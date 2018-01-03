@@ -27,6 +27,8 @@ private:
     int idGetDir_ = 0;
     int idFFMpeg_ = 0;
 
+    int threadcountGetDir_ = 1;
+    int threadcountFFmpeg_ = 2;
 protected:
     virtual void resizeEvent(QResizeEvent *event);
     void closeEvent(QCloseEvent *event);
@@ -39,6 +41,12 @@ private slots:
     void on_action_About_triggered();
 
     void on_tableView_doubleClicked(const QModelIndex &index);
+
+    void on_action_Options_triggered();
+
+
+
+    void on_action_Pause_triggered();
 
 private:
     QThreadPool* poolFFMpeg_;
@@ -72,6 +80,8 @@ public slots:
 
     void afterGetDir(int id,
                      const QStringList& dirs);
+
+    void onMenuEdit_AboutToShow();
 };
 
 #endif // MAINWINDOW_H

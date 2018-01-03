@@ -24,6 +24,9 @@
 #include "settings.h"
 #include "waitcursor.h"
 
+#include "optiondialog.h"
+#include "globals.h"
+
 #include "mainwindow.h"
 
 
@@ -35,6 +38,9 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
 
     this->setWindowTitle(Consts::APPNAME);
 
+    QObject::connect(ui->menu_Edit, &QMenu::aboutToShow,
+                     this, &MainWindow::onMenuEdit_AboutToShow);
+
     tableModel_=new TableModel(this);
     // QStandardItemModel* model = new QStandardItemModel;
     // ui->tableView->horizontalHeader()->setStretchLastSection(true);
@@ -45,14 +51,18 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
     ui->treeView->setModel(treeModel_);
 
     poolGetDir_ = new QThreadPool();
-    poolGetDir_->setMaxThreadCount(1);
+    poolGetDir_->setExpiryTimeout(-1);
+    Q_ASSERT(threadcountGetDir_ > 0);
+    poolGetDir_->setMaxThreadCount(threadcountGetDir_);
 
     poolFFMpeg_ = new QThreadPool();
-    int threadcount = QThread::idealThreadCount()-2;
-    if(threadcount <= 0)
-        threadcount=0;
-    qDebug() << QString("threadcount=%1").arg(threadcount);
-    poolFFMpeg_->setMaxThreadCount(threadcount);
+    poolFFMpeg_->setExpiryTimeout(-1);
+    threadcountFFmpeg_ = QThread::idealThreadCount()-2;
+    if(threadcountFFmpeg_ <= 0)
+        threadcountFFmpeg_=1;
+    qDebug() << QString("threadcount=%1").arg(threadcountFFmpeg_);
+    Q_ASSERT(threadcountFFmpeg_ > 0);
+    poolFFMpeg_->setMaxThreadCount(threadcountFFmpeg_);
 
 
     QVariant vVal;
@@ -271,6 +281,7 @@ void MainWindow::afterGetDir(int id,
 void MainWindow::closeEvent(QCloseEvent *event) {
     Q_UNUSED(event);
 
+    gPaused = false;
     WaitCursor wc;
 
     poolFFMpeg_->clear();
@@ -334,4 +345,41 @@ void MainWindow::on_tableView_doubleClicked(const QModelIndex &index)
         msgBox.setStandardButtons(QMessageBox::Ok);
         msgBox.exec();
     }
+}
+
+
+void MainWindow::on_action_Options_triggered()
+{
+    OptionDialog dlg(this);
+    dlg.exec();
+//    QDialog dlg(this, Qt::WindowSystemMenuHint | Qt::WindowTitleHint);
+//    Ui_Option option;
+//    option.setupUi(&dlg);
+
+//    if(QDialog::Accepted != dlg.exec())
+//        return;
+
+}
+
+
+void MainWindow::onMenuEdit_AboutToShow()
+{
+    qDebug() << "gPaused" << gPaused;
+    ui->action_Pause->setChecked(gPaused);
+}
+
+void MainWindow::on_action_Pause_triggered()
+{
+    gPaused = !gPaused;
+
+//    if(gPaused)
+//    {
+//        poolGetDir_->
+//        poolFFMpeg_->setMaxThreadCount(0);
+//    }
+//    else
+//    {
+//        poolGetDir_->setMaxThreadCount(threadcountGetDir_);
+//        poolFFMpeg_->setMaxThreadCount(threadcountFFmpeg_);
+//    }
 }

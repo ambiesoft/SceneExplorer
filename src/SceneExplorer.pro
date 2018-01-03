@@ -32,7 +32,9 @@ SOURCES += \
     treemodel.cpp \
     taskffmpeg.cpp \
     taskgetdir.cpp \
-    waitcursor.cpp
+    waitcursor.cpp \
+    optiondialog.cpp \
+    globals.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -43,9 +45,12 @@ HEADERS += \
     treemodel.h \
     taskffmpeg.h \
     taskgetdir.h \
-    waitcursor.h
+    waitcursor.h \
+    optiondialog.h \
+    globals.h
 
 FORMS += \
-        mainwindow.ui
+        mainwindow.ui \
+    option.ui
 
 RC_FILE = app.rc

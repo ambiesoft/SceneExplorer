@@ -3,9 +3,9 @@
 
 namespace Consts
 {
-    constexpr const char ORGANIZATION[] = "Ambiesoft";
-    constexpr const char APPDOMAIN[] = "ambiesoft.fam.cx";
-    constexpr const char APPNAME[] = "SceneExplorer";
-    constexpr const char VERSION[] = "1.0";
+    const char ORGANIZATION[] = "Ambiesoft";
+    const char APPDOMAIN[] = "ambiesoft.fam.cx";
+    const char APPNAME[] = "SceneExplorer";
+    const char VERSION[] = "1.0";
 }
 #endif // CONSTS_H

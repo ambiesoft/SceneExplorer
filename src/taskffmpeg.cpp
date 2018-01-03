@@ -5,6 +5,7 @@
 #include <QJsonObject>
 #include <QUuid>
 
+#include "globals.h"
 #include "taskffmpeg.h"
 
 bool getDuration(const QString& file,double& d,QString& videoFormat)
@@ -74,6 +75,9 @@ bool getDuration(const QString& file,double& d,QString& videoFormat)
 
 void TaskFFMpeg::run()
 {
+    while(gPaused)
+        QThread::sleep(5);
+
     emit sayHello(id_, movieFile_);
     if(!run2())
         emit sayNo(id_, movieFile_);
