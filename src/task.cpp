@@ -7,7 +7,7 @@
 
 #include "task.h"
 
-bool getDuration(const QString& file,double& d)
+bool getDuration(const QString& file,double& d,QString& videoFormat)
 {
     QProcess process;
     process.setProgram("C:\\LegacyPrograms\\ffmpeg\\bin\\ffprobe.exe");
@@ -45,10 +45,20 @@ bool getDuration(const QString& file,double& d)
     QJsonValue format = sett2.value(QString("format"));
     qWarning() << format;
     QJsonObject item = format.toObject();
-    qWarning() << QObject::tr("QJsonObject of description: ") << item;
+    // qWarning() << item;
+
+    QJsonValue format_name = item["format_name"];
+    if(
+            format_name.toString()=="tty" ||
+            format_name.toString()=="image2"
+      )
+    {
+        return false;
+    }
+    videoFormat = format_name.toString();
 
     /* in case of string value get value and convert into string*/
-    qWarning() << QObject::tr("QJsonObject[appName] of description: ") << item["duration"];
+    // qWarning() << QObject::tr("QJsonObject[appName] of description: ") << item["duration"];
     QJsonValue duration = item["duration"];
     qWarning() << duration.toString();
 
@@ -61,22 +71,21 @@ bool getDuration(const QString& file,double& d)
     d = ds.toDouble(&ok);
     return ok;
 }
-//void TaskFFMpeg::sayGoodby(){}
+
 void TaskFFMpeg::run()
 {
-//    QString file;
-//    {
-//        QMutexLocker locker(&mutex_);
-//        if(fileIndex_ == files_.count())
-//            return;
-
-//        file = files_[fileIndex_];
-//        ++fileIndex_;
-//    }
-
     double d;
-    if(!getDuration(file_,d))
+    QString format;
+    if(!getDuration(file_,d,format))
         return;
+    // qDebug() << file_ << d;
+
+    int width=240;
+    int height=180;
+    QString strWidthHeight;
+    strWidthHeight.append(QString::number(width));
+    strWidthHeight.append("x");
+    strWidthHeight.append(QString::number(height));
 
     QString thumbfile = QUuid::createUuid().toString();
     thumbfile = thumbfile.remove(L'{');
@@ -101,7 +110,7 @@ void TaskFFMpeg::run()
         qsl.append("-vframes" );
         qsl.append("1");
         qsl.append("-s");
-        qsl.append("240x180");
+        qsl.append(strWidthHeight);
         qsl.append(filename);
 
         QProcess ffmpeg;
@@ -115,16 +124,17 @@ void TaskFFMpeg::run()
         if(!ffmpeg.waitForFinished())
             return;
 
-        qDebug() << "exitCode()=" << ffmpeg.exitCode();
+        if(ffmpeg.exitCode() != 0)
+            return;
 
-        QByteArray baOut = ffmpeg.readAllStandardOutput();
-        qDebug()<<baOut.data();
+//        QByteArray baOut = ffmpeg.readAllStandardOutput();
+//        qDebug()<<baOut.data();
 
-        QByteArray baErr=ffmpeg.readAllStandardError();
-        qDebug() << baErr.data();
+//        QByteArray baErr=ffmpeg.readAllStandardError();
+//        qDebug() << baErr.data();
 
         emitFiles.append(filename);
     }
 
-    emit sayGoodby(id_,emitFiles);
+    emit sayGoodby(id_,emitFiles, width, height, file_, format);
 }

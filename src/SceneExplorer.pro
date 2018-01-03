@@ -27,12 +27,14 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     task.cpp \
-    imagemodel.cpp
+    tablemodel.cpp \
+    itemdata.cpp
 
 HEADERS += \
         mainwindow.h \
     task.h \
-    imagemodel.h
+    tablemodel.h \
+    itemdata.h
 
 FORMS += \
         mainwindow.ui

@@ -4,11 +4,16 @@
 #include <QAbstractTableModel>
 #include <QStyledItemDelegate>
 
-class ImageModel : public QAbstractTableModel
+class ItemData;
+class TableModel : public QAbstractTableModel
 {
     Q_OBJECT
+    QList<ItemData*> items_;
+    QString GetInfoText(const ItemData& item, const bool isFilename) const;
 public:
-    ImageModel(QObject *parent);
+    TableModel(QObject *parent);
+    void AppendData(ItemData* pItemData);
+
     int rowCount(const QModelIndex &parent = QModelIndex()) const override ;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
@@ -28,4 +33,7 @@ public:
         return QSize(100,100);
     }
 };
+
+
+
 #endif // IMAGEMODEL_H

@@ -21,7 +21,12 @@ public:
     }
     void run() override ;
 signals:
-    void sayGoodby(int id,const QStringList& files);
+    void sayGoodby(int id,
+                   const QStringList& files,
+                   int width,
+                   int height,
+                   const QString& movieFile,
+                   const QString& format);
 
 };
 

@@ -2,7 +2,13 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "imagemodel.h"
+
+#include "tablemodel.h"
+
+class QThreadPool;
+class ListModel;
+class ItemData;
+
 
 namespace Ui {
 class MainWindow;
@@ -18,17 +24,32 @@ public:
 
 protected:
     virtual void resizeEvent(QResizeEvent *event);
+    void closeEvent(QCloseEvent *event);
 
 private slots:
     void on_action_Close_triggered();
-
     void on_action_Do_It_triggered();
 
 private:
+    QThreadPool* pool_;
     Ui::MainWindow *ui;
-    ImageModel* imageModel_;
+    TableModel* imageModel_;
+    QString lastSelectedDir_;
+
+//    ListModel* listModel_;
+
+public:
+//    int getItemCount() const {
+//        return listItems_.count();
+//    }
+//    QString getItemMovieFile(int index) const ;
 public slots:
-    void sayGoodby(int id,const QStringList& files);
+    void sayGoodby(int id,
+                   const QStringList& files,
+                   int width,
+                   int height,
+                   const QString& movieFile,
+                   const QString& format);
 };
 
 #endif // MAINWINDOW_H
