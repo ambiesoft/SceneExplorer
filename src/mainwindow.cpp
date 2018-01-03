@@ -10,15 +10,18 @@
 #include <QStandardItemModel>
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QWidget>
 
-#include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "task.h"
 #include "tablemodel.h"
 
-//#include "listmodel.h"
+#include "treemodel.h"
 #include "itemdata.h"
 #include "settings.h"
+
+#include "mainwindow.h"
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -34,9 +37,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->tableView->setModel(imageModel_);
 
 
-
-//    listModel_ = new ListModel(this);
-//    ui->listView->setModel(listModel_);
+    treeModel_ = new TreeModel;
+    ui->treeView->setModel(treeModel_);
 
     pool_ = new QThreadPool();
 
@@ -51,13 +53,21 @@ MainWindow::MainWindow(QWidget *parent) :
     vVal = settings.value("lastselecteddir");
     if(vVal.isValid())
         lastSelectedDir_ = vVal.toString();
+
+    show();
+    vVal = settings.value("treesize");
+    if(vVal.isValid())
+        resizeDock(ui->dockTree, vVal.toSize());
+
+    vVal = settings.value("txtlogsize");
+    if(vVal.isValid())
+        resizeDock(ui->dockLog, vVal.toSize());
 }
 
 MainWindow::~MainWindow()
 {
     delete imageModel_;
-    // delete listModel_;
-
+    delete treeModel_;
     delete ui;
 }
 
@@ -124,8 +134,46 @@ void MainWindow::sayGoodby(int,
     // ui->listView->dataChanged( model()->dataChanged(QModelIndex(),QModelIndex());
 }
 
+void MainWindow::resizeDock(QDockWidget* dock, const QSize& size)
+{
+    // width
+    switch(this->dockWidgetArea(dock))
+    {
+        case Qt::DockWidgetArea::LeftDockWidgetArea:
+        case Qt::DockWidgetArea::RightDockWidgetArea:
+        {
+            QList<int> sizes;
+            QList<QDockWidget*> docks;
+
+            docks.append(dock);
+            sizes.append(size.height());
+
+            resizeDocks(docks,sizes,Qt::Orientation::Vertical);
+        }
+        break;
+
+        case Qt::DockWidgetArea::TopDockWidgetArea:
+        case Qt::DockWidgetArea::BottomDockWidgetArea:
+        // height
+        {
+        QList<QDockWidget*> docks;
+            QList<int> sizes;
+
+            docks.append(dock);
+            sizes.append(size.width());
+
+            resizeDocks(docks,sizes,Qt::Orientation::Horizontal);
+        }
+        break;
+
+    default:
+        break;
+    }
+}
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
+    resizeDock(ui->dockTree, ui->treeView->size());
+    resizeDock(ui->dockLog, ui->txtLog->size());
     QMainWindow::resizeEvent(event);
 }
 
@@ -159,6 +207,8 @@ void MainWindow::closeEvent(QCloseEvent *event) {
     if(!this->isMaximized() && !this->isMinimized())
     {
         settings.setValue("size", this->size());
+        settings.setValue("treesize", ui->treeView->size());
+        settings.setValue("txtlogsize", ui->txtLog->size());
     }
     settings.setValue("lastselecteddir", lastSelectedDir_);
 }

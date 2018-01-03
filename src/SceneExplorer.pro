@@ -29,7 +29,8 @@ SOURCES += \
     task.cpp \
     tablemodel.cpp \
     itemdata.cpp \
-    settings.cpp
+    settings.cpp \
+    treemodel.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -37,7 +38,8 @@ HEADERS += \
     tablemodel.h \
     itemdata.h \
     settings.h \
-    consts.h
+    consts.h \
+    treemodel.h
 
 FORMS += \
         mainwindow.ui

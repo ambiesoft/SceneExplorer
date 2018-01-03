@@ -8,7 +8,7 @@
 class QThreadPool;
 class ListModel;
 class ItemData;
-
+class TreeModel;
 
 namespace Ui {
 class MainWindow;
@@ -38,8 +38,9 @@ private:
     TableModel* imageModel_;
     QString lastSelectedDir_;
 
-//    ListModel* listModel_;
+    TreeModel* treeModel_;
 
+    void resizeDock(QDockWidget* dock, const QSize& size);
 public:
 //    int getItemCount() const {
 //        return listItems_.count();
@@ -52,6 +53,8 @@ public slots:
                    int height,
                    const QString& movieFile,
                    const QString& format);
+
+
 };
 
 #endif // MAINWINDOW_H
