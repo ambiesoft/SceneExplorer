@@ -5,7 +5,7 @@
 #include <QJsonObject>
 #include <QUuid>
 
-#include "task.h"
+#include "taskffmpeg.h"
 
 bool getDuration(const QString& file,double& d,QString& videoFormat)
 {
@@ -74,11 +74,16 @@ bool getDuration(const QString& file,double& d,QString& videoFormat)
 
 void TaskFFMpeg::run()
 {
+    emit sayHello(id_, movieFile_);
+    if(!run2())
+        emit sayNo(id_, movieFile_);
+}
+bool TaskFFMpeg::run2()
+{
     double d;
     QString format;
-    if(!getDuration(file_,d,format))
-        return;
-    // qDebug() << file_ << d;
+    if(!getDuration(movieFile_,d,format))
+        return false;
 
     int width=240;
     int height=180;
@@ -104,7 +109,7 @@ void TaskFFMpeg::run()
         qsl.append("-ss" );
         qsl.append(QString::number(timepoint) );
         qsl.append("-i" );
-        qsl.append(file_ );
+        qsl.append(movieFile_ );
         qsl.append("-vf" );
         qsl.append("select='eq(pict_type\\,I)'");
         qsl.append("-vframes" );
@@ -119,13 +124,13 @@ void TaskFFMpeg::run()
         ffmpeg.start(QProcess::ReadOnly);
 
         if(!ffmpeg.waitForStarted())
-            return;
+            return false;
 
         if(!ffmpeg.waitForFinished())
-            return;
+            return false;
 
         if(ffmpeg.exitCode() != 0)
-            return;
+            return false;
 
 //        QByteArray baOut = ffmpeg.readAllStandardOutput();
 //        qDebug()<<baOut.data();
@@ -136,5 +141,6 @@ void TaskFFMpeg::run()
         emitFiles.append(filename);
     }
 
-    emit sayGoodby(id_,emitFiles, width, height, file_, format);
+    emit sayGoodby(id_,emitFiles, width, height, movieFile_, format);
+    return true;
 }

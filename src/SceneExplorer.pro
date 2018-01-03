@@ -26,20 +26,24 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
         main.cpp \
         mainwindow.cpp \
-    task.cpp \
     tablemodel.cpp \
     itemdata.cpp \
     settings.cpp \
-    treemodel.cpp
+    treemodel.cpp \
+    taskffmpeg.cpp \
+    taskgetdir.cpp \
+    waitcursor.cpp
 
 HEADERS += \
         mainwindow.h \
-    task.h \
     tablemodel.h \
     itemdata.h \
     settings.h \
     consts.h \
-    treemodel.h
+    treemodel.h \
+    taskffmpeg.h \
+    taskgetdir.h \
+    waitcursor.h
 
 FORMS += \
         mainwindow.ui

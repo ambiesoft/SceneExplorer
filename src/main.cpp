@@ -1,8 +1,9 @@
 #include <QApplication>
 #include <QSettings>
 
-#include "mainwindow.h"
 #include "consts.h"
+#include "settings.h"
+#include "mainwindow.h"
 
 int main(int argc, char *argv[])
 {
@@ -11,8 +12,11 @@ int main(int argc, char *argv[])
     QCoreApplication::setApplicationName(Consts::APPNAME);
 
     QApplication app(argc, argv);
-    MainWindow w;
+
+    Settings settings;
+    MainWindow w(nullptr, settings);
     w.show();
+
 
     return app.exec();
 }

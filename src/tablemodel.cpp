@@ -74,6 +74,11 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
     int actualIndex = index.row()/3;
     bool isFilename = (index.row()%3)==0;
     bool isInfo = (index.row()%3)==1;
+
+    if(role==TableRole::MovieFile)
+    {
+        return items_[actualIndex]->getMovieFile();
+    }
     if(isFilename)
     {
         if(index.column() != 0)
@@ -115,15 +120,6 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
                 return pix;
             }
             break;
-
-//            case Qt::SizeHintRole:
-//            {
-//                QString imageFile = items_[actualIndex]->getImageFiles()[index.column()];
-//                QImage image(imageFile);
-//                QPixmap pix = QPixmap::fromImage(image);
-//                return pix.size();
-//            }
-//            break;
         }
     }
     return QVariant();

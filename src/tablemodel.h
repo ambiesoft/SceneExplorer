@@ -11,6 +11,9 @@ class TableModel : public QAbstractTableModel
     QList<ItemData*> items_;
     QString GetInfoText(const ItemData& item, const bool isFilename) const;
 public:
+    enum TableRole {
+        MovieFile = Qt::UserRole + 1,
+    };
     TableModel(QObject *parent);
     void AppendData(ItemData* pItemData);
 

@@ -9,6 +9,7 @@ class QThreadPool;
 class ListModel;
 class ItemData;
 class TreeModel;
+class Settings;
 
 namespace Ui {
 class MainWindow;
@@ -19,12 +20,17 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    explicit MainWindow(QWidget *parent, Settings& settings);
     ~MainWindow();
+
+private:
+    int idGetDir_ = 0;
+    int idFFMpeg_ = 0;
 
 protected:
     virtual void resizeEvent(QResizeEvent *event);
     void closeEvent(QCloseEvent *event);
+    void showEvent( QShowEvent* event );
 
 private slots:
     void on_action_Close_triggered();
@@ -32,21 +38,31 @@ private slots:
 
     void on_action_About_triggered();
 
+    void on_tableView_doubleClicked(const QModelIndex &index);
+
 private:
-    QThreadPool* pool_;
+    QThreadPool* poolFFMpeg_;
+    QThreadPool* poolGetDir_;
+
     Ui::MainWindow *ui;
-    TableModel* imageModel_;
+    TableModel* tableModel_;
     QString lastSelectedDir_;
 
     TreeModel* treeModel_;
 
     void resizeDock(QDockWidget* dock, const QSize& size);
-public:
-//    int getItemCount() const {
-//        return listItems_.count();
-//    }
-//    QString getItemMovieFile(int index) const ;
+
+    enum TaskKind {
+        GetDir,
+        FFMpeg,
+    };
+    void insertLog(TaskKind kind, int id, const QString& text);
+
 public slots:
+    void sayHello(int id,
+                   const QString& movieFile);
+    void sayNo(int id,
+                   const QString& movieFile);
     void sayGoodby(int id,
                    const QStringList& files,
                    int width,
@@ -54,7 +70,8 @@ public slots:
                    const QString& movieFile,
                    const QString& format);
 
-
+    void afterGetDir(int id,
+                     const QStringList& dirs);
 };
 
 #endif // MAINWINDOW_H
