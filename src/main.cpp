@@ -1,12 +1,14 @@
-#include "mainwindow.h"
 #include <QApplication>
 #include <QSettings>
 
+#include "mainwindow.h"
+#include "consts.h"
+
 int main(int argc, char *argv[])
 {
-    QCoreApplication::setOrganizationName("Ambiesoft");
-    QCoreApplication::setOrganizationDomain("ambiesoft.fam.cx");
-    QCoreApplication::setApplicationName("Scene Explorer");
+    QCoreApplication::setOrganizationName(Consts::ORGANIZATION);
+    QCoreApplication::setOrganizationDomain(Consts::APPDOMAIN);
+    QCoreApplication::setApplicationName(Consts::APPNAME);
 
     QApplication app(argc, argv);
     MainWindow w;

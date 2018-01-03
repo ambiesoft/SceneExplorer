@@ -28,13 +28,18 @@ SOURCES += \
         mainwindow.cpp \
     task.cpp \
     tablemodel.cpp \
-    itemdata.cpp
+    itemdata.cpp \
+    settings.cpp
 
 HEADERS += \
         mainwindow.h \
     task.h \
     tablemodel.h \
-    itemdata.h
+    itemdata.h \
+    settings.h \
+    consts.h
 
 FORMS += \
         mainwindow.ui
+
+RC_FILE = app.rc

@@ -9,7 +9,7 @@
 #include <QObject>
 #include <QStandardItemModel>
 #include <QFileDialog>
-#include <QSettings>
+#include <QMessageBox>
 
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
@@ -18,12 +18,15 @@
 
 //#include "listmodel.h"
 #include "itemdata.h"
+#include "settings.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    this->setWindowTitle(Consts::APPNAME);
 
     imageModel_=new TableModel(this);
     // QStandardItemModel* model = new QStandardItemModel;
@@ -37,15 +40,16 @@ MainWindow::MainWindow(QWidget *parent) :
 
     pool_ = new QThreadPool();
 
-    QSettings settings;
+    Settings settings;
+
     QVariant vVal;
 
     vVal = settings.value("size");
-    if(!vVal.Invalid)
+    if(vVal.isValid())
         resize(vVal.toSize());
 
     vVal = settings.value("lastselecteddir");
-    if(!vVal.Invalid)
+    if(vVal.isValid())
         lastSelectedDir_ = vVal.toString();
 }
 
@@ -151,10 +155,24 @@ void MainWindow::on_action_Do_It_triggered()
 void MainWindow::closeEvent(QCloseEvent *event) {
     Q_UNUSED(event);
 
-    QSettings settings;
+    Settings settings;
     if(!this->isMaximized() && !this->isMinimized())
     {
         settings.setValue("size", this->size());
     }
     settings.setValue("lastselecteddir", lastSelectedDir_);
+}
+
+void MainWindow::on_action_About_triggered()
+{
+    QString title = Consts::APPNAME;
+    QString text = Consts::APPNAME;
+    text.append(" ");
+    text.append("ver ");
+    text.append(Consts::VERSION);
+    text.append("\n");
+    text.append("\n");
+    text.append("copyright 2018 ");
+    text.append(Consts::ORGANIZATION);
+    QMessageBox::about(this,title,text);
 }

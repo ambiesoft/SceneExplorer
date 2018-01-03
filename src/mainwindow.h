@@ -30,6 +30,8 @@ private slots:
     void on_action_Close_triggered();
     void on_action_Do_It_triggered();
 
+    void on_action_About_triggered();
+
 private:
     QThreadPool* pool_;
     Ui::MainWindow *ui;
