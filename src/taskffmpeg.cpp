@@ -109,13 +109,14 @@ bool TaskFFMpeg::run2()
 
         int timepoint = (int)(((double)i-0.5)*d/5);
         QStringList qsl;
-        qsl.append("-n");
-        qsl.append("-ss" );
-        qsl.append(QString::number(timepoint) );
-        qsl.append("-i" );
-        qsl.append(movieFile_ );
-        qsl.append("-vf" );
-        qsl.append("select='eq(pict_type\\,I)'");
+        qsl.append("-hide_banner");  // as it is
+        qsl.append("-n");  // no overwrite
+        qsl.append("-ss" );  // seek input
+        qsl.append(QString::number(timepoint) );  // seek position
+        qsl.append("-i" );  // input file
+        qsl.append(movieFile_ );  // input file
+        qsl.append("-vf" );  // video filtergraph
+        qsl.append("select='eq(pict_type\\,I)'");  // select filter with argument, Select only I-frames:
         qsl.append("-vframes" );
         qsl.append("1");
         qsl.append("-s");
