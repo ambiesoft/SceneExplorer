@@ -33,15 +33,15 @@ void TaskModel::RemoveTask(int id)
     int row = findRow(p);
     Q_ASSERT(row >= 0);
 
-    osoi
-    beginRemoveRows(QModelIndex(), row, row);
+    
+    // beginRemoveRows(QModelIndex(), row, row);
     // beginResetModel();
 
     Q_ASSERT(items_.contains(p));
     items_.removeOne(p);
     Q_ASSERT(!items_.contains(p));
 
-    endRemoveRows();
+    // endRemoveRows();
     // endResetModel();
 
     map_.remove(id);
@@ -60,7 +60,7 @@ void TaskModel::SetProgress(int id, TaskFFMpeg::Progress progress)
     map_[id]->SetProgress(progress);
     // endResetModel();
 
-    // dataChanged(createIndex(row,0), createIndex(row,0));
+    // emit dataChanged(createIndex(row,0), createIndex(row,0));
     // dataChanged(QModelIndex(),QModelIndex());// createIndex(row,0), createIndex(row,0));
 }
 int TaskModel::rowCount(const QModelIndex &parent) const

@@ -35,7 +35,6 @@ private:
     int threadcountGetDir_ = 1;
     int threadcountFFmpeg_ = 2;
 
-    void OnTimer();
     QTimer* timer_ = nullptr;
 
 protected:
@@ -104,7 +103,7 @@ public slots:
     void afterGetDir(int id,
                      const QStringList& dirs);
 
-
+	void OnTimer();
 };
 
 #endif // MAINWINDOW_H

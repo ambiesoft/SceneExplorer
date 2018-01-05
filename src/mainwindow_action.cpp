@@ -102,3 +102,8 @@ void MainWindow::on_action_About_triggered()
     text.append(Consts::ORGANIZATION);
     QMessageBox::about(this,title,text);
 }
+void MainWindow::OnTimer()
+{
+//	if(taskModel_)
+		//taskModel_->UpdateList();
+}

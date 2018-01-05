@@ -48,7 +48,7 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
 
     timer_ = new QTimer(this);
     connect(timer_, SIGNAL(timeout()),
-            this, SLOT(this->OnTimer()));
+            this, SLOT(OnTimer()));
     timer_->start(1000);
 
     tableModel_=new TableModel(this);
@@ -255,7 +255,3 @@ void MainWindow::afterGetDir(int id,
 
 
 
-void MainWindow::OnTimer()
-{
-
-}
