@@ -34,6 +34,10 @@ private:
 
     int threadcountGetDir_ = 1;
     int threadcountFFmpeg_ = 2;
+
+    void OnTimer();
+    QTimer* timer_ = nullptr;
+
 protected:
     virtual void resizeEvent(QResizeEvent *event);
     void closeEvent(QCloseEvent *event);

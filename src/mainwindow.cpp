@@ -11,7 +11,9 @@
 #include <QThread>
 #include <QThreadPool>
 #include <QTime>
+#include <QTimer>
 #include <QUrl>
+#include <QVector>
 #include <QWidget>
 
 #include "ui_mainwindow.h"
@@ -43,6 +45,11 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
                      this, &MainWindow::onMenuTask_AboutToShow);
     QObject::connect(ui->menu_Docking_windows, &QMenu::aboutToShow,
                      this, &MainWindow::onMenuDocking_windows_AboutToShow);
+
+    timer_ = new QTimer(this);
+    connect(timer_, SIGNAL(timeout()),
+            this, SLOT(this->OnTimer()));
+    timer_->start(1000);
 
     tableModel_=new TableModel(this);
     // QStandardItemModel* model = new QStandardItemModel;
@@ -212,6 +219,10 @@ void MainWindow::afterGetDir(int id,
 //    int saveThreadCount = poolFFMpeg_->maxThreadCount();
 //    poolFFMpeg_->setMaxThreadCount(1);
 
+    bool prevPaused = gPaused;
+    gPaused=true;
+
+    QVector<TaskListData*> tasks;
     QStringListIterator it(dirs);
     while (it.hasNext()) {
         QString file = it.next();
@@ -228,12 +239,15 @@ void MainWindow::afterGetDir(int id,
         QObject::connect(pTask, &TaskFFMpeg::sayDead,
                          this, &MainWindow::sayDead);
 
-        taskModel_->AddTask(new TaskListData(pTask->GetId(),pTask->GetMovieFile()));
+        tasks.append(new TaskListData(pTask->GetId(),pTask->GetMovieFile()));
         poolFFMpeg_->start(pTask);
 
         insertLog(TaskKind::FFMpeg, idFFMpeg_, tr("Task registered"));
     }
+    taskModel_->AddTasks(tasks);
+
     // poolFFMpeg_->setMaxThreadCount(saveThreadCount);
+    gPaused=prevPaused;
 }
 
 
@@ -241,3 +255,7 @@ void MainWindow::afterGetDir(int id,
 
 
 
+void MainWindow::OnTimer()
+{
+
+}
