@@ -7,9 +7,11 @@
 
 class QThreadPool;
 class ListModel;
-class ItemData;
+class TableItemData;
 class TreeModel;
 class Settings;
+class TaskModel;
+class TaskFFMpeg;
 
 namespace Ui {
 class MainWindow;
@@ -18,6 +20,9 @@ class MainWindow;
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
+
+    // setting keys
+
 
 public:
     explicit MainWindow(QWidget *parent, Settings& settings);
@@ -48,15 +53,26 @@ private slots:
 
     void on_action_Pause_triggered();
 
+    void on_action_Stop_triggered();
+    void onMenuTask_AboutToShow();
+    void onMenuDocking_windows_AboutToShow();
+
+
 private:
-    QThreadPool* poolFFMpeg_;
-    QThreadPool* poolGetDir_;
+    QThreadPool* poolFFMpeg_ = nullptr;
+
+    QThreadPool* pPoolGetDir_ = nullptr;
+    QThreadPool* getPoolGetDir();
+    void clearPoolGetDir();
+    void clearAllPool();
 
     Ui::MainWindow *ui;
     TableModel* tableModel_;
     QString lastSelectedDir_;
 
     TreeModel* treeModel_;
+
+    TaskModel* taskModel_;
 
     void resizeDock(QDockWidget* dock, const QSize& size);
 
@@ -67,6 +83,8 @@ private:
     void insertLog(TaskKind kind, int id, const QString& text);
 
 public slots:
+//    void sayBorn(int id,
+//                   const QString& movieFile);
     void sayHello(int id,
                    const QString& movieFile);
     void sayNo(int id,
@@ -77,11 +95,12 @@ public slots:
                    int height,
                    const QString& movieFile,
                    const QString& format);
+    void sayDead(int id);
 
     void afterGetDir(int id,
                      const QStringList& dirs);
 
-    void onMenuEdit_AboutToShow();
+
 };
 
 #endif // MAINWINDOW_H

@@ -3,14 +3,14 @@
 #include <QPixmap>
 #include <QFileInfo>
 
-#include "itemdata.h"
+#include "tableitemdata.h"
 #include "tablemodel.h"
 
 TableModel::TableModel(QObject *parent)
     :QAbstractTableModel(parent)
 {
 }
-void TableModel:: AppendData(ItemData* pItemData)
+void TableModel:: AppendData(TableItemData* pItemData)
 {
     beginResetModel();
     items_.append(pItemData);
@@ -44,7 +44,7 @@ QString size_human(QFileInfo& fi)
     return QString().setNum(num,'f',2)+" "+unit;
 }
 
-QString TableModel::GetInfoText(const ItemData& item, bool isFilename) const
+QString TableModel::GetInfoText(const TableItemData& item, bool isFilename) const
 {
     QString ret;
     if(isFilename)

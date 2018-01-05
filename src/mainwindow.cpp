@@ -20,7 +20,8 @@
 
 #include "tablemodel.h"
 #include "treemodel.h"
-#include "itemdata.h"
+#include "taskmodel.h"
+#include "tableitemdata.h"
 #include "settings.h"
 #include "waitcursor.h"
 
@@ -38,8 +39,10 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
 
     this->setWindowTitle(Consts::APPNAME);
 
-    QObject::connect(ui->menu_Edit, &QMenu::aboutToShow,
-                     this, &MainWindow::onMenuEdit_AboutToShow);
+    QObject::connect(ui->menu_Task, &QMenu::aboutToShow,
+                     this, &MainWindow::onMenuTask_AboutToShow);
+    QObject::connect(ui->menu_Docking_windows, &QMenu::aboutToShow,
+                     this, &MainWindow::onMenuDocking_windows_AboutToShow);
 
     tableModel_=new TableModel(this);
     // QStandardItemModel* model = new QStandardItemModel;
@@ -50,14 +53,14 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
     treeModel_ = new TreeModel;
     ui->treeView->setModel(treeModel_);
 
-    poolGetDir_ = new QThreadPool();
-    poolGetDir_->setExpiryTimeout(-1);
-    Q_ASSERT(threadcountGetDir_ > 0);
-    poolGetDir_->setMaxThreadCount(threadcountGetDir_);
+    taskModel_ = new TaskModel;
+    ui->listTask->setModel(taskModel_);
+
+
 
     poolFFMpeg_ = new QThreadPool();
     poolFFMpeg_->setExpiryTimeout(-1);
-    threadcountFFmpeg_ = QThread::idealThreadCount()-2;
+    // threadcountFFmpeg_ = QThread::idealThreadCount()-2;
     if(threadcountFFmpeg_ <= 0)
         threadcountFFmpeg_=1;
     qDebug() << QString("threadcount=%1").arg(threadcountFFmpeg_);
@@ -67,104 +70,68 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
 
     QVariant vVal;
 
-    vVal = settings.value("size");
+    vVal = settings.value(Consts::KEY_SIZE);
     if(vVal.isValid())
         resize(vVal.toSize());
 
-    vVal = settings.value("lastselecteddir");
+    vVal = settings.value(Consts::KEY_LASTSELECTEDDIRECTORY);
     if(vVal.isValid())
         lastSelectedDir_ = vVal.toString();
 
-    vVal = settings.value("treesize");
+    vVal = settings.value(Consts::KEY_TREESIZE);
     if(vVal.isValid())
         ui->treeView->setMaximumSize(vVal.toSize());
 
-    vVal = settings.value("txtlogsize");
+    vVal = settings.value(Consts::KEY_TXTLOGSIZE);
     if(vVal.isValid())
         ui->txtLog->setMaximumSize(vVal.toSize());
 
+    vVal = settings.value(Consts::KEY_LISTTASKSIZE);
+    if(vVal.isValid())
+        ui->listTask->setMaximumSize(vVal.toSize());
+}
 
+QThreadPool* MainWindow::getPoolGetDir()
+{
+    if(!pPoolGetDir_)
+    {
+        pPoolGetDir_ = new QThreadPool;
+        pPoolGetDir_->setExpiryTimeout(-1);
+        Q_ASSERT(threadcountGetDir_ > 0);
+        pPoolGetDir_->setMaxThreadCount(threadcountGetDir_);
+    }
+    return pPoolGetDir_;
+}
+void MainWindow::clearAllPool()
+{
+    if(poolFFMpeg_)
+        poolFFMpeg_->clear();
+    if(pPoolGetDir_)
+        pPoolGetDir_->clear();
+
+    delete pPoolGetDir_;
+    pPoolGetDir_ = nullptr;
+
+    delete poolFFMpeg_;
+    poolFFMpeg_ = nullptr;
+}
+
+void MainWindow::clearPoolGetDir()
+{
+    delete pPoolGetDir_;
+    pPoolGetDir_=nullptr;
 }
 
 MainWindow::~MainWindow()
 {
-
     delete tableModel_;
     delete treeModel_;
+    delete taskModel_;
     delete ui;
 }
 
-void MainWindow::on_action_Close_triggered()
-{
-    this->close();
-}
-void MainWindow::sayHello(int id,
-               const QString& movieFile)
-{
-    insertLog(TaskKind::FFMpeg, id, QString("%1 \"%2\"").arg(tr("Started"), movieFile));
-}
-void MainWindow::sayNo(int id,
-               const QString& movieFile)
-{
-    insertLog(TaskKind::FFMpeg, id, QString("%1 \"%2\"").arg(tr("Not a video"), movieFile));
-}
-void MainWindow::sayGoodby(int id,
-                           const QStringList& files,
-                           int width,
-                           int height,
-                           const QString& movieFile,
-                           const QString& format)
-{
-    if(false)
-    {
-        int newRow = ui->tableView->model()->rowCount();
 
-        QStandardItem* infoItem = new QStandardItem();
-        infoItem->setText(movieFile);
-        ((QStandardItemModel*)ui->tableView->model())->setItem(newRow,0,infoItem);
-        ui->tableView->setSpan(newRow,0,1,5);
-        ++newRow;
 
-        int i;
-        for(i=0 ; i < 5 ; ++i)
-        {
-            QImage image(files[i]);
-            QPixmap pix = QPixmap::fromImage(image);
-
-            QStandardItem* item = new QStandardItem();
-            item->setData(QVariant(pix), Qt::DecorationRole);
-            ((QStandardItemModel*)ui->tableView->model())->setItem(newRow,i,item);
-
-            ui->tableView->setColumnWidth(i, width);
-            ui->tableView->setRowHeight(newRow, height);
-        }
-    }
-    else
-    {
-        int newRowFilename = ui->tableView->model()->rowCount();
-        int newRowInfo = newRowFilename+1;
-        int newRowImage = newRowFilename+2;
-
-        ui->tableView->setSpan(newRowFilename,0,1,5);
-        ui->tableView->setSpan(newRowInfo,0,1,5);
-        ui->tableView->resizeRowToContents(newRowFilename);
-        ui->tableView->resizeRowToContents(newRowInfo);
-
-        tableModel_->AppendData(new ItemData(files, width, height, movieFile, format));
-
-        for(int i=0 ; i < 5 ; ++i)
-        {
-            ui->tableView->setColumnWidth(i, width);
-            ui->tableView->setRowHeight(newRowImage, height);
-        }
-
-        insertLog(TaskKind::FFMpeg, id, QString("%1 \"%2\"").arg(tr("Done"), movieFile));
-    }
-
-    //listModel_->AppendData(new ListItemData(files, width, height, movieFile));
-    //ui->listView->update(ui->listView->model()->index(0,0));
-    // ui->listView->dataChanged( model()->dataChanged(QModelIndex(),QModelIndex());
-}
 void MainWindow::insertLog(TaskKind kind, int id, const QString& text)
 {
     QString message;
@@ -231,155 +198,46 @@ void MainWindow::resizeEvent(QResizeEvent *event)
 {
     resizeDock(ui->dockTree, ui->treeView->size());
     resizeDock(ui->dockLog, ui->txtLog->size());
+    resizeDock(ui->dockTask, ui->listTask->size());
     QMainWindow::resizeEvent(event);
 }
 
-void MainWindow::on_action_Do_It_triggered()
-{
-    QString dir = QFileDialog::getExistingDirectory(this, tr("Open Directory"),lastSelectedDir_);
-    if(dir.isEmpty())
-        return;
-    lastSelectedDir_ = dir;
 
-
-    TaskGetDir* pTaskGetDir = new TaskGetDir(++idGetDir_, dir);
-    pTaskGetDir->setAutoDelete(true);
-    QObject::connect(pTaskGetDir, &TaskGetDir::afterGetDir,
-                     this, &MainWindow::afterGetDir);
-    poolGetDir_->start(pTaskGetDir);
-
-    insertLog(TaskKind::GetDir, idGetDir_, tr("Task registered"));
-}
 void MainWindow::afterGetDir(int id,
                  const QStringList& dirs)
 {
     Q_UNUSED(id);
     WaitCursor wc;
 
-    int saveThreadCount = poolFFMpeg_->maxThreadCount();
-    poolFFMpeg_->setMaxThreadCount(0);
+//    int saveThreadCount = poolFFMpeg_->maxThreadCount();
+//    poolFFMpeg_->setMaxThreadCount(1);
 
     QStringListIterator it(dirs);
     while (it.hasNext()) {
         QString file = it.next();
         TaskFFMpeg* pTask = new TaskFFMpeg(++idFFMpeg_,file);
         pTask->setAutoDelete(true);
+//        QObject::connect(pTask, &TaskFFMpeg::sayBorn,
+//                         this, &MainWindow::sayBorn);
         QObject::connect(pTask, &TaskFFMpeg::sayHello,
                          this, &MainWindow::sayHello);
         QObject::connect(pTask, &TaskFFMpeg::sayNo,
                          this, &MainWindow::sayNo);
         QObject::connect(pTask, &TaskFFMpeg::sayGoodby,
                          this, &MainWindow::sayGoodby);
+        QObject::connect(pTask, &TaskFFMpeg::sayDead,
+                         this, &MainWindow::sayDead);
+
+        taskModel_->AddTask(new TaskListData(pTask->GetId(),pTask->GetMovieFile()));
         poolFFMpeg_->start(pTask);
 
         insertLog(TaskKind::FFMpeg, idFFMpeg_, tr("Task registered"));
     }
-    poolFFMpeg_->setMaxThreadCount(saveThreadCount);
+    // poolFFMpeg_->setMaxThreadCount(saveThreadCount);
 }
 
 
-void MainWindow::closeEvent(QCloseEvent *event) {
-    Q_UNUSED(event);
-
-    gPaused = false;
-    WaitCursor wc;
-
-    poolFFMpeg_->clear();
-    poolGetDir_->clear();
-
-    delete poolGetDir_;
-    poolGetDir_ = nullptr;
-
-    delete poolFFMpeg_;
-    poolFFMpeg_ = nullptr;
 
 
-    Settings settings;
-    if(!this->isMaximized() && !this->isMinimized())
-    {
-        settings.setValue("size", this->size());
-        settings.setValue("treesize", ui->treeView->size());
-        settings.setValue("txtlogsize", ui->txtLog->size());
-    }
-    settings.setValue("lastselecteddir", lastSelectedDir_);
-}
-
-void MainWindow::on_action_About_triggered()
-{
-    QString title = Consts::APPNAME;
-    QString text = Consts::APPNAME;
-    text.append(" ");
-    text.append("ver ");
-    text.append(Consts::VERSION);
-    text.append("\n");
-    text.append("\n");
-    text.append("copyright 2018 ");
-    text.append(Consts::ORGANIZATION);
-    QMessageBox::about(this,title,text);
-}
-
-void MainWindow::showEvent( QShowEvent* event )
-{
-    QMainWindow::showEvent( event );
-
-    ui->treeView->setMaximumSize(10000,10000);
-    ui->txtLog->setMaximumSize(10000,10000);
-
-}
-
-void MainWindow::on_tableView_doubleClicked(const QModelIndex &index)
-{
-    QVariant v = tableModel_->data(index, TableModel::TableRole::MovieFile);
-    Q_ASSERT(v.isValid());
-    Q_ASSERT(!v.toString().isEmpty());
-
-//    QProcess process;
-//    QString file = v.toString();
-//    process.start("",file);
-
-    if(!QDesktopServices::openUrl(QUrl::fromLocalFile(v.toString())))
-    {
-        QMessageBox msgBox;
-        msgBox.setText(Consts::APPNAME);
-        msgBox.setInformativeText(tr("failed to launch."));
-        msgBox.setStandardButtons(QMessageBox::Ok);
-        msgBox.exec();
-    }
-}
 
 
-void MainWindow::on_action_Options_triggered()
-{
-    OptionDialog dlg(this);
-    dlg.exec();
-//    QDialog dlg(this, Qt::WindowSystemMenuHint | Qt::WindowTitleHint);
-//    Ui_Option option;
-//    option.setupUi(&dlg);
-
-//    if(QDialog::Accepted != dlg.exec())
-//        return;
-
-}
-
-
-void MainWindow::onMenuEdit_AboutToShow()
-{
-    qDebug() << "gPaused" << gPaused;
-    ui->action_Pause->setChecked(gPaused);
-}
-
-void MainWindow::on_action_Pause_triggered()
-{
-    gPaused = !gPaused;
-
-//    if(gPaused)
-//    {
-//        poolGetDir_->
-//        poolFFMpeg_->setMaxThreadCount(0);
-//    }
-//    else
-//    {
-//        poolGetDir_->setMaxThreadCount(threadcountGetDir_);
-//        poolFFMpeg_->setMaxThreadCount(threadcountFFmpeg_);
-//    }
-}

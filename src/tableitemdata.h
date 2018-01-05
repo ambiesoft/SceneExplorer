@@ -3,7 +3,7 @@
 
 #include <QStringList>
 
-class ItemData
+class TableItemData
 {
     QStringList files_;
     int width_;
@@ -12,7 +12,7 @@ class ItemData
     QString format_;
 
 public:
-    ItemData(const QStringList& files,
+    TableItemData(const QStringList& files,
              int width, int height,
              const QString& movieFile,
              const QString& format);

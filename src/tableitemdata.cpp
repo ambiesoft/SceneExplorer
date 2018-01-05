@@ -1,8 +1,8 @@
-#include "itemdata.h"
+#include "tableitemdata.h"
 
 #include <QStringList>
 
-ItemData::ItemData(const QStringList& files,
+TableItemData::TableItemData(const QStringList& files,
                    int width,
                    int height,
                    const QString& movieFile,

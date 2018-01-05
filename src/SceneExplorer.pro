@@ -5,7 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui
-
+QT += sql
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = SceneExplorer
@@ -27,19 +27,24 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     tablemodel.cpp \
-    itemdata.cpp \
     settings.cpp \
     treemodel.cpp \
     taskffmpeg.cpp \
     taskgetdir.cpp \
     waitcursor.cpp \
     optiondialog.cpp \
-    globals.cpp
+    globals.cpp \
+    sql.cpp \
+    taskmodel.cpp \
+    tasklistdata.cpp \
+    mainwindow_slot.cpp \
+    tableitemdata.cpp \
+    mainwindow_action.cpp \
+    mainwindow_event.cpp
 
 HEADERS += \
         mainwindow.h \
     tablemodel.h \
-    itemdata.h \
     settings.h \
     consts.h \
     treemodel.h \
@@ -47,7 +52,11 @@ HEADERS += \
     taskgetdir.h \
     waitcursor.h \
     optiondialog.h \
-    globals.h
+    globals.h \
+    sql.h \
+    taskmodel.h \
+    tasklistdata.h \
+    tableitemdata.h
 
 FORMS += \
         mainwindow.ui \

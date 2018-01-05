@@ -8,6 +8,18 @@
 #include "globals.h"
 #include "taskffmpeg.h"
 
+TaskFFMpeg::TaskFFMpeg(int id,const QString& file)
+{
+    id_=id;
+    movieFile_=file;
+
+    progress_ = Uninitialized;
+    // emit sayBorn(id,file);
+}
+TaskFFMpeg::~TaskFFMpeg()
+{
+    emit sayDead(id_);
+}
 bool getDuration(const QString& file,double& d,QString& videoFormat)
 {
     QProcess process;
@@ -75,12 +87,15 @@ bool getDuration(const QString& file,double& d,QString& videoFormat)
 
 void TaskFFMpeg::run()
 {
+    QThread::currentThread()->setPriority(QThread::IdlePriority);
+
     while(gPaused)
         QThread::sleep(5);
-
+    progress_ = Progressing;
     emit sayHello(id_, movieFile_);
     if(!run2())
         emit sayNo(id_, movieFile_);
+    progress_ = Finished;
 }
 bool TaskFFMpeg::run2()
 {

@@ -80,8 +80,6 @@
      <string>&amp;Edit</string>
     </property>
     <addaction name="action_Copy"/>
-    <addaction name="action_Do_It"/>
-    <addaction name="action_Pause"/>
    </widget>
    <widget class="QMenu" name="menu_Help">
     <property name="title">
@@ -95,12 +93,39 @@
     </property>
     <addaction name="action_Options"/>
    </widget>
+   <widget class="QMenu" name="menu_Task">
+    <property name="title">
+     <string>Task</string>
+    </property>
+    <addaction name="action_Pause"/>
+    <addaction name="action_Stop"/>
+    <addaction name="action_Do_It"/>
+   </widget>
+   <widget class="QMenu" name="menu_View">
+    <property name="title">
+     <string>&amp;View</string>
+    </property>
+    <widget class="QMenu" name="menu_Docking_windows">
+     <property name="title">
+      <string>&amp;Docking windows</string>
+     </property>
+     <addaction name="action_DockFolder"/>
+     <addaction name="action_DockTask"/>
+     <addaction name="action_DockOutput"/>
+    </widget>
+    <addaction name="menu_Docking_windows"/>
+   </widget>
    <addaction name="menu_File"/>
+   <addaction name="menu_View"/>
    <addaction name="menu_Edit"/>
+   <addaction name="menu_Task"/>
    <addaction name="menu_Option"/>
    <addaction name="menu_Help"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
+   <property name="windowTitle">
+    <string>ToolBar</string>
+   </property>
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
    </attribute>
@@ -110,6 +135,9 @@
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QDockWidget" name="dockLog">
+   <property name="windowTitle">
+    <string>Output</string>
+   </property>
    <attribute name="dockWidgetArea">
     <number>8</number>
    </attribute>
@@ -156,6 +184,9 @@
      <verstretch>0</verstretch>
     </sizepolicy>
    </property>
+   <property name="windowTitle">
+    <string>Folder</string>
+   </property>
    <attribute name="dockWidgetArea">
     <number>1</number>
    </attribute>
@@ -198,6 +229,36 @@
     </layout>
    </widget>
   </widget>
+  <widget class="QDockWidget" name="dockTask">
+   <property name="windowTitle">
+    <string>Task</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>2</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents_3">
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="QListView" name="listTask"/>
+     </item>
+    </layout>
+   </widget>
+  </widget>
   <action name="action_Close">
    <property name="text">
     <string>&amp;Close</string>
@@ -228,7 +289,36 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Pause</string>
+    <string>&amp;Pause</string>
+   </property>
+  </action>
+  <action name="action_Stop">
+   <property name="text">
+    <string>&amp;Stop</string>
+   </property>
+  </action>
+  <action name="action_DockFolder">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Folder</string>
+   </property>
+  </action>
+  <action name="action_DockTask">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Task</string>
+   </property>
+  </action>
+  <action name="action_DockOutput">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Output</string>
    </property>
   </action>
  </widget>

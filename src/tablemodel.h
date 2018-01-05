@@ -4,18 +4,18 @@
 #include <QAbstractTableModel>
 #include <QStyledItemDelegate>
 
-class ItemData;
+class TableItemData;
 class TableModel : public QAbstractTableModel
 {
     Q_OBJECT
-    QList<ItemData*> items_;
-    QString GetInfoText(const ItemData& item, const bool isFilename) const;
+    QList<TableItemData*> items_;
+    QString GetInfoText(const TableItemData& item, const bool isFilename) const;
 public:
     enum TableRole {
         MovieFile = Qt::UserRole + 1,
     };
     TableModel(QObject *parent);
-    void AppendData(ItemData* pItemData);
+    void AppendData(TableItemData* pItemData);
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override ;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
