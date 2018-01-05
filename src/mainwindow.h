@@ -35,7 +35,7 @@ private:
     int threadcountGetDir_ = 1;
     int threadcountFFmpeg_ = 2;
 
-    QTimer* timer_ = nullptr;
+//    QTimer* timer_ = nullptr;
 
 protected:
     virtual void resizeEvent(QResizeEvent *event);
@@ -103,7 +103,7 @@ public slots:
     void afterGetDir(int id,
                      const QStringList& dirs);
 
-	void OnTimer();
+//	void OnTimer();
 };
 
 #endif // MAINWINDOW_H

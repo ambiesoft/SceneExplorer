@@ -46,10 +46,10 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
     QObject::connect(ui->menu_Docking_windows, &QMenu::aboutToShow,
                      this, &MainWindow::onMenuDocking_windows_AboutToShow);
 
-    timer_ = new QTimer(this);
-    connect(timer_, SIGNAL(timeout()),
-            this, SLOT(OnTimer()));
-    timer_->start(1000);
+//    timer_ = new QTimer(this);
+//    connect(timer_, SIGNAL(timeout()),
+//            this, SLOT(OnTimer()));
+//    timer_->start(5000);
 
     tableModel_=new TableModel(this);
     // QStandardItemModel* model = new QStandardItemModel;
@@ -160,10 +160,19 @@ void MainWindow::insertLog(TaskKind kind, int id, const QString& text)
     message.append(head);
     message.append(text);
 
-    ui->txtLog->appendPlainText(message);
+    int scrollMax=ui->txtLog->verticalScrollBar()->maximum();
+    int scrollCur=ui->txtLog->verticalScrollBar()->value();
 
-    ui->txtLog->verticalScrollBar()->setValue(
+    //int prevcursorPos = ui->txtLog->textCursor().position();
+    ui->txtLog->appendPlainText(message);
+    //int aftercursorPos = ui->txtLog->textCursor().position();
+
+    //if(prevcursorPos < aftercursorPos)
+    if(scrollMax==scrollCur)
+    {
+        ui->txtLog->verticalScrollBar()->setValue(
                 ui->txtLog->verticalScrollBar()->maximum()); // Scrolls to the bottom
+    }
 }
 void MainWindow::resizeDock(QDockWidget* dock, const QSize& size)
 {
