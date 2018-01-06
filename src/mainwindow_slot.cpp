@@ -1,13 +1,16 @@
 #include "taskmodel.h"
 #include "tableitemdata.h"
 
+#include "globals.h"
+#include "sql.h"
+
 #include "ui_mainwindow.h"
 #include "mainwindow.h"
 
 void MainWindow::sayHello(int id,
                const QString& movieFile)
 {
-    taskModel_->SetProgress(id, TaskFFMpeg::Progressing);
+    taskModel_->SetProgress(id, TaskFFmpeg::Progressing);
     insertLog(TaskKind::FFMpeg, id, QString("%1 \"%2\"").arg(tr("Started"), movieFile));
 }
 void MainWindow::sayNo(int id,
@@ -58,6 +61,15 @@ void MainWindow::sayGoodby(int id,
     ui->tableView->resizeRowToContents(newRowInfo);
 
     tableModel_->AppendData(new TableItemData(files, width, height, movieFile, format));
+    int sqlError = gpSQL->AppendData(files, width, height, movieFile, format);
+    if(sqlError==0)
+    {
+        insertLog(TaskKind::SQL, id, QString("%1 \"%2\"").arg(tr("Written in Database"), movieFile));
+    }
+    else
+    {
+        insertLog(TaskKind::SQL, id, QString("%1 \"%2\"").arg(tr("Failed to write on Database"), movieFile));
+    }
 
     for(int i=0 ; i < 5 ; ++i)
     {

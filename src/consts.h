@@ -14,5 +14,9 @@ namespace Consts
     const char KEY_LISTTASKSIZE[] = "listtasksize";
 
     const char KEY_LASTSELECTEDDIRECTORY[] = "lastselecteddir";
+
+    const char KEY_DBPATH[] = "dbpath";
+
+    const char FILEPART_THUMBS[] = "thumbs";
 }
 #endif // CONSTS_H

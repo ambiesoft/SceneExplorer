@@ -8,7 +8,7 @@ class TaskListData
 private:
     int id_;
     QString movieFile_;
-    TaskFFMpeg::Progress progress_ = TaskFFMpeg::Progress::Uninitialized;
+    TaskFFmpeg::Progress progress_ = TaskFFmpeg::Progress::Uninitialized;
 
 public:
     TaskListData(int id, const QString& movieFile):id_(id), movieFile_(movieFile)
@@ -30,7 +30,7 @@ public:
         return movieFile_;
     }
 
-    void SetProgress(TaskFFMpeg::Progress progress)
+    void SetProgress(TaskFFmpeg::Progress progress)
     {
         progress_=progress;
     }

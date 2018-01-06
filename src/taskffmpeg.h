@@ -5,7 +5,7 @@
 #include <QMutexLocker>
 #include <QObject>
 
-class TaskFFMpeg : public QObject, public QRunnable
+class TaskFFmpeg : public QObject, public QRunnable
 // class TaskFFMpeg : public QRunnable
 {
     Q_OBJECT
@@ -24,8 +24,8 @@ private:
     // int fileIndex_=0;
     Progress progress_;
 public:
-    TaskFFMpeg(int id,const QString& file);
-    virtual ~TaskFFMpeg();
+    TaskFFmpeg(int id,const QString& file);
+    virtual ~TaskFFmpeg();
     void run() override ;
     bool run2();
     int GetId() const

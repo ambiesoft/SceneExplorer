@@ -47,7 +47,7 @@ void TaskModel::RemoveTask(int id)
     map_.remove(id);
     delete p;
 }
-void TaskModel::SetProgress(int id, TaskFFMpeg::Progress progress)
+void TaskModel::SetProgress(int id, TaskFFmpeg::Progress progress)
 {
     // beginResetModel();
     Q_ASSERT(map_.contains(id));
@@ -55,9 +55,9 @@ void TaskModel::SetProgress(int id, TaskFFMpeg::Progress progress)
     TaskListData* p = map_[id];
     Q_ASSERT(p);
 
-    int row = findRow(p);
+    // int row = findRow(p);
 
-    map_[id]->SetProgress(progress);
+    p->SetProgress(progress);
     // endResetModel();
 
     // emit dataChanged(createIndex(row,0), createIndex(row,0));

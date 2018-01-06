@@ -18,7 +18,7 @@ public:
     void AddTasks(const QVector<TaskListData*>& tasks);
     int findRow(TaskListData* p);
     void RemoveTask(int id);
-    void SetProgress(int id, TaskFFMpeg::Progress progress);
+    void SetProgress(int id, TaskFFmpeg::Progress progress);
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
 

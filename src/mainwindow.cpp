@@ -21,7 +21,7 @@
 #include "taskffmpeg.h"
 
 #include "tablemodel.h"
-#include "treemodel.h"
+#include "foldermodel.h"
 #include "taskmodel.h"
 #include "tableitemdata.h"
 #include "settings.h"
@@ -29,6 +29,8 @@
 
 #include "optiondialog.h"
 #include "globals.h"
+
+#include "sql.h"
 
 #include "mainwindow.h"
 
@@ -57,7 +59,7 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
     ui->tableView->setModel(tableModel_);
 
 
-    treeModel_ = new TreeModel;
+    treeModel_ = new FolderModel;
     ui->treeView->setModel(treeModel_);
 
     taskModel_ = new TaskModel;
@@ -65,14 +67,6 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
 
 
 
-    poolFFMpeg_ = new QThreadPool();
-    poolFFMpeg_->setExpiryTimeout(-1);
-    // threadcountFFmpeg_ = QThread::idealThreadCount()-2;
-    if(threadcountFFmpeg_ <= 0)
-        threadcountFFmpeg_=1;
-    qDebug() << QString("threadcount=%1").arg(threadcountFFmpeg_);
-    Q_ASSERT(threadcountFFmpeg_ > 0);
-    poolFFMpeg_->setMaxThreadCount(threadcountFFmpeg_);
 
 
     QVariant vVal;
@@ -109,25 +103,43 @@ QThreadPool* MainWindow::getPoolGetDir()
     }
     return pPoolGetDir_;
 }
+void MainWindow::clearPoolGetDir()
+{
+    delete pPoolGetDir_;
+    pPoolGetDir_=nullptr;
+}
+
+QThreadPool* MainWindow::getPoolFFmpeg()
+{
+    if(!pPoolFFmpeg_)
+    {
+        pPoolFFmpeg_ = new QThreadPool;
+        pPoolFFmpeg_->setExpiryTimeout(-1);
+        Q_ASSERT(threadcountFFmpeg_ > 0);
+        pPoolFFmpeg_->setMaxThreadCount(threadcountFFmpeg_);
+    }
+    return pPoolFFmpeg_;
+}
+void MainWindow::clearPoolFFmpeg()
+{
+    delete pPoolFFmpeg_;
+    pPoolFFmpeg_=nullptr;
+}
 void MainWindow::clearAllPool()
 {
-    if(poolFFMpeg_)
-        poolFFMpeg_->clear();
+    if(pPoolFFmpeg_)
+        pPoolFFmpeg_->clear();
     if(pPoolGetDir_)
         pPoolGetDir_->clear();
 
     delete pPoolGetDir_;
     pPoolGetDir_ = nullptr;
 
-    delete poolFFMpeg_;
-    poolFFMpeg_ = nullptr;
+    delete pPoolFFmpeg_;
+    pPoolFFmpeg_ = nullptr;
 }
 
-void MainWindow::clearPoolGetDir()
-{
-    delete pPoolGetDir_;
-    pPoolGetDir_=nullptr;
-}
+
 
 MainWindow::~MainWindow()
 {
@@ -147,15 +159,31 @@ void MainWindow::insertLog(TaskKind kind, int id, const QString& text)
     message.append(" ");
 
     QString head;
-    if(kind==TaskKind::GetDir)
+    switch(kind)
     {
-        head.append(tr("Getting files"));
+        case TaskKind::GetDir:
+        {
+            head.append(tr("Iterate"));
+            head.append(QString::number(id));
+        }
+        break;
+        case TaskKind::FFMpeg:
+        {
+            head.append(tr("Analyze"));
+            head.append(QString::number(id));
+        }
+        break;
+        case TaskKind::SQL:
+        {
+            head.append(tr("Database"));
+        }
+        break;
+
+        default:
+            Q_ASSERT(false);
+            return;
     }
-    else
-    {
-        head.append(tr("Analyze file"));
-    }
-    head.append(QString::number(id));
+
     head.append("> ");
     message.append(head);
     message.append(text);
@@ -235,21 +263,27 @@ void MainWindow::afterGetDir(int id,
     QStringListIterator it(dirs);
     while (it.hasNext()) {
         QString file = it.next();
-        TaskFFMpeg* pTask = new TaskFFMpeg(++idFFMpeg_,file);
+        if(gpSQL->hasThumb(file))
+        {
+            insertLog(TaskKind::SQL, 0, tr("Found in db. Skipping"));
+            continue;
+        }
+
+        TaskFFmpeg* pTask = new TaskFFmpeg(++idFFMpeg_,file);
         pTask->setAutoDelete(true);
 //        QObject::connect(pTask, &TaskFFMpeg::sayBorn,
 //                         this, &MainWindow::sayBorn);
-        QObject::connect(pTask, &TaskFFMpeg::sayHello,
+        QObject::connect(pTask, &TaskFFmpeg::sayHello,
                          this, &MainWindow::sayHello);
-        QObject::connect(pTask, &TaskFFMpeg::sayNo,
+        QObject::connect(pTask, &TaskFFmpeg::sayNo,
                          this, &MainWindow::sayNo);
-        QObject::connect(pTask, &TaskFFMpeg::sayGoodby,
+        QObject::connect(pTask, &TaskFFmpeg::sayGoodby,
                          this, &MainWindow::sayGoodby);
-        QObject::connect(pTask, &TaskFFMpeg::sayDead,
+        QObject::connect(pTask, &TaskFFmpeg::sayDead,
                          this, &MainWindow::sayDead);
 
         tasks.append(new TaskListData(pTask->GetId(),pTask->GetMovieFile()));
-        poolFFMpeg_->start(pTask);
+        getPoolFFmpeg()->start(pTask);
 
         insertLog(TaskKind::FFMpeg, idFFMpeg_, tr("Task registered"));
     }

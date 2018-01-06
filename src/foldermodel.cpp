@@ -1,12 +1,12 @@
-#include "treemodel.h"
+#include "foldermodel.h"
 
-TreeModel::TreeModel()
+FolderModel::FolderModel()
 {
     setFilter( QDir::Dirs | QDir::NoDotAndDotDot );
     setRootPath("");
 }
 
-QVariant TreeModel::data(const QModelIndex &index, int role) const
+QVariant FolderModel::data(const QModelIndex &index, int role) const
 {
     if(role == Qt::CheckStateRole)
     {
@@ -17,12 +17,14 @@ QVariant TreeModel::data(const QModelIndex &index, int role) const
         else
             return Qt::Unchecked;
     }
-    else
+    else if(role==Qt::DisplayRole)
     {
+
         return QFileSystemModel::data(index, role);
     }
+    return QFileSystemModel::data(index, role);
 }
-bool TreeModel::setData(const QModelIndex &index, const QVariant &value, int role)
+bool FolderModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     if(role == Qt::CheckStateRole)
     {
@@ -48,7 +50,7 @@ bool TreeModel::setData(const QModelIndex &index, const QVariant &value, int rol
     }
     return QFileSystemModel::setData(index, value, role);
 }
-bool TreeModel::recursiveCheck(const QModelIndex &index, const QVariant &value)
+bool FolderModel::recursiveCheck(const QModelIndex &index, const QVariant &value)
 {
     if(hasChildren(index))
     {

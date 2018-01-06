@@ -1,9 +1,21 @@
 #include <QApplication>
 #include <QSettings>
+#include <Qstandardpaths>
+#include <QDir>
+#include <QMessageBox>
+#include <QString>
+#include <QObject>
+#include <QDebug>
 
 #include "consts.h"
+#include "globals.h"
+#include "sql.h"
+
+#include "helper.h"
+
 #include "settings.h"
 #include "mainwindow.h"
+
 
 int main(int argc, char *argv[])
 {
@@ -13,10 +25,46 @@ int main(int argc, char *argv[])
 
     QApplication app(argc, argv);
 
+    // QString dataDir = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+
     Settings settings;
+    QString dbDir = settings.value(Consts::KEY_DBPATH).toString();
+    if(dbDir.isEmpty() || !QDir(dbDir).exists())
+    {
+        dbDir = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+        QDir(dbDir).mkpath("db");
+        dbDir = pathCombine(dbDir, "db");
+    }
+    if(!QDir(dbDir).exists())
+    {
+        Alert(QString(QObject::tr("%1 is not directory.")).arg(dbDir));
+        return 1;
+    }
+    if(!QDir::setCurrent(dbDir))
+    {
+        Alert(QString(QObject::tr("Failed to set %1 as current directory.").arg(dbDir)));
+        return 1;
+    }
+
+    qDebug() << "Current Directory =" << dbDir;
+
+    // create and check thumbs dir
+    QDir(".").mkdir(Consts::FILEPART_THUMBS);
+    if(!QDir(Consts::FILEPART_THUMBS).exists())
+    {
+        Alert(QString(QObject::tr("Failed to mkdir %1 or it is not a directory.").arg(Consts::FILEPART_THUMBS)));
+        return 1;
+    }
+
+    gpSQL = new Sql();
+
     MainWindow w(nullptr, settings);
     w.show();
 
+    int ret = app.exec();
 
-    return app.exec();
+    delete gpSQL;
+    gpSQL = nullptr;
+
+    return ret;
 }

@@ -8,10 +8,10 @@
 class QThreadPool;
 class ListModel;
 class TableItemData;
-class TreeModel;
+class FolderModel;
 class Settings;
 class TaskModel;
-class TaskFFMpeg;
+class TaskFFmpeg;
 
 namespace Ui {
 class MainWindow;
@@ -62,18 +62,21 @@ private slots:
 
 
 private:
-    QThreadPool* poolFFMpeg_ = nullptr;
+    QThreadPool* pPoolFFmpeg_ = nullptr;
+    QThreadPool* getPoolFFmpeg();
+    void clearPoolFFmpeg();
 
     QThreadPool* pPoolGetDir_ = nullptr;
     QThreadPool* getPoolGetDir();
     void clearPoolGetDir();
+
     void clearAllPool();
 
     Ui::MainWindow *ui;
     TableModel* tableModel_;
     QString lastSelectedDir_;
 
-    TreeModel* treeModel_;
+    FolderModel* treeModel_;
 
     TaskModel* taskModel_;
 
@@ -82,6 +85,7 @@ private:
     enum TaskKind {
         GetDir,
         FFMpeg,
+        SQL,
     };
     void insertLog(TaskKind kind, int id, const QString& text);
 

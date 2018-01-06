@@ -28,7 +28,6 @@ SOURCES += \
         mainwindow.cpp \
     tablemodel.cpp \
     settings.cpp \
-    treemodel.cpp \
     taskffmpeg.cpp \
     taskgetdir.cpp \
     waitcursor.cpp \
@@ -40,14 +39,15 @@ SOURCES += \
     mainwindow_slot.cpp \
     tableitemdata.cpp \
     mainwindow_action.cpp \
-    mainwindow_event.cpp
+    mainwindow_event.cpp \
+    helper.cpp \
+    foldermodel.cpp
 
 HEADERS += \
         mainwindow.h \
     tablemodel.h \
     settings.h \
     consts.h \
-    treemodel.h \
     taskffmpeg.h \
     taskgetdir.h \
     waitcursor.h \
@@ -56,7 +56,9 @@ HEADERS += \
     sql.h \
     taskmodel.h \
     tasklistdata.h \
-    tableitemdata.h
+    tableitemdata.h \
+    helper.h \
+    foldermodel.h
 
 FORMS += \
         mainwindow.ui \

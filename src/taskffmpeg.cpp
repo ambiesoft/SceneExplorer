@@ -4,11 +4,14 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QUuid>
+#include <QDir>
 
 #include "globals.h"
+#include "consts.h"
+
 #include "taskffmpeg.h"
 
-TaskFFMpeg::TaskFFMpeg(int id,const QString& file)
+TaskFFmpeg::TaskFFmpeg(int id,const QString& file)
 {
     id_=id;
     movieFile_=file;
@@ -16,7 +19,7 @@ TaskFFMpeg::TaskFFMpeg(int id,const QString& file)
     progress_ = Uninitialized;
     // emit sayBorn(id,file);
 }
-TaskFFMpeg::~TaskFFMpeg()
+TaskFFmpeg::~TaskFFmpeg()
 {
     emit sayDead(id_);
 }
@@ -85,7 +88,7 @@ bool getDuration(const QString& file,double& d,QString& videoFormat)
     return ok;
 }
 
-void TaskFFMpeg::run()
+void TaskFFmpeg::run()
 {
     QThread::currentThread()->setPriority(QThread::IdlePriority);
 
@@ -97,7 +100,7 @@ void TaskFFMpeg::run()
         emit sayNo(id_, movieFile_);
     progress_ = Finished;
 }
-bool TaskFFMpeg::run2()
+bool TaskFFmpeg::run2()
 {
     double d;
     QString format;
@@ -136,7 +139,7 @@ bool TaskFFMpeg::run2()
         qsl.append("1");
         qsl.append("-s");
         qsl.append(strWidthHeight);
-        qsl.append(filename);
+        qsl.append(QString(Consts::FILEPART_THUMBS) + QDir::separator() + filename);
 
         QProcess ffmpeg;
         ffmpeg.setProgram("C:\\LegacyPrograms\\ffmpeg\\bin\\ffmpeg.exe");

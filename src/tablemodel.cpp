@@ -3,6 +3,9 @@
 #include <QPixmap>
 #include <QFileInfo>
 
+#include "consts.h"
+#include "helper.h"
+
 #include "tableitemdata.h"
 #include "tablemodel.h"
 
@@ -114,6 +117,8 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
             case Qt::DecorationRole:
             {
                 QString imageFile = items_[actualIndex]->getImageFiles()[index.column()];
+                imageFile = pathCombine(Consts::FILEPART_THUMBS, imageFile);
+
                 // QString imageFile("C:\\Cygwin\\home\\fjUnc\\gitdev\\SceneExplorer\\build-SceneExplorer-Desktop_Qt_5_10_0_MSVC2013_64bit-Debug\\0b76916f-3fb8-49be-a7da-d110ed476952-2.png");
                 QImage image(imageFile);
                 QPixmap pix = QPixmap::fromImage(image);

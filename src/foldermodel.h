@@ -5,13 +5,13 @@
 #include <QModelIndex>
 #include <QSet>
 
-class TreeModel : public QFileSystemModel
+class FolderModel : public QFileSystemModel
 {
 public:
     QSet<QPersistentModelIndex> checkedIndexes_;
     QSet<QPersistentModelIndex> partcheckedIndexes_;
 
-    TreeModel();
+    FolderModel();
 
     int columnCount(const QModelIndex& parent = QModelIndex()) const override
     {
