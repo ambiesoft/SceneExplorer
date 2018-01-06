@@ -8,6 +8,9 @@
 #include <QFileDevice>
 #include <QDateTime>
 #include <QSqlError>
+
+#include "tableitemdata.h"
+#include "helper.h"
 #include "sql.h"
 
 Sql::Sql() : db_(QSqlDatabase::addDatabase("QSQLITE"))
@@ -221,4 +224,30 @@ int Sql::AppendData(const QStringList& files,
         return SQL_EXEC_FAILED;
     }
     return 0;
+}
+
+bool Sql::GetAll(QList<TableItemData*>& v)
+{
+    QSqlQuery query(db_);
+    if(!query.exec("select * from FileInfo"))
+        return false;
+    while (query.next()) {
+        QString thumbid = query.value("thumbid").toString();
+        QStringList thumbs;
+        for(int i=1 ; i <= 5 ; ++i)
+        {
+            QString t=thumbid;
+            t+="-";
+            t+=QString::number(i);
+            t+=".png";
+            thumbs.append(t);
+        }
+        QString movieFile = pathCombine(query.value("directory").toString(),
+                                        query.value("name").toString());
+
+
+        TableItemData* pID = new TableItemData(thumbs,0,0,movieFile,"format");
+        v.append(pID);
+    }
+    return true;
 }

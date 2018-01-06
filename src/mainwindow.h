@@ -36,7 +36,9 @@ private:
     int threadcountFFmpeg_ = 2;
 
 //    QTimer* timer_ = nullptr;
+    bool initShown=false;
 
+    void setTableSpan();
 protected:
     virtual void resizeEvent(QResizeEvent *event);
     void closeEvent(QCloseEvent *event);

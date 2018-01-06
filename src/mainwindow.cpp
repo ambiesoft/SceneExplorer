@@ -92,6 +92,30 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
         ui->listTask->setMaximumSize(vVal.toSize());
 }
 
+void MainWindow::setTableSpan()
+{
+    int newRowFilename = ui->tableView->model()->rowCount()-TableModel::RowCountPerEntry;
+    int newRowInfo = newRowFilename+1;
+    int newRowImage = newRowFilename+2;
+
+    ui->tableView->setSpan(newRowFilename,0,1,5);
+    ui->tableView->setSpan(newRowInfo,0,1,5);
+    // ui->tableView->resizeRowToContents(newRowFilename);
+    // ui->tableView->resizeRowToContents(newRowInfo);
+
+    static bool initColumnWidth=false;
+    if(!initColumnWidth)
+    {
+        initColumnWidth=true;
+        for(int i=0 ; i < 5 ; ++i)
+        {
+            ui->tableView->setColumnWidth(i, Consts::THUMB_WIDTH);
+        }
+    }
+
+    ui->tableView->setRowHeight(newRowImage, Consts::THUMB_HEIGHT);
+}
+
 QThreadPool* MainWindow::getPoolGetDir()
 {
     if(!pPoolGetDir_)

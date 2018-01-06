@@ -14,8 +14,11 @@ public:
     enum TableRole {
         MovieFile = Qt::UserRole + 1,
     };
+    static const int RowCountPerEntry = 3;
+
     TableModel(QObject *parent);
     void AppendData(TableItemData* pItemData);
+    void AppendDatas(const QList<TableItemData*>&v);
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override ;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;

@@ -15,13 +15,19 @@ TableModel::TableModel(QObject *parent)
 }
 void TableModel:: AppendData(TableItemData* pItemData)
 {
-    beginResetModel();
+    beginInsertRows(QModelIndex(),items_.count()*RowCountPerEntry,(items_.count()*RowCountPerEntry)+RowCountPerEntry);
     items_.append(pItemData);
+    endInsertRows();
+}
+void TableModel::AppendDatas(const QList<TableItemData*>&v)
+{
+    beginResetModel();
+    items_.append(v);
     endResetModel();
 }
 int TableModel::rowCount(const QModelIndex & /*parent*/) const
 {
-   return items_.count()*3;
+   return items_.count()*RowCountPerEntry;
 }
 
 int TableModel::columnCount(const QModelIndex & /*parent*/) const
@@ -74,9 +80,9 @@ QString TableModel::GetInfoText(const TableItemData& item, bool isFilename) cons
 }
 QVariant TableModel::data(const QModelIndex &index, int role) const
 {
-    int actualIndex = index.row()/3;
-    bool isFilename = (index.row()%3)==0;
-    bool isInfo = (index.row()%3)==1;
+    int actualIndex = index.row()/RowCountPerEntry;
+    bool isFilename = (index.row()%RowCountPerEntry)==0;
+    bool isInfo = (index.row()%RowCountPerEntry)==1;
 
     if(role==TableRole::MovieFile)
     {

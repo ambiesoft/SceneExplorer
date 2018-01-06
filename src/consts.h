@@ -18,5 +18,8 @@ namespace Consts
     const char KEY_DBPATH[] = "dbpath";
 
     const char FILEPART_THUMBS[] = "thumbs";
+
+    const int THUMB_WIDTH=240;
+    const int THUMB_HEIGHT=180;
 }
 #endif // CONSTS_H

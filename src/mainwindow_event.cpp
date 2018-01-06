@@ -5,6 +5,8 @@
 
 #include "settings.h"
 
+#include "sql.h"
+
 #include "ui_mainwindow.h"
 #include "mainwindow.h"
 
@@ -12,9 +14,27 @@ void MainWindow::showEvent( QShowEvent* event )
 {
     QMainWindow::showEvent( event );
 
+    if(initShown)
+        return;
+    initShown=true;
+
     ui->treeView->setMaximumSize(10000,10000);
     ui->txtLog->setMaximumSize(10000,10000);
     ui->listTask->setMaximumSize(10000,10000);
+
+    QList<TableItemData*> v;
+    if(!gpSQL->GetAll(v))
+    {
+        insertLog(TaskKind::SQL,0,tr("Failed to get data from database."));
+        return;
+    }
+
+    for(int i=0 ; i < v.size(); ++i)
+    {
+        tableModel_->AppendData(v[i]);
+        setTableSpan();
+    }
+
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {

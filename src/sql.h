@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QtSql/QSqlDatabase>
 
+class TableItemData;
 class Sql : public QObject
 {
     Q_OBJECT
@@ -32,6 +33,8 @@ public:
         Q_UNUSED(file);
         return false;
     }
+
+    bool GetAll(QList<TableItemData*>& v);
 };
 
 #endif // SQL_H

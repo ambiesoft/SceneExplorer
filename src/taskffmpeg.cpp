@@ -107,12 +107,10 @@ bool TaskFFmpeg::run2()
     if(!getDuration(movieFile_,d,format))
         return false;
 
-    int width=240;
-    int height=180;
     QString strWidthHeight;
-    strWidthHeight.append(QString::number(width));
+    strWidthHeight.append(QString::number(Consts::THUMB_WIDTH));
     strWidthHeight.append("x");
-    strWidthHeight.append(QString::number(height));
+    strWidthHeight.append(QString::number(Consts::THUMB_HEIGHT));
 
     QString thumbfile = QUuid::createUuid().toString();
     thumbfile = thumbfile.remove(L'{');
@@ -164,6 +162,6 @@ bool TaskFFmpeg::run2()
         emitFiles.append(filename);
     }
 
-    emit sayGoodby(id_,emitFiles, width, height, movieFile_, format);
+    emit sayGoodby(id_,emitFiles, Consts::THUMB_WIDTH, Consts::THUMB_HEIGHT, movieFile_, format);
     return true;
 }

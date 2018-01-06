@@ -25,40 +25,7 @@ void MainWindow::sayGoodby(int id,
                            const QString& movieFile,
                            const QString& format)
 {
-//    if(false)
-//    {
-//        int newRow = ui->tableView->model()->rowCount();
 
-//        QStandardItem* infoItem = new QStandardItem();
-//        infoItem->setText(movieFile);
-//        ((QStandardItemModel*)ui->tableView->model())->setItem(newRow,0,infoItem);
-//        ui->tableView->setSpan(newRow,0,1,5);
-//        ++newRow;
-
-//        int i;
-//        for(i=0 ; i < 5 ; ++i)
-//        {
-//            QImage image(files[i]);
-//            QPixmap pix = QPixmap::fromImage(image);
-
-//            QStandardItem* item = new QStandardItem();
-//            item->setData(QVariant(pix), Qt::DecorationRole);
-//            ((QStandardItemModel*)ui->tableView->model())->setItem(newRow,i,item);
-
-//            ui->tableView->setColumnWidth(i, width);
-//            ui->tableView->setRowHeight(newRow, height);
-//        }
-//    }
-
-
-    int newRowFilename = ui->tableView->model()->rowCount();
-    int newRowInfo = newRowFilename+1;
-    int newRowImage = newRowFilename+2;
-
-    ui->tableView->setSpan(newRowFilename,0,1,5);
-    ui->tableView->setSpan(newRowInfo,0,1,5);
-    ui->tableView->resizeRowToContents(newRowFilename);
-    ui->tableView->resizeRowToContents(newRowInfo);
 
     tableModel_->AppendData(new TableItemData(files, width, height, movieFile, format));
     int sqlError = gpSQL->AppendData(files, width, height, movieFile, format);
@@ -71,12 +38,7 @@ void MainWindow::sayGoodby(int id,
         insertLog(TaskKind::SQL, id, QString("%1 \"%2\"").arg(tr("Failed to write on Database"), movieFile));
     }
 
-    for(int i=0 ; i < 5 ; ++i)
-    {
-        ui->tableView->setColumnWidth(i, width);
-        ui->tableView->setRowHeight(newRowImage, height);
-    }
-
+    setTableSpan();
     insertLog(TaskKind::FFMpeg, id, QString("%1 \"%2\"").arg(tr("Done"), movieFile));
 
 

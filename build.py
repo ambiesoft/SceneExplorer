@@ -14,6 +14,7 @@ def myexit(message):
 def getQt():
     qtdirs = [
         "Y:\\local\\Qt",
+        "C:\\local\\Qt",
     ]
     qtdir = ""
     for t in qtdirs:
@@ -87,13 +88,29 @@ def ensureDir(dir):
         if not os.path.isdir(dir):
             myexit('Could not create {}'.format(dir))
 
+def getBuildToolsBinDir():
+    cand = [
+        "C:\\local\\Qt\\Tools\\mingw530_32\\bin",
+        "Y:\\local\\Qt\\Tools\\mingw530_32\\bin",
+    ];
+    ret = ""
+    for t in cand:
+        if os.path.isdir(t):
+            ret=t
+            break
+
+    if not ret:
+        myexit("Qt not found")
+
+    return ret
+    
 def main():
     if not os.path.isdir("build"):
         os.mkdir("build")
         if not os.path.isdir("build"):
             myexit("Could not create dir [build]")
 
-    toolbin = "Y:\\local\\Qt\\Tools\\mingw530_32\\bin"
+    toolbin = getBuildToolsBinDir()
     my_env = os.environ.copy()
     my_env["PATH"] = toolbin + os.pathsep + my_env["PATH"]
     os.environ['PATH']=my_env['PATH']
