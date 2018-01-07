@@ -2,6 +2,7 @@
 #include <QImage>
 #include <QPixmap>
 #include <QFileInfo>
+#include <QTableView>
 
 #include "consts.h"
 #include "helper.h"
@@ -9,15 +10,42 @@
 #include "tableitemdata.h"
 #include "tablemodel.h"
 
-TableModel::TableModel(QObject *parent)
+TableModel::TableModel(QTableView *parent)
     :QAbstractTableModel(parent)
 {
+    parent_=parent;
 }
 void TableModel:: AppendData(TableItemData* pItemData)
 {
-    beginInsertRows(QModelIndex(),items_.count()*RowCountPerEntry,(items_.count()*RowCountPerEntry)+RowCountPerEntry);
+    beginInsertRows(QModelIndex(),
+                    items_.count()*RowCountPerEntry,
+                    (items_.count()*RowCountPerEntry)+RowCountPerEntry-1);
+    // beginResetModel();
     items_.append(pItemData);
+    // endResetModel();
     endInsertRows();
+
+
+    int newRowFilename = rowCount()-TableModel::RowCountPerEntry;
+    int newRowInfo = newRowFilename+1;
+    int newRowImage = newRowFilename+2;
+
+    parent_->setSpan(newRowFilename,0,1,5);
+    parent_->setSpan(newRowInfo,0,1,5);
+    // ui->tableView->resizeRowToContents(newRowFilename);
+    // ui->tableView->resizeRowToContents(newRowInfo);
+
+    static bool initColumnWidth=false;
+    if(!initColumnWidth)
+    {
+        initColumnWidth=true;
+        for(int i=0 ; i < 5 ; ++i)
+        {
+            parent_->setColumnWidth(i, Consts::THUMB_WIDTH);
+        }
+    }
+
+    parent_->setRowHeight(newRowImage, Consts::THUMB_HEIGHT);
 }
 void TableModel::AppendDatas(const QList<TableItemData*>&v)
 {

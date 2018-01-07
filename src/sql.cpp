@@ -8,46 +8,11 @@
 #include <QFileDevice>
 #include <QDateTime>
 #include <QSqlError>
+#include <QSet>
 
 #include "tableitemdata.h"
 #include "helper.h"
 #include "sql.h"
-
-Sql::Sql() : db_(QSqlDatabase::addDatabase("QSQLITE"))
-{
-    // データベースを開く。無ければ作る
-
-     db_.setDatabaseName("./db.sqlite3");
-     db_.open();
-     qDebug() << "tables 1";
-     for (int i = 0; i < db_.tables().count(); i ++) {
-         qDebug() << db_.tables().at(i);
-     }
-
-     // テーブルを作る。すでに有れば何もしない
-     QSqlQuery query;
-     query.exec("create table FileInfo(size, ctime, wtime, directory, name, salient, thumbid)");
-     qDebug() << "tables 2";
-     for (int i = 0; i < db_.tables().count(); i ++) {
-         qDebug() << db_.tables().at(i);
-     }
-
-     // データを書き込む
-
-     // データを出力する
-     qDebug() << "records";
-     query.exec("select * from test1");
-     while (query.next()) {
-         int id = query.value(0).toInt();
-         QString name = query.value(1).toString();
-         QString memo = query.value(2).toString();
-         qDebug() << QString("id(%1),name(%2),memo(%3)").arg(id).arg(name).arg(memo);
-     }
-}
-Sql::~Sql()
-{
-     db_.close();
-}
 
 static QString getBytecode1(char c)
 {
@@ -107,6 +72,36 @@ static QString getBytecode(const char* pByte, int size)
     }
     return ret;
 }
+
+
+Sql::Sql() : db_(QSqlDatabase::addDatabase("QSQLITE"))
+{
+    // データベースを開く。無ければ作る
+
+     db_.setDatabaseName("./db.sqlite3");
+     db_.open();
+     qDebug() << "tables 1";
+     for (int i = 0; i < db_.tables().count(); i ++) {
+         qDebug() << db_.tables().at(i);
+     }
+
+     // テーブルを作る。すでに有れば何もしない
+     QSqlQuery query;
+     query.exec("create table FileInfo(size, ctime, wtime, directory, name, salient, thumbid)");
+     qDebug() << "tables 2";
+     for (int i = 0; i < db_.tables().count(); i ++) {
+         qDebug() << db_.tables().at(i);
+     }
+}
+Sql::~Sql()
+{
+    delete pQDeleteFromDirectoryName_;
+    delete pQInsert_;
+    delete pQGetInfo_;
+
+    db_.close();
+}
+
 static QString createSalient(const QString& file, const qint64& size)
 {
     QFile f(file);
@@ -166,10 +161,74 @@ static bool isUUID(const QString& s)
 {
     if(s.isEmpty())
         return false;
-
+    if(s.length()!=36)
+        return false;
     return true;
 }
 
+int Sql::GetMovieFileInfo(const QString& movieFile,
+                     bool& exist,
+                     qint64& size,
+                     QString& directory,
+                     QString& name,
+                     QString* salient,
+                     qint64& ctime,
+                     qint64& wtime) const
+{
+    QFileInfo fi(movieFile);
+    exist = fi.exists();
+    if(!exist)
+        return MOVIEFILE_NOT_FOUND;
+
+    size = fi.size();
+    if(size <= 0)
+        return FILESIZE_UNDERZERO;
+
+    directory = fi.absolutePath();
+    name = fi.fileName();
+
+    ctime = fi.fileTime(QFileDevice::FileBirthTime).toSecsSinceEpoch();
+    wtime = fi.fileTime(QFileDevice::FileModificationTime).toSecsSinceEpoch();
+
+    if(salient)
+    {
+        *salient = createSalient(movieFile, size);
+        if(salient->isEmpty())
+            return ERROR_CREATE_SALIENT;
+    }
+    return 0;
+}
+
+QSqlQuery* Sql::getDeleteFromDirectoryName()
+{
+    if(pQDeleteFromDirectoryName_)
+        return pQDeleteFromDirectoryName_;
+
+    pQDeleteFromDirectoryName_ = new QSqlQuery(db_);
+    if(!pQDeleteFromDirectoryName_->prepare("delete from FileInfo where "
+                  "directory=? and name=?"))
+    {
+        qDebug() << pQDeleteFromDirectoryName_->lastError();
+        Q_ASSERT(false);
+        return nullptr;
+    }
+    return pQDeleteFromDirectoryName_;
+}
+QSqlQuery* Sql::getInsertQuery()
+{
+    if(pQInsert_)
+        return pQInsert_;
+    pQInsert_=new QSqlQuery(db_);
+
+    if(!pQInsert_->prepare("insert into FileInfo (size, ctime, wtime, directory, name, salient, thumbid) "
+                  "values (?, ?, ?, ?, ?, ?, ?)"))
+    {
+        qDebug() << pQInsert_->lastError();
+        Q_ASSERT(false);
+        return nullptr;
+    }
+    return pQInsert_;
+}
 int Sql::AppendData(const QStringList& files,
          int width, int height,
          const QString& movieFile,
@@ -178,25 +237,25 @@ int Sql::AppendData(const QStringList& files,
     Q_UNUSED(width);
     Q_UNUSED(height);
     Q_UNUSED(format);
-    QFileInfo mF(movieFile);
-    if(!mF.exists())
-        return MOVIEFILE_NOT_FOUND;
 
-    qint64 size = mF.size();
-    if(size <= 0)
-        return FILESIZE_UNDERZERO;
-
-    QString directory = mF.absolutePath();
-    QString name = mF.fileName();
-
-    QString salient = createSalient(movieFile, size);
-    if(salient.isEmpty())
-        return ERROR_CREATE_SALIENT;
-
-
-    qint64 ctime = mF.fileTime(QFileDevice::FileBirthTime).toSecsSinceEpoch();
-    qint64 wtime = mF.fileTime(QFileDevice::FileModificationTime).toSecsSinceEpoch();
-
+    bool exist;
+    qint64 size;
+    QString directory;
+    QString name;
+    QString salient;
+    qint64 ctime;
+    qint64 wtime;
+    int ret = GetMovieFileInfo(
+                     movieFile,
+                     exist,
+                     size,
+                     directory,
+                     name,
+                     &salient,
+                     ctime,
+                     wtime);
+    if(ret != 0)
+        return ret;
 
     if(files.isEmpty())
         return THUMBFILE_NOT_FOUND;
@@ -205,19 +264,210 @@ int Sql::AppendData(const QStringList& files,
     if(!isUUID(uuid))
         return UUID_FORMAT_ERROR;
 
-    QSqlQuery query(db_);
-    query.prepare("insert into FileInfo (size, ctime, wtime, directory, name, salient, thumbid) "
-                  "values (?, ?, ?, ?, ?, ?, ?)");
+    {
+        QSqlQuery* pQuery = getDeleteFromDirectoryName();
 
+        int i = 0;
+        pQuery->bindValue(i++, directory);
+        pQuery->bindValue(i++, name);
+        if(!pQuery->exec())
+        {
+            qDebug() << pQuery->lastError();
+            return SQL_EXEC_FAILED;
+        }
+    }
+
+    QSqlQuery* pQInsert = getInsertQuery();
     int i = 0;
-    query.bindValue(i++, size);
-    query.bindValue(i++, ctime);
-    query.bindValue(i++, wtime);
-    query.bindValue(i++, directory);
-    query.bindValue(i++, name);
-    query.bindValue(i++, salient);
-    query.bindValue(i++, uuid);
+    pQInsert->bindValue(i++, size);
+    pQInsert->bindValue(i++, ctime);
+    pQInsert->bindValue(i++, wtime);
+    pQInsert->bindValue(i++, directory);
+    pQInsert->bindValue(i++, name);
+    pQInsert->bindValue(i++, salient);
+    pQInsert->bindValue(i++, uuid);
 
+    if(!pQInsert->exec())
+    {
+        qDebug() << pQInsert->lastError();
+        return SQL_EXEC_FAILED;
+    }
+    return 0;
+}
+QSqlQuery* Sql::getGetInfoQuery()
+{
+    if(pQGetInfo_)
+        return pQGetInfo_;
+    pQGetInfo_=new QSqlQuery(db_);
+
+    if(!pQGetInfo_->prepare("select * from FileInfo where "
+                   "size=? and directory=? and name=? and salient=? and ctime=? and wtime=?"))
+    {
+        qDebug() << pQGetInfo_->lastError();
+        Q_ASSERT(false);
+        return nullptr;
+    }
+    return pQGetInfo_;
+}
+
+bool Sql::IsSameFile(const QString& dir,
+                const QString& name,
+                const qint64& size,
+                const QString& salient)
+{
+    bool exist2;
+    qint64 size2;
+    QString directory2;
+    QString name2;
+    QString salient2;
+    qint64 ctime2;
+    qint64 wtime2;
+    int ret = GetMovieFileInfo(
+                     pathCombine(dir,name),
+                     exist2,
+                     size2,
+                     directory2,
+                     name2,
+                     nullptr,
+                     ctime2,
+                     wtime2);
+    if(ret != 0)
+        return false;
+
+    if(size != size2)
+        return false;
+
+    // need to check salient
+    GetMovieFileInfo(
+                     pathCombine(dir,name),
+                     exist2,
+                     size2,
+                     directory2,
+                     name2,
+                     &salient2,
+                     ctime2,
+                     wtime2);
+    if(salient != salient2)
+        return false;
+
+    return true;
+}
+int Sql::filterWithEntry(const QString& movieDir,
+                         const QStringList& movieFiles,
+                         QStringList& results)
+{
+    if(movieFiles.isEmpty())
+        return 0;
+
+    QSet<QString> sets;
+    for(int i=0 ; i < movieFiles.count(); ++i)
+        sets.insert(movieFiles[i]);
+
+    QSqlQuery query(db_);
+    if(!query.prepare("select size,name,salient from FileInfo where "
+                  "directory=?"))
+    {
+        qDebug() << pQGetInfo_->lastError();
+        Q_ASSERT(false);
+        return SQL_PREPARE_FAILED;
+    }
+    query.bindValue(0, movieDir);
+
+    if(!query.exec())
+    {
+        return SQL_EXEC_FAILED;
+    }
+
+    while(query.next())
+    {
+        qint64 size = query.value("size").toLongLong();
+        QString name = query.value("name").toString();
+        QString salient = query.value("salient").toString();
+
+        if(sets.contains(name) && IsSameFile(movieDir,name,size,salient))
+        {
+            sets.remove(name);
+        }
+    }
+
+    QSet<QString>::iterator it;
+    for (it = sets.begin(); it != sets.end(); ++it)
+        results.append(*it);
+    return 0;
+}
+int Sql::hasThumb(const QString& movieFile)
+{
+    bool exist;
+    qint64 size;
+    QString directory;
+    QString name;
+    QString salient;
+    qint64 ctime;
+    qint64 wtime;
+    int ret = GetMovieFileInfo(
+                     movieFile,
+                     exist,
+                     size,
+                     directory,
+                     name,
+                     &salient,
+                     ctime,
+                     wtime);
+    if(ret != 0)
+        return ret;
+
+    QSqlQuery* pGetInfo = getGetInfoQuery();
+    int i = 0;
+    pGetInfo->bindValue(i++, size);
+    pGetInfo->bindValue(i++, directory);
+    pGetInfo->bindValue(i++, name);
+    pGetInfo->bindValue(i++, salient);
+    pGetInfo->bindValue(i++, ctime);
+    pGetInfo->bindValue(i++, wtime);
+    if(!pGetInfo->exec())
+    {
+        qDebug() << pGetInfo->lastError();
+        return SQL_EXEC_FAILED;
+    }
+    while (pGetInfo->next())
+    {
+        QString thumbid = pGetInfo->value("thumbid").toString();
+        QStringList thumbs;
+        for(int i=1 ; i <= 5 ; ++i)
+        {
+            QString t=thumbid;
+            t+="-";
+            t+=QString::number(i);
+            t+=".png";
+
+            t = pathCombine("thumbs", t);
+            if(!QFile(t).exists())
+            {
+                removeEntry(thumbid);
+                return THUMBFILE_NOT_FOUND;
+            }
+        }
+
+        Q_ASSERT(!pGetInfo->next());
+        return THUMB_EXIST;
+    }
+    return THUMB_NOT_EXIST;
+}
+int Sql::removeEntry(const QString& thumbid)
+{
+    if(!isUUID(thumbid))
+        return THUMBID_IS_NOT_UUID;
+
+    QSqlQuery query(db_);
+
+    if(!query.prepare("delete from FileInfo where "
+                   "thumbid=?"))
+    {
+        qDebug() << query.lastError();
+        return SQL_EXEC_FAILED;
+    }
+    int i = 0;
+    query.bindValue(i++, thumbid);
     if(!query.exec())
     {
         qDebug() << query.lastError();
@@ -225,7 +475,23 @@ int Sql::AppendData(const QStringList& files,
     }
     return 0;
 }
-
+QString Sql::getErrorStrig(int thumbRet)
+{
+    switch(thumbRet)
+    {
+    case NO_ERROR: return tr("No Error");
+    case MOVIEFILE_NOT_FOUND: return tr("Video file not found.");
+    case FILESIZE_UNDERZERO: return tr("File size is under 0.");
+    case ERROR_CREATE_SALIENT: return tr("Failed to create Salient.");
+    case THUMBFILE_NOT_FOUND: return tr("Thumbnail file(s) not found.");
+    case UUID_FORMAT_ERROR: return tr("UUID format error.");
+    case SQL_EXEC_FAILED: return tr("Sql failed.");
+    case THUMB_EXIST: return tr("Thumb exists.");
+    case THUMB_NOT_EXIST: return tr("Thumb not exists.");
+    }
+    Q_ASSERT(false);
+    return QString();
+}
 bool Sql::GetAll(QList<TableItemData*>& v)
 {
     QSqlQuery query(db_);
@@ -245,9 +511,11 @@ bool Sql::GetAll(QList<TableItemData*>& v)
         QString movieFile = pathCombine(query.value("directory").toString(),
                                         query.value("name").toString());
 
-
-        TableItemData* pID = new TableItemData(thumbs,0,0,movieFile,"format");
-        v.append(pID);
+        if(QFile(movieFile).exists())
+        {
+            TableItemData* pID = new TableItemData(thumbs,0,0,movieFile,"format");
+            v.append(pID);
+        }
     }
     return true;
 }

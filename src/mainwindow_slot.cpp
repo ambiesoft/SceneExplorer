@@ -38,7 +38,7 @@ void MainWindow::sayGoodby(int id,
         insertLog(TaskKind::SQL, id, QString("%1 \"%2\"").arg(tr("Failed to write on Database"), movieFile));
     }
 
-    setTableSpan();
+    // setTableSpan();
     insertLog(TaskKind::FFMpeg, id, QString("%1 \"%2\"").arg(tr("Done"), movieFile));
 
 

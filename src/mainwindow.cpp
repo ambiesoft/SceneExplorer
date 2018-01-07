@@ -29,6 +29,7 @@
 
 #include "optiondialog.h"
 #include "globals.h"
+#include "helper.h"
 
 #include "sql.h"
 
@@ -53,16 +54,15 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
 //            this, SLOT(OnTimer()));
 //    timer_->start(5000);
 
-    tableModel_=new TableModel(this);
+    tableModel_=new TableModel(ui->tableView);
     // QStandardItemModel* model = new QStandardItemModel;
     // ui->tableView->horizontalHeader()->setStretchLastSection(true);
     ui->tableView->setModel(tableModel_);
 
-
     treeModel_ = new FolderModel;
     ui->treeView->setModel(treeModel_);
 
-    taskModel_ = new TaskModel;
+    taskModel_ = new TaskModel(ui->listTask);
     ui->listTask->setModel(taskModel_);
 
 
@@ -92,29 +92,29 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
         ui->listTask->setMaximumSize(vVal.toSize());
 }
 
-void MainWindow::setTableSpan()
-{
-    int newRowFilename = ui->tableView->model()->rowCount()-TableModel::RowCountPerEntry;
-    int newRowInfo = newRowFilename+1;
-    int newRowImage = newRowFilename+2;
+//void MainWindow::setTableSpan()
+//{
+//    int newRowFilename = ui->tableView->model()->rowCount()-TableModel::RowCountPerEntry;
+//    int newRowInfo = newRowFilename+1;
+//    int newRowImage = newRowFilename+2;
 
-    ui->tableView->setSpan(newRowFilename,0,1,5);
-    ui->tableView->setSpan(newRowInfo,0,1,5);
-    // ui->tableView->resizeRowToContents(newRowFilename);
-    // ui->tableView->resizeRowToContents(newRowInfo);
+//    ui->tableView->setSpan(newRowFilename,0,1,5);
+//    ui->tableView->setSpan(newRowInfo,0,1,5);
+//    // ui->tableView->resizeRowToContents(newRowFilename);
+//    // ui->tableView->resizeRowToContents(newRowInfo);
 
-    static bool initColumnWidth=false;
-    if(!initColumnWidth)
-    {
-        initColumnWidth=true;
-        for(int i=0 ; i < 5 ; ++i)
-        {
-            ui->tableView->setColumnWidth(i, Consts::THUMB_WIDTH);
-        }
-    }
+//    static bool initColumnWidth=false;
+//    if(!initColumnWidth)
+//    {
+//        initColumnWidth=true;
+//        for(int i=0 ; i < 5 ; ++i)
+//        {
+//            ui->tableView->setColumnWidth(i, Consts::THUMB_WIDTH);
+//        }
+//    }
 
-    ui->tableView->setRowHeight(newRowImage, Consts::THUMB_HEIGHT);
-}
+//    ui->tableView->setRowHeight(newRowImage, Consts::THUMB_HEIGHT);
+//}
 
 QThreadPool* MainWindow::getPoolGetDir()
 {
@@ -151,6 +151,9 @@ void MainWindow::clearPoolFFmpeg()
 }
 void MainWindow::clearAllPool()
 {
+    insertLog(TaskKind::App, 0, tr("Clearing all tasks..."));
+    gStop = true;
+
     if(pPoolFFmpeg_)
         pPoolFFmpeg_->clear();
     if(pPoolGetDir_)
@@ -161,6 +164,9 @@ void MainWindow::clearAllPool()
 
     delete pPoolFFmpeg_;
     pPoolFFmpeg_ = nullptr;
+
+    gStop = false;
+    insertLog(TaskKind::App, 0, tr("All tasks Cleared."));
 }
 
 
@@ -175,8 +181,9 @@ MainWindow::~MainWindow()
 
 
 
-void MainWindow::insertLog(TaskKind kind, int id, const QString& text)
+void MainWindow::insertLog(TaskKind kind, int id, const QString& text, bool bError)
 {
+    Q_UNUSED(bError);
     QString message;
 
     message.append(QTime::currentTime().toString());
@@ -200,6 +207,11 @@ void MainWindow::insertLog(TaskKind kind, int id, const QString& text)
         case TaskKind::SQL:
         {
             head.append(tr("Database"));
+        }
+        break;
+        case TaskKind::App:
+        {
+
         }
         break;
 
@@ -272,7 +284,8 @@ void MainWindow::resizeEvent(QResizeEvent *event)
 
 
 void MainWindow::afterGetDir(int id,
-                 const QStringList& dirs)
+                             const QString& dir,
+                             const QStringList& filesIn)
 {
     Q_UNUSED(id);
     WaitCursor wc;
@@ -283,16 +296,40 @@ void MainWindow::afterGetDir(int id,
     bool prevPaused = gPaused;
     gPaused=true;
 
+    QStringList filteredFiles;
+    int ret = gpSQL->filterWithEntry(dir, filesIn, filteredFiles);
+    if(ret != 0)
+    {
+        insertLog(TaskKind::SQL, 0, Sql::getErrorStrig(ret), true);
+    }
+    if(filteredFiles.isEmpty())
+    {
+        insertLog(TaskKind::SQL, 0, QString(tr("No new files found. %1")).arg(dir));
+    }
+    else
+    {
+        insertLog(TaskKind::SQL, 0, QString(tr("%1 new items found. %2")).
+                  arg(QString::number(filteredFiles.count()), dir));
+    }
     QVector<TaskListData*> tasks;
-    QStringListIterator it(dirs);
+    QStringListIterator it(filteredFiles);
     while (it.hasNext()) {
-        QString file = it.next();
-        if(gpSQL->hasThumb(file))
-        {
-            insertLog(TaskKind::SQL, 0, tr("Found in db. Skipping"));
-            continue;
-        }
-
+        QString file = pathCombine(dir, it.next());
+//        int thumbRet = gpSQL->hasThumb(file);
+//        if(thumbRet==Sql::THUMB_EXIST)
+//        {
+//            insertLog(TaskKind::SQL, 0, tr("Found in db. Skipping"));
+//            continue;
+//        }
+//        else if(thumbRet != Sql::THUMB_NOT_EXIST &&
+//                thumbRet != Sql::THUMBFILE_NOT_FOUND)
+//        {
+//            insertLog(TaskKind::SQL, 0, Sql::getErrorStrig(thumbRet), true);
+//        }
+//        if(thumbRet == Sql::THUMBFILE_NOT_FOUND)
+//        {
+//            gpSQL->removeEntry(file);
+//        }
         TaskFFmpeg* pTask = new TaskFFmpeg(++idFFMpeg_,file);
         pTask->setAutoDelete(true);
 //        QObject::connect(pTask, &TaskFFMpeg::sayBorn,

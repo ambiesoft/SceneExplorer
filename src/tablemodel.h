@@ -5,10 +5,12 @@
 #include <QStyledItemDelegate>
 
 class TableItemData;
+class QTableView;
 class TableModel : public QAbstractTableModel
 {
     Q_OBJECT
     QList<TableItemData*> items_;
+    QTableView* parent_;
     QString GetInfoText(const TableItemData& item, const bool isFilename) const;
 public:
     enum TableRole {
@@ -16,7 +18,7 @@ public:
     };
     static const int RowCountPerEntry = 3;
 
-    TableModel(QObject *parent);
+    TableModel(QTableView *parent);
     void AppendData(TableItemData* pItemData);
     void AppendDatas(const QList<TableItemData*>&v);
 
@@ -24,6 +26,7 @@ public:
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     Qt::ItemFlags flags(const QModelIndex & index) const override ;
+
 };
 
 class ImageDelegate : public QStyledItemDelegate

@@ -2,4 +2,5 @@
 #include "globals.h"
 
 volatile bool gPaused;
+volatile bool gStop;
 Sql* gpSQL = nullptr;

@@ -90,10 +90,13 @@ bool getDuration(const QString& file,double& d,QString& videoFormat)
 
 void TaskFFmpeg::run()
 {
-    QThread::currentThread()->setPriority(QThread::IdlePriority);
-
+    if(gStop)
+        return;
     while(gPaused)
         QThread::sleep(5);
+    if(gStop)
+        return;
+
     progress_ = Progressing;
     emit sayHello(id_, movieFile_);
     if(!run2())
@@ -123,7 +126,7 @@ bool TaskFFmpeg::run2()
         filename.append(QString::number(i));
         filename.append(".png");
 
-        int timepoint = (int)(((double)i-0.5)*d/5);
+        double timepoint = (((double)i-0.5)*d/5);
         QStringList qsl;
         qsl.append("-hide_banner");  // as it is
         qsl.append("-n");  // no overwrite

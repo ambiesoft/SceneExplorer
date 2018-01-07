@@ -7,18 +7,36 @@
 
 void TaskGetDir::run()
 {
+    runStuff(dir_);
+}
+void TaskGetDir::runStuff(const QString& dir)
+{
+    if(gStop)
+        return;
     while(gPaused)
         QThread::sleep(5);
+    if(gStop)
+        return;
 
-    QStringList dirs;
-    QDirIterator it(dir_, QDirIterator::Subdirectories);
-    while(it.hasNext())
     {
-        QString file = it.next();
-        if(it.fileInfo().isFile())
+        QStringList files;
+        QDirIterator itFile(dir, QDir::NoDotAndDotDot|QDir::Files); // ,QDirIterator::Subdirectories);
+        while(itFile.hasNext())
         {
-            dirs.append(file);
+            if(gStop)
+                return;
+            itFile.next();
+            Q_ASSERT(itFile.fileInfo().isFile());
+            files.append(itFile.fileName());
+        }
+        emit afterGetDir(id_, dir, files);
+    }
+
+    {
+        QDirIterator itDir(dir, QDir::NoDotAndDotDot|QDir::Dirs);
+        while(itDir.hasNext())
+        {
+            runStuff(itDir.next());
         }
     }
-    emit afterGetDir(id_, dirs);
 }

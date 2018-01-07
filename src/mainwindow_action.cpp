@@ -43,7 +43,12 @@ void MainWindow::on_tableView_doubleClicked(const QModelIndex &index)
 void MainWindow::on_action_Options_triggered()
 {
     OptionDialog dlg(this);
-    dlg.exec();
+    dlg.maxff_ = threadcountFFmpeg_;
+    if(QDialog::Accepted != dlg.exec())
+        return;
+
+    threadcountFFmpeg_ = dlg.maxff_;
+    getPoolFFmpeg()->setMaxThreadCount(threadcountFFmpeg_);
 }
 
 void MainWindow::onMenuTask_AboutToShow()

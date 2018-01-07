@@ -38,7 +38,7 @@ private:
 //    QTimer* timer_ = nullptr;
     bool initShown=false;
 
-    void setTableSpan();
+    // void setTableSpan();
 protected:
     virtual void resizeEvent(QResizeEvent *event);
     void closeEvent(QCloseEvent *event);
@@ -88,8 +88,9 @@ private:
         GetDir,
         FFMpeg,
         SQL,
+        App,
     };
-    void insertLog(TaskKind kind, int id, const QString& text);
+    void insertLog(TaskKind kind, int id, const QString& text, bool bError=false);
 
 public slots:
 //    void sayBorn(int id,
@@ -107,7 +108,8 @@ public slots:
     void sayDead(int id);
 
     void afterGetDir(int id,
-                     const QStringList& dirs);
+                     const QString& dir,
+                     const QStringList& files);
 
 //	void OnTimer();
 };

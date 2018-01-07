@@ -2,30 +2,40 @@
 #define TASKMODEL_H
 
 #include <QAbstractListModel>
-
+#include <QListView>
 #include "taskffmpeg.h"
 #include "tasklistdata.h"
 
-class TaskModel : public QAbstractListModel
+
+class TaskModel : public QAbstractTableModel
 {
     Q_OBJECT
     //QList<TaskListData*> items_;
     QVector<TaskListData*> items_;
     QMap<int, TaskListData*> map_;
 
+    QListView* parent_;
+    void myupdate();
 public:
-    TaskModel(){}
+    TaskModel(QListView* parent) : QAbstractTableModel(parent)
+    {
+        parent_=parent;
+    }
     void AddTasks(const QVector<TaskListData*>& tasks);
     int findRow(TaskListData* p);
     void RemoveTask(int id);
     void SetProgress(int id, TaskFFmpeg::Progress progress);
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
-
-	void UpdateList()
-	{
-		emit dataChanged(QModelIndex(), QModelIndex());
-	}
+    int columnCount(const QModelIndex &parent = QModelIndex()) const override
+    {
+        Q_UNUSED(parent);
+        return 1;
+    }
+//	void UpdateList()
+//	{
+//		emit dataChanged(QModelIndex(), QModelIndex());
+//	}
 //signals:
 //    void numberPopulated(int number);
 

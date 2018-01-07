@@ -32,7 +32,7 @@ void MainWindow::showEvent( QShowEvent* event )
     for(int i=0 ; i < v.size(); ++i)
     {
         tableModel_->AppendData(v[i]);
-        setTableSpan();
+        // setTableSpan();
     }
 
 }

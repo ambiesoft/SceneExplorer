@@ -3,7 +3,7 @@
 
 
 extern volatile bool gPaused;
-
+extern volatile bool gStop;
 class Sql;
 extern Sql* gpSQL;
 

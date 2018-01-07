@@ -13,6 +13,11 @@ private:
 
 public:
     OptionDialog(QWidget* parent = nullptr);
+
+    int maxff_;
+
+protected:
+    void showEvent(QShowEvent *) override;
 private slots:
     void on_buttonBox_accepted();
 };

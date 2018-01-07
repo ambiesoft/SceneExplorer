@@ -10,13 +10,18 @@ class TaskGetDir : public QObject, public QRunnable
 private:
     int id_;
     QString dir_;
+
+    void runStuff(const QString& dir);
+
 public:
     TaskGetDir(int id, const QString& dir):id_(id), dir_(dir){}
 
     void run() override;
 
 signals:
-    void afterGetDir(int id, const QStringList& dirs);
+    void afterGetDir(int id,
+                     const QString& dir,
+                     const QStringList& files);
 };
 
 #endif // TASKGETDIR_H
