@@ -63,6 +63,10 @@ private slots:
     void onMenuDocking_windows_AboutToShow();
 
 
+    void on_actionSort_by_file_name_triggered();
+
+    void on_actionSort_by_file_size_triggered();
+
 private:
     QThreadPool* pPoolFFmpeg_ = nullptr;
     QThreadPool* getPoolFFmpeg();

@@ -10,7 +10,7 @@ class TableItemData
     int height_;
     QString movieFile_;
     QString format_;
-
+    mutable qint64 size_=-1;
 public:
     TableItemData(const QStringList& files,
              int width, int height,
@@ -32,6 +32,8 @@ public:
     QString getFormat() const {
         return format_;
     }
+    qint64 getSize() const;
+
 
 };
 

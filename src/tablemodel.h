@@ -11,7 +11,7 @@ class TableModel : public QAbstractTableModel
     Q_OBJECT
     QList<TableItemData*> items_;
     QTableView* parent_;
-    QString GetInfoText(const TableItemData& item) const;
+    QString GetInfoText(TableItemData& item) const;
 public:
     enum TableRole {
         MovieFile = Qt::UserRole + 1,
@@ -26,7 +26,8 @@ public:
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     Qt::ItemFlags flags(const QModelIndex & index) const override ;
-
+    void SortByFileName();
+    void SortBySize();
 };
 
 class ImageDelegate : public QStyledItemDelegate

@@ -16,6 +16,8 @@
 
 #include "taskgetdir.h"
 
+#include "sql.h"
+
 #include "ui_mainwindow.h"
 #include "mainwindow.h"
 
@@ -90,10 +92,12 @@ void MainWindow::on_action_Stop_triggered()
 
     clearAllPool();
 }
+
 void MainWindow::on_action_Close_triggered()
 {
     this->close();
 }
+
 void MainWindow::on_action_About_triggered()
 {
     QString title = Consts::APPNAME;
@@ -107,8 +111,12 @@ void MainWindow::on_action_About_triggered()
     text.append(Consts::ORGANIZATION);
     QMessageBox::about(this,title,text);
 }
-//void MainWindow::OnTimer()
-//{
-//    if(taskModel_)
-//        taskModel_->UpdateList();
-//}
+
+void MainWindow::on_actionSort_by_file_name_triggered()
+{
+    tableModel_->SortByFileName();
+}
+void MainWindow::on_actionSort_by_file_size_triggered()
+{
+    tableModel_->SortBySize();
+}

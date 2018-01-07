@@ -64,9 +64,9 @@ int TableModel::columnCount(const QModelIndex & /*parent*/) const
 }
 
 // http://comments.gmane.org/gmane.comp.lib.qt.general/34914
-QString size_human(QFileInfo& fi)
+QString size_human(const qint64& size)
 {
-    float num = fi.size();
+    float num = size;
     QStringList list;
     list << "KB" << "MB" << "GB" << "TB";
 
@@ -94,15 +94,15 @@ static QString dq(const QString& s)
 
 	return "\"" + s + "\"";
 }
-QString TableModel::GetInfoText(const TableItemData& item) const
+QString TableModel::GetInfoText(TableItemData& item) const
 {
     QString ret;
 
     ret.append(dq(item.getMovieFile()));
 	ret.append(" ");
 
-    QFileInfo fi(item.getMovieFile());
-    ret.append(size_human(fi));
+
+    ret.append(size_human(item.getSize()));
     ret.append(" ");
 
     ret.append(item.getFormat());
@@ -158,4 +158,42 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
 Qt::ItemFlags TableModel::flags(const QModelIndex &index) const
 {
     return QAbstractTableModel::flags(index);
+}
+
+enum SORTCOLUMN{
+    FILENAME,
+    SIZE,
+} gSortColumn;
+bool gSortReverse;
+
+bool itemDataLessThan(const TableItemData* v1, const TableItemData* v2)
+{
+    bool ret;
+    switch(gSortColumn)
+    {
+    case SORTCOLUMN::FILENAME:
+        ret = (v1->getMovieFile() < v2->getMovieFile());
+    case SORTCOLUMN::SIZE:
+        ret = (v1->getSize() < v2->getSize());
+    default:
+        Q_ASSERT(false);
+    }
+    return gSortReverse ? !ret : ret;
+}
+void TableModel::SortByFileName()
+{
+    gSortReverse = !gSortReverse;
+    beginResetModel();
+    gSortColumn = SORTCOLUMN::FILENAME;
+    qSort(items_.begin(), items_.end(), itemDataLessThan);
+    endResetModel();
+}
+
+void TableModel::SortBySize()
+{
+    gSortReverse = !gSortReverse;
+    beginResetModel();
+    gSortColumn = SORTCOLUMN::SIZE;
+    qSort(items_.begin(), items_.end(), itemDataLessThan);
+    endResetModel();
 }

@@ -1,6 +1,7 @@
-#include "tableitemdata.h"
-
 #include <QStringList>
+#include <QFileInfo>
+
+#include "tableitemdata.h"
 
 TableItemData::TableItemData(const QStringList& files,
                    int width,
@@ -13,4 +14,14 @@ TableItemData::TableItemData(const QStringList& files,
     height_ = height;
     movieFile_ = movieFile;
     format_=format;
+    size_ = -1;
+}
+qint64 TableItemData::getSize() const
+{
+    if(size_==-1)
+    {
+        QFileInfo fi(movieFile_);
+        size_=fi.size();
+    }
+    return size_;
 }

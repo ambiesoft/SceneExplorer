@@ -36,7 +36,13 @@ void MainWindow::showEvent( QShowEvent* event )
     }
 
 }
-
+void MainWindow::resizeEvent(QResizeEvent *event)
+{
+    resizeDock(ui->dockTree, ui->treeView->size());
+    resizeDock(ui->dockLog, ui->txtLog->size());
+    resizeDock(ui->dockTask, ui->listTask->size());
+    QMainWindow::resizeEvent(event);
+}
 void MainWindow::closeEvent(QCloseEvent *event) {
     Q_UNUSED(event);
 
