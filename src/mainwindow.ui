@@ -39,7 +39,7 @@
     <item>
      <widget class="QTableView" name="tableView">
       <property name="autoScroll">
-       <bool>false</bool>
+       <bool>true</bool>
       </property>
       <property name="showGrid">
        <bool>false</bool>
@@ -69,7 +69,7 @@
      <x>0</x>
      <y>0</y>
      <width>701</width>
-     <height>20</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">

@@ -41,7 +41,8 @@ SOURCES += \
     mainwindow_action.cpp \
     mainwindow_event.cpp \
     helper.cpp \
-    foldermodel.cpp
+    foldermodel.cpp \
+    taskfilter.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -58,7 +59,8 @@ HEADERS += \
     tasklistdata.h \
     tableitemdata.h \
     helper.h \
-    foldermodel.h
+    foldermodel.h \
+    taskfilter.h
 
 FORMS += \
         mainwindow.ui \

@@ -91,6 +91,7 @@ private:
         App,
     };
     void insertLog(TaskKind kind, int id, const QString& text, bool bError=false);
+    void insertLog(TaskKind kind, const QVector<int>& ids, const QStringList& texts, bool bError=false);
 
 public slots:
 //    void sayBorn(int id,
@@ -110,6 +111,9 @@ public slots:
     void afterGetDir(int id,
                      const QString& dir,
                      const QStringList& files);
+    void afterFilter(int id,
+                     const QString& dir,
+                     const QStringList& filteredFiles);
 
 //	void OnTimer();
 };

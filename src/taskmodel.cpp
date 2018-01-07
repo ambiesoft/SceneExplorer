@@ -46,7 +46,7 @@ void TaskModel::RemoveTask(int id)
     map_.remove(id);
     delete p;
 
-    myupdate();
+    // myupdate();
     if(rowCount()==0)
     {
         beginResetModel();
@@ -80,7 +80,7 @@ void TaskModel::SetProgress(int id, TaskFFmpeg::Progress progress)
 
     p->SetProgress(progress);
 
-    myupdate();
+    //myupdate();
 //    int row = findRow(p);
 //    emit dataChanged(createIndex(row,0), createIndex(row,0));
 }

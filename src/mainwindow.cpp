@@ -26,6 +26,7 @@
 #include "tableitemdata.h"
 #include "settings.h"
 #include "waitcursor.h"
+#include "taskfilter.h"
 
 #include "optiondialog.h"
 #include "globals.h"
@@ -183,47 +184,65 @@ MainWindow::~MainWindow()
 
 void MainWindow::insertLog(TaskKind kind, int id, const QString& text, bool bError)
 {
+    QVector<int> ids;
+    ids.append(id);
+
+    QStringList l;
+    l.append(text);
+
+    insertLog(kind, ids, l, bError);
+}
+void MainWindow::insertLog(TaskKind kind, const QVector<int>& ids, const QStringList& texts, bool bError)
+{
     Q_UNUSED(bError);
     QString message;
 
     message.append(QTime::currentTime().toString());
     message.append(" ");
 
-    QString head;
-    switch(kind)
+    Q_ASSERT(ids.count()==texts.count());
+    for(int i=0 ; i < texts.length(); ++i)
     {
-        case TaskKind::GetDir:
-        {
-            head.append(tr("Iterate"));
-            head.append(QString::number(id));
-        }
-        break;
-        case TaskKind::FFMpeg:
-        {
-            head.append(tr("Analyze"));
-            head.append(QString::number(id));
-        }
-        break;
-        case TaskKind::SQL:
-        {
-            head.append(tr("Database"));
-        }
-        break;
-        case TaskKind::App:
-        {
+        QString text=texts[i];
+        int id=ids[i];
 
-        }
-        break;
+        QString head;
+        switch(kind)
+        {
+            case TaskKind::GetDir:
+            {
+                head.append(tr("Iterate"));
+                head.append(QString::number(id));
+            }
+            break;
+            case TaskKind::FFMpeg:
+            {
+                head.append(tr("Analyze"));
+                head.append(QString::number(id));
+            }
+            break;
+            case TaskKind::SQL:
+            {
+                head.append(tr("Database"));
+            }
+            break;
+            case TaskKind::App:
+            {
 
-        default:
-            Q_ASSERT(false);
-            return;
+            }
+            break;
+
+            default:
+                Q_ASSERT(false);
+                return;
+        }
+
+        head.append("> ");
+        message.append(head);
+        message.append(text);
+        if( (i+1) != texts.length())
+            message.append("\n");
     }
-
-    head.append("> ");
-    message.append(head);
-    message.append(text);
-
     int scrollMax=ui->txtLog->verticalScrollBar()->maximum();
     int scrollCur=ui->txtLog->verticalScrollBar()->value();
 
@@ -293,15 +312,40 @@ void MainWindow::afterGetDir(int id,
 //    int saveThreadCount = poolFFMpeg_->maxThreadCount();
 //    poolFFMpeg_->setMaxThreadCount(1);
 
+	QStringList entries;
+    QVector<qint64> sizes;
+    QVector<qint64> ctimes;
+    QVector<qint64> wtimes;
+    QStringList salients;
+
+    gpSQL->GetAllEntry(dir, entries, sizes, ctimes, wtimes, salients);
+    TaskFilter* pTaskFilter = new TaskFilter(id, dir, filesIn,
+                                             entries,
+                                             sizes,
+                                             ctimes,
+                                             wtimes,
+                                             salients);
+    pTaskFilter->setAutoDelete(true);
+
+    QObject::connect(pTaskFilter, &TaskFilter::afterFilter,
+                     this, &MainWindow::afterFilter);
+    getPoolGetDir()->start(pTaskFilter);
+}
+void MainWindow::afterFilter(int id,
+                 const QString& dir,
+                 const QStringList& filteredFiles)
+{
+    Q_UNUSED(id);
+
     bool prevPaused = gPaused;
     gPaused=true;
 
-    QStringList filteredFiles;
-    int ret = gpSQL->filterWithEntry(dir, filesIn, filteredFiles);
-    if(ret != 0)
-    {
-        insertLog(TaskKind::SQL, 0, Sql::getErrorStrig(ret), true);
-    }
+//    QStringList filteredFiles;
+//    int ret = gpSQL->filterWithEntry(dir, filesIn, filteredFiles);
+//    if(ret != 0)
+//    {
+//        insertLog(TaskKind::SQL, 0, Sql::getErrorStrig(ret), true);
+//    }
     if(filteredFiles.isEmpty())
     {
         insertLog(TaskKind::SQL, 0, QString(tr("No new files found. %1")).arg(dir));
@@ -312,24 +356,11 @@ void MainWindow::afterGetDir(int id,
                   arg(QString::number(filteredFiles.count()), dir));
     }
     QVector<TaskListData*> tasks;
-    QStringListIterator it(filteredFiles);
-    while (it.hasNext()) {
-        QString file = pathCombine(dir, it.next());
-//        int thumbRet = gpSQL->hasThumb(file);
-//        if(thumbRet==Sql::THUMB_EXIST)
-//        {
-//            insertLog(TaskKind::SQL, 0, tr("Found in db. Skipping"));
-//            continue;
-//        }
-//        else if(thumbRet != Sql::THUMB_NOT_EXIST &&
-//                thumbRet != Sql::THUMBFILE_NOT_FOUND)
-//        {
-//            insertLog(TaskKind::SQL, 0, Sql::getErrorStrig(thumbRet), true);
-//        }
-//        if(thumbRet == Sql::THUMBFILE_NOT_FOUND)
-//        {
-//            gpSQL->removeEntry(file);
-//        }
+    QVector<int> logids;
+    QStringList logtexts;
+    for(int i=0 ; i < filteredFiles.length(); ++i)
+    {
+        QString file = pathCombine(dir, filteredFiles[i]);
         TaskFFmpeg* pTask = new TaskFFmpeg(++idFFMpeg_,file);
         pTask->setAutoDelete(true);
 //        QObject::connect(pTask, &TaskFFMpeg::sayBorn,
@@ -346,11 +377,11 @@ void MainWindow::afterGetDir(int id,
         tasks.append(new TaskListData(pTask->GetId(),pTask->GetMovieFile()));
         getPoolFFmpeg()->start(pTask);
 
-        insertLog(TaskKind::FFMpeg, idFFMpeg_, tr("Task registered"));
+        logids.append(idFFMpeg_);
+        logtexts.append(tr("Task registered"));
     }
+    insertLog(TaskKind::FFMpeg, logids, logtexts);
     taskModel_->AddTasks(tasks);
-
-    // poolFFMpeg_->setMaxThreadCount(saveThreadCount);
     gPaused=prevPaused;
 }
 

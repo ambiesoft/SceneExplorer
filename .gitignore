@@ -1,3 +1,6 @@
+*.sdf
+*.suo
+
 .qmake.stash
 .vs/
 SceneExplorer.VC.db

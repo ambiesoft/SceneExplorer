@@ -14,9 +14,9 @@ if %VCVARSBAT% == x (
   goto :end
 )
 
-
+set QTBIN=Y:\local\Qt\5.10.0\msvc2013_64\bin
 set QMAKE=x
-set QMAKECANDIDATE1=Y:\local\Qt\5.10.0\msvc2013_64\bin\qmake.exe
+set QMAKECANDIDATE1=%QTBIN%\qmake.exe
 if exist %QMAKECANDIDATE1% (
   set QMAKE=%QMAKECANDIDATE1%
 )
@@ -37,5 +37,7 @@ call %QMAKE% -tp vc %PROFILE%
 
 echo "==== Creating Visual Studio project successful ===="
 
+set PATH=%QTBIN%;%PATH%
+"C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\devenv.exe" SceneExplorer.vcxproj
 :end
 pause
