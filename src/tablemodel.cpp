@@ -26,12 +26,12 @@ void TableModel:: AppendData(TableItemData* pItemData)
     endInsertRows();
 
 
-    int newRowFilename = rowCount()-TableModel::RowCountPerEntry;
-    int newRowInfo = newRowFilename+1;
-    int newRowImage = newRowFilename+2;
+    int newRowInfo = rowCount()-TableModel::RowCountPerEntry;
+    int newRowImage = newRowInfo+1;
+    int newRowSeparator = newRowImage+1;
 
-    parent_->setSpan(newRowFilename,0,1,5);
     parent_->setSpan(newRowInfo,0,1,5);
+    parent_->setSpan(newRowSeparator,0,1,5);
     // ui->tableView->resizeRowToContents(newRowFilename);
     // ui->tableView->resizeRowToContents(newRowInfo);
 
@@ -81,42 +81,48 @@ QString size_human(QFileInfo& fi)
     return QString().setNum(num,'f',2)+" "+unit;
 }
 
-QString TableModel::GetInfoText(const TableItemData& item, bool isFilename) const
+static QString dq(const QString& s)
+{
+	if (s.isEmpty())
+		return "\"\"";
+
+	if (s[0] == '\\')
+		return s;
+
+	if (!s.contains(" "))
+		return s;
+
+	return "\"" + s + "\"";
+}
+QString TableModel::GetInfoText(const TableItemData& item) const
 {
     QString ret;
-    if(isFilename)
-    {
-        ret.append(tr("File:"));
-        ret.append(" ");
-        ret.append(item.getMovieFile());
-        return ret;
-    }
-    else
-    {
-        ret.append(tr("Size:"));
-        ret.append(" ");
-        QFileInfo fi(item.getMovieFile());
-        ret.append(size_human(fi));
-        ret.append(", ");
 
-        ret.append(tr("Format:"));
-        ret.append(" ");
-        ret.append(item.getFormat());
+    ret.append(dq(item.getMovieFile()));
+	ret.append(" ");
 
-        return ret;
-    }
+    QFileInfo fi(item.getMovieFile());
+    ret.append(size_human(fi));
+    ret.append(" ");
+
+    ret.append(item.getFormat());
+
+    return ret;
 }
+
 QVariant TableModel::data(const QModelIndex &index, int role) const
 {
     int actualIndex = index.row()/RowCountPerEntry;
-    bool isFilename = (index.row()%RowCountPerEntry)==0;
-    bool isInfo = (index.row()%RowCountPerEntry)==1;
+    int mod = index.row() % RowCountPerEntry;
+    bool isInfo = mod==0;
+    bool isImage = mod==1;
 
     if(role==TableRole::MovieFile)
     {
         return items_[actualIndex]->getMovieFile();
     }
-    if(isFilename)
+
+    if(isInfo)
     {
         if(index.column() != 0)
             return QVariant();
@@ -125,26 +131,12 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
         {
             case Qt::DisplayRole:
             {
-                return GetInfoText(*(items_[actualIndex]),true);
+                return GetInfoText(*(items_[actualIndex]));
             }
             break;
         }
     }
-    else if(isInfo)
-    {
-        if(index.column() != 0)
-            return QVariant();
-
-        switch(role)
-        {
-            case Qt::DisplayRole:
-            {
-                return GetInfoText(*(items_[actualIndex]),false);
-            }
-            break;
-        }
-    }
-    else
+    else if(isImage)
     {
         switch(role)
         {

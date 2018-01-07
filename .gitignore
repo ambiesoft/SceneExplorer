@@ -1,3 +1,14 @@
+.qmake.stash
+.vs/
+SceneExplorer.VC.db
+SceneExplorer.sln
+SceneExplorer.vcxproj
+SceneExplorer.vcxproj.filters
+debug/
+release/
+ui_mainwindow.h
+ui_option.h
+
 /build-*
 *.user
 build/

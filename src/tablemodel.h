@@ -11,7 +11,7 @@ class TableModel : public QAbstractTableModel
     Q_OBJECT
     QList<TableItemData*> items_;
     QTableView* parent_;
-    QString GetInfoText(const TableItemData& item, const bool isFilename) const;
+    QString GetInfoText(const TableItemData& item) const;
 public:
     enum TableRole {
         MovieFile = Qt::UserRole + 1,
