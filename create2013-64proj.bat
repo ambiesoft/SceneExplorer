@@ -38,6 +38,6 @@ call %QMAKE% -tp vc %PROFILE%
 echo "==== Creating Visual Studio project successful ===="
 
 set PATH=%QTBIN%;%PATH%
-"C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\devenv.exe" SceneExplorer.vcxproj
+start "" "C:\Program Files (x86)\Microsoft Visual Studio 12.0\Common7\IDE\devenv.exe" SceneExplorer.vcxproj
 :end
 pause

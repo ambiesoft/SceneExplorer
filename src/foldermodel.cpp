@@ -3,7 +3,8 @@
 FolderModel::FolderModel()
 {
     setFilter( QDir::Dirs | QDir::NoDotAndDotDot );
-    setRootPath("");
+    // setRootPath("");
+    setReadOnly(true);
 }
 
 QVariant FolderModel::data(const QModelIndex &index, int role) const
@@ -19,10 +20,9 @@ QVariant FolderModel::data(const QModelIndex &index, int role) const
     }
     else if(role==Qt::DisplayRole)
     {
-
-        return QFileSystemModel::data(index, role);
+        return QDirModel::data(index, role);
     }
-    return QFileSystemModel::data(index, role);
+    return QDirModel::data(index, role);
 }
 bool FolderModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
@@ -32,7 +32,7 @@ bool FolderModel::setData(const QModelIndex &index, const QVariant &value, int r
         {
             checkedIndexes_.insert(index);
             partcheckedIndexes_.remove(index);
-            recursiveCheck(index, value);
+            // recursiveCheck(index, value);
         }
         else if(value == Qt::PartiallyChecked)
         {
@@ -43,12 +43,12 @@ bool FolderModel::setData(const QModelIndex &index, const QVariant &value, int r
         {
             checkedIndexes_.remove(index);
             partcheckedIndexes_.remove(index);
-            recursiveCheck(index, value);
+            // recursiveCheck(index, value);
         }
         emit dataChanged(index, index);
         return true;
     }
-    return QFileSystemModel::setData(index, value, role);
+    return QDirModel::setData(index, value, role);
 }
 bool FolderModel::recursiveCheck(const QModelIndex &index, const QVariant &value)
 {
@@ -59,7 +59,7 @@ bool FolderModel::recursiveCheck(const QModelIndex &index, const QVariant &value
         QModelIndex child;
         for(i=0; i<childrenCount; i++)
         {
-            child = QFileSystemModel::index(i, 0, index);
+            child = QDirModel::index(i, 0, index);
             setData(child, value, Qt::CheckStateRole);
         }
     }

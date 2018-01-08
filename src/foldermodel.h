@@ -4,8 +4,8 @@
 #include <QFileSystemModel>
 #include <QModelIndex>
 #include <QSet>
-
-class FolderModel : public QFileSystemModel
+#include <QDirModel>
+class FolderModel : public QDirModel // QFileSystemModel
 {
 public:
     QSet<QPersistentModelIndex> checkedIndexes_;
@@ -29,7 +29,8 @@ public:
     }
     Qt::ItemFlags flags(const QModelIndex &index) const
     {
-        return QFileSystemModel::flags(index) | Qt::ItemIsUserCheckable;
+        // return QFileSystemModel::flags(index) | Qt::ItemIsUserCheckable;
+        return QDirModel::flags(index) | Qt::ItemIsUserCheckable | Qt::ItemIsUserTristate;
     }
 
 private:
