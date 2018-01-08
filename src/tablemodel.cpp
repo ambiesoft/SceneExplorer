@@ -78,9 +78,22 @@ QString size_human(const qint64& size)
         unit = i.next();
         num /= 1024.0;
     }
-    return QString().setNum(num,'f',2)+" "+unit;
+    return QString().setNum(num,'f',2)+unit;
 }
+QString duration_human(double duration)
+{
+    int iduration = (int)(duration);
 
+    int hour = iduration/3600;
+    int minutes = (iduration%3600)/60;
+    int seconds = iduration%60;
+
+    return
+                QString("%1").arg((int)hour, 2, 10, QChar('0')) + ":"+
+                QString("%1").arg((int)minutes, 2, 10, QChar('0'))+":"+
+                QString("%1").arg((int)seconds, 2, 10, QChar('0'));
+
+}
 static QString dq(const QString& s)
 {
 	if (s.isEmpty())
@@ -89,7 +102,7 @@ static QString dq(const QString& s)
 	if (s[0] == '\\')
 		return s;
 
-	if (!s.contains(" "))
+    if (!s.contains(" ") && !s.contains(","))
 		return s;
 
 	return "\"" + s + "\"";
@@ -97,15 +110,25 @@ static QString dq(const QString& s)
 QString TableModel::GetInfoText(TableItemData& item) const
 {
     QString ret;
-
+    static const char* sep = ", ";
     ret.append(dq(item.getMovieFile()));
-	ret.append(" ");
-
+    ret.append(sep);
 
     ret.append(size_human(item.getSize()));
-    ret.append(" ");
+    ret.append(sep);
 
-    ret.append(item.getFormat());
+    ret.append(duration_human(item.getDuration()));
+    ret.append(sep);
+
+    ret.append(dq(item.getFormat()));
+    ret.append(sep);
+
+    ret.append(item.getVcodec());
+    ret.append(sep);
+    ret.append(QString::number(item.getVWidth()) + "x" + QString::number(item.getVHeight()));
+    ret.append(sep);
+
+    ret.append(item.getAcodec());
 
     return ret;
 }
@@ -160,40 +183,49 @@ Qt::ItemFlags TableModel::flags(const QModelIndex &index) const
     return QAbstractTableModel::flags(index);
 }
 
-enum SORTCOLUMN{
-    FILENAME,
-    SIZE,
-} gSortColumn;
-bool gSortReverse;
 
-bool itemDataLessThan(const TableItemData* v1, const TableItemData* v2)
+
+bool TableModel::itemDataLessThan(const TableItemData* v1, const TableItemData* v2)
 {
     bool ret;
-    switch(gSortColumn)
+    switch(sSortColumn_)
     {
     case SORTCOLUMN::FILENAME:
         ret = (v1->getMovieFile() < v2->getMovieFile());
+        break;
     case SORTCOLUMN::SIZE:
         ret = (v1->getSize() < v2->getSize());
+        break;
+    case SORTCOLUMN::WTIME:
+        ret = (v1->getWtime() < v2->getWtime());
+        break;
     default:
         Q_ASSERT(false);
     }
-    return gSortReverse ? !ret : ret;
+    return sSortReverse_ ? !ret : ret;
+}
+TableModel::SORTCOLUMN TableModel::sSortColumn_;
+bool TableModel::sSortReverse_;
+
+void TableModel::SortCommon(SORTCOLUMN column)
+{
+    sSortReverse_ = !sSortReverse_;
+    beginResetModel();
+    sSortColumn_ = column;
+    qSort(items_.begin(), items_.end(), &TableModel::itemDataLessThan);
+    endResetModel();
 }
 void TableModel::SortByFileName()
 {
-    gSortReverse = !gSortReverse;
-    beginResetModel();
-    gSortColumn = SORTCOLUMN::FILENAME;
-    qSort(items_.begin(), items_.end(), itemDataLessThan);
-    endResetModel();
+    SortCommon(SORTCOLUMN::FILENAME);
 }
 
 void TableModel::SortBySize()
 {
-    gSortReverse = !gSortReverse;
-    beginResetModel();
-    gSortColumn = SORTCOLUMN::SIZE;
-    qSort(items_.begin(), items_.end(), itemDataLessThan);
-    endResetModel();
+    SortCommon(SORTCOLUMN::SIZE);
 }
+void TableModel::SortByWtime()
+{
+    SortCommon(SORTCOLUMN::WTIME);
+}
+

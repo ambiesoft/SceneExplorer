@@ -10,7 +10,8 @@ class Sql : public QObject
     Q_OBJECT
 
     QSqlDatabase db_;
-
+    bool ok_=false;
+    QStringList allColumns_;
     int GetMovieFileInfo(const QString& movieFile,
                          bool& exist,
                          qint64& size,
@@ -21,7 +22,7 @@ class Sql : public QObject
                          qint64& wtime) const;
 
     int removeEntry(const QString& thumbid);
-
+    QString getAllColumns(bool bBrace, bool bQ);
 public:
     enum SQL_ERROR {
         NO_ERROR,
@@ -36,6 +37,9 @@ public:
         THUMB_NOT_EXIST,
         THUMBID_IS_NOT_UUID,
     };
+    bool isOK() const {
+        return ok_;
+    }
     static QString getErrorStrig(int thumbRet);
 
     QSqlQuery* pQDeleteFromDirectoryName_ = nullptr;
@@ -49,10 +53,7 @@ public:
 
     Sql();
     ~Sql();
-    int AppendData(const QStringList& files,
-             int width, int height,
-             const QString& movieFile,
-             const QString& format);
+    int AppendData(const TableItemData& tid);
     bool IsSameFile(const QString& dir,
                     const QString& name,
                     const qint64& size,

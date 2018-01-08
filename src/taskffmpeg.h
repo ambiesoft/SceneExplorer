@@ -47,10 +47,14 @@ signals:
 
     void sayGoodby(int id,
                    const QStringList& files,
-                   int width,
-                   int height,
                    const QString& movieFile,
-                   const QString& format);
+                   int thumbwidth,
+                   int thumbheight,
+                   const double& duration,
+                   const QString& format,
+                   const QString& vcodec,
+                   const QString& acodec,
+                   int vWidth,int vHeight);
     void sayDead(int id);
 
 };

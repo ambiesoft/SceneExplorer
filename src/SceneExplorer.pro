@@ -67,3 +67,6 @@ FORMS += \
     option.ui
 
 RC_FILE = app.rc
+
+DISTFILES += \
+    info/info.txt

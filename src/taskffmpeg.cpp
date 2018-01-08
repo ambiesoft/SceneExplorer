@@ -3,6 +3,7 @@
 #include <QDebug>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QJsonArray>
 #include <QUuid>
 #include <QDir>
 
@@ -23,16 +24,27 @@ TaskFFmpeg::~TaskFFmpeg()
 {
     emit sayDead(id_);
 }
-bool getDuration(const QString& file,double& d,QString& videoFormat)
+bool getProbe(const QString& file,
+              double& outDuration,
+              QString& outFormat,
+
+              QString& outVideoCodec,
+              QString& outAudioCodec,
+
+              int& outVWidth,
+              int& outVHeight)
 {
     QProcess process;
     process.setProgram("C:\\LegacyPrograms\\ffmpeg\\bin\\ffprobe.exe");
     process.setArguments( QStringList() <<
-                          file <<
+                          "-v" <<
+                          "quiet" <<
                           "-hide_banner" <<
                           "-show_format" <<
+                          "-show_streams" <<
                           "-print_format" <<
-                          "json"
+                          "json" <<
+                          file
                           );
 
     process.start(QProcess::ReadOnly);
@@ -47,45 +59,71 @@ bool getDuration(const QString& file,double& d,QString& videoFormat)
             return false;
 
     QByteArray baOut = process.readAllStandardOutput();
-    qDebug()<<baOut.data();
-
     QByteArray baErr=process.readAllStandardError();
-    qDebug() << baErr.data();
 
 
     QJsonDocument jd = QJsonDocument::fromJson(baOut);
     if(jd.isNull())
         return false;
 
-    QJsonObject sett2 = jd.object();
-    QJsonValue format = sett2.value(QString("format"));
-    qWarning() << format;
-    QJsonObject item = format.toObject();
-    // qWarning() << item;
+    QJsonObject jo = jd.object();
+    if(jo.isEmpty())
+        return false;
 
-    QJsonValue format_name = item["format_name"];
-    if(
-            format_name.toString()=="tty" ||
-            format_name.toString()=="image2"
-      )
+    // format and duration
     {
-        return false;
+        QJsonValue format = jo.value(QString("format"));
+        QJsonObject item = format.toObject();
+
+        QJsonValue format_name = item["format_name"];
+        if(
+                format_name.toString()=="tty" ||
+                format_name.toString()=="image2"
+          )
+        {
+            return false;
+        }
+        outFormat = format_name.toString();
+
+        QJsonValue jDuration = item["duration"];
+
+        if(!jDuration.isString())
+            return false;
+
+        QString ds = jDuration.toString();
+
+        bool ok;
+        outDuration = ds.toDouble(&ok);
+        if(!ok)
+            return false;
     }
-    videoFormat = format_name.toString();
 
-    /* in case of string value get value and convert into string*/
-    // qWarning() << QObject::tr("QJsonObject[appName] of description: ") << item["duration"];
-    QJsonValue duration = item["duration"];
-    qWarning() << duration.toString();
+    // stream
+    outVideoCodec.clear();
+    outAudioCodec.clear();
+    {
+        QJsonValue streams = jo.value(QString("streams"));
+        for(const QJsonValue& value : streams.toArray())
+        {
+            QJsonObject item = value.toObject();
 
-    if(!duration.isString())
-        return false;
+            QString ctype = item["codec_type"].toString();
+            if(outVideoCodec.isEmpty() && ctype=="video")
+            {
+                outVideoCodec = item["codec_name"].toString();
+                outVWidth = item["coded_width"].toInt();
+                outVHeight = item["coded_height"].toInt();
+            }
+            if(outAudioCodec.isEmpty() && ctype=="audio")
+            {
+                outAudioCodec = item["codec_name"].toString();
+            }
 
-    QString ds = duration.toString();
-
-    bool ok;
-    d = ds.toDouble(&ok);
-    return ok;
+            if(!outVideoCodec.isEmpty() && !outAudioCodec.isEmpty())
+                break;
+        }
+    }
+    return true;
 }
 
 void TaskFFmpeg::run()
@@ -105,10 +143,19 @@ void TaskFFmpeg::run()
 }
 bool TaskFFmpeg::run2()
 {
-    double d;
+    double duration;
     QString format;
-    if(!getDuration(movieFile_,d,format))
+    QString vcodec,acodec;
+    int vWidth,vHeight;
+    if(!getProbe(movieFile_,
+                 duration,
+                 format,
+                 vcodec,
+                 acodec,
+                 vWidth,vHeight))
+    {
         return false;
+    }
 
     QString strWidthHeight;
     strWidthHeight.append(QString::number(Consts::THUMB_WIDTH));
@@ -126,8 +173,10 @@ bool TaskFFmpeg::run2()
         filename.append(QString::number(i));
         filename.append(".png");
 
-        double timepoint = (((double)i-0.5)*d/5);
+        double timepoint = (((double)i-0.5)*duration/5);
         QStringList qsl;
+        qsl.append("-v");
+        qsl.append("quiet");  // no log
         qsl.append("-hide_banner");  // as it is
         qsl.append("-n");  // no overwrite
         qsl.append("-ss" );  // seek input
@@ -165,6 +214,16 @@ bool TaskFFmpeg::run2()
         emitFiles.append(filename);
     }
 
-    emit sayGoodby(id_,emitFiles, Consts::THUMB_WIDTH, Consts::THUMB_HEIGHT, movieFile_, format);
+    // emit sayGoodby(id_,emitFiles, Consts::THUMB_WIDTH, Consts::THUMB_HEIGHT, movieFile_, format);
+    emit sayGoodby(id_,
+                   emitFiles,
+                   movieFile_,
+                   Consts::THUMB_WIDTH,
+                   Consts::THUMB_HEIGHT,
+                   duration,
+                   format,
+                   vcodec,acodec,
+                   vWidth,vHeight
+                   );
     return true;
 }

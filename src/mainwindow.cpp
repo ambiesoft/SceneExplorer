@@ -15,6 +15,7 @@
 #include <QUrl>
 #include <QVector>
 #include <QWidget>
+#include <QClipboard>
 
 #include "ui_mainwindow.h"
 #include "taskgetdir.h"
@@ -195,6 +196,11 @@ void MainWindow::insertLog(TaskKind kind, int id, const QString& text, bool bErr
 void MainWindow::insertLog(TaskKind kind, const QVector<int>& ids, const QStringList& texts, bool bError)
 {
     Q_UNUSED(bError);
+    if(ids.isEmpty())
+    {
+        Q_ASSERT(texts.isEmpty());
+        return;
+    }
     QString message;
 
     message.append(QTime::currentTime().toString());
@@ -383,4 +389,28 @@ void MainWindow::afterFilter(int id,
 
 
 
+QString MainWindow::getSelectedVideo()
+{
+    QItemSelectionModel *select = ui->tableView->selectionModel();
 
+    Q_ASSERT(select->hasSelection());
+
+    QVariant v = tableModel_->data(select->selectedIndexes()[0], TableModel::MovieFile);
+    QString s = v.toString();
+    Q_ASSERT(!s.isEmpty());
+
+    return QDir::toNativeSeparators(s);
+}
+void MainWindow::openSelectedVideo()
+{
+    openVideo(getSelectedVideo());
+}
+void MainWindow::openSelectedVideoInFolder()
+{
+    openVideoInFolder(getSelectedVideo());
+}
+
+void MainWindow::copySelectedVideoPath()
+{
+    QApplication::clipboard()->setText(getSelectedVideo());
+}

@@ -6,7 +6,7 @@ namespace Consts
     const char ORGANIZATION[] = "Ambiesoft";
     const char APPDOMAIN[] = "ambiesoft.fam.cx";
     const char APPNAME[] = "SceneExplorer";
-    const char VERSION[] = "1.0";
+    const char VERSION[] = "0.1";
 
     const char KEY_SIZE[] = "size";
     const char KEY_TREESIZE[] = "treesize";

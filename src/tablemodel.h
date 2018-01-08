@@ -6,15 +6,27 @@
 
 class TableItemData;
 class QTableView;
+
 class TableModel : public QAbstractTableModel
 {
     Q_OBJECT
+public:
+    enum SORTCOLUMN{
+        FILENAME,
+        SIZE,
+        WTIME,
+    } ;
+private:
     QList<TableItemData*> items_;
     QTableView* parent_;
     QString GetInfoText(TableItemData& item) const;
+
+    static bool itemDataLessThan(const TableItemData* v1, const TableItemData* v2);
+    void SortCommon(SORTCOLUMN column);
 public:
     enum TableRole {
         MovieFile = Qt::UserRole + 1,
+        SelectedMovieFile = Qt::UserRole + 1,
     };
     static const int RowCountPerEntry = 3;
 
@@ -26,8 +38,12 @@ public:
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     Qt::ItemFlags flags(const QModelIndex & index) const override ;
+    static SORTCOLUMN sSortColumn_;
+    static bool sSortReverse_;
+
     void SortByFileName();
     void SortBySize();
+    void SortByWtime();
 };
 
 class ImageDelegate : public QStyledItemDelegate

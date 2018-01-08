@@ -1,3 +1,6 @@
+#include <QFileInfo>
+#include <QDateTime>
+
 #include "taskmodel.h"
 #include "tableitemdata.h"
 
@@ -20,15 +23,34 @@ void MainWindow::sayNo(int id,
 }
 void MainWindow::sayGoodby(int id,
                            const QStringList& files,
-                           int width,
-                           int height,
                            const QString& movieFile,
-                           const QString& format)
+                           int thumbwidth,
+                           int thumbheight,
+                           const double& duration,
+                           const QString& format,
+                           const QString& vcodec,
+                           const QString& acodec,
+                           int vWidth,int vHeight)
 {
+    QFileInfo fi(movieFile);
 
+    TableItemData* pTID = new TableItemData(
+                            files,
+                            fi.absolutePath(),
+                            fi.fileName(),
+                            fi.size(),
+                            fi.birthTime().toSecsSinceEpoch(),
+                            fi.lastModified().toSecsSinceEpoch(),
+                            thumbwidth,thumbheight,
+                            duration,
+                            format,
+                            vcodec,acodec,
+                            vWidth,vHeight
+                );
 
-    tableModel_->AppendData(new TableItemData(files, width, height, movieFile, format));
-    int sqlError = gpSQL->AppendData(files, width, height, movieFile, format);
+    tableModel_->AppendData(pTID);
+
+    int sqlError = gpSQL->AppendData(*pTID);
     if(sqlError==0)
     {
         insertLog(TaskKind::SQL, id, QString("%1 \"%2\"").arg(tr("Written in Database"), movieFile));

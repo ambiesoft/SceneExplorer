@@ -74,6 +74,9 @@
     </item>
     <item>
      <widget class="QTableView" name="tableView">
+      <property name="contextMenuPolicy">
+       <enum>Qt::CustomContextMenu</enum>
+      </property>
       <property name="autoScroll">
        <bool>true</bool>
       </property>
@@ -156,6 +159,7 @@
     <addaction name="separator"/>
     <addaction name="actionSort_by_file_name"/>
     <addaction name="actionSort_by_file_size"/>
+    <addaction name="actionSort_by_wtime"/>
    </widget>
    <addaction name="menu_File"/>
    <addaction name="menu_View"/>
@@ -182,6 +186,7 @@
    </attribute>
    <addaction name="actionSort_by_file_name"/>
    <addaction name="actionSort_by_file_size"/>
+   <addaction name="actionSort_by_wtime"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QDockWidget" name="dockLog">
@@ -385,6 +390,11 @@
   <action name="actionSort_by_file_size">
    <property name="text">
     <string>Sort by file &amp;size</string>
+   </property>
+  </action>
+  <action name="actionSort_by_wtime">
+   <property name="text">
+    <string>Sort by wtime</string>
    </property>
   </action>
  </widget>

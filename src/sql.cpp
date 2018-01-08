@@ -18,22 +18,29 @@
 
 Sql::Sql() : db_(QSqlDatabase::addDatabase("QSQLITE"))
 {
-    // データベースを開く。無ければ作る
-
      db_.setDatabaseName("./db.sqlite3");
      db_.open();
-     qDebug() << "tables 1";
-     for (int i = 0; i < db_.tables().count(); i ++) {
-         qDebug() << db_.tables().at(i);
-     }
 
-     // テーブルを作る。すでに有れば何もしない
      QSqlQuery query;
      query.exec("create table FileInfo(size, ctime, wtime, directory, name, salient, thumbid)");
-     qDebug() << "tables 2";
+     query.exec("alter table FileInfo add duration");
+     query.exec("alter table FileInfo add format");
+     query.exec("alter table FileInfo add vcodec");
+     query.exec("alter table FileInfo add acodec");
+     query.exec("alter table FileInfo add vwidth");
+     query.exec("alter table FileInfo add vheight");
+
      for (int i = 0; i < db_.tables().count(); i ++) {
          qDebug() << db_.tables().at(i);
      }
+     query.exec("PRAGMA table_info('FileInfo')");
+     while(query.next())
+     {
+         QString col=query.value("name").toString();
+         qDebug() << col;
+         allColumns_.append(col);
+     }
+     ok_ = true;
 }
 Sql::~Sql()
 {
@@ -86,8 +93,8 @@ int Sql::GetMovieFileInfo(const QString& movieFile,
     directory = fi.absolutePath();
     name = fi.fileName();
 
-    ctime = fi.fileTime(QFileDevice::FileBirthTime).toSecsSinceEpoch();
-    wtime = fi.fileTime(QFileDevice::FileModificationTime).toSecsSinceEpoch();
+    ctime = fi.birthTime().toSecsSinceEpoch();
+    wtime = fi.lastModified().toSecsSinceEpoch();
 
     if(salient)
     {
@@ -113,14 +120,48 @@ QSqlQuery* Sql::getDeleteFromDirectoryName()
     }
     return pQDeleteFromDirectoryName_;
 }
+
+QString Sql::getAllColumns(bool bBrace, bool bQ)
+{
+    QString ret;
+    ret += " "; //safe space
+    if(bBrace)
+        ret.append("(");
+
+    for(int i=0 ; i < allColumns_.count(); ++i)
+    {
+        if(bQ)
+        {
+            ret.append("?");
+        }
+        else
+        {
+            ret.append(allColumns_[i]);
+        }
+        if( (i+1) != allColumns_.count())
+            ret.append(",");
+    }
+
+    if(bBrace)
+        ret.append(")");
+
+    ret += " "; //safe space
+    return ret;
+}
 QSqlQuery* Sql::getInsertQuery()
 {
     if(pQInsert_)
         return pQInsert_;
     pQInsert_=new QSqlQuery(db_);
 
-    if(!pQInsert_->prepare("insert into FileInfo (size, ctime, wtime, directory, name, salient, thumbid) "
-                  "values (?, ?, ?, ?, ?, ?, ?)"))
+    QString preparing =
+        QString("insert into FileInfo ") +
+        // "(size, ctime, wtime, directory, name, salient, thumbid, format, duration) "
+        getAllColumns(true,false) +
+        "values "+
+        getAllColumns(true,true);
+        //"values (?,?,?,?,?,?,?,?,?)"))
+    if(!pQInsert_->prepare(preparing))
     {
         qDebug() << pQInsert_->lastError();
         Q_ASSERT(false);
@@ -128,38 +169,15 @@ QSqlQuery* Sql::getInsertQuery()
     }
     return pQInsert_;
 }
-int Sql::AppendData(const QStringList& files,
-         int width, int height,
-         const QString& movieFile,
-         const QString& format)
+int Sql::AppendData(const TableItemData& tid)
 {
-    Q_UNUSED(width);
-    Q_UNUSED(height);
-    Q_UNUSED(format);
+    QString salient = createSalient(tid.getMovieFile(), tid.getSize());
 
-    bool exist;
-    qint64 size;
-    QString directory;
-    QString name;
-    QString salient;
-    qint64 ctime;
-    qint64 wtime;
-    int ret = GetMovieFileInfo(
-                     movieFile,
-                     exist,
-                     size,
-                     directory,
-                     name,
-                     &salient,
-                     ctime,
-                     wtime);
-    if(ret != 0)
-        return ret;
-
-    if(files.isEmpty())
+    Q_ASSERT(tid.getImageFiles().count()==5);
+    if(tid.getImageFiles().isEmpty())
         return THUMBFILE_NOT_FOUND;
 
-    QString uuid = getUUID(files[0]);
+    QString uuid = getUUID(tid.getImageFiles()[0]);
     if(!isUUID(uuid))
         return UUID_FORMAT_ERROR;
 
@@ -167,8 +185,9 @@ int Sql::AppendData(const QStringList& files,
         QSqlQuery* pQuery = getDeleteFromDirectoryName();
 
         int i = 0;
-        pQuery->bindValue(i++, directory);
-        pQuery->bindValue(i++, name);
+
+        pQuery->bindValue(i++, tid.getMovieDirectory());
+        pQuery->bindValue(i++, tid.getMovieFileName());
         if(!pQuery->exec())
         {
             qDebug() << pQuery->lastError();
@@ -178,13 +197,19 @@ int Sql::AppendData(const QStringList& files,
 
     QSqlQuery* pQInsert = getInsertQuery();
     int i = 0;
-    pQInsert->bindValue(i++, size);
-    pQInsert->bindValue(i++, ctime);
-    pQInsert->bindValue(i++, wtime);
-    pQInsert->bindValue(i++, directory);
-    pQInsert->bindValue(i++, name);
+    pQInsert->bindValue(i++, tid.getSize());
+    pQInsert->bindValue(i++, tid.getCtime());
+    pQInsert->bindValue(i++, tid.getWtime());
+    pQInsert->bindValue(i++, tid.getMovieDirectory());
+    pQInsert->bindValue(i++, tid.getMovieFileName());
     pQInsert->bindValue(i++, salient);
     pQInsert->bindValue(i++, uuid);
+    pQInsert->bindValue(i++, tid.getDuration());
+    pQInsert->bindValue(i++, tid.getFormat());
+    pQInsert->bindValue(i++, tid.getVcodec());
+    pQInsert->bindValue(i++, tid.getAcodec());
+    pQInsert->bindValue(i++, tid.getVWidth());
+    pQInsert->bindValue(i++, tid.getVHeight());
 
     if(!pQInsert->exec())
     {
@@ -431,6 +456,11 @@ bool Sql::GetAll(QList<TableItemData*>& v)
     if(!query.exec("select * from FileInfo"))
         return false;
     while (query.next()) {
+        QString directory = query.value("directory").toString();
+        QString name = query.value("name").toString();
+        QString movieFileFull = pathCombine(directory,name);
+         if(!QFile(movieFileFull).exists())
+             continue;
         QString thumbid = query.value("thumbid").toString();
         QStringList thumbs;
         for(int i=1 ; i <= 5 ; ++i)
@@ -441,14 +471,33 @@ bool Sql::GetAll(QList<TableItemData*>& v)
             t+=".png";
             thumbs.append(t);
         }
-        QString movieFile = pathCombine(query.value("directory").toString(),
-                                        query.value("name").toString());
 
-        if(QFile(movieFile).exists())
-        {
-            TableItemData* pID = new TableItemData(thumbs,0,0,movieFile,"format");
-            v.append(pID);
-        }
+        qint64 size = query.value("size").toLongLong();
+        qint64 ctime = query.value("ctime").toLongLong();
+        qint64 wtime = query.value("wtime").toLongLong();
+        QString salitnet = query.value("salient").toString();
+        double duration  = query.value("duration").toDouble();
+        QString format = query.value("format").toString();
+
+        QString vcodec = query.value("vcodec").toString();
+        QString acodec = query.value("acodec").toString();
+
+        int vwidth = query.value("vwidth").toInt();
+        int vheight = query.value("vheight").toInt();
+        TableItemData* pID = new TableItemData(thumbs,
+                                               directory,
+                                               name,
+
+                                               size,
+                                               ctime,
+                                               wtime,
+
+                                               0,0,
+                                               duration,
+                                               format,
+                                               vcodec,acodec,
+                                               vwidth,vheight);
+        v.append(pID);
     }
     return true;
 }

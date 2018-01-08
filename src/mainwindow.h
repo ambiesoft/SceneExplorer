@@ -67,6 +67,10 @@ private slots:
 
     void on_actionSort_by_file_size_triggered();
 
+    void on_actionSort_by_wtime_triggered();
+
+    void on_tableView_customContextMenuRequested(const QPoint &pos);
+
 private:
     QThreadPool* pPoolFFmpeg_ = nullptr;
     QThreadPool* getPoolFFmpeg();
@@ -97,6 +101,9 @@ private:
     void insertLog(TaskKind kind, int id, const QString& text, bool bError=false);
     void insertLog(TaskKind kind, const QVector<int>& ids, const QStringList& texts, bool bError=false);
 
+    void openVideo(const QString& movieFile);
+    void openVideoInFolder(const QString& movieFile);
+    QString getSelectedVideo();
 public slots:
 //    void sayBorn(int id,
 //                   const QString& movieFile);
@@ -106,10 +113,14 @@ public slots:
                    const QString& movieFile);
     void sayGoodby(int id,
                    const QStringList& files,
-                   int width,
-                   int height,
                    const QString& movieFile,
-                   const QString& format);
+                   int thumbwidth,
+                   int thumbheight,
+                   const double& duration,
+                   const QString& format,
+                   const QString& vcodec,
+                   const QString& acodec,
+                   int vWidth,int vHeight);
     void sayDead(int id);
 
     void afterGetDir(int id,
@@ -119,7 +130,9 @@ public slots:
                      const QString& dir,
                      const QStringList& filteredFiles);
 
-//	void OnTimer();
+    void openSelectedVideo();
+    void openSelectedVideoInFolder();
+    void copySelectedVideoPath();
 };
 
 #endif // MAINWINDOW_H

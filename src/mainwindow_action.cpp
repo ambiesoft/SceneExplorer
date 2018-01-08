@@ -17,28 +17,33 @@
 #include "taskgetdir.h"
 
 #include "sql.h"
+#include "helper.h"
 
 #include "ui_mainwindow.h"
 #include "mainwindow.h"
 
+void MainWindow::openVideo(const QString& movieFile)
+{
+    if(!QDesktopServices::openUrl(QUrl::fromLocalFile(movieFile)))
+    {
+        QMessageBox msgBox;
+        msgBox.setText(Consts::APPNAME);
+        msgBox.setInformativeText(QString(tr("failed to launch %1.")).arg(movieFile));
+        msgBox.setStandardButtons(QMessageBox::Ok);
+        msgBox.exec();
+    }
+}
+void MainWindow::openVideoInFolder(const QString& movieFile)
+{
+    showInGraphicalShell(this, movieFile);
+}
 void MainWindow::on_tableView_doubleClicked(const QModelIndex &index)
 {
     QVariant v = tableModel_->data(index, TableModel::TableRole::MovieFile);
     Q_ASSERT(v.isValid());
     Q_ASSERT(!v.toString().isEmpty());
 
-//    QProcess process;
-//    QString file = v.toString();
-//    process.start("",file);
-
-    if(!QDesktopServices::openUrl(QUrl::fromLocalFile(v.toString())))
-    {
-        QMessageBox msgBox;
-        msgBox.setText(Consts::APPNAME);
-        msgBox.setInformativeText(tr("failed to launch."));
-        msgBox.setStandardButtons(QMessageBox::Ok);
-        msgBox.exec();
-    }
+    openVideo(v.toString());
 }
 
 
@@ -109,7 +114,11 @@ void MainWindow::on_action_About_triggered()
     text.append("\n");
     text.append("copyright 2018 ");
     text.append(Consts::ORGANIZATION);
-    QMessageBox::about(this,title,text);
+    QMessageBox msgbox(this);
+    msgbox.setIcon(QMessageBox::Information);
+    msgbox.setText(text);
+    msgbox.setWindowTitle(title);
+    msgbox.exec();
 }
 
 void MainWindow::on_actionSort_by_file_name_triggered()
@@ -119,4 +128,35 @@ void MainWindow::on_actionSort_by_file_name_triggered()
 void MainWindow::on_actionSort_by_file_size_triggered()
 {
     tableModel_->SortBySize();
+}
+
+void MainWindow::on_actionSort_by_wtime_triggered()
+{
+    tableModel_->SortByWtime();
+}
+void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
+{
+    QMenu contextMenu(tr("Context menu"), this);
+
+
+        QAction actionOpen("&Open", this);
+        connect(&actionOpen, SIGNAL(triggered()),
+                this, SLOT(openSelectedVideo()));
+        contextMenu.addAction(&actionOpen);
+
+
+        QAction actionOpenFolder("Open &Folder", this);
+        connect(&actionOpenFolder, SIGNAL(triggered()),
+                this, SLOT(openSelectedVideoInFolder()));
+        contextMenu.addAction(&actionOpenFolder);
+
+    contextMenu.addSeparator();
+
+    QAction actionCopyPath("&Copy Path");
+    connect(&actionCopyPath, SIGNAL(triggered()),
+            this, SLOT(copySelectedVideoPath()));
+    contextMenu.addAction(&actionCopyPath);
+
+    contextMenu.exec(ui->tableView->mapToGlobal(pos));
+
 }
