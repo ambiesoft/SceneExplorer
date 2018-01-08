@@ -173,6 +173,8 @@ bool TaskFFmpeg::run2()
         filename.append(QString::number(i));
         filename.append(".png");
 
+        QString actualFile = QString(Consts::FILEPART_THUMBS) + QDir::separator() + filename;
+
         double timepoint = (((double)i-0.5)*duration/5);
         QStringList qsl;
         qsl.append("-v");
@@ -189,7 +191,7 @@ bool TaskFFmpeg::run2()
         qsl.append("1");
         qsl.append("-s");
         qsl.append(strWidthHeight);
-        qsl.append(QString(Consts::FILEPART_THUMBS) + QDir::separator() + filename);
+        qsl.append(actualFile);
 
         QProcess ffmpeg;
         ffmpeg.setProgram("C:\\LegacyPrograms\\ffmpeg\\bin\\ffmpeg.exe");
@@ -211,6 +213,11 @@ bool TaskFFmpeg::run2()
 //        QByteArray baErr=ffmpeg.readAllStandardError();
 //        qDebug() << baErr.data();
 
+        if(i==1)
+        {
+            if(!QFile(actualFile).exists())
+                return false;
+        }
         emitFiles.append(filename);
     }
 

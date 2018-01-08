@@ -71,6 +71,17 @@ void MainWindow::onMenuDocking_windows_AboutToShow()
 void MainWindow::on_action_Pause_triggered()
 {
     gPaused = !gPaused;
+
+    if(gPaused)
+    {
+        statusLabel_->setText(tr("Paused"));
+        statusLabel_->show();
+    }
+    else
+    {
+        statusLabel_->setText(QString());
+        statusLabel_->hide();
+    }
 }
 
 void MainWindow::on_action_Do_It_triggered()

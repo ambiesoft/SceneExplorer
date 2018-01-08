@@ -212,7 +212,8 @@ void TableModel::SortCommon(SORTCOLUMN column)
     sSortReverse_ = !sSortReverse_;
     beginResetModel();
     sSortColumn_ = column;
-    qSort(items_.begin(), items_.end(), &TableModel::itemDataLessThan);
+    // qSort(items_.begin(), items_.end(), &TableModel::itemDataLessThan);
+    std::sort(items_.begin(), items_.end(), &TableModel::itemDataLessThan);
     endResetModel();
 }
 void TableModel::SortByFileName()

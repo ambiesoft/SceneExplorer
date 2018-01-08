@@ -12,6 +12,7 @@ class FolderModel;
 class Settings;
 class TaskModel;
 class TaskFFmpeg;
+class QLabel;
 
 namespace Ui {
 class MainWindow;
@@ -35,10 +36,9 @@ private:
     int threadcountGetDir_ = 1;
     int threadcountFFmpeg_ = 2;
 
-//    QTimer* timer_ = nullptr;
     bool initShown=false;
 
-    // void setTableSpan();
+    QLabel *statusLabel_ = nullptr;
 protected:
     virtual void resizeEvent(QResizeEvent *event);
     void closeEvent(QCloseEvent *event);

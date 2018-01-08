@@ -68,7 +68,9 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
     ui->listTask->setModel(taskModel_);
 
 
-
+    statusLabel_ = new QLabel(this);
+    statusLabel_->hide();
+    ui->statusBar->addPermanentWidget(statusLabel_);
 
 
     QVariant vVal;
