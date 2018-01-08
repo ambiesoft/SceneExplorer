@@ -1,5 +1,5 @@
 #include <QDirModel>
-
+#include "mydirmodel.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
@@ -9,7 +9,7 @@ MainWindow::MainWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    QDirModel* model = new QDirModel(this);
+    MyDirModel* model = new MyDirModel(this);
     model->setReadOnly(true);
     model->setSorting(QDir::DirsFirst | QDir::IgnoreCase | QDir::Name);
     model->setFilter(QDir::Dirs | QDir::NoDotAndDotDot);

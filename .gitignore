@@ -17,3 +17,5 @@ ui_option.h
 build/
 .idea/workspace.xml
 
+qtSamples/src/build-*
+
