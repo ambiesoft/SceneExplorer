@@ -234,9 +234,16 @@ void MainWindow::insertLog(TaskKind kind, const QVector<int>& ids, const QString
                 head.append(tr("Database"));
             }
             break;
+
             case TaskKind::App:
             {
 
+            }
+            break;
+
+        case TaskKind::Filter:
+            {
+                head.append(tr("Filter"));
             }
             break;
 
@@ -309,7 +316,7 @@ void MainWindow::afterGetDir(int id,
                              const QStringList& filesIn)
 {
     Q_UNUSED(id);
-    WaitCursor wc;
+    // WaitCursor wc;
 
 //    int saveThreadCount = poolFFMpeg_->maxThreadCount();
 //    poolFFMpeg_->setMaxThreadCount(1);
@@ -332,6 +339,7 @@ void MainWindow::afterGetDir(int id,
     QObject::connect(pTaskFilter, &TaskFilter::afterFilter,
                      this, &MainWindow::afterFilter);
     getPoolGetDir()->start(pTaskFilter);
+    insertLog(TaskKind::Filter, id, QString(tr("Task Registered. %1")).arg(dir));
 }
 void MainWindow::afterFilter(int id,
                              const QString& dir,
@@ -408,7 +416,7 @@ void MainWindow::afterFilter(int id,
         getPoolFFmpeg()->start(pTask);
 
         logids.append(idFFMpeg_);
-        logtexts.append(tr("Task registered"));
+        logtexts.append(QString(tr("Task registered. %1")).arg(file));
     }
     insertLog(TaskKind::FFMpeg, logids, logtexts);
     taskModel_->AddTasks(tasks);

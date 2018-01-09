@@ -98,7 +98,7 @@ void MainWindow::on_action_Do_It_triggered()
                      this, &MainWindow::afterGetDir);
     getPoolGetDir()->start(pTaskGetDir);
 
-    insertLog(TaskKind::GetDir, idGetDir_, tr("Task registered"));
+    insertLog(TaskKind::GetDir, idGetDir_, QString(tr("Task registered. %1")).arg(dir));
 }
 
 void MainWindow::on_action_Stop_triggered()

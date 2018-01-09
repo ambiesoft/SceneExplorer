@@ -94,6 +94,7 @@ private:
 
     enum TaskKind {
         GetDir,
+        Filter,
         FFMpeg,
         SQL,
         App,
