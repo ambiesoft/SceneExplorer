@@ -20,9 +20,9 @@ QVariant FolderModel::data(const QModelIndex &index, int role) const
     }
     else if(role==Qt::DisplayRole)
     {
-        return QDirModel::data(index, role);
+        return MYFOLDERMODEL::data(index, role);
     }
-    return QDirModel::data(index, role);
+    return MYFOLDERMODEL::data(index, role);
 }
 bool FolderModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
@@ -48,7 +48,7 @@ bool FolderModel::setData(const QModelIndex &index, const QVariant &value, int r
         emit dataChanged(index, index);
         return true;
     }
-    return QDirModel::setData(index, value, role);
+    return MYFOLDERMODEL::setData(index, value, role);
 }
 bool FolderModel::recursiveCheck(const QModelIndex &index, const QVariant &value)
 {
@@ -59,7 +59,7 @@ bool FolderModel::recursiveCheck(const QModelIndex &index, const QVariant &value
         QModelIndex child;
         for(i=0; i<childrenCount; i++)
         {
-            child = QDirModel::index(i, 0, index);
+            child = MYFOLDERMODEL::index(i, 0, index);
             setData(child, value, Qt::CheckStateRole);
         }
     }

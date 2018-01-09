@@ -350,17 +350,6 @@ void MainWindow::afterFilter(int id,
 //    {
 //        insertLog(TaskKind::SQL, 0, Sql::getErrorStrig(ret), true);
 //    }
-    if(filteredFiles.isEmpty())
-    {
-        insertLog(TaskKind::SQL, 0, QString(tr("No new files found in %1")).arg(dir));
-    }
-    else
-    {
-        insertLog(TaskKind::SQL, 0, QString(tr("%1 new items found in %2")).
-                  arg(QString::number(filteredFiles.count())).
-                  arg(dir));
-    }
-
     Q_ASSERT(renameOlds.count()==renameNews.count());
     if(!renameOlds.isEmpty())
     {
@@ -380,6 +369,22 @@ void MainWindow::afterFilter(int id,
         gpSQL->RenameEntries(dir, renameOlds, renameNews);
         tableModel_->RenameEntries(dir, renameOlds, renameNews);
     }
+
+
+    if(filteredFiles.isEmpty())
+    {
+        insertLog(TaskKind::SQL, 0, QString(tr("No new files found in %1")).arg(dir));
+    }
+    else
+    {
+        insertLog(TaskKind::SQL, 0, QString(tr("%1 new items found in %2")).
+                  arg(QString::number(filteredFiles.count())).
+                  arg(dir));
+    }
+
+    // afterfilter must perform salient check from SQL, for filter-passed files
+
+
     QVector<TaskListData*> tasks;
     QVector<int> logids;
     QStringList logtexts;

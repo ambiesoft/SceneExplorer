@@ -69,4 +69,5 @@ FORMS += \
 RC_FILE = app.rc
 
 DISTFILES += \
-    info/info.txt
+    info/info-ffprobe-json.txt \
+    info/db-update.txt
