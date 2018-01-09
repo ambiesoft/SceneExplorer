@@ -55,7 +55,7 @@ public:
     {
         return movieFilename_;
     }
-    QString getMovieFile() const ;
+    QString getMovieFileFull() const ;
     QString getFormat() const {
         return format_;
     }
@@ -77,6 +77,17 @@ public:
     qint64 getSize() const;
     qint64 getCtime() const;
     qint64 getWtime() const;
+
+    bool Rename(const QString& oldname,
+                const QString& newname)
+    {
+        Q_ASSERT(movieFilename_==oldname);
+        if(movieFilename_!=oldname)
+            return false;
+
+        movieFilename_=newname;
+        return true;
+    }
 };
 
 #endif // LISTITEMDATA_H

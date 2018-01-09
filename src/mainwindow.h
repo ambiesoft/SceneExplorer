@@ -128,7 +128,9 @@ public slots:
                      const QStringList& files);
     void afterFilter(int id,
                      const QString& dir,
-                     const QStringList& filteredFiles);
+                     const QStringList& filteredFiles,
+                     const QStringList& renameOlds,
+                     const QStringList& renameNews);
 
     void openSelectedVideo();
     void openSelectedVideoInFolder();

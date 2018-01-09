@@ -171,7 +171,7 @@ QSqlQuery* Sql::getInsertQuery()
 }
 int Sql::AppendData(const TableItemData& tid)
 {
-    QString salient = createSalient(tid.getMovieFile(), tid.getSize());
+    QString salient = createSalient(tid.getMovieFileFull(), tid.getSize());
 
     Q_ASSERT(tid.getImageFiles().count()==5);
     if(tid.getImageFiles().isEmpty())
@@ -459,8 +459,10 @@ bool Sql::GetAll(QList<TableItemData*>& v)
         QString directory = query.value("directory").toString();
         QString name = query.value("name").toString();
         QString movieFileFull = pathCombine(directory,name);
-         if(!QFile(movieFileFull).exists())
-             continue;
+
+//        if(!QFile(movieFileFull).exists())
+//             continue;
+
         QString thumbid = query.value("thumbid").toString();
         QStringList thumbs;
         for(int i=1 ; i <= 5 ; ++i)
@@ -499,5 +501,46 @@ bool Sql::GetAll(QList<TableItemData*>& v)
                                                vwidth,vheight);
         v.append(pID);
     }
+    return true;
+}
+
+
+bool Sql::RenameEntries(const QString& dir,
+                        const QStringList& renameOlds,
+                        const QStringList& renameNews)
+{
+
+    for(int i=0 ; i < renameOlds.count(); ++i)
+    {
+        // check old file not exists
+        QString oldfile = renameOlds[i];
+        QString newfile = renameNews[i];
+        Q_ASSERT(!oldfile.isEmpty());
+        Q_ASSERT(!newfile.isEmpty());
+        Q_ASSERT(oldfile != newfile);
+        Q_ASSERT(!QFile(pathCombine(dir, oldfile)).exists());
+        if(!QFile(pathCombine(dir, oldfile)).exists())
+        {
+            QSqlQuery query;
+            if(!query.prepare("update FileInfo "
+                          "set name=? "
+                          "where directory=? and name=?"))
+            {
+                Q_ASSERT(false);
+                return false;
+            }
+            int i=0;
+            query.bindValue(i++, newfile);
+            query.bindValue(i++, dir);
+            query.bindValue(i++, oldfile);
+
+            if(!query.exec())
+            {
+                Q_ASSERT(false);
+                return false;
+            }
+        }
+    }
+
     return true;
 }

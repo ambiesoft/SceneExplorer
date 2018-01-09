@@ -4,6 +4,7 @@
 #include <QRunnable>
 #include <QObject>
 #include <QVector>
+#include <QMap>
 class TaskFilter : public QObject, public QRunnable
 {
     Q_OBJECT
@@ -43,7 +44,9 @@ public:
 signals:
     void afterFilter(int id,
                      const QString& dir,
-                     const QStringList& files);
+                     const QStringList& files,
+                     const QStringList& renameOlds,
+                     const QStringList& renameNews);
 };
 
 #endif // TASKFILTER_H

@@ -334,8 +334,10 @@ void MainWindow::afterGetDir(int id,
     getPoolGetDir()->start(pTaskFilter);
 }
 void MainWindow::afterFilter(int id,
-                 const QString& dir,
-                 const QStringList& filteredFiles)
+                             const QString& dir,
+                             const QStringList& filteredFiles,
+                             const QStringList& renameOlds,
+                             const QStringList& renameNews)
 {
     Q_UNUSED(id);
 
@@ -350,12 +352,33 @@ void MainWindow::afterFilter(int id,
 //    }
     if(filteredFiles.isEmpty())
     {
-        insertLog(TaskKind::SQL, 0, QString(tr("No new files found. %1")).arg(dir));
+        insertLog(TaskKind::SQL, 0, QString(tr("No new files found in %1")).arg(dir));
     }
     else
     {
-        insertLog(TaskKind::SQL, 0, QString(tr("%1 new items found. %2")).
-                  arg(QString::number(filteredFiles.count()), dir));
+        insertLog(TaskKind::SQL, 0, QString(tr("%1 new items found in %2")).
+                  arg(QString::number(filteredFiles.count())).
+                  arg(dir));
+    }
+
+    Q_ASSERT(renameOlds.count()==renameNews.count());
+    if(!renameOlds.isEmpty())
+    {
+        QString logMessage = QString(tr("%1 renamed items found in %2.")).
+                arg(QString::number(renameOlds.count())).
+                arg(dir);
+
+        for(int i=0 ; i < renameOlds.count(); ++i)
+        {
+            QString oldfile = renameOlds[i];
+            QString newfile = renameNews[i];
+            logMessage += "\n";
+            logMessage += "  " + QString("\"%1\" -> \"%2\"").arg(oldfile).arg(newfile);
+        }
+        insertLog(TaskKind::SQL,0,logMessage);
+
+        gpSQL->RenameEntries(dir, renameOlds, renameNews);
+        tableModel_->RenameEntries(dir, renameOlds, renameNews);
     }
     QVector<TaskListData*> tasks;
     QVector<int> logids;

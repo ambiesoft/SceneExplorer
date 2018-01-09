@@ -70,6 +70,9 @@ public:
                     QVector<qint64>& ctimes,
                     QVector<qint64>& wtimes,
                     QStringList& salients);
+    bool RenameEntries(const QString& dir,
+                       const QStringList& renameOlds,
+                       const QStringList& renameNews);
 };
 
 #endif // SQL_H

@@ -3,6 +3,7 @@
 #include <QPixmap>
 #include <QFileInfo>
 #include <QTableView>
+#include <QColor>
 
 #include "consts.h"
 #include "helper.h"
@@ -25,6 +26,7 @@ void TableModel:: AppendData(TableItemData* pItemData)
     // endResetModel();
     endInsertRows();
 
+    mapsFullpathToItem_[pItemData->getMovieFileFull()] = pItemData;
 
     int newRowInfo = rowCount()-TableModel::RowCountPerEntry;
     int newRowImage = newRowInfo+1;
@@ -47,12 +49,12 @@ void TableModel:: AppendData(TableItemData* pItemData)
 
     parent_->setRowHeight(newRowImage, Consts::THUMB_HEIGHT);
 }
-void TableModel::AppendDatas(const QList<TableItemData*>&v)
-{
-    beginResetModel();
-    items_.append(v);
-    endResetModel();
-}
+//void TableModel::AppendDatas(const QList<TableItemData*>&v)
+//{
+//    beginResetModel();
+//    items_.append(v);
+//    endResetModel();
+//}
 int TableModel::rowCount(const QModelIndex & /*parent*/) const
 {
    return items_.count()*RowCountPerEntry;
@@ -111,7 +113,7 @@ QString TableModel::GetInfoText(TableItemData& item) const
 {
     QString ret;
     static const char* sep = ", ";
-    ret.append(dq(item.getMovieFile()));
+    ret.append(dq(item.getMovieFileFull()));
     ret.append(sep);
 
     ret.append(size_human(item.getSize()));
@@ -142,7 +144,7 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
 
     if(role==TableRole::MovieFile)
     {
-        return items_[actualIndex]->getMovieFile();
+        return items_[actualIndex]->getMovieFileFull();
     }
 
     if(isInfo)
@@ -157,6 +159,16 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
                 return GetInfoText(*(items_[actualIndex]));
             }
             break;
+
+            case Qt::TextColorRole:
+            {
+                if(!QFile(items_[actualIndex]->getMovieFileFull()).exists())
+                {
+                    return QColor(Qt::red);
+                }
+            }
+            break;
+
         }
     }
     else if(isImage)
@@ -191,7 +203,7 @@ bool TableModel::itemDataLessThan(const TableItemData* v1, const TableItemData* 
     switch(sSortColumn_)
     {
     case SORTCOLUMN::FILENAME:
-        ret = (v1->getMovieFile() < v2->getMovieFile());
+        ret = (v1->getMovieFileFull() < v2->getMovieFileFull());
         break;
     case SORTCOLUMN::SIZE:
         ret = (v1->getSize() < v2->getSize());
@@ -230,3 +242,19 @@ void TableModel::SortByWtime()
     SortCommon(SORTCOLUMN::WTIME);
 }
 
+bool TableModel::RenameEntries(const QString& dir,
+                   const QStringList& renameOlds,
+                   const QStringList& renameNews)
+{
+    bool ret = true;
+    for(int i=0 ; i < renameOlds.count(); ++i)
+    {
+        TableItemData* pID = mapsFullpathToItem_[pathCombine(dir,renameOlds[i])];
+        Q_ASSERT(pID);
+        if(pID)
+        {
+            ret &= pID->Rename(renameOlds[i], renameNews[i]);
+        }
+    }
+    return ret;
+}

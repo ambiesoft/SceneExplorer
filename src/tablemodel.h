@@ -18,6 +18,8 @@ public:
     } ;
 private:
     QList<TableItemData*> items_;
+    QMap<QString, TableItemData*> mapsFullpathToItem_;
+
     QTableView* parent_;
     QString GetInfoText(TableItemData& item) const;
 
@@ -32,7 +34,7 @@ public:
 
     TableModel(QTableView *parent);
     void AppendData(TableItemData* pItemData);
-    void AppendDatas(const QList<TableItemData*>&v);
+    // void AppendDatas(const QList<TableItemData*>&v);
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override ;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
@@ -44,6 +46,10 @@ public:
     void SortByFileName();
     void SortBySize();
     void SortByWtime();
+
+    bool RenameEntries(const QString& dir,
+                       const QStringList& renameOlds,
+                       const QStringList& renameNews);
 };
 
 class ImageDelegate : public QStyledItemDelegate

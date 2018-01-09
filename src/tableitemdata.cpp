@@ -41,7 +41,7 @@ TableItemData::TableItemData(const QStringList& files,
     vWidth_=vWidth;
     vHeight_=vHeight;
 }
-QString TableItemData::getMovieFile() const {
+QString TableItemData::getMovieFileFull() const {
     Q_ASSERT(!movieDirectory_.isEmpty());
     Q_ASSERT(!movieFilename_.isEmpty());
 
