@@ -8,6 +8,7 @@
 void TaskGetDir::run()
 {
     runStuff(dir_);
+    emit finished_GetDir(loopId_, id_);
 }
 void TaskGetDir::runStuff(const QString& dir)
 {
@@ -29,7 +30,7 @@ void TaskGetDir::runStuff(const QString& dir)
             Q_ASSERT(itFile.fileInfo().isFile());
             files.append(itFile.fileName());
         }
-        emit afterGetDir(id_, dir, files);
+        emit afterGetDir(loopId_,id_, dir, files);
     }
 
     {

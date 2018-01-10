@@ -43,6 +43,7 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    idManager_ = new IDManager(this);
 
     this->setWindowTitle(Consts::APPNAME);
 
@@ -68,10 +69,13 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
     ui->listTask->setModel(taskModel_);
 
 
-    statusLabel_ = new QLabel(this);
-    statusLabel_->hide();
-    ui->statusBar->addPermanentWidget(statusLabel_);
+    slPaused_ = new QLabel(this);
+    slPaused_->hide();
+    ui->statusBar->addPermanentWidget(slPaused_);
 
+    slTask_ = new QLabel(this);
+    ui->statusBar->addPermanentWidget(slTask_);
+    idManager_->Clear();
 
     QVariant vVal;
 
@@ -131,11 +135,21 @@ QThreadPool* MainWindow::getPoolGetDir()
     }
     return pPoolGetDir_;
 }
-void MainWindow::clearPoolGetDir()
+QThreadPool* MainWindow::getPoolFilter()
 {
-    delete pPoolGetDir_;
-    pPoolGetDir_=nullptr;
+    if(!pPoolFilter_)
+    {
+        pPoolFilter_ = new QThreadPool;
+        pPoolFilter_->setExpiryTimeout(-1);
+        Q_ASSERT(threadcountFilter_ > 0);
+        pPoolFilter_->setMaxThreadCount(threadcountFilter_);
+    }
+    return pPoolFilter_;
 }
+
+
+
+
 
 QThreadPool* MainWindow::getPoolFFmpeg()
 {
@@ -148,27 +162,56 @@ QThreadPool* MainWindow::getPoolFFmpeg()
     }
     return pPoolFFmpeg_;
 }
-void MainWindow::clearPoolFFmpeg()
-{
-    delete pPoolFFmpeg_;
-    pPoolFFmpeg_=nullptr;
-}
+
 void MainWindow::clearAllPool()
 {
     insertLog(TaskKind::App, 0, tr("Clearing all tasks..."));
     gStop = true;
+    bool prevPause = gPaused;
+    gPaused = false;
 
-    if(pPoolFFmpeg_)
-        pPoolFFmpeg_->clear();
-    if(pPoolGetDir_)
-        pPoolGetDir_->clear();
+
+    do {
+        if(pPoolFFmpeg_)
+            pPoolFFmpeg_->clear();
+        if(pPoolGetDir_)
+            pPoolGetDir_->clear();
+        if(pPoolFilter_)
+            pPoolFilter_->clear();
+        if(pPoolFFmpeg_)
+            pPoolFFmpeg_->clear();
+
+        if(pPoolGetDir_ && pPoolGetDir_->activeThreadCount() != 0)
+            continue;
+        if(pPoolFilter_ && pPoolFilter_->activeThreadCount() != 0)
+            continue;
+        if(pPoolFFmpeg_ && pPoolFFmpeg_->activeThreadCount() != 0)
+            continue;
+
+        break;
+    } while(true);
+
+//    while( !( (idGetDir_ == idGetDirDone_) &&
+//           (idFilter_ == idFilterDone_) &&
+//           (idFFMpeg_ == idFFMpegDone_) ) )
+//    {
+//        QApplication::processEvents();
+//    }
+    ++gLoopId;
+    idManager_->Clear();
 
     delete pPoolGetDir_;
     pPoolGetDir_ = nullptr;
 
+    delete pPoolFilter_;
+    pPoolFilter_ = nullptr;
+
     delete pPoolFFmpeg_;
     pPoolFFmpeg_ = nullptr;
 
+	taskModel_->ClearAllTasks();
+
+    gPaused=prevPause;
     gStop = false;
     insertLog(TaskKind::App, 0, tr("All tasks Cleared."));
 }
@@ -311,10 +354,13 @@ void MainWindow::resizeDock(QDockWidget* dock, const QSize& size)
 
 
 
-void MainWindow::afterGetDir(int id,
+void MainWindow::afterGetDir(int loopId, int id,
                              const QString& dir,
                              const QStringList& filesIn)
 {
+    if(loopId != gLoopId)
+        return;
+
     Q_UNUSED(id);
     // WaitCursor wc;
 
@@ -328,7 +374,9 @@ void MainWindow::afterGetDir(int id,
     QStringList salients;
 
     gpSQL->GetAllEntry(dir, entries, sizes, ctimes, wtimes, salients);
-    TaskFilter* pTaskFilter = new TaskFilter(id, dir, filesIn,
+    TaskFilter* pTaskFilter = new TaskFilter(gLoopId, idManager_->Increment(IDKIND_Filter),
+                                             dir,
+                                             filesIn,
                                              entries,
                                              sizes,
                                              ctimes,
@@ -338,15 +386,36 @@ void MainWindow::afterGetDir(int id,
 
     QObject::connect(pTaskFilter, &TaskFilter::afterFilter,
                      this, &MainWindow::afterFilter);
-    getPoolGetDir()->start(pTaskFilter);
+    QObject::connect(pTaskFilter, &TaskFilter::finished_Filter,
+                     this, &MainWindow::finished_Filter);
+    getPoolFilter()->start(pTaskFilter);
+
+//    int newRow = ui->listTaskDirectory->rowCount();
+//    ui->listTaskDirectory->setRowCount(newRow+1);
+//    QTableWidgetItem *newItemID = new QTableWidgetItem(QString::number(id));
+//    ui->listTaskDirectory->setItem(newRow, 0, newItemID);
+//    QTableWidgetItem *newItemDir = new QTableWidgetItem(dir);
+//    ui->listTaskDirectory->setItem(newRow, 1, newItemDir);
+
     insertLog(TaskKind::Filter, id, QString(tr("Task Registered. %1")).arg(dir));
 }
-void MainWindow::afterFilter(int id,
+void MainWindow::finished_GetDir(int loopId, int id)
+{
+    if(loopId != gLoopId)
+        return;
+
+    idManager_->IncrementDone(IDKIND_GetDir);
+    Q_ASSERT(id >= idManager_->GetDone(IDKIND_GetDir));
+}
+void MainWindow::afterFilter(int loopId,int id,
                              const QString& dir,
                              const QStringList& filteredFiles,
                              const QStringList& renameOlds,
                              const QStringList& renameNews)
 {
+    if(loopId != gLoopId)
+        return;
+
     Q_UNUSED(id);
 
     bool prevPaused = gPaused;
@@ -399,7 +468,7 @@ void MainWindow::afterFilter(int id,
     for(int i=0 ; i < filteredFiles.length(); ++i)
     {
         QString file = pathCombine(dir, filteredFiles[i]);
-        TaskFFmpeg* pTask = new TaskFFmpeg(++idFFMpeg_,file);
+        TaskFFmpeg* pTask = new TaskFFmpeg(gLoopId, idManager_->Increment(IDKIND_FFmpeg), file);
         pTask->setAutoDelete(true);
 //        QObject::connect(pTask, &TaskFFMpeg::sayBorn,
 //                         this, &MainWindow::sayBorn);
@@ -411,11 +480,13 @@ void MainWindow::afterFilter(int id,
                          this, &MainWindow::sayGoodby);
         QObject::connect(pTask, &TaskFFmpeg::sayDead,
                          this, &MainWindow::sayDead);
+        QObject::connect(pTask, &TaskFFmpeg::finished_FFMpeg,
+                         this, &MainWindow::finished_FFMpeg);
 
         tasks.append(new TaskListData(pTask->GetId(),pTask->GetMovieFile()));
         getPoolFFmpeg()->start(pTask);
 
-        logids.append(idFFMpeg_);
+        logids.append(idManager_->Get(IDKIND_FFmpeg));
         logtexts.append(QString(tr("Task registered. %1")).arg(file));
     }
     insertLog(TaskKind::FFMpeg, logids, logtexts);
@@ -423,7 +494,15 @@ void MainWindow::afterFilter(int id,
     gPaused=prevPaused;
 }
 
+void MainWindow::finished_Filter(int loopId, int id)
+{
+    if(loopId != gLoopId)
+        return;
 
+    Q_UNUSED(id);
+    idManager_->IncrementDone(IDKIND_Filter);
+    Q_ASSERT(idManager_->Get(IDKIND_Filter) >= idManager_->GetDone(IDKIND_Filter));
+}
 
 
 
@@ -451,4 +530,14 @@ void MainWindow::openSelectedVideoInFolder()
 void MainWindow::copySelectedVideoPath()
 {
     QApplication::clipboard()->setText(getSelectedVideo());
+}
+
+void MainWindow::IDManager::updateStatus()
+{
+    QString s = QString("D:%1/%2 F:%3/%4 M:%5/%6").
+            arg(idGetDirDone_).arg(idGetDir_).
+            arg(idFilterDone_).arg(idFilter_).
+            arg(idFFMpegDone_).arg(idFFMpeg_);
+
+    win_->slTask_->setText(s);
 }

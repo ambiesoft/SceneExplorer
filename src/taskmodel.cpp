@@ -53,6 +53,17 @@ void TaskModel::RemoveTask(int id)
         endResetModel();
     }
 }
+void TaskModel::ClearAllTasks()
+{
+	beginResetModel();
+	map_.clear();
+	for (int i = 0; i < items_.count(); ++i)
+	{
+		delete items_[i];
+	}
+	items_.clear();
+	endResetModel();
+}
 void TaskModel::myupdate()
 {
     if(gStop)

@@ -4,3 +4,4 @@
 volatile bool gPaused;
 volatile bool gStop;
 Sql* gpSQL = nullptr;
+volatile int gLoopId;

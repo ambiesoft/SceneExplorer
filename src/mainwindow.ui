@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>701</width>
-    <height>486</height>
+    <width>874</width>
+    <height>590</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -107,7 +107,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>701</width>
+     <width>874</width>
      <height>21</height>
     </rect>
    </property>
@@ -206,7 +206,7 @@
       <height>16777215</height>
      </size>
     </property>
-    <layout class="QVBoxLayout" name="verticalLayout_3">
+    <layout class="QHBoxLayout" name="horizontalLayout_5">
      <property name="leftMargin">
       <number>0</number>
      </property>
@@ -226,6 +226,9 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
        </property>
       </widget>
      </item>
@@ -292,7 +295,7 @@
   </widget>
   <widget class="QDockWidget" name="dockTask">
    <property name="windowTitle">
-    <string>Task</string>
+    <string>Task Thumbnail</string>
    </property>
    <attribute name="dockWidgetArea">
     <number>2</number>
@@ -317,6 +320,33 @@
      <item>
       <widget class="QListView" name="listTask"/>
      </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QDockWidget" name="dockWidget">
+   <property name="windowTitle">
+    <string>Task Directory</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>2</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents_4">
+    <layout class="QHBoxLayout" name="horizontalLayout_4">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
     </layout>
    </widget>
   </widget>

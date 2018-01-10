@@ -12,8 +12,9 @@
 
 #include "taskffmpeg.h"
 
-TaskFFmpeg::TaskFFmpeg(int id,const QString& file)
+TaskFFmpeg::TaskFFmpeg(int loopId, int id,const QString& file)
 {
+    loopId_ = loopId;
     id_=id;
     movieFile_=file;
 
@@ -22,9 +23,9 @@ TaskFFmpeg::TaskFFmpeg(int id,const QString& file)
 }
 TaskFFmpeg::~TaskFFmpeg()
 {
-    emit sayDead(id_);
+    emit sayDead(loopId_,id_);
 }
-bool getProbe(const QString& file,
+bool TaskFFmpeg::getProbe(const QString& file,
               double& outDuration,
               QString& outFormat,
 
@@ -32,7 +33,9 @@ bool getProbe(const QString& file,
               QString& outAudioCodec,
 
               int& outVWidth,
-              int& outVHeight)
+              int& outVHeight,
+
+              QString& errorReason)
 {
     QProcess process;
     process.setProgram("C:\\LegacyPrograms\\ffmpeg\\bin\\ffprobe.exe");
@@ -49,26 +52,39 @@ bool getProbe(const QString& file,
 
     process.start(QProcess::ReadOnly);
     if(!process.waitForStarted())
+    {
+        errorReason = tr("waitForStarted failed");
         return false;
-
+    }
     if(!process.waitForFinished())
+    {
+        errorReason = tr("waitForFinished failed");
         return false;
+    }
 
     qDebug() << "exitCode()=" << process.exitCode();
     if(0 != process.exitCode())
-            return false;
-
+    {
+        errorReason = tr("existCode != 0");
+        return false;
+    }
     QByteArray baOut = process.readAllStandardOutput();
     QByteArray baErr=process.readAllStandardError();
 
 
     QJsonDocument jd = QJsonDocument::fromJson(baOut);
     if(jd.isNull())
+    {
+        errorReason = tr("QJsonDocument is Null");
         return false;
+    }
 
     QJsonObject jo = jd.object();
     if(jo.isEmpty())
+    {
+        errorReason = tr("QJsonObject is Empty");
         return false;
+    }
 
     // format and duration
     {
@@ -76,26 +92,32 @@ bool getProbe(const QString& file,
         QJsonObject item = format.toObject();
 
         QJsonValue format_name = item["format_name"];
-        if(
-                format_name.toString()=="tty" ||
-                format_name.toString()=="image2"
-          )
-        {
-            return false;
-        }
+//        if(
+//                format_name.toString()=="tty" ||
+//                format_name.toString()=="image2"
+//          )
+//        {
+//            return false;
+//        }
         outFormat = format_name.toString();
 
         QJsonValue jDuration = item["duration"];
 
         if(!jDuration.isString())
+        {
+            errorReason = tr("duration is not a string");
             return false;
+        }
 
         QString ds = jDuration.toString();
 
         bool ok;
         outDuration = ds.toDouble(&ok);
         if(!ok)
+        {
+            errorReason = tr("duration is not double");
             return false;
+        }
     }
 
     // stream
@@ -123,10 +145,20 @@ bool getProbe(const QString& file,
                 break;
         }
     }
+    if(outVideoCodec.isEmpty())
+    {
+        errorReason = tr("No video streams found");
+        return false;
+    }
     return true;
 }
-
 void TaskFFmpeg::run()
+{
+    run2();
+    emit finished_FFMpeg(loopId_,id_);
+}
+
+void TaskFFmpeg::run2()
 {
     if(gStop)
         return;
@@ -136,12 +168,13 @@ void TaskFFmpeg::run()
         return;
 
     progress_ = Progressing;
-    emit sayHello(id_, movieFile_);
-    if(!run2())
-        emit sayNo(id_, movieFile_);
+    emit sayHello(loopId_,id_, movieFile_);
+    QString errorReason;
+    if(!run3(errorReason))
+        emit sayNo(loopId_,id_, movieFile_, errorReason);
     progress_ = Finished;
 }
-bool TaskFFmpeg::run2()
+bool TaskFFmpeg::run3(QString& errorReason)
 {
     double duration;
     QString format;
@@ -152,7 +185,8 @@ bool TaskFFmpeg::run2()
                  format,
                  vcodec,
                  acodec,
-                 vWidth,vHeight))
+                 vWidth,vHeight,
+                 errorReason))
     {
         return false;
     }
@@ -222,7 +256,7 @@ bool TaskFFmpeg::run2()
     }
 
     // emit sayGoodby(id_,emitFiles, Consts::THUMB_WIDTH, Consts::THUMB_HEIGHT, movieFile_, format);
-    emit sayGoodby(id_,
+    emit sayGoodby(loopId_,id_,
                    emitFiles,
                    movieFile_,
                    Consts::THUMB_WIDTH,

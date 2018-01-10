@@ -74,13 +74,13 @@ void MainWindow::on_action_Pause_triggered()
 
     if(gPaused)
     {
-        statusLabel_->setText(tr("Paused"));
-        statusLabel_->show();
+        slPaused_->setText(tr("Paused"));
+        slPaused_->show();
     }
     else
     {
-        statusLabel_->setText(QString());
-        statusLabel_->hide();
+        slPaused_->setText(QString());
+        slPaused_->hide();
     }
 }
 
@@ -92,13 +92,18 @@ void MainWindow::on_action_Do_It_triggered()
     lastSelectedDir_ = dir;
 
 
-    TaskGetDir* pTaskGetDir = new TaskGetDir(++idGetDir_, dir);
+    TaskGetDir* pTaskGetDir = new TaskGetDir(gLoopId, idManager_->Increment(IDKIND_GetDir), dir);
     pTaskGetDir->setAutoDelete(true);
     QObject::connect(pTaskGetDir, &TaskGetDir::afterGetDir,
                      this, &MainWindow::afterGetDir);
+    QObject::connect(pTaskGetDir, &TaskGetDir::finished_GetDir,
+                     this, &MainWindow::finished_GetDir);
     getPoolGetDir()->start(pTaskGetDir);
 
-    insertLog(TaskKind::GetDir, idGetDir_, QString(tr("Task registered. %1")).arg(dir));
+
+
+
+    insertLog(TaskKind::GetDir, idManager_->Get(IDKIND_GetDir), QString(tr("Task registered. %1")).arg(dir));
 }
 
 void MainWindow::on_action_Stop_triggered()

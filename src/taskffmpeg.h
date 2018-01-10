@@ -18,16 +18,31 @@ public:
     };
 
 private:
+    int loopId_;
     int id_;
     QString movieFile_;
     // QMutex mutex_;
     // int fileIndex_=0;
     Progress progress_;
+
+    bool getProbe(const QString& file,
+                  double& outDuration,
+                  QString& outFormat,
+
+                  QString& outVideoCodec,
+                  QString& outAudioCodec,
+
+                  int& outVWidth,
+                  int& outVHeight,
+
+                  QString& errorReason);
+    void run2();
+    bool run3(QString& errorReason);
+
 public:
-    TaskFFmpeg(int id,const QString& file);
+    TaskFFmpeg(int loopId, int id,const QString& file);
     virtual ~TaskFFmpeg();
     void run() override ;
-    bool run2();
     int GetId() const
     {
         return id_;
@@ -40,12 +55,13 @@ public:
 signals:
 //    void sayBorn(int id,
 //                 const QString& movieFile);
-    void sayHello(int id,
+    void sayHello(int loopId, int id,
                    const QString& movieFile);
-    void sayNo(int id,
-                   const QString& movieFile);
+    void sayNo(int loopId, int id,
+                   const QString& movieFile,
+                   const QString& errorReason);
 
-    void sayGoodby(int id,
+    void sayGoodby(int loopId, int id,
                    const QStringList& files,
                    const QString& movieFile,
                    int thumbwidth,
@@ -55,7 +71,8 @@ signals:
                    const QString& vcodec,
                    const QString& acodec,
                    int vWidth,int vHeight);
-    void sayDead(int id);
+    void sayDead(int loopId, int id);
+    void finished_FFMpeg(int loopId, int id);
 
 };
 
