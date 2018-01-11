@@ -53,7 +53,7 @@ private:
     public:
         IDManager(MainWindow* win):win_(win){}
 
-        int Get(IDKIND idkind)
+        int Get(IDKIND idkind) const
         {
             switch(idkind)
             {
@@ -64,7 +64,7 @@ private:
             Q_ASSERT(false);
             return 0;
         }
-        int GetDone(IDKIND idkind)
+        int GetDone(IDKIND idkind) const
         {
             switch(idkind)
             {
@@ -110,6 +110,18 @@ private:
             idFFMpeg_ = idFFMpegDone_=0;
             updateStatus();
         }
+        bool isAllTaskFinished() const
+        {
+            if(
+                    Get(IDKIND_FFmpeg)==GetDone(IDKIND_FFmpeg) &&
+                    Get(IDKIND_GetDir)==GetDone(IDKIND_GetDir) &&
+                    Get(IDKIND_Filter)==GetDone(IDKIND_Filter)
+               )
+            {
+                return true;
+            }
+            return false;
+        }
     }* idManager_ = nullptr;
     friend class IDManager;
 
@@ -144,9 +156,6 @@ private slots:
 
     void on_tableView_customContextMenuRequested(const QPoint &pos);
 
-    void on_treeView_activated(const QModelIndex &index);
-
-    void on_treeView_clicked(const QModelIndex &index);
     void on_treeView_selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
 
 private:

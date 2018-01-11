@@ -97,11 +97,7 @@ void MainWindow::finished_FFMpeg(int loopId, int id)
     Q_ASSERT(idManager_->Get(IDKIND_FFmpeg) >= idManager_->GetDone(IDKIND_FFmpeg));
 
 
-    if(
-            idManager_->Get(IDKIND_FFmpeg)==idManager_->GetDone(IDKIND_FFmpeg) &&
-            idManager_->Get(IDKIND_GetDir)==idManager_->GetDone(IDKIND_GetDir) &&
-            idManager_->Get(IDKIND_Filter)==idManager_->GetDone(IDKIND_Filter)
-       )
+    if(idManager_->isAllTaskFinished())
     {
         insertLog(TaskKind::App, 0, tr("All Tasks finished."));
     }

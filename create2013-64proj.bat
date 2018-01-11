@@ -14,7 +14,7 @@ if %VCVARSBAT% == x (
   goto :end
 )
 
-set QTBIN=Y:\local\Qt\5.10.0\msvc2013_64\bin
+set QTBIN=Y:\G\Qt\5.10.0\msvc2013_64\bin
 set QMAKE=x
 set QMAKECANDIDATE1=%QTBIN%\qmake.exe
 if exist %QMAKECANDIDATE1% (

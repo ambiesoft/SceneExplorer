@@ -498,6 +498,12 @@ void MainWindow::afterFilter(int loopId,int id,
     }
     insertLog(TaskKind::FFMpeg, logids, logtexts);
     taskModel_->AddTasks(tasks);
+
+    if(idManager_->isAllTaskFinished())
+    {
+        insertLog(TaskKind::App, 0, tr("All Tasks finished."));
+    }
+
     gPaused=prevPaused;
 }
 
@@ -549,18 +555,11 @@ void MainWindow::IDManager::updateStatus()
     win_->slTask_->setText(s);
 }
 
-void MainWindow::on_treeView_activated(const QModelIndex &index)
-{
-
-}
-
-void MainWindow::on_treeView_clicked(const QModelIndex &index)
-{
-
-}
 
 void MainWindow::on_treeView_selectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
 {
+    Q_UNUSED(deselected);
+
     if(selected.indexes().isEmpty())
         return;
 

@@ -70,4 +70,5 @@ RC_FILE = app.rc
 
 DISTFILES += \
     info/info-ffprobe-json.txt \
-    info/db-update.txt
+    info/db-update.txt \
+    info/Scenario-rename.txt
