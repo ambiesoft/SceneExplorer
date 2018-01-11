@@ -16,16 +16,20 @@ TableModel::TableModel(QTableView *parent)
 {
     parent_=parent;
 }
-void TableModel:: AppendData(TableItemData* pItemData)
+void TableModel:: AppendData(TableItemData* pItemData, const bool enableUpdate)
 {
-    beginInsertRows(QModelIndex(),
-                    items_.count()*RowCountPerEntry,
-                    (items_.count()*RowCountPerEntry)+RowCountPerEntry-1);
-    // beginResetModel();
-    items_.append(pItemData);
-    // endResetModel();
-    endInsertRows();
-
+    if(enableUpdate)
+    {
+        beginInsertRows(QModelIndex(),
+                        itemDatas_.count()*RowCountPerEntry,
+                        (itemDatas_.count()*RowCountPerEntry)+RowCountPerEntry-1);
+        itemDatas_.append(pItemData);
+        endInsertRows();
+    }
+    else
+    {
+        itemDatas_.append(pItemData);
+    }
     mapsFullpathToItem_[pItemData->getMovieFileFull()] = pItemData;
 
     int newRowInfo = rowCount()-TableModel::RowCountPerEntry;
@@ -49,6 +53,16 @@ void TableModel:: AppendData(TableItemData* pItemData)
 
     parent_->setRowHeight(newRowImage, Consts::THUMB_HEIGHT);
 }
+void TableModel::ResetData(const QList<TableItemData*>& all)
+{
+    beginResetModel();
+    ClearData();
+    for(int i=0;i < all.count(); ++i)
+    {
+        AppendData(all[i],!false);
+    }
+    endResetModel();
+}
 //void TableModel::AppendDatas(const QList<TableItemData*>&v)
 //{
 //    beginResetModel();
@@ -57,7 +71,14 @@ void TableModel:: AppendData(TableItemData* pItemData)
 //}
 int TableModel::rowCount(const QModelIndex & /*parent*/) const
 {
-   return items_.count()*RowCountPerEntry;
+   return itemDatas_.count()*RowCountPerEntry;
+}
+void TableModel::ClearData()
+{
+    for(int i=0 ; i < itemDatas_.count();++i)
+        delete itemDatas_[i];
+    itemDatas_.clear();
+    mapsFullpathToItem_.clear();
 }
 
 int TableModel::columnCount(const QModelIndex & /*parent*/) const
@@ -144,7 +165,7 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
 
     if(role==TableRole::MovieFile)
     {
-        return items_[actualIndex]->getMovieFileFull();
+        return itemDatas_[actualIndex]->getMovieFileFull();
     }
 
     if(isInfo)
@@ -156,13 +177,13 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
         {
             case Qt::DisplayRole:
             {
-                return GetInfoText(*(items_[actualIndex]));
+                return GetInfoText(*(itemDatas_[actualIndex]));
             }
             break;
 
             case Qt::TextColorRole:
             {
-                if(!QFile(items_[actualIndex]->getMovieFileFull()).exists())
+                if(!QFile(itemDatas_[actualIndex]->getMovieFileFull()).exists())
                 {
                     return QColor(Qt::red);
                 }
@@ -177,7 +198,7 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
         {
             case Qt::DecorationRole:
             {
-                QString imageFile = items_[actualIndex]->getImageFiles()[index.column()];
+                QString imageFile = itemDatas_[actualIndex]->getImageFiles()[index.column()];
                 imageFile = pathCombine(Consts::FILEPART_THUMBS, imageFile);
 
                 // QString imageFile("C:\\Cygwin\\home\\fjUnc\\gitdev\\SceneExplorer\\build-SceneExplorer-Desktop_Qt_5_10_0_MSVC2013_64bit-Debug\\0b76916f-3fb8-49be-a7da-d110ed476952-2.png");
@@ -224,8 +245,8 @@ void TableModel::SortCommon(SORTCOLUMN column)
     sSortReverse_ = !sSortReverse_;
     beginResetModel();
     sSortColumn_ = column;
-    // qSort(items_.begin(), items_.end(), &TableModel::itemDataLessThan);
-    std::sort(items_.begin(), items_.end(), &TableModel::itemDataLessThan);
+    qSort(itemDatas_.begin(), itemDatas_.end(), &TableModel::itemDataLessThan);
+    // std::sort(itemDatas_.begin(), itemDatas_.end(), &TableModel::itemDataLessThan);
     endResetModel();
 }
 void TableModel::SortByFileName()

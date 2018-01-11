@@ -17,7 +17,7 @@ public:
         WTIME,
     } ;
 private:
-    QList<TableItemData*> items_;
+    QList<TableItemData*> itemDatas_;
     QMap<QString, TableItemData*> mapsFullpathToItem_;
 
     QTableView* parent_;
@@ -25,6 +25,7 @@ private:
 
     static bool itemDataLessThan(const TableItemData* v1, const TableItemData* v2);
     void SortCommon(SORTCOLUMN column);
+    void ClearData();
 public:
     enum TableRole {
         MovieFile = Qt::UserRole + 1,
@@ -33,7 +34,7 @@ public:
     static const int RowCountPerEntry = 3;
 
     TableModel(QTableView *parent);
-    void AppendData(TableItemData* pItemData);
+    void AppendData(TableItemData* pItemData, const bool enableUpdate = true);
     // void AppendDatas(const QList<TableItemData*>&v);
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override ;
@@ -50,6 +51,8 @@ public:
     bool RenameEntries(const QString& dir,
                        const QStringList& renameOlds,
                        const QStringList& renameNews);
+
+    void ResetData(const QList<TableItemData*>& all);
 };
 
 class ImageDelegate : public QStyledItemDelegate

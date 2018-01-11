@@ -63,7 +63,7 @@ public:
                         QStringList& results);
     int hasThumb(const QString& movieFile) ;
 
-    bool GetAll(QList<TableItemData*>& v);
+    bool GetAll(QList<TableItemData*>& v, const QString& dir = QString());
     int GetAllEntry(const QString& dir,
                     QStringList& entries,
                     QVector<qint64>& sizes,

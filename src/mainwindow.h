@@ -14,6 +14,7 @@ class Settings;
 class TaskModel;
 class TaskFFmpeg;
 class QLabel;
+class QItemSelection;
 
 namespace Ui {
 class MainWindow;
@@ -142,6 +143,11 @@ private slots:
     void on_actionSort_by_wtime_triggered();
 
     void on_tableView_customContextMenuRequested(const QPoint &pos);
+
+    void on_treeView_activated(const QModelIndex &index);
+
+    void on_treeView_clicked(const QModelIndex &index);
+    void on_treeView_selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
 
 private:
     QThreadPool* pPoolFFmpeg_ = nullptr;

@@ -62,8 +62,15 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
     // ui->tableView->horizontalHeader()->setStretchLastSection(true);
     ui->tableView->setModel(tableModel_);
 
+
+
     treeModel_ = new FolderModel;
     ui->treeView->setModel(treeModel_);
+
+    QItemSelectionModel* treeSelectionModel = ui->treeView->selectionModel();
+    QObject::connect(treeSelectionModel, &QItemSelectionModel::selectionChanged,
+                     this, &MainWindow::on_treeView_selectionChanged);
+
 
     taskModel_ = new TaskModel(ui->listTask);
     ui->listTask->setModel(taskModel_);
@@ -540,4 +547,29 @@ void MainWindow::IDManager::updateStatus()
             arg(idFFMpegDone_).arg(idFFMpeg_);
 
     win_->slTask_->setText(s);
+}
+
+void MainWindow::on_treeView_activated(const QModelIndex &index)
+{
+
+}
+
+void MainWindow::on_treeView_clicked(const QModelIndex &index)
+{
+
+}
+
+void MainWindow::on_treeView_selectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
+{
+    if(selected.indexes().isEmpty())
+        return;
+
+    QVariant sel = treeModel_->data(selected.indexes()[0], QDirModel::FilePathRole);
+    qDebug() << "Selected" << sel;
+    QString dir = sel.toString();
+
+    QList<TableItemData*> all;
+    gpSQL->GetAll(all,dir);
+
+    tableModel_->ResetData(all);
 }

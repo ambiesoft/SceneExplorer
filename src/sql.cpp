@@ -450,11 +450,31 @@ QString Sql::getErrorStrig(int thumbRet)
     Q_ASSERT(false);
     return QString();
 }
-bool Sql::GetAll(QList<TableItemData*>& v)
+bool Sql::GetAll(QList<TableItemData*>& v, const QString& dir)
 {
     QSqlQuery query(db_);
-    if(!query.exec("select * from FileInfo"))
-        return false;
+    if(dir.isEmpty())
+    {
+        if(!query.exec("select * from FileInfo"))
+        {
+            Q_ASSERT(false);
+            return false;
+        }
+    }
+    else
+    {
+        bool ok = true;
+        ok &= query.prepare("select * from FileInfo where "
+                      "directory=?");
+        int i=0;
+        query.bindValue(i++, dir);
+        ok &= query.exec();
+        if(!ok)
+        {
+            Q_ASSERT(false);
+            return false;
+        }
+    }
     while (query.next()) {
         QString directory = query.value("directory").toString();
         QString name = query.value("name").toString();
