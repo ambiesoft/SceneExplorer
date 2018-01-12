@@ -1,9 +1,9 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QMainWindow>
 
 #include "tablemodel.h"
+#include "directoryentry.h"
 
 class QThreadPool;
 class QLabel;
@@ -34,7 +34,7 @@ public:
 private:
     enum IDKIND {
         IDKIND_GetDir,
-        IDKIND_Filter,
+        // IDKIND_Filter,
         IDKIND_FFmpeg,
     };
     class IDManager
@@ -42,11 +42,11 @@ private:
         MainWindow* win_;
 
         int idGetDir_ = 0;
-        int idFilter_ = 0;
+        // int idFilter_ = 0;
         int idFFMpeg_ = 0;
 
         int idGetDirDone_ = 0;
-        int idFilterDone_ = 0;
+        // int idFilterDone_ = 0;
         int idFFMpegDone_ = 0;
 
         void updateStatus();
@@ -58,7 +58,7 @@ private:
             switch(idkind)
             {
             case GetDir: return idGetDir_;
-            case Filter: return idFilter_;
+            // case Filter: return idFilter_;
             case FFMpeg: return idFFMpeg_;
             }
             Q_ASSERT(false);
@@ -69,7 +69,7 @@ private:
             switch(idkind)
             {
             case GetDir: return idGetDirDone_;
-            case Filter: return idFilterDone_;
+            // case Filter: return idFilterDone_;
             case FFMpeg: return idFFMpegDone_;
             }
             Q_ASSERT(false);
@@ -81,7 +81,7 @@ private:
             switch(idkind)
             {
             case GetDir: ret = ++idGetDir_;break;
-            case Filter: ret = ++idFilter_;break;
+            // case Filter: ret = ++idFilter_;break;
             case FFMpeg: ret = ++idFFMpeg_;break;
             default:
             Q_ASSERT(false);
@@ -95,7 +95,7 @@ private:
             switch(idkind)
             {
             case GetDir: ret = ++idGetDirDone_;break;
-            case Filter: ret = ++idFilterDone_;break;
+            // case Filter: ret = ++idFilterDone_;break;
             case FFMpeg: ret = ++idFFMpegDone_;break;
             default:
             Q_ASSERT(false);
@@ -106,7 +106,7 @@ private:
         void Clear()
         {
             idGetDir_ = idGetDirDone_ = 0;
-            idFilter_ = idFilterDone_ = 0;
+            // idFilter_ = idFilterDone_ = 0;
             idFFMpeg_ = idFFMpegDone_=0;
             updateStatus();
         }
@@ -114,9 +114,8 @@ private:
         {
             if(
                     Get(IDKIND_FFmpeg)==GetDone(IDKIND_FFmpeg) &&
-                    Get(IDKIND_GetDir)==GetDone(IDKIND_GetDir) &&
-                    Get(IDKIND_Filter)==GetDone(IDKIND_Filter)
-               )
+                    Get(IDKIND_GetDir)==GetDone(IDKIND_GetDir)
+              )
             {
                 return true;
             }
@@ -125,15 +124,17 @@ private:
     }* idManager_ = nullptr;
     friend class IDManager;
 
+    void checkTaskFinished();
+
     int threadcountGetDir_ = 1;
     int threadcountFFmpeg_ = 2;
-    int threadcountFilter_ = 1;
+    // int threadcountFilter_ = 1;
 
     bool initShown=false;
 
     QLabel *slPaused_ = nullptr;
     QLabel *slTask_ = nullptr;
-
+    QLabel *slItemCount_ = nullptr;
 protected:
     virtual void resizeEvent(QResizeEvent *event);
     void closeEvent(QCloseEvent *event);
@@ -156,7 +157,13 @@ private slots:
 
     void on_tableView_customContextMenuRequested(const QPoint &pos);
 
-    void on_treeView_selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
+    void on_directoryWidget_selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
+
+    void on_action_Top_triggered();
+
+    void on_action_Bottom_triggered();
+
+    void on_directoryWidget_itemChanged(DirectoryEntry *item);
 
 private:
     QThreadPool* pPoolFFmpeg_ = nullptr;
@@ -165,16 +172,19 @@ private:
     QThreadPool* pPoolGetDir_ = nullptr;
     QThreadPool* getPoolGetDir();
 
-    QThreadPool* pPoolFilter_ = nullptr;
-    QThreadPool* getPoolFilter();
+//    QThreadPool* pPoolFilter_ = nullptr;
+//    QThreadPool* getPoolFilter();
 
     void clearAllPool();
+
+    void AddUserEntryDirectory(const QString& dir);
+    void directoryChangedCommon();
+
+    QFileIconProvider fiProvider_;
 
     Ui::MainWindow *ui;
     TableModel* tableModel_;
     QString lastSelectedDir_;
-
-    FolderModel* treeModel_;
 
     TaskModel* taskModel_;
 
@@ -182,7 +192,7 @@ private:
 
     enum TaskKind {
         GetDir,
-        Filter,
+        // Filter,
         FFMpeg,
         SQL,
         App,
@@ -218,16 +228,21 @@ public slots:
                      const QString& dir,
                      const QStringList& files);
     void finished_GetDir(int loopId, int id);
-    void afterFilter(int loopId, int id,
+//    void afterFilter(int loopId, int id,
+//                     const QString& dir,
+//                     const QStringList& filteredFiles,
+//                     const QStringList& renameOlds,
+//                     const QStringList& renameNews);
+    void afterFilter2(int loopId, int id,
                      const QString& dir,
-                     const QStringList& filteredFiles,
-                     const QStringList& renameOlds,
-                     const QStringList& renameNews);
-    void finished_Filter(int loopId, int id);
+                     const QStringList& filteredFiles);
+//    void finished_Filter(int loopId, int id);
 
     void openSelectedVideo();
     void openSelectedVideoInFolder();
     void copySelectedVideoPath();
+
+    void tableItemCountChanged();
 };
 
 #endif // MAINWINDOW_H

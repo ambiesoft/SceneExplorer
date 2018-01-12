@@ -1,3 +1,7 @@
+cd %~dp0
+sdel SceneExplorer.vcxproj
+sdel SceneExplorer.vcxproj.filters
+
 set CANDIDATE1="C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\vcvarsall.bat"
 set CANDIDATE2="C:\Program Files\Microsoft Visual Studio 12.0\VC\vcvarsall.bat"
 

@@ -47,7 +47,7 @@ void MainWindow::sayGoodby(int loopId,  int id,
 
     TableItemDataPointer pTID = TableItemData::Create(
                             files,
-                            fi.absolutePath(),
+                            fi.canonicalPath() + '/',
                             fi.fileName(),
                             fi.size(),
                             fi.birthTime().toSecsSinceEpoch(),
@@ -61,7 +61,7 @@ void MainWindow::sayGoodby(int loopId,  int id,
 
     tableModel_->AppendData(pTID);
 
-    int sqlError = gpSQL->AppendData(*pTID);
+    int sqlError = gpSQL->AppendData(pTID);
     if(sqlError==0)
     {
         insertLog(TaskKind::SQL, id, QString("%1 \"%2\"").arg(tr("Written in Database"), movieFile));

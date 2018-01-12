@@ -30,6 +30,9 @@ Sql::Sql() : db_(QSqlDatabase::addDatabase("QSQLITE"))
      query.exec("alter table FileInfo add vwidth");
      query.exec("alter table FileInfo add vheight");
 
+     if(!query.exec("CREATE INDEX idx_directory ON FileInfo(directory)"))
+         qDebug() << "index failed" << query.lastError().text();
+
      for (int i = 0; i < db_.tables().count(); i ++) {
          qDebug() << db_.tables().at(i);
      }
@@ -52,17 +55,6 @@ Sql::~Sql()
 }
 
 
-static QString getUUID(const QString& file)
-{
-    int i = file.lastIndexOf('.');
-    if(i < 0)
-        return QString();
-    QString ret = file.left(i);
-    if(ret.length() < 2)
-        return QString();
-    ret = ret.left(ret.length()-2);
-    return ret;
-}
 static bool isUUID(const QString& s)
 {
     if(s.isEmpty())
@@ -120,7 +112,15 @@ QSqlQuery* Sql::getDeleteFromDirectoryName()
     }
     return pQDeleteFromDirectoryName_;
 }
-
+QStringList Sql::getAllColumnNames()
+{
+//    QSet<QString> ret;
+//    for(const QString& s:allColumns_)
+//    {
+//       ret.insert(s);
+//    }
+    return allColumns_;
+}
 QString Sql::getAllColumns(bool bBrace, bool bQ)
 {
     QString ret;
@@ -148,68 +148,110 @@ QString Sql::getAllColumns(bool bBrace, bool bQ)
     ret += " "; //safe space
     return ret;
 }
-QSqlQuery* Sql::getInsertQuery()
+//QString Sql::getAllColumnsUpdate(TableItemDataPointer tid)
+//{
+//    QString ret;
+//    for(int i=0 ; i < allColumns_.count(); ++i)
+//    {
+//        ret += allColumns_[i];
+//        ret += "=?";
+//        if((i+1)!=allColumns_.count())
+//        {
+//            ret+=",";
+//        }
+//    }
+//    return ret;
+//}
+QSqlQuery* Sql::getInsertQuery(TableItemDataPointer tid)
 {
-    if(pQInsert_)
-        return pQInsert_;
-    pQInsert_=new QSqlQuery(db_);
-
-    QString preparing =
-        QString("insert into FileInfo ") +
-        // "(size, ctime, wtime, directory, name, salient, thumbid, format, duration) "
-        getAllColumns(true,false) +
-        "values "+
-        getAllColumns(true,true);
-        //"values (?,?,?,?,?,?,?,?,?)"))
-    if(!pQInsert_->prepare(preparing))
+    static QStringList allcolumns;
+    if(!pQInsert_)
     {
-        qDebug() << pQInsert_->lastError();
-        Q_ASSERT(false);
-        return nullptr;
-    }
-    return pQInsert_;
-}
-int Sql::AppendData(const TableItemData& tid)
-{
-    QString salient = createSalient(tid.getMovieFileFull(), tid.getSize());
+        pQInsert_=new QSqlQuery();
+        QString preparing;
+        allcolumns = getAllColumnNames();
+        VERIFY(allcolumns.removeOne("directory"));
+        VERIFY(allcolumns.removeOne("name"));
 
-    Q_ASSERT(tid.getImageFiles().count()==5);
-    if(tid.getImageFiles().isEmpty())
-        return THUMBFILE_NOT_FOUND;
+        preparing = "INSERT OR REPLACE INTO FileInfo (";
 
-    QString uuid = getUUID(tid.getImageFiles()[0]);
-    if(!isUUID(uuid))
-        return UUID_FORMAT_ERROR;
-
-    {
-        QSqlQuery* pQuery = getDeleteFromDirectoryName();
-
-        int i = 0;
-
-        pQuery->bindValue(i++, tid.getMovieDirectory());
-        pQuery->bindValue(i++, tid.getMovieFileName());
-        if(!pQuery->exec())
+        for(int i=0 ; i < allcolumns.count(); ++i)
         {
-            qDebug() << pQuery->lastError();
-            return SQL_EXEC_FAILED;
+            preparing += allcolumns[i];
+            preparing += ",";
+        }
+        preparing += "directory,name ";
+
+        preparing += ") VALUES ( ";
+
+        for(int i=0 ; i < allcolumns.count(); ++i)
+        {
+            preparing += "?";
+            preparing += ",";
+        }
+        preparing += "COALESCE((SELECT directory FROM FileInfo WHERE directory=? and name=?), ?),";
+        preparing += "COALESCE((SELECT name FROM FileInfo WHERE directory=? and name=?), ?)";
+
+        preparing+=")";
+
+
+
+    //    QString preparing =
+    //        QString("insert into FileInfo ") +
+    //        getAllColumns(true,false) +
+    //        "values "+
+    //        getAllColumns(true,true);
+        qDebug() << preparing;
+
+
+        if(!pQInsert_->prepare(preparing))
+        {
+            qDebug() << pQInsert_->lastError() << preparing;
+            Q_ASSERT(false);
+            return nullptr;
         }
     }
 
-    QSqlQuery* pQInsert = getInsertQuery();
-    int i = 0;
-    pQInsert->bindValue(i++, tid.getSize());
-    pQInsert->bindValue(i++, tid.getCtime());
-    pQInsert->bindValue(i++, tid.getWtime());
-    pQInsert->bindValue(i++, tid.getMovieDirectory());
-    pQInsert->bindValue(i++, tid.getMovieFileName());
-    pQInsert->bindValue(i++, salient);
-    pQInsert->bindValue(i++, uuid);
-    pQInsert->bindValue(i++, tid.getDuration());
-    pQInsert->bindValue(i++, tid.getFormat());
-    pQInsert->bindValue(i++, tid.getVcodec());
-    pQInsert->bindValue(i++, tid.getAcodec());
-    pQInsert->bindValue(i++, tid.getVWidth());
-    pQInsert->bindValue(i++, tid.getVHeight());
+    int bindIndex=0;
+
+    QMap<QString,QVariant> allmap = tid->getColumnValues();
+#ifdef QT_DEBUG
+    for(const QString& s:allcolumns)
+    {
+        Q_ASSERT(allmap.contains(s));
+    }
+#endif
+
+    for (const QString& c : allcolumns)
+    {
+        pQInsert_->bindValue(bindIndex++, allmap[c]);
+    }
+
+    // first COALEASE
+    pQInsert_->bindValue(bindIndex++, tid->getMovieDirectory());
+    pQInsert_->bindValue(bindIndex++, tid->getMovieFileName());
+    pQInsert_->bindValue(bindIndex++, tid->getMovieDirectory());
+
+    // 2nd COALEASE
+    pQInsert_->bindValue(bindIndex++, tid->getMovieDirectory());
+    pQInsert_->bindValue(bindIndex++, tid->getMovieFileName());
+    pQInsert_->bindValue(bindIndex++, tid->getMovieFileName());
+
+    return pQInsert_;
+}
+int Sql::AppendData(TableItemDataPointer tid)
+{
+
+
+    Q_ASSERT(tid->getImageFiles().count()==5);
+    if(tid->getImageFiles().isEmpty())
+        return THUMBFILE_NOT_FOUND;
+
+//    QString uuid = getUUID(tid.getImageFiles()[0]);
+//    if(!isUUID(uuid))
+//        return UUID_FORMAT_ERROR;
+
+    QSqlQuery* pQInsert = getInsertQuery(tid);
 
     if(!pQInsert->exec())
     {
@@ -353,6 +395,7 @@ int Sql::GetAllEntry(const QString& dir,
 
     return 0;
 }
+
 int Sql::hasThumb(const QString& movieFile)
 {
     bool exist;
@@ -450,10 +493,15 @@ QString Sql::getErrorStrig(int thumbRet)
     Q_ASSERT(false);
     return QString();
 }
-bool Sql::GetAll(QList<TableItemDataPointer>& v, const QString& dir)
+
+//bool Sql::GetAll(QList<TableItemDataPointer>& v, const QString& dir)
+//{
+//    return GetAll(v, QStringList(dir));
+//}
+bool Sql::GetAll(QList<TableItemDataPointer>& v, const QStringList& dirs)
 {
     QSqlQuery query(db_);
-    if(dir.isEmpty())
+    if(dirs.isEmpty())
     {
         if(!query.exec("select * from FileInfo"))
         {
@@ -464,10 +512,20 @@ bool Sql::GetAll(QList<TableItemDataPointer>& v, const QString& dir)
     else
     {
         bool ok = true;
-        ok &= query.prepare("select * from FileInfo where "
-                      "directory=?");
-        int i=0;
-        query.bindValue(i++, dir);
+        QString strPrepare("select * from FileInfo where ");
+        for(int i=0 ; i < dirs.count(); ++i)
+        {
+            strPrepare += "directory like ?";
+            if((i+1)!=dirs.count())
+                strPrepare += " or ";
+        }
+        ok &= query.prepare(strPrepare);
+
+        for(int i=0 ; i < dirs.count(); ++i)
+        {
+			Q_ASSERT(dirs[i].endsWith('/'));
+            query.bindValue(i, dirs[i] + "%");
+        }
         ok &= query.exec();
         if(!ok)
         {
@@ -477,7 +535,11 @@ bool Sql::GetAll(QList<TableItemDataPointer>& v, const QString& dir)
     }
     while (query.next()) {
         QString directory = query.value("directory").toString();
+        if(directory.isEmpty())
+            continue;
         QString name = query.value("name").toString();
+        if(name.isEmpty())
+            continue;
         QString movieFileFull = pathCombine(directory,name);
 
 //        if(!QFile(movieFileFull).exists())
@@ -524,7 +586,41 @@ bool Sql::GetAll(QList<TableItemDataPointer>& v, const QString& dir)
     return true;
 }
 
+bool Sql::RenameEntry(const QString& oldDirc,
+                      const QString& oldFile,
+                      const QString& newDirc,
+                      const QString& newFile)
+{
+    QString oldDir = canonicalDir(oldDirc);
+    QString newDir = canonicalDir(newDirc);
 
+    Q_ASSERT(!QFileInfo(pathCombine(oldDir,oldFile)).exists());
+    Q_ASSERT(QFileInfo(pathCombine(newDir,newFile)).exists());
+
+    if(!QFile(pathCombine(oldDir, oldFile)).exists())
+    {
+        QSqlQuery query;
+        if(!query.prepare("update FileInfo "
+                      "set directory=?,name=? "
+                      "where directory=? and name=?"))
+        {
+            Q_ASSERT(false);
+            return false;
+        }
+        int i=0;
+        query.bindValue(i++, newDir);
+        query.bindValue(i++, newFile);
+        query.bindValue(i++, oldDir);
+        query.bindValue(i++, oldFile);
+
+        if(!query.exec())
+        {
+            Q_ASSERT(false);
+            return false;
+        }
+    }
+    return true;
+}
 bool Sql::RenameEntries(const QString& dir,
                         const QStringList& renameOlds,
                         const QStringList& renameNews)
@@ -562,5 +658,73 @@ bool Sql::RenameEntries(const QString& dir,
         }
     }
 
+    return true;
+}
+
+bool Sql::getEntryFromSalient(const QString& salient,
+                              QStringList& dirsDB,
+                              QStringList& filesDB,
+                              QList<qint64>& sizesDB)
+{
+    QSqlQuery query;
+    if(!query.prepare("select directory, name, size from FileInfo where "
+                  "salient = ?"))
+    {
+        Q_ASSERT(false);
+        return false;
+    }
+    query.bindValue(0, salient);
+    if(!query.exec())
+    {
+        Q_ASSERT(false);
+        return false;
+    }
+
+    while(query.next())
+    {
+        QString dir = query.value("directory").toString();
+        Q_ASSERT(!dir.isEmpty());
+        QString name = query.value("name").toString();
+        Q_ASSERT(!name.isEmpty());
+        qint64 size = query.value("size").toLongLong();
+
+        dirsDB.append(dir);
+        filesDB.append(name);
+        sizesDB.append(size);
+    }
+    return true;
+}
+
+void showFatal(const QString& error)
+{
+    Alert(error);
+}
+#define SQC(siki) do { if(!(siki)) { Q_ASSERT(false); showFatal(query.lastError().text()); return false;}} while(false)
+bool Sql::hasEntry(const QString& dir,
+              const QString& file,
+              const QString& sa)
+{
+    QSqlQuery query;
+
+    SQC(query.prepare("select name from FileInfo where "
+                  "directory=? and name=? and salient=?"));
+    int i=0;
+    query.bindValue(i++, dir);
+    query.bindValue(i++, file);
+    query.bindValue(i++, sa);
+
+    SQC(query.exec());
+    return query.next();
+}
+bool Sql::RemoveEntry(const QString& dir,
+                 const QString& file)
+{
+    QSqlQuery& query = *getDeleteFromDirectoryName();
+
+    int i = 0;
+
+    query.bindValue(i++, dir);
+    query.bindValue(i++, file);
+    SQC(query.exec());
     return true;
 }

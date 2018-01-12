@@ -1,10 +1,7 @@
 #ifndef TASKFILTER_H
 #define TASKFILTER_H
 
-#include <QRunnable>
-#include <QObject>
-#include <QVector>
-#include <QMap>
+
 class TaskFilter : public QObject, public QRunnable
 {
     Q_OBJECT

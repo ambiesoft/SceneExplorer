@@ -150,5 +150,5 @@ void TaskFilter::runStuff(const QString& dir)
 		}
         newfiles.append(fileDisk);
     }
-    emit afterFilter(loopId_,id_, dir, newfiles, renameOlds, renameNews);
+    emit afterFilter(loopId_,id_, QDir(dir).canonicalPath(), newfiles, renameOlds, renameNews);
 }

@@ -1,8 +1,7 @@
 #ifndef TASKGETDIR_H
 #define TASKGETDIR_H
 
-#include <QRunnable>
-#include <QObject>
+
 
 class TaskGetDir : public QObject, public QRunnable
 {

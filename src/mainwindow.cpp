@@ -27,7 +27,7 @@
 #include "tableitemdata.h"
 #include "settings.h"
 #include "waitcursor.h"
-#include "taskfilter.h"
+// #include "taskfilter.h"
 
 #include "optiondialog.h"
 #include "globals.h"
@@ -61,15 +61,17 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
     // QStandardItemModel* model = new QStandardItemModel;
     // ui->tableView->horizontalHeader()->setStretchLastSection(true);
     ui->tableView->setModel(tableModel_);
+    QObject::connect(tableModel_, &TableModel::itemCountChanged,
+                     this, &MainWindow::tableItemCountChanged);
 
 
+    // treeModel_ = new FolderModel;
+//	entryDirectoryModel_ = new EntryDirectoryModel;
+//    ui->directoryWidget->setModel(entryDirectoryModel_);
 
-    treeModel_ = new FolderModel;
-    ui->treeView->setModel(treeModel_);
-
-    QItemSelectionModel* treeSelectionModel = ui->treeView->selectionModel();
+    QItemSelectionModel* treeSelectionModel = ui->directoryWidget->selectionModel();
     QObject::connect(treeSelectionModel, &QItemSelectionModel::selectionChanged,
-                     this, &MainWindow::on_treeView_selectionChanged);
+                     this, &MainWindow::on_directoryWidget_selectionChanged);
 
 
     taskModel_ = new TaskModel(ui->listTask);
@@ -84,6 +86,9 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
     ui->statusBar->addPermanentWidget(slTask_);
     idManager_->Clear();
 
+    slItemCount_ = new QLabel(this);
+    ui->statusBar->addPermanentWidget(slItemCount_);
+
     QVariant vVal;
 
     vVal = settings.value(Consts::KEY_SIZE);
@@ -96,7 +101,7 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
 
     vVal = settings.value(Consts::KEY_TREESIZE);
     if(vVal.isValid())
-        ui->treeView->setMaximumSize(vVal.toSize());
+        ui->directoryWidget->setMaximumSize(vVal.toSize());
 
     vVal = settings.value(Consts::KEY_TXTLOGSIZE);
     if(vVal.isValid())
@@ -105,6 +110,15 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
     vVal = settings.value(Consts::KEY_LISTTASKSIZE);
     if(vVal.isValid())
         ui->listTask->setMaximumSize(vVal.toSize());
+
+
+    vVal = settings.value(Consts::KEY_USERENTRYDIRECTORIES);
+    if(vVal.isValid())
+    {
+        QStringList dirs = vVal.toStringList();
+        for(const QString& s : dirs)
+            AddUserEntryDirectory(s);
+    }
 }
 
 //void MainWindow::setTableSpan()
@@ -142,17 +156,17 @@ QThreadPool* MainWindow::getPoolGetDir()
     }
     return pPoolGetDir_;
 }
-QThreadPool* MainWindow::getPoolFilter()
-{
-    if(!pPoolFilter_)
-    {
-        pPoolFilter_ = new QThreadPool;
-        pPoolFilter_->setExpiryTimeout(-1);
-        Q_ASSERT(threadcountFilter_ > 0);
-        pPoolFilter_->setMaxThreadCount(threadcountFilter_);
-    }
-    return pPoolFilter_;
-}
+//QThreadPool* MainWindow::getPoolFilter()
+//{
+//    if(!pPoolFilter_)
+//    {
+//        pPoolFilter_ = new QThreadPool;
+//        pPoolFilter_->setExpiryTimeout(-1);
+//        Q_ASSERT(threadcountFilter_ > 0);
+//        pPoolFilter_->setMaxThreadCount(threadcountFilter_);
+//    }
+//    return pPoolFilter_;
+//}
 
 
 
@@ -183,15 +197,15 @@ void MainWindow::clearAllPool()
             pPoolFFmpeg_->clear();
         if(pPoolGetDir_)
             pPoolGetDir_->clear();
-        if(pPoolFilter_)
-            pPoolFilter_->clear();
+//        if(pPoolFilter_)
+//            pPoolFilter_->clear();
         if(pPoolFFmpeg_)
             pPoolFFmpeg_->clear();
 
         if(pPoolGetDir_ && pPoolGetDir_->activeThreadCount() != 0)
             continue;
-        if(pPoolFilter_ && pPoolFilter_->activeThreadCount() != 0)
-            continue;
+//        if(pPoolFilter_ && pPoolFilter_->activeThreadCount() != 0)
+//            continue;
         if(pPoolFFmpeg_ && pPoolFFmpeg_->activeThreadCount() != 0)
             continue;
 
@@ -210,8 +224,8 @@ void MainWindow::clearAllPool()
     delete pPoolGetDir_;
     pPoolGetDir_ = nullptr;
 
-    delete pPoolFilter_;
-    pPoolFilter_ = nullptr;
+//    delete pPoolFilter_;
+//    pPoolFilter_ = nullptr;
 
     delete pPoolFFmpeg_;
     pPoolFFmpeg_ = nullptr;
@@ -228,7 +242,6 @@ void MainWindow::clearAllPool()
 MainWindow::~MainWindow()
 {
     delete tableModel_;
-    delete treeModel_;
     delete taskModel_;
     delete ui;
 
@@ -297,11 +310,11 @@ void MainWindow::insertLog(TaskKind kind, const QVector<int>& ids, const QString
             }
             break;
 
-        case TaskKind::Filter:
-            {
-                head.append(tr("Filter"));
-            }
-            break;
+//            case TaskKind::Filter:
+//            {
+//                head.append(tr("Filter"));
+//            }
+//            break;
 
             default:
                 Q_ASSERT(false);
@@ -368,49 +381,110 @@ void MainWindow::resizeDock(QDockWidget* dock, const QSize& size)
 
 
 void MainWindow::afterGetDir(int loopId, int id,
-                             const QString& dir,
+                             const QString& dirc,
                              const QStringList& filesIn)
 {
     if(loopId != gLoopId)
         return;
 
     Q_UNUSED(id);
-    // WaitCursor wc;
+    WaitCursor wc;
 
-//    int saveThreadCount = poolFFMpeg_->maxThreadCount();
-//    poolFFMpeg_->setMaxThreadCount(1);
+    QString dir = QDir(dirc).canonicalPath() + '/';
 
-	QStringList entries;
-    QVector<qint64> sizes;
-    QVector<qint64> ctimes;
-    QVector<qint64> wtimes;
-    QStringList salients;
+    QStringList filteredFiles;
 
-    gpSQL->GetAllEntry(dir, entries, sizes, ctimes, wtimes, salients);
-    TaskFilter* pTaskFilter = new TaskFilter(gLoopId, idManager_->Increment(IDKIND_Filter),
-                                             dir,
-                                             filesIn,
-                                             entries,
-                                             sizes,
-                                             ctimes,
-                                             wtimes,
-                                             salients);
-    pTaskFilter->setAutoDelete(true);
+    // check file is in DB
+    for(const QString& file : filesIn)
+    {
+        QFileInfo fi(pathCombine(dir, file));
 
-    QObject::connect(pTaskFilter, &TaskFilter::afterFilter,
-                     this, &MainWindow::afterFilter);
-    QObject::connect(pTaskFilter, &TaskFilter::finished_Filter,
-                     this, &MainWindow::finished_Filter);
-    getPoolFilter()->start(pTaskFilter);
+        QString sa = createSalient(fi.absoluteFilePath(), fi.size());
 
-//    int newRow = ui->listTaskDirectory->rowCount();
-//    ui->listTaskDirectory->setRowCount(newRow+1);
-//    QTableWidgetItem *newItemID = new QTableWidgetItem(QString::number(id));
-//    ui->listTaskDirectory->setItem(newRow, 0, newItemID);
-//    QTableWidgetItem *newItemDir = new QTableWidgetItem(dir);
-//    ui->listTaskDirectory->setItem(newRow, 1, newItemDir);
+        if(gpSQL->hasEntry(dir,file,sa))
+        {
+            if(true) // gpSQL->hasThumb(dir, file))
+            {
+                insertLog(TaskKind::GetDir, id, QString(tr("Already exist. \"%1\"")).
+                          arg(fi.absoluteFilePath()));
+                continue;
+            }
+            else
+            {
+                // thumbs not exist
+                // may be crashed or failed to create
+                // remove entry
+                gpSQL->RemoveEntry(dir, file);
+            }
+        }
 
-    insertLog(TaskKind::Filter, id, QString(tr("Task Registered. %1")).arg(dir));
+        QStringList dirsDB;
+        QStringList filesDB;
+        QList<qint64> sizesDB;
+        gpSQL->getEntryFromSalient(sa, dirsDB, filesDB, sizesDB);
+        bool renamed = false;
+        for(int i=0 ; i < filesDB.count(); ++i)
+        {
+            const QString& dbFile = pathCombine(dirsDB[i], filesDB[i]);
+            // same salient in db
+            QFileInfo fidb(dbFile);
+            if(!fidb.exists())
+            {
+                // file info in db does not exist on disk
+                if(fi.size()==sizesDB[i])
+                {
+                    // db size is same size with disk
+                    // and salient is same ( conditonal queried from db )
+                    // we assume file is moved
+                    insertLog(TaskKind::GetDir, id, QString(tr("Rename detected. \"%1\" -> \"%2\"")).
+                              arg(dbFile).
+                              arg(pathCombine(dir,file)));
+                    if(gpSQL->RenameEntry(dirsDB[i], filesDB[i], dir, file))
+                    {
+                        tableModel_->RenameEntry(dirsDB[i], filesDB[i], dir, file);
+                    }
+                    renamed = true;
+                    break;
+                }
+            }
+        }
+
+        if(renamed)
+            continue;
+        filteredFiles.append(file);
+    }
+    // now file must be thumbnailed
+    afterFilter2(loopId,
+                id,
+                dir,
+                filteredFiles
+                );
+
+
+//	QStringList entries;
+//    QVector<qint64> sizes;
+//    QVector<qint64> ctimes;
+//    QVector<qint64> wtimes;
+//    QStringList salients;
+
+//    gpSQL->GetAllEntry(dir, entries, sizes, ctimes, wtimes, salients);
+//    TaskFilter* pTaskFilter = new TaskFilter(gLoopId, idManager_->Increment(IDKIND_Filter),
+//                                             dir,
+//                                             filesIn,
+//                                             entries,
+//                                             sizes,
+//                                             ctimes,
+//                                             wtimes,
+//                                             salients);
+//    pTaskFilter->setAutoDelete(true);
+
+//    QObject::connect(pTaskFilter, &TaskFilter::afterFilter,
+//                     this, &MainWindow::afterFilter);
+//    QObject::connect(pTaskFilter, &TaskFilter::finished_Filter,
+//                     this, &MainWindow::finished_Filter);
+//    getPoolFilter()->start(pTaskFilter);
+
+//    insertLog(TaskKind::Filter, id, QString(tr("Task Registered. %1")).arg(dir));
 }
 void MainWindow::finished_GetDir(int loopId, int id)
 {
@@ -419,12 +493,12 @@ void MainWindow::finished_GetDir(int loopId, int id)
 
     idManager_->IncrementDone(IDKIND_GetDir);
     Q_ASSERT(id >= idManager_->GetDone(IDKIND_GetDir));
+
+    checkTaskFinished();
 }
-void MainWindow::afterFilter(int loopId,int id,
+void MainWindow::afterFilter2(int loopId,int id,
                              const QString& dir,
-                             const QStringList& filteredFiles,
-                             const QStringList& renameOlds,
-                             const QStringList& renameNews)
+                             const QStringList& filteredFiles)
 {
     if(loopId != gLoopId)
         return;
@@ -440,26 +514,6 @@ void MainWindow::afterFilter(int loopId,int id,
 //    {
 //        insertLog(TaskKind::SQL, 0, Sql::getErrorStrig(ret), true);
 //    }
-    Q_ASSERT(renameOlds.count()==renameNews.count());
-    if(!renameOlds.isEmpty())
-    {
-        QString logMessage = QString(tr("%1 renamed items found in %2.")).
-                arg(QString::number(renameOlds.count())).
-                arg(dir);
-
-        for(int i=0 ; i < renameOlds.count(); ++i)
-        {
-            QString oldfile = renameOlds[i];
-            QString newfile = renameNews[i];
-            logMessage += "\n";
-            logMessage += "  " + QString("\"%1\" -> \"%2\"").arg(oldfile).arg(newfile);
-        }
-        insertLog(TaskKind::SQL,0,logMessage);
-
-        gpSQL->RenameEntries(dir, renameOlds, renameNews);
-        tableModel_->RenameEntries(dir, renameOlds, renameNews);
-    }
-
 
     if(filteredFiles.isEmpty())
     {
@@ -505,23 +559,119 @@ void MainWindow::afterFilter(int loopId,int id,
     insertLog(TaskKind::FFMpeg, logids, logtexts);
     taskModel_->AddTasks(tasks);
 
+    checkTaskFinished();
+
+    gPaused=prevPaused;
+}
+void MainWindow::checkTaskFinished()
+{
     if(idManager_->isAllTaskFinished())
     {
         insertLog(TaskKind::App, 0, tr("All Tasks finished."));
     }
-
-    gPaused=prevPaused;
 }
+//void MainWindow::afterFilter(int loopId,int id,
+//                             const QString& dir,
+//                             const QStringList& filteredFiles,
+//                             const QStringList& renameOlds,
+//                             const QStringList& renameNews)
+//{
+//    if(loopId != gLoopId)
+//        return;
 
-void MainWindow::finished_Filter(int loopId, int id)
-{
-    if(loopId != gLoopId)
-        return;
+//    Q_UNUSED(id);
 
-    Q_UNUSED(id);
-    idManager_->IncrementDone(IDKIND_Filter);
-    Q_ASSERT(idManager_->Get(IDKIND_Filter) >= idManager_->GetDone(IDKIND_Filter));
-}
+//    bool prevPaused = gPaused;
+//    gPaused=true;
+
+////    QStringList filteredFiles;
+////    int ret = gpSQL->filterWithEntry(dir, filesIn, filteredFiles);
+////    if(ret != 0)
+////    {
+////        insertLog(TaskKind::SQL, 0, Sql::getErrorStrig(ret), true);
+////    }
+//    Q_ASSERT(renameOlds.count()==renameNews.count());
+//    if(!renameOlds.isEmpty())
+//    {
+//        QString logMessage = QString(tr("%1 renamed items found in %2.")).
+//                arg(QString::number(renameOlds.count())).
+//                arg(dir);
+
+//        for(int i=0 ; i < renameOlds.count(); ++i)
+//        {
+//            QString oldfile = renameOlds[i];
+//            QString newfile = renameNews[i];
+//            logMessage += "\n";
+//            logMessage += "  " + QString("\"%1\" -> \"%2\"").arg(oldfile).arg(newfile);
+//        }
+//        insertLog(TaskKind::SQL,0,logMessage);
+
+//        gpSQL->RenameEntries(dir, renameOlds, renameNews);
+//        tableModel_->RenameEntries(dir, renameOlds, renameNews);
+//    }
+
+
+//    if(filteredFiles.isEmpty())
+//    {
+//        insertLog(TaskKind::SQL, 0, QString(tr("No new files found in %1")).arg(dir));
+//    }
+//    else
+//    {
+//        insertLog(TaskKind::SQL, 0, QString(tr("%1 new items found in %2")).
+//                  arg(QString::number(filteredFiles.count())).
+//                  arg(dir));
+//    }
+
+//    // afterfilter must perform salient check from SQL, for filter-passed files
+
+
+//    QVector<TaskListDataPointer> tasks;
+//    QVector<int> logids;
+//    QStringList logtexts;
+//    for(int i=0 ; i < filteredFiles.length(); ++i)
+//    {
+//        QString file = pathCombine(dir, filteredFiles[i]);
+//        TaskFFmpeg* pTask = new TaskFFmpeg(gLoopId, idManager_->Increment(IDKIND_FFmpeg), file);
+//        pTask->setAutoDelete(true);
+////        QObject::connect(pTask, &TaskFFMpeg::sayBorn,
+////                         this, &MainWindow::sayBorn);
+//        QObject::connect(pTask, &TaskFFmpeg::sayHello,
+//                         this, &MainWindow::sayHello);
+//        QObject::connect(pTask, &TaskFFmpeg::sayNo,
+//                         this, &MainWindow::sayNo);
+//        QObject::connect(pTask, &TaskFFmpeg::sayGoodby,
+//                         this, &MainWindow::sayGoodby);
+//        QObject::connect(pTask, &TaskFFmpeg::sayDead,
+//                         this, &MainWindow::sayDead);
+//        QObject::connect(pTask, &TaskFFmpeg::finished_FFMpeg,
+//                         this, &MainWindow::finished_FFMpeg);
+
+//        tasks.append(TaskListData::Create(pTask->GetId(),pTask->GetMovieFile()));
+//        getPoolFFmpeg()->start(pTask);
+
+//        logids.append(idManager_->Get(IDKIND_FFmpeg));
+//        logtexts.append(QString(tr("Task registered. %1")).arg(file));
+//    }
+//    insertLog(TaskKind::FFMpeg, logids, logtexts);
+//    taskModel_->AddTasks(tasks);
+
+//    if(idManager_->isAllTaskFinished())
+//    {
+//        insertLog(TaskKind::App, 0, tr("All Tasks finished."));
+//    }
+
+//    gPaused=prevPaused;
+//}
+
+//void MainWindow::finished_Filter(int loopId, int id)
+//{
+//    if(loopId != gLoopId)
+//        return;
+
+//    Q_UNUSED(id);
+//    idManager_->IncrementDone(IDKIND_Filter);
+//    Q_ASSERT(idManager_->Get(IDKIND_Filter) >= idManager_->GetDone(IDKIND_Filter));
+//}
 
 
 
@@ -553,28 +703,63 @@ void MainWindow::copySelectedVideoPath()
 
 void MainWindow::IDManager::updateStatus()
 {
-    QString s = QString("D:%1/%2 F:%3/%4 M:%5/%6").
+    QString s = QString("D: %1/%2   M: %5/%6").
             arg(idGetDirDone_).arg(idGetDir_).
-            arg(idFilterDone_).arg(idFilter_).
+            // arg(idFilterDone_).arg(idFilter_).
             arg(idFFMpegDone_).arg(idFFMpeg_);
 
     win_->slTask_->setText(s);
 }
 
 
-void MainWindow::on_treeView_selectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
+void MainWindow::on_directoryWidget_selectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
 {
+    Q_UNUSED(selected);
     Q_UNUSED(deselected);
-
-    if(selected.indexes().isEmpty())
-        return;
-
-    QVariant sel = treeModel_->data(selected.indexes()[0], QDirModel::FilePathRole);
-    qDebug() << "Selected" << sel;
-    QString dir = sel.toString();
+    directoryChangedCommon();
+}
+void MainWindow::directoryChangedCommon()
+{
+    QStringList dirs;
+    for(int i=0 ; i < ui->directoryWidget->count(); ++i)
+    {
+        QListWidgetItem* item = ui->directoryWidget->item(i);
+        if(item->checkState()==Qt::Checked)
+        {
+            dirs.append(item->text());
+            continue;
+        }
+        if(item->isSelected())
+        {
+            dirs.append(item->text());
+            continue;
+        }
+    }
 
     QList<TableItemDataPointer> all;
-    gpSQL->GetAll(all,dir);
+    gpSQL->GetAll(all, dirs);
 
     tableModel_->ResetData(all);
+}
+
+void MainWindow::on_action_Top_triggered()
+{
+    ui->tableView->scrollToTop();
+}
+
+void MainWindow::on_action_Bottom_triggered()
+{
+    ui->tableView->scrollToBottom();
+}
+
+
+void MainWindow::on_directoryWidget_itemChanged(DirectoryEntry *item)
+{
+    Q_UNUSED(item);
+    directoryChangedCommon();
+}
+
+void MainWindow::tableItemCountChanged()
+{
+    slItemCount_->setText(QString(tr("Items: %1")).arg(tableModel_->GetItemCount()));
 }

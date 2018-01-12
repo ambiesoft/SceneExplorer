@@ -32,14 +32,15 @@ void TableModel:: AppendData(TableItemDataPointer pItemData, const bool enableUp
     }
     mapsFullpathToItem_[pItemData->getMovieFileFull()] = pItemData;
 
-    int newRowInfo = rowCount()-TableModel::RowCountPerEntry;
-    int newRowImage = newRowInfo+1;
-    int newRowSeparator = newRowImage+1;
+    int newRowFilename = rowCount()-TableModel::RowCountPerEntry;
+    int newRowImage = newRowFilename+1;
+    int newRowInfo = newRowImage+1;
 
+    parent_->setSpan(newRowFilename,0,1,5);
     parent_->setSpan(newRowInfo,0,1,5);
-    parent_->setSpan(newRowSeparator,0,1,5);
     // ui->tableView->resizeRowToContents(newRowFilename);
     // ui->tableView->resizeRowToContents(newRowInfo);
+
 
     static bool initColumnWidth=false;
     if(!initColumnWidth)
@@ -52,6 +53,8 @@ void TableModel:: AppendData(TableItemDataPointer pItemData, const bool enableUp
     }
 
     parent_->setRowHeight(newRowImage, Consts::THUMB_HEIGHT);
+
+    emit itemCountChanged();
 }
 void TableModel::ResetData(const QList<TableItemDataPointer>& all)
 {
@@ -62,6 +65,8 @@ void TableModel::ResetData(const QList<TableItemDataPointer>& all)
         AppendData(all[i],!false);
     }
     endResetModel();
+
+    emit itemCountChanged();
 }
 //void TableModel::AppendDatas(const QList<TableItemData*>&v)
 //{
@@ -77,6 +82,8 @@ void TableModel::ClearData()
 {
     itemDatas_.clear();
     mapsFullpathToItem_.clear();
+
+    emit itemCountChanged();
 }
 
 int TableModel::columnCount(const QModelIndex & /*parent*/) const
@@ -99,7 +106,7 @@ QString size_human(const qint64& size)
         unit = i.next();
         num /= 1024.0;
     }
-    return QString().setNum(num,'f',2)+unit;
+    return QString().setNum(num,'f',2)+ " " +unit;
 }
 QString duration_human(double duration)
 {
@@ -131,9 +138,7 @@ static QString dq(const QString& s)
 QString TableModel::GetInfoText(TableItemData& item) const
 {
     QString ret;
-    static const char* sep = ", ";
-    ret.append(dq(item.getMovieFileFull()));
-    ret.append(sep);
+    static const char* sep = "   ";
 
     ret.append(size_human(item.getSize()));
     ret.append(sep);
@@ -150,6 +155,10 @@ QString TableModel::GetInfoText(TableItemData& item) const
     ret.append(sep);
 
     ret.append(item.getAcodec());
+	ret.append(sep);
+
+    ret.append(dq(item.getMovieDirectory()));
+	// ret.append(sep);
 
     return ret;
 }
@@ -158,15 +167,16 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
 {
     int actualIndex = index.row()/RowCountPerEntry;
     int mod = index.row() % RowCountPerEntry;
-    bool isInfo = mod==0;
+    bool isFilename = mod==0;
     bool isImage = mod==1;
+	bool isInfo = mod == 2;
 
     if(role==TableRole::MovieFile)
     {
         return itemDatas_[actualIndex]->getMovieFileFull();
     }
 
-    if(isInfo)
+    if(isFilename)
     {
         if(index.column() != 0)
             return QVariant();
@@ -175,7 +185,7 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
         {
             case Qt::DisplayRole:
             {
-                return GetInfoText(*(itemDatas_[actualIndex]));
+				return itemDatas_[actualIndex]->getMovieFileName();
             }
             break;
 
@@ -185,6 +195,12 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
                 {
                     return QColor(Qt::red);
                 }
+            }
+            break;
+
+            case Qt::TextAlignmentRole:
+            {
+                return Qt::AlignBottom;
             }
             break;
 
@@ -207,6 +223,32 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
             break;
         }
     }
+	else if (isInfo)
+	{
+		switch (role)
+		{
+		case Qt::DisplayRole:
+		{
+			return GetInfoText(*(itemDatas_[actualIndex]));
+		}
+		break;
+
+        case Qt::TextColorRole:
+        {
+            if(!QFile(itemDatas_[actualIndex]->getMovieFileFull()).exists())
+            {
+                return QColor(Qt::red);
+            }
+        }
+        break;
+
+        case Qt::TextAlignmentRole:
+        {
+            return Qt::AlignTop;
+        }
+        break;
+		}
+	}
     return QVariant();
 }
 Qt::ItemFlags TableModel::flags(const QModelIndex &index) const
@@ -261,19 +303,37 @@ void TableModel::SortByWtime()
     SortCommon(SORTCOLUMN::WTIME);
 }
 
-bool TableModel::RenameEntries(const QString& dir,
-                   const QStringList& renameOlds,
-                   const QStringList& renameNews)
+//bool TableModel::RenameEntries(const QString& dir,
+//                   const QStringList& renameOlds,
+//                   const QStringList& renameNews)
+//{
+//    bool ret = true;
+//    for(int i=0 ; i < renameOlds.count(); ++i)
+//    {
+//		TableItemDataPointer pID = mapsFullpathToItem_[pathCombine(dir,renameOlds[i])];
+//        Q_ASSERT(pID);
+//        if(pID)
+//        {
+//            ret &= pID->Rename(renameOlds[i], renameNews[i]);
+//        }
+//    }
+//    return ret;
+//}
+bool TableModel::RenameEntry(const QString& dbDir,
+                 const QString& dbFile,
+                 const QString& newdir,
+                 const QString& newfile)
 {
     bool ret = true;
-    for(int i=0 ; i < renameOlds.count(); ++i)
+    TableItemDataPointer pID = mapsFullpathToItem_[pathCombine(dbDir,dbFile)];
+    Q_ASSERT(pID);
+    if(pID)
     {
-		TableItemDataPointer pID = mapsFullpathToItem_[pathCombine(dir,renameOlds[i])];
-        Q_ASSERT(pID);
-        if(pID)
-        {
-            ret &= pID->Rename(renameOlds[i], renameNews[i]);
-        }
+        ret &= pID->Rename(dbDir,dbFile,newdir,newfile);
+
+        int row = itemDatas_.indexOf(pID);
+        Q_ASSERT(row >= 0);
+        emit dataChanged(createIndex(row*3,0), createIndex((row*3)+2,0));
     }
     return ret;
 }

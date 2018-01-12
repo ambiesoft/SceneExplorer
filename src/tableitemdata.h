@@ -1,8 +1,7 @@
 #ifndef LISTITEMDATA_H
 #define LISTITEMDATA_H
 
-#include <QStringList>
-#include <QSharedPointer>
+
 
 class TableItemData;
 typedef QSharedPointer<TableItemData> TableItemDataPointer;
@@ -63,7 +62,13 @@ public:
 		const QString& acodec,
 		int vWidth, int vHeight)
 	{
-		return TableItemDataPointer(new TableItemData(
+        Q_ASSERT(!movieDirectory.isEmpty());
+        Q_ASSERT(!movieFileName.isEmpty());
+        if(movieDirectory.isEmpty() || movieFileName.isEmpty())
+        {
+            return nullptr;
+        }
+        return TableItemDataPointer(new TableItemData(
 			files,
 			movieDirectory,
 			movieFileName,
@@ -104,6 +109,7 @@ public:
     }
     QString getMovieDirectory() const
     {
+        Q_ASSERT(movieDirectory_.endsWith('/'));
         return movieDirectory_;
     }
     QString getMovieFileName() const
@@ -133,16 +139,25 @@ public:
     qint64 getCtime() const;
     qint64 getWtime() const;
 
-    bool Rename(const QString& oldname,
+    bool Rename(const QString& olddir,
+                const QString& oldname,
+                const QString& newdir,
                 const QString& newname)
     {
+        Q_ASSERT(movieDirectory_==olddir);
         Q_ASSERT(movieFilename_==oldname);
+        if(movieDirectory_!=olddir)
+            return false;
+
         if(movieFilename_!=oldname)
             return false;
 
+        movieDirectory_=newdir;
         movieFilename_=newname;
+
         return true;
     }
+    QMap<QString,QVariant> getColumnValues() const;
 };
 
 #endif // LISTITEMDATA_H

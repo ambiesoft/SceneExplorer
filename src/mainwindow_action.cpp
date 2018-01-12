@@ -84,6 +84,28 @@ void MainWindow::on_action_Pause_triggered()
     }
 }
 
+void MainWindow::AddUserEntryDirectory(const QString& cdir)
+{
+    QDir di(cdir);
+
+    for(int i=0 ; i < ui->directoryWidget->count(); ++i)
+    {
+        QListWidgetItem* item = ui->directoryWidget->item(i);
+        QDir d(item->text());
+        if(di == d)
+        {
+            return;
+        }
+    }
+    QListWidgetItem* newitem = new QListWidgetItem(ui->directoryWidget);
+    newitem->setText(di.canonicalPath());
+    newitem->setFlags(newitem->flags() | Qt::ItemIsUserCheckable);
+    newitem->setCheckState(Qt::Unchecked);
+    newitem->setIcon(fiProvider_.icon(QFileIconProvider::Folder));
+    ui->directoryWidget->addItem(newitem);
+
+
+}
 void MainWindow::on_action_Do_It_triggered()
 {
     QString dir = QFileDialog::getExistingDirectory(this, tr("Open Directory"),lastSelectedDir_);
@@ -91,6 +113,7 @@ void MainWindow::on_action_Do_It_triggered()
         return;
     lastSelectedDir_ = dir;
 
+    AddUserEntryDirectory(dir);
 
     TaskGetDir* pTaskGetDir = new TaskGetDir(gLoopId, idManager_->Increment(IDKIND_GetDir), dir);
     pTaskGetDir->setAutoDelete(true);
@@ -104,6 +127,8 @@ void MainWindow::on_action_Do_It_triggered()
 
 
     insertLog(TaskKind::GetDir, idManager_->Get(IDKIND_GetDir), QString(tr("Task registered. %1")).arg(dir));
+
+
 }
 
 void MainWindow::on_action_Stop_triggered()

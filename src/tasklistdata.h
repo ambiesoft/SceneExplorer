@@ -1,7 +1,6 @@
 #ifndef TASKLISTDATA_H
 #define TASKLISTDATA_H
 
-#include <QSharedPointer>
 #include "taskffmpeg.h"
 
 class TaskListData;

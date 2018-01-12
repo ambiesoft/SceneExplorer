@@ -1,8 +1,7 @@
 #ifndef SQL_H
 #define SQL_H
 
-#include <QObject>
-#include <QtSql/QSqlDatabase>
+
 
 #include "tableitemdata.h"
 
@@ -23,7 +22,9 @@ class Sql : public QObject
                          qint64& wtime) const;
 
     int removeEntry(const QString& thumbid);
+    QStringList getAllColumnNames();
     QString getAllColumns(bool bBrace, bool bQ);
+    // QString getAllColumnsUpdate(TableItemDataPointer tid);
 public:
     enum SQL_ERROR {
         NO_ERROR,
@@ -47,14 +48,14 @@ public:
     QSqlQuery* getDeleteFromDirectoryName();
 
     QSqlQuery* pQInsert_=nullptr;
-    QSqlQuery* getInsertQuery();
+    QSqlQuery* getInsertQuery(TableItemDataPointer tid);
 
     QSqlQuery* pQGetInfo_=nullptr;
     QSqlQuery* getGetInfoQuery();
 
     Sql();
     ~Sql();
-    int AppendData(const TableItemData& tid);
+    int AppendData(TableItemDataPointer tid);
     bool IsSameFile(const QString& dir,
                     const QString& name,
                     const qint64& size,
@@ -64,7 +65,9 @@ public:
                         QStringList& results);
     int hasThumb(const QString& movieFile) ;
 
-    bool GetAll(QList<TableItemDataPointer>& v, const QString& dir = QString());
+    // bool GetAll(QList<TableItemDataPointer>& v, const QString& dir = QString());
+    bool GetAll(QList<TableItemDataPointer>& v, const QStringList& dirs = QStringList());
+
     int GetAllEntry(const QString& dir,
                     QStringList& entries,
                     QVector<qint64>& sizes,
@@ -74,6 +77,20 @@ public:
     bool RenameEntries(const QString& dir,
                        const QStringList& renameOlds,
                        const QStringList& renameNews);
+    bool RenameEntry(const QString& dbDir,
+                     const QString& dbFile,
+                     const QString& newdir,
+                     const QString& newfile);
+    bool getEntryFromSalient(const QString& salient,
+                             QStringList& dirsDB,
+                             QStringList& filesDB,
+                             QList<qint64>& sizesDB);
+
+    bool hasEntry(const QString& dir,
+                  const QString& file,
+                  const QString& sa);
+    bool RemoveEntry(const QString& dir,
+                     const QString& file);
 };
 
 #endif // SQL_H

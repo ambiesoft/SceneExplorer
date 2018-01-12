@@ -67,3 +67,23 @@ qint64 TableItemData::getWtime() const
 {
     return wtime_;
 }
+
+QMap<QString,QVariant> TableItemData::getColumnValues() const
+{
+    QMap<QString,QVariant> ret;
+    ret["size"]=getSize();
+    ret["ctime"]=getCtime();
+    ret["wtime"]=getWtime();
+    ret["directory"]=getMovieDirectory();
+    ret["name"]=getMovieFileName();
+    ret["salient"] = createSalient(getMovieFileFull(), getSize());
+    ret["thumbid"] = getUUIDFromThumbfile(getImageFiles()[0]);
+    ret["duration"]=getDuration();
+    ret["format"]=getFormat();
+    ret["vcodec"]=getVcodec();
+    ret["acodec"]=getAcodec();
+    ret["vwidth"]=getVWidth();
+    ret["vheight"]=getVHeight();
+
+    return ret;
+}

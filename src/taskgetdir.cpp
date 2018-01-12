@@ -2,6 +2,7 @@
 #include <QDirIterator>
 #include <QThread>
 
+#include "helper.h"
 #include "globals.h"
 #include "taskgetdir.h"
 
@@ -28,9 +29,10 @@ void TaskGetDir::runStuff(const QString& dir)
                 return;
             itFile.next();
             Q_ASSERT(itFile.fileInfo().isFile());
-            files.append(itFile.fileName());
+            if(IsVideoExtention(itFile.fileName()))
+                files.append(itFile.fileName());
         }
-        emit afterGetDir(loopId_,id_, dir, files);
+        emit afterGetDir(loopId_,id_, QDir(dir).canonicalPath(), files);
     }
 
     {

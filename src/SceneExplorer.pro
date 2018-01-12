@@ -42,7 +42,7 @@ SOURCES += \
     mainwindow_event.cpp \
     helper.cpp \
     foldermodel.cpp \
-    taskfilter.cpp
+    directoryentry.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -60,7 +60,8 @@ HEADERS += \
     tableitemdata.h \
     helper.h \
     foldermodel.h \
-    taskfilter.h
+    stable.h \
+    directoryentry.h
 
 FORMS += \
         mainwindow.ui \
@@ -72,3 +73,5 @@ DISTFILES += \
     info/info-ffprobe-json.txt \
     info/db-update.txt \
     info/Scenario-rename.txt
+
+PRECOMPILED_HEADER = stable.h

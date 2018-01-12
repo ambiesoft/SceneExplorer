@@ -1,7 +1,7 @@
 #ifndef OPTIONDIALOG_H
 #define OPTIONDIALOG_H
 
-#include <QDialog>
+
 #include "ui_option.h"
 
 class OptionDialog:public QDialog

@@ -1,10 +1,7 @@
 #ifndef TREEMODEL_H
 #define TREEMODEL_H
 
-#include <QFileSystemModel>
-#include <QModelIndex>
-#include <QSet>
-#include <QDirModel>
+
 
 #define MYFOLDERMODEL QDirModel
 class FolderModel : public MYFOLDERMODEL

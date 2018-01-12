@@ -1,8 +1,7 @@
 #ifndef IMAGEMODEL_H
 #define IMAGEMODEL_H
 
-#include <QAbstractTableModel>
-#include <QStyledItemDelegate>
+
 
 #include "tableitemdata.h"
 
@@ -49,11 +48,21 @@ public:
     void SortBySize();
     void SortByWtime();
 
-    bool RenameEntries(const QString& dir,
-                       const QStringList& renameOlds,
-                       const QStringList& renameNews);
-
+//    bool RenameEntries(const QString& dir,
+//                       const QStringList& renameOlds,
+//                       const QStringList& renameNews);
+    bool RenameEntry(const QString& dbDir,
+                     const QString& dbFile,
+                     const QString& newdir,
+                     const QString& newfile);
     void ResetData(const QList<TableItemDataPointer>& all);
+    int GetItemCount() const {
+        return itemDatas_.count();
+    }
+
+signals:
+    void itemCountChanged();
+
 };
 
 class ImageDelegate : public QStyledItemDelegate

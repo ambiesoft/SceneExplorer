@@ -1,8 +1,7 @@
 #ifndef TASKMODEL_H
 #define TASKMODEL_H
 
-#include <QAbstractListModel>
-#include <QListView>
+
 #include "taskffmpeg.h"
 #include "tasklistdata.h"
 
