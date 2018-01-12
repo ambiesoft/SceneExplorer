@@ -231,6 +231,12 @@ MainWindow::~MainWindow()
     delete treeModel_;
     delete taskModel_;
     delete ui;
+
+#ifdef QT_DEBUG
+	Q_ASSERT(TaskListData::isAllClear());
+	Q_ASSERT(TableItemData::isAllClear());
+#endif
+
 }
 
 
@@ -469,7 +475,7 @@ void MainWindow::afterFilter(int loopId,int id,
     // afterfilter must perform salient check from SQL, for filter-passed files
 
 
-    QVector<TaskListData*> tasks;
+    QVector<TaskListDataPointer> tasks;
     QVector<int> logids;
     QStringList logtexts;
     for(int i=0 ; i < filteredFiles.length(); ++i)
@@ -490,7 +496,7 @@ void MainWindow::afterFilter(int loopId,int id,
         QObject::connect(pTask, &TaskFFmpeg::finished_FFMpeg,
                          this, &MainWindow::finished_FFMpeg);
 
-        tasks.append(new TaskListData(pTask->GetId(),pTask->GetMovieFile()));
+        tasks.append(TaskListData::Create(pTask->GetId(),pTask->GetMovieFile()));
         getPoolFFmpeg()->start(pTask);
 
         logids.append(idManager_->Get(IDKIND_FFmpeg));
@@ -567,7 +573,7 @@ void MainWindow::on_treeView_selectionChanged(const QItemSelection &selected, co
     qDebug() << "Selected" << sel;
     QString dir = sel.toString();
 
-    QList<TableItemData*> all;
+    QList<TableItemDataPointer> all;
     gpSQL->GetAll(all,dir);
 
     tableModel_->ResetData(all);

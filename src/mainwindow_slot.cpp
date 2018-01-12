@@ -45,7 +45,7 @@ void MainWindow::sayGoodby(int loopId,  int id,
 
     QFileInfo fi(movieFile);
 
-    TableItemData* pTID = new TableItemData(
+    TableItemDataPointer pTID = TableItemData::Create(
                             files,
                             fi.absolutePath(),
                             fi.fileName(),

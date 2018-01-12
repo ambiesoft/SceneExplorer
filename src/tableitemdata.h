@@ -2,9 +2,16 @@
 #define LISTITEMDATA_H
 
 #include <QStringList>
+#include <QSharedPointer>
+
+class TableItemData;
+typedef QSharedPointer<TableItemData> TableItemDataPointer;
 
 class TableItemData
 {
+#ifdef QT_DEBUG
+	static int dinstcount_;
+#endif
     QStringList files_;
     QString movieDirectory_;
     QString movieFilename_;
@@ -21,7 +28,7 @@ class TableItemData
     QString vcodec_;
     QString acodec_;
     int vWidth_,vHeight_;
-public:
+
     TableItemData(const QStringList& files,
                   const QString& movieDirectory,
                   const QString& movieFileName,
@@ -38,6 +45,54 @@ public:
                   const QString& acodec,
                   int vWidth,int vHeight);
 
+public:
+	static TableItemDataPointer Create(
+		const QStringList& files,
+		const QString& movieDirectory,
+		const QString& movieFileName,
+
+		const qint64& size,
+		const qint64& ctime,
+		const qint64& wtime,
+
+		int thumbwidth,
+		int thumbheight,
+		const double& duration,
+		const QString& format,
+		const QString& vcodec,
+		const QString& acodec,
+		int vWidth, int vHeight)
+	{
+		return TableItemDataPointer(new TableItemData(
+			files,
+			movieDirectory,
+			movieFileName,
+
+			size,
+			ctime,
+			wtime,
+
+			thumbwidth,
+			thumbheight,
+			duration,
+			format,
+			vcodec,
+			acodec,
+
+			vWidth, vHeight));
+	}
+	~TableItemData()
+	{
+#ifdef QT_DEBUG
+		--dinstcount_;
+#endif
+	}
+#ifdef QT_DEBUG
+	static bool isAllClear()
+	{
+		return dinstcount_ == 0;
+	}
+#endif
     QStringList getImageFiles() const {
         return files_;
     }

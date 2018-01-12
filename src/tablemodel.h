@@ -4,7 +4,8 @@
 #include <QAbstractTableModel>
 #include <QStyledItemDelegate>
 
-class TableItemData;
+#include "tableitemdata.h"
+
 class QTableView;
 
 class TableModel : public QAbstractTableModel
@@ -17,13 +18,13 @@ public:
         WTIME,
     } ;
 private:
-    QList<TableItemData*> itemDatas_;
-    QMap<QString, TableItemData*> mapsFullpathToItem_;
+    QList<TableItemDataPointer> itemDatas_;
+    QMap<QString, TableItemDataPointer> mapsFullpathToItem_;
 
     QTableView* parent_;
     QString GetInfoText(TableItemData& item) const;
 
-    static bool itemDataLessThan(const TableItemData* v1, const TableItemData* v2);
+    static bool itemDataLessThan(const TableItemDataPointer v1, const TableItemDataPointer v2);
     void SortCommon(SORTCOLUMN column);
     void ClearData();
 public:
@@ -34,7 +35,7 @@ public:
     static const int RowCountPerEntry = 3;
 
     TableModel(QTableView *parent);
-    void AppendData(TableItemData* pItemData, const bool enableUpdate = true);
+    void AppendData(TableItemDataPointer pItemData, const bool enableUpdate = true);
     // void AppendDatas(const QList<TableItemData*>&v);
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override ;
@@ -52,7 +53,7 @@ public:
                        const QStringList& renameOlds,
                        const QStringList& renameNews);
 
-    void ResetData(const QList<TableItemData*>& all);
+    void ResetData(const QList<TableItemDataPointer>& all);
 };
 
 class ImageDelegate : public QStyledItemDelegate

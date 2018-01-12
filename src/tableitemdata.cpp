@@ -5,6 +5,10 @@
 #include "helper.h"
 #include "tableitemdata.h"
 
+#ifdef QT_DEBUG
+int TableItemData::dinstcount_ = 0;
+#endif
+
 TableItemData::TableItemData(const QStringList& files,
                              const QString& movieDirectory,
                              const QString& movieFileName,
@@ -21,6 +25,9 @@ TableItemData::TableItemData(const QStringList& files,
                              const QString& acodec,
                              int vWidth,int vHeight)
 {
+#ifdef QT_DEBUG
+	++dinstcount_;
+#endif
     files_ = files;
     movieDirectory_=movieDirectory;
     movieFilename_=movieFileName;

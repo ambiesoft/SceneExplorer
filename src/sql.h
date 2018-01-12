@@ -4,7 +4,8 @@
 #include <QObject>
 #include <QtSql/QSqlDatabase>
 
-class TableItemData;
+#include "tableitemdata.h"
+
 class Sql : public QObject
 {
     Q_OBJECT
@@ -63,7 +64,7 @@ public:
                         QStringList& results);
     int hasThumb(const QString& movieFile) ;
 
-    bool GetAll(QList<TableItemData*>& v, const QString& dir = QString());
+    bool GetAll(QList<TableItemDataPointer>& v, const QString& dir = QString());
     int GetAllEntry(const QString& dir,
                     QStringList& entries,
                     QVector<qint64>& sizes,

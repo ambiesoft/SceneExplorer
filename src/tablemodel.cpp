@@ -16,7 +16,7 @@ TableModel::TableModel(QTableView *parent)
 {
     parent_=parent;
 }
-void TableModel:: AppendData(TableItemData* pItemData, const bool enableUpdate)
+void TableModel:: AppendData(TableItemDataPointer pItemData, const bool enableUpdate)
 {
     if(enableUpdate)
     {
@@ -53,7 +53,7 @@ void TableModel:: AppendData(TableItemData* pItemData, const bool enableUpdate)
 
     parent_->setRowHeight(newRowImage, Consts::THUMB_HEIGHT);
 }
-void TableModel::ResetData(const QList<TableItemData*>& all)
+void TableModel::ResetData(const QList<TableItemDataPointer>& all)
 {
     beginResetModel();
     ClearData();
@@ -75,8 +75,6 @@ int TableModel::rowCount(const QModelIndex & /*parent*/) const
 }
 void TableModel::ClearData()
 {
-    for(int i=0 ; i < itemDatas_.count();++i)
-        delete itemDatas_[i];
     itemDatas_.clear();
     mapsFullpathToItem_.clear();
 }
@@ -218,7 +216,7 @@ Qt::ItemFlags TableModel::flags(const QModelIndex &index) const
 
 
 
-bool TableModel::itemDataLessThan(const TableItemData* v1, const TableItemData* v2)
+bool TableModel::itemDataLessThan(const TableItemDataPointer v1, const TableItemDataPointer v2)
 {
     bool ret;
     switch(sSortColumn_)
@@ -270,7 +268,7 @@ bool TableModel::RenameEntries(const QString& dir,
     bool ret = true;
     for(int i=0 ; i < renameOlds.count(); ++i)
     {
-        TableItemData* pID = mapsFullpathToItem_[pathCombine(dir,renameOlds[i])];
+		TableItemDataPointer pID = mapsFullpathToItem_[pathCombine(dir,renameOlds[i])];
         Q_ASSERT(pID);
         if(pID)
         {

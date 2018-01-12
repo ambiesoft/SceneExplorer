@@ -11,8 +11,8 @@ class TaskModel : public QAbstractTableModel
 {
     Q_OBJECT
     //QList<TaskListData*> items_;
-    QVector<TaskListData*> items_;
-    QMap<int, TaskListData*> map_;
+    QVector<TaskListDataPointer> items_;
+    QMap<int, TaskListDataPointer> map_;
 
     QListView* parent_;
     void myupdate();
@@ -21,8 +21,8 @@ public:
     {
         parent_=parent;
     }
-    void AddTasks(const QVector<TaskListData*>& tasks);
-    int findRow(TaskListData* p);
+    void AddTasks(const QVector<TaskListDataPointer>& tasks);
+    int findRow(TaskListDataPointer p);
     void RemoveTask(int id);
 	void ClearAllTasks();
     void SetProgress(int id, TaskFFmpeg::Progress progress);

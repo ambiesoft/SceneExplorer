@@ -450,7 +450,7 @@ QString Sql::getErrorStrig(int thumbRet)
     Q_ASSERT(false);
     return QString();
 }
-bool Sql::GetAll(QList<TableItemData*>& v, const QString& dir)
+bool Sql::GetAll(QList<TableItemDataPointer>& v, const QString& dir)
 {
     QSqlQuery query(db_);
     if(dir.isEmpty())
@@ -506,7 +506,7 @@ bool Sql::GetAll(QList<TableItemData*>& v, const QString& dir)
 
         int vwidth = query.value("vwidth").toInt();
         int vheight = query.value("vheight").toInt();
-        TableItemData* pID = new TableItemData(thumbs,
+		TableItemDataPointer pID = TableItemData::Create(thumbs,
                                                directory,
                                                name,
 

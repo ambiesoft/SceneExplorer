@@ -1,6 +1,9 @@
 #include <QString>
 #include "tasklistdata.h"
 
+#ifdef QT_DEBUG
+int TaskListData::dinstcount_ = 0;
+#endif
 
 QString TaskListData::GetIdString() const
 {

@@ -22,7 +22,7 @@ void MainWindow::showEvent( QShowEvent* event )
     ui->txtLog->setMaximumSize(10000,10000);
     ui->listTask->setMaximumSize(10000,10000);
 
-    QList<TableItemData*> v;
+    QList<TableItemDataPointer> v;
     if(!gpSQL->GetAll(v))
     {
         insertLog(TaskKind::SQL,0,tr("Failed to get data from database."));

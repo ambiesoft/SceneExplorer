@@ -2,7 +2,7 @@
 
 #include "taskmodel.h"
 
-void TaskModel::AddTasks(const QVector<TaskListData*>& tasks)
+void TaskModel::AddTasks(const QVector<TaskListDataPointer>& tasks)
 {
     if(tasks.isEmpty())
         return;
@@ -18,7 +18,7 @@ void TaskModel::AddTasks(const QVector<TaskListData*>& tasks)
     }
     endInsertRows();
 }
-int TaskModel::findRow(TaskListData* p)
+int TaskModel::findRow(TaskListDataPointer p)
 {
     for(int i=0 ; i < items_.count();++i)
     {
@@ -31,7 +31,7 @@ int TaskModel::findRow(TaskListData* p)
 }
 void TaskModel::RemoveTask(int id)
 {
-    TaskListData* p = map_[id];
+    TaskListDataPointer p = map_[id];
     Q_ASSERT(p);
 
     int row = findRow(p);
@@ -44,7 +44,6 @@ void TaskModel::RemoveTask(int id)
     // endRemoveRows();
 
     map_.remove(id);
-    delete p;
 
     // myupdate();
     if(rowCount()==0)
@@ -57,10 +56,10 @@ void TaskModel::ClearAllTasks()
 {
 	beginResetModel();
 	map_.clear();
-	for (int i = 0; i < items_.count(); ++i)
-	{
-		delete items_[i];
-	}
+	//for (int i = 0; i < items_.count(); ++i)
+	//{
+	//	delete items_[i];
+	//}
 	items_.clear();
 	endResetModel();
 }
@@ -86,7 +85,7 @@ void TaskModel::SetProgress(int id, TaskFFmpeg::Progress progress)
 
     Q_ASSERT(map_.contains(id));
 
-    TaskListData* p = map_[id];
+	TaskListDataPointer p = map_[id];
     Q_ASSERT(p);
 
     p->SetProgress(progress);
