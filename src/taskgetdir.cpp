@@ -9,7 +9,7 @@
 void TaskGetDir::run()
 {
     runStuff(dir_);
-    emit finished_GetDir(loopId_, id_);
+    emit finished_GetDir(loopId_, id_, dir_);
 }
 void TaskGetDir::runStuff(const QString& dir)
 {

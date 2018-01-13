@@ -74,13 +74,16 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
                      this, &MainWindow::on_directoryWidget_selectionChanged);
 
 
+    // tool bar
+    QComboBox* myComboBox = new QComboBox(ui->mainToolBar);
+    myComboBox->setEditable(true);
+    ui->mainToolBar->addWidget(myComboBox);
+
+
+    // status bar
     taskModel_ = new TaskModel(ui->listTask);
     ui->listTask->setModel(taskModel_);
 
-
-    slPaused_ = new QLabel(this);
-    slPaused_->hide();
-    ui->statusBar->addPermanentWidget(slPaused_);
 
     slTask_ = new QLabel(this);
     ui->statusBar->addPermanentWidget(slTask_);
@@ -88,6 +91,10 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
 
     slItemCount_ = new QLabel(this);
     ui->statusBar->addPermanentWidget(slItemCount_);
+
+    slPaused_ = new QLabel(this);
+    slPaused_->hide();
+    ui->statusBar->addPermanentWidget(slPaused_);
 
     QVariant vVal;
 
@@ -501,13 +508,15 @@ void MainWindow::afterGetDir(int loopId, int id,
 
 //    insertLog(TaskKind::Filter, id, QString(tr("Task Registered. %1")).arg(dir));
 }
-void MainWindow::finished_GetDir(int loopId, int id)
+void MainWindow::finished_GetDir(int loopId, int id, const QString& dir)
 {
     if(loopId != gLoopId)
         return;
 
     idManager_->IncrementDone(IDKIND_GetDir);
     Q_ASSERT(id >= idManager_->GetDone(IDKIND_GetDir));
+
+    insertLog(TaskKind::GetDir, id, QString(tr("Scan directory finished. %1")).arg(dir));
 
     checkTaskFinished();
 }
@@ -714,10 +723,15 @@ void MainWindow::copySelectedVideoPath()
 {
     QApplication::clipboard()->setText(getSelectedVideo());
 }
+void MainWindow::copySelectedVideoFilename()
+{
+    QFileInfo fi(getSelectedVideo());
+    QApplication::clipboard()->setText(fi.fileName());
+}
 
 void MainWindow::IDManager::updateStatus()
 {
-    QString s = QString("D: %1/%2   M: %5/%6").
+    QString s = QString("D: %1/%2   M: %3/%4").
             arg(idGetDirDone_).arg(idGetDir_).
             // arg(idFilterDone_).arg(idFilter_).
             arg(idFFMpegDone_).arg(idFFMpeg_);

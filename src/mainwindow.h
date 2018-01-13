@@ -229,7 +229,7 @@ public slots:
                      const QString& dir,
                      const QStringList& files,
 		const QStringList& salients);
-    void finished_GetDir(int loopId, int id);
+    void finished_GetDir(int loopId, int id ,const QString& dir);
 //    void afterFilter(int loopId, int id,
 //                     const QString& dir,
 //                     const QStringList& filteredFiles,
@@ -243,6 +243,7 @@ public slots:
     void openSelectedVideo();
     void openSelectedVideoInFolder();
     void copySelectedVideoPath();
+    void copySelectedVideoFilename();
 
     void tableItemCountChanged();
 };

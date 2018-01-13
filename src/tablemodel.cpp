@@ -276,36 +276,74 @@ Qt::ItemFlags TableModel::flags(const QModelIndex &index) const
 }
 
 
-
-bool TableModel::itemDataLessThan(const TableItemDataPointer v1, const TableItemDataPointer v2)
+class SortFunctor
 {
-    bool ret;
-    switch(sSortColumn_)
-    {
-    case SORTCOLUMN::FILENAME:
-        ret = (v1->getMovieFileFull() < v2->getMovieFileFull());
-        break;
-    case SORTCOLUMN::SIZE:
-        ret = (v1->getSize() < v2->getSize());
-        break;
-    case SORTCOLUMN::WTIME:
-        ret = (v1->getWtime() < v2->getWtime());
-        break;
-    default:
-        Q_ASSERT(false);
-    }
-    return sSortReverse_ ? !ret : ret;
-}
+    bool rev_;
+    TableModel::SORTCOLUMN sc_;
+
+	bool compare(const TableItemDataPointer& v1, const TableItemDataPointer& v2) const
+	{
+		switch (sc_)
+		{
+		case TableModel::SORTCOLUMN::FILENAME:
+			return (v1->getMovieFileFull() < v2->getMovieFileFull());
+			break;
+		case TableModel::SORTCOLUMN::SIZE:
+			return (v1->getSize() < v2->getSize());
+			break;
+		case TableModel::SORTCOLUMN::WTIME:
+			return (v1->getWtime() < v2->getWtime());
+			break;
+		default:
+			Q_ASSERT(false);
+		}
+		return false;
+	}
+public:
+    SortFunctor(bool rev, TableModel::SORTCOLUMN sc):
+        rev_(rev), sc_(sc)
+    {}
+
+	bool operator()(const TableItemDataPointer& v1, const TableItemDataPointer& v2) const
+	{
+		if (rev_)
+			return compare(v2, v1);
+		else
+			return compare(v1, v2);
+	}
+
+};
+//bool TableModel::itemDataLessThan(const TableItemDataPointer v1, const TableItemDataPointer v2)
+//{
+//    bool ret;
+//    switch(sSortColumn_)
+//    {
+//    case SORTCOLUMN::FILENAME:
+//        ret = (v1->getMovieFileFull() < v2->getMovieFileFull());
+//        break;
+//    case SORTCOLUMN::SIZE:
+//        ret = (v1->getSize() < v2->getSize());
+//        break;
+//    case SORTCOLUMN::WTIME:
+//        ret = (v1->getWtime() < v2->getWtime());
+//        break;
+//    default:
+//        Q_ASSERT(false);
+//    }
+//    return sSortReverse_ ? !ret : ret;
+//}
 TableModel::SORTCOLUMN TableModel::sSortColumn_;
 bool TableModel::sSortReverse_;
 
 void TableModel::SortCommon(SORTCOLUMN column)
 {
+
     sSortReverse_ = !sSortReverse_;
+    SortFunctor func(sSortReverse_, column);
     beginResetModel();
     sSortColumn_ = column;
-    qSort(itemDatas_.begin(), itemDatas_.end(), &TableModel::itemDataLessThan);
-    // std::sort(itemDatas_.begin(), itemDatas_.end(), &TableModel::itemDataLessThan);
+    // qSort(itemDatas_.begin(), itemDatas_.end(), func);
+    std::sort(itemDatas_.begin(), itemDatas_.end(), func);
     endResetModel();
 }
 void TableModel::SortByFileName()
