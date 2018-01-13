@@ -32,7 +32,7 @@ QString canonicalDir(const QString& dir)
 void Alert(QString message)
 {
     QMessageBox msgBox;
-    msgBox.setText("Name");
+    // msgBox.setText("Name");
     msgBox.setInformativeText(message);
     msgBox.setStandardButtons(QMessageBox::Ok);
     msgBox.exec();

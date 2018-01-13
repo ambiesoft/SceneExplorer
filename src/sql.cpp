@@ -18,8 +18,9 @@
 
 Sql::Sql() : db_(QSqlDatabase::addDatabase("QSQLITE"))
 {
-     db_.setDatabaseName("./db.sqlite3");
-     db_.open();
+     db_.setDatabaseName(DBFILENAME);
+	 if (!db_.open())
+		 return;
 
      QSqlQuery query;
      query.exec("create table FileInfo(size, ctime, wtime, directory, name, salient, thumbid)");
@@ -31,23 +32,25 @@ Sql::Sql() : db_(QSqlDatabase::addDatabase("QSQLITE"))
      query.exec("alter table FileInfo add vwidth");
      query.exec("alter table FileInfo add vheight");
 
-     if (!query.exec("CREATE INDEX idx_directory ON FileInfo(directory)"))
-         qDebug() << "index failed" << query.lastError().text();
-     if (!query.exec("CREATE INDEX idx_name ON FileInfo(name)"))
-         qDebug() << "index failed" << query.lastError().text();
-     if (!query.exec("CREATE INDEX idx_salient ON FileInfo(salient)"))
-		 qDebug() << "index failed" << query.lastError().text();
+	 query.exec("CREATE INDEX idx_directory ON FileInfo(directory)");
+	 query.exec("CREATE INDEX idx_name ON FileInfo(name)");
+	 query.exec("CREATE INDEX idx_salient ON FileInfo(salient)");
 
+#ifdef QT__DEBUG
      for (int i = 0; i < db_.tables().count(); i ++) {
          qDebug() << db_.tables().at(i);
      }
-     query.exec("PRAGMA table_info('FileInfo')");
+#endif
+     
+	 if (!query.exec("PRAGMA table_info('FileInfo')"))
+		 return;
+
      while(query.next())
      {
          QString col=query.value("name").toString();
-         qDebug() << col;
          allColumns_.append(col);
      }
+	 qDebug() << allColumns_;
      ok_ = true;
 }
 Sql::~Sql()

@@ -9,6 +9,8 @@ class Sql : public QObject
 {
     Q_OBJECT
 
+	static constexpr const char* DBFILENAME = "./db.sqlite3";
+
     QSqlDatabase db_;
     bool ok_=false;
     QStringList allColumns_;
@@ -42,6 +44,10 @@ public:
     bool isOK() const {
         return ok_;
     }
+	static QString getDBFileName() {
+		return DBFILENAME;
+	}
+
     static QString getErrorStrig(int thumbRet);
 
     QSqlQuery* pQDeleteFromDirectoryName_ = nullptr;

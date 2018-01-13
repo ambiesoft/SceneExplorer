@@ -220,7 +220,7 @@ bool TaskFFmpeg::run3(QString& errorReason)
         double timepoint = (((double)i-0.5)*duration/5);
         QStringList qsl;
         qsl.append("-v");
-        qsl.append("quiet");  // no log
+        qsl.append("16");  // only error output
         qsl.append("-hide_banner");  // as it is
         qsl.append("-n");  // no overwrite
         qsl.append("-ss" );  // seek input
@@ -240,20 +240,30 @@ bool TaskFFmpeg::run3(QString& errorReason)
         ffmpeg.setArguments(qsl);
         ffmpeg.start(QProcess::ReadOnly);
 
-        if(!ffmpeg.waitForStarted())
-            return false;
+		if (!ffmpeg.waitForStarted())
+		{
+			errorReason = tr("ffmpeg.waitForStarted failed");
+			return false;
+		}
 
-        if(!ffmpeg.waitForFinished())
-            return false;
+		if (!ffmpeg.waitForFinished())
+		{
+			errorReason = tr("ffmpeg.waitForFinished failed");
+			return false;
+		}
 
-        if(ffmpeg.exitCode() != 0)
-            return false;
+		if (ffmpeg.exitCode() != 0)
+		{
+			errorReason = tr("ffmpeg.exitCode() != 0");
+			errorReason += "\n\n";
+			QByteArray baErr=ffmpeg.readAllStandardError();
+			errorReason += baErr.data();
+			return false;
+		}
 
 //        QByteArray baOut = ffmpeg.readAllStandardOutput();
 //        qDebug()<<baOut.data();
 
-//        QByteArray baErr=ffmpeg.readAllStandardError();
-//        qDebug() << baErr.data();
 
         if(i==1)
         {

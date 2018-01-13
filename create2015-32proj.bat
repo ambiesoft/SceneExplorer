@@ -1,3 +1,8 @@
+cd %~dp0
+sdel SceneExplorer.sln
+sdel SceneExplorer.vcxproj
+sdel SceneExplorer.vcxproj.filters
+
 set CANDIDATE1="C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat"
 set CANDIDATE2="C:\Program Files\Microsoft Visual Studio 14.0\VC\vcvarsall.bat"
 
@@ -39,6 +44,8 @@ call %QMAKE% -tp vc %PROFILE%
 echo "==== Creating Visual Studio project successful ===="
 
 set PATH=%QTBIN%;%PATH%
-"C:\Program Files\Microsoft Visual Studio 14.0\Common7\IDE\devenv.exe" SceneExplorer.sln
+start "" "C:\Program Files\Microsoft Visual Studio 14.0\Common7\IDE\devenv.exe" SceneExplorer.vcxproj
+exit
+
 :end
 pause
