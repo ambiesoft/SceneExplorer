@@ -1,4 +1,5 @@
 cd %~dp0
+sdel SceneExplorer.sln
 sdel SceneExplorer.vcxproj
 sdel SceneExplorer.vcxproj.filters
 

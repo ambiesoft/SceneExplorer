@@ -23,5 +23,8 @@ namespace Consts
 
     const int THUMB_WIDTH=240;
     const int THUMB_HEIGHT=180;
+
+    const int UUID_LENGTH=37;
+    const int THUMB_FILENAME_LENGTH=42;
 }
 #endif // CONSTS_H

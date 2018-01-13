@@ -19,3 +19,5 @@ build/
 
 qtSamples/src/build-*
 
+src/stable.h.cpp
+

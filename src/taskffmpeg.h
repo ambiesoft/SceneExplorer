@@ -25,6 +25,7 @@ private:
     bool getProbe(const QString& file,
                   double& outDuration,
                   QString& outFormat,
+                  int& outBitrate,
 
                   QString& outVideoCodec,
                   QString& outAudioCodec,
@@ -65,6 +66,7 @@ signals:
                    int thumbheight,
                    const double& duration,
                    const QString& format,
+                   int bitrate,
                    const QString& vcodec,
                    const QString& acodec,
                    int vWidth,int vHeight);

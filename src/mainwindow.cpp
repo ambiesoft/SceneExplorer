@@ -382,10 +382,23 @@ void MainWindow::resizeDock(QDockWidget* dock, const QSize& size)
 
 void MainWindow::afterGetDir(int loopId, int id,
                              const QString& dirc,
-                             const QStringList& filesIn)
+                             const QStringList& filesIn,
+							 const QStringList& salients)
 {
     if(loopId != gLoopId)
         return;
+
+	struct PauseBack
+	{
+		bool bBack_;
+		PauseBack(bool bBack) :bBack_(bBack) 
+		{
+			gPaused = true;
+		}
+		~PauseBack() {
+			gPaused = bBack_;
+		}
+	} pback(gPaused);
 
     Q_UNUSED(id);
     WaitCursor wc;
@@ -395,11 +408,13 @@ void MainWindow::afterGetDir(int loopId, int id,
     QStringList filteredFiles;
 
     // check file is in DB
-    for(const QString& file : filesIn)
+    for(int ifs = 0 ; ifs < filesIn.count();++ifs)
     {
+		const QString& file = filesIn[ifs];
+		const QString& sa = salients[ifs];
         QFileInfo fi(pathCombine(dir, file));
 
-        QString sa = createSalient(fi.absoluteFilePath(), fi.size());
+        // QString sa = createSalient(fi.absoluteFilePath(), fi.size());
 
         if(gpSQL->hasEntry(dir,file,sa))
         {
@@ -505,8 +520,7 @@ void MainWindow::afterFilter2(int loopId,int id,
 
     Q_UNUSED(id);
 
-    bool prevPaused = gPaused;
-    gPaused=true;
+
 
 //    QStringList filteredFiles;
 //    int ret = gpSQL->filterWithEntry(dir, filesIn, filteredFiles);
@@ -561,7 +575,7 @@ void MainWindow::afterFilter2(int loopId,int id,
 
     checkTaskFinished();
 
-    gPaused=prevPaused;
+
 }
 void MainWindow::checkTaskFinished()
 {

@@ -21,6 +21,7 @@ TableItemData::TableItemData(const QStringList& files,
                              int thumbheight,
                              const double& duration,
                              const QString& format,
+                             int bitrate,
                              const QString& vcodec,
                              const QString& acodec,
                              int vWidth,int vHeight)
@@ -41,7 +42,7 @@ TableItemData::TableItemData(const QStringList& files,
 
     duration_=duration;
     format_=format;
-
+    bitrate_=bitrate;
     vcodec_=vcodec;
     acodec_=acodec;
 
@@ -80,6 +81,7 @@ QMap<QString,QVariant> TableItemData::getColumnValues() const
     ret["thumbid"] = getUUIDFromThumbfile(getImageFiles()[0]);
     ret["duration"]=getDuration();
     ret["format"]=getFormat();
+    ret["bitrate"]=getBitrate();
     ret["vcodec"]=getVcodec();
     ret["acodec"]=getAcodec();
     ret["vwidth"]=getVWidth();

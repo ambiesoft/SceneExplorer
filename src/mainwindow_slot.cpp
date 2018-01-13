@@ -4,8 +4,10 @@
 #include "taskmodel.h"
 #include "tableitemdata.h"
 
+#include "consts.h"
 #include "globals.h"
 #include "sql.h"
+#include "helper.h"
 
 #include "ui_mainwindow.h"
 #include "mainwindow.h"
@@ -36,12 +38,26 @@ void MainWindow::sayGoodby(int loopId,  int id,
                            int thumbheight,
                            const double& duration,
                            const QString& format,
+                           int bitrate,
                            const QString& vcodec,
                            const QString& acodec,
                            int vWidth,int vHeight)
 {
-    if(loopId != gLoopId)
-        return;
+	if (loopId != gLoopId)
+	{
+        for(const QString& thumbfile:files)
+        {
+            if(thumbfile.count() == Consts::THUMB_FILENAME_LENGTH)
+            {
+                QFile fi(pathCombine(Consts::FILEPART_THUMBS, thumbfile));
+                if(fi.exists())
+                {
+                    VERIFY(fi.remove());
+                }
+            }
+        }
+		return;
+	}
 
     QFileInfo fi(movieFile);
 
@@ -55,6 +71,7 @@ void MainWindow::sayGoodby(int loopId,  int id,
                             thumbwidth,thumbheight,
                             duration,
                             format,
+                            bitrate,
                             vcodec,acodec,
                             vWidth,vHeight
                 );

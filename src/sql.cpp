@@ -25,13 +25,18 @@ Sql::Sql() : db_(QSqlDatabase::addDatabase("QSQLITE"))
      query.exec("create table FileInfo(size, ctime, wtime, directory, name, salient, thumbid)");
      query.exec("alter table FileInfo add duration");
      query.exec("alter table FileInfo add format");
+     query.exec("alter table FileInfo add bitrate");
      query.exec("alter table FileInfo add vcodec");
      query.exec("alter table FileInfo add acodec");
      query.exec("alter table FileInfo add vwidth");
      query.exec("alter table FileInfo add vheight");
 
-     if(!query.exec("CREATE INDEX idx_directory ON FileInfo(directory)"))
+     if (!query.exec("CREATE INDEX idx_directory ON FileInfo(directory)"))
          qDebug() << "index failed" << query.lastError().text();
+     if (!query.exec("CREATE INDEX idx_name ON FileInfo(name)"))
+         qDebug() << "index failed" << query.lastError().text();
+     if (!query.exec("CREATE INDEX idx_salient ON FileInfo(salient)"))
+		 qDebug() << "index failed" << query.lastError().text();
 
      for (int i = 0; i < db_.tables().count(); i ++) {
          qDebug() << db_.tables().at(i);
@@ -562,7 +567,7 @@ bool Sql::GetAll(QList<TableItemDataPointer>& v, const QStringList& dirs)
         QString salitnet = query.value("salient").toString();
         double duration  = query.value("duration").toDouble();
         QString format = query.value("format").toString();
-
+        int bitrate = query.value("bitrate").toInt();
         QString vcodec = query.value("vcodec").toString();
         QString acodec = query.value("acodec").toString();
 
@@ -579,6 +584,8 @@ bool Sql::GetAll(QList<TableItemDataPointer>& v, const QStringList& dirs)
                                                0,0,
                                                duration,
                                                format,
+                                               bitrate,
+
                                                vcodec,acodec,
                                                vwidth,vheight);
         v.append(pID);

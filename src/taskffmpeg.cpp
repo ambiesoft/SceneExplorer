@@ -28,6 +28,7 @@ TaskFFmpeg::~TaskFFmpeg()
 bool TaskFFmpeg::getProbe(const QString& file,
               double& outDuration,
               QString& outFormat,
+              int& outBitrate,
 
               QString& outVideoCodec,
               QString& outAudioCodec,
@@ -86,20 +87,25 @@ bool TaskFFmpeg::getProbe(const QString& file,
         return false;
     }
 
-    // format and duration
+    // format,duration,bitrate
     {
         QJsonValue format = jo.value(QString("format"));
         QJsonObject item = format.toObject();
 
         QJsonValue format_name = item["format_name"];
-//        if(
-//                format_name.toString()=="tty" ||
-//                format_name.toString()=="image2"
-//          )
-//        {
-//            return false;
-//        }
+        if( format_name.toString()=="tty" )
+        {
+            errorReason = tr("tty format ignored");
+            return false;
+        }
         outFormat = format_name.toString();
+
+        QJsonValue bit_rate = item["bit_rate"];
+        QString strBitrate = bit_rate.toString();
+        if(!strBitrate.isEmpty())
+        {
+            outBitrate = strBitrate.toInt();
+        }
 
         QJsonValue jDuration = item["duration"];
 
@@ -178,11 +184,13 @@ bool TaskFFmpeg::run3(QString& errorReason)
 {
     double duration;
     QString format;
+    int bitrate=0;
     QString vcodec,acodec;
     int vWidth,vHeight;
     if(!getProbe(movieFile_,
                  duration,
                  format,
+                 bitrate,
                  vcodec,
                  acodec,
                  vWidth,vHeight,
@@ -263,6 +271,7 @@ bool TaskFFmpeg::run3(QString& errorReason)
                    Consts::THUMB_HEIGHT,
                    duration,
                    format,
+                   bitrate,
                    vcodec,acodec,
                    vWidth,vHeight
                    );

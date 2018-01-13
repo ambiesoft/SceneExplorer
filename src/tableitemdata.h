@@ -24,6 +24,7 @@ class TableItemData
     int thumbheight_=-1;
     double duration_=-1;
     QString format_;
+    int bitrate_=0;
     QString vcodec_;
     QString acodec_;
     int vWidth_,vHeight_;
@@ -40,6 +41,7 @@ class TableItemData
                   int thumbheight,
                   const double& duration,
                   const QString& format,
+                  int bitrate,
                   const QString& vcodec,
                   const QString& acodec,
                   int vWidth,int vHeight);
@@ -58,6 +60,7 @@ public:
 		int thumbheight,
 		const double& duration,
 		const QString& format,
+        int bitrate,
 		const QString& vcodec,
 		const QString& acodec,
 		int vWidth, int vHeight)
@@ -81,6 +84,7 @@ public:
 			thumbheight,
 			duration,
 			format,
+            bitrate,
 			vcodec,
 			acodec,
 
@@ -119,6 +123,9 @@ public:
     QString getMovieFileFull() const ;
     QString getFormat() const {
         return format_;
+    }
+    int getBitrate() const {
+        return bitrate_;
     }
     double getDuration() const {
         return duration_;

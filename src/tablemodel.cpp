@@ -135,6 +135,22 @@ static QString dq(const QString& s)
 
 	return "\"" + s + "\"";
 }
+static QString bitrate_human(int bitrate)
+{
+    float num = bitrate;
+    QStringList list;
+    list << "kb/s" << "mb/s" << "gb/s" << "tb/s";
+
+    QStringListIterator i(list);
+    QString unit("bytes");
+
+    while(num >= 1024.0 && i.hasNext())
+     {
+        unit = i.next();
+        num /= 1024.0;
+    }
+    return QString().setNum(num,'f',2)+ " " +unit;
+}
 QString TableModel::GetInfoText(TableItemData& item) const
 {
     QString ret;
@@ -147,6 +163,9 @@ QString TableModel::GetInfoText(TableItemData& item) const
     ret.append(sep);
 
     ret.append(dq(item.getFormat()));
+    ret.append(sep);
+
+    ret.append(bitrate_human(item.getBitrate()));
     ret.append(sep);
 
     ret.append(item.getVcodec());

@@ -218,6 +218,7 @@ public slots:
                    int thumbheight,
                    const double& duration,
                    const QString& format,
+                   int bitrate,
                    const QString& vcodec,
                    const QString& acodec,
                    int vWidth,int vHeight);
@@ -226,7 +227,8 @@ public slots:
 
     void afterGetDir(int loopId, int id,
                      const QString& dir,
-                     const QStringList& files);
+                     const QStringList& files,
+		const QStringList& salients);
     void finished_GetDir(int loopId, int id);
 //    void afterFilter(int loopId, int id,
 //                     const QString& dir,

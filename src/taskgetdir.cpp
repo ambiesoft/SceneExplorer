@@ -22,6 +22,7 @@ void TaskGetDir::runStuff(const QString& dir)
 
     {
         QStringList files;
+		QStringList salients;
         QDirIterator itFile(dir, QDir::NoDotAndDotDot|QDir::Files); // ,QDirIterator::Subdirectories);
         while(itFile.hasNext())
         {
@@ -29,10 +30,14 @@ void TaskGetDir::runStuff(const QString& dir)
                 return;
             itFile.next();
             Q_ASSERT(itFile.fileInfo().isFile());
-            if(IsVideoExtention(itFile.fileName()))
-                files.append(itFile.fileName());
+			if (IsVideoExtention(itFile.fileName()))
+			{
+				files.append(itFile.fileName());
+
+				salients.append(createSalient(itFile.filePath(), QFile(itFile.filePath()).size()));
+			}
         }
-        emit afterGetDir(loopId_,id_, QDir(dir).canonicalPath(), files);
+		emit afterGetDir(loopId_, id_, QDir(dir).canonicalPath(), files, salients);
     }
 
     {
