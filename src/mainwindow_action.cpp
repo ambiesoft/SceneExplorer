@@ -98,14 +98,13 @@ void MainWindow::AddUserEntryDirectory(const QString& cdir)
         }
     }
     QListWidgetItem* newitem = new QListWidgetItem(ui->directoryWidget);
-    newitem->setText(di.canonicalPath());
+    newitem->setText(canonicalDir(cdir));
     newitem->setFlags(newitem->flags() | Qt::ItemIsUserCheckable);
     newitem->setCheckState(Qt::Unchecked);
     newitem->setIcon(fiProvider_.icon(QFileIconProvider::Folder));
     ui->directoryWidget->addItem(newitem);
-
-
 }
+
 void MainWindow::on_action_Do_It_triggered()
 {
     QString dir = QFileDialog::getExistingDirectory(this, tr("Open Directory"),lastSelectedDir_);
@@ -113,7 +112,7 @@ void MainWindow::on_action_Do_It_triggered()
         return;
     lastSelectedDir_ = dir;
 
-    AddUserEntryDirectory(dir);
+    AddUserEntryDirectory(canonicalDir(dir));
 
     TaskGetDir* pTaskGetDir = new TaskGetDir(gLoopId, idManager_->Increment(IDKIND_GetDir), dir);
     pTaskGetDir->setAutoDelete(true);
