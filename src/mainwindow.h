@@ -37,6 +37,9 @@ private:
         // IDKIND_Filter,
         IDKIND_FFmpeg,
     };
+	bool initialized_ = false;
+	bool closed_ = false;
+
     class IDManager
     {
         MainWindow* win_;
@@ -163,7 +166,9 @@ private slots:
 
     void on_action_Bottom_triggered();
 
-    void on_directoryWidget_itemChanged(DirectoryEntry *item);
+    void on_directoryWidget_itemChanged(QListWidgetItem *item);
+
+    void on_directoryWidget_customContextMenuRequested(const QPoint &pos);
 
 private:
     QThreadPool* pPoolFFmpeg_ = nullptr;
@@ -179,6 +184,9 @@ private:
 
     void AddUserEntryDirectory(const QString& dir);
     void directoryChangedCommon();
+    void StartScan(const QString& dir);
+    void StartScan(QListWidgetItem* item);
+    void StartScan2(const QString& dir);
 
     QFileIconProvider fiProvider_;
 
@@ -246,6 +254,8 @@ public slots:
     void copySelectedVideoFilename();
 
     void tableItemCountChanged();
+
+    void on_Rescan();
 };
 
 #endif // MAINWINDOW_H

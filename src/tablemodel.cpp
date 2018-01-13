@@ -32,15 +32,14 @@ void TableModel:: AppendData(TableItemDataPointer pItemData, const bool enableUp
     }
     mapsFullpathToItem_[pItemData->getMovieFileFull()] = pItemData;
 
+
+
     int newRowFilename = rowCount()-TableModel::RowCountPerEntry;
     int newRowImage = newRowFilename+1;
     int newRowInfo = newRowImage+1;
 
     parent_->setSpan(newRowFilename,0,1,5);
     parent_->setSpan(newRowInfo,0,1,5);
-    // ui->tableView->resizeRowToContents(newRowFilename);
-    // ui->tableView->resizeRowToContents(newRowInfo);
-
 
     static bool initColumnWidth=false;
     if(!initColumnWidth)
@@ -60,24 +59,31 @@ void TableModel::ResetData(const QList<TableItemDataPointer>& all)
 {
     beginResetModel();
     ClearData();
+
+
+    parent_->scrollToTop();
+
+
     for(int i=0;i < all.count(); ++i)
     {
-        AppendData(all[i],!false);
+        AppendData(all[i], false);
     }
+
+//    beginInsertRows(QModelIndex(),
+//                    0,
+//                    (itemDatas_.count()*RowCountPerEntry)+RowCountPerEntry-1);
+
+//    endInsertRows();
     endResetModel();
 
     emit itemCountChanged();
 }
-//void TableModel::AppendDatas(const QList<TableItemData*>&v)
-//{
-//    beginResetModel();
-//    items_.append(v);
-//    endResetModel();
-//}
+
 int TableModel::rowCount(const QModelIndex & /*parent*/) const
 {
    return itemDatas_.count()*RowCountPerEntry;
 }
+
 void TableModel::ClearData()
 {
     itemDatas_.clear();
@@ -195,6 +201,15 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
         return itemDatas_[actualIndex]->getMovieFileFull();
     }
 
+// never comes
+//    if(role==Qt::SizeHintRole)
+//    {
+//        if(isFilename)
+//        {
+//            parent_->setSpan(index.row(),0,1,5);
+//        }
+//    }
+
     if(isFilename)
     {
         if(index.column() != 0)
@@ -204,7 +219,11 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
         {
             case Qt::DisplayRole:
             {
-				return itemDatas_[actualIndex]->getMovieFileName();
+            // infinite loop
+//                parent_->setSpan(index.row(),0,1,5);
+//                parent_->setSpan(index.row()+3,0,1,5);
+//                parent_->setSpan(index.row()+6,0,1,5);
+                return itemDatas_[actualIndex]->getMovieFileName();
             }
             break;
 
@@ -231,6 +250,20 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
         {
             case Qt::DecorationRole:
             {
+//                parent_->setColumnWidth(index.row()-3, Consts::THUMB_WIDTH);
+//                parent_->setRowHeight(index.row()-3, Consts::THUMB_HEIGHT);
+                parent_->setColumnWidth(index.row(), Consts::THUMB_WIDTH);
+                parent_->setRowHeight(index.row(), Consts::THUMB_HEIGHT);
+//                parent_->setColumnWidth(index.row()+3, Consts::THUMB_WIDTH);
+//                parent_->setRowHeight(index.row()+3, Consts::THUMB_HEIGHT);
+
+
+//                {
+//                    for(int i=0 ; i < 5 ; ++i)
+//                    {
+//                        parent_->setColumnWidth(i, Consts::THUMB_WIDTH);
+//                    }
+//                }
                 QString imageFile = itemDatas_[actualIndex]->getImageFiles()[index.column()];
                 imageFile = pathCombine(Consts::FILEPART_THUMBS, imageFile);
 
@@ -248,7 +281,10 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
 		{
 		case Qt::DisplayRole:
 		{
-			return GetInfoText(*(itemDatas_[actualIndex]));
+//            parent_->setSpan(index.row(),0,1,5);
+//            parent_->setSpan(index.row()+3,0,1,5);
+//            parent_->setSpan(index.row()+6,0,1,5);
+            return GetInfoText(*(itemDatas_[actualIndex]));
 		}
 		break;
 

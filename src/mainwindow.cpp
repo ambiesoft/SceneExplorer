@@ -47,31 +47,27 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
 
     this->setWindowTitle(Consts::APPNAME);
 
+	// menu
     QObject::connect(ui->menu_Task, &QMenu::aboutToShow,
                      this, &MainWindow::onMenuTask_AboutToShow);
     QObject::connect(ui->menu_Docking_windows, &QMenu::aboutToShow,
                      this, &MainWindow::onMenuDocking_windows_AboutToShow);
 
-//    timer_ = new QTimer(this);
-//    connect(timer_, SIGNAL(timeout()),
-//            this, SLOT(OnTimer()));
-//    timer_->start(5000);
 
+	// table
     tableModel_=new TableModel(ui->tableView);
-    // QStandardItemModel* model = new QStandardItemModel;
-    // ui->tableView->horizontalHeader()->setStretchLastSection(true);
     ui->tableView->setModel(tableModel_);
     QObject::connect(tableModel_, &TableModel::itemCountChanged,
                      this, &MainWindow::tableItemCountChanged);
 
 
-    // treeModel_ = new FolderModel;
-//	entryDirectoryModel_ = new EntryDirectoryModel;
-//    ui->directoryWidget->setModel(entryDirectoryModel_);
 
+	// tree
     QItemSelectionModel* treeSelectionModel = ui->directoryWidget->selectionModel();
     QObject::connect(treeSelectionModel, &QItemSelectionModel::selectionChanged,
                      this, &MainWindow::on_directoryWidget_selectionChanged);
+	QObject::connect(ui->directoryWidget, &DirectoryEntry::itemChanged,
+		this, &MainWindow::on_directoryWidget_itemChanged);
 
 
     // tool bar
@@ -126,6 +122,8 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
         for(const QString& s : dirs)
             AddUserEntryDirectory(s);
     }
+
+	initialized_ = true;
 }
 
 //void MainWindow::setTableSpan()
@@ -248,6 +246,8 @@ void MainWindow::clearAllPool()
 
 MainWindow::~MainWindow()
 {
+	closed_ = true;
+
     delete tableModel_;
     delete taskModel_;
     delete ui;
@@ -746,8 +746,15 @@ void MainWindow::on_directoryWidget_selectionChanged(const QItemSelection &selec
     Q_UNUSED(deselected);
     directoryChangedCommon();
 }
+#include <QElapsedTimer>
 void MainWindow::directoryChangedCommon()
 {
+	if (!initialized_ || closed_)
+		return;
+
+	WaitCursor wc;
+
+	static QStringList lastDirs;
     QStringList dirs;
     for(int i=0 ; i < ui->directoryWidget->count(); ++i)
     {
@@ -763,11 +770,27 @@ void MainWindow::directoryChangedCommon()
             continue;
         }
     }
+	if (dirs == lastDirs)
+		return;
+	lastDirs = dirs;
+
+    QElapsedTimer timer;
+    timer.start();
 
     QList<TableItemDataPointer> all;
     gpSQL->GetAll(all, dirs);
 
+
+    insertLog(TaskKind::App,
+              0,
+              QString(tr("Quering Database takes %1 milliseconds.")).arg(timer.elapsed()));
+
+    timer.start();
     tableModel_->ResetData(all);
+
+    insertLog(TaskKind::App,
+              0,
+              QString(tr("Resetting data takes %1 milliseconds.")).arg(timer.elapsed()));
 }
 
 void MainWindow::on_action_Top_triggered()
@@ -781,7 +804,7 @@ void MainWindow::on_action_Bottom_triggered()
 }
 
 
-void MainWindow::on_directoryWidget_itemChanged(DirectoryEntry *item)
+void MainWindow::on_directoryWidget_itemChanged(QListWidgetItem *item)
 {
     Q_UNUSED(item);
     directoryChangedCommon();
@@ -791,3 +814,5 @@ void MainWindow::tableItemCountChanged()
 {
     slItemCount_->setText(QString(tr("Items: %1")).arg(tableModel_->GetItemCount()));
 }
+
+

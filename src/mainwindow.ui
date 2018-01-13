@@ -41,9 +41,6 @@
       <property name="contextMenuPolicy">
        <enum>Qt::CustomContextMenu</enum>
       </property>
-      <property name="autoScroll">
-       <bool>true</bool>
-      </property>
       <property name="showGrid">
        <bool>false</bool>
       </property>
@@ -245,7 +242,11 @@
       <number>0</number>
      </property>
      <item>
-      <widget class="DirectoryEntry" name="directoryWidget"/>
+      <widget class="DirectoryEntry" name="directoryWidget">
+       <property name="contextMenuPolicy">
+        <enum>Qt::CustomContextMenu</enum>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>

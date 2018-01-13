@@ -4,6 +4,7 @@
 #include <QDebug>
 #include <QThreadPool>
 #include <QFileDialog>
+#include <QListWidget>
 
 #include "consts.h"
 #include "globals.h"
@@ -15,6 +16,7 @@
 #include "optiondialog.h"
 
 #include "taskgetdir.h"
+#include "directoryentry.h"
 
 #include "sql.h"
 #include "helper.h"
@@ -112,8 +114,19 @@ void MainWindow::on_action_Do_It_triggered()
         return;
     lastSelectedDir_ = dir;
 
+    StartScan(dir);
+}
+void MainWindow::StartScan(QListWidgetItem* item)
+{
+    StartScan2(item->text());
+}
+void MainWindow::StartScan(const QString& dir)
+{
     AddUserEntryDirectory(canonicalDir(dir));
-
+    StartScan2(dir);
+}
+void MainWindow::StartScan2(const QString& dir)
+{
     TaskGetDir* pTaskGetDir = new TaskGetDir(gLoopId, idManager_->Increment(IDKIND_GetDir), dir);
     pTaskGetDir->setAutoDelete(true);
     QObject::connect(pTaskGetDir, &TaskGetDir::afterGetDir,
@@ -123,13 +136,8 @@ void MainWindow::on_action_Do_It_triggered()
     getPoolGetDir()->start(pTaskGetDir);
 
 
-
-
     insertLog(TaskKind::GetDir, idManager_->Get(IDKIND_GetDir), QString(tr("Task registered. %1")).arg(dir));
-
-
 }
-
 void MainWindow::on_action_Stop_triggered()
 {
     gPaused = false;
@@ -208,5 +216,26 @@ void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
     contextMenu.addMenu(&menuCopyOther);
 
     contextMenu.exec(ui->tableView->mapToGlobal(pos));
+}
 
+void MainWindow::on_Rescan()
+{
+    if(ui->directoryWidget->selectedItems().isEmpty())
+        return;
+
+    QListWidgetItem* item = ui->directoryWidget->selectedItems()[0];
+
+    StartScan(item);
+}
+void MainWindow::on_directoryWidget_customContextMenuRequested(const QPoint &pos)
+{
+    QMenu menu(this);
+
+    QAction actRescan(tr("&Rescan to create thumbnails"));
+    connect(&actRescan, SIGNAL(triggered(bool)),
+            this, SLOT(on_Rescan()));
+
+    menu.addAction(&actRescan);
+
+    menu.exec(ui->directoryWidget->mapToGlobal(pos));
 }
