@@ -51,7 +51,7 @@ void TableModel:: AppendData(TableItemDataPointer pItemData, const bool enableUp
         }
     }
 
-    parent_->setRowHeight(newRowImage, Consts::THUMB_HEIGHT);
+    // parent_->setRowHeight(newRowImage, Consts::THUMB_HEIGHT);
 
     emit itemCountChanged();
 }
@@ -74,6 +74,7 @@ void TableModel::ResetData(const QList<TableItemDataPointer>& all)
 //                    (itemDatas_.count()*RowCountPerEntry)+RowCountPerEntry-1);
 
 //    endInsertRows();
+    Sort(sSortColumn_, sSortReverse_);
     endResetModel();
 
     emit itemCountChanged();
@@ -229,9 +230,12 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
 
             case Qt::TextColorRole:
             {
-                if(!QFile(itemDatas_[actualIndex]->getMovieFileFull()).exists())
+                if(bShowMissing_)
                 {
-                    return QColor(Qt::red);
+                    if(!QFile(itemDatas_[actualIndex]->getMovieFileFull()).exists())
+                    {
+                        return QColor(Qt::red);
+                    }
                 }
             }
             break;
@@ -250,20 +254,9 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
         {
             case Qt::DecorationRole:
             {
-//                parent_->setColumnWidth(index.row()-3, Consts::THUMB_WIDTH);
-//                parent_->setRowHeight(index.row()-3, Consts::THUMB_HEIGHT);
                 parent_->setColumnWidth(index.row(), Consts::THUMB_WIDTH);
                 parent_->setRowHeight(index.row(), Consts::THUMB_HEIGHT);
-//                parent_->setColumnWidth(index.row()+3, Consts::THUMB_WIDTH);
-//                parent_->setRowHeight(index.row()+3, Consts::THUMB_HEIGHT);
 
-
-//                {
-//                    for(int i=0 ; i < 5 ; ++i)
-//                    {
-//                        parent_->setColumnWidth(i, Consts::THUMB_WIDTH);
-//                    }
-//                }
                 QString imageFile = itemDatas_[actualIndex]->getImageFiles()[index.column()];
                 imageFile = pathCombine(Consts::FILEPART_THUMBS, imageFile);
 
@@ -290,10 +283,13 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
 
         case Qt::TextColorRole:
         {
-            if(!QFile(itemDatas_[actualIndex]->getMovieFileFull()).exists())
-            {
-                return QColor(Qt::red);
-            }
+			if (bShowMissing_)
+			{
+				if (!QFile(itemDatas_[actualIndex]->getMovieFileFull()).exists())
+				{
+					return QColor(Qt::red);
+				}
+			}
         }
         break;
 
@@ -321,16 +317,25 @@ class SortFunctor
 	{
 		switch (sc_)
 		{
-		case TableModel::SORTCOLUMN::FILENAME:
+        case TableModel::SORTCOLUMN::SORT_FILENAME:
 			return (v1->getMovieFileFull() < v2->getMovieFileFull());
 			break;
-		case TableModel::SORTCOLUMN::SIZE:
+        case TableModel::SORTCOLUMN::SORT_SIZE:
 			return (v1->getSize() < v2->getSize());
 			break;
-		case TableModel::SORTCOLUMN::WTIME:
-			return (v1->getWtime() < v2->getWtime());
-			break;
-		default:
+        case TableModel::SORTCOLUMN::SORT_WTIME:
+            return (v1->getWtime() < v2->getWtime());
+            break;
+        case TableModel::SORTCOLUMN::SORT_RESOLUTION:
+            return (v1->getResolutionMultiplied() < v2->getResolutionMultiplied());
+            break;
+        case TableModel::SORTCOLUMN::SORT_DURATION:
+            return (v1->getDuration() < v2->getDuration());
+            break;
+        case TableModel::SORTCOLUMN::SORT_BITRATE:
+            return (v1->getBitrate() < v2->getBitrate());
+            break;
+        default:
 			Q_ASSERT(false);
 		}
 		return false;
@@ -349,51 +354,25 @@ public:
 	}
 
 };
-//bool TableModel::itemDataLessThan(const TableItemDataPointer v1, const TableItemDataPointer v2)
-//{
-//    bool ret;
-//    switch(sSortColumn_)
-//    {
-//    case SORTCOLUMN::FILENAME:
-//        ret = (v1->getMovieFileFull() < v2->getMovieFileFull());
-//        break;
-//    case SORTCOLUMN::SIZE:
-//        ret = (v1->getSize() < v2->getSize());
-//        break;
-//    case SORTCOLUMN::WTIME:
-//        ret = (v1->getWtime() < v2->getWtime());
-//        break;
-//    default:
-//        Q_ASSERT(false);
-//    }
-//    return sSortReverse_ ? !ret : ret;
-//}
+
 TableModel::SORTCOLUMN TableModel::sSortColumn_;
 bool TableModel::sSortReverse_;
 
-void TableModel::SortCommon(SORTCOLUMN column)
+void TableModel::Sort(SORTCOLUMN column, bool rev)
 {
-
-    sSortReverse_ = !sSortReverse_;
-    SortFunctor func(sSortReverse_, column);
-    beginResetModel();
+    sSortReverse_ = rev;
     sSortColumn_ = column;
-    // qSort(itemDatas_.begin(), itemDatas_.end(), func);
+
+    SortFunctor func(sSortReverse_, column);
+
+    beginResetModel();
     std::sort(itemDatas_.begin(), itemDatas_.end(), func);
     endResetModel();
 }
-void TableModel::SortByFileName()
+void TableModel::Sort(SORTCOLUMN column)
 {
-    SortCommon(SORTCOLUMN::FILENAME);
-}
-
-void TableModel::SortBySize()
-{
-    SortCommon(SORTCOLUMN::SIZE);
-}
-void TableModel::SortByWtime()
-{
-    SortCommon(SORTCOLUMN::WTIME);
+    sSortReverse_ = !sSortReverse_;
+    Sort(column,sSortReverse_);
 }
 
 //bool TableModel::RenameEntries(const QString& dir,
@@ -430,3 +409,11 @@ bool TableModel::RenameEntry(const QString& dbDir,
     }
     return ret;
 }
+
+//void TableModel::SetShowMissing(bool bToggle)
+//{
+//    if(bShowMissing_==bToggle)
+//        return;
+//
+//    bShowMissing_ = bToggle;
+//}

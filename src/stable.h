@@ -59,6 +59,11 @@
 #include <QAbstractTableModel>
 #include <QStyledItemDelegate>
 #include <QComboBox>
+#include <QElapsedTimer>
+#include <QToolButton>
+#include <QPushButton>
+#include <QCheckBox>
+#include <QSortFilterProxyModel>
 
 #if !defined(VERIFY)
 # if !defined(QT_NO_DEBUG)

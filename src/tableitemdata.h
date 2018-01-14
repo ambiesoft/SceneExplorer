@@ -146,6 +146,9 @@ public:
     qint64 getCtime() const;
     qint64 getWtime() const;
 
+    int getResolutionMultiplied() const {
+        return vWidth_*vHeight_;
+    }
     bool Rename(const QString& olddir,
                 const QString& oldname,
                 const QString& newdir,

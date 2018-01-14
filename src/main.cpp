@@ -37,12 +37,12 @@ int main(int argc, char *argv[])
     }
     if(!QDir(dbDir).exists())
     {
-        Alert(QString(QObject::tr("\"%1\" is not directory.")).arg(dbDir));
+        Alert(nullptr,QString(QObject::tr("\"%1\" is not directory.")).arg(dbDir));
         return 1;
     }
     if(!QDir::setCurrent(dbDir))
     {
-        Alert(QString(QObject::tr("Failed to set \"%1\" as current directory.").arg(dbDir)));
+        Alert(nullptr, QString(QObject::tr("Failed to set \"%1\" as current directory.").arg(dbDir)));
         return 1;
     }
 
@@ -52,7 +52,7 @@ int main(int argc, char *argv[])
     QDir(".").mkdir(Consts::FILEPART_THUMBS);
     if(!QDir(Consts::FILEPART_THUMBS).exists())
     {
-        Alert(QString(QObject::tr("Failed to mkdir \"%1\" or it is not a directory.")).
+        Alert(nullptr, QString(QObject::tr("Failed to mkdir \"%1\" or it is not a directory.")).
 			arg(QFileInfo(Consts::FILEPART_THUMBS).absoluteFilePath()));
         return 1;
     }
@@ -60,13 +60,15 @@ int main(int argc, char *argv[])
 	Sql theSql;
 	if (!theSql.isOK())
 	{
-		Alert(QString(QObject::tr("Failed to open or create database. \"%1\"")).
+		Alert(nullptr, QString(QObject::tr("Failed to open or create database. \"%1\"")).
 			arg(QFileInfo(Sql::getDBFileName()).absoluteFilePath()));
 		return 1;
 	}
 	gpSQL = &theSql;
 
     MainWindow w(nullptr, settings);
+    if(!w.IsInitialized())
+        return 1;
     w.show();
 
     return app.exec();

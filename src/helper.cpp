@@ -2,7 +2,9 @@
 #include <QMessageBox>
 #include <QProcessEnvironment>
 #include <QFileInfo>
+#include <QDesktopServices>
 
+#include "consts.h"
 #include "helper.h"
 
 QString rstrip(const QString& str, QChar c) {
@@ -29,13 +31,24 @@ QString canonicalDir(const QString& dir)
         return dir+'/';
     return rstrip(dir, '/') + '/';
 }
-void Alert(QString message)
+void Alert(QWidget* parent, QString message)
 {
-    QMessageBox msgBox;
-    // msgBox.setText("Name");
-    msgBox.setInformativeText(message);
-    msgBox.setStandardButtons(QMessageBox::Ok);
-    msgBox.exec();
+	QMessageBox msgBox(parent);
+	// msgBox.setText("Name");
+	msgBox.setInformativeText(message);
+	msgBox.setStandardButtons(QMessageBox::Ok);
+	msgBox.exec();
+}
+bool YesNo(QWidget* parent, QString message)
+{
+	QMessageBox msgBox(parent);
+	msgBox.setWindowTitle(Consts::APPNAME);
+	msgBox.setText(message);
+	msgBox.setStandardButtons(QMessageBox::Yes);
+	msgBox.addButton(QMessageBox::No);
+	msgBox.setDefaultButton(QMessageBox::No);
+	msgBox.setIcon(QMessageBox::Question);
+	return msgBox.exec() == QMessageBox::Yes;
 }
 
 static QString getBytecode1(char c)
@@ -146,33 +159,45 @@ QString createSalient(const QString& file, const qint64& size)
 // https://stackoverflow.com/a/3546503
 void showInGraphicalShell(QWidget *parent, const QString &pathIn)
 {
-    // Mac, Windows support folder or file.
+	// Mac, Windows support folder or file.
 #if defined(Q_OS_WIN)
-    QString explorer;
-    QString path = QProcessEnvironment::systemEnvironment().value("PATH");
-    QStringList paths = path.split(';');
-    for(int i=0 ; i < paths.length(); ++i)
-    {
-        QString s=pathCombine(paths[i],"explorer.exe");
+	QString explorer;
+	QString path = QProcessEnvironment::systemEnvironment().value("PATH");
+	QStringList paths = path.split(';');
+	for (int i = 0; i < paths.length(); ++i)
+	{
+		QString s = pathCombine(paths[i], "explorer.exe");
 
-        if(QFile(s).exists())
-        {
-            explorer=s;
-            break;
-        }
-    }
-    if (explorer.isEmpty()) {
-        QMessageBox::warning(parent,
-                             QObject::tr("Launching Windows Explorer failed"),
-                             QObject::tr("Could not find explorer.exe in path to launch Windows Explorer."));
-        return;
-    }
-    QString param;
-    if (!QFileInfo(pathIn).isDir())
-        param = QLatin1String("/select,");
-    param += QDir::toNativeSeparators(pathIn);
-    QString command = explorer + " " + param;
-    QProcess::startDetached(command);
+		if (QFile(s).exists())
+		{
+			explorer = s;
+			break;
+		}
+	}
+	if (explorer.isEmpty()) {
+		QMessageBox::warning(parent,
+			QObject::tr("Launching Windows Explorer failed"),
+			QObject::tr("Could not find explorer.exe in path to launch Windows Explorer."));
+		return;
+	}
+	QString param;
+	if (!QFileInfo(pathIn).isDir())
+	{
+		QStringList args;
+		args << "/select,";
+		args << QDir::toNativeSeparators(pathIn);
+		args << ",/n";
+		QProcess::startDetached(explorer, args);
+	}
+	else
+	{
+		QStringList args;
+		args << QDir::toNativeSeparators(pathIn);
+		QProcess::startDetached(explorer, args);
+	}
+
+
+
 #elif defined(Q_OS_MAC)
     Q_UNUSED(parent)
     QStringList scriptArgs;

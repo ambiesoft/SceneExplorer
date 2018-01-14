@@ -11,12 +11,22 @@ namespace Consts
     const char KEY_SIZE[] = "size";
     const char KEY_TREESIZE[] = "treesize";
     const char KEY_TXTLOGSIZE[] = "txtlogsize";
-    const char KEY_LISTTASKSIZE[] = "listtasksize";
+	const char KEY_LISTTASKSIZE[] = "listtasksize";
+	
+	const char KEY_SHOWMISSING[] = "showmissing";
 
+	
     const char KEY_LASTSELECTEDDIRECTORY[] = "lastselecteddir";
     const char KEY_DBPATH[] = "dbpath";
 
-    const char KEY_USERENTRYDIRECTORIES[] = "entrydirectories";
+
+
+    const char KEY_KEY_USERENTRY_DIRECTORY_ALL_SELECTED[] = "entrydirectoryallselected";
+    const char KEY_KEY_USERENTRY_DIRECTORY_ALL_CHECKED[] = "entrydirectoryallchecked";
+
+    const char KEY_USERENTRY_DIRECTORIES[] = "entrydirectories";
+    const char KEY_USERENTRY_SELECTED[] = "entryselecteds";
+    const char KEY_USERENTRY_CHECKEDS[] = "entrycheckeds";
 
 
     const char FILEPART_THUMBS[] = "thumbs";

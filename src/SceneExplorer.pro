@@ -42,7 +42,8 @@ SOURCES += \
     mainwindow_event.cpp \
     helper.cpp \
     foldermodel.cpp \
-    directoryentry.cpp
+    directoryentry.cpp \
+    directoryitem.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -61,7 +62,8 @@ HEADERS += \
     helper.h \
     foldermodel.h \
     stable.h \
-    directoryentry.h
+    directoryentry.h \
+    directoryitem.h
 
 FORMS += \
         mainwindow.ui \

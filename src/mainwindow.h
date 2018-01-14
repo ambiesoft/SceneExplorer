@@ -4,6 +4,7 @@
 
 #include "tablemodel.h"
 #include "directoryentry.h"
+#include "directoryitem.h"
 
 class QThreadPool;
 class QLabel;
@@ -31,6 +32,8 @@ public:
     explicit MainWindow(QWidget *parent, Settings& settings);
     ~MainWindow();
 
+    bool IsInitialized() const;
+
 private:
     enum IDKIND {
         IDKIND_GetDir,
@@ -39,7 +42,11 @@ private:
     };
 	bool initialized_ = false;
 	bool closed_ = false;
-
+	bool directoryChanging_ = false;
+    QStringList currentDirs_;
+    // bool bShowMissing_ = false;
+    void GetSqlAllSetTable(const QStringList& dirs);
+	QToolButton* btnShowNonExistant_ = nullptr;
     class IDManager
     {
         MainWindow* win_;
@@ -134,6 +141,9 @@ private:
     // int threadcountFilter_ = 1;
 
     bool initShown=false;
+	bool IsClosed() const {
+		return closed_;
+	}
 
     QLabel *slPaused_ = nullptr;
     QLabel *slTask_ = nullptr;
@@ -170,6 +180,12 @@ private slots:
 
     void on_directoryWidget_customContextMenuRequested(const QPoint &pos);
 
+    void on_actionSort_by_resolution_triggered();
+
+    void on_actionSort_by_duration_triggered();
+
+    void on_actionSort_by_bitrate_triggered();
+    void on_action_ShowMissing(bool bToggle);
 private:
     QThreadPool* pPoolFFmpeg_ = nullptr;
     QThreadPool* getPoolFFmpeg();
@@ -182,7 +198,11 @@ private:
 
     void clearAllPool();
 
-    void AddUserEntryDirectory(const QString& dir);
+    void AddUserEntryDirectory(
+            DirectoryItem::DirectoryItemType itemType,
+            const QString& dir,
+            bool sel,
+            bool check);
     void directoryChangedCommon();
     void StartScan(const QString& dir);
     void StartScan(QListWidgetItem* item);
@@ -192,6 +212,7 @@ private:
 
     Ui::MainWindow *ui;
     TableModel* tableModel_;
+	FileMissingFilterProxyModel *proxyModel_;
     QString lastSelectedDir_;
 
     TaskModel* taskModel_;
@@ -255,7 +276,9 @@ public slots:
 
     void tableItemCountChanged();
 
-    void on_Rescan();
+	void on_Rescan();
+	void on_directoryWidget_Remove();
+	void on_directoryWidget_UncheckAll();
 };
 
 #endif // MAINWINDOW_H

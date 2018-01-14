@@ -86,24 +86,50 @@ void MainWindow::on_action_Pause_triggered()
     }
 }
 
-void MainWindow::AddUserEntryDirectory(const QString& cdir)
+void MainWindow::AddUserEntryDirectory(
+        DirectoryItem::DirectoryItemType itemType,
+        const QString& cdir,
+        bool sel,
+        bool check)
 {
-    QDir di(cdir);
-
-    for(int i=0 ; i < ui->directoryWidget->count(); ++i)
+    QString text;
+    if(itemType==DirectoryItem::DI_NORMAL)
     {
-        QListWidgetItem* item = ui->directoryWidget->item(i);
-        QDir d(item->text());
-        if(di == d)
+        QDir di(cdir);
+
+        for(int i=0 ; i < ui->directoryWidget->count(); ++i)
         {
-            return;
+            QListWidgetItem* item = ui->directoryWidget->item(i);
+            QDir d(item->text());
+            if(di == d)
+            {
+                return;
+            }
         }
+        text=canonicalDir(cdir);
     }
-    QListWidgetItem* newitem = new QListWidgetItem(ui->directoryWidget);
-    newitem->setText(canonicalDir(cdir));
+    else if(itemType==DirectoryItem::DI_ALL)
+    {
+        text=tr("All");
+    }
+    else if(itemType==DirectoryItem::DI_MISSING)
+    {
+        text=tr("Missing");
+    }
+    else
+    {
+        Q_ASSERT(false);
+        return;
+    }
+    DirectoryItem* newitem = new DirectoryItem(ui->directoryWidget, itemType);
+    newitem->setText(text);
     newitem->setFlags(newitem->flags() | Qt::ItemIsUserCheckable);
-    newitem->setCheckState(Qt::Unchecked);
-    newitem->setIcon(fiProvider_.icon(QFileIconProvider::Folder));
+
+    newitem->setSelected(sel);
+    newitem->setCheckState(check ? Qt::Checked : Qt::Unchecked);
+
+    if(itemType==DirectoryItem::DI_NORMAL)
+        newitem->setIcon(fiProvider_.icon(QFileIconProvider::Folder));
     ui->directoryWidget->addItem(newitem);
 }
 
@@ -122,7 +148,7 @@ void MainWindow::StartScan(QListWidgetItem* item)
 }
 void MainWindow::StartScan(const QString& dir)
 {
-    AddUserEntryDirectory(canonicalDir(dir));
+    AddUserEntryDirectory(DirectoryItem::DI_NORMAL, canonicalDir(dir), false, false);
     StartScan2(dir);
 }
 void MainWindow::StartScan2(const QString& dir)
@@ -171,17 +197,35 @@ void MainWindow::on_action_About_triggered()
 
 void MainWindow::on_actionSort_by_file_name_triggered()
 {
-    tableModel_->SortByFileName();
+    WaitCursor wc;
+    tableModel_->Sort(TableModel::SORT_FILENAME);
 }
 void MainWindow::on_actionSort_by_file_size_triggered()
 {
-    tableModel_->SortBySize();
+    WaitCursor wc;
+    tableModel_->Sort(TableModel::SORT_SIZE);
 }
-
 void MainWindow::on_actionSort_by_wtime_triggered()
 {
-    tableModel_->SortByWtime();
+    WaitCursor wc;
+    tableModel_->Sort(TableModel::SORT_WTIME);
 }
+void MainWindow::on_actionSort_by_resolution_triggered()
+{
+    WaitCursor wc;
+    tableModel_->Sort(TableModel::SORT_RESOLUTION);
+}
+void MainWindow::on_actionSort_by_duration_triggered()
+{
+    WaitCursor wc;
+    tableModel_->Sort(TableModel::SORT_DURATION);
+}
+void MainWindow::on_actionSort_by_bitrate_triggered()
+{
+    WaitCursor wc;
+    tableModel_->Sort(TableModel::SORT_BITRATE);
+}
+
 void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
 {
     QMenu contextMenu(tr("Context menu"), this);
@@ -227,15 +271,64 @@ void MainWindow::on_Rescan()
 
     StartScan(item);
 }
+void MainWindow::on_directoryWidget_Remove()
+{
+    if(ui->directoryWidget->selectedItems().isEmpty())
+        return;
+
+    QListWidgetItem* item = ui->directoryWidget->selectedItems()[0];
+	if (!YesNo(this,QString(tr("Are you sure you want to remove \"%1\" from the lists?")).arg(item->text())))
+		return;
+    
+	delete ui->directoryWidget->takeItem(ui->directoryWidget->row(item));
+}
+void MainWindow::on_directoryWidget_UncheckAll()
+{
+	directoryChanging_ = true;
+	for (int i = 0; i < ui->directoryWidget->count(); ++i)
+	{
+		QListWidgetItem* item = ui->directoryWidget->item(i);
+		item->setCheckState(Qt::Unchecked);
+	}
+	directoryChanging_ = false;
+	directoryChangedCommon();
+}
 void MainWindow::on_directoryWidget_customContextMenuRequested(const QPoint &pos)
 {
+    if(!ui->directoryWidget->itemAt(pos))
+        return;
+
     QMenu menu(this);
 
-    QAction actRescan(tr("&Rescan to create thumbnails"));
-    connect(&actRescan, SIGNAL(triggered(bool)),
-            this, SLOT(on_Rescan()));
+	QAction actRescan(tr("&Rescan to create thumbnails"));
+	connect(&actRescan, SIGNAL(triggered(bool)),
+		this, SLOT(on_Rescan()));
+	menu.addAction(&actRescan);
 
-    menu.addAction(&actRescan);
+	QAction actRemove(tr("Re&move"));
+	connect(&actRemove, SIGNAL(triggered(bool)),
+		this, SLOT(on_directoryWidget_Remove()));
+	menu.addAction(&actRemove);
+
+	QAction actUncheckAll(tr("&Uncheck all"));
+	connect(&actUncheckAll, SIGNAL(triggered(bool)),
+		this, SLOT(on_directoryWidget_UncheckAll()));
+	menu.addAction(&actUncheckAll);
 
     menu.exec(ui->directoryWidget->mapToGlobal(pos));
+}
+
+void MainWindow::on_action_ShowMissing(bool bToggle)
+{
+	Q_UNUSED(bToggle);
+
+	if (!IsInitialized() || IsClosed())
+		return;
+    //if(bShowMissing_==bToggle)
+    //    return;
+    //bShowMissing_ = bToggle;
+
+
+
+    GetSqlAllSetTable(currentDirs_);
 }

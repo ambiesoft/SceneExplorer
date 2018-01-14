@@ -14,7 +14,7 @@
 #include "helper.h"
 #include "sql.h"
 
-
+#define SQC(siki) do { if(!(siki)) { Q_ASSERT(false); showFatal(db_.lastError().text()); return false;}} while(false)
 
 Sql::Sql() : db_(QSqlDatabase::addDatabase("QSQLITE"))
 {
@@ -506,7 +506,8 @@ QString Sql::getErrorStrig(int thumbRet)
 //{
 //    return GetAll(v, QStringList(dir));
 //}
-bool Sql::GetAll(QList<TableItemDataPointer>& v, const QStringList& dirs)
+bool Sql::GetAll(QList<TableItemDataPointer>& v,
+                 const QStringList& dirs)
 {
     QSqlQuery query(db_);
     if(dirs.isEmpty())
@@ -550,8 +551,9 @@ bool Sql::GetAll(QList<TableItemDataPointer>& v, const QStringList& dirs)
             continue;
         QString movieFileFull = pathCombine(directory,name);
 
-//        if(!QFile(movieFileFull).exists())
-//             continue;
+
+        //if(removeMissing && !QFile(movieFileFull).exists())
+        //     continue;
 
         QString thumbid = query.value("thumbid").toString();
         QStringList thumbs;
@@ -707,15 +709,14 @@ bool Sql::getEntryFromSalient(const QString& salient,
 
 void showFatal(const QString& error)
 {
-    Alert(error);
+    Alert(nullptr, error);
 }
-#define SQC(siki) do { if(!(siki)) { Q_ASSERT(false); showFatal(query.lastError().text()); return false;}} while(false)
+
 bool Sql::hasEntry(const QString& dir,
               const QString& file,
               const QString& sa)
 {
     QSqlQuery query;
-
     SQC(query.prepare("select name from FileInfo where "
                   "directory=? and name=? and salient=?"));
     int i=0;

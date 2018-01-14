@@ -16,6 +16,9 @@
 #include <QVector>
 #include <QWidget>
 #include <QClipboard>
+#include <QToolButton>
+#include <QPushButton>
+#include <QCheckBox>
 
 #include "ui_mainwindow.h"
 #include "taskgetdir.h"
@@ -29,6 +32,7 @@
 #include "waitcursor.h"
 // #include "taskfilter.h"
 
+
 #include "optiondialog.h"
 #include "globals.h"
 #include "helper.h"
@@ -37,7 +41,7 @@
 
 #include "mainwindow.h"
 
-
+#include <QSortFilterProxyModel>
 MainWindow::MainWindow(QWidget *parent, Settings& settings) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -56,10 +60,16 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
 
 	// table
     tableModel_=new TableModel(ui->tableView);
-    ui->tableView->setModel(tableModel_);
+	proxyModel_ = new FileMissingFilterProxyModel(ui->tableView);
+	proxyModel_->setSourceModel(tableModel_);
+	// very slow
+	// ui->tableView->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    ui->tableView->setModel(proxyModel_);
+	
     QObject::connect(tableModel_, &TableModel::itemCountChanged,
                      this, &MainWindow::tableItemCountChanged);
-
+	// not called
+	// ui->tableView->setItemDelegate(new ImageSizeDelegate(ui->tableView));
 
 
 	// tree
@@ -71,6 +81,18 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
 
 
     // tool bar
+    // tool bar show missing
+	btnShowNonExistant_ = new QToolButton(ui->mainToolBar);
+	btnShowNonExistant_->setText(tr("Show missing files"));
+	btnShowNonExistant_->setCheckable(true);
+    QObject::connect(btnShowNonExistant_, &QToolButton::toggled,
+                     this, &MainWindow::on_action_ShowMissing);
+    ui->mainToolBar->addWidget(btnShowNonExistant_);
+
+
+    QToolButton* myTooButton = new QToolButton(ui->mainToolBar);
+    ui->mainToolBar->addWidget(myTooButton);
+
     QComboBox* myComboBox = new QComboBox(ui->mainToolBar);
     myComboBox->setEditable(true);
     ui->mainToolBar->addWidget(myComboBox);
@@ -114,15 +136,91 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
     if(vVal.isValid())
         ui->listTask->setMaximumSize(vVal.toSize());
 
+	vVal = settings.value(Consts::KEY_SHOWMISSING);
+	if (vVal.isValid())
+		btnShowNonExistant_->setChecked(vVal.toBool());
 
-    vVal = settings.value(Consts::KEY_USERENTRYDIRECTORIES);
+    bool bAllSel=false;
+    bool bAllCheck=false;
+    vVal = settings.value(Consts::KEY_KEY_USERENTRY_DIRECTORY_ALL_SELECTED);
     if(vVal.isValid())
-    {
-        QStringList dirs = vVal.toStringList();
-        for(const QString& s : dirs)
-            AddUserEntryDirectory(s);
-    }
+        bAllSel=vVal.toBool();
+    vVal = settings.value(Consts::KEY_KEY_USERENTRY_DIRECTORY_ALL_CHECKED);
+    if(vVal.isValid())
+        bAllCheck=vVal.toBool();
 
+    AddUserEntryDirectory(DirectoryItem::DI_ALL, QString(), bAllSel,bAllCheck);
+
+    bool dirOK = false;
+    do
+    {
+        QVariant vValDirs = settings.value(Consts::KEY_USERENTRY_DIRECTORIES);
+        QVariant vValSelecteds = settings.value(Consts::KEY_USERENTRY_SELECTED);
+        QVariant vValCheckeds = settings.value(Consts::KEY_USERENTRY_CHECKEDS);
+
+        if(vValDirs.isValid())
+        {
+            QStringList dirs = vValDirs.toStringList();
+            QList<QVariant> sels;
+            if(vValSelecteds.isValid())
+            {
+                sels = vValSelecteds.toList();
+            }
+            else
+            {
+                for(int i =0 ; i < dirs.count(); ++i)
+                    sels.append(false);
+            }
+
+            QList<QVariant> checks;
+            if(vValCheckeds.isValid())
+            {
+                checks= vValCheckeds.toList();
+            }
+            else
+            {
+                for(int i =0 ; i < dirs.count(); ++i)
+                    checks.append(false);
+            }
+
+
+
+
+
+            Q_ASSERT(dirs.count()==sels.count());
+            Q_ASSERT(dirs.count()==checks.count());
+            for(int i=0 ; i < dirs.count(); ++i)
+            {
+                QString dir = dirs[i];
+
+                if(!sels[i].isValid())
+                    break;
+                bool sel = sels[i].toBool();
+
+                if(!checks[i].isValid())
+                    break;
+                bool chk = checks[i].toBool();
+                AddUserEntryDirectory(DirectoryItem::DI_NORMAL, dir, sel,chk);
+            }
+        }
+        dirOK = true;
+    } while(false);
+
+    if(!dirOK)
+    {
+        QMessageBox msgBox;
+        msgBox.setWindowTitle(Consts::APPNAME);
+        msgBox.setText(QString(tr("Failed to load user directory data from %1. Do you want to continue?")).
+                       arg(settings.fileName()));
+        msgBox.setStandardButtons(QMessageBox::Yes);
+        msgBox.addButton(QMessageBox::No);
+        msgBox.setDefaultButton(QMessageBox::No);
+        msgBox.setIcon(QMessageBox::Warning);
+        if(msgBox.exec() != QMessageBox::Yes)
+        {
+            return;
+        }
+    }
 	initialized_ = true;
 }
 
@@ -746,19 +844,29 @@ void MainWindow::on_directoryWidget_selectionChanged(const QItemSelection &selec
     Q_UNUSED(deselected);
     directoryChangedCommon();
 }
-#include <QElapsedTimer>
+
 void MainWindow::directoryChangedCommon()
 {
 	if (!initialized_ || closed_)
 		return;
 
+	if (directoryChanging_)
+		return;
+
 	WaitCursor wc;
 
-	static QStringList lastDirs;
     QStringList dirs;
     for(int i=0 ; i < ui->directoryWidget->count(); ++i)
     {
-        QListWidgetItem* item = ui->directoryWidget->item(i);
+        DirectoryItem* item = (DirectoryItem*)ui->directoryWidget->item(i);
+        if(item->IsAllItem())
+        {
+            if(item->isSelected() || item->checkState()==Qt::Checked)
+            {
+                dirs = QStringList();
+                break;
+            }
+        }
         if(item->checkState()==Qt::Checked)
         {
             dirs.append(item->text());
@@ -770,16 +878,22 @@ void MainWindow::directoryChangedCommon()
             continue;
         }
     }
-	if (dirs == lastDirs)
+    if (dirs == currentDirs_)
 		return;
-	lastDirs = dirs;
+    currentDirs_ = dirs;
 
+
+    GetSqlAllSetTable(dirs);
+}
+
+void MainWindow::GetSqlAllSetTable(const QStringList& dirs)
+{
+	tableModel_->SetShowMissing(btnShowNonExistant_->isChecked() );
     QElapsedTimer timer;
     timer.start();
 
     QList<TableItemDataPointer> all;
-    gpSQL->GetAll(all, dirs);
-
+	gpSQL->GetAll(all, dirs);
 
     insertLog(TaskKind::App,
               0,
@@ -816,3 +930,8 @@ void MainWindow::tableItemCountChanged()
 }
 
 
+
+bool MainWindow::IsInitialized() const
+{
+    return initialized_;
+}

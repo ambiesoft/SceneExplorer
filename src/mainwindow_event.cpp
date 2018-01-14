@@ -1,3 +1,5 @@
+#include <QListWidgetItem>
+
 #include "consts.h"
 #include "globals.h"
 
@@ -22,18 +24,9 @@ void MainWindow::showEvent( QShowEvent* event )
     ui->txtLog->setMaximumSize(10000,10000);
     ui->listTask->setMaximumSize(10000,10000);
 
-    QList<TableItemDataPointer> v;
-    if(!gpSQL->GetAll(v))
-    {
-        insertLog(TaskKind::SQL,0,tr("Failed to get data from database."));
-        return;
-    }
 
-    for(int i=0 ; i < v.size(); ++i)
-    {
-        tableModel_->AppendData(v[i]);
-        // setTableSpan();
-    }
+    // GetSqlAllSetTable(QStringList());
+	directoryChangedCommon();
 }
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
@@ -60,11 +53,31 @@ void MainWindow::closeEvent(QCloseEvent *event) {
     }
     settings.setValue(Consts::KEY_LASTSELECTEDDIRECTORY, lastSelectedDir_);
 
+	settings.setValue(Consts::KEY_SHOWMISSING, btnShowNonExistant_->isChecked());
+
     QStringList userDirs;
+    QList<QVariant> userSelecteds;
+    QList<QVariant> userCheckeds;
     for(int i=0 ; i < ui->directoryWidget->count();++i)
     {
-        QListWidgetItem* item = ui->directoryWidget->item(i);
-        userDirs << item->text();
+        DirectoryItem* item = (DirectoryItem*)ui->directoryWidget->item(i);
+        if(item->IsAllItem())
+        {
+            settings.setValue(Consts::KEY_KEY_USERENTRY_DIRECTORY_ALL_SELECTED, item->isSelected());
+            settings.setValue(Consts::KEY_KEY_USERENTRY_DIRECTORY_ALL_CHECKED, item->checkState()==Qt::Checked);
+        }
+        else if(item->IsNormalItem())
+        {
+            userDirs.append(item->text());
+            userSelecteds.append(item->isSelected());
+            userCheckeds.append(item->checkState()==Qt::Checked);
+        }
+        else if(item->IsMissingItem())
+        {
+            // nothing
+        }
     }
-    settings.setValue(Consts::KEY_USERENTRYDIRECTORIES, userDirs);
+    settings.setValue(Consts::KEY_USERENTRY_DIRECTORIES, userDirs);
+    settings.setValue(Consts::KEY_USERENTRY_SELECTED, userSelecteds);
+    settings.setValue(Consts::KEY_USERENTRY_CHECKEDS, userCheckeds);
 }

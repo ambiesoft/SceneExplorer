@@ -121,6 +121,9 @@
     <addaction name="actionSort_by_file_name"/>
     <addaction name="actionSort_by_file_size"/>
     <addaction name="actionSort_by_wtime"/>
+    <addaction name="actionSort_by_resolution"/>
+    <addaction name="actionSort_by_duration"/>
+    <addaction name="actionSort_by_bitrate"/>
    </widget>
    <addaction name="menu_File"/>
    <addaction name="menu_View"/>
@@ -393,6 +396,21 @@
   <action name="action_Bottom">
    <property name="text">
     <string>&amp;Bottom</string>
+   </property>
+  </action>
+  <action name="actionSort_by_resolution">
+   <property name="text">
+    <string>Sort by &amp;resolution</string>
+   </property>
+  </action>
+  <action name="actionSort_by_duration">
+   <property name="text">
+    <string>Sort by &amp;duration</string>
+   </property>
+  </action>
+  <action name="actionSort_by_bitrate">
+   <property name="text">
+    <string>Sort by &amp;bitrate</string>
    </property>
   </action>
  </widget>
