@@ -802,7 +802,7 @@ QString MainWindow::getSelectedVideo()
 
     Q_ASSERT(select->hasSelection());
 
-    QVariant v = tableModel_->data(select->selectedIndexes()[0], TableModel::MovieFile);
+    QVariant v = proxyModel_->data(select->selectedIndexes()[0], TableModel::MovieFile);
     QString s = v.toString();
     Q_ASSERT(!s.isEmpty());
 
