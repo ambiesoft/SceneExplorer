@@ -1,6 +1,7 @@
 #ifndef DIRECTORYITEM_H
 #define DIRECTORYITEM_H
 
+#include <QListWidgetItem>
 
 class DirectoryItem : public QListWidgetItem
 {

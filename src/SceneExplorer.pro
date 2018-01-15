@@ -77,3 +77,14 @@ DISTFILES += \
     info/Scenario-rename.txt
 
 PRECOMPILED_HEADER = stable.h
+
+message($$QMAKESPEC)
+
+win32 {
+    SOURCES += \
+            osd_win32.cpp
+}
+linux-g++ {
+    SOURCES += \
+            osd_linux.cpp
+}

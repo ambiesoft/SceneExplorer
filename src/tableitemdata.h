@@ -1,7 +1,7 @@
 #ifndef LISTITEMDATA_H
 #define LISTITEMDATA_H
 
-
+#include <QSharedPointer>
 
 class TableItemData;
 typedef QSharedPointer<TableItemData> TableItemDataPointer;

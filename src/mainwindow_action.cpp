@@ -37,7 +37,8 @@ void MainWindow::openVideo(const QString& movieFile)
 }
 void MainWindow::openVideoInFolder(const QString& movieFile)
 {
-    showInGraphicalShell(this, movieFile);
+    if(!showInGraphicalShell(this, movieFile))
+        Alert(this, tr("Failed to open folder."));
 }
 void MainWindow::on_tableView_doubleClicked(const QModelIndex &index)
 {

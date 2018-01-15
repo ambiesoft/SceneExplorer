@@ -1,6 +1,8 @@
 #ifndef TASKLISTDATA_H
 #define TASKLISTDATA_H
 
+#include <QSharedPointer>
+
 #include "taskffmpeg.h"
 
 class TaskListData;
@@ -26,10 +28,7 @@ private:
 #endif
 	}
 public:
-	static TaskListDataPointer Create(int id, const QString& movieFile)
-	{
-		return TaskListDataPointer(new TaskListData(id, movieFile));
-	}
+    static TaskListDataPointer Create(int id, const QString& movieFile);
 	~TaskListData()
 	{
 #ifdef QT_DEBUG

@@ -1,7 +1,7 @@
 #ifndef SQL_H
 #define SQL_H
 
-
+#include <QSqlDatabase>
 
 #include "tableitemdata.h"
 

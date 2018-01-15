@@ -12,6 +12,7 @@
 
 #include "tableitemdata.h"
 #include "helper.h"
+#include "globals.h"
 #include "sql.h"
 
 #define SQC(siki) do { if(!(siki)) { Q_ASSERT(false); showFatal(db_.lastError().text()); return false;}} while(false)

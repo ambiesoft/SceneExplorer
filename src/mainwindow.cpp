@@ -19,6 +19,8 @@
 #include <QToolButton>
 #include <QPushButton>
 #include <QCheckBox>
+#include <QComboBox>
+#include <QElapsedTimer>
 
 #include "ui_mainwindow.h"
 #include "taskgetdir.h"
@@ -845,7 +847,7 @@ void MainWindow::on_directoryWidget_selectionChanged(const QItemSelection &selec
     directoryChangedCommon();
 }
 
-void MainWindow::directoryChangedCommon()
+void MainWindow::directoryChangedCommon(bool bForceRead)
 {
 	if (!initialized_ || closed_)
 		return;
@@ -878,8 +880,12 @@ void MainWindow::directoryChangedCommon()
             continue;
         }
     }
-    if (dirs == currentDirs_)
-		return;
+
+    if(!bForceRead)
+    {
+        if (dirs == currentDirs_)
+            return;
+    }
     currentDirs_ = dirs;
 
 

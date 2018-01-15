@@ -1,6 +1,8 @@
 #ifndef WORKER_H
 #define WORKER_H
 
+#include <QObject>
+#include <QRunnable>
 
 class TaskFFmpeg : public QObject, public QRunnable
 // class TaskFFMpeg : public QRunnable

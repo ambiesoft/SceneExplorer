@@ -1,7 +1,7 @@
 #ifndef DIRECTORYENTRY_H
 #define DIRECTORYENTRY_H
 
-
+#include <QListWidget>
 
 class DirectoryEntry : public QListWidget
 {

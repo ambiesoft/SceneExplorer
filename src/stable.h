@@ -48,7 +48,7 @@
 #include <QUuid>
 #include <QVector>
 #include <QWidget>
-#include <Qstandardpaths>
+#include <QStandardPaths>
 #include <QtSql/QSqlDatabase>
 #include <QtSql/QSqlQuery>
 #include <QFileSystemModel>
@@ -65,17 +65,6 @@
 #include <QCheckBox>
 #include <QSortFilterProxyModel>
 
-#if !defined(VERIFY)
-# if !defined(QT_NO_DEBUG)
-#  define VERIFY Q_ASSERT
-# else
-#  define VERIFY(expr)  \
-    do                    \
-    {                     \
-        (void) (expr);    \
-    } while (0)
-# endif
-#endif
 
 
 

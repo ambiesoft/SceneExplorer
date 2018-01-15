@@ -1,7 +1,10 @@
 #ifndef IMAGEMODEL_H
 #define IMAGEMODEL_H
 
-
+#include <QAbstractTableModel>
+#include <QSortFilterProxyModel>
+#include <QWidget>
+#include <QFile>
 
 #include "tableitemdata.h"
 

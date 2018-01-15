@@ -5,6 +5,11 @@
 int TaskListData::dinstcount_ = 0;
 #endif
 
+TaskListDataPointer TaskListData::Create(int id, const QString& movieFile)
+{
+    return TaskListDataPointer(new TaskListData(id, movieFile));
+}
+
 QString TaskListData::GetIdString() const
 {
     return QString::number(id_);

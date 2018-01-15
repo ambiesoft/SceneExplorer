@@ -1,6 +1,9 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include <QMainWindow>
+#include <QToolButton>
+#include <QFileIconProvider>
 
 #include "tablemodel.h"
 #include "directoryentry.h"
@@ -203,7 +206,7 @@ private:
             const QString& dir,
             bool sel,
             bool check);
-    void directoryChangedCommon();
+    void directoryChangedCommon(bool bForceRead=false);
     void StartScan(const QString& dir);
     void StartScan(QListWidgetItem* item);
     void StartScan2(const QString& dir);

@@ -25,8 +25,7 @@ void MainWindow::showEvent( QShowEvent* event )
     ui->listTask->setMaximumSize(10000,10000);
 
 
-    // GetSqlAllSetTable(QStringList());
-	directoryChangedCommon();
+    directoryChangedCommon(true);
 }
 void MainWindow::resizeEvent(QResizeEvent *event)
 {

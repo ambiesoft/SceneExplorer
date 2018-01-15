@@ -1,6 +1,8 @@
 #include <QStringList>
 #include <QFileInfo>
 #include <QDateTime>
+#include <QMap>
+#include <QVariant>
 
 #include "helper.h"
 #include "tableitemdata.h"

@@ -9,7 +9,7 @@ QString canonicalDir(const QString& dir);
 void Alert(QWidget* parent, QString message);
 bool YesNo(QWidget* parent, QString message);
 QString createSalient(const QString& file, const qint64& size);
-void showInGraphicalShell(QWidget *parent, const QString &pathIn);
+bool showInGraphicalShell(QWidget *parent, const QString &pathIn);
 QString getUUIDFromThumbfile(const QString& file);
 bool IsVideoExtention(const QString& file);
 

@@ -1,6 +1,7 @@
 #ifndef WAITCURSOR_H
 #define WAITCURSOR_H
 
+#include <QApplication>
 
 class WaitCursor
 {

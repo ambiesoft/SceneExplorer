@@ -1,6 +1,7 @@
 #include <QApplication>
 #include <QSettings>
-#include <Qstandardpaths>
+
+#include <QStandardPaths>
 #include <QDir>
 #include <QMessageBox>
 #include <QString>
