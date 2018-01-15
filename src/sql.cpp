@@ -15,6 +15,11 @@
 #include "globals.h"
 #include "sql.h"
 
+static void showFatal(const QString& error)
+{
+    Alert(nullptr, error);
+}
+
 #define SQC(siki) do { if(!(siki)) { Q_ASSERT(false); showFatal(db_.lastError().text()); return false;}} while(false)
 
 Sql::Sql() : db_(QSqlDatabase::addDatabase("QSQLITE"))
@@ -508,34 +513,53 @@ QString Sql::getErrorStrig(int thumbRet)
 //    return GetAll(v, QStringList(dir));
 //}
 bool Sql::GetAll(QList<TableItemDataPointer>& v,
-                 const QStringList& dirs)
+                 const QStringList& dirs,
+                 const QString& find)
 {
     QSqlQuery query(db_);
     if(dirs.isEmpty())
     {
-        if(!query.exec("select * from FileInfo"))
+        if(find.isEmpty())
         {
-            Q_ASSERT(false);
-            return false;
+            if(!query.exec("select * from FileInfo"))
+            {
+                Q_ASSERT(false);
+                return false;
+            }
+        }
+        else
+        {
+            int i=0;
+            SQC(query.prepare("select * from FileInfo where name like ?"));
+            query.bindValue(i++, "%"+find+"%");
+            SQC(query.exec());
         }
     }
     else
     {
         bool ok = true;
-        QString strPrepare("select * from FileInfo where ");
+        QString strPrepare("select * from FileInfo where (");
         for(int i=0 ; i < dirs.count(); ++i)
         {
             strPrepare += "directory like ?";
             if((i+1)!=dirs.count())
                 strPrepare += " or ";
         }
+        strPrepare += ") ";
+        if(!find.isEmpty())
+            strPrepare += " and name like ?";
+
         ok &= query.prepare(strPrepare);
 
-        for(int i=0 ; i < dirs.count(); ++i)
+        int i;
+        for(i=0 ; i < dirs.count(); ++i)
         {
 			Q_ASSERT(dirs[i].endsWith('/'));
             query.bindValue(i, dirs[i] + "%");
         }
+        if(!find.isEmpty())
+            query.bindValue(i++, "%"+find+"%");
+
         ok &= query.exec();
         if(!ok)
         {
@@ -550,9 +574,8 @@ bool Sql::GetAll(QList<TableItemDataPointer>& v,
         QString name = query.value("name").toString();
         if(name.isEmpty())
             continue;
-        QString movieFileFull = pathCombine(directory,name);
 
-
+        //QString movieFileFull = pathCombine(directory,name);
         //if(removeMissing && !QFile(movieFileFull).exists())
         //     continue;
 
@@ -708,10 +731,6 @@ bool Sql::getEntryFromSalient(const QString& salient,
     return true;
 }
 
-void showFatal(const QString& error)
-{
-    Alert(nullptr, error);
-}
 
 bool Sql::hasEntry(const QString& dir,
               const QString& file,

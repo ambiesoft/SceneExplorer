@@ -26,6 +26,7 @@ void MainWindow::showEvent( QShowEvent* event )
 
 
     directoryChangedCommon(true);
+    tableSortParameterChanged(tableModel_->GetSortColumn(), tableModel_->GetSortReverse());
 }
 void MainWindow::resizeEvent(QResizeEvent *event)
 {

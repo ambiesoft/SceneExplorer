@@ -1,13 +1,15 @@
 #include <QWidget>
 #include "optiondialog.h"
 
-OptionDialog::OptionDialog(QWidget* parent) : QDialog(parent)
+OptionDialog::OptionDialog(QWidget* parent)
+    : QDialog(parent,
+              //Qt::WindowFlags())
+              ((Qt::WindowTitleHint | Qt::WindowFlags()) & ~Qt::WindowContextHelpButtonHint))
 {
     ui.setupUi(this);
     setWindowTitle(tr("option"));
-
-
 }
+
 void OptionDialog::showEvent(QShowEvent *ev)
 {
     ui.spinMaxFFmpegCount->setValue(maxff_);

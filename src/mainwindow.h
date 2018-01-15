@@ -8,6 +8,7 @@
 #include "tablemodel.h"
 #include "directoryentry.h"
 #include "directoryitem.h"
+#include "findcombobox.h"
 
 class QThreadPool;
 class QLabel;
@@ -151,6 +152,10 @@ private:
     QLabel *slPaused_ = nullptr;
     QLabel *slTask_ = nullptr;
     QLabel *slItemCount_ = nullptr;
+    QLabel *slItemSort_ = nullptr;
+
+    FindComboBox* comboFind_ = nullptr;
+
 protected:
     virtual void resizeEvent(QResizeEvent *event);
     void closeEvent(QCloseEvent *event);
@@ -189,6 +194,10 @@ private slots:
 
     void on_actionSort_by_bitrate_triggered();
     void on_action_ShowMissing(bool bToggle);
+    void on_action_Find_triggered();
+
+    void on_action_Clear_triggered();
+
 private:
     QThreadPool* pPoolFFmpeg_ = nullptr;
     QThreadPool* getPoolFFmpeg();
@@ -278,10 +287,13 @@ public slots:
     void copySelectedVideoFilename();
 
     void tableItemCountChanged();
+    void tableSortParameterChanged(TableModel::SORTCOLUMN sc, bool rev);
 
 	void on_Rescan();
 	void on_directoryWidget_Remove();
 	void on_directoryWidget_UncheckAll();
+
+    void on_FindCombo_EnterPressed();
 };
 
 #endif // MAINWINDOW_H

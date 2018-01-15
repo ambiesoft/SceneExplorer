@@ -21,6 +21,7 @@
 #include <QCheckBox>
 #include <QComboBox>
 #include <QElapsedTimer>
+#include <QSortFilterProxyModel>
 
 #include "ui_mainwindow.h"
 #include "taskgetdir.h"
@@ -43,7 +44,7 @@
 
 #include "mainwindow.h"
 
-#include <QSortFilterProxyModel>
+
 MainWindow::MainWindow(QWidget *parent, Settings& settings) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -70,6 +71,8 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
 	
     QObject::connect(tableModel_, &TableModel::itemCountChanged,
                      this, &MainWindow::tableItemCountChanged);
+    QObject::connect(tableModel_, &TableModel::sortParameterChanged,
+                     this, &MainWindow::tableSortParameterChanged);
 	// not called
 	// ui->tableView->setItemDelegate(new ImageSizeDelegate(ui->tableView));
 
@@ -89,15 +92,25 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
 	btnShowNonExistant_->setCheckable(true);
     QObject::connect(btnShowNonExistant_, &QToolButton::toggled,
                      this, &MainWindow::on_action_ShowMissing);
-    ui->mainToolBar->addWidget(btnShowNonExistant_);
 
 
-    QToolButton* myTooButton = new QToolButton(ui->mainToolBar);
-    ui->mainToolBar->addWidget(myTooButton);
 
-    QComboBox* myComboBox = new QComboBox(ui->mainToolBar);
-    myComboBox->setEditable(true);
-    ui->mainToolBar->addWidget(myComboBox);
+//    QToolButton* myTooButton = new QToolButton(ui->mainToolBar);
+//    ui->mainToolBar->addWidget(myTooButton);
+
+    comboFind_ = new FindComboBox(ui->mainToolBar);
+    comboFind_->setMinimumWidth(160);
+    comboFind_->setMaximumWidth(160);
+    comboFind_->setEditable(true);
+    QObject::connect(comboFind_, &FindComboBox::on_EnterPressed,
+                     this, &MainWindow::on_FindCombo_EnterPressed);
+
+
+    ui->mainToolBar->insertWidget(ui->action_Top, btnShowNonExistant_);
+    ui->mainToolBar->insertSeparator(ui->action_Top);
+    ui->mainToolBar->insertWidget(ui->action_Find, comboFind_);
+
+
 
 
     // status bar
@@ -111,6 +124,10 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
 
     slItemCount_ = new QLabel(this);
     ui->statusBar->addPermanentWidget(slItemCount_);
+
+    slItemSort_ = new QLabel(this);
+    ui->statusBar->addPermanentWidget(slItemSort_);
+
 
     slPaused_ = new QLabel(this);
     slPaused_->hide();
@@ -899,7 +916,7 @@ void MainWindow::GetSqlAllSetTable(const QStringList& dirs)
     timer.start();
 
     QList<TableItemDataPointer> all;
-	gpSQL->GetAll(all, dirs);
+    gpSQL->GetAll(all, dirs, comboFind_->currentText());
 
     insertLog(TaskKind::App,
               0,
@@ -934,10 +951,31 @@ void MainWindow::tableItemCountChanged()
 {
     slItemCount_->setText(QString(tr("Items: %1")).arg(tableModel_->GetItemCount()));
 }
-
+void MainWindow::tableSortParameterChanged(TableModel::SORTCOLUMN sc, bool rev)
+{
+    QString text = QString(tr("Sort: %1 %2")).
+            arg(TableModel::GetSortColumnName(sc)).
+            arg(rev ? "-" : "+");
+    slItemSort_->setText(text);
+}
 
 
 bool MainWindow::IsInitialized() const
 {
     return initialized_;
+}
+
+void MainWindow::on_action_Find_triggered()
+{
+    directoryChangedCommon(true);
+}
+
+void MainWindow::on_action_Clear_triggered()
+{
+    comboFind_->setCurrentText(QString());
+    directoryChangedCommon(true);
+}
+void MainWindow::on_FindCombo_EnterPressed()
+{
+    directoryChangedCommon(true);
 }

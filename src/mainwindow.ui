@@ -69,7 +69,7 @@
      <x>0</x>
      <y>0</y>
      <width>874</width>
-     <height>21</height>
+     <height>18</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">
@@ -83,6 +83,8 @@
      <string>&amp;Edit</string>
     </property>
     <addaction name="action_Copy"/>
+    <addaction name="action_Find"/>
+    <addaction name="action_Clear"/>
    </widget>
    <widget class="QMenu" name="menu_Help">
     <property name="title">
@@ -94,7 +96,6 @@
     <property name="title">
      <string>&amp;Option</string>
     </property>
-    <addaction name="action_Options"/>
    </widget>
    <widget class="QMenu" name="menu_Task">
     <property name="title">
@@ -124,6 +125,9 @@
     <addaction name="actionSort_by_resolution"/>
     <addaction name="actionSort_by_duration"/>
     <addaction name="actionSort_by_bitrate"/>
+    <addaction name="separator"/>
+    <addaction name="action_Top"/>
+    <addaction name="action_Bottom"/>
    </widget>
    <addaction name="menu_File"/>
    <addaction name="menu_View"/>
@@ -154,6 +158,12 @@
    <addaction name="separator"/>
    <addaction name="action_Top"/>
    <addaction name="action_Bottom"/>
+   <addaction name="separator"/>
+   <addaction name="action_Find"/>
+   <addaction name="action_Clear"/>
+   <addaction name="separator"/>
+   <addaction name="action_Options"/>
+   <addaction name="separator"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QDockWidget" name="dockLog">
@@ -284,33 +294,6 @@
     </layout>
    </widget>
   </widget>
-  <widget class="QDockWidget" name="dockWidget">
-   <property name="windowTitle">
-    <string>Task Directory</string>
-   </property>
-   <attribute name="dockWidgetArea">
-    <number>2</number>
-   </attribute>
-   <widget class="QWidget" name="dockWidgetContents_4">
-    <layout class="QHBoxLayout" name="horizontalLayout_4">
-     <property name="spacing">
-      <number>0</number>
-     </property>
-     <property name="leftMargin">
-      <number>0</number>
-     </property>
-     <property name="topMargin">
-      <number>0</number>
-     </property>
-     <property name="rightMargin">
-      <number>0</number>
-     </property>
-     <property name="bottomMargin">
-      <number>0</number>
-     </property>
-    </layout>
-   </widget>
-  </widget>
   <action name="action_Close">
    <property name="text">
     <string>&amp;Close</string>
@@ -411,6 +394,16 @@
   <action name="actionSort_by_bitrate">
    <property name="text">
     <string>Sort by &amp;bitrate</string>
+   </property>
+  </action>
+  <action name="action_Find">
+   <property name="text">
+    <string>&amp;Find</string>
+   </property>
+  </action>
+  <action name="action_Clear">
+   <property name="text">
+    <string>&amp;Clear</string>
    </property>
   </action>
  </widget>

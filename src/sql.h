@@ -73,7 +73,8 @@ public:
 
     // bool GetAll(QList<TableItemDataPointer>& v, const QString& dir = QString());
 	bool GetAll(QList<TableItemDataPointer>& v,
-		const QStringList& dirs = QStringList());
+                const QStringList& dirs = QStringList(),
+                const QString& find = QString());
 
 
     int GetAllEntry(const QString& dir,

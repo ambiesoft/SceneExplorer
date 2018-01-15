@@ -22,6 +22,7 @@ public:
         SORT_DURATION,
         SORT_BITRATE,
     } ;
+    static QString GetSortColumnName(SORTCOLUMN sc);
 private:
     QList<TableItemDataPointer> itemDatas_;
     QMap<QString, TableItemDataPointer> mapsFullpathToItem_;
@@ -34,8 +35,16 @@ private:
     // static bool itemDataLessThan(const TableItemDataPointer v1, const TableItemDataPointer v2);
 
     void ClearData();
+    SORTCOLUMN sortColumn_ = SORT_FILENAME;
+    bool sortReverse_ = false;
 
+    void SetSortColumn(SORTCOLUMN sc);
+
+    void SetSortReverse(bool rev);
 public:
+    SORTCOLUMN GetSortColumn() const;
+    bool GetSortReverse() const;
+
     enum TableRole {
         MovieFile = Qt::UserRole + 1,
         // SelectedMovieFile = Qt::UserRole + 1,
@@ -50,8 +59,7 @@ public:
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     Qt::ItemFlags flags(const QModelIndex & index) const override ;
-    static SORTCOLUMN sSortColumn_;
-    static bool sSortReverse_;
+
     void Sort(SORTCOLUMN column);
     void Sort(SORTCOLUMN column, bool rev);
 //    bool RenameEntries(const QString& dir,
@@ -76,7 +84,7 @@ public:
 
 signals:
     void itemCountChanged();
-
+    void sortParameterChanged(SORTCOLUMN sc, bool rev);
 };
 
 class FileMissingFilterProxyModel : public QSortFilterProxyModel

@@ -74,7 +74,7 @@ void TableModel::ResetData(const QList<TableItemDataPointer>& all)
 //                    (itemDatas_.count()*RowCountPerEntry)+RowCountPerEntry-1);
 
 //    endInsertRows();
-    Sort(sSortColumn_, sSortReverse_);
+    Sort(GetSortColumn(), GetSortReverse());
     endResetModel();
 
     emit itemCountChanged();
@@ -310,8 +310,8 @@ Qt::ItemFlags TableModel::flags(const QModelIndex &index) const
 
 class SortFunctor
 {
-    bool rev_;
     TableModel::SORTCOLUMN sc_;
+    bool rev_;
 
 	bool compare(const TableItemDataPointer& v1, const TableItemDataPointer& v2) const
 	{
@@ -341,8 +341,8 @@ class SortFunctor
 		return false;
 	}
 public:
-    SortFunctor(bool rev, TableModel::SORTCOLUMN sc):
-        rev_(rev), sc_(sc)
+    SortFunctor(TableModel::SORTCOLUMN sc,bool rev):
+        sc_(sc), rev_(rev)
     {}
 
 	bool operator()(const TableItemDataPointer& v1, const TableItemDataPointer& v2) const
@@ -355,15 +355,60 @@ public:
 
 };
 
-TableModel::SORTCOLUMN TableModel::sSortColumn_;
-bool TableModel::sSortReverse_;
+
+TableModel::SORTCOLUMN TableModel::GetSortColumn() const
+{
+    return sortColumn_;
+}
+void TableModel::SetSortColumn(SORTCOLUMN sc)
+{
+    if(sortColumn_ != sc)
+    {
+        sortColumn_ = sc;
+        emit sortParameterChanged(sc,GetSortReverse());
+    }
+}
+
+
+QString TableModel::GetSortColumnName(SORTCOLUMN sc)
+{
+    switch(sc)
+    {
+
+    case SORT_FILENAME:return tr("Filename");
+    case SORT_SIZE:return tr("Size");
+    case SORT_WTIME:return tr("Wtime");
+    case SORT_RESOLUTION: return tr("Resolution");
+    case SORT_DURATION:return tr("Duration");
+    case SORT_BITRATE:return tr("Bitrate");
+    default :
+        Q_ASSERT(false);
+
+    }
+    return QString();
+}
+
+
+
+bool TableModel::GetSortReverse() const
+{
+    return sortReverse_;
+}
+void TableModel::SetSortReverse(bool rev)
+{
+    if(sortReverse_ != rev)
+    {
+        sortReverse_ = rev;
+        emit sortParameterChanged(GetSortColumn(), rev);
+    }
+}
 
 void TableModel::Sort(SORTCOLUMN column, bool rev)
 {
-    sSortReverse_ = rev;
-    sSortColumn_ = column;
+    SetSortReverse(rev);
+    SetSortColumn(column);
 
-    SortFunctor func(sSortReverse_, column);
+    SortFunctor func(column,rev);
 
     beginResetModel();
     std::sort(itemDatas_.begin(), itemDatas_.end(), func);
@@ -371,8 +416,9 @@ void TableModel::Sort(SORTCOLUMN column, bool rev)
 }
 void TableModel::Sort(SORTCOLUMN column)
 {
-    sSortReverse_ = !sSortReverse_;
-    Sort(column,sSortReverse_);
+    if(column==GetSortColumn())
+        SetSortReverse(!GetSortReverse());
+    Sort(column,GetSortReverse());
 }
 
 //bool TableModel::RenameEntries(const QString& dir,
@@ -398,7 +444,7 @@ bool TableModel::RenameEntry(const QString& dbDir,
 {
     bool ret = true;
     TableItemDataPointer pID = mapsFullpathToItem_[pathCombine(dbDir,dbFile)];
-    Q_ASSERT(pID);
+
     if(pID)
     {
         ret &= pID->Rename(dbDir,dbFile,newdir,newfile);
