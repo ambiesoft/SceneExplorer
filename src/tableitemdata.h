@@ -28,7 +28,7 @@ class TableItemData
     QString vcodec_;
     QString acodec_;
     int vWidth_,vHeight_;
-
+    int opencount_ = 0;
     TableItemData(const QStringList& files,
                   const QString& movieDirectory,
                   const QString& movieFileName,
@@ -44,7 +44,8 @@ class TableItemData
                   int bitrate,
                   const QString& vcodec,
                   const QString& acodec,
-                  int vWidth,int vHeight);
+                  int vWidth,int vHeight,
+                  int opencount);
 
 public:
 	static TableItemDataPointer Create(
@@ -63,7 +64,8 @@ public:
         int bitrate,
 		const QString& vcodec,
 		const QString& acodec,
-		int vWidth, int vHeight)
+        int vWidth, int vHeight,
+        int opencount)
 	{
         Q_ASSERT(!movieDirectory.isEmpty());
         Q_ASSERT(!movieFileName.isEmpty());
@@ -88,7 +90,9 @@ public:
 			vcodec,
 			acodec,
 
-			vWidth, vHeight));
+            vWidth, vHeight,
+
+            opencount));
 	}
 	~TableItemData()
 	{
@@ -146,6 +150,9 @@ public:
     qint64 getCtime() const;
     qint64 getWtime() const;
 
+    int getOpenCount() const {
+        return opencount_;
+    }
     int getResolutionMultiplied() const {
         return vWidth_*vHeight_;
     }
@@ -168,6 +175,9 @@ public:
         return true;
     }
     QMap<QString,QVariant> getColumnValues() const;
+	void IncrementOpenCount() {
+		++opencount_;
+	}
 };
 
 #endif // LISTITEMDATA_H

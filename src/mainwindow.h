@@ -9,6 +9,7 @@
 #include "directoryentry.h"
 #include "directoryitem.h"
 #include "findcombobox.h"
+#include "settings.h"
 
 class QThreadPool;
 class QLabel;
@@ -29,8 +30,9 @@ class MainWindow : public QMainWindow
 {
     Q_OBJECT
 
+    Ui::MainWindow *ui;
     // setting keys
-
+    Settings& settings_;
 
 public:
     explicit MainWindow(QWidget *parent, Settings& settings);
@@ -49,7 +51,8 @@ private:
 	bool directoryChanging_ = false;
     QStringList currentDirs_;
     // bool bShowMissing_ = false;
-    void GetSqlAllSetTable(const QStringList& dirs);
+    void GetSqlAllSetTable(const QStringList& dirs,
+                           bool bOnlyMissing = false);
 	QToolButton* btnShowNonExistant_ = nullptr;
     class IDManager
     {
@@ -156,6 +159,11 @@ private:
 
     FindComboBox* comboFind_ = nullptr;
 
+    void onTaskStarted();
+    void onTaskEnded();
+    QTimer* taskMonitorTimer = nullptr;
+
+
 protected:
     virtual void resizeEvent(QResizeEvent *event);
     void closeEvent(QCloseEvent *event);
@@ -171,6 +179,7 @@ private slots:
     void on_action_Stop_triggered();
     void onMenuTask_AboutToShow();
     void onMenuDocking_windows_AboutToShow();
+    void onMenu_Favorites_AboutToShow();
 
     void on_actionSort_by_file_name_triggered();
     void on_actionSort_by_file_size_triggered();
@@ -198,6 +207,12 @@ private slots:
 
     void on_action_Clear_triggered();
 
+    void on_action_Add_current_check_states_triggered();
+    void on_FavoriteFolder_triggered(bool checked=false);
+
+    void onTaskTimerTick();
+    void on_actionSort_by_open_count_triggered();
+
 private:
     QThreadPool* pPoolFFmpeg_ = nullptr;
     QThreadPool* getPoolFFmpeg();
@@ -222,7 +237,7 @@ private:
 
     QFileIconProvider fiProvider_;
 
-    Ui::MainWindow *ui;
+
     TableModel* tableModel_;
 	FileMissingFilterProxyModel *proxyModel_;
     QString lastSelectedDir_;
@@ -244,6 +259,7 @@ private:
     void openVideo(const QString& movieFile);
     void openVideoInFolder(const QString& movieFile);
     QString getSelectedVideo();
+    bool IsDirSelected(const QString& dir) const;
 public slots:
 //    void sayBorn(int id,
 //                   const QString& movieFile);
@@ -292,6 +308,7 @@ public slots:
 	void on_Rescan();
 	void on_directoryWidget_Remove();
 	void on_directoryWidget_UncheckAll();
+	void on_directoryWidget_SortByName();
 
     void on_FindCombo_EnterPressed();
 };

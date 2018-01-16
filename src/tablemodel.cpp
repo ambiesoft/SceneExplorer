@@ -11,6 +11,19 @@
 #include "tableitemdata.h"
 #include "tablemodel.h"
 
+static QString dq(const QString& s)
+{
+	if (s.isEmpty())
+		return "\"\"";
+
+	if (s[0] == '\\')
+		return s;
+
+	if (!s.contains(" ") && !s.contains(","))
+		return s;
+
+	return "\"" + s + "\"";
+}
 TableModel::TableModel(QTableView *parent)
     :QAbstractTableModel(parent)
 {
@@ -115,6 +128,12 @@ QString size_human(const qint64& size)
     }
     return QString().setNum(num,'f',2)+ " " +unit;
 }
+
+QString filetime_human(const qint64& filetime)
+{
+	QDateTime qdt = QDateTime::fromTime_t(filetime);
+	return dq(qdt.toString(Qt::DateFormat::DefaultLocaleShortDate));
+}
 QString duration_human(double duration)
 {
     int iduration = (int)(duration);
@@ -129,19 +148,7 @@ QString duration_human(double duration)
                 QString("%1").arg((int)seconds, 2, 10, QChar('0'));
 
 }
-static QString dq(const QString& s)
-{
-	if (s.isEmpty())
-		return "\"\"";
 
-	if (s[0] == '\\')
-		return s;
-
-    if (!s.contains(" ") && !s.contains(","))
-		return s;
-
-	return "\"" + s + "\"";
-}
 static QString bitrate_human(int bitrate)
 {
     float num = bitrate;
@@ -163,8 +170,11 @@ QString TableModel::GetInfoText(TableItemData& item) const
     QString ret;
     static const char* sep = "   ";
 
-    ret.append(size_human(item.getSize()));
-    ret.append(sep);
+	ret.append(size_human(item.getSize()));
+	ret.append(sep);
+
+	ret.append(filetime_human(item.getWtime()));
+	ret.append(sep);
 
     ret.append(duration_human(item.getDuration()));
     ret.append(sep);
@@ -184,7 +194,10 @@ QString TableModel::GetInfoText(TableItemData& item) const
 	ret.append(sep);
 
     ret.append(dq(item.getMovieDirectory()));
-	// ret.append(sep);
+    ret.append(sep);
+
+    ret.append(QString::number(item.getOpenCount()));
+    // ret.append(sep);
 
     return ret;
 }
@@ -319,22 +332,18 @@ class SortFunctor
 		{
         case TableModel::SORTCOLUMN::SORT_FILENAME:
 			return (v1->getMovieFileFull() < v2->getMovieFileFull());
-			break;
         case TableModel::SORTCOLUMN::SORT_SIZE:
 			return (v1->getSize() < v2->getSize());
-			break;
         case TableModel::SORTCOLUMN::SORT_WTIME:
             return (v1->getWtime() < v2->getWtime());
-            break;
         case TableModel::SORTCOLUMN::SORT_RESOLUTION:
             return (v1->getResolutionMultiplied() < v2->getResolutionMultiplied());
-            break;
         case TableModel::SORTCOLUMN::SORT_DURATION:
             return (v1->getDuration() < v2->getDuration());
-            break;
         case TableModel::SORTCOLUMN::SORT_BITRATE:
             return (v1->getBitrate() < v2->getBitrate());
-            break;
+        case TableModel::SORTCOLUMN::SORT_OPENCOUNT:
+            return (v1->getOpenCount() < v2->getOpenCount());
         default:
 			Q_ASSERT(false);
 		}
@@ -381,6 +390,7 @@ QString TableModel::GetSortColumnName(SORTCOLUMN sc)
     case SORT_RESOLUTION: return tr("Resolution");
     case SORT_DURATION:return tr("Duration");
     case SORT_BITRATE:return tr("Bitrate");
+    case SORT_OPENCOUNT:return tr("Open count");
     default :
         Q_ASSERT(false);
 
@@ -455,7 +465,18 @@ bool TableModel::RenameEntry(const QString& dbDir,
     }
     return ret;
 }
+void TableModel::UpdateItem(const QString& movieFile)
+{
+	TableItemDataPointer pID = mapsFullpathToItem_[movieFile];
 
+	if (pID)
+	{
+		pID->IncrementOpenCount();
+		int row = itemDatas_.indexOf(pID);
+		Q_ASSERT(row >= 0);
+		emit dataChanged(createIndex(row * 3, 0), createIndex((row * 3) + 2, 0));
+	}
+}
 //void TableModel::SetShowMissing(bool bToggle)
 //{
 //    if(bShowMissing_==bToggle)

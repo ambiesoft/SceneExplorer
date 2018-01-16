@@ -73,10 +73,14 @@ void MainWindow::sayGoodby(int loopId,  int id,
                             format,
                             bitrate,
                             vcodec,acodec,
-                            vWidth,vHeight
-                );
+                            vWidth,vHeight,
 
-    tableModel_->AppendData(pTID);
+                            0
+                );
+    if(IsDirSelected(canonicalDir(fi.canonicalPath())))
+    {
+        tableModel_->AppendData(pTID);
+    }
 
     int sqlError = gpSQL->AppendData(pTID);
     if(sqlError==0)
@@ -88,13 +92,8 @@ void MainWindow::sayGoodby(int loopId,  int id,
         insertLog(TaskKind::SQL, id, QString("%1 \"%2\"").arg(tr("Failed to write on Database"), movieFile));
     }
 
-    // setTableSpan();
     insertLog(TaskKind::FFMpeg, id, QString("%1 \"%2\"").arg(tr("Done"), movieFile));
 
-
-    //listModel_->AppendData(new ListItemData(files, width, height, movieFile));
-    //ui->listView->update(ui->listView->model()->index(0,0));
-    // ui->listView->dataChanged( model()->dataChanged(QModelIndex(),QModelIndex());
 }
 void MainWindow::sayDead(int loopId, int id)
 {
@@ -116,6 +115,7 @@ void MainWindow::finished_FFMpeg(int loopId, int id)
 
     if(idManager_->isAllTaskFinished())
     {
+        onTaskEnded();
         insertLog(TaskKind::App, 0, tr("All Tasks finished."));
     }
 }

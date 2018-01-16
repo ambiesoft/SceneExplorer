@@ -21,6 +21,7 @@ public:
         SORT_RESOLUTION,
         SORT_DURATION,
         SORT_BITRATE,
+        SORT_OPENCOUNT,
     } ;
     static QString GetSortColumnName(SORTCOLUMN sc);
 private:
@@ -81,7 +82,7 @@ public:
 	bool IsShowMissing() const {
 		return bShowMissing_;
 	}
-
+	void UpdateItem(const QString& movieFile);
 signals:
     void itemCountChanged();
     void sortParameterChanged(SORTCOLUMN sc, bool rev);
@@ -105,7 +106,21 @@ public:
 		QString s = v.toString();
 		return QFile(s).exists();
 	}
-
+    void ensureBottom()
+    {
+        int allcount = rowCount();
+        int startI = allcount-(3*10);
+		if (startI < 0)
+			return;
+        for(int i=startI; i < allcount; ++i)
+        {
+			sourceModel()->data(sourceModel()->index(i,0),Qt::DecorationRole);
+			sourceModel()->data(sourceModel()->index(i,1),Qt::DecorationRole);
+			sourceModel()->data(sourceModel()->index(i,2),Qt::DecorationRole);
+			sourceModel()->data(sourceModel()->index(i,3),Qt::DecorationRole);
+			sourceModel()->data(sourceModel()->index(i,4),Qt::DecorationRole);
+        }
+    }
 };
 //#include <QItemDelegate>
 //class ImageSizeDelegate : public QItemDelegate 

@@ -267,8 +267,18 @@ bool TaskFFmpeg::run3(QString& errorReason)
 
         if(i==1)
         {
-            if(!QFile(actualFile).exists())
-                return false;
+			if (!QFile(actualFile).exists())
+			{
+				errorReason = tr("Failed to create thumbnail");
+				QByteArray baErr = ffmpeg.readAllStandardError();
+				QString strErr = baErr.data();
+				if (!strErr.isEmpty())
+				{
+					errorReason += "\n\n";
+					errorReason += strErr;
+				}
+				return false;
+			}
         }
         emitFiles.append(filename);
     }

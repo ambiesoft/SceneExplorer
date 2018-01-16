@@ -32,6 +32,11 @@ public:
     bool IsMissingItem() const {
         return itemType_==DI_MISSING;
     }
+
+    bool IsChecked() const {
+        return checkState()==Qt::Checked;
+    }
+	
 };
 
 #endif // DIRECTORYITEM_H

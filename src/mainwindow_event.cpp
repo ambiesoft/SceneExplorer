@@ -43,17 +43,16 @@ void MainWindow::closeEvent(QCloseEvent *event) {
 
     clearAllPool();
 
-    Settings settings;
     if(!this->isMaximized() && !this->isMinimized())
     {
-        settings.setValue(Consts::KEY_SIZE, this->size());
-        settings.setValue(Consts::KEY_TREESIZE, ui->directoryWidget->size());
-        settings.setValue(Consts::KEY_TXTLOGSIZE, ui->txtLog->size());
-        settings.setValue(Consts::KEY_LISTTASKSIZE, ui->listTask->size());
+        settings_.setValue(Consts::KEY_SIZE, this->size());
+        settings_.setValue(Consts::KEY_TREESIZE, ui->directoryWidget->size());
+        settings_.setValue(Consts::KEY_TXTLOGSIZE, ui->txtLog->size());
+        settings_.setValue(Consts::KEY_LISTTASKSIZE, ui->listTask->size());
     }
-    settings.setValue(Consts::KEY_LASTSELECTEDDIRECTORY, lastSelectedDir_);
+    settings_.setValue(Consts::KEY_LASTSELECTEDDIRECTORY, lastSelectedDir_);
 
-	settings.setValue(Consts::KEY_SHOWMISSING, btnShowNonExistant_->isChecked());
+    settings_.setValue(Consts::KEY_SHOWMISSING, btnShowNonExistant_->isChecked());
 
     QStringList userDirs;
     QList<QVariant> userSelecteds;
@@ -63,8 +62,8 @@ void MainWindow::closeEvent(QCloseEvent *event) {
         DirectoryItem* item = (DirectoryItem*)ui->directoryWidget->item(i);
         if(item->IsAllItem())
         {
-            settings.setValue(Consts::KEY_KEY_USERENTRY_DIRECTORY_ALL_SELECTED, item->isSelected());
-            settings.setValue(Consts::KEY_KEY_USERENTRY_DIRECTORY_ALL_CHECKED, item->checkState()==Qt::Checked);
+            settings_.setValue(Consts::KEY_KEY_USERENTRY_DIRECTORY_ALL_SELECTED, item->isSelected());
+            settings_.setValue(Consts::KEY_KEY_USERENTRY_DIRECTORY_ALL_CHECKED, item->checkState()==Qt::Checked);
         }
         else if(item->IsNormalItem())
         {
@@ -77,7 +76,7 @@ void MainWindow::closeEvent(QCloseEvent *event) {
             // nothing
         }
     }
-    settings.setValue(Consts::KEY_USERENTRY_DIRECTORIES, userDirs);
-    settings.setValue(Consts::KEY_USERENTRY_SELECTED, userSelecteds);
-    settings.setValue(Consts::KEY_USERENTRY_CHECKEDS, userCheckeds);
+    settings_.setValue(Consts::KEY_USERENTRY_DIRECTORIES, userDirs);
+    settings_.setValue(Consts::KEY_USERENTRY_SELECTED, userSelecteds);
+    settings_.setValue(Consts::KEY_USERENTRY_CHECKEDS, userCheckeds);
 }

@@ -69,7 +69,7 @@
      <x>0</x>
      <y>0</y>
      <width>874</width>
-     <height>18</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">
@@ -96,6 +96,7 @@
     <property name="title">
      <string>&amp;Option</string>
     </property>
+    <addaction name="action_Options"/>
    </widget>
    <widget class="QMenu" name="menu_Task">
     <property name="title">
@@ -125,13 +126,22 @@
     <addaction name="actionSort_by_resolution"/>
     <addaction name="actionSort_by_duration"/>
     <addaction name="actionSort_by_bitrate"/>
+    <addaction name="actionSort_by_open_count"/>
     <addaction name="separator"/>
     <addaction name="action_Top"/>
     <addaction name="action_Bottom"/>
    </widget>
+   <widget class="QMenu" name="menu_Favorites">
+    <property name="title">
+     <string>&amp;Favorites</string>
+    </property>
+    <addaction name="action_Add_current_check_states"/>
+    <addaction name="separator"/>
+   </widget>
    <addaction name="menu_File"/>
    <addaction name="menu_View"/>
    <addaction name="menu_Edit"/>
+   <addaction name="menu_Favorites"/>
    <addaction name="menu_Task"/>
    <addaction name="menu_Option"/>
    <addaction name="menu_Help"/>
@@ -155,10 +165,14 @@
    <addaction name="actionSort_by_file_name"/>
    <addaction name="actionSort_by_file_size"/>
    <addaction name="actionSort_by_wtime"/>
+   <addaction name="actionSort_by_open_count"/>
    <addaction name="separator"/>
    <addaction name="action_Top"/>
    <addaction name="action_Bottom"/>
    <addaction name="separator"/>
+   <addaction name="placeHolder_ShowMissing"/>
+   <addaction name="separator"/>
+   <addaction name="placeHolder_ComboBox"/>
    <addaction name="action_Find"/>
    <addaction name="action_Clear"/>
    <addaction name="separator"/>
@@ -404,6 +418,26 @@
   <action name="action_Clear">
    <property name="text">
     <string>&amp;Clear</string>
+   </property>
+  </action>
+  <action name="placeHolder_ShowMissing">
+   <property name="text">
+    <string>placeHolder_ShowMissing</string>
+   </property>
+  </action>
+  <action name="placeHolder_ComboBox">
+   <property name="text">
+    <string>placeHolder_ComboBox</string>
+   </property>
+  </action>
+  <action name="action_Add_current_check_states">
+   <property name="text">
+    <string>&amp;Add current check states</string>
+   </property>
+  </action>
+  <action name="actionSort_by_open_count">
+   <property name="text">
+    <string>Sort by open count</string>
    </property>
   </action>
  </widget>

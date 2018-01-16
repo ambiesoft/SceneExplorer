@@ -20,7 +20,7 @@ static void showFatal(const QString& error)
     Alert(nullptr, error);
 }
 
-#define SQC(siki) do { if(!(siki)) { Q_ASSERT(false); showFatal(db_.lastError().text()); return false;}} while(false)
+#define SQC(Q,siki) do { if(!( Q.siki )) { showFatal((Q).lastError().text()); Q_ASSERT(false); return false;}} while(false)
 
 Sql::Sql() : db_(QSqlDatabase::addDatabase("QSQLITE"))
 {
@@ -29,15 +29,34 @@ Sql::Sql() : db_(QSqlDatabase::addDatabase("QSQLITE"))
 		 return;
 
      QSqlQuery query;
-     query.exec("create table FileInfo(size, ctime, wtime, directory, name, salient, thumbid)");
-     query.exec("alter table FileInfo add duration");
-     query.exec("alter table FileInfo add format");
-     query.exec("alter table FileInfo add bitrate");
-     query.exec("alter table FileInfo add vcodec");
-     query.exec("alter table FileInfo add acodec");
-     query.exec("alter table FileInfo add vwidth");
-     query.exec("alter table FileInfo add vheight");
-
+	 //query.exec("create table FileInfo(size, ctime, wtime, directory, name, salient, thumbid)");
+	 //query.exec("alter table FileInfo add duration");
+	 //query.exec("alter table FileInfo add format");
+	 //query.exec("alter table FileInfo add bitrate");
+	 //query.exec("alter table FileInfo add vcodec");
+	 //query.exec("alter table FileInfo add acodec");
+	 //query.exec("alter table FileInfo add vwidth");
+	 //query.exec("alter table FileInfo add vheight");
+	 
+	 query.exec("CREATE TABLE FileInfo( "
+		 "directory TEXT,"
+		 "name TEXT,"
+		 "size INT NOT NULL DEFAULT '0',"
+		 "ctime INT NOT NULL DEFAULT '0',"
+		 "wtime INT NOT NULL DEFAULT '0',"
+		 "salient TEXT,"
+		 "thumbid TEXT,"
+		 "duration INT NOT NULL DEFAULT '0',"
+		 "format TEXT,"
+		 "bitrate INT NOT NULL DEFAULT '0',"
+		 "vcodec TEXT,"
+		 "acodec TEXT,"
+		 "vwidth INT NOT NULL DEFAULT '0',"
+		 "vheight INT NOT NULL DEFAULT '0',"
+		 "opencount INT NOT NULL DEFAULT '0')"
+	 );
+	 qDebug() << query.lastError().text();
+	 
 	 query.exec("CREATE INDEX idx_directory ON FileInfo(directory)");
 	 query.exec("CREATE INDEX idx_name ON FileInfo(name)");
 	 query.exec("CREATE INDEX idx_salient ON FileInfo(salient)");
@@ -514,30 +533,26 @@ QString Sql::getErrorStrig(int thumbRet)
 //}
 bool Sql::GetAll(QList<TableItemDataPointer>& v,
                  const QStringList& dirs,
-                 const QString& find)
+                 const QString& find,
+                 bool bOnlyMissing)
 {
     QSqlQuery query(db_);
     if(dirs.isEmpty())
     {
         if(find.isEmpty())
         {
-            if(!query.exec("select * from FileInfo"))
-            {
-                Q_ASSERT(false);
-                return false;
-            }
+			SQC(query, exec("select * from FileInfo"));
         }
         else
         {
             int i=0;
-            SQC(query.prepare("select * from FileInfo where name like ?"));
+            SQC(query,prepare("select * from FileInfo where name like ?"));
             query.bindValue(i++, "%"+find+"%");
-            SQC(query.exec());
+            SQC(query,exec());
         }
     }
     else
     {
-        bool ok = true;
         QString strPrepare("select * from FileInfo where (");
         for(int i=0 ; i < dirs.count(); ++i)
         {
@@ -549,7 +564,7 @@ bool Sql::GetAll(QList<TableItemDataPointer>& v,
         if(!find.isEmpty())
             strPrepare += " and name like ?";
 
-        ok &= query.prepare(strPrepare);
+		SQC(query, prepare(strPrepare));
 
         int i;
         for(i=0 ; i < dirs.count(); ++i)
@@ -560,12 +575,7 @@ bool Sql::GetAll(QList<TableItemDataPointer>& v,
         if(!find.isEmpty())
             query.bindValue(i++, "%"+find+"%");
 
-        ok &= query.exec();
-        if(!ok)
-        {
-            Q_ASSERT(false);
-            return false;
-        }
+        SQC(query,exec());
     }
     while (query.next()) {
         QString directory = query.value("directory").toString();
@@ -575,9 +585,12 @@ bool Sql::GetAll(QList<TableItemDataPointer>& v,
         if(name.isEmpty())
             continue;
 
-        //QString movieFileFull = pathCombine(directory,name);
-        //if(removeMissing && !QFile(movieFileFull).exists())
-        //     continue;
+        if(bOnlyMissing)
+        {
+            QString movieFileFull = pathCombine(directory,name);
+            if(QFile(movieFileFull).exists())
+                 continue;
+        }
 
         QString thumbid = query.value("thumbid").toString();
         QStringList thumbs;
@@ -602,6 +615,8 @@ bool Sql::GetAll(QList<TableItemDataPointer>& v,
 
         int vwidth = query.value("vwidth").toInt();
         int vheight = query.value("vheight").toInt();
+
+        int opencount = query.value("opencount").toInt();
 		TableItemDataPointer pID = TableItemData::Create(thumbs,
                                                directory,
                                                name,
@@ -616,12 +631,32 @@ bool Sql::GetAll(QList<TableItemDataPointer>& v,
                                                bitrate,
 
                                                vcodec,acodec,
-                                               vwidth,vheight);
+                                               vwidth,vheight,
+
+                                               opencount);
         v.append(pID);
     }
     return true;
 }
+bool Sql::IncrementOpenCount(const QString& movieFile)
+{
+    QFileInfo fi(movieFile);
+    QString dir = canonicalDir(fi.absolutePath());
+    QString file = fi.fileName();
 
+    QString state = "UPDATE FileInfo SET opencount=opencount+1 WHERE "
+            "directory=? AND name=?";
+    QSqlQuery query;
+    SQC(query,prepare(state));
+
+    int i=0;
+    query.bindValue(i++, dir);
+    query.bindValue(i++, file);
+
+    SQC(query,exec());
+	Q_ASSERT(query.numRowsAffected() == 1);
+    return true;
+}
 bool Sql::RenameEntry(const QString& oldDirc,
                       const QString& oldFile,
                       const QString& newDirc,
@@ -636,24 +671,16 @@ bool Sql::RenameEntry(const QString& oldDirc,
     if(!QFile(pathCombine(oldDir, oldFile)).exists())
     {
         QSqlQuery query;
-        if(!query.prepare("update FileInfo "
+        SQC(query,prepare("update FileInfo "
                       "set directory=?,name=? "
-                      "where directory=? and name=?"))
-        {
-            Q_ASSERT(false);
-            return false;
-        }
+			"where directory=? and name=?"));
         int i=0;
         query.bindValue(i++, newDir);
         query.bindValue(i++, newFile);
         query.bindValue(i++, oldDir);
         query.bindValue(i++, oldFile);
 
-        if(!query.exec())
-        {
-            Q_ASSERT(false);
-            return false;
-        }
+		SQC(query, exec());
     }
     return true;
 }
@@ -703,18 +730,10 @@ bool Sql::getEntryFromSalient(const QString& salient,
                               QList<qint64>& sizesDB)
 {
     QSqlQuery query;
-    if(!query.prepare("select directory, name, size from FileInfo where "
-                  "salient = ?"))
-    {
-        Q_ASSERT(false);
-        return false;
-    }
-    query.bindValue(0, salient);
-    if(!query.exec())
-    {
-        Q_ASSERT(false);
-        return false;
-    }
+	SQC(query, prepare("select directory, name, size from FileInfo where "
+		"salient = ?"));
+	query.bindValue(0, salient);
+	SQC(query, exec());
 
     while(query.next())
     {
@@ -737,14 +756,14 @@ bool Sql::hasEntry(const QString& dir,
               const QString& sa)
 {
     QSqlQuery query;
-    SQC(query.prepare("select name from FileInfo where "
+    SQC(query,prepare("select name from FileInfo where "
                   "directory=? and name=? and salient=?"));
     int i=0;
     query.bindValue(i++, dir);
     query.bindValue(i++, file);
     query.bindValue(i++, sa);
 
-    SQC(query.exec());
+    SQC(query,exec());
     return query.next();
 }
 bool Sql::RemoveEntry(const QString& dir,
@@ -756,6 +775,6 @@ bool Sql::RemoveEntry(const QString& dir,
 
     query.bindValue(i++, dir);
     query.bindValue(i++, file);
-    SQC(query.exec());
+    SQC(query,exec());
     return true;
 }

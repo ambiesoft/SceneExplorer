@@ -47,7 +47,8 @@
 
 MainWindow::MainWindow(QWidget *parent, Settings& settings) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    settings_(settings)
 {
     ui->setupUi(this);
     idManager_ = new IDManager(this);
@@ -59,6 +60,8 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
                      this, &MainWindow::onMenuTask_AboutToShow);
     QObject::connect(ui->menu_Docking_windows, &QMenu::aboutToShow,
                      this, &MainWindow::onMenuDocking_windows_AboutToShow);
+    QObject::connect(ui->menu_Favorites, &QMenu::aboutToShow,
+                     this, &MainWindow::onMenu_Favorites_AboutToShow);
 
 
 	// table
@@ -82,7 +85,7 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
     QObject::connect(treeSelectionModel, &QItemSelectionModel::selectionChanged,
                      this, &MainWindow::on_directoryWidget_selectionChanged);
 	QObject::connect(ui->directoryWidget, &DirectoryEntry::itemChanged,
-		this, &MainWindow::on_directoryWidget_itemChanged);
+                     this, &MainWindow::on_directoryWidget_itemChanged);
 
 
     // tool bar
@@ -106,32 +109,32 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
                      this, &MainWindow::on_FindCombo_EnterPressed);
 
 
-    ui->mainToolBar->insertWidget(ui->action_Top, btnShowNonExistant_);
-    ui->mainToolBar->insertSeparator(ui->action_Top);
-    ui->mainToolBar->insertWidget(ui->action_Find, comboFind_);
+    ui->mainToolBar->insertWidget(ui->placeHolder_ShowMissing, btnShowNonExistant_);
+    ui->mainToolBar->insertWidget(ui->placeHolder_ComboBox, comboFind_);
 
-
+    ui->mainToolBar->removeAction(ui->placeHolder_ShowMissing);
+    ui->mainToolBar->removeAction(ui->placeHolder_ComboBox);
 
 
     // status bar
     taskModel_ = new TaskModel(ui->listTask);
     ui->listTask->setModel(taskModel_);
 
+    slItemSort_ = new QLabel(this);
+    ui->statusBar->addPermanentWidget(slItemSort_);
+
+    slItemCount_ = new QLabel(this);
+    ui->statusBar->addPermanentWidget(slItemCount_);
 
     slTask_ = new QLabel(this);
     ui->statusBar->addPermanentWidget(slTask_);
     idManager_->Clear();
 
-    slItemCount_ = new QLabel(this);
-    ui->statusBar->addPermanentWidget(slItemCount_);
-
-    slItemSort_ = new QLabel(this);
-    ui->statusBar->addPermanentWidget(slItemSort_);
-
-
     slPaused_ = new QLabel(this);
     slPaused_->hide();
     ui->statusBar->addPermanentWidget(slPaused_);
+
+
 
     QVariant vVal;
 
@@ -240,6 +243,7 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
             return;
         }
     }
+	AddUserEntryDirectory(DirectoryItem::DI_MISSING, QString(), false, false);
 	initialized_ = true;
 }
 
@@ -707,6 +711,7 @@ void MainWindow::checkTaskFinished()
 {
     if(idManager_->isAllTaskFinished())
     {
+        onTaskEnded();
         insertLog(TaskKind::App, 0, tr("All Tasks finished."));
     }
 }
@@ -875,6 +880,7 @@ void MainWindow::directoryChangedCommon(bool bForceRead)
 	WaitCursor wc;
 
     QStringList dirs;
+    bool bOnlyMissing = false;
     for(int i=0 ; i < ui->directoryWidget->count(); ++i)
     {
         DirectoryItem* item = (DirectoryItem*)ui->directoryWidget->item(i);
@@ -886,6 +892,18 @@ void MainWindow::directoryChangedCommon(bool bForceRead)
                 break;
             }
         }
+        else if(item->IsMissingItem())
+        {
+            if(item->isSelected())
+            {
+                dirs = QStringList();
+                bOnlyMissing = true;
+                bForceRead = true;
+                break;
+            }
+        }
+
+
         if(item->checkState()==Qt::Checked)
         {
             dirs.append(item->text());
@@ -906,17 +924,17 @@ void MainWindow::directoryChangedCommon(bool bForceRead)
     currentDirs_ = dirs;
 
 
-    GetSqlAllSetTable(dirs);
+    GetSqlAllSetTable(dirs, bOnlyMissing);
 }
 
-void MainWindow::GetSqlAllSetTable(const QStringList& dirs)
+void MainWindow::GetSqlAllSetTable(const QStringList& dirs, bool bOnlyMissing)
 {
 	tableModel_->SetShowMissing(btnShowNonExistant_->isChecked() );
     QElapsedTimer timer;
     timer.start();
 
     QList<TableItemDataPointer> all;
-    gpSQL->GetAll(all, dirs, comboFind_->currentText());
+    gpSQL->GetAll(all, dirs, comboFind_->currentText(), bOnlyMissing);
 
     insertLog(TaskKind::App,
               0,
@@ -932,11 +950,15 @@ void MainWindow::GetSqlAllSetTable(const QStringList& dirs)
 
 void MainWindow::on_action_Top_triggered()
 {
+	WaitCursor wc;
     ui->tableView->scrollToTop();
 }
 
 void MainWindow::on_action_Bottom_triggered()
 {
+	WaitCursor wc;
+    proxyModel_->ensureBottom();
+	QApplication::processEvents();
     ui->tableView->scrollToBottom();
 }
 
@@ -979,3 +1001,4 @@ void MainWindow::on_FindCombo_EnterPressed()
 {
     directoryChangedCommon(true);
 }
+
