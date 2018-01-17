@@ -34,7 +34,7 @@
 #include "settings.h"
 #include "waitcursor.h"
 // #include "taskfilter.h"
-
+#include "errorinfoexception.h"
 
 #include "optiondialog.h"
 #include "globals.h"
@@ -65,6 +65,8 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
 
 
 	// table
+    QObject::connect(ui->tableView->verticalScrollBar(), &QScrollBar::valueChanged,
+                     this, &MainWindow::on_tableView_scrollChanged);
     tableModel_=new TableModel(ui->tableView);
 	proxyModel_ = new FileMissingFilterProxyModel(ui->tableView);
 	proxyModel_->setSourceModel(tableModel_);
@@ -585,7 +587,11 @@ void MainWindow::afterGetDir(int loopId, int id,
                               arg(pathCombine(dir,file)));
                     if(gpSQL->RenameEntry(dirsDB[i], filesDB[i], dir, file))
                     {
-                        tableModel_->RenameEntry(dirsDB[i], filesDB[i], dir, file);
+                        if(!tableModel_->RenameEntry(dirsDB[i], filesDB[i], dir, file))
+                        {
+                            // TODO append data
+                            // tableModel_->AppendData();
+                        }
                     }
                     renamed = true;
                     break;
@@ -821,17 +827,18 @@ void MainWindow::checkTaskFinished()
 
 
 
-QString MainWindow::getSelectedVideo()
+QString MainWindow::getSelectedVideo(bool bNativeFormat)
 {
     QItemSelectionModel *select = ui->tableView->selectionModel();
 
     Q_ASSERT(select->hasSelection());
-
-    QVariant v = proxyModel_->data(select->selectedIndexes()[0], TableModel::MovieFile);
+    if(!select->hasSelection())
+        return QString();
+    QVariant v = proxyModel_->data(select->selectedIndexes()[0], TableModel::MovieFileFull);
     QString s = v.toString();
     Q_ASSERT(!s.isEmpty());
 
-    return QDir::toNativeSeparators(s);
+    return bNativeFormat ? QDir::toNativeSeparators(s) : s;
 }
 void MainWindow::openSelectedVideo()
 {
@@ -846,6 +853,72 @@ void MainWindow::copySelectedVideoPath()
 {
     QApplication::clipboard()->setText(getSelectedVideo());
 }
+void MainWindow::removeFromDatabase()
+{
+    QString movieFile = getSelectedVideo(false);
+    if(movieFile.isEmpty())
+    {
+        Alert(this, tr("Movie file is empty."));
+        return;
+    }
+
+
+    QMessageBox msgbox(this);
+    QCheckBox cb(tr("Also remove from external media"));
+    msgbox.setText(QString(tr("Do you want to remove \"%1\"?")).
+                   arg(movieFile));
+    msgbox.setIcon(QMessageBox::Icon::Question);
+    msgbox.addButton(QMessageBox::Yes);
+    msgbox.addButton(QMessageBox::No);
+    msgbox.setDefaultButton(QMessageBox::No);
+    msgbox.setCheckBox(&cb);
+
+//    QObject::connect(&cb, &QCheckBox::stateChanged, [this](int state){
+//        if (static_cast<Qt::CheckState>(state) == Qt::CheckState::Checked) {
+//            this->showMsgBox = false;
+//        }
+//    });
+
+    if(msgbox.exec() != QMessageBox::Yes)
+        return;
+    bool bRemoveFromHardDisk = cb.checkState()==Qt::Checked;
+
+//    if(!YesNo(this,
+//          QString(tr("Do you want to remove \"%1\" from database?")).
+//          arg(movieFile)))
+//    {
+//        return;
+//    }
+    QString error;
+    QString dir,name;
+    canonicalDirAndName(movieFile, dir, name);
+    if(dir.isEmpty() || name.isEmpty())
+    {
+        Alert(this, tr("Directory or name is empty."));
+        return;
+    }
+    if(!gpSQL->RemoveEntry(dir,name,&error))
+    {
+        Alert(this,
+              QString(tr("Failed to remove \"%1\".")).
+              arg(movieFile));
+        return;
+    }
+    tableModel_->RemoveItem(movieFile);
+
+    if(bRemoveFromHardDisk)
+    {
+        try
+        {
+            MoveToTrashImpl(movieFile);
+        }
+        catch(ErrorInfoException& ex)
+        {
+            Alert(this, ex.getErrorInfo());
+        }
+    }
+}
+
 void MainWindow::copySelectedVideoFilename()
 {
     QFileInfo fi(getSelectedVideo());
@@ -973,7 +1046,8 @@ void MainWindow::on_directoryWidget_itemChanged(QListWidgetItem *item)
 
 void MainWindow::tableItemCountChanged()
 {
-    slItemCount_->setText(QString(tr("Items: %1")).arg(tableModel_->GetItemCount()));
+    // slItemCount_->setText(QString(tr("Items: %1")).arg(tableModel_->GetItemCount()));
+    slItemCount_->setText(QString(tr("Items: %1")).arg(proxyModel_->GetItemCount()));
 }
 void MainWindow::tableSortParameterChanged(TableModel::SORTCOLUMN sc, bool rev)
 {
@@ -1004,3 +1078,19 @@ void MainWindow::on_FindCombo_EnterPressed()
     directoryChangedCommon(true);
 }
 
+void MainWindow::on_tableView_scrollChanged(int pos)
+{
+    Q_UNUSED(pos);
+
+    QModelIndex indexTop = ui->tableView->indexAt(ui->tableView->rect().topLeft());
+    QModelIndex indexBottom = ui->tableView->indexAt(ui->tableView->rect().bottomLeft());
+    int rowCountPerScreen = indexBottom.row()-indexTop.row()+1;
+
+    int rowBottom = indexBottom.row();
+    int maxBottom = rowBottom + rowCountPerScreen; // upto next page
+    for(int i=rowBottom; i < maxBottom; ++i)
+    {
+        QModelIndex mi = proxyModel_->index(i,0);
+        proxyModel_->data(mi, Qt::DecorationRole);
+    }
+}

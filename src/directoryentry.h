@@ -27,6 +27,8 @@ public:
 
     bool IsTopNormalItem(int row) const;
     bool IsBottomNormalItem(int row) const;
+
+    void SortNormalItems();
 };
 
 #endif // DIRECTORYENTRY_H

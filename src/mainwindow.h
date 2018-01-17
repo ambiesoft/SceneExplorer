@@ -258,7 +258,7 @@ private:
 
     void openVideo(const QString& movieFile);
     void openVideoInFolder(const QString& movieFile);
-    QString getSelectedVideo();
+    QString getSelectedVideo(bool bNativeFormat = true);
     bool IsDirSelected(const QString& dir) const;
 public slots:
 //    void sayBorn(int id,
@@ -301,6 +301,7 @@ public slots:
     void openSelectedVideoInFolder();
     void copySelectedVideoPath();
     void copySelectedVideoFilename();
+    void removeFromDatabase();
 
     void tableItemCountChanged();
     void tableSortParameterChanged(TableModel::SORTCOLUMN sc, bool rev);
@@ -312,6 +313,8 @@ public slots:
 	void on_directoryWidget_MoveUp();
     void on_directoryWidget_MoveDown();
     void on_FindCombo_EnterPressed();
+
+    void on_tableView_scrollChanged(int pos);
 };
 
 #endif // MAINWINDOW_H

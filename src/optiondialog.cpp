@@ -12,10 +12,10 @@ OptionDialog::OptionDialog(QWidget* parent)
 
 void OptionDialog::showEvent(QShowEvent *ev)
 {
-    ui.spinMaxFFmpegCount->setValue(maxff_);
+    ui.spinBoxThumb->setValue(maxff_);
     QDialog::showEvent(ev);
 }
 void OptionDialog::on_buttonBox_accepted()
 {
-    maxff_ = ui.spinMaxFFmpegCount->value();
+    maxff_ = ui.spinBoxThumb->value();
 }

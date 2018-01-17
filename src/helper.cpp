@@ -37,6 +37,12 @@ QString canonicalDir(const QString& dir)
         return dir+'/';
     return rstrip(dir, '/') + '/';
 }
+void canonicalDirAndName(const QString& full, QString&dir, QString& name)
+{
+    QFileInfo fi(full);
+    dir = canonicalDir(fi.absolutePath());
+    name = fi.fileName();
+}
 void Info(QWidget* parent, QString message)
 {
 	QMessageBox msgBox(parent);

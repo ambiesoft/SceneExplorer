@@ -7,83 +7,47 @@
     <x>0</x>
     <y>0</y>
     <width>562</width>
-    <height>394</height>
+    <height>93</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
-  <widget class="QDialogButtonBox" name="buttonBox">
-   <property name="geometry">
-    <rect>
-     <x>390</x>
-     <y>360</y>
-     <width>160</width>
-     <height>25</height>
-    </rect>
-   </property>
-   <property name="orientation">
-    <enum>Qt::Horizontal</enum>
-   </property>
-   <property name="standardButtons">
-    <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-   </property>
-  </widget>
-  <widget class="QTabWidget" name="tabWidget">
-   <property name="geometry">
-    <rect>
-     <x>10</x>
-     <y>10</y>
-     <width>541</width>
-     <height>341</height>
-    </rect>
-   </property>
-   <property name="currentIndex">
-    <number>1</number>
-   </property>
-   <widget class="QWidget" name="tabGeneral">
-    <attribute name="title">
-     <string>Tab 1</string>
-    </attribute>
-    <layout class="QFormLayout" name="formLayout">
-     <item row="0" column="0">
-      <widget class="QLabel" name="label">
-       <property name="text">
-        <string>Thread Count:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QSpinBox" name="spinMaxFFmpegCount"/>
-     </item>
-    </layout>
-   </widget>
-   <widget class="QWidget" name="tab_2">
-    <attribute name="title">
-     <string>Tab 2</string>
-    </attribute>
-    <widget class="QPlainTextEdit" name="plainTextEdit">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>160</y>
-       <width>511</width>
-       <height>131</height>
-      </rect>
+  <layout class="QFormLayout" name="formLayout">
+   <item row="1" column="0">
+    <widget class="QLabel" name="labelThumb">
+     <property name="text">
+      <string>Thread Count Thumbnailing:</string>
+     </property>
+     <property name="buddy">
+      <cstring>spinBoxThumb</cstring>
      </property>
     </widget>
-    <widget class="QPlainTextEdit" name="plainTextEdit_2">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>10</y>
-       <width>511</width>
-       <height>131</height>
-      </rect>
+   </item>
+   <item row="1" column="1">
+    <widget class="QSpinBox" name="spinBoxThumb"/>
+   </item>
+   <item row="3" column="1">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
      </property>
     </widget>
-   </widget>
-  </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="labelGetDir">
+     <property name="text">
+      <string>Thread Count Get Direcotry:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QSpinBox" name="spinBoxGetDir"/>
+   </item>
+  </layout>
  </widget>
  <resources/>
  <connections>

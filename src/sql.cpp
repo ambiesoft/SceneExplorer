@@ -481,7 +481,7 @@ int Sql::hasThumb(const QString& movieFile)
             t = pathCombine("thumbs", t);
             if(!QFile(t).exists())
             {
-                removeEntry(thumbid);
+                RemoveEntryFromThumbID(thumbid);
                 return THUMBFILE_NOT_FOUND;
             }
         }
@@ -491,7 +491,7 @@ int Sql::hasThumb(const QString& movieFile)
     }
     return THUMB_NOT_EXIST;
 }
-int Sql::removeEntry(const QString& thumbid)
+int Sql::RemoveEntryFromThumbID(const QString& thumbid)
 {
     if(!isUUID(thumbid))
         return THUMBID_IS_NOT_UUID;
@@ -771,7 +771,8 @@ bool Sql::hasEntry(const QString& dir,
     return query.next();
 }
 bool Sql::RemoveEntry(const QString& dir,
-                 const QString& file)
+                      const QString& file,
+                      QString* error)
 {
     QSqlQuery& query = *getDeleteFromDirectoryName();
 
@@ -780,5 +781,14 @@ bool Sql::RemoveEntry(const QString& dir,
     query.bindValue(i++, dir);
     query.bindValue(i++, file);
     SQC(query,exec());
+    if(1 != query.numRowsAffected())
+    {
+        if(error)
+        {
+            *error = QString(tr("numRowAffected is not 1 but %1.")).
+                    arg(query.numRowsAffected());
+        }
+        return false;
+    }
     return true;
 }

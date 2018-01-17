@@ -143,3 +143,13 @@ bool DirectoryEntry::IsBottomNormalItem(int row) const
     Q_ASSERT(((DirectoryItem*)item(count()-1))->IsMissingItem());
     return row==count()-2;
 }
+void DirectoryEntry::SortNormalItems()
+{
+    DirectoryItem* itemAll = this->takeShowAllItem();
+    Q_ASSERT(itemAll);
+    DirectoryItem* itemMissing = this->takeMissingItem();
+    Q_ASSERT(itemMissing);
+    sortItems();
+    insertItem(0, itemAll);
+    addItem(itemMissing);
+}

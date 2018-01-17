@@ -23,7 +23,7 @@ class Sql : public QObject
                          qint64& ctime,
                          qint64& wtime) const;
 
-    int removeEntry(const QString& thumbid);
+    int RemoveEntryFromThumbID(const QString& thumbid);
     QStringList getAllColumnNames();
     QString getAllColumns(bool bBrace, bool bQ);
     // QString getAllColumnsUpdate(TableItemDataPointer tid);
@@ -102,7 +102,8 @@ public:
                   const QString& file,
                   const QString& sa);
     bool RemoveEntry(const QString& dir,
-                     const QString& file);
+                     const QString& file,
+                     QString* error = nullptr);
 };
 
 #endif // SQL_H

@@ -7,6 +7,7 @@
 
 #include "consts.h"
 #include "helper.h"
+#include "globals.h"
 
 #include "tableitemdata.h"
 #include "tablemodel.h"
@@ -165,38 +166,59 @@ static QString bitrate_human(int bitrate)
     }
     return QString().setNum(num,'f',2)+ " " +unit;
 }
-QString TableModel::GetInfoText(TableItemData& item) const
+static QString resolution_human(int width, int height)
+{
+    return QString::number(width) + "x" + QString::number(height);
+}
+static QString opencount_human(int count)
+{
+    return QString::number(count);
+}
+QString TableModel::GetTitleText(TableItemDataPointer item) const
+{
+    static const char* sep = "   ";
+
+    if(GetSortColumn()==SORT_FILENAME)
+        return item->getMovieFileName();
+
+    QString ret = GetSortColumnValue(item);
+    ret.append(sep);
+    ret.append(item->getMovieFileName());
+
+    return ret;
+}
+QString TableModel::GetInfoText(TableItemDataPointer item) const
 {
     QString ret;
     static const char* sep = "   ";
 
-	ret.append(size_human(item.getSize()));
+    ret.append(size_human(item->getSize()));
 	ret.append(sep);
 
-	ret.append(filetime_human(item.getWtime()));
+    ret.append(filetime_human(item->getWtime()));
 	ret.append(sep);
 
-    ret.append(duration_human(item.getDuration()));
+    ret.append(duration_human(item->getDuration()));
     ret.append(sep);
 
-    ret.append(dq(item.getFormat()));
+    ret.append(dq(item->getFormat()));
     ret.append(sep);
 
-    ret.append(bitrate_human(item.getBitrate()));
+    ret.append(bitrate_human(item->getBitrate()));
     ret.append(sep);
 
-    ret.append(item.getVcodec());
+    ret.append(item->getVcodec());
     ret.append(sep);
-    ret.append(QString::number(item.getVWidth()) + "x" + QString::number(item.getVHeight()));
+    ret.append(resolution_human(item->getVWidth(),item->getVHeight()));
     ret.append(sep);
 
-    ret.append(item.getAcodec());
+    ret.append(item->getAcodec());
 	ret.append(sep);
 
-    ret.append(dq(item.getMovieDirectory()));
+    ret.append(dq(item->getMovieDirectory()));
     ret.append(sep);
 
-    ret.append(QString::number(item.getOpenCount()));
+    ret.append(opencount_human(item->getOpenCount()));
     // ret.append(sep);
 
     return ret;
@@ -210,7 +232,7 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
     bool isImage = mod==1;
 	bool isInfo = mod == 2;
 
-    if(role==TableRole::MovieFile)
+    if(role==TableRole::MovieFileFull)
     {
         return itemDatas_[actualIndex]->getMovieFileFull();
     }
@@ -237,7 +259,7 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
 //                parent_->setSpan(index.row(),0,1,5);
 //                parent_->setSpan(index.row()+3,0,1,5);
 //                parent_->setSpan(index.row()+6,0,1,5);
-                return itemDatas_[actualIndex]->getMovieFileName();
+                return GetTitleText(itemDatas_[actualIndex]); //->getMovieFileName();
             }
             break;
 
@@ -290,7 +312,7 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
 //            parent_->setSpan(index.row(),0,1,5);
 //            parent_->setSpan(index.row()+3,0,1,5);
 //            parent_->setSpan(index.row()+6,0,1,5);
-            return GetInfoText(*(itemDatas_[actualIndex]));
+            return GetInfoText(itemDatas_[actualIndex]);
 		}
 		break;
 
@@ -398,7 +420,23 @@ QString TableModel::GetSortColumnName(SORTCOLUMN sc)
     return QString();
 }
 
+QString TableModel::GetSortColumnValue(TableItemDataPointer item) const
+{
+    switch(GetSortColumn())
+    {
+    case SORT_FILENAME:return item->getMovieFileFull();
+    case SORT_SIZE:return size_human(item->getSize());
+    case SORT_WTIME:return filetime_human(item->getWtime());
+    case SORT_RESOLUTION: return resolution_human(item->getVWidth(),item->getVHeight());
+    case SORT_DURATION:return duration_human(item->getDuration());
+    case SORT_BITRATE:return bitrate_human(item->getBitrate());
+    case SORT_OPENCOUNT:return opencount_human(item->getOpenCount());
+    default :
+        Q_ASSERT(false);
 
+    }
+    return QString();
+}
 
 bool TableModel::GetSortReverse() const
 {
@@ -452,19 +490,19 @@ bool TableModel::RenameEntry(const QString& dbDir,
                  const QString& newdir,
                  const QString& newfile)
 {
-    bool ret = true;
     TableItemDataPointer pID = mapsFullpathToItem_[pathCombine(dbDir,dbFile)];
 
-    if(pID)
-    {
-        ret &= pID->Rename(dbDir,dbFile,newdir,newfile);
+    if(!pID)
+        return false;
 
-        int row = itemDatas_.indexOf(pID);
-        Q_ASSERT(row >= 0);
-        emit dataChanged(createIndex(row*3,0), createIndex((row*3)+2,0));
-    }
-    return ret;
+    VERIFY(pID->Rename(dbDir,dbFile,newdir,newfile));
+
+    int row = itemDatas_.indexOf(pID);
+    Q_ASSERT(row >= 0);
+    emit dataChanged(createIndex(row*3,0), createIndex((row*3)+2,0));
+    return true;
 }
+
 void TableModel::UpdateItem(const QString& movieFile)
 {
 	TableItemDataPointer pID = mapsFullpathToItem_[movieFile];
@@ -476,6 +514,29 @@ void TableModel::UpdateItem(const QString& movieFile)
 		Q_ASSERT(row >= 0);
 		emit dataChanged(createIndex(row * 3, 0), createIndex((row * 3) + 2, 0));
 	}
+}
+void TableModel::RemoveItem(const QString& movieFile)
+{
+    if(movieFile.isEmpty())
+    {
+        Alert(parent_, tr("File is empty."));
+        return;
+    }
+    // QString movieFile = QFileInfo(movieFilec).canonicalFilePath();
+    TableItemDataPointer pID = mapsFullpathToItem_[movieFile];
+
+    if (pID)
+    {
+        VERIFY(1==mapsFullpathToItem_.remove(movieFile));
+
+        int row = itemDatas_.indexOf(pID);
+        Q_ASSERT(row >= 0);
+        //beginRemoveRows(QModelIndex(), row*RowCountPerEntry, (row*RowCountPerEntry)+RowCountPerEntry);
+        beginResetModel();
+        itemDatas_.removeAt(row);
+        //endRemoveRows();
+        endResetModel();
+    }
 }
 //void TableModel::SetShowMissing(bool bToggle)
 //{

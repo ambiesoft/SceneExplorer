@@ -24,6 +24,7 @@ public:
         SORT_OPENCOUNT,
     } ;
     static QString GetSortColumnName(SORTCOLUMN sc);
+    QString GetSortColumnValue(TableItemDataPointer item) const;
 private:
     QList<TableItemDataPointer> itemDatas_;
     QMap<QString, TableItemDataPointer> mapsFullpathToItem_;
@@ -31,7 +32,8 @@ private:
 	bool bShowMissing_ = false;
 
     QTableView* parent_;
-    QString GetInfoText(TableItemData& item) const;
+    QString GetTitleText(TableItemDataPointer item) const;
+    QString GetInfoText(TableItemDataPointer item) const;
 
     // static bool itemDataLessThan(const TableItemDataPointer v1, const TableItemDataPointer v2);
 
@@ -47,8 +49,7 @@ public:
     bool GetSortReverse() const;
 
     enum TableRole {
-        MovieFile = Qt::UserRole + 1,
-        // SelectedMovieFile = Qt::UserRole + 1,
+        MovieFileFull = Qt::UserRole + 1,
     };
     static const int RowCountPerEntry = 3;
 
@@ -83,6 +84,7 @@ public:
 		return bShowMissing_;
 	}
 	void UpdateItem(const QString& movieFile);
+    void RemoveItem(const QString& movieFile);
 signals:
     void itemCountChanged();
     void sortParameterChanged(SORTCOLUMN sc, bool rev);
@@ -102,7 +104,7 @@ public:
 			return true;
 
 		QModelIndex index = sourceModel()->index(sourceRow, 0, sourceParent);
-		QVariant v = sourceModel()->data(index, TableModel::MovieFile);
+        QVariant v = sourceModel()->data(index, TableModel::MovieFileFull);
 		QString s = v.toString();
 		return QFile(s).exists();
 	}
@@ -120,6 +122,9 @@ public:
 			sourceModel()->data(sourceModel()->index(i,3),Qt::DecorationRole);
 			sourceModel()->data(sourceModel()->index(i,4),Qt::DecorationRole);
         }
+    }
+    int GetItemCount() const {
+        return rowCount()/3;
     }
 };
 //#include <QItemDelegate>

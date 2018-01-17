@@ -47,7 +47,7 @@ void MainWindow::openVideoInFolder(const QString& movieFile)
 }
 void MainWindow::on_tableView_doubleClicked(const QModelIndex &index)
 {
-    QVariant v = proxyModel_->data(index, TableModel::TableRole::MovieFile);
+    QVariant v = proxyModel_->data(index, TableModel::TableRole::MovieFileFull);
     Q_ASSERT(v.isValid());
     Q_ASSERT(!v.toString().isEmpty());
 
@@ -404,7 +404,7 @@ void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
     contextMenu.addAction(&actionCopyPath);
 
 
-    // sub menu
+    // sub menu start --->
     QMenu menuCopyOther(tr("C&opy others..."), this);
 
     QAction actionCopyFilename("&Filename");
@@ -413,6 +413,14 @@ void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
     menuCopyOther.addAction(&actionCopyFilename);
 
     contextMenu.addMenu(&menuCopyOther);
+    // <--- sub menu end
+
+    contextMenu.addSeparator();
+
+    QAction actionRemoveFromDB("&Remove from database");
+    connect(&actionRemoveFromDB, SIGNAL(triggered()),
+            this, SLOT(removeFromDatabase()));
+    contextMenu.addAction(&actionRemoveFromDB);
 
     contextMenu.exec(ui->tableView->mapToGlobal(pos));
 }
@@ -469,13 +477,11 @@ void MainWindow::on_directoryWidget_UncheckAll()
 //}
 void MainWindow::on_directoryWidget_SortByName()
 {
-	directoryChanging_ = true;
+    BlockedTrue bt(&directoryChanging_);
 	
-	DirectoryItem* item = ui->directoryWidget->takeShowAllItem();
-	ui->directoryWidget->sortItems();
-	ui->directoryWidget->insertItem(0, item);
+    ui->directoryWidget->SortNormalItems();
 
-	directoryChanging_ = false;
+
 
 	//directoryChanging_ = true;
 	//QList<QListWidgetItem*> allitems;
