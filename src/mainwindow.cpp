@@ -886,9 +886,10 @@ void MainWindow::directoryChangedCommon(bool bForceRead)
         DirectoryItem* item = (DirectoryItem*)ui->directoryWidget->item(i);
         if(item->IsAllItem())
         {
-            if(item->isSelected() || item->checkState()==Qt::Checked)
+            if(item->isSelected())
             {
                 dirs = QStringList();
+				bForceRead = true;
                 break;
             }
         }

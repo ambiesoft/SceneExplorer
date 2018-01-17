@@ -37,17 +37,30 @@ QString canonicalDir(const QString& dir)
         return dir+'/';
     return rstrip(dir, '/') + '/';
 }
+void Info(QWidget* parent, QString message)
+{
+	QMessageBox msgBox;
+	msgBox.setParent(parent);
+	msgBox.setWindowTitle(Consts::APPNAME);
+	// msgBox.setInformativeText(message);
+	msgBox.setText(message);
+	msgBox.setStandardButtons(QMessageBox::Ok);
+	msgBox.setIcon(QMessageBox::Information);
+	msgBox.exec();
+}
 void Alert(QWidget* parent, QString message)
 {
-	QMessageBox msgBox(parent);
-	// msgBox.setText("Name");
-	msgBox.setInformativeText(message);
+	QMessageBox msgBox;
+	msgBox.setParent(parent);
+	// msgBox.setInformativeText(message);
+	msgBox.setText(message);
 	msgBox.setStandardButtons(QMessageBox::Ok);
 	msgBox.exec();
 }
 bool YesNo(QWidget* parent, QString message)
 {
-	QMessageBox msgBox(parent);
+	QMessageBox msgBox;
+	msgBox.setParent(parent);
 	msgBox.setWindowTitle(Consts::APPNAME);
 	msgBox.setText(message);
 	msgBox.setStandardButtons(QMessageBox::Yes);

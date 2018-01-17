@@ -6,6 +6,7 @@
 QString rstrip(const QString& str, QChar c);
 QString pathCombine(const QString& path1, const QString& path2);
 QString canonicalDir(const QString& dir);
+void Info(QWidget* parent, QString message);
 void Alert(QWidget* parent, QString message);
 bool YesNo(QWidget* parent, QString message);
 QString createSalient(const QString& file, const qint64& size);

@@ -12,6 +12,8 @@
 
 #include "taskffmpeg.h"
 
+int TaskFFmpeg::waitMax_ = -1;
+
 TaskFFmpeg::TaskFFmpeg(int loopId, int id,const QString& file)
 {
     loopId_ = loopId;
@@ -52,12 +54,12 @@ bool TaskFFmpeg::getProbe(const QString& file,
                           );
 
     process.start(QProcess::ReadOnly);
-    if(!process.waitForStarted())
+    if(!process.waitForStarted(waitMax_))
     {
         errorReason = tr("waitForStarted failed");
         return false;
     }
-    if(!process.waitForFinished())
+    if(!process.waitForFinished(waitMax_))
     {
         errorReason = tr("waitForFinished failed");
         return false;
@@ -240,13 +242,13 @@ bool TaskFFmpeg::run3(QString& errorReason)
         ffmpeg.setArguments(qsl);
         ffmpeg.start(QProcess::ReadOnly);
 
-		if (!ffmpeg.waitForStarted())
+        if (!ffmpeg.waitForStarted(waitMax_))
 		{
 			errorReason = tr("ffmpeg.waitForStarted failed");
 			return false;
 		}
 
-		if (!ffmpeg.waitForFinished())
+        if (!ffmpeg.waitForFinished(waitMax_))
 		{
 			errorReason = tr("ffmpeg.waitForFinished failed");
 			return false;

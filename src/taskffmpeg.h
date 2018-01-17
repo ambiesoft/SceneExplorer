@@ -7,6 +7,8 @@
 class TaskFFmpeg : public QObject, public QRunnable
 // class TaskFFMpeg : public QRunnable
 {
+    static int waitMax_;
+
     Q_OBJECT
 public:
     enum Progress

@@ -9,8 +9,10 @@
 class Settings : public QSettings
 {
 public:
-    static const char* KEY_FAVORITE_FOLDERS;
-    static const char* GROUPPREFIX_FAVORITE;
+	static const char* KEY_FAVORITE_COUNT;
+	static const char* KEY_FAVORITE_NAME;
+	static const char* KEY_FAVORITE_FOLDERS;
+	static const char* GROUPPREFIX_FAVORITE;
 private:
     QSqlDatabase db_;
     QStringList allColumns_;

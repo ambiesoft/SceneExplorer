@@ -184,6 +184,7 @@ void MainWindow::AddUserEntryDirectory(
         bool check)
 {
     QString text;
+	bool hasCheckbox = true;
     if(itemType==DirectoryItem::DI_NORMAL)
     {
         QDir di(cdir);
@@ -202,10 +203,12 @@ void MainWindow::AddUserEntryDirectory(
     else if(itemType==DirectoryItem::DI_ALL)
     {
         text=tr("All");
+		hasCheckbox = false;
     }
     else if(itemType==DirectoryItem::DI_MISSING)
     {
         text=tr("Missing");
+		hasCheckbox = false;
     }
     else
     {
@@ -214,10 +217,12 @@ void MainWindow::AddUserEntryDirectory(
     }
     DirectoryItem* newitem = new DirectoryItem(ui->directoryWidget, itemType);
     newitem->setText(text);
-    newitem->setFlags(newitem->flags() | Qt::ItemIsUserCheckable);
+	if(hasCheckbox)
+		newitem->setFlags(newitem->flags() | Qt::ItemIsUserCheckable);
 
     newitem->setSelected(sel);
-    newitem->setCheckState(check ? Qt::Checked : Qt::Unchecked);
+	if(hasCheckbox)
+		newitem->setCheckState(check ? Qt::Checked : Qt::Unchecked);
 
     if(itemType==DirectoryItem::DI_NORMAL)
         newitem->setIcon(fiProvider_.icon(QFileIconProvider::Folder));

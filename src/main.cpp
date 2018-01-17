@@ -12,11 +12,42 @@
 #include "globals.h"
 #include "sql.h"
 
-#include "helper.h"
+#include "runguard.h"
 
+#include "helper.h"
+#include "tableitemdata.h"
 #include "settings.h"
 #include "mainwindow.h"
 
+#ifdef QT_DEBUG
+static void testSQL()
+{
+	QStringList files;
+	files << "00c75732-e92b-4e3c-90a1-914bd137797f-1.png";
+	files << "00c75732-e92b-4e3c-90a1-914bd137797f-2.png";
+	files << "00c75732-e92b-4e3c-90a1-914bd137797f-3.png";
+	files << "00c75732-e92b-4e3c-90a1-914bd137797f-4.png";
+	files << "00c75732-e92b-4e3c-90a1-914bd137797f-5.png";
+
+	TableItemDataPointer tid = TableItemData::Create(files,
+		"X:/aaa/bbb/",
+		"moviefile.mp3",
+		33333,
+		22344,
+		33333,
+		240,
+		160,
+		33.33,
+		"frm",
+		33,
+		"vc",
+		"ac",
+		640,
+		480,
+		0);
+	gpSQL->AppendData(tid);
+}
+#endif
 
 int main(int argc, char *argv[])
 {
@@ -24,9 +55,19 @@ int main(int argc, char *argv[])
     QCoreApplication::setOrganizationDomain(Consts::APPDOMAIN);
     QCoreApplication::setApplicationName(Consts::APPNAME);
 
-    QApplication app(argc, argv);
 
-    // QString dataDir = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+
+    QApplication app(argc, argv);
+	
+	RunGuard guard("SceneExplorer");
+	if (!guard.tryToRun())
+	{
+		Info(nullptr, QObject::tr("Another instance is already running."));
+		return 0;
+	}
+    
+	
+	// QString dataDir = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
 
     Settings settings;
     QString dbDir = settings.value(Consts::KEY_DBPATH).toString();
@@ -66,7 +107,10 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 	gpSQL = &theSql;
-
+#ifdef QT_DEBUG
+	testSQL();
+	testSQL();
+#endif
     MainWindow w(nullptr, settings);
     if(!w.IsInitialized())
         return 1;

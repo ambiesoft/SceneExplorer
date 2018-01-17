@@ -59,6 +59,8 @@ Sql::Sql() : db_(QSqlDatabase::addDatabase("QSQLITE"))
 	 
 	 query.exec("CREATE INDEX idx_directory ON FileInfo(directory)");
 	 query.exec("CREATE INDEX idx_name ON FileInfo(name)");
+	 // make "INSERT OR REPLACE" to work
+	 query.exec("CREATE UNIQUE INDEX idx_directoryname ON FileInfo(directory,name)");
 	 query.exec("CREATE INDEX idx_salient ON FileInfo(salient)");
 
 #ifdef QT__DEBUG
@@ -203,8 +205,10 @@ QSqlQuery* Sql::getInsertQuery(TableItemDataPointer tid)
         pQInsert_=new QSqlQuery();
         QString preparing;
         allcolumns = getAllColumnNames();
-        VERIFY(allcolumns.removeOne("directory"));
-        VERIFY(allcolumns.removeOne("name"));
+		
+		VERIFY(allcolumns.removeOne("directory"));
+		VERIFY(allcolumns.removeOne("name"));
+		VERIFY(allcolumns.removeOne("opencount"));
 
         preparing = "INSERT OR REPLACE INTO FileInfo (";
 
