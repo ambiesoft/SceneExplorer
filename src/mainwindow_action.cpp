@@ -21,6 +21,7 @@
 #include "settings.h"
 #include "sql.h"
 #include "helper.h"
+#include "blockedtrue.h"
 
 #include "ui_mainwindow.h"
 #include "mainwindow.h"
@@ -286,31 +287,31 @@ void MainWindow::StartScan2(const QString& dir)
 
 void MainWindow::onTaskStarted()
 {
-    if(!taskMonitorTimer)
-    {
-        taskMonitorTimer = new QTimer(this);
-        connect(taskMonitorTimer, SIGNAL(timeout()),
-                this, SLOT(onTaskTimerTick()));
+    //if(!taskMonitorTimer)
+    //{
+    //    taskMonitorTimer = new QTimer(this);
+    //    connect(taskMonitorTimer, SIGNAL(timeout()),
+    //            this, SLOT(onTaskTimerTick()));
 
-        taskMonitorTimer->start(1000);
-    }
+    //    taskMonitorTimer->start(1000);
+    //}
 }
-void MainWindow::onTaskTimerTick()
-{
-    if(IsClosed())
-        return;
-
-    QApplication::processEvents();
-}
+//void MainWindow::onTaskTimerTick()
+//{
+//    if(IsClosed())
+//        return;
+//
+//    QApplication::processEvents();
+//}
 void MainWindow::onTaskEnded()
 {
-    if(taskMonitorTimer)
-    {
-        disconnect(taskMonitorTimer, SIGNAL(timeout()),
-                this, SLOT(onTaskTimerTick()));
-        delete taskMonitorTimer;
-        taskMonitorTimer=nullptr;
-    }
+    //if(taskMonitorTimer)
+    //{
+    //    disconnect(taskMonitorTimer, SIGNAL(timeout()),
+    //            this, SLOT(onTaskTimerTick()));
+    //    delete taskMonitorTimer;
+    //    taskMonitorTimer=nullptr;
+    //}
 }
 void MainWindow::on_action_Stop_triggered()
 {
@@ -492,6 +493,47 @@ void MainWindow::on_directoryWidget_SortByName()
 	//directoryChanging_ = false;
 	// directoryChangedCommon();
 }
+void MainWindow::on_directoryWidget_MoveUp()
+{
+    if (ui->directoryWidget->selectedItems().isEmpty())
+        return;
+
+    BlockedTrue bt(&directoryChanging_);
+
+    DirectoryItem* item = (DirectoryItem*)ui->directoryWidget->selectedItems()[0];
+    if (!item->IsNormalItem())
+        return;
+
+    int row = ui->directoryWidget->row(item);
+    if (ui->directoryWidget->IsTopNormalItem(row))
+        return;
+
+    item = (DirectoryItem*)ui->directoryWidget->takeItem(row);
+    ui->directoryWidget->insertItem(row - 1, item);
+    item->setSelected(true);
+    ui->directoryWidget->setFocus();
+}
+void MainWindow::on_directoryWidget_MoveDown()
+{
+    if (ui->directoryWidget->selectedItems().isEmpty())
+        return;
+
+    BlockedTrue bt(&directoryChanging_);
+
+    DirectoryItem* item = (DirectoryItem*)ui->directoryWidget->selectedItems()[0];
+    if (!item->IsNormalItem())
+        return;
+
+    int row = ui->directoryWidget->row(item);
+    if (ui->directoryWidget->IsBottomNormalItem(row))
+        return;
+
+    item = (DirectoryItem*)ui->directoryWidget->takeItem(row);
+    ui->directoryWidget->insertItem(row + 1, item);
+    item->setSelected(true);
+    ui->directoryWidget->setFocus();
+}
+
 void MainWindow::on_directoryWidget_customContextMenuRequested(const QPoint &pos)
 {
 	DirectoryItem* item = (DirectoryItem*)ui->directoryWidget->itemAt(pos);
@@ -521,6 +563,17 @@ void MainWindow::on_directoryWidget_customContextMenuRequested(const QPoint &pos
 	connect(&actSortByName, SIGNAL(triggered(bool)),
 		this, SLOT(on_directoryWidget_SortByName()));
 	menu.addAction(&actSortByName);
+
+    QAction actMoveUp(tr("Move &up"));
+    connect(&actMoveUp, SIGNAL(triggered(bool)),
+        this, SLOT(on_directoryWidget_MoveUp()));
+    menu.addAction(&actMoveUp);
+
+    QAction actMoveDown(tr("Move &down"));
+    connect(&actMoveDown, SIGNAL(triggered(bool)),
+        this, SLOT(on_directoryWidget_MoveDown()));
+    menu.addAction(&actMoveDown);
+
 
     menu.exec(ui->directoryWidget->mapToGlobal(pos));
 }

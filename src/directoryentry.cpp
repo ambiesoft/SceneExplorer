@@ -127,3 +127,19 @@ bool DirectoryEntry::IsMissingItemSelectedOrChecked() const
     Q_ASSERT(false);
     return false;
 }
+bool DirectoryEntry::IsTopNormalItem(int row) const
+{
+    if(count() < row)
+        return false;
+
+    Q_ASSERT(((DirectoryItem*)item(0))->IsAllItem());
+    return row==1;
+}
+bool DirectoryEntry::IsBottomNormalItem(int row) const
+{
+    if(count() < row)
+        return false;
+
+    Q_ASSERT(((DirectoryItem*)item(count()-1))->IsMissingItem());
+    return row==count()-2;
+}

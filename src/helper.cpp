@@ -39,8 +39,8 @@ QString canonicalDir(const QString& dir)
 }
 void Info(QWidget* parent, QString message)
 {
-	QMessageBox msgBox;
-	msgBox.setParent(parent);
+	QMessageBox msgBox(parent);
+	
 	msgBox.setWindowTitle(Consts::APPNAME);
 	// msgBox.setInformativeText(message);
 	msgBox.setText(message);
@@ -50,8 +50,8 @@ void Info(QWidget* parent, QString message)
 }
 void Alert(QWidget* parent, QString message)
 {
-	QMessageBox msgBox;
-	msgBox.setParent(parent);
+	QMessageBox msgBox(parent);
+	
 	// msgBox.setInformativeText(message);
 	msgBox.setText(message);
 	msgBox.setStandardButtons(QMessageBox::Ok);
@@ -59,8 +59,8 @@ void Alert(QWidget* parent, QString message)
 }
 bool YesNo(QWidget* parent, QString message)
 {
-	QMessageBox msgBox;
-	msgBox.setParent(parent);
+	QMessageBox msgBox(parent);
+	
 	msgBox.setWindowTitle(Consts::APPNAME);
 	msgBox.setText(message);
 	msgBox.setStandardButtons(QMessageBox::Yes);

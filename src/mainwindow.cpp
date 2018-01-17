@@ -422,19 +422,20 @@ void MainWindow::insertLog(TaskKind kind, const QVector<int>& ids, const QString
             break;
             case TaskKind::FFMpeg:
             {
-                head.append(tr("Analyze"));
+                head.append(tr("Thumbnail"));
                 head.append(QString::number(id));
             }
             break;
             case TaskKind::SQL:
             {
                 head.append(tr("Database"));
+				head.append(QString::number(id));
             }
             break;
 
             case TaskKind::App:
             {
-
+				head.append(tr("Application"));
             }
             break;
 
@@ -661,11 +662,11 @@ void MainWindow::afterFilter2(int loopId,int id,
 
     if(filteredFiles.isEmpty())
     {
-        insertLog(TaskKind::SQL, 0, QString(tr("No new files found in %1")).arg(dir));
+        insertLog(TaskKind::GetDir, id, QString(tr("No new files found in %1")).arg(dir));
     }
     else
     {
-        insertLog(TaskKind::SQL, 0, QString(tr("%1 new items found in %2")).
+        insertLog(TaskKind::GetDir, id, QString(tr("%1 new items found in %2")).
                   arg(QString::number(filteredFiles.count())).
                   arg(dir));
     }

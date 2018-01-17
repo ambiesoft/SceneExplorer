@@ -24,6 +24,9 @@ public:
 
     bool IsAllItemSelectedOrChecked() const;
     bool IsMissingItemSelectedOrChecked() const;
+
+    bool IsTopNormalItem(int row) const;
+    bool IsBottomNormalItem(int row) const;
 };
 
 #endif // DIRECTORYENTRY_H

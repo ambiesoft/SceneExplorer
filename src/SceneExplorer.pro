@@ -45,7 +45,8 @@ SOURCES += \
     directoryentry.cpp \
     directoryitem.cpp \
     findcombobox.cpp \
-    runguard.cpp
+    runguard.cpp \
+    blockedtrue.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -67,7 +68,8 @@ HEADERS += \
     directoryentry.h \
     directoryitem.h \
     findcombobox.h \
-    runguard.h
+    runguard.h \
+    blockedtrue.h
 
 FORMS += \
         mainwindow.ui \
