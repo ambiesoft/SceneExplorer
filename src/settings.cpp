@@ -118,3 +118,15 @@ Settings::~Settings()
 	Q_ASSERT(favorites_.count() == i);
 	setValue(KEY_FAVORITE_COUNT, favorites_.count());
 }
+int Settings::valueInt(const QString& key, int defaultvalue)
+{
+    QVariant v = value(key);
+    if(!v.isValid())
+        return defaultvalue;
+
+    // setvalue(int) will be got as string
+//    if(v.type()!=QVariant::Type::Int)
+//        return defaultvalue;
+
+    return v.toInt();
+}

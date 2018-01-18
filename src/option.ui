@@ -7,17 +7,30 @@
     <x>0</x>
     <y>0</y>
     <width>562</width>
-    <height>93</height>
+    <height>153</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
   <layout class="QFormLayout" name="formLayout">
+   <item row="0" column="0">
+    <widget class="QLabel" name="labelGetDir">
+     <property name="text">
+      <string>Thread count of &amp;iterating direcotry:</string>
+     </property>
+     <property name="buddy">
+      <cstring>spinBoxGetDir</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QSpinBox" name="spinBoxGetDir"/>
+   </item>
    <item row="1" column="0">
     <widget class="QLabel" name="labelThumb">
      <property name="text">
-      <string>Thread Count Thumbnailing:</string>
+      <string>Thread count of &amp;creating thumbnail:</string>
      </property>
      <property name="buddy">
       <cstring>spinBoxThumb</cstring>
@@ -27,7 +40,7 @@
    <item row="1" column="1">
     <widget class="QSpinBox" name="spinBoxThumb"/>
    </item>
-   <item row="3" column="1">
+   <item row="2" column="1">
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -37,18 +50,12 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="0">
-    <widget class="QLabel" name="labelGetDir">
-     <property name="text">
-      <string>Thread Count Get Direcotry:</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="1">
-    <widget class="QSpinBox" name="spinBoxGetDir"/>
-   </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>spinBoxGetDir</tabstop>
+  <tabstop>spinBoxThumb</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>

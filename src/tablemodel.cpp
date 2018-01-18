@@ -1,9 +1,12 @@
 // ImageModel.cpp
+
 #include <QImage>
 #include <QPixmap>
 #include <QFileInfo>
 #include <QTableView>
 #include <QColor>
+#include <QSharedPointer>
+#include <QMap>
 
 #include "consts.h"
 #include "helper.h"
@@ -103,7 +106,7 @@ void TableModel::ClearData()
 {
     itemDatas_.clear();
     mapsFullpathToItem_.clear();
-
+    mapPixmaps_.clear();
     emit itemCountChanged();
 }
 
@@ -292,13 +295,17 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
                 parent_->setColumnWidth(index.row(), Consts::THUMB_WIDTH);
                 parent_->setRowHeight(index.row(), Consts::THUMB_HEIGHT);
 
-                QString imageFile = itemDatas_[actualIndex]->getImageFiles()[index.column()];
-                imageFile = pathCombine(Consts::FILEPART_THUMBS, imageFile);
-
-                // QString imageFile("C:\\Cygwin\\home\\fjUnc\\gitdev\\SceneExplorer\\build-SceneExplorer-Desktop_Qt_5_10_0_MSVC2013_64bit-Debug\\0b76916f-3fb8-49be-a7da-d110ed476952-2.png");
-                QImage image(imageFile);
-                QPixmap pix = QPixmap::fromImage(image);
-                return pix;
+                QString imageFile = pathCombine(Consts::FILEPART_THUMBS,
+                                        itemDatas_[actualIndex]->getImageFiles()[index.column()]);
+                if(!mapPixmaps_.keys().contains(imageFile))
+                {
+                    // QString imageFile("C:\\Cygwin\\home\\fjUnc\\gitdev\\SceneExplorer\\build-SceneExplorer-Desktop_Qt_5_10_0_MSVC2013_64bit-Debug\\0b76916f-3fb8-49be-a7da-d110ed476952-2.png");
+                    QImage image(imageFile);
+                    // const PixmapPointer pix = PixmapPointer(new QPixmap(QPixmap::fromImage(image)));
+                    QVariant vpix(QPixmap::fromImage(image));
+                    mapPixmaps_[imageFile]= vpix;
+                }
+                return mapPixmaps_[imageFile];
             }
             break;
         }
@@ -499,7 +506,7 @@ bool TableModel::RenameEntry(const QString& dbDir,
 
     int row = itemDatas_.indexOf(pID);
     Q_ASSERT(row >= 0);
-    emit dataChanged(createIndex(row*3,0), createIndex((row*3)+2,0));
+    emit dataChanged(createIndex(row*3,0), createIndex((row*3)+3,0));
     return true;
 }
 

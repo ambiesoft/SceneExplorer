@@ -247,7 +247,12 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
         }
     }
 	AddUserEntryDirectory(DirectoryItem::DI_MISSING, QString(), false, false);
-	initialized_ = true;
+
+    threadcountGetDir_ = settings_.valueInt(Consts::KEY_MAX_GETDIR_THREADCOUNT, threadcountGetDir_);
+    threadcountThumbnail_ = settings_.valueInt(Consts::KEY_MAX_THUMBNAIL_THREADCOUNT, threadcountThumbnail_);
+
+
+    initialized_ = true;
 }
 
 //void MainWindow::setTableSpan()
@@ -307,34 +312,30 @@ QThreadPool* MainWindow::getPoolFFmpeg()
     {
         pPoolFFmpeg_ = new QThreadPool;
         pPoolFFmpeg_->setExpiryTimeout(-1);
-        Q_ASSERT(threadcountFFmpeg_ > 0);
-        pPoolFFmpeg_->setMaxThreadCount(threadcountFFmpeg_);
+        Q_ASSERT(threadcountThumbnail_ > 0);
+        pPoolFFmpeg_->setMaxThreadCount(threadcountThumbnail_);
     }
     return pPoolFFmpeg_;
 }
 
-void MainWindow::clearAllPool()
+void MainWindow::clearAllPool(bool bAppendLog)
 {
-    insertLog(TaskKind::App, 0, tr("Clearing all tasks..."));
-    gStop = true;
-    bool prevPause = gPaused;
-    gPaused = false;
+    if(bAppendLog)
+        insertLog(TaskKind::App, 0, tr("Clearing all tasks..."));
 
+    BlockedBool btStop(&gStop, true, false);
+    BlockedBool btPaused(&gPaused, false, gPaused);
 
     do {
         if(pPoolFFmpeg_)
             pPoolFFmpeg_->clear();
         if(pPoolGetDir_)
             pPoolGetDir_->clear();
-//        if(pPoolFilter_)
-//            pPoolFilter_->clear();
         if(pPoolFFmpeg_)
             pPoolFFmpeg_->clear();
 
         if(pPoolGetDir_ && pPoolGetDir_->activeThreadCount() != 0)
             continue;
-//        if(pPoolFilter_ && pPoolFilter_->activeThreadCount() != 0)
-//            continue;
         if(pPoolFFmpeg_ && pPoolFFmpeg_->activeThreadCount() != 0)
             continue;
 
@@ -353,17 +354,13 @@ void MainWindow::clearAllPool()
     delete pPoolGetDir_;
     pPoolGetDir_ = nullptr;
 
-//    delete pPoolFilter_;
-//    pPoolFilter_ = nullptr;
-
     delete pPoolFFmpeg_;
     pPoolFFmpeg_ = nullptr;
 
 	taskModel_->ClearAllTasks();
 
-    gPaused=prevPause;
-    gStop = false;
-    insertLog(TaskKind::App, 0, tr("All tasks Cleared."));
+    if(bAppendLog)
+        insertLog(TaskKind::App, 0, tr("All tasks Cleared."));
 }
 
 
@@ -718,113 +715,9 @@ void MainWindow::checkTaskFinished()
     if(idManager_->isAllTaskFinished())
     {
         onTaskEnded();
-        insertLog(TaskKind::App, 0, tr("All Tasks finished."));
+        insertLog(TaskKind::App, 0, tr(Consts::ALL_TASK_FINISHED));
     }
 }
-//void MainWindow::afterFilter(int loopId,int id,
-//                             const QString& dir,
-//                             const QStringList& filteredFiles,
-//                             const QStringList& renameOlds,
-//                             const QStringList& renameNews)
-//{
-//    if(loopId != gLoopId)
-//        return;
-
-//    Q_UNUSED(id);
-
-//    bool prevPaused = gPaused;
-//    gPaused=true;
-
-////    QStringList filteredFiles;
-////    int ret = gpSQL->filterWithEntry(dir, filesIn, filteredFiles);
-////    if(ret != 0)
-////    {
-////        insertLog(TaskKind::SQL, 0, Sql::getErrorStrig(ret), true);
-////    }
-//    Q_ASSERT(renameOlds.count()==renameNews.count());
-//    if(!renameOlds.isEmpty())
-//    {
-//        QString logMessage = QString(tr("%1 renamed items found in %2.")).
-//                arg(QString::number(renameOlds.count())).
-//                arg(dir);
-
-//        for(int i=0 ; i < renameOlds.count(); ++i)
-//        {
-//            QString oldfile = renameOlds[i];
-//            QString newfile = renameNews[i];
-//            logMessage += "\n";
-//            logMessage += "  " + QString("\"%1\" -> \"%2\"").arg(oldfile).arg(newfile);
-//        }
-//        insertLog(TaskKind::SQL,0,logMessage);
-
-//        gpSQL->RenameEntries(dir, renameOlds, renameNews);
-//        tableModel_->RenameEntries(dir, renameOlds, renameNews);
-//    }
-
-
-//    if(filteredFiles.isEmpty())
-//    {
-//        insertLog(TaskKind::SQL, 0, QString(tr("No new files found in %1")).arg(dir));
-//    }
-//    else
-//    {
-//        insertLog(TaskKind::SQL, 0, QString(tr("%1 new items found in %2")).
-//                  arg(QString::number(filteredFiles.count())).
-//                  arg(dir));
-//    }
-
-//    // afterfilter must perform salient check from SQL, for filter-passed files
-
-
-//    QVector<TaskListDataPointer> tasks;
-//    QVector<int> logids;
-//    QStringList logtexts;
-//    for(int i=0 ; i < filteredFiles.length(); ++i)
-//    {
-//        QString file = pathCombine(dir, filteredFiles[i]);
-//        TaskFFmpeg* pTask = new TaskFFmpeg(gLoopId, idManager_->Increment(IDKIND_FFmpeg), file);
-//        pTask->setAutoDelete(true);
-////        QObject::connect(pTask, &TaskFFMpeg::sayBorn,
-////                         this, &MainWindow::sayBorn);
-//        QObject::connect(pTask, &TaskFFmpeg::sayHello,
-//                         this, &MainWindow::sayHello);
-//        QObject::connect(pTask, &TaskFFmpeg::sayNo,
-//                         this, &MainWindow::sayNo);
-//        QObject::connect(pTask, &TaskFFmpeg::sayGoodby,
-//                         this, &MainWindow::sayGoodby);
-//        QObject::connect(pTask, &TaskFFmpeg::sayDead,
-//                         this, &MainWindow::sayDead);
-//        QObject::connect(pTask, &TaskFFmpeg::finished_FFMpeg,
-//                         this, &MainWindow::finished_FFMpeg);
-
-//        tasks.append(TaskListData::Create(pTask->GetId(),pTask->GetMovieFile()));
-//        getPoolFFmpeg()->start(pTask);
-
-//        logids.append(idManager_->Get(IDKIND_FFmpeg));
-//        logtexts.append(QString(tr("Task registered. %1")).arg(file));
-//    }
-//    insertLog(TaskKind::FFMpeg, logids, logtexts);
-//    taskModel_->AddTasks(tasks);
-
-//    if(idManager_->isAllTaskFinished())
-//    {
-//        insertLog(TaskKind::App, 0, tr("All Tasks finished."));
-//    }
-
-//    gPaused=prevPaused;
-//}
-
-//void MainWindow::finished_Filter(int loopId, int id)
-//{
-//    if(loopId != gLoopId)
-//        return;
-
-//    Q_UNUSED(id);
-//    idManager_->IncrementDone(IDKIND_Filter);
-//    Q_ASSERT(idManager_->Get(IDKIND_Filter) >= idManager_->GetDone(IDKIND_Filter));
-//}
-
-
 
 QString MainWindow::getSelectedVideo(bool bNativeFormat)
 {
@@ -1080,6 +973,7 @@ void MainWindow::on_FindCombo_EnterPressed()
     directoryChangedCommon(true);
 }
 
+
 void MainWindow::on_tableView_scrollChanged(int pos)
 {
     Q_UNUSED(pos);
@@ -1087,6 +981,14 @@ void MainWindow::on_tableView_scrollChanged(int pos)
     QModelIndex indexTop = ui->tableView->indexAt(ui->tableView->rect().topLeft());
     QModelIndex indexBottom = ui->tableView->indexAt(ui->tableView->rect().bottomLeft());
     int rowCountPerScreen = indexBottom.row()-indexTop.row()+1;
+
+    int top = qMax(0, indexTop.row()-rowCountPerScreen);
+    for(int i=top ; i <= indexTop.row(); ++i)
+    {
+        QModelIndex mi = proxyModel_->index(i,0);
+        proxyModel_->data(mi, Qt::DecorationRole);
+    }
+
 
     int rowBottom = indexBottom.row();
     int maxBottom = rowBottom + rowCountPerScreen; // upto next page

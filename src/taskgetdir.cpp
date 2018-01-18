@@ -7,6 +7,10 @@
 #include "globals.h"
 #include "taskgetdir.h"
 
+void TaskGetDir::RegisterMetaType()
+{
+    qRegisterMetaType< QList<qint64> >( "QList<qint64>" );
+}
 void TaskGetDir::run()
 {
     runStuff(dir_);
@@ -21,7 +25,7 @@ void TaskGetDir::runStuff(const QString& dir)
     if(gStop)
         return;
 
-    qRegisterMetaType< QList<qint64> >( "QList<qint64>" );
+
 
     {
         QStringList files;

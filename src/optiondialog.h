@@ -14,6 +14,7 @@ private:
 public:
     OptionDialog(QWidget* parent = nullptr);
 
+    int maxgd_;
     int maxff_;
 
 protected:

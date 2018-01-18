@@ -61,10 +61,12 @@ void MainWindow::sayGoodby(int loopId,  int id,
 
     QFileInfo fi(movieFile);
 
+    QString dir,name;
+    canonicalDirAndName(fi.canonicalFilePath(), dir, name);
     TableItemDataPointer pTID = TableItemData::Create(
                             files,
-                            fi.canonicalPath() + '/',
-                            fi.fileName(),
+                            dir,
+                            name,
                             fi.size(),
                             fi.birthTime().toSecsSinceEpoch(),
                             fi.lastModified().toSecsSinceEpoch(),
@@ -79,7 +81,15 @@ void MainWindow::sayGoodby(int loopId,  int id,
                 );
     if(IsDirSelected(canonicalDir(fi.canonicalPath())))
     {
+        tableModel_->RemoveItem(fi.canonicalFilePath());
         tableModel_->AppendData(pTID);
+    }
+
+    QString removedThumbID;
+    if(gpSQL->RemoveEntryThumb(dir,name, removedThumbID))
+    {
+        insertLog(TaskKind::SQL, id, QString(tr("Thumbnail %1 has been removed from database").
+                                             arg(removedThumbID)));
     }
 
     int sqlError = gpSQL->AppendData(pTID);
@@ -116,6 +126,6 @@ void MainWindow::finished_FFMpeg(int loopId, int id)
     if(idManager_->isAllTaskFinished())
     {
         onTaskEnded();
-        insertLog(TaskKind::App, 0, tr("All Tasks finished."));
+        insertLog(TaskKind::App, 0, tr(Consts::ALL_TASK_FINISHED));
     }
 }

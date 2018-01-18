@@ -217,7 +217,7 @@ QSqlQuery* Sql::getInsertQuery(TableItemDataPointer tid)
             preparing += allcolumns[i];
             preparing += ",";
         }
-        preparing += "directory,name ";
+        preparing += "directory,name,opencount ";
 
         preparing += ") VALUES ( ";
 
@@ -227,7 +227,8 @@ QSqlQuery* Sql::getInsertQuery(TableItemDataPointer tid)
             preparing += ",";
         }
         preparing += "COALESCE((SELECT directory FROM FileInfo WHERE directory=? and name=?), ?),";
-        preparing += "COALESCE((SELECT name FROM FileInfo WHERE directory=? and name=?), ?)";
+        preparing += "COALESCE((SELECT name FROM FileInfo WHERE directory=? and name=?), ?),";
+        preparing += "COALESCE((SELECT opencount FROM FileInfo WHERE directory=? and name=?), ?)";
 
         preparing+=")";
 
@@ -274,12 +275,15 @@ QSqlQuery* Sql::getInsertQuery(TableItemDataPointer tid)
     pQInsert_->bindValue(bindIndex++, tid->getMovieFileName());
     pQInsert_->bindValue(bindIndex++, tid->getMovieFileName());
 
+    // 3rd COALEASE
+    pQInsert_->bindValue(bindIndex++, tid->getMovieDirectory());
+    pQInsert_->bindValue(bindIndex++, tid->getMovieFileName());
+    pQInsert_->bindValue(bindIndex++, tid->getOpenCount());
+
     return pQInsert_;
 }
 int Sql::AppendData(TableItemDataPointer tid)
 {
-
-
     Q_ASSERT(tid->getImageFiles().count()==5);
     if(tid->getImageFiles().isEmpty())
         return THUMBFILE_NOT_FOUND;
@@ -433,6 +437,24 @@ int Sql::GetAllEntry(const QString& dir,
     return 0;
 }
 
+QStringList GetThumbFilesFromThumbID(const QString& thumbID)
+{
+    if(!isUUID(thumbID))
+        return QStringList();
+
+    QStringList ret;
+    for(int i=1 ; i <= 5 ; ++i)
+    {
+        QString t=thumbID;
+        t+="-";
+        t+=QString::number(i);
+        t+=".png";
+
+        t = pathCombine("thumbs", t);
+        ret.append(t);
+    }
+    return ret;
+}
 int Sql::hasThumb(const QString& movieFile)
 {
     bool exist;
@@ -491,6 +513,43 @@ int Sql::hasThumb(const QString& movieFile)
     }
     return THUMB_NOT_EXIST;
 }
+bool Sql::RemoveEntryThumb(const QString& dir,
+                      const QString& name,
+                      QString& removedThumbID)
+{
+    if(dir.isEmpty() || name.isEmpty())
+    {
+        Q_ASSERT(false);
+        return false;
+    }
+    QSqlQuery query;
+    SQC(query,prepare("SELECT thumbid FROM FileInfo WHERE "
+                  "directory=? and name=?"));
+    int i=0;
+    query.bindValue(i++, dir);
+    query.bindValue(i++, name);
+
+    SQC(query, exec());
+
+    if(!query.next())
+        return false;
+
+    removedThumbID = query.value("thumbid").toString();
+    if(!isUUID(removedThumbID))
+    {
+        Q_ASSERT(false);
+        return false;
+    }
+    QStringList thumbfiles = GetThumbFilesFromThumbID(removedThumbID);
+    Q_ASSERT(thumbfiles.count()==5);
+    for(const QString& f : thumbfiles)
+    {
+        QFile(f).remove();
+        Q_ASSERT(!QFile(f).exists());
+    }
+    return true;
+}
+
 int Sql::RemoveEntryFromThumbID(const QString& thumbid)
 {
     if(!isUUID(thumbid))

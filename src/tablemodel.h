@@ -28,6 +28,7 @@ public:
 private:
     QList<TableItemDataPointer> itemDatas_;
     QMap<QString, TableItemDataPointer> mapsFullpathToItem_;
+    mutable QMap<QString, QVariant> mapPixmaps_;
 
 	bool bShowMissing_ = false;
 

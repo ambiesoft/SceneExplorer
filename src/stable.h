@@ -65,7 +65,7 @@
 #include <QCheckBox>
 #include <QSortFilterProxyModel>
 #include <QDateTime>
-
+#include <QInputDialog>
 
 
 

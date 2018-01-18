@@ -16,6 +16,8 @@ private:
     void runStuff(const QString& dir);
 
 public:
+    static void RegisterMetaType();
+
     TaskGetDir(int loopId, int id, const QString& dir):
         loopId_(loopId),
         id_(id),

@@ -144,7 +144,7 @@ private:
     void checkTaskFinished();
 
     int threadcountGetDir_ = 1;
-    int threadcountFFmpeg_ = 2;
+    int threadcountThumbnail_ = 2;
     // int threadcountFilter_ = 1;
 
     bool initShown=false;
@@ -223,7 +223,7 @@ private:
 //    QThreadPool* pPoolFilter_ = nullptr;
 //    QThreadPool* getPoolFilter();
 
-    void clearAllPool();
+    void clearAllPool(bool bAppendLog=true);
 
     void AddUserEntryDirectory(
             DirectoryItem::DirectoryItemType itemType,

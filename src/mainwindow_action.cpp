@@ -58,12 +58,16 @@ void MainWindow::on_tableView_doubleClicked(const QModelIndex &index)
 void MainWindow::on_action_Options_triggered()
 {
     OptionDialog dlg(this);
-    dlg.maxff_ = threadcountFFmpeg_;
+    dlg.maxgd_ = threadcountGetDir_;
+    dlg.maxff_ = threadcountThumbnail_;
     if(QDialog::Accepted != dlg.exec())
         return;
 
-    threadcountFFmpeg_ = dlg.maxff_;
-    getPoolFFmpeg()->setMaxThreadCount(threadcountFFmpeg_);
+    threadcountGetDir_ = dlg.maxgd_;
+    threadcountThumbnail_ = dlg.maxff_;
+
+    // this will cause task's destructor not to called.
+    // getPoolFFmpeg()->setMaxThreadCount(threadcountFFmpeg_);
 }
 
 void MainWindow::onMenuTask_AboutToShow()
@@ -120,7 +124,7 @@ void MainWindow::onMenu_Favorites_AboutToShow()
         ui->menu_Favorites->addAction(qa);
     }
 }
-#include <QInputDialog>
+
 void MainWindow::on_action_Add_current_check_states_triggered()
 {
     bool ok;
@@ -312,6 +316,9 @@ void MainWindow::onTaskEnded()
     //    delete taskMonitorTimer;
     //    taskMonitorTimer=nullptr;
     //}
+
+    // make pool null to make thread count effective
+    clearAllPool(false);
 }
 void MainWindow::on_action_Stop_triggered()
 {

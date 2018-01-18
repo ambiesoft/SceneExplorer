@@ -5,6 +5,7 @@
 
 class TableItemData;
 typedef QSharedPointer<TableItemData> TableItemDataPointer;
+// typedef QSharedPointer<QPixmap> PixmapPointer;
 
 class TableItemData
 {

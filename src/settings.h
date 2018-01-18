@@ -38,6 +38,7 @@ public:
     bool IsNameExists(const QString& name) const {
         return favorites_.contains(name);
     }
+    int valueInt(const QString& key, int defaultvalue);
 };
 
 #endif // SETTINGS_H
