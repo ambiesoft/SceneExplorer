@@ -100,6 +100,10 @@ public:
 
     bool hasEntry(const QString& dir,
                   const QString& file,
+
+                  const qint64& size,
+                  const qint64& wtime,
+
                   const QString& sa);
     bool RemoveEntry(const QString& dir,
                      const QString& file,

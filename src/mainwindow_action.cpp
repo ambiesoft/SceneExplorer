@@ -21,7 +21,7 @@
 #include "settings.h"
 #include "sql.h"
 #include "helper.h"
-#include "blockedtrue.h"
+#include "blockedbool.h"
 
 #include "ui_mainwindow.h"
 #include "mainwindow.h"
@@ -31,7 +31,7 @@ void MainWindow::openVideo(const QString& movieFile)
     if(!QDesktopServices::openUrl(QUrl::fromLocalFile(movieFile)))
     {
         QMessageBox msgBox;
-        msgBox.setText(Consts::APPNAME);
+        msgBox.setText(Consts::APPNAME_DISPLAY);
         msgBox.setInformativeText(QString(tr("failed to launch %1.")).arg(movieFile));
         msgBox.setStandardButtons(QMessageBox::Ok);
         msgBox.exec();
@@ -328,7 +328,7 @@ void MainWindow::on_action_Close_triggered()
 
 void MainWindow::on_action_About_triggered()
 {
-    QString title = Consts::APPNAME;
+    QString title = Consts::APPNAME_DISPLAY;
     QString text = Consts::APPNAME;
     text.append(" ");
     text.append("ver ");
@@ -477,7 +477,8 @@ void MainWindow::on_directoryWidget_UncheckAll()
 //}
 void MainWindow::on_directoryWidget_SortByName()
 {
-    BlockedTrue bt(&directoryChanging_);
+    Q_ASSERT(!directoryChanging_);
+    BlockedBool bt(&directoryChanging_, true, false);
 	
     ui->directoryWidget->SortNormalItems();
 
@@ -504,7 +505,8 @@ void MainWindow::on_directoryWidget_MoveUp()
     if (ui->directoryWidget->selectedItems().isEmpty())
         return;
 
-    BlockedTrue bt(&directoryChanging_);
+    Q_ASSERT(!directoryChanging_);
+    BlockedBool bt(&directoryChanging_, true, false);
 
     DirectoryItem* item = (DirectoryItem*)ui->directoryWidget->selectedItems()[0];
     if (!item->IsNormalItem())
@@ -524,7 +526,8 @@ void MainWindow::on_directoryWidget_MoveDown()
     if (ui->directoryWidget->selectedItems().isEmpty())
         return;
 
-    BlockedTrue bt(&directoryChanging_);
+    Q_ASSERT(!directoryChanging_);
+    BlockedBool bt(&directoryChanging_, true, false);
 
     DirectoryItem* item = (DirectoryItem*)ui->directoryWidget->selectedItems()[0];
     if (!item->IsNormalItem())

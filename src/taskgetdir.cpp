@@ -1,6 +1,7 @@
 #include <QObject>
 #include <QDirIterator>
 #include <QThread>
+#include <QDateTime>
 
 #include "helper.h"
 #include "globals.h"
@@ -20,8 +21,11 @@ void TaskGetDir::runStuff(const QString& dir)
     if(gStop)
         return;
 
+    qRegisterMetaType< QList<qint64> >( "QList<qint64>" );
+
     {
         QStringList files;
+        QList<qint64> sizes,wtimes;
 		QStringList salients;
         QDirIterator itFile(dir, QDir::NoDotAndDotDot|QDir::Files); // ,QDirIterator::Subdirectories);
         while(itFile.hasNext())
@@ -33,11 +37,17 @@ void TaskGetDir::runStuff(const QString& dir)
 			if (IsVideoExtention(itFile.fileName()))
 			{
 				files.append(itFile.fileName());
-
+                sizes.append(itFile.fileInfo().size());
+                wtimes.append(itFile.fileInfo().lastModified().toSecsSinceEpoch());
 				salients.append(createSalient(itFile.filePath(), QFile(itFile.filePath()).size()));
 			}
         }
-		emit afterGetDir(loopId_, id_, QDir(dir).canonicalPath(), files, salients);
+        emit afterGetDir(loopId_, id_,
+                         QDir(dir).canonicalPath(),
+                         files,
+                         sizes,
+                         wtimes,
+                         salients);
     }
 
     {

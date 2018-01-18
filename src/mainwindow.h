@@ -285,7 +285,11 @@ public slots:
     void afterGetDir(int loopId, int id,
                      const QString& dir,
                      const QStringList& files,
-		const QStringList& salients);
+
+                     const QList<qint64> sizes,
+                     const QList<qint64> wtimes,
+
+                     const QStringList& salients);
     void finished_GetDir(int loopId, int id ,const QString& dir);
 //    void afterFilter(int loopId, int id,
 //                     const QString& dir,

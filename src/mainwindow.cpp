@@ -39,6 +39,7 @@
 #include "optiondialog.h"
 #include "globals.h"
 #include "helper.h"
+#include "blockedbool.h"
 
 #include "sql.h"
 
@@ -53,7 +54,7 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
     ui->setupUi(this);
     idManager_ = new IDManager(this);
 
-    this->setWindowTitle(Consts::APPNAME);
+    this->setWindowTitle(Consts::APPNAME_DISPLAY);
 
 	// menu
     QObject::connect(ui->menu_Task, &QMenu::aboutToShow,
@@ -233,7 +234,7 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
     if(!dirOK)
     {
         QMessageBox msgBox;
-        msgBox.setWindowTitle(Consts::APPNAME);
+        msgBox.setWindowTitle(Consts::APPNAME_DISPLAY);
         msgBox.setText(QString(tr("Failed to load user directory data from %1. Do you want to continue?")).
                        arg(settings.fileName()));
         msgBox.setStandardButtons(QMessageBox::Yes);
@@ -514,22 +515,17 @@ void MainWindow::resizeDock(QDockWidget* dock, const QSize& size)
 void MainWindow::afterGetDir(int loopId, int id,
                              const QString& dirc,
                              const QStringList& filesIn,
-							 const QStringList& salients)
+
+                             const QList<qint64> sizes,
+                             const QList<qint64> wtimes,
+
+                             const QStringList& salients
+                             )
 {
     if(loopId != gLoopId)
         return;
 
-	struct PauseBack
-	{
-		bool bBack_;
-		PauseBack(bool bBack) :bBack_(bBack) 
-		{
-			gPaused = true;
-		}
-		~PauseBack() {
-			gPaused = bBack_;
-		}
-	} pback(gPaused);
+    BlockedBool btPause(&gPaused, true, gPaused);
 
     Q_UNUSED(id);
     WaitCursor wc;
@@ -543,11 +539,14 @@ void MainWindow::afterGetDir(int loopId, int id,
     {
 		const QString& file = filesIn[ifs];
 		const QString& sa = salients[ifs];
+        const qint64 size = sizes[ifs];
+        const qint64 wtime = wtimes[ifs];
+
         QFileInfo fi(pathCombine(dir, file));
 
         // QString sa = createSalient(fi.absoluteFilePath(), fi.size());
 
-        if(gpSQL->hasEntry(dir,file,sa))
+        if(gpSQL->hasEntry(dir,file,size,wtime,sa))
         {
             if(true) // gpSQL->hasThumb(dir, file))
             {
@@ -865,7 +864,8 @@ void MainWindow::removeFromDatabase()
 
     QMessageBox msgbox(this);
     QCheckBox cb(tr("Also remove from external media"));
-    msgbox.setText(QString(tr("Do you want to remove \"%1\"?")).
+    cb.setEnabled(QFile(movieFile).exists());
+    msgbox.setText(QString(tr("Do you want to remove \"%1\" from database?")).
                    arg(movieFile));
     msgbox.setIcon(QMessageBox::Icon::Question);
     msgbox.addButton(QMessageBox::Yes);
@@ -990,6 +990,8 @@ void MainWindow::directoryChangedCommon(bool bForceRead)
             continue;
         }
     }
+
+    btnShowNonExistant_->setEnabled(!bOnlyMissing);
 
     if(!bForceRead)
     {

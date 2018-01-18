@@ -66,7 +66,8 @@ int main(int argc, char *argv[])
 		return 0;
 	}
     
-	
+
+
 	// QString dataDir = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
 
     Settings settings;

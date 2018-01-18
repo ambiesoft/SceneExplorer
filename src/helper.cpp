@@ -47,7 +47,7 @@ void Info(QWidget* parent, QString message)
 {
 	QMessageBox msgBox(parent);
 	
-	msgBox.setWindowTitle(Consts::APPNAME);
+    msgBox.setWindowTitle(Consts::APPNAME_DISPLAY);
 	// msgBox.setInformativeText(message);
 	msgBox.setText(message);
 	msgBox.setStandardButtons(QMessageBox::Ok);
@@ -67,7 +67,7 @@ bool YesNo(QWidget* parent, QString message)
 {
 	QMessageBox msgBox(parent);
 	
-	msgBox.setWindowTitle(Consts::APPNAME);
+    msgBox.setWindowTitle(Consts::APPNAME_DISPLAY);
 	msgBox.setText(message);
 	msgBox.setStandardButtons(QMessageBox::Yes);
 	msgBox.addButton(QMessageBox::No);

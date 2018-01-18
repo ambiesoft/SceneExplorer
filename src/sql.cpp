@@ -756,15 +756,19 @@ bool Sql::getEntryFromSalient(const QString& salient,
 
 
 bool Sql::hasEntry(const QString& dir,
-              const QString& file,
-              const QString& sa)
+                   const QString& file,
+                   const qint64& size,
+                   const qint64& wtime,
+                   const QString& sa)
 {
     QSqlQuery query;
     SQC(query,prepare("select name from FileInfo where "
-                  "directory=? and name=? and salient=?"));
+                  "directory=? and name=? and size=? and wtime=? and salient=?"));
     int i=0;
     query.bindValue(i++, dir);
     query.bindValue(i++, file);
+    query.bindValue(i++, size);
+    query.bindValue(i++, wtime);
     query.bindValue(i++, sa);
 
     SQC(query,exec());
