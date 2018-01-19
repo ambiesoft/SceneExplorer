@@ -194,11 +194,10 @@ QString getUUIDFromThumbfile(const QString& file)
     return ret;
 }
 
-#include <QReadWriteLock>
-static QReadWriteLock sLock;
-QString GetDefaultMovieExtention()
+
+QStringList GetDefaultMovieExtention()
 {
-    static QList<QString> sqExts = {
+    static QStringList sqExts = {
         ".3g2",
         ".3gp",
         ".amv",
@@ -241,12 +240,21 @@ QString GetDefaultMovieExtention()
         ".yuv",
     };
 
-    // TODO
+    return sqExts;
+}
+
+
+#include <QReadWriteLock>
+static QReadWriteLock sLock;
+QSet<QString>* GetMovieExtention()
+{
+
+
 }
 bool IsVideoExtention(const QString& file)
 {
-    // static const char* sexts[] = {
-
+    static QSet<QString> sExtCache;
+    QReadLocker locker(sLock);
 
     int li = file.lastIndexOf('.');
     if (li < 0)

@@ -40,13 +40,9 @@ void TableModel:: AppendData(TableItemDataPointer pItemData, const bool enableUp
         beginInsertRows(QModelIndex(),
                         itemDatas_.count()*RowCountPerEntry,
                         (itemDatas_.count()*RowCountPerEntry)+RowCountPerEntry-1);
-        itemDatas_.append(pItemData);
-        endInsertRows();
     }
-    else
-    {
-        itemDatas_.append(pItemData);
-    }
+
+    itemDatas_.append(pItemData);
     mapsFullpathToItem_[pItemData->getMovieFileFull()] = pItemData;
 
 
@@ -69,6 +65,10 @@ void TableModel:: AppendData(TableItemDataPointer pItemData, const bool enableUp
     }
 
     // parent_->setRowHeight(newRowImage, Consts::THUMB_HEIGHT);
+    if(enableUpdate)
+    {
+        endInsertRows();
+    }
 
     emit itemCountChanged();
 }
