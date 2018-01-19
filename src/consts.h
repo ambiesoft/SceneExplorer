@@ -32,6 +32,9 @@ namespace Consts
 
     const char KEY_ALLOW_EXTENSIONS[] = "allowextensions";
 
+    const char KEY_FONT_TABLEINFO[] = "fonttableinfo";
+    const char KEY_FONT_TABLEDETAIL[] = "fonttabledetail";
+
 
 
     const char ALL_TASK_FINISHED[] = "======== All Tasks finished ========";

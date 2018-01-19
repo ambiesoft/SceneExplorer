@@ -40,35 +40,35 @@ void TableModel:: AppendData(TableItemDataPointer pItemData, const bool enableUp
         beginInsertRows(QModelIndex(),
                         itemDatas_.count()*RowCountPerEntry,
                         (itemDatas_.count()*RowCountPerEntry)+RowCountPerEntry-1);
+
+        itemDatas_.append(pItemData);
+        endInsertRows();
+    }
+    else
+    {
+        itemDatas_.append(pItemData);
     }
 
-    itemDatas_.append(pItemData);
     mapsFullpathToItem_[pItemData->getMovieFileFull()] = pItemData;
-
-
 
     int newRowFilename = rowCount()-TableModel::RowCountPerEntry;
     int newRowImage = newRowFilename+1;
     int newRowInfo = newRowImage+1;
 
-    parent_->setSpan(newRowFilename,0,1,5);
-    parent_->setSpan(newRowInfo,0,1,5);
+    parent_->setSpan(newRowFilename,0,1,ColumnCountImage);
+    parent_->setSpan(newRowInfo,0,1,ColumnCountImage);
 
     static bool initColumnWidth=false;
     if(!initColumnWidth)
     {
         initColumnWidth=true;
-        for(int i=0 ; i < 5 ; ++i)
+        for(int i=0 ; i < ColumnCountImage ; ++i)
         {
             parent_->setColumnWidth(i, Consts::THUMB_WIDTH);
         }
     }
 
     // parent_->setRowHeight(newRowImage, Consts::THUMB_HEIGHT);
-    if(enableUpdate)
-    {
-        endInsertRows();
-    }
 
     emit itemCountChanged();
 }
@@ -112,7 +112,7 @@ void TableModel::ClearData()
 
 int TableModel::columnCount(const QModelIndex & /*parent*/) const
 {
-    return 5;
+    return ColumnCountImage;
 }
 
 // http://comments.gmane.org/gmane.comp.lib.qt.general/34914
@@ -284,6 +284,12 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
             }
             break;
 
+            case Qt::FontRole:
+            {
+                return fontInfo_;
+            }
+            break;
+
         }
     }
     else if(isImage)
@@ -340,6 +346,14 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
             return Qt::AlignTop;
         }
         break;
+
+        case Qt::FontRole:
+        {
+            return fontDetail_;
+        }
+        break;
+
+
 		}
 	}
     return QVariant();

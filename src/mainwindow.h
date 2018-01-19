@@ -217,6 +217,12 @@ private slots:
 
     void on_action_Extentions_triggered();
 
+    void on_action_Font_triggered();
+
+    void on_action_FontDetail_triggered();
+
+    void on_action_Output_triggered();
+
 private:
     QThreadPool* pPoolFFmpeg_ = nullptr;
     QThreadPool* getPoolFFmpeg();

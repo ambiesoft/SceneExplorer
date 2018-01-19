@@ -49,7 +49,8 @@ SOURCES += \
     errorinfoexception.cpp \
     blockedbool.cpp \
     option_extension.cpp \
-    extension.cpp
+    extension.cpp \
+    optionfontdialog.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -75,12 +76,14 @@ HEADERS += \
     errorinfoexception.h \
     blockedbool.h \
     option_extension.h \
-    extension.h
+    extension.h \
+    optionfontdialog.h
 
 FORMS += \
         mainwindow.ui \
     option.ui \
-    option_extension.ui
+    option_extension.ui \
+    optionfontdialog.ui
 
 RC_FILE = app.rc
 

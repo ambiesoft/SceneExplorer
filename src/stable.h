@@ -67,8 +67,8 @@
 #include <QDateTime>
 #include <QInputDialog>
 #include <QReadWriteLock>
-
-
+#include <QFont>
+#include <QFontDialog>
 
 #endif // __cplusplus
 

@@ -26,7 +26,7 @@
 #include "ui_mainwindow.h"
 #include "taskgetdir.h"
 #include "taskffmpeg.h"
-
+#include "optionfontdialog.h"
 #include "tablemodel.h"
 #include "foldermodel.h"
 #include "taskmodel.h"
@@ -264,6 +264,27 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
         Extension::SetMovieExtension(Extension::GetDefault());
     }
 
+
+    QFont font;
+    vVal = settings_.value(Consts::KEY_FONT_TABLEINFO);
+    if(vVal.isValid() && font.fromString(vVal.toString()))
+    {
+        tableModel_->SetInfoFont(font);
+    }
+    else
+    {
+        tableModel_->SetInfoFont(ui->tableView->font());
+    }
+
+    vVal = settings_.value(Consts::KEY_FONT_TABLEDETAIL);
+    if(vVal.isValid() && font.fromString(vVal.toString()))
+    {
+        tableModel_->SetDetailFont(font);
+    }
+    else
+    {
+        tableModel_->SetDetailFont(ui->tableView->font());
+    }
     initialized_ = true;
 }
 
@@ -1011,4 +1032,41 @@ void MainWindow::on_action_Extentions_triggered()
 
     optionAllowExtention_ = dlg.strAllow_;
     optionDenyExtention_ = dlg.strDeny_;
+}
+
+void MainWindow::on_action_Font_triggered()
+{
+//    OptionFontDialog dlg(this);
+//    if(QDialog::Accepted != dlg.exec())
+//        return;
+
+    bool ok;
+    QFont font = QFontDialog::getFont(
+                &ok,
+                tableModel_->GetInfoFont(),
+                this);
+    if (!ok)
+        return;
+
+    tableModel_->SetInfoFont(font);
+    settings_.setValue(Consts::KEY_FONT_TABLEINFO, font.toString());
+}
+
+void MainWindow::on_action_FontDetail_triggered()
+{
+    bool ok;
+    QFont font = QFontDialog::getFont(
+                &ok,
+                tableModel_->GetDetailFont(),
+                this);
+    if (!ok)
+        return;
+
+    tableModel_->SetDetailFont(font);
+    settings_.setValue(Consts::KEY_FONT_TABLEDETAIL, font.toString());
+}
+
+void MainWindow::on_action_Output_triggered()
+{
+
 }

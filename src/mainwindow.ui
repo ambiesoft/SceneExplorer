@@ -69,7 +69,7 @@
      <x>0</x>
      <y>0</y>
      <width>874</width>
-     <height>21</height>
+     <height>18</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">
@@ -96,8 +96,18 @@
     <property name="title">
      <string>&amp;Option</string>
     </property>
+    <widget class="QMenu" name="menu_Font">
+     <property name="title">
+      <string>&amp;Font</string>
+     </property>
+     <addaction name="action_Font"/>
+     <addaction name="action_FontDetail"/>
+     <addaction name="separator"/>
+     <addaction name="action_Output"/>
+    </widget>
     <addaction name="action_Options"/>
     <addaction name="action_Extentions"/>
+    <addaction name="menu_Font"/>
    </widget>
    <widget class="QMenu" name="menu_Task">
     <property name="title">
@@ -450,6 +460,21 @@
   <action name="action_Extentions">
    <property name="text">
     <string>&amp;Extentions...</string>
+   </property>
+  </action>
+  <action name="action_Font">
+   <property name="text">
+    <string>&amp;Name...</string>
+   </property>
+  </action>
+  <action name="action_FontDetail">
+   <property name="text">
+    <string>&amp;Detail...</string>
+   </property>
+  </action>
+  <action name="action_Output">
+   <property name="text">
+    <string>&amp;Output..</string>
    </property>
   </action>
  </widget>

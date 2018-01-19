@@ -13,6 +13,13 @@ class QTableView;
 class TableModel : public QAbstractTableModel
 {
     Q_OBJECT
+
+    static const int RowCountPerEntry = 3;
+    static const int ColumnCountImage = 5;
+
+    QFont fontInfo_;
+    QFont fontDetail_;
+
 public:
     enum SORTCOLUMN{
         SORT_FILENAME,
@@ -52,8 +59,6 @@ public:
     enum TableRole {
         MovieFileFull = Qt::UserRole + 1,
     };
-    static const int RowCountPerEntry = 3;
-
     TableModel(QTableView *parent);
     void AppendData(TableItemDataPointer pItemData, const bool enableUpdate = true);
     // void AppendDatas(const QList<TableItemData*>&v);
@@ -86,6 +91,20 @@ public:
 	}
 	void UpdateItem(const QString& movieFile);
     void RemoveItem(const QString& movieFile);
+
+    QFont GetInfoFont() {
+        return fontInfo_;
+    }
+    void SetInfoFont(const QFont& font) {
+        fontInfo_=font;
+    }
+
+    QFont GetDetailFont() {
+        return fontDetail_;
+    }
+    void SetDetailFont(const QFont& font) {
+        fontDetail_=font;
+    }
 signals:
     void itemCountChanged();
     void sortParameterChanged(SORTCOLUMN sc, bool rev);
