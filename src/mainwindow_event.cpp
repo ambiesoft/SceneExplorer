@@ -8,7 +8,7 @@
 #include "settings.h"
 
 #include "sql.h"
-
+#include "extension.h"
 #include "ui_mainwindow.h"
 #include "mainwindow.h"
 
@@ -82,4 +82,7 @@ void MainWindow::closeEvent(QCloseEvent *event) {
 
     settings_.setValue(Consts::KEY_MAX_GETDIR_THREADCOUNT, optionThreadcountGetDir_);
     settings_.setValue(Consts::KEY_MAX_THUMBNAIL_THREADCOUNT, optionThreadcountThumbnail_);
+
+
+    settings_.setValue(Consts::KEY_ALLOW_EXTENSIONS, Extension::GetMovieExtension());
 }

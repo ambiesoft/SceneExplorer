@@ -1,17 +1,17 @@
-#ifndef OPTIONEXTENTION_H
-#define OPTIONEXTENTION_H
+#ifndef OPTIONEXTENSION_H
+#define OPTIONEXTENSION_H
 
-#include "ui_Option_Extention.h"
+#include "ui_Option_Extension.h"
 
-class Option_Extention : public QDialog
+class Option_Extension : public QDialog
 {
     Q_OBJECT
 
 private:
-    Ui::Option_Extention ui;
+    Ui::Option_Extension ui;
 
 public:
-    Option_Extention(QWidget* parent = nullptr);
+    Option_Extension(QWidget* parent = nullptr);
 
     QString strAllow_;
     QString strDeny_;
@@ -25,4 +25,4 @@ private slots:
 
 };
 
-#endif // OPTIONEXTENTION_H
+#endif // OPTIONEXTENSION_H

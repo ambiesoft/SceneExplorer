@@ -37,13 +37,13 @@
 #include "errorinfoexception.h"
 
 #include "optiondialog.h"
-#include "option_extention.h"
+#include "option_extension.h"
 
 #include "globals.h"
 #include "helper.h"
 #include "blockedbool.h"
 
-
+#include "extension.h"
 #include "sql.h"
 
 #include "mainwindow.h"
@@ -254,6 +254,15 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
     optionThreadcountGetDir_ = settings_.valueInt(Consts::KEY_MAX_GETDIR_THREADCOUNT, optionThreadcountGetDir_);
     optionThreadcountThumbnail_ = settings_.valueInt(Consts::KEY_MAX_THUMBNAIL_THREADCOUNT, optionThreadcountThumbnail_);
 
+    vVal = settings_.value(Consts::KEY_ALLOW_EXTENSIONS);
+    if(vVal.isValid())
+    {
+        Extension::SetMovieExtension(vVal.toStringList());
+    }
+    else
+    {
+        Extension::SetMovieExtension(Extension::GetDefault());
+    }
 
     initialized_ = true;
 }
@@ -993,7 +1002,7 @@ void MainWindow::on_action_Add_Folder_triggered()
 
 void MainWindow::on_action_Extentions_triggered()
 {
-    Option_Extention dlg(this);
+    Option_Extension dlg(this);
     dlg.strAllow_ = optionAllowExtention_;
     dlg.strDeny_ = optionDenyExtention_;
 

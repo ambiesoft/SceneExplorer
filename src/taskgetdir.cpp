@@ -5,6 +5,7 @@
 
 #include "helper.h"
 #include "globals.h"
+#include "extension.h"
 #include "taskgetdir.h"
 
 void TaskGetDir::RegisterMetaType()
@@ -38,7 +39,7 @@ void TaskGetDir::runStuff(const QString& dir)
                 return;
             itFile.next();
             Q_ASSERT(itFile.fileInfo().isFile());
-			if (IsVideoExtention(itFile.fileName()))
+            if (Extension::IsMovieExtension(itFile.fileName()))
 			{
 				files.append(itFile.fileName());
                 sizes.append(itFile.fileInfo().size());

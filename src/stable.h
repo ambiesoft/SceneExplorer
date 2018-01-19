@@ -66,7 +66,7 @@
 #include <QSortFilterProxyModel>
 #include <QDateTime>
 #include <QInputDialog>
-
+#include <QReadWriteLock>
 
 
 

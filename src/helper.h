@@ -12,7 +12,6 @@ void Alert(QWidget* parent, QString message);
 bool YesNo(QWidget* parent, QString message);
 QString createSalient(const QString& file, const qint64& size);
 QString getUUIDFromThumbfile(const QString& file);
-bool IsVideoExtention(const QString& file);
 
 // OSD
 bool showInGraphicalShell(QWidget *parent, const QString &pathIn);

@@ -30,11 +30,11 @@ namespace Consts
     const char KEY_MAX_GETDIR_THREADCOUNT[] = "maxgetdirthreadcount";
     const char KEY_MAX_THUMBNAIL_THREADCOUNT[] = "maxthumbnailthreadcount";
 
+    const char KEY_ALLOW_EXTENSIONS[] = "allowextensions";
+
+
+
     const char ALL_TASK_FINISHED[] = "======== All Tasks finished ========";
-
-
-
-
     const char FILEPART_THUMBS[] = "thumbs";
 
     const int THUMB_WIDTH=240;

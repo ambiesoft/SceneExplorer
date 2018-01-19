@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Option_Extention</class>
- <widget class="QDialog" name="Option_Extention">
+ <class>Option_Extension</class>
+ <widget class="QDialog" name="Option_Extension">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -95,7 +95,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>accepted()</signal>
-   <receiver>Option_Extention</receiver>
+   <receiver>Option_Extension</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -111,7 +111,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>Option_Extention</receiver>
+   <receiver>Option_Extension</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -127,7 +127,7 @@
   <connection>
    <sender>btnRestoreDefault</sender>
    <signal>clicked()</signal>
-   <receiver>Option_Extention</receiver>
+   <receiver>Option_Extension</receiver>
    <slot>aaa()</slot>
    <hints>
     <hint type="sourcelabel">

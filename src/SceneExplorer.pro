@@ -48,7 +48,8 @@ SOURCES += \
     runguard.cpp \
     errorinfoexception.cpp \
     blockedbool.cpp \
-    option_extention.cpp
+    option_extension.cpp \
+    extension.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -73,12 +74,13 @@ HEADERS += \
     runguard.h \
     errorinfoexception.h \
     blockedbool.h \
-    option_extention.h
+    option_extension.h \
+    extension.h
 
 FORMS += \
         mainwindow.ui \
     option.ui \
-    option_extention.ui
+    option_extension.ui
 
 RC_FILE = app.rc
 
