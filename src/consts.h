@@ -34,6 +34,7 @@ namespace Consts
 
     const char KEY_FONT_TABLEINFO[] = "fonttableinfo";
     const char KEY_FONT_TABLEDETAIL[] = "fonttabledetail";
+    const char KEY_FONT_OUPUT[] = "fontoutput";
 
 
 

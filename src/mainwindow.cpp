@@ -285,6 +285,13 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
     {
         tableModel_->SetDetailFont(ui->tableView->font());
     }
+
+    vVal = settings_.value(Consts::KEY_FONT_OUPUT);
+    if(vVal.isValid() && font.fromString(vVal.toString()))
+    {
+        ui->txtLog->setFont(font);
+    }
+
     initialized_ = true;
 }
 
@@ -1068,5 +1075,14 @@ void MainWindow::on_action_FontDetail_triggered()
 
 void MainWindow::on_action_Output_triggered()
 {
+    bool ok;
+    QFont font = QFontDialog::getFont(
+                &ok,
+                ui->txtLog->font(),
+                this);
+    if (!ok)
+        return;
 
+    ui->txtLog->setFont(font);
+    settings_.setValue(Consts::KEY_FONT_OUPUT, font.toString());
 }
