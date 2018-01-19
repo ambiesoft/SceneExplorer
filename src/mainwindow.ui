@@ -97,6 +97,7 @@
      <string>&amp;Option</string>
     </property>
     <addaction name="action_Options"/>
+    <addaction name="action_Extentions"/>
    </widget>
    <widget class="QMenu" name="menu_Task">
     <property name="title">
@@ -104,7 +105,6 @@
     </property>
     <addaction name="action_Pause"/>
     <addaction name="action_Stop"/>
-    <addaction name="action_Do_It"/>
    </widget>
    <widget class="QMenu" name="menu_View">
     <property name="title">
@@ -138,11 +138,18 @@
     <addaction name="action_Add_current_check_states"/>
     <addaction name="separator"/>
    </widget>
+   <widget class="QMenu" name="menu_Folder">
+    <property name="title">
+     <string>&amp;Folder</string>
+    </property>
+    <addaction name="action_Add_Folder"/>
+   </widget>
    <addaction name="menu_File"/>
    <addaction name="menu_View"/>
    <addaction name="menu_Edit"/>
    <addaction name="menu_Favorites"/>
    <addaction name="menu_Task"/>
+   <addaction name="menu_Folder"/>
    <addaction name="menu_Option"/>
    <addaction name="menu_Help"/>
   </widget>
@@ -323,9 +330,9 @@
     <string>&amp;About...</string>
    </property>
   </action>
-  <action name="action_Do_It">
+  <action name="action_Add_Folder">
    <property name="text">
-    <string>&amp;Do It</string>
+    <string>&amp;Add Folder...</string>
    </property>
   </action>
   <action name="action_Options">
@@ -438,6 +445,11 @@
   <action name="actionSort_by_open_count">
    <property name="text">
     <string>Sort by open count</string>
+   </property>
+  </action>
+  <action name="action_Extentions">
+   <property name="text">
+    <string>&amp;Extentions...</string>
    </property>
   </action>
  </widget>

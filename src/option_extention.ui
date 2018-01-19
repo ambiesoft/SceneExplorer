@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Option_Extention</class>
+ <widget class="QDialog" name="Option_Extention">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>446</width>
+    <height>483</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="1" column="0">
+    <widget class="QLabel" name="labelDeny">
+     <property name="text">
+      <string>&amp;Deny:</string>
+     </property>
+     <property name="buddy">
+      <cstring>txtDeny</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="labelAllow">
+     <property name="text">
+      <string>&amp;Allow:</string>
+     </property>
+     <property name="buddy">
+      <cstring>txtAllow</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="0">
+    <widget class="QPushButton" name="btnRestoreDefault">
+     <property name="text">
+      <string>Restore &amp;Default</string>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="labelOrder">
+     <property name="text">
+      <string>&amp;Order:</string>
+     </property>
+     <property name="buddy">
+      <cstring>radioAD</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="2" colspan="2">
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+     <property name="standardButtons">
+      <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1" colspan="3">
+    <widget class="QPlainTextEdit" name="txtAllow"/>
+   </item>
+   <item row="3" column="1">
+    <widget class="QRadioButton" name="radioAD">
+     <property name="text">
+      <string>A&amp;llow -&gt; Deny</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1">
+    <widget class="QRadioButton" name="radioDA">
+     <property name="text">
+      <string>De&amp;ny -&gt; Allow</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="1" colspan="3">
+    <widget class="QPlainTextEdit" name="txtDeny"/>
+   </item>
+  </layout>
+ </widget>
+ <tabstops>
+  <tabstop>txtAllow</tabstop>
+  <tabstop>txtDeny</tabstop>
+  <tabstop>radioAD</tabstop>
+  <tabstop>radioDA</tabstop>
+  <tabstop>btnRestoreDefault</tabstop>
+ </tabstops>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>accepted()</signal>
+   <receiver>Option_Extention</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>436</x>
+     <y>465</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>157</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>buttonBox</sender>
+   <signal>rejected()</signal>
+   <receiver>Option_Extention</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>436</x>
+     <y>471</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>274</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnRestoreDefault</sender>
+   <signal>clicked()</signal>
+   <receiver>Option_Extention</receiver>
+   <slot>aaa()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>60</x>
+     <y>462</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>222</x>
+     <y>241</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>aaa()</slot>
+ </slots>
+</ui>

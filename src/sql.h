@@ -110,6 +110,8 @@ public:
     bool RemoveEntry(const QString& dir,
                      const QString& file,
                      QString* error = nullptr);
+
+	bool RemoveAllMissingEntries(const QString& dir);
 };
 
 #endif // SQL_H

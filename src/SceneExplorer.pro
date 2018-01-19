@@ -47,7 +47,8 @@ SOURCES += \
     findcombobox.cpp \
     runguard.cpp \
     errorinfoexception.cpp \
-    blockedbool.cpp
+    blockedbool.cpp \
+    option_extention.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -71,11 +72,13 @@ HEADERS += \
     findcombobox.h \
     runguard.h \
     errorinfoexception.h \
-    blockedbool.h
+    blockedbool.h \
+    option_extention.h
 
 FORMS += \
         mainwindow.ui \
-    option.ui
+    option.ui \
+    option_extention.ui
 
 RC_FILE = app.rc
 

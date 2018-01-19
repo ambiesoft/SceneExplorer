@@ -58,13 +58,13 @@ void MainWindow::on_tableView_doubleClicked(const QModelIndex &index)
 void MainWindow::on_action_Options_triggered()
 {
     OptionDialog dlg(this);
-    dlg.maxgd_ = threadcountGetDir_;
-    dlg.maxff_ = threadcountThumbnail_;
+    dlg.maxgd_ = optionThreadcountGetDir_;
+    dlg.maxff_ = optionThreadcountThumbnail_;
     if(QDialog::Accepted != dlg.exec())
         return;
 
-    threadcountGetDir_ = dlg.maxgd_;
-    threadcountThumbnail_ = dlg.maxff_;
+    optionThreadcountGetDir_ = dlg.maxgd_;
+    optionThreadcountThumbnail_ = dlg.maxff_;
 
     // this will cause task's destructor not to called.
     // getPoolFFmpeg()->setMaxThreadCount(threadcountFFmpeg_);
@@ -196,7 +196,9 @@ void MainWindow::AddUserEntryDirectory(
 
         for(int i=0 ; i < ui->directoryWidget->count(); ++i)
         {
-            QListWidgetItem* item = ui->directoryWidget->item(i);
+            DirectoryItem* item = (DirectoryItem*)ui->directoryWidget->item(i);
+            if(!item->IsNormalItem())
+                continue;
             QDir d(item->text());
             if(di == d)
             {
@@ -257,15 +259,7 @@ bool MainWindow::IsDirSelected(const QString& dir) const
     }
     return false;
 }
-void MainWindow::on_action_Do_It_triggered()
-{
-    QString dir = QFileDialog::getExistingDirectory(this, tr("Open Directory"),lastSelectedDir_);
-    if(dir.isEmpty())
-        return;
-    lastSelectedDir_ = dir;
 
-    StartScan(dir);
-}
 void MainWindow::StartScan(QListWidgetItem* item)
 {
     StartScan2(item->text());
@@ -467,15 +461,39 @@ void MainWindow::on_directoryWidget_Remove()
     
 	delete ui->directoryWidget->takeItem(ui->directoryWidget->row(item));
 }
+void MainWindow::on_directoryWidget_RemoveMissingItems()
+{
+    if(ui->directoryWidget->selectedItems().isEmpty())
+        return;
+
+	DirectoryItem* item = (DirectoryItem*) ui->directoryWidget->selectedItems()[0];
+
+	if (!YesNo(this,
+		tr("Are you sure you want to remove missing items from database?")))
+	{
+		return;
+	}
+    
+	QString dir;
+	if(item->IsNormalItem())
+		dir = item->text();
+	
+    gpSQL->RemoveAllMissingEntries(dir);
+	
+	directoryChangedCommon();
+}
 void MainWindow::on_directoryWidget_UncheckAll()
 {
-	directoryChanging_ = true;
-	for (int i = 0; i < ui->directoryWidget->count(); ++i)
-	{
-		QListWidgetItem* item = ui->directoryWidget->item(i);
-		item->setCheckState(Qt::Unchecked);
-	}
-	directoryChanging_ = false;
+    {
+        BlockedBool bt(&directoryChanging_, true, false);
+
+        for (int i = 0; i < ui->directoryWidget->count(); ++i)
+        {
+            QListWidgetItem* item = ui->directoryWidget->item(i);
+            item->setCheckState(Qt::Unchecked);
+        }
+    }
+
 	directoryChangedCommon();
 }
 //static bool widgetsListItemLessThan(const QListWidgetItem* v1, const QListWidgetItem* v2)
@@ -553,45 +571,63 @@ void MainWindow::on_directoryWidget_MoveDown()
 void MainWindow::on_directoryWidget_customContextMenuRequested(const QPoint &pos)
 {
 	DirectoryItem* item = (DirectoryItem*)ui->directoryWidget->itemAt(pos);
+
 	if(!item)
-        return;
+    {
+        QMenu menu(this);
+        menu.addAction(ui->action_Add_Folder);
+        menu.exec(ui->directoryWidget->mapToGlobal(pos));
+    }
+    else
+    {
+        QMenu menu(this);
 
-    QMenu menu(this);
+        QAction actRescan(tr("&Rescan to create thumbnails"));
+        actRescan.setEnabled(!item->IsMissingItem());
+        connect(&actRescan, SIGNAL(triggered(bool)),
+            this, SLOT(on_Rescan()));
+        menu.addAction(&actRescan);
 
-	QAction actRescan(tr("&Rescan to create thumbnails"));
-	actRescan.setEnabled(!item->IsMissingItem());
-	connect(&actRescan, SIGNAL(triggered(bool)),
-		this, SLOT(on_Rescan()));
-	menu.addAction(&actRescan);
+        menu.addSeparator();
 
-	QAction actRemove(tr("Re&move"));
-	actRemove.setEnabled(item->IsNormalItem());
-	connect(&actRemove, SIGNAL(triggered(bool)),
-		this, SLOT(on_directoryWidget_Remove()));
-	menu.addAction(&actRemove);
+        QAction actUncheckAll(tr("&Uncheck all"));
+        connect(&actUncheckAll, SIGNAL(triggered(bool)),
+            this, SLOT(on_directoryWidget_UncheckAll()));
+        menu.addAction(&actUncheckAll);
 
-	QAction actUncheckAll(tr("&Uncheck all"));
-	connect(&actUncheckAll, SIGNAL(triggered(bool)),
-		this, SLOT(on_directoryWidget_UncheckAll()));
-	menu.addAction(&actUncheckAll);
+        menu.addSeparator();
 
-	QAction actSortByName(tr("&Sort by name"));
-	connect(&actSortByName, SIGNAL(triggered(bool)),
-		this, SLOT(on_directoryWidget_SortByName()));
-	menu.addAction(&actSortByName);
+        QAction actMoveUp(tr("Move &up"));
+        connect(&actMoveUp, SIGNAL(triggered(bool)),
+            this, SLOT(on_directoryWidget_MoveUp()));
+        menu.addAction(&actMoveUp);
 
-    QAction actMoveUp(tr("Move &up"));
-    connect(&actMoveUp, SIGNAL(triggered(bool)),
-        this, SLOT(on_directoryWidget_MoveUp()));
-    menu.addAction(&actMoveUp);
+        QAction actMoveDown(tr("Move &down"));
+        connect(&actMoveDown, SIGNAL(triggered(bool)),
+            this, SLOT(on_directoryWidget_MoveDown()));
+        menu.addAction(&actMoveDown);
 
-    QAction actMoveDown(tr("Move &down"));
-    connect(&actMoveDown, SIGNAL(triggered(bool)),
-        this, SLOT(on_directoryWidget_MoveDown()));
-    menu.addAction(&actMoveDown);
+        QAction actSortByName(tr("&Sort by name"));
+        connect(&actSortByName, SIGNAL(triggered(bool)),
+            this, SLOT(on_directoryWidget_SortByName()));
+        menu.addAction(&actSortByName);
 
 
-    menu.exec(ui->directoryWidget->mapToGlobal(pos));
+        menu.addSeparator();
+
+        QAction actRemove(tr("Re&move this folder from database"));
+        actRemove.setEnabled(item->IsNormalItem());
+        connect(&actRemove, SIGNAL(triggered(bool)),
+            this, SLOT(on_directoryWidget_Remove()));
+        menu.addAction(&actRemove);
+
+        QAction actRemoveMissingItems(tr("Remove &missing items from database"));
+        connect(&actRemoveMissingItems, SIGNAL(triggered(bool)),
+            this, SLOT(on_directoryWidget_RemoveMissingItems()));
+        menu.addAction(&actRemoveMissingItems);
+
+        menu.exec(ui->directoryWidget->mapToGlobal(pos));
+    }
 }
 
 void MainWindow::on_action_ShowMissing(bool bToggle)

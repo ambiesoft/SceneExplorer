@@ -72,7 +72,7 @@ int main(int argc, char *argv[])
 	// QString dataDir = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
 
     Settings settings;
-    QString dbDir = settings.value(Consts::KEY_DBPATH).toString();
+    QString dbDir = settings.valueString(Consts::KEY_DBPATH);
     if(dbDir.isEmpty() || !QDir(dbDir).exists())
     {
         dbDir = QStandardPaths::writableLocation(QStandardPaths::DataLocation);

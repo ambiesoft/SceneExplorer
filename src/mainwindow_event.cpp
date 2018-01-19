@@ -80,6 +80,6 @@ void MainWindow::closeEvent(QCloseEvent *event) {
     settings_.setValue(Consts::KEY_USERENTRY_SELECTED, userSelecteds);
     settings_.setValue(Consts::KEY_USERENTRY_CHECKEDS, userCheckeds);
 
-    settings_.setValue(Consts::KEY_MAX_GETDIR_THREADCOUNT, threadcountGetDir_);
-    settings_.setValue(Consts::KEY_MAX_THUMBNAIL_THREADCOUNT, threadcountThumbnail_);
+    settings_.setValue(Consts::KEY_MAX_GETDIR_THREADCOUNT, optionThreadcountGetDir_);
+    settings_.setValue(Consts::KEY_MAX_THUMBNAIL_THREADCOUNT, optionThreadcountThumbnail_);
 }

@@ -194,79 +194,65 @@ QString getUUIDFromThumbfile(const QString& file)
     return ret;
 }
 
+#include <QReadWriteLock>
+static QReadWriteLock sLock;
+QString GetDefaultMovieExtention()
+{
+    static QList<QString> sqExts = {
+        ".3g2",
+        ".3gp",
+        ".amv",
+        ".asf",
+        ".avi",
+        ".avs",
+        ".divx",
+        ".drc",
+        ".f4a",
+        ".f4b",
+        ".f4p",
+        ".f4v",
+        ".flv",
+        ".m2v",
+        ".m4p",
+        ".m4v",
+        ".mkv",
+        ".mng",
+        ".mov",
+        ".mp2",
+        ".mp4",
+        ".mpe",
+        ".mpeg",
+        ".mpg",
+        ".mpv",
+        ".mxf",
+        ".nsv",
+        ".ogg",
+        ".ogm",
+        ".ogv",
+        ".qt",
+        ".rm",
+        ".rmvb",
+        ".roq",
+        ".svi",
+        ".swf",
+        ".vob",
+        ".webm",
+        ".wmv",
+        ".yuv",
+    };
+
+    // TODO
+}
 bool IsVideoExtention(const QString& file)
 {
     // static const char* sexts[] = {
-    static QSet<QString> sqExts = {
-        "3g2",
-        "3g2",
-        "3gp",
-        "3gp",
-        "amv",
-        "asf",
-        "asf",
-        "avi",
-        "avi",
-        "avs",
-        "divx",
-        "drc",
-        "f4a",
-        "f4b",
-        "f4p",
-        "f4v",
-        "flv",
-        "flv",
-        "flv",
-        "flv",
-        "gif",
-        "gifv",
-        "m2v",
-        "m4p",
-        "m4v",
-        "m4v",
-        "m4v",
-        "mkv",
-        "mkv",
-        "mng",
-        "mov",
-        "mov",
-        "mp2",
-        "mp4",
-        "mp4",
-        "mpe",
-        "mpeg",
-        "mpeg",
-        "mpeg",
-        "mpg",
-        "mpg",
-        "mpg",
-        "mpv",
-        "mxf",
-        "nsv",
-        "ogg",
-        "ogm",
-        "ogv",
-        "qt",
-        "rm",
-        "rm",
-        "rmvb",
-        "rmvb",
-        "roq",
-        "svi",
-        "swf",
-        "vob",
-        "webm",
-        "wmv",
-        "wmv",
-        "yuv",
-    };
 
 
     int li = file.lastIndexOf('.');
     if (li < 0)
         return false;
 
-    QString ext = file.right(file.length() - li - 1);
+    QString ext = file.right(file.length() - li);
     ext = ext.toLower();
     return sqExts.contains(ext);
 }

@@ -855,3 +855,50 @@ bool Sql::RemoveEntry(const QString& dir,
     }
     return true;
 }
+
+bool Sql::RemoveAllMissingEntries(const QString& dirc)
+{
+    QSqlQuery query;
+
+	if (dirc.isEmpty())
+	{
+        SQC(query,prepare("SELECT directory,name FROM FileInfo"));
+    }
+    else
+    {
+        QString dir = canonicalDir(dirc);
+        SQC(query,prepare("SELECT directory,name FROM FileInfo WHERE directory=?"));
+
+        query.bindValue(0, dir+"%");
+    }
+
+    SQC(query,exec());
+
+	QSet<QPair<QString, QString> > dels;
+	while (query.next())
+	{
+		QString d = query.value("directory").toString();
+		QString n = query.value("name").toString();
+		if (d.isEmpty() || n.isEmpty())
+		{
+			Q_ASSERT(false);
+			continue;
+		}
+		QString fullpath = pathCombine(d, n);
+        if (!QFileInfo(fullpath).exists())
+		{
+			dels.insert(qMakePair(d, n));
+		}
+	}
+
+	SQC(query, prepare("DELETE FROM FileInfo WHERE directory=? AND name=?"));
+    for (QSet<QPair<QString, QString> >::iterator it = dels.begin(); it != dels.end(); ++it)
+	{
+		int i = 0;
+		query.bindValue(i++, it->first);
+		query.bindValue(i++, it->second);
+
+		SQC(query, exec());
+	}
+	return true;
+}

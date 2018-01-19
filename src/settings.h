@@ -6,7 +6,7 @@
 
 #include "consts.h"
 
-class Settings : public QSettings
+class Settings
 {
 public:
 	static const char* KEY_FAVORITE_COUNT;
@@ -14,15 +14,17 @@ public:
 	static const char* KEY_FAVORITE_FOLDERS;
 	static const char* GROUPPREFIX_FAVORITE;
 private:
-    QSqlDatabase db_;
-    QStringList allColumns_;
-    bool ok_ = false;
+    QSettings s_;
 
-    QMap<QString, QStringList> favorites_;
+//    QSqlDatabase db_;
+//    QStringList allColumns_;
+//    bool ok_ = false;
+    typedef QList<QPair<QString,QStringList> > FAVTYPE;
+    FAVTYPE favorites_;
 
     void init();
 public:
-    Settings() : QSettings(
+    Settings() : s_(
                      QSettings::Format::IniFormat,
                      QSettings::Scope::UserScope,
                      Consts::ORGANIZATION,
@@ -36,9 +38,21 @@ public:
     QStringList GetFavorites() const;
     QStringList GetFavorite(const QString& name) const;
     bool IsNameExists(const QString& name) const {
-        return favorites_.contains(name);
+        for(int i=0 ; i < favorites_.count(); ++i)
+        {
+            if(favorites_[i].first == name)
+                return true;
+        }
+        return false;
     }
-    int valueInt(const QString& key, int defaultvalue);
+    QString valueString(const QString& key, const QString& defaultvalue=QString());
+    int valueInt(const QString& key, int defaultvalue=0);
+    QVariant value(const QString& key);
+
+    QString fileName() const {
+        return s_.fileName();
+    }
+    void setValue(const QString& key, const QVariant& v);
 };
 
 #endif // SETTINGS_H

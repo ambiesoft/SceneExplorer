@@ -37,9 +37,12 @@
 #include "errorinfoexception.h"
 
 #include "optiondialog.h"
+#include "option_extention.h"
+
 #include "globals.h"
 #include "helper.h"
 #include "blockedbool.h"
+
 
 #include "sql.h"
 
@@ -248,8 +251,8 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
     }
 	AddUserEntryDirectory(DirectoryItem::DI_MISSING, QString(), false, false);
 
-    threadcountGetDir_ = settings_.valueInt(Consts::KEY_MAX_GETDIR_THREADCOUNT, threadcountGetDir_);
-    threadcountThumbnail_ = settings_.valueInt(Consts::KEY_MAX_THUMBNAIL_THREADCOUNT, threadcountThumbnail_);
+    optionThreadcountGetDir_ = settings_.valueInt(Consts::KEY_MAX_GETDIR_THREADCOUNT, optionThreadcountGetDir_);
+    optionThreadcountThumbnail_ = settings_.valueInt(Consts::KEY_MAX_THUMBNAIL_THREADCOUNT, optionThreadcountThumbnail_);
 
 
     initialized_ = true;
@@ -285,8 +288,8 @@ QThreadPool* MainWindow::getPoolGetDir()
     {
         pPoolGetDir_ = new QThreadPool;
         pPoolGetDir_->setExpiryTimeout(-1);
-        Q_ASSERT(threadcountGetDir_ > 0);
-        pPoolGetDir_->setMaxThreadCount(threadcountGetDir_);
+        Q_ASSERT(optionThreadcountGetDir_ > 0);
+        pPoolGetDir_->setMaxThreadCount(optionThreadcountGetDir_);
     }
     return pPoolGetDir_;
 }
@@ -312,8 +315,8 @@ QThreadPool* MainWindow::getPoolFFmpeg()
     {
         pPoolFFmpeg_ = new QThreadPool;
         pPoolFFmpeg_->setExpiryTimeout(-1);
-        Q_ASSERT(threadcountThumbnail_ > 0);
-        pPoolFFmpeg_->setMaxThreadCount(threadcountThumbnail_);
+        Q_ASSERT(optionThreadcountThumbnail_ > 0);
+        pPoolFFmpeg_->setMaxThreadCount(optionThreadcountThumbnail_);
     }
     return pPoolFFmpeg_;
 }
@@ -527,6 +530,8 @@ void MainWindow::afterGetDir(int loopId, int id,
     Q_UNUSED(id);
     WaitCursor wc;
 
+    bool needUpdate = false;
+
     QString dir = QDir(dirc).canonicalPath() + '/';
 
     QStringList filteredFiles;
@@ -585,8 +590,7 @@ void MainWindow::afterGetDir(int loopId, int id,
                     {
                         if(!tableModel_->RenameEntry(dirsDB[i], filesDB[i], dir, file))
                         {
-                            // TODO append data
-                            // tableModel_->AppendData();
+                            needUpdate = true;
                         }
                     }
                     renamed = true;
@@ -607,30 +611,8 @@ void MainWindow::afterGetDir(int loopId, int id,
                 );
 
 
-//	QStringList entries;
-//    QVector<qint64> sizes;
-//    QVector<qint64> ctimes;
-//    QVector<qint64> wtimes;
-//    QStringList salients;
-
-//    gpSQL->GetAllEntry(dir, entries, sizes, ctimes, wtimes, salients);
-//    TaskFilter* pTaskFilter = new TaskFilter(gLoopId, idManager_->Increment(IDKIND_Filter),
-//                                             dir,
-//                                             filesIn,
-//                                             entries,
-//                                             sizes,
-//                                             ctimes,
-//                                             wtimes,
-//                                             salients);
-//    pTaskFilter->setAutoDelete(true);
-
-//    QObject::connect(pTaskFilter, &TaskFilter::afterFilter,
-//                     this, &MainWindow::afterFilter);
-//    QObject::connect(pTaskFilter, &TaskFilter::finished_Filter,
-//                     this, &MainWindow::finished_Filter);
-//    getPoolFilter()->start(pTaskFilter);
-
-//    insertLog(TaskKind::Filter, id, QString(tr("Task Registered. %1")).arg(dir));
+    if(needUpdate)
+        directoryChangedCommon();
 }
 void MainWindow::finished_GetDir(int loopId, int id, const QString& dir)
 {
@@ -997,4 +979,27 @@ void MainWindow::on_tableView_scrollChanged(int pos)
         QModelIndex mi = proxyModel_->index(i,0);
         proxyModel_->data(mi, Qt::DecorationRole);
     }
+}
+
+void MainWindow::on_action_Add_Folder_triggered()
+{
+    QString dir = QFileDialog::getExistingDirectory(this, tr("Open Directory"),lastSelectedDir_);
+    if(dir.isEmpty())
+        return;
+    lastSelectedDir_ = dir;
+
+    AddUserEntryDirectory(DirectoryItem::DI_NORMAL, canonicalDir(dir), false, false);
+}
+
+void MainWindow::on_action_Extentions_triggered()
+{
+    Option_Extention dlg(this);
+    dlg.strAllow_ = optionAllowExtention_;
+    dlg.strDeny_ = optionDenyExtention_;
+
+    if(QDialog::Accepted != dlg.exec())
+        return;
+
+    optionAllowExtention_ = dlg.strAllow_;
+    optionDenyExtention_ = dlg.strDeny_;
 }

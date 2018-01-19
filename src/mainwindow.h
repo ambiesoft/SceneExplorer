@@ -143,9 +143,10 @@ private:
 
     void checkTaskFinished();
 
-    int threadcountGetDir_ = 1;
-    int threadcountThumbnail_ = 2;
-    // int threadcountFilter_ = 1;
+    int optionThreadcountGetDir_ = 1;
+    int optionThreadcountThumbnail_ = 2;
+    QString optionAllowExtention_;
+    QString optionDenyExtention_;
 
     bool initShown=false;
 	bool IsClosed() const {
@@ -171,7 +172,6 @@ protected:
 
 private slots:
     void on_action_Close_triggered();
-    void on_action_Do_It_triggered();
     void on_action_About_triggered();
     void on_tableView_doubleClicked(const QModelIndex &index);
     void on_action_Options_triggered();
@@ -212,6 +212,10 @@ private slots:
 
     // void onTaskTimerTick();
     void on_actionSort_by_open_count_triggered();
+
+    void on_action_Add_Folder_triggered();
+
+    void on_action_Extentions_triggered();
 
 private:
     QThreadPool* pPoolFFmpeg_ = nullptr;
@@ -312,6 +316,7 @@ public slots:
 
 	void on_Rescan();
 	void on_directoryWidget_Remove();
+	void on_directoryWidget_RemoveMissingItems();
 	void on_directoryWidget_UncheckAll();
 	void on_directoryWidget_SortByName();
 	void on_directoryWidget_MoveUp();
