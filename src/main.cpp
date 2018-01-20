@@ -116,10 +116,10 @@ int main(int argc, char *argv[])
 	testSQL();
 #endif
 
-//    ExeFFmpeg.SetFFmpeg("C:\\LegacyPrograms\\ffmpeg\\bin\\ffmpeg.exe");
-//    ExeFFmpeg.SetFFprobe("C:\\LegacyPrograms\\ffmpeg\\bin\\ffprobe.exe");
-    theFFmepg.SetFFmpeg("ffmpeg");
-    theFFmepg.SetFFprobe("ffprobe");
+    theFFmepg.SetFFmpeg("C:\\LegacyPrograms\\ffmpeg\\bin\\ffmpeg.exe");
+    theFFmepg.SetFFprobe("C:\\LegacyPrograms\\ffmpeg\\bin\\ffprobe.exe");
+//    theFFmepg.SetFFmpeg("ffmpeg");
+//    theFFmepg.SetFFprobe("ffprobe");
 
     MainWindow w(nullptr, settings);
     if(!w.IsInitialized())
