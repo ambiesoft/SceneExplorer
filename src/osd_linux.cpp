@@ -1,6 +1,11 @@
 #include <QFileInfo>
 #include <QDesktopServices>
 #include <QUrl>
+#include <QDebug>
+#include <QDir>
+#include <QDateTime>
+
+#include "errorinfoexception.h"
 
 // https://stackoverflow.com/a/3546503
 bool showInGraphicalShell(QWidget *parent, const QString &pathIn)
@@ -37,16 +42,16 @@ void MoveToTrashImpl( QString file ){
                 }
             }
             if( TrashPath.isEmpty() )
-                throw Exception( "Cant detect trash folder" );
+                throw ErrorInfoException( "Cant detect trash folder" );
             TrashPathInfo = TrashPath + "/info";
             TrashPathFiles = TrashPath + "/files";
             if( !QDir( TrashPathInfo ).exists() || !QDir( TrashPathFiles ).exists() )
-                throw Exception( "Trash doesnt looks like FreeDesktop.org Trash specification" );
+                throw ErrorInfoException( "Trash doesnt looks like FreeDesktop.org Trash specification" );
             TrashInitialized = true;
         }
         QFileInfo original( file );
         if( !original.exists() )
-            throw Exception( "File doesnt exists, cant move to trash" );
+            throw ErrorInfoException( "File doesnt exists, cant move to trash" );
         QString info;
         info += "[Trash Info]\nPath=";
         info += original.absoluteFilePath();
@@ -68,12 +73,13 @@ void MoveToTrashImpl( QString file ){
         }
         QDir dir;
         if( !dir.rename( original.absoluteFilePath(), filepath ) ){
-            throw Exception( "move to trash failed" );
+            throw ErrorInfoException( "move to trash failed" );
         }
-        File infofile;
-        infofile.createUtf8( infopath, info );
+        // TODO nazo
+//        QFile infofile;
+//        infofile.createUtf8( infopath, info );
     #else
         Q_UNUSED( file );
-        throw Exception( "Trash in server-mode not supported" );
+        throw ErrorInfoException( "Trash in server-mode not supported" );
     #endif
 }

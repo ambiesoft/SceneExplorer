@@ -22,6 +22,7 @@
 #include <QComboBox>
 #include <QElapsedTimer>
 #include <QSortFilterProxyModel>
+#include <QFontDialog>
 
 #include "ui_mainwindow.h"
 #include "taskgetdir.h"

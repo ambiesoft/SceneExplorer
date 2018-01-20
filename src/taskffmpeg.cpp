@@ -10,6 +10,8 @@
 #include "globals.h"
 #include "consts.h"
 
+#include "exeffmpeg.h"
+
 #include "taskffmpeg.h"
 
 int TaskFFmpeg::waitMax_ = -1;
@@ -41,7 +43,7 @@ bool TaskFFmpeg::getProbe(const QString& file,
               QString& errorReason)
 {
     QProcess process;
-    process.setProgram("C:\\LegacyPrograms\\ffmpeg\\bin\\ffprobe.exe");
+    process.setProgram(theFFmepg.GetFFprobe());
     process.setArguments( QStringList() <<
                           "-v" <<
                           "quiet" <<
@@ -238,7 +240,7 @@ bool TaskFFmpeg::run3(QString& errorReason)
         qsl.append(actualFile);
 
         QProcess ffmpeg;
-        ffmpeg.setProgram("C:\\LegacyPrograms\\ffmpeg\\bin\\ffmpeg.exe");
+        ffmpeg.setProgram(theFFmepg.GetFFmepg());
         ffmpeg.setArguments(qsl);
         ffmpeg.start(QProcess::ReadOnly);
 

@@ -1,7 +1,8 @@
 #ifndef HELPER_H
 #define HELPER_H
 
-
+#include <QString>
+#include <QWidget>
 
 QString rstrip(const QString& str, QChar c);
 QString pathCombine(const QString& path1, const QString& path2);

@@ -7,6 +7,7 @@
 #include <QColor>
 #include <QSharedPointer>
 #include <QMap>
+#include <QDateTime>
 
 #include "consts.h"
 #include "helper.h"

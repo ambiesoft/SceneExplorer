@@ -17,6 +17,8 @@
 #include "helper.h"
 #include "tableitemdata.h"
 #include "settings.h"
+#include "exeffmpeg.h"
+
 #include "mainwindow.h"
 
 #ifdef QT_DEBUG
@@ -113,6 +115,12 @@ int main(int argc, char *argv[])
 	testSQL();
 	testSQL();
 #endif
+
+//    ExeFFmpeg.SetFFmpeg("C:\\LegacyPrograms\\ffmpeg\\bin\\ffmpeg.exe");
+//    ExeFFmpeg.SetFFprobe("C:\\LegacyPrograms\\ffmpeg\\bin\\ffprobe.exe");
+    theFFmepg.SetFFmpeg("ffmpeg");
+    theFFmepg.SetFFprobe("ffprobe");
+
     MainWindow w(nullptr, settings);
     if(!w.IsInitialized())
         return 1;

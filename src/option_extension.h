@@ -1,7 +1,7 @@
 #ifndef OPTIONEXTENSION_H
 #define OPTIONEXTENSION_H
 
-#include "ui_Option_Extension.h"
+#include "ui_option_extension.h"
 
 class Option_Extension : public QDialog
 {

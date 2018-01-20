@@ -1,6 +1,7 @@
 #ifndef EXTERNALTOOLITEM_H
 #define EXTERNALTOOLITEM_H
 
+#include <QString>
 
 class ExternalToolItem
 {

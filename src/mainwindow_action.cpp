@@ -5,6 +5,7 @@
 #include <QThreadPool>
 #include <QFileDialog>
 #include <QListWidget>
+#include <QInputDialog>
 
 #include "consts.h"
 #include "globals.h"
@@ -506,8 +507,9 @@ void MainWindow::on_directoryWidget_UncheckAll()
 
         for (int i = 0; i < ui->directoryWidget->count(); ++i)
         {
-            QListWidgetItem* item = ui->directoryWidget->item(i);
-            item->setCheckState(Qt::Unchecked);
+            DirectoryItem* item = (DirectoryItem*)ui->directoryWidget->item(i);
+            if(item->IsNormalItem())
+                item->setCheckState(Qt::Unchecked);
         }
     }
 

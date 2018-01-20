@@ -2,6 +2,7 @@
 #define OPTIONEXTERNALTOOLSDIALOG_H
 
 #include <QDialog>
+#include <QListWidgetItem>
 
 #include "externaltoolitem.h"
 
