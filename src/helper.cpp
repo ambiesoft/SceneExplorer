@@ -195,3 +195,7 @@ QString getUUIDFromThumbfile(const QString& file)
 }
 
 
+Qt::WindowFlags GetDefaultDialogFlags()
+{
+    return ((Qt::WindowTitleHint | Qt::WindowCloseButtonHint| Qt::WindowFlags()) & ~Qt::WindowContextHelpButtonHint);
+}

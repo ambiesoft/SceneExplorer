@@ -10,6 +10,7 @@
 #include "directoryitem.h"
 #include "findcombobox.h"
 #include "settings.h"
+#include "externaltoolitem.h"
 
 class QThreadPool;
 class QLabel;
@@ -21,6 +22,8 @@ class TaskModel;
 class TaskFFmpeg;
 class QLabel;
 class QItemSelection;
+
+typedef QSharedPointer<ExternalToolItem> ExternalToolItemPointer;
 
 namespace Ui {
 class MainWindow;
@@ -54,6 +57,9 @@ private:
     void GetSqlAllSetTable(const QStringList& dirs,
                            bool bOnlyMissing = false);
 	QToolButton* btnShowNonExistant_ = nullptr;
+
+    QList<ExternalToolItem> externalTools_;
+
     class IDManager
     {
         MainWindow* win_;
@@ -223,6 +229,8 @@ private slots:
 
     void on_action_Output_triggered();
 
+    void on_actionExternal_Tools_triggered();
+
 private:
     QThreadPool* pPoolFFmpeg_ = nullptr;
     QThreadPool* getPoolFFmpeg();
@@ -316,6 +324,7 @@ public slots:
     void copySelectedVideoPath();
     void copySelectedVideoFilename();
     void removeFromDatabase();
+    void on_context_ExternalTools();
 
     void tableItemCountChanged();
     void tableSortParameterChanged(TableModel::SORTCOLUMN sc, bool rev);

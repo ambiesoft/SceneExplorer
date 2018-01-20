@@ -4,8 +4,7 @@
 
 
 Option_Extension::Option_Extension(QWidget* parent)
-    : QDialog(parent,
-              ((Qt::WindowTitleHint | Qt::WindowFlags()) & ~Qt::WindowContextHelpButtonHint))
+    : QDialog(parent, GetDefaultDialogFlags())
 {
     ui.setupUi(this);
     setWindowTitle(tr("Option") + " | " + tr("Extension"));

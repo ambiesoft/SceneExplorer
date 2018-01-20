@@ -69,7 +69,7 @@
      <x>0</x>
      <y>0</y>
      <width>874</width>
-     <height>18</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">
@@ -107,6 +107,7 @@
     </widget>
     <addaction name="action_Options"/>
     <addaction name="action_Extentions"/>
+    <addaction name="actionExternal_Tools"/>
     <addaction name="menu_Font"/>
    </widget>
    <widget class="QMenu" name="menu_Task">
@@ -475,6 +476,11 @@
   <action name="action_Output">
    <property name="text">
     <string>&amp;Output..</string>
+   </property>
+  </action>
+  <action name="actionExternal_Tools">
+   <property name="text">
+    <string>External &amp;Tools...</string>
    </property>
   </action>
  </widget>

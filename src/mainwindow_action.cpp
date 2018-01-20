@@ -418,6 +418,23 @@ void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
 
     contextMenu.addSeparator();
 
+    // externl tools ----->
+    QMenu menuExternalTools(tr("External &tools..."), this);
+    QList< QSharedPointer<QAction> > actExts;
+    for(int i=0 ; i < externalTools_.count(); ++i)
+    {
+        QSharedPointer<QAction> act(new QAction(externalTools_[i].GetName()));
+        connect(act.data(), SIGNAL(triggered()),
+                this, SLOT(on_context_ExternalTools()));
+        menuExternalTools.addAction(act.data());
+        act->setData(i);
+        actExts.append(act);
+    }
+    contextMenu.addMenu(&menuExternalTools);
+    // <---- external tools
+
+    contextMenu.addSeparator();
+
     QAction actionRemoveFromDB("&Remove from database");
     connect(&actionRemoveFromDB, SIGNAL(triggered()),
             this, SLOT(removeFromDatabase()));

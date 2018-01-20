@@ -50,7 +50,9 @@ SOURCES += \
     blockedbool.cpp \
     option_extension.cpp \
     extension.cpp \
-    optionfontdialog.cpp
+    optionfontdialog.cpp \
+    optionexternaltoolsdialog.cpp \
+    externaltoolitem.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -77,13 +79,16 @@ HEADERS += \
     blockedbool.h \
     option_extension.h \
     extension.h \
-    optionfontdialog.h
+    optionfontdialog.h \
+    optionexternaltoolsdialog.h \
+    externaltoolitem.h
 
 FORMS += \
         mainwindow.ui \
     option.ui \
     option_extension.ui \
-    optionfontdialog.ui
+    optionfontdialog.ui \
+    optionexternaltoolsdialog.ui
 
 RC_FILE = app.rc
 

@@ -38,6 +38,7 @@
 
 #include "optiondialog.h"
 #include "option_extension.h"
+#include "optionexternaltoolsdialog.h"
 
 #include "globals.h"
 #include "helper.h"
@@ -292,6 +293,13 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
         ui->txtLog->setFont(font);
     }
 
+
+//    externalTools_.append(ExternalToolItemPointer(new ExternalToolItem("Shell Menu",
+//                                               "C:\\Linkout\\OpenShellContextMenu\\OpenShellContextMenu.exe",
+//                                               "")));
+    externalTools_.append(ExternalToolItem("Shell Menu",
+                                           "C:\\Linkout\\OpenShellContextMenu\\OpenShellContextMenu.exe",
+                                           ""));
     initialized_ = true;
 }
 
@@ -830,7 +838,18 @@ void MainWindow::removeFromDatabase()
         }
     }
 }
+void MainWindow::on_context_ExternalTools()
+{
+    QString movieFile = getSelectedVideo(true);
 
+    QAction* act = (QAction*)QObject::sender();
+    int i = act->data().toInt();
+    QString exe = externalTools_[i].GetExe();
+    QStringList arg;
+    arg << movieFile;
+
+    QProcess::startDetached(exe,arg);
+}
 void MainWindow::copySelectedVideoFilename()
 {
     QFileInfo fi(getSelectedVideo());
@@ -1085,4 +1104,14 @@ void MainWindow::on_action_Output_triggered()
 
     ui->txtLog->setFont(font);
     settings_.setValue(Consts::KEY_FONT_OUPUT, font.toString());
+}
+
+
+void MainWindow::on_actionExternal_Tools_triggered()
+{
+    OptionExternalToolsDialog dlg(this);
+    dlg.items_ = externalTools_;
+    if(QDialog::Accepted != dlg.exec())
+        return;
+    externalTools_ = dlg.items_;
 }

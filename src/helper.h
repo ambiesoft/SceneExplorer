@@ -12,6 +12,7 @@ void Alert(QWidget* parent, QString message);
 bool YesNo(QWidget* parent, QString message);
 QString createSalient(const QString& file, const qint64& size);
 QString getUUIDFromThumbfile(const QString& file);
+Qt::WindowFlags GetDefaultDialogFlags();
 
 // OSD
 bool showInGraphicalShell(QWidget *parent, const QString &pathIn);
