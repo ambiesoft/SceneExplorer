@@ -85,4 +85,10 @@ void MainWindow::closeEvent(QCloseEvent *event) {
 
 
     settings_.setValue(Consts::KEY_ALLOW_EXTENSIONS, Extension::GetMovieExtension());
+
+    for(int i=0 ; i < externalTools_.count(); ++i)
+    {
+        externalTools_[i].Save(i, settings_);
+    }
+    settings_.setValue(Consts::KEY_EXTERNALTOOLS_COUNT, externalTools_.count());
 }

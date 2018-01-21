@@ -53,6 +53,14 @@ public:
         return s_.fileName();
     }
     void setValue(const QString& key, const QVariant& v);
+
+    void beginGroup(const QString& group) {
+        s_.beginGroup(group);
+    }
+    void endGroup() {
+        s_.endGroup();
+    }
+
 };
 
 #endif // SETTINGS_H

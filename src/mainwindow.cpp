@@ -294,13 +294,11 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
         ui->txtLog->setFont(font);
     }
 
-
-//    externalTools_.append(ExternalToolItemPointer(new ExternalToolItem("Shell Menu",
-//                                               "C:\\Linkout\\OpenShellContextMenu\\OpenShellContextMenu.exe",
-//                                               "")));
-    externalTools_.append(ExternalToolItem("Shell Menu",
-                                           "C:\\Linkout\\OpenShellContextMenu\\OpenShellContextMenu.exe",
-                                           ""));
+    int externalToolsCount = settings_.valueInt(Consts::KEY_EXTERNALTOOLS_COUNT, 0);
+    for(int i=0 ; i < externalToolsCount; ++i)
+    {
+        externalTools_.append(ExternalToolItem::Load(i, settings_));
+    }
     initialized_ = true;
 }
 

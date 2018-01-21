@@ -36,6 +36,12 @@ namespace Consts
     const char KEY_FONT_TABLEDETAIL[] = "fonttabledetail";
     const char KEY_FONT_OUPUT[] = "fontoutput";
 
+    const char KEY_EXTERNALTOOLS_COUNT[] = "externaltoolscount";
+    const char KEY_EXTERNALTOOLS_GROUPPRIX[] = "externaltool_";
+    const char KEY_EXTERNALTOOLS_NAME[] = "externaltoolname";
+    const char KEY_EXTERNALTOOLS_EXE[] = "externaltoolexe";
+    const char KEY_EXTERNALTOOLS_ARG[] = "externaltoolarg";
+
 
 
     const char ALL_TASK_FINISHED[] = "======== All Tasks finished ========";

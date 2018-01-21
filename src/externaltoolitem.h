@@ -2,7 +2,7 @@
 #define EXTERNALTOOLITEM_H
 
 #include <QString>
-
+#include "settings.h"
 class ExternalToolItem
 {
     QString name_;
@@ -23,6 +23,9 @@ public:
         this->exe_ = that.exe_;
         this->arg_ = that.arg_;
     }
+    static ExternalToolItem Load(int i, Settings& settings);
+    void Save(int i, Settings& settings);
+
     QString GetName() const {
         return name_;
     }
