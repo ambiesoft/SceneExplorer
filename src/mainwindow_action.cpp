@@ -61,12 +61,14 @@ void MainWindow::on_action_Options_triggered()
     OptionDialog dlg(this);
     dlg.maxgd_ = optionThreadcountGetDir_;
     dlg.maxff_ = optionThreadcountThumbnail_;
+    dlg.imagecache_ = tableModel_->GetImageCache();
+
     if(QDialog::Accepted != dlg.exec())
         return;
 
     optionThreadcountGetDir_ = dlg.maxgd_;
     optionThreadcountThumbnail_ = dlg.maxff_;
-
+    tableModel_->SetImageCache(dlg.imagecache_);
     // this will cause task's destructor not to called.
     // getPoolFFmpeg()->setMaxThreadCount(threadcountFFmpeg_);
 }
@@ -503,8 +505,8 @@ void MainWindow::on_directoryWidget_RemoveMissingItems()
 		dir = item->text();
 	
     gpSQL->RemoveAllMissingEntries(dir);
-	
-	directoryChangedCommon();
+
+    directoryChangedCommon(true);
 }
 void MainWindow::on_directoryWidget_UncheckAll()
 {

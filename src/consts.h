@@ -29,6 +29,7 @@ namespace Consts
 
     const char KEY_MAX_GETDIR_THREADCOUNT[] = "maxgetdirthreadcount";
     const char KEY_MAX_THUMBNAIL_THREADCOUNT[] = "maxthumbnailthreadcount";
+    const char KEY_IMAGECACHETYPE[] = "imagecachetype";
 
     const char KEY_ALLOW_EXTENSIONS[] = "allowextensions";
 

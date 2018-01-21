@@ -107,7 +107,8 @@ void TableModel::ClearData()
 {
     itemDatas_.clear();
     mapsFullpathToItem_.clear();
-    mapPixmaps_.clear();
+    if(imagecache_ != ImageCacheType::IC_ALWAYS)
+        mapPixmaps_.clear();
     emit itemCountChanged();
 }
 
@@ -303,16 +304,25 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
                 parent_->setRowHeight(index.row(), Consts::THUMB_HEIGHT);
 
                 QString imageFile = pathCombine(Consts::FILEPART_THUMBS,
-                                        itemDatas_[actualIndex]->getImageFiles()[index.column()]);
-                if(!mapPixmaps_.keys().contains(imageFile))
+                                                itemDatas_[actualIndex]->getImageFiles()[index.column()]);
+                if(imagecache_==ImageCacheType::IC_NEVER)
                 {
-                    // QString imageFile("C:\\Cygwin\\home\\fjUnc\\gitdev\\SceneExplorer\\build-SceneExplorer-Desktop_Qt_5_10_0_MSVC2013_64bit-Debug\\0b76916f-3fb8-49be-a7da-d110ed476952-2.png");
                     QImage image(imageFile);
                     // const PixmapPointer pix = PixmapPointer(new QPixmap(QPixmap::fromImage(image)));
-                    QVariant vpix(QPixmap::fromImage(image));
-                    mapPixmaps_[imageFile]= vpix;
+                   return QPixmap::fromImage(image);
                 }
-                return mapPixmaps_[imageFile];
+                else
+                {
+                    if(!mapPixmaps_.keys().contains(imageFile))
+                    {
+                        // QString imageFile("C:\\Cygwin\\home\\fjUnc\\gitdev\\SceneExplorer\\build-SceneExplorer-Desktop_Qt_5_10_0_MSVC2013_64bit-Debug\\0b76916f-3fb8-49be-a7da-d110ed476952-2.png");
+                        QImage image(imageFile);
+                        // const PixmapPointer pix = PixmapPointer(new QPixmap(QPixmap::fromImage(image)));
+                        QVariant vpix(QPixmap::fromImage(image));
+                        mapPixmaps_[imageFile]= vpix;
+                    }
+                    return mapPixmaps_[imageFile];
+                }
             }
             break;
         }

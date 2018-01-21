@@ -37,6 +37,7 @@ class MainWindow : public QMainWindow
     // setting keys
     Settings& settings_;
 
+
 public:
     explicit MainWindow(QWidget *parent, Settings& settings);
     ~MainWindow();

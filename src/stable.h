@@ -69,6 +69,7 @@
 #include <QReadWriteLock>
 #include <QFont>
 #include <QFontDialog>
+#include <QFileDialog>
 
 #endif // __cplusplus
 

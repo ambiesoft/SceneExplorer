@@ -348,7 +348,7 @@
   </action>
   <action name="action_Options">
    <property name="text">
-    <string>&amp;Options...</string>
+    <string>&amp;General Otions...</string>
    </property>
   </action>
   <action name="action_Pause">

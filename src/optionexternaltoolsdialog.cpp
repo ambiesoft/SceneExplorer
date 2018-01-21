@@ -1,4 +1,5 @@
 #include "helper.h"
+#include "blockedbool.h"
 
 #include "optionexternaltoolsdialog.h"
 #include "ui_optionexternaltoolsdialog.h"
@@ -12,13 +13,17 @@ OptionExternalToolsDialog::OptionExternalToolsDialog(QWidget *parent) :
 }
 void OptionExternalToolsDialog::showEvent(QShowEvent *ev)
 {
+    ExternalToolWidgetItem* itemToSelect=nullptr;
     for(int i=0 ; i < items_.count(); ++i)
     {
         ExternalToolWidgetItem* item = new ExternalToolWidgetItem(items_[i]);
         item->setText(items_[i].GetName());
 
         ui->listWidget->addItem(item);
+        if(i==0)
+            itemToSelect=item;
     }
+    itemToSelect->setSelected(true);
     QDialog::showEvent(ev);
 }
 OptionExternalToolsDialog::~OptionExternalToolsDialog()
@@ -28,7 +33,22 @@ OptionExternalToolsDialog::~OptionExternalToolsDialog()
 
 void OptionExternalToolsDialog::on_listWidget_itemSelectionChanged()
 {
+    BlockedBool bb(&selectionChanging_);
+    if(ui->listWidget->selectedItems().isEmpty())
+    {
+        ui->lineName->setEnabled(false);
+        ui->lineExe->setEnabled(false);
+        ui->lineArg->setEnabled(false);
+        return;
+    }
+    ui->lineName->setEnabled(true);
+    ui->lineExe->setEnabled(true);
+    ui->lineArg->setEnabled(true);
 
+    ExternalToolWidgetItem* item = (ExternalToolWidgetItem*)ui->listWidget->selectedItems()[0];
+    ui->lineName->setText(item->GetItemName());
+    ui->lineExe->setText(item->GetItemExe());
+    ui->lineArg->setText(item->GetItemArg());
 }
 int OptionExternalToolsDialog::GetItemIndex(QListWidgetItem* item) const
 {
@@ -47,10 +67,10 @@ void OptionExternalToolsDialog::on_listWidget_currentItemChanged(QListWidgetItem
 
     if(previous)
     {
-        ExternalToolWidgetItem* pItem = (ExternalToolWidgetItem*)previous;
-        pItem->SetItemName(ui->lineName->text());
-        pItem->SetItemExe(ui->lineExe->text());
-        pItem->SetItemArg(ui->lineArg->text());
+//        ExternalToolWidgetItem* pItem = (ExternalToolWidgetItem*)previous;
+//        pItem->SetItemName(ui->lineName->text());
+//        pItem->SetItemExe(ui->lineExe->text());
+//        pItem->SetItemArg(ui->lineArg->text());
 //        int prevI = GetItemIndex(previous);
 //        items_[prevI].SetName(ui->lineName->text());
 //        items_[prevI].SetExe(ui->lineExe->text());
@@ -59,10 +79,10 @@ void OptionExternalToolsDialog::on_listWidget_currentItemChanged(QListWidgetItem
 
     if(current)
     {
-        ExternalToolWidgetItem* pItem = (ExternalToolWidgetItem*)current;
-        ui->lineName->setText(pItem->GetItemName());
-        ui->lineExe->setText(pItem->GetItemExe());
-        ui->lineArg->setText(pItem->GetItemArg());
+//        ExternalToolWidgetItem* pItem = (ExternalToolWidgetItem*)current;
+//        ui->lineName->setText(pItem->GetItemName());
+//        ui->lineExe->setText(pItem->GetItemExe());
+//        ui->lineArg->setText(pItem->GetItemArg());
 
 //        int currentI = GetItemIndex(current);
 //        ui->lineName->setText(items_[currentI].GetName());
@@ -113,19 +133,43 @@ void OptionExternalToolsDialog::on_pbMoveDown_clicked()
 
 }
 
-void OptionExternalToolsDialog::on_pbAddMacro_clicked()
-{
 
-}
 
 void OptionExternalToolsDialog::on_lineName_textChanged(const QString &arg1)
 {
+    if(selectionChanging_)
+        return;
     if(ui->listWidget->selectedItems().isEmpty())
         return;
 
     ExternalToolWidgetItem* item = (ExternalToolWidgetItem*)ui->listWidget->selectedItems()[0];
+    item->SetItemName(arg1);
     item->setText(arg1);
 }
+void OptionExternalToolsDialog::on_lineExe_textChanged(const QString &arg1)
+{
+    if(selectionChanging_)
+        return;
+
+    if(ui->listWidget->selectedItems().isEmpty())
+        return;
+
+    ExternalToolWidgetItem* item = (ExternalToolWidgetItem*)ui->listWidget->selectedItems()[0];
+    item->SetItemExe(arg1);
+}
+
+void OptionExternalToolsDialog::on_lineArg_textChanged(const QString &arg1)
+{
+    if(selectionChanging_)
+        return;
+
+    if(ui->listWidget->selectedItems().isEmpty())
+        return;
+
+    ExternalToolWidgetItem* item = (ExternalToolWidgetItem*)ui->listWidget->selectedItems()[0];
+    item->SetItemArg(arg1);
+}
+
 
 void OptionExternalToolsDialog::on_buttonBox_accepted()
 {
@@ -150,10 +194,21 @@ void OptionExternalToolsDialog::UpdateData()
 
 void OptionExternalToolsDialog::on_tbExecutable_clicked()
 {
+    QFileDialog dialog(this);
+    dialog.setFileMode(QFileDialog::ExistingFile);
+    if(!dialog.exec())
+        return;
 
+    if(dialog.selectedFiles().isEmpty())
+    {
+        Alert(this, tr("No file selected."));
+        return;
+    }
+    ui->lineExe->setText(dialog.selectedFiles()[0]);
 }
 
 void OptionExternalToolsDialog::on_tbArguments_clicked()
 {
 
 }
+

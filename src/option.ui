@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>562</width>
-    <height>93</height>
+    <height>236</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -27,7 +27,7 @@
    <item row="0" column="1">
     <widget class="QSpinBox" name="spinBoxGetDir"/>
    </item>
-   <item row="1" column="0">
+   <item row="3" column="0">
     <widget class="QLabel" name="labelThumb">
      <property name="text">
       <string>Thread count of &amp;creating thumbnail:</string>
@@ -37,16 +37,60 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="1">
+   <item row="3" column="1">
     <widget class="QSpinBox" name="spinBoxThumb"/>
    </item>
-   <item row="2" column="1">
+   <item row="5" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>&amp;Image cache:</string>
+     </property>
+     <property name="buddy">
+      <cstring>rbICNever</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="10" column="1">
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
      <property name="standardButtons">
       <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+     </property>
+    </widget>
+   </item>
+   <item row="8" column="1">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="5" column="1">
+    <widget class="QRadioButton" name="rbICNever">
+     <property name="text">
+      <string>&amp;Never</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="1">
+    <widget class="QRadioButton" name="rbICPerfolder">
+     <property name="text">
+      <string>&amp;Per folder selections</string>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="1">
+    <widget class="QRadioButton" name="rbICAlways">
+     <property name="text">
+      <string>&amp;Always</string>
      </property>
     </widget>
    </item>

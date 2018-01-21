@@ -6,6 +6,7 @@
 #include <QWidget>
 #include <QFile>
 
+#include "globals.h"
 #include "tableitemdata.h"
 
 class QTableView;
@@ -19,6 +20,7 @@ class TableModel : public QAbstractTableModel
 
     QFont fontInfo_;
     QFont fontDetail_;
+
 
 public:
     enum SORTCOLUMN{
@@ -36,6 +38,7 @@ private:
     QList<TableItemDataPointer> itemDatas_;
     QMap<QString, TableItemDataPointer> mapsFullpathToItem_;
     mutable QMap<QString, QVariant> mapPixmaps_;
+    ImageCacheType imagecache_;
 
 	bool bShowMissing_ = false;
 
@@ -105,6 +108,13 @@ public:
     void SetDetailFont(const QFont& font) {
         fontDetail_=font;
     }
+
+    ImageCacheType GetImageCache() const {
+        return imagecache_;
+    }
+    void SetImageCache(ImageCacheType ic) {
+        imagecache_=ic;
+    }
 signals:
     void itemCountChanged();
     void sortParameterChanged(SORTCOLUMN sc, bool rev);
@@ -146,6 +156,8 @@ public:
     int GetItemCount() const {
         return rowCount()/3;
     }
+
+
 };
 //#include <QItemDelegate>
 //class ImageSizeDelegate : public QItemDelegate 

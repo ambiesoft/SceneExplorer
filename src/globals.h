@@ -20,5 +20,10 @@ extern volatile int gLoopId;
 # endif
 #endif
 
+enum ImageCacheType {
+    IC_NEVER,
+    IC_PERFOLDER,
+    IC_ALWAYS,
+};
 
 #endif // GLOBALS_H

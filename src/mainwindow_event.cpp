@@ -82,7 +82,7 @@ void MainWindow::closeEvent(QCloseEvent *event) {
 
     settings_.setValue(Consts::KEY_MAX_GETDIR_THREADCOUNT, optionThreadcountGetDir_);
     settings_.setValue(Consts::KEY_MAX_THUMBNAIL_THREADCOUNT, optionThreadcountThumbnail_);
-
+    settings_.setValue(Consts::KEY_IMAGECACHETYPE, (int)tableModel_->GetImageCache());
 
     settings_.setValue(Consts::KEY_ALLOW_EXTENSIONS, Extension::GetMovieExtension());
 

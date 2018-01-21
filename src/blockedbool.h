@@ -13,6 +13,12 @@ public:
     {
         *target_ = c;
     }
+    BlockedBool(volatile bool* target) :
+        target_(target),
+        d_(false)
+    {
+        *target_ = true;
+    }
     ~BlockedBool()
     {
         *target_ = d_;

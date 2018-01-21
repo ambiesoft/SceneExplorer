@@ -53,6 +53,8 @@ class OptionExternalToolsDialog : public QDialog
 {
     Q_OBJECT
 
+    bool selectionChanging_=false;
+
     bool HasItemWithName(const QString& name);
     void UpdateData();
 
@@ -79,7 +81,6 @@ private slots:
 
     void on_pbMoveDown_clicked();
 
-    void on_pbAddMacro_clicked();
 
     void on_lineName_textChanged(const QString &arg1);
 
@@ -88,6 +89,10 @@ private slots:
     void on_tbExecutable_clicked();
 
     void on_tbArguments_clicked();
+
+    void on_lineExe_textChanged(const QString &arg1);
+
+    void on_lineArg_textChanged(const QString &arg1);
 
 private:
     Ui::OptionExternalToolsDialog *ui;

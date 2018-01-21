@@ -255,6 +255,7 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
 
     optionThreadcountGetDir_ = settings_.valueInt(Consts::KEY_MAX_GETDIR_THREADCOUNT, optionThreadcountGetDir_);
     optionThreadcountThumbnail_ = settings_.valueInt(Consts::KEY_MAX_THUMBNAIL_THREADCOUNT, optionThreadcountThumbnail_);
+    tableModel_->SetImageCache((ImageCacheType)settings_.valueInt(Consts::KEY_IMAGECACHETYPE,1));
 
     vVal = settings_.value(Consts::KEY_ALLOW_EXTENSIONS);
     if(vVal.isValid())

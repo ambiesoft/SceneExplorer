@@ -867,7 +867,7 @@ bool Sql::RemoveAllMissingEntries(const QString& dirc)
     else
     {
         QString dir = canonicalDir(dirc);
-        SQC(query,prepare("SELECT directory,name FROM FileInfo WHERE directory=?"));
+        SQC(query,prepare("SELECT directory,name FROM FileInfo WHERE directory LIKE ?"));
 
         query.bindValue(0, dir+"%");
     }
@@ -891,14 +891,24 @@ bool Sql::RemoveAllMissingEntries(const QString& dirc)
 		}
 	}
 
+
+    for (QSet<QPair<QString, QString> >::iterator it = dels.begin(); it != dels.end(); ++it)
+    {
+        QString removed;
+        VERIFY(RemoveEntryThumb(it->first, it->second, removed));
+    }
+
 	SQC(query, prepare("DELETE FROM FileInfo WHERE directory=? AND name=?"));
     for (QSet<QPair<QString, QString> >::iterator it = dels.begin(); it != dels.end(); ++it)
-	{
-		int i = 0;
-		query.bindValue(i++, it->first);
-		query.bindValue(i++, it->second);
+    {
+        int i = 0;
+        query.bindValue(i++, it->first);
+        query.bindValue(i++, it->second);
 
-		SQC(query, exec());
-	}
+        SQC(query, exec());
+    }
+
+
+
 	return true;
 }
