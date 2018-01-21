@@ -11,6 +11,10 @@ debug/
 release/
 ui_mainwindow.h
 ui_option.h
+ui_option_extension.h
+ui_optionexternaltoolsdialog.h
+ui_optionfontdialog.h
+
 
 /build-*
 *.user

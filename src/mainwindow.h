@@ -58,6 +58,8 @@ private:
                            bool bOnlyMissing = false);
 	QToolButton* btnShowNonExistant_ = nullptr;
 
+    void UpdateTitle(const QStringList& dirs, bool bOnlyMissing);
+
     QList<ExternalToolItem> externalTools_;
 
     class IDManager
@@ -319,11 +321,12 @@ public slots:
                      const QStringList& filteredFiles);
 //    void finished_Filter(int loopId, int id);
 
-    void openSelectedVideo();
-    void openSelectedVideoInFolder();
-    void copySelectedVideoPath();
-    void copySelectedVideoFilename();
-    void removeFromDatabase();
+    void on_context_openSelectedVideo();
+    void on_context_openSelectedVideoInFolder();
+    void on_context_copySelectedVideoPath();
+    void on_context_copySelectedVideoFilename();
+    void on_context_removeFromDatabase();
+    void on_context_Rename();
     void on_context_ExternalTools();
 
     void tableItemCountChanged();

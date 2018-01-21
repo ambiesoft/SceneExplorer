@@ -130,7 +130,7 @@ void MainWindow::on_action_Add_current_check_states_triggered()
 {
     bool ok;
     QString name = QInputDialog::getText(this,
-                                         Consts::APPNAME,
+                                         Consts::APPNAME_DISPLAY,
                                          tr("Name:"),
                                          QLineEdit::Normal,
                                          QString(),
@@ -389,20 +389,20 @@ void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
 
     QAction actionOpen("&Open", this);
     connect(&actionOpen, SIGNAL(triggered()),
-            this, SLOT(openSelectedVideo()));
+            this, SLOT(on_context_openSelectedVideo()));
     contextMenu.addAction(&actionOpen);
 
 
     QAction actionOpenFolder("Open &Folder", this);
     connect(&actionOpenFolder, SIGNAL(triggered()),
-            this, SLOT(openSelectedVideoInFolder()));
+            this, SLOT(on_context_openSelectedVideoInFolder()));
     contextMenu.addAction(&actionOpenFolder);
 
     contextMenu.addSeparator();
 
     QAction actionCopyPath("&Copy Path");
     connect(&actionCopyPath, SIGNAL(triggered()),
-            this, SLOT(copySelectedVideoPath()));
+            this, SLOT(on_context_copySelectedVideoPath()));
     contextMenu.addAction(&actionCopyPath);
 
 
@@ -411,7 +411,7 @@ void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
 
     QAction actionCopyFilename("&Filename");
     connect(&actionCopyFilename, SIGNAL(triggered()),
-            this, SLOT(copySelectedVideoFilename()));
+            this, SLOT(on_context_copySelectedVideoFilename()));
     menuCopyOther.addAction(&actionCopyFilename);
 
     contextMenu.addMenu(&menuCopyOther);
@@ -436,9 +436,15 @@ void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
 
     contextMenu.addSeparator();
 
-    QAction actionRemoveFromDB("&Remove from database");
+    QAction actionRename(tr("Re&name"));
+    connect(&actionRename, SIGNAL(triggered()),
+            this, SLOT(on_context_Rename()));
+    contextMenu.addAction(&actionRename);
+    contextMenu.addSeparator();
+
+    QAction actionRemoveFromDB(tr("&Remove from database"));
     connect(&actionRemoveFromDB, SIGNAL(triggered()),
-            this, SLOT(removeFromDatabase()));
+            this, SLOT(on_context_removeFromDatabase()));
     contextMenu.addAction(&actionRemoveFromDB);
 
     contextMenu.exec(ui->tableView->mapToGlobal(pos));

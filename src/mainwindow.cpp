@@ -760,20 +760,59 @@ QString MainWindow::getSelectedVideo(bool bNativeFormat)
 
     return bNativeFormat ? QDir::toNativeSeparators(s) : s;
 }
-void MainWindow::openSelectedVideo()
+void MainWindow::on_context_openSelectedVideo()
 {
     openVideo(getSelectedVideo());
 }
-void MainWindow::openSelectedVideoInFolder()
+void MainWindow::on_context_openSelectedVideoInFolder()
 {
     openVideoInFolder(getSelectedVideo());
 }
 
-void MainWindow::copySelectedVideoPath()
+void MainWindow::on_context_copySelectedVideoPath()
 {
     QApplication::clipboard()->setText(getSelectedVideo());
 }
-void MainWindow::removeFromDatabase()
+void MainWindow::on_context_Rename()
+{
+    QString oldfull = getSelectedVideo();
+    QString olddir = canonicalDir(QFileInfo(oldfull).canonicalPath());
+    QString oldname = QFileInfo(oldfull).fileName();
+
+    bool ok;
+    QString newname = QInputDialog::getText(this,
+                                         Consts::APPNAME_DISPLAY,
+                                         tr("&New name:"),
+                                         QLineEdit::Normal,
+                                         oldname,
+                                         &ok,
+                                         GetDefaultDialogFlags());
+    if(!ok)
+        return;
+    if(newname.isEmpty())
+        return;
+
+    if(newname==oldname)
+    {
+        Alert(this,tr("New name is same as old name."));
+        return;
+    }
+	QFile filefull(oldfull);
+    if(!filefull.rename(pathCombine(olddir, newname)))
+    {
+		Alert(this,
+			QString(tr("Failed to rename file. (%1)")).arg(filefull.errorString()));
+        return;
+    }
+    if(!gpSQL->RenameEntry(olddir, oldname, olddir,newname))
+    {
+        Alert(this, tr("Failed to rename in database."));
+        return;
+    }
+    tableModel_->RenameEntry(olddir, oldname, olddir, newname);
+}
+
+void MainWindow::on_context_removeFromDatabase()
 {
     QString movieFile = getSelectedVideo(false);
     if(movieFile.isEmpty())
@@ -851,7 +890,7 @@ void MainWindow::on_context_ExternalTools()
 
     QProcess::startDetached(exe,arg);
 }
-void MainWindow::copySelectedVideoFilename()
+void MainWindow::on_context_copySelectedVideoFilename()
 {
     QFileInfo fi(getSelectedVideo());
     QApplication::clipboard()->setText(fi.fileName());
@@ -945,6 +984,8 @@ void MainWindow::GetSqlAllSetTable(const QStringList& dirs, bool bOnlyMissing)
     QList<TableItemDataPointer> all;
     gpSQL->GetAll(all, dirs, comboFind_->currentText(), bOnlyMissing);
 
+    UpdateTitle(dirs, bOnlyMissing);
+
     insertLog(TaskKind::App,
               0,
               QString(tr("Quering Database takes %1 milliseconds.")).arg(timer.elapsed()));
@@ -957,6 +998,36 @@ void MainWindow::GetSqlAllSetTable(const QStringList& dirs, bool bOnlyMissing)
               QString(tr("Resetting data takes %1 milliseconds.")).arg(timer.elapsed()));
 }
 
+void MainWindow::UpdateTitle(const QStringList& dirs, bool bOnlyMissing)
+{
+    QStringList titles;
+    if(bOnlyMissing)
+    {
+        titles << tr("Missing");
+    }
+    else
+    {
+        titles = dirs;
+    }
+
+    QString title;
+    for(int i=0 ; i < titles.count(); ++i)
+    {
+        title.append(titles[i]);
+        if((i+1) != titles.count())
+            title.append(" - ");
+    }
+
+    if(title.isEmpty())
+        title = Consts::APPNAME_DISPLAY;
+    else
+    {
+        title.append(" - ");
+        title.append(Consts::APPNAME_DISPLAY);
+    }
+
+    this->setWindowTitle(title);
+}
 void MainWindow::on_action_Top_triggered()
 {
 	WaitCursor wc;

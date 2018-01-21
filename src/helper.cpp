@@ -61,6 +61,7 @@ void Alert(QWidget* parent, QString message)
 	// msgBox.setInformativeText(message);
 	msgBox.setText(message);
 	msgBox.setStandardButtons(QMessageBox::Ok);
+    msgBox.setIcon(QMessageBox::Warning);
 	msgBox.exec();
 }
 bool YesNo(QWidget* parent, QString message)
