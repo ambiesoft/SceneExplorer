@@ -18,7 +18,7 @@ namespace Consts
 
 	
     const char KEY_LASTSELECTEDDIRECTORY[] = "lastselecteddir";
-    const char KEY_DBPATH[] = "dbpath";
+    const char KEY_DATABASE_PATH[] = "databasepath";
 
     const char KEY_KEY_USERENTRY_DIRECTORY_ALL_SELECTED[] = "entrydirectoryallselected";
     const char KEY_KEY_USERENTRY_DIRECTORY_ALL_CHECKED[] = "entrydirectoryallchecked";

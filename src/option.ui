@@ -40,7 +40,7 @@
    <item row="3" column="1">
     <widget class="QSpinBox" name="spinBoxThumb"/>
    </item>
-   <item row="5" column="0">
+   <item row="6" column="0">
     <widget class="QLabel" name="label">
      <property name="text">
       <string>&amp;Image cache:</string>
@@ -50,7 +50,7 @@
      </property>
     </widget>
    </item>
-   <item row="10" column="1">
+   <item row="11" column="1">
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -60,7 +60,7 @@
      </property>
     </widget>
    </item>
-   <item row="8" column="1">
+   <item row="9" column="1">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -73,32 +73,64 @@
      </property>
     </spacer>
    </item>
-   <item row="5" column="1">
+   <item row="6" column="1">
     <widget class="QRadioButton" name="rbICNever">
      <property name="text">
       <string>&amp;Never</string>
      </property>
     </widget>
    </item>
-   <item row="6" column="1">
+   <item row="7" column="1">
     <widget class="QRadioButton" name="rbICPerfolder">
      <property name="text">
       <string>&amp;Per folder selections</string>
      </property>
     </widget>
    </item>
-   <item row="7" column="1">
+   <item row="8" column="1">
     <widget class="QRadioButton" name="rbICAlways">
      <property name="text">
       <string>&amp;Always</string>
      </property>
     </widget>
    </item>
+   <item row="5" column="0">
+    <widget class="QLabel" name="labelDBDir">
+     <property name="text">
+      <string>&amp;Database directory:</string>
+     </property>
+     <property name="buddy">
+      <cstring>lineDBDir</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="QLineEdit" name="lineDBDir"/>
+     </item>
+     <item>
+      <widget class="QToolButton" name="tbDBDir">
+       <property name="text">
+        <string>...</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
   </layout>
  </widget>
  <tabstops>
   <tabstop>spinBoxGetDir</tabstop>
   <tabstop>spinBoxThumb</tabstop>
+  <tabstop>lineDBDir</tabstop>
+  <tabstop>tbDBDir</tabstop>
+  <tabstop>rbICNever</tabstop>
+  <tabstop>rbICPerfolder</tabstop>
+  <tabstop>rbICAlways</tabstop>
  </tabstops>
  <resources/>
  <connections>

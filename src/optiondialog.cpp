@@ -1,4 +1,6 @@
 #include <QWidget>
+#include <QFileDialog>
+
 #include "helper.h"
 #include "optiondialog.h"
 
@@ -29,6 +31,8 @@ void OptionDialog::showEvent(QShowEvent *ev)
     default:
         Q_ASSERT(false);
     }
+
+    dbdirupdated_ = dbdir_;
     QDialog::showEvent(ev);
 }
 void OptionDialog::on_buttonBox_accepted()
@@ -44,4 +48,18 @@ void OptionDialog::on_buttonBox_accepted()
         imagecache_=IC_ALWAYS;
     else
         Q_ASSERT(false);
+
+    dbdir_ = dbdirupdated_;
+}
+
+void OptionDialog::on_tbDBDir_clicked()
+{
+    QFileDialog dlg(this);
+    dlg.setFileMode(QFileDialog::DirectoryOnly);
+    dlg.setDirectory(dbdir_);
+
+    if(!dlg.exec())
+        return;
+
+    dbdirUpdated_ = dlg.selectedFiles()[0];
 }

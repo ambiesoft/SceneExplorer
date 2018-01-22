@@ -7,6 +7,7 @@
 #include <QString>
 #include <QObject>
 #include <QDebug>
+#include <QFileDialog>
 
 #include "consts.h"
 #include "globals.h"
@@ -52,13 +53,69 @@ static void testSQL()
 }
 #endif
 
+
+bool OpenSceneDirectory(Settings& settings,const QString& dbDir)
+{
+    if(!QDir(dbDir).exists())
+    {
+        Alert(nullptr,QString(QObject::tr("\"%1\" is not directory.")).arg(dbDir));
+        return false;
+    }
+    if(!QDir::setCurrent(dbDir))
+    {
+        Alert(nullptr, QString(QObject::tr("Failed to set \"%1\" as current directory.").arg(dbDir)));
+        return false;
+    }
+
+    qDebug() << "Current Directory =" << dbDir;
+
+    // create and check thumbs dir
+    QDir(".").mkdir(Consts::FILEPART_THUMBS);
+    if(!QDir(Consts::FILEPART_THUMBS).exists())
+    {
+        Alert(nullptr, QString(QObject::tr("Failed to mkdir \"%1\" or it is not a directory.")).
+            arg(QFileInfo(Consts::FILEPART_THUMBS).absoluteFilePath()));
+        return false;
+    }
+
+    settings.setValue(Consts::KEY_DATABASE_PATH, dbDir);
+    return true;
+}
+
+bool GetDefaultSceneDirectory(Settings& settings, QString& dbdir)
+{
+    dbdir = settings.valueString(Consts::KEY_DATABASE_PATH);
+
+    if(dbdir.isEmpty() || !QDir(dbdir).exists())
+    {
+        dbdir = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+        QFileDialog dlg;
+        dlg.setFileMode(QFileDialog::FileMode::DirectoryOnly);
+        dlg.setDirectory(dbdir);
+
+        if(!dlg.exec())
+            return false;
+
+        if(dlg.selectedFiles().isEmpty())
+            return false;
+
+        dbdir = dlg.selectedFiles()[0];
+    }
+    return true;
+}
+
+enum PROGRAM_RETURN {
+    PR_OK = 0,
+    PR_GETDIRECTORYFAILED,
+    PR_OPENSCENEDIRECTORYFAILED,
+    PR_SQLOPENFAILED,
+    PR_WINDOWINITFAILED,
+};
 int main(int argc, char *argv[])
 {
     QCoreApplication::setOrganizationName(Consts::ORGANIZATION);
     QCoreApplication::setOrganizationDomain(Consts::APPDOMAIN);
     QCoreApplication::setApplicationName(Consts::APPNAME);
-
-
 
     QApplication app(argc, argv);
 	
@@ -71,44 +128,22 @@ int main(int argc, char *argv[])
     
     TaskGetDir::RegisterMetaType();
 
-	// QString dataDir = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+
 
     Settings settings;
-    QString dbDir = settings.valueString(Consts::KEY_DBPATH);
-    if(dbDir.isEmpty() || !QDir(dbDir).exists())
-    {
-        dbDir = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
-        QDir(dbDir).mkpath("db");
-        dbDir = pathCombine(dbDir, "db");
-    }
-    if(!QDir(dbDir).exists())
-    {
-        Alert(nullptr,QString(QObject::tr("\"%1\" is not directory.")).arg(dbDir));
-        return 1;
-    }
-    if(!QDir::setCurrent(dbDir))
-    {
-        Alert(nullptr, QString(QObject::tr("Failed to set \"%1\" as current directory.").arg(dbDir)));
-        return 1;
-    }
+    QString dbdir;
+    if(!GetDefaultSceneDirectory(settings,dbdir))
+        return PR_GETDIRECTORYFAILED;
 
-    qDebug() << "Current Directory =" << dbDir;
-
-    // create and check thumbs dir
-    QDir(".").mkdir(Consts::FILEPART_THUMBS);
-    if(!QDir(Consts::FILEPART_THUMBS).exists())
-    {
-        Alert(nullptr, QString(QObject::tr("Failed to mkdir \"%1\" or it is not a directory.")).
-			arg(QFileInfo(Consts::FILEPART_THUMBS).absoluteFilePath()));
-        return 1;
-    }
+    if(!OpenSceneDirectory(settings,dbdir))
+        return PR_OPENSCENEDIRECTORYFAILED;
 
 	Sql theSql;
 	if (!theSql.isOK())
 	{
 		Alert(nullptr, QString(QObject::tr("Failed to open or create database. \"%1\"")).
 			arg(QFileInfo(Sql::getDBFileName()).absoluteFilePath()));
-		return 1;
+        return PR_SQLOPENFAILED;
 	}
 	gpSQL = &theSql;
 #ifdef QT_DEBUG
@@ -123,7 +158,7 @@ int main(int argc, char *argv[])
 
     MainWindow w(nullptr, settings);
     if(!w.IsInitialized())
-        return 1;
+        return PR_WINDOWINITFAILED;
     w.show();
 
     return app.exec();

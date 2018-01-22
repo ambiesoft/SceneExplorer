@@ -13,17 +13,20 @@ class OptionDialog:public QDialog
 private:
     Ui::Option ui;
 
+    QString dbdirupdated_;
 public:
     OptionDialog(QWidget* parent = nullptr);
 
     ImageCacheType imagecache_;
     int maxgd_;
     int maxff_;
+    QString dbdir_;
 
 protected:
     void showEvent(QShowEvent *) override;
 private slots:
     void on_buttonBox_accepted();
+    void on_tbDBDir_clicked();
 };
 
 #endif // OPTIONDIALOG_H

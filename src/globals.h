@@ -26,4 +26,6 @@ enum ImageCacheType {
     IC_ALWAYS,
 };
 
+
+
 #endif // GLOBALS_H
