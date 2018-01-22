@@ -154,8 +154,6 @@ private:
 
     int optionThreadcountGetDir_ = 1;
     int optionThreadcountThumbnail_ = 2;
-    QString optionAllowExtention_;
-    QString optionDenyExtention_;
 
     bool initShown=false;
 	bool IsClosed() const {

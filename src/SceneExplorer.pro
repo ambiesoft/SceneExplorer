@@ -48,12 +48,12 @@ SOURCES += \
     runguard.cpp \
     errorinfoexception.cpp \
     blockedbool.cpp \
-    option_extension.cpp \
     extension.cpp \
     optionfontdialog.cpp \
     optionexternaltoolsdialog.cpp \
     externaltoolitem.cpp \
-    exeffmpeg.cpp
+    exeffmpeg.cpp \
+    optionextension.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -78,19 +78,19 @@ HEADERS += \
     runguard.h \
     errorinfoexception.h \
     blockedbool.h \
-    option_extension.h \
     extension.h \
     optionfontdialog.h \
     optionexternaltoolsdialog.h \
     externaltoolitem.h \
-    exeffmpeg.h
+    exeffmpeg.h \
+    optionextension.h
 
 FORMS += \
         mainwindow.ui \
     option.ui \
-    option_extension.ui \
     optionfontdialog.ui \
-    optionexternaltoolsdialog.ui
+    optionexternaltoolsdialog.ui \
+    optionextension.ui
 
 RC_FILE = app.rc
 

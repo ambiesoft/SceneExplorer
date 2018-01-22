@@ -13,7 +13,6 @@ class OptionDialog:public QDialog
 private:
     Ui::Option ui;
 
-    QString dbdirupdated_;
 public:
     OptionDialog(QWidget* parent = nullptr);
 

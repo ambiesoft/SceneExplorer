@@ -7,3 +7,4 @@ Sql* gpSQL = nullptr;
 volatile int gLoopId;
 
 
+volatile bool gReboot;

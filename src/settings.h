@@ -47,6 +47,7 @@ public:
     }
     QString valueString(const QString& key, const QString& defaultvalue=QString());
     int valueInt(const QString& key, int defaultvalue=0);
+    bool valueBool(const QString& key, bool defaultvalue=false);
     QVariant value(const QString& key);
 
     QString fileName() const {

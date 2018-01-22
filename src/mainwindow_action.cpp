@@ -62,15 +62,25 @@ void MainWindow::on_action_Options_triggered()
     dlg.maxgd_ = optionThreadcountGetDir_;
     dlg.maxff_ = optionThreadcountThumbnail_;
     dlg.imagecache_ = tableModel_->GetImageCache();
-
+    dlg.dbdir_ = QDir::currentPath();
     if(QDialog::Accepted != dlg.exec())
         return;
 
     optionThreadcountGetDir_ = dlg.maxgd_;
     optionThreadcountThumbnail_ = dlg.maxff_;
     tableModel_->SetImageCache(dlg.imagecache_);
-    // this will cause task's destructor not to called.
-    // getPoolFFmpeg()->setMaxThreadCount(threadcountFFmpeg_);
+
+    settings_.setValue(Consts::KEY_DATABASE_PATH, dlg.dbdir_);
+    if(QDir::current() != QDir(dlg.dbdir_))
+    {
+        if(YesNo(this,
+              tr("Application needs to restart to effect the change. Do you want to restart application now?")))
+        {
+            gReboot = true;
+            this->close();
+            return;
+        }
+    }
 }
 
 void MainWindow::onMenuTask_AboutToShow()

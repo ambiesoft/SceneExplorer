@@ -8,6 +8,7 @@
 #include <QObject>
 #include <QDebug>
 #include <QFileDialog>
+#include <QProcess>
 
 #include "consts.h"
 #include "globals.h"
@@ -86,13 +87,24 @@ bool GetDefaultSceneDirectory(Settings& settings, QString& dbdir)
 {
     dbdir = settings.valueString(Consts::KEY_DATABASE_PATH);
 
+    if(!dbdir.isEmpty() && !QDir(dbdir).exists())
+    {
+        QDir().mkdir(dbdir);
+        if(!QDir(dbdir).exists())
+        {
+            Alert(nullptr,QString(QObject::tr("Failed to create directory \"%1\"")).
+                  arg(dbdir));
+        }
+    }
+
+
     if(dbdir.isEmpty() || !QDir(dbdir).exists())
     {
         dbdir = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
         QFileDialog dlg;
         dlg.setFileMode(QFileDialog::FileMode::DirectoryOnly);
         dlg.setDirectory(dbdir);
-
+        dlg.setWindowTitle(QObject::tr("Choose Database directory"));
         if(!dlg.exec())
             return false;
 
@@ -110,7 +122,10 @@ enum PROGRAM_RETURN {
     PR_OPENSCENEDIRECTORYFAILED,
     PR_SQLOPENFAILED,
     PR_WINDOWINITFAILED,
+    PR_LAUNCHTHISAPPFAILED,
 };
+
+int main2(int argc, char *argv[], QApplication& app);
 int main(int argc, char *argv[])
 {
     QCoreApplication::setOrganizationName(Consts::ORGANIZATION);
@@ -118,7 +133,25 @@ int main(int argc, char *argv[])
     QCoreApplication::setApplicationName(Consts::APPNAME);
 
     QApplication app(argc, argv);
-	
+
+    int ret = main2(argc, argv, app);
+    if(gReboot)
+    {
+        QString thisapp = QCoreApplication::applicationFilePath();
+        if(!QProcess::startDetached(thisapp))
+        {
+            Alert(nullptr, QString(QObject::tr("Failed to launch \"%1\"")).
+                  arg(thisapp));
+            return PR_LAUNCHTHISAPPFAILED;
+        }
+    }
+    return ret;
+}
+int main2(int argc, char *argv[], QApplication& app)
+{
+    Q_UNUSED(argc);
+    Q_UNUSED(argv);
+
 	RunGuard guard("SceneExplorer");
 	if (!guard.tryToRun())
 	{

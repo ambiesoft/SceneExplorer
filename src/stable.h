@@ -70,6 +70,8 @@
 #include <QFont>
 #include <QFontDialog>
 #include <QFileDialog>
+#include <QTextBlock>
+
 
 #endif // __cplusplus
 

@@ -31,7 +31,10 @@ namespace Consts
     const char KEY_MAX_THUMBNAIL_THREADCOUNT[] = "maxthumbnailthreadcount";
     const char KEY_IMAGECACHETYPE[] = "imagecachetype";
 
+
+    const char KEY_EXTENSION_ORDERALLOW[] = "extensionoderallow";
     const char KEY_ALLOW_EXTENSIONS[] = "allowextensions";
+    const char KEY_DENY_EXTENSIONS[] = "denyextensions";
 
     const char KEY_FONT_TABLEINFO[] = "fonttableinfo";
     const char KEY_FONT_TABLEDETAIL[] = "fonttabledetail";

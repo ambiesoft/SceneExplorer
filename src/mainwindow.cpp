@@ -38,7 +38,7 @@
 #include "errorinfoexception.h"
 
 #include "optiondialog.h"
-#include "option_extension.h"
+#include "optionextension.h"
 #include "optionexternaltoolsdialog.h"
 
 #include "globals.h"
@@ -257,15 +257,8 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
     optionThreadcountThumbnail_ = settings_.valueInt(Consts::KEY_MAX_THUMBNAIL_THREADCOUNT, optionThreadcountThumbnail_);
     tableModel_->SetImageCache((ImageCacheType)settings_.valueInt(Consts::KEY_IMAGECACHETYPE,1));
 
-    vVal = settings_.value(Consts::KEY_ALLOW_EXTENSIONS);
-    if(vVal.isValid())
-    {
-        Extension::SetMovieExtension(vVal.toStringList());
-    }
-    else
-    {
-        Extension::SetMovieExtension(Extension::GetDefault());
-    }
+    Extension::Load(settings_);
+
 
 
     QFont font;
@@ -597,7 +590,7 @@ void MainWindow::afterGetDir(int loopId, int id,
         {
             if(true) // gpSQL->hasThumb(dir, file))
             {
-                insertLog(TaskKind::GetDir, id, QString(tr("Already exist. \"%1\"")).
+                insertLog(TaskKind::GetDir, id, QString(tr("Already exists. \"%1\"")).
                           arg(fi.absoluteFilePath()));
                 continue;
             }
@@ -1120,15 +1113,8 @@ void MainWindow::on_action_Add_Folder_triggered()
 
 void MainWindow::on_action_Extentions_triggered()
 {
-    Option_Extension dlg(this);
-    dlg.strAllow_ = optionAllowExtention_;
-    dlg.strDeny_ = optionDenyExtention_;
-
-    if(QDialog::Accepted != dlg.exec())
-        return;
-
-    optionAllowExtention_ = dlg.strAllow_;
-    optionDenyExtention_ = dlg.strDeny_;
+    OptionExtension dlg(this, settings_);
+    dlg.exec();
 }
 
 void MainWindow::on_action_Font_triggered()

@@ -136,6 +136,14 @@ int Settings::valueInt(const QString& key, int defaultvalue)
 
     return v.toInt();
 }
+bool Settings::valueBool(const QString& key, bool defaultvalue)
+{
+    QVariant v = s_.value(key);
+    if(!v.isValid())
+        return defaultvalue;
+
+    return v.toBool();
+}
 QString Settings::valueString(const QString& key, const QString& defaultvalue)
 {
     QVariant v = s_.value(key);
