@@ -20,12 +20,9 @@ namespace Consts
     const char KEY_LASTSELECTEDDIRECTORY[] = "lastselecteddir";
     const char KEY_DATABASE_PATH[] = "databasepath";
 
-    const char KEY_KEY_USERENTRY_DIRECTORY_ALL_SELECTED[] = "entrydirectoryallselected";
-    const char KEY_KEY_USERENTRY_DIRECTORY_ALL_CHECKED[] = "entrydirectoryallchecked";
 
-    const char KEY_USERENTRY_DIRECTORIES[] = "entrydirectories";
-    const char KEY_USERENTRY_SELECTED[] = "entryselecteds";
-    const char KEY_USERENTRY_CHECKEDS[] = "entrycheckeds";
+
+
 
     const char KEY_MAX_GETDIR_THREADCOUNT[] = "maxgetdirthreadcount";
     const char KEY_MAX_THUMBNAIL_THREADCOUNT[] = "maxthumbnailthreadcount";
@@ -46,6 +43,9 @@ namespace Consts
     const char KEY_EXTERNALTOOLS_EXE[] = "externaltoolexe";
     const char KEY_EXTERNALTOOLS_ARG[] = "externaltoolarg";
 
+
+    const char KEY_RECENT_OPENDOCUMENTS[] = "recentdocuments";
+    const char KEY_OPEN_LASTOPENEDDOCUMENT[] = "openlastdocument";
 
 
     const char ALL_TASK_FINISHED[] = "======== All Tasks finished ========";

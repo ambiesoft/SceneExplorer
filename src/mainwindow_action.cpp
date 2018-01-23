@@ -63,13 +63,14 @@ void MainWindow::on_action_Options_triggered()
     dlg.maxff_ = optionThreadcountThumbnail_;
     dlg.imagecache_ = tableModel_->GetImageCache();
     dlg.dbdir_ = QDir::currentPath();
+    dlg.openlastdoc_ = settings_.valueBool(Consts::KEY_OPEN_LASTOPENEDDOCUMENT);
     if(QDialog::Accepted != dlg.exec())
         return;
 
     optionThreadcountGetDir_ = dlg.maxgd_;
     optionThreadcountThumbnail_ = dlg.maxff_;
     tableModel_->SetImageCache(dlg.imagecache_);
-
+    settings_.setValue(Consts::KEY_OPEN_LASTOPENEDDOCUMENT,dlg.openlastdoc_);
     settings_.setValue(Consts::KEY_DATABASE_PATH, dlg.dbdir_);
     if(QDir::current() != QDir(dlg.dbdir_))
     {
@@ -101,6 +102,7 @@ void MainWindow::on_FavoriteFolder_triggered(bool checked)
     ui->directoryWidget->SetCheck(dirs, true);
     directoryChangedCommon(true);
 }
+
 void MainWindow::onMenu_Favorites_AboutToShow()
 {
     int sepIndex = 2;
@@ -135,6 +137,16 @@ void MainWindow::onMenu_Favorites_AboutToShow()
         QObject::connect(qa, &QAction::triggered,
                          this, &MainWindow::on_FavoriteFolder_triggered);
         ui->menu_Favorites->addAction(qa);
+    }
+}
+void MainWindow::onMenu_RecentDocuments_AboutToShow()
+{
+    QString current = pDoc_ ? pDoc_->GetFullName() : QString();
+    ui->menu_Recent_documets->clear();
+
+    for(const QString& rc : recents_)
+    {
+        // TODO
     }
 }
 

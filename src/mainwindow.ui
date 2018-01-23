@@ -76,6 +76,18 @@
     <property name="title">
      <string>&amp;File</string>
     </property>
+    <widget class="QMenu" name="menu_Recent_documets">
+     <property name="title">
+      <string>&amp;Recent documets</string>
+     </property>
+     <addaction name="actiondummy"/>
+    </widget>
+    <addaction name="action_Open"/>
+    <addaction name="menu_Recent_documets"/>
+    <addaction name="separator"/>
+    <addaction name="action_Save"/>
+    <addaction name="actionSave_as"/>
+    <addaction name="separator"/>
     <addaction name="action_Close"/>
    </widget>
    <widget class="QMenu" name="menu_Edit">
@@ -481,6 +493,26 @@
   <action name="actionExternal_Tools">
    <property name="text">
     <string>External &amp;Tools...</string>
+   </property>
+  </action>
+  <action name="action_Open">
+   <property name="text">
+    <string>&amp;Open...</string>
+   </property>
+  </action>
+  <action name="action_Save">
+   <property name="text">
+    <string>&amp;Save</string>
+   </property>
+  </action>
+  <action name="actionSave_as">
+   <property name="text">
+    <string>Save &amp;as...</string>
+   </property>
+  </action>
+  <action name="actiondummy">
+   <property name="text">
+    <string>dummy</string>
    </property>
   </action>
  </widget>

@@ -20,6 +20,7 @@ public:
     int maxgd_;
     int maxff_;
     QString dbdir_;
+    bool openlastdoc_;
 
 protected:
     void showEvent(QShowEvent *) override;

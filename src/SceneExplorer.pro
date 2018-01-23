@@ -53,7 +53,8 @@ SOURCES += \
     optionexternaltoolsdialog.cpp \
     externaltoolitem.cpp \
     exeffmpeg.cpp \
-    optionextension.cpp
+    optionextension.cpp \
+    document.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -83,7 +84,8 @@ HEADERS += \
     optionexternaltoolsdialog.h \
     externaltoolitem.h \
     exeffmpeg.h \
-    optionextension.h
+    optionextension.h \
+    document.h
 
 FORMS += \
         mainwindow.ui \

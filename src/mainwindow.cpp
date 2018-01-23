@@ -68,6 +68,8 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
                      this, &MainWindow::onMenuDocking_windows_AboutToShow);
     QObject::connect(ui->menu_Favorites, &QMenu::aboutToShow,
                      this, &MainWindow::onMenu_Favorites_AboutToShow);
+    QObject::connect(ui->menu_Recent_documets, &QMenu::aboutToShow,
+                     this, &MainWindow::onMenu_RecentDocuments_AboutToShow);
 
 
 	// table
@@ -170,97 +172,19 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
 	if (vVal.isValid())
 		btnShowNonExistant_->setChecked(vVal.toBool());
 
-    bool bAllSel=false;
-    bool bAllCheck=false;
-    vVal = settings.value(Consts::KEY_KEY_USERENTRY_DIRECTORY_ALL_SELECTED);
-    if(vVal.isValid())
-        bAllSel=vVal.toBool();
-    vVal = settings.value(Consts::KEY_KEY_USERENTRY_DIRECTORY_ALL_CHECKED);
-    if(vVal.isValid())
-        bAllCheck=vVal.toBool();
-
-    AddUserEntryDirectory(DirectoryItem::DI_ALL, QString(), bAllSel,bAllCheck);
-
-    bool dirOK = false;
-    do
-    {
-        QVariant vValDirs = settings.value(Consts::KEY_USERENTRY_DIRECTORIES);
-        QVariant vValSelecteds = settings.value(Consts::KEY_USERENTRY_SELECTED);
-        QVariant vValCheckeds = settings.value(Consts::KEY_USERENTRY_CHECKEDS);
-
-        if(vValDirs.isValid())
-        {
-            QStringList dirs = vValDirs.toStringList();
-            QList<QVariant> sels;
-            if(vValSelecteds.isValid())
-            {
-                sels = vValSelecteds.toList();
-            }
-            else
-            {
-                for(int i =0 ; i < dirs.count(); ++i)
-                    sels.append(false);
-            }
-
-            QList<QVariant> checks;
-            if(vValCheckeds.isValid())
-            {
-                checks= vValCheckeds.toList();
-            }
-            else
-            {
-                for(int i =0 ; i < dirs.count(); ++i)
-                    checks.append(false);
-            }
 
 
-
-
-
-            Q_ASSERT(dirs.count()==sels.count());
-            Q_ASSERT(dirs.count()==checks.count());
-            for(int i=0 ; i < dirs.count(); ++i)
-            {
-                QString dir = dirs[i];
-
-                if(!sels[i].isValid())
-                    break;
-                bool sel = sels[i].toBool();
-
-                if(!checks[i].isValid())
-                    break;
-                bool chk = checks[i].toBool();
-                AddUserEntryDirectory(DirectoryItem::DI_NORMAL, dir, sel,chk);
-            }
-        }
-        dirOK = true;
-    } while(false);
-
-    if(!dirOK)
-    {
-        QMessageBox msgBox;
-        msgBox.setWindowTitle(Consts::APPNAME_DISPLAY);
-        msgBox.setText(QString(tr("Failed to load user directory data from %1. Do you want to continue?")).
-                       arg(settings.fileName()));
-        msgBox.setStandardButtons(QMessageBox::Yes);
-        msgBox.addButton(QMessageBox::No);
-        msgBox.setDefaultButton(QMessageBox::No);
-        msgBox.setIcon(QMessageBox::Warning);
-        if(msgBox.exec() != QMessageBox::Yes)
-        {
-            return;
-        }
-    }
-	AddUserEntryDirectory(DirectoryItem::DI_MISSING, QString(), false, false);
 
     optionThreadcountGetDir_ = settings_.valueInt(Consts::KEY_MAX_GETDIR_THREADCOUNT, optionThreadcountGetDir_);
     optionThreadcountThumbnail_ = settings_.valueInt(Consts::KEY_MAX_THUMBNAIL_THREADCOUNT, optionThreadcountThumbnail_);
     tableModel_->SetImageCache((ImageCacheType)settings_.valueInt(Consts::KEY_IMAGECACHETYPE,1));
 
+
+    // extension
     Extension::Load(settings_);
 
 
-
+    // font
     QFont font;
     vVal = settings_.value(Consts::KEY_FONT_TABLEINFO);
     if(vVal.isValid() && font.fromString(vVal.toString()))
@@ -288,14 +212,71 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
         ui->txtLog->setFont(font);
     }
 
+
+    // external tools
     int externalToolsCount = settings_.valueInt(Consts::KEY_EXTERNALTOOLS_COUNT, 0);
     for(int i=0 ; i < externalToolsCount; ++i)
     {
         externalTools_.append(ExternalToolItem::Load(i, settings_));
     }
+
     initialized_ = true;
+
+
+    // recents
+    recents_ = settings_.valueStringList(Consts::KEY_RECENT_OPENDOCUMENTS);
+
+    if(settings_.valueBool(Consts::KEY_OPEN_LASTOPENEDDOCUMENT, true))
+    {
+        if(!recents_.isEmpty())
+        {
+            OpenDocument(recents_[0]);
+        }
+    }
+
 }
 
+void MainWindow::OpenDocument(const QString& file)
+{
+    Document* pNewDoc = new Document;
+    if(!pNewDoc->Load(file))
+    {
+        Alert(this, pNewDoc->GetLastErr());
+        delete pNewDoc;
+        return;
+    }
+
+    recents_.removeAll(file);
+    recents_.insert(0, file);
+
+    if(pDoc_)
+    {
+        pDoc_->Save(ui->directoryWidget);
+        delete pDoc_;
+    }
+    pDoc_ = pNewDoc;
+    InitDocument();
+}
+void MainWindow::InitDocument()
+{
+    BlockedBool btD(&directoryChanging_);
+
+    ui->directoryWidget->clear();
+
+    AddUserEntryDirectory(DirectoryItem::DI_ALL, QString(),
+                          pDoc_->IsAllSelected(),
+                          pDoc_->IsAllChecked());
+    for(int i=0 ; i < pDoc_->dirCount() ; ++i)
+    {
+        AddUserEntryDirectory(DirectoryItem::DI_NORMAL,
+                              pDoc_->GetDEText(i),
+                              pDoc_->IsDESelected(i),
+                              pDoc_->IsDEChecked(i));
+    }
+    AddUserEntryDirectory(DirectoryItem::DI_MISSING, QString(), false, false);
+
+    directoryChangedCommon(true);
+}
 //void MainWindow::setTableSpan()
 //{
 //    int newRowFilename = ui->tableView->model()->rowCount()-TableModel::RowCountPerEntry;
@@ -409,6 +390,9 @@ void MainWindow::clearAllPool(bool bAppendLog)
 MainWindow::~MainWindow()
 {
 	closed_ = true;
+
+    delete pDoc_;
+    pDoc_ = nullptr;
 
     delete tableModel_;
     delete taskModel_;
@@ -563,7 +547,7 @@ void MainWindow::afterGetDir(int loopId, int id,
     if(loopId != gLoopId)
         return;
 
-    BlockedBool btPause(&gPaused, true, gPaused);
+    // BlockedBool btPause(&gPaused, true, gPaused);
 
     Q_UNUSED(id);
     WaitCursor wc;
@@ -911,7 +895,7 @@ void MainWindow::directoryChangedCommon(bool bForceRead)
 	if (!initialized_ || closed_)
 		return;
 
-	if (directoryChanging_)
+    if (directoryChanging_ && !bForceRead)
 		return;
 
 	WaitCursor wc;
@@ -993,6 +977,7 @@ void MainWindow::GetSqlAllSetTable(const QStringList& dirs, bool bOnlyMissing)
 void MainWindow::UpdateTitle(const QStringList& dirs, bool bOnlyMissing)
 {
     QStringList titles;
+
     if(bOnlyMissing)
     {
         titles << tr("Missing");
@@ -1003,11 +988,16 @@ void MainWindow::UpdateTitle(const QStringList& dirs, bool bOnlyMissing)
     }
 
     QString title;
+    if(pDoc_)
+    {
+        title.append(pDoc_->GetFileName());
+        title.append(" - ");
+    }
     for(int i=0 ; i < titles.count(); ++i)
     {
         title.append(titles[i]);
         if((i+1) != titles.count())
-            title.append(" - ");
+            title.append(" | ");
     }
 
     if(title.isEmpty())
@@ -1171,4 +1161,30 @@ void MainWindow::on_actionExternal_Tools_triggered()
     if(QDialog::Accepted != dlg.exec())
         return;
     externalTools_ = dlg.items_;
+}
+
+void MainWindow::on_action_Open_triggered()
+{
+    QFileDialog dlg(this);
+    dlg.setFileMode(QFileDialog::ExistingFile);
+
+    QStringList filters;
+    filters << tr("SceneExplorer Document (*.scexd)")
+            << tr("Any files (*)");
+
+    dlg.setNameFilters(filters);
+    if(!dlg.exec())
+        return;
+
+    OpenDocument(dlg.selectedFiles()[0]);
+}
+
+void MainWindow::on_action_Save_triggered()
+{
+    pDoc_->Save(ui->directoryWidget);
+}
+
+void MainWindow::on_actionSave_as_triggered()
+{
+
 }

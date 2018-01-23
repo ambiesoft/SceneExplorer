@@ -24,8 +24,7 @@ void MainWindow::showEvent( QShowEvent* event )
     ui->txtLog->setMaximumSize(10000,10000);
     ui->listTask->setMaximumSize(10000,10000);
 
-
-    directoryChangedCommon(true);
+    // directoryChangedCommon(true);
     tableSortParameterChanged(tableModel_->GetSortColumn(), tableModel_->GetSortReverse());
 }
 void MainWindow::resizeEvent(QResizeEvent *event)
@@ -54,31 +53,8 @@ void MainWindow::closeEvent(QCloseEvent *event) {
 
     settings_.setValue(Consts::KEY_SHOWMISSING, btnShowNonExistant_->isChecked());
 
-    QStringList userDirs;
-    QList<QVariant> userSelecteds;
-    QList<QVariant> userCheckeds;
-    for(int i=0 ; i < ui->directoryWidget->count();++i)
-    {
-        DirectoryItem* item = (DirectoryItem*)ui->directoryWidget->item(i);
-        if(item->IsAllItem())
-        {
-            settings_.setValue(Consts::KEY_KEY_USERENTRY_DIRECTORY_ALL_SELECTED, item->isSelected());
-            settings_.setValue(Consts::KEY_KEY_USERENTRY_DIRECTORY_ALL_CHECKED, item->checkState()==Qt::Checked);
-        }
-        else if(item->IsNormalItem())
-        {
-            userDirs.append(item->text());
-            userSelecteds.append(item->isSelected());
-            userCheckeds.append(item->checkState()==Qt::Checked);
-        }
-        else if(item->IsMissingItem())
-        {
-            // nothing
-        }
-    }
-    settings_.setValue(Consts::KEY_USERENTRY_DIRECTORIES, userDirs);
-    settings_.setValue(Consts::KEY_USERENTRY_SELECTED, userSelecteds);
-    settings_.setValue(Consts::KEY_USERENTRY_CHECKEDS, userCheckeds);
+
+    pDoc_->Save(ui->directoryWidget);
 
     settings_.setValue(Consts::KEY_MAX_GETDIR_THREADCOUNT, optionThreadcountGetDir_);
     settings_.setValue(Consts::KEY_MAX_THUMBNAIL_THREADCOUNT, optionThreadcountThumbnail_);
@@ -91,4 +67,7 @@ void MainWindow::closeEvent(QCloseEvent *event) {
         externalTools_[i].Save(i, settings_);
     }
     settings_.setValue(Consts::KEY_EXTERNALTOOLS_COUNT, externalTools_.count());
+
+    // recents
+    settings_.setValue(Consts::KEY_RECENT_OPENDOCUMENTS,recents_);
 }

@@ -34,6 +34,8 @@ void OptionDialog::showEvent(QShowEvent *ev)
 
     ui.lineDBDir->setText(dbdir_);
 
+    ui.chkOpenLastDocument->setChecked(openlastdoc_);
+
     QDialog::showEvent(ev);
 }
 void OptionDialog::on_buttonBox_accepted()
@@ -51,6 +53,8 @@ void OptionDialog::on_buttonBox_accepted()
         Q_ASSERT(false);
 
     dbdir_ = ui.lineDBDir->text();
+
+    openlastdoc_ = ui.chkOpenLastDocument->isChecked();
 }
 
 void OptionDialog::on_tbDBDir_clicked()

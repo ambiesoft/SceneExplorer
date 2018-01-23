@@ -151,6 +151,13 @@ QString Settings::valueString(const QString& key, const QString& defaultvalue)
         return defaultvalue;
     return v.toString();
 }
+QStringList Settings::valueStringList(const QString& key)
+{
+    QVariant v = s_.value(key);
+    if(!v.isValid())
+        return QStringList();
+    return v.toStringList();
+}
 QVariant Settings::value(const QString& key)
 {
     return s_.value(key);

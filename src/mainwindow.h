@@ -11,6 +11,7 @@
 #include "findcombobox.h"
 #include "settings.h"
 #include "externaltoolitem.h"
+#include "document.h"
 
 class QThreadPool;
 class QLabel;
@@ -36,7 +37,8 @@ class MainWindow : public QMainWindow
     Ui::MainWindow *ui;
     // setting keys
     Settings& settings_;
-
+    Document* pDoc_ = nullptr;
+    QStringList recents_;
 
 public:
     explicit MainWindow(QWidget *parent, Settings& settings);
@@ -187,6 +189,7 @@ private slots:
     void onMenuTask_AboutToShow();
     void onMenuDocking_windows_AboutToShow();
     void onMenu_Favorites_AboutToShow();
+    void onMenu_RecentDocuments_AboutToShow();
 
     void on_actionSort_by_file_name_triggered();
     void on_actionSort_by_file_size_triggered();
@@ -231,6 +234,12 @@ private slots:
     void on_action_Output_triggered();
 
     void on_actionExternal_Tools_triggered();
+
+    void on_action_Open_triggered();
+
+    void on_action_Save_triggered();
+
+    void on_actionSave_as_triggered();
 
 private:
     QThreadPool* pPoolFFmpeg_ = nullptr;
@@ -279,6 +288,11 @@ private:
     void openVideoInFolder(const QString& movieFile);
     QString getSelectedVideo(bool bNativeFormat = true);
     bool IsDirSelected(const QString& dir) const;
+
+public:
+    void OpenDocument(const QString& file);
+    void InitDocument();
+
 public slots:
 //    void sayBorn(int id,
 //                   const QString& movieFile);
