@@ -54,7 +54,7 @@ void MainWindow::closeEvent(QCloseEvent *event) {
     settings_.setValue(Consts::KEY_SHOWMISSING, btnShowNonExistant_->isChecked());
 
 
-    pDoc_->Save(ui->directoryWidget);
+    pDoc_->Store(ui->directoryWidget);
 
     settings_.setValue(Consts::KEY_MAX_GETDIR_THREADCOUNT, optionThreadcountGetDir_);
     settings_.setValue(Consts::KEY_MAX_THUMBNAIL_THREADCOUNT, optionThreadcountThumbnail_);

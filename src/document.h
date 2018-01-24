@@ -41,7 +41,7 @@ public:
     QString GetLastErr() const {
         return lastErr_;
     }
-    void Save(QListWidget* pLW);
+    void Store(QListWidget* pLW);
 
     bool IsAllSelected() const {
         return bAllSel_;

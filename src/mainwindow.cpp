@@ -1,4 +1,5 @@
 #include <QDebug>
+#include <QStringList>
 #include <QDesktopServices>
 #include <QDirIterator>
 #include <QFileDialog>
@@ -246,12 +247,14 @@ void MainWindow::OpenDocument(const QString& file)
         return;
     }
 
-    recents_.removeAll(file);
+    qDebug() << "Document Loaded: " << file;
+    recents_.removeDuplicates();
+    recents_.removeOne(file);
     recents_.insert(0, file);
 
     if(pDoc_)
     {
-        pDoc_->Save(ui->directoryWidget);
+        pDoc_->Store(ui->directoryWidget);
         delete pDoc_;
     }
     pDoc_ = pNewDoc;
@@ -1181,7 +1184,7 @@ void MainWindow::on_action_Open_triggered()
 
 void MainWindow::on_action_Save_triggered()
 {
-    pDoc_->Save(ui->directoryWidget);
+    pDoc_->Store(ui->directoryWidget);
 }
 
 void MainWindow::on_actionSave_as_triggered()

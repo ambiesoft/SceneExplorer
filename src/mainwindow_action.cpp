@@ -139,15 +139,43 @@ void MainWindow::onMenu_Favorites_AboutToShow()
         ui->menu_Favorites->addAction(qa);
     }
 }
+void MainWindow::on_RecentDocuments_triggered(bool checked)
+{
+    Q_UNUSED(checked);
+    QAction* qa = (QAction*)QObject::sender();
+    Q_ASSERT(qa);
+
+    QString file = qa->text();
+    OpenDocument(file);
+}
 void MainWindow::onMenu_RecentDocuments_AboutToShow()
 {
     QString current = pDoc_ ? pDoc_->GetFullName() : QString();
-    ui->menu_Recent_documets->clear();
 
-    for(const QString& rc : recents_)
+
+    while(ui->menu_Recent_documets->actions().count() > 0)
     {
-        // TODO
+        QAction *qa = ui->menu_Recent_documets->actions()[0];
+        ui->menu_Recent_documets->removeAction(qa);
+        QObject::disconnect(qa, &QAction::triggered,
+                            this, &MainWindow::on_RecentDocuments_triggered);
+        delete qa;
     }
+
+    for(int i=0; i < recents_.count(); ++i)
+    {
+        QAction* qa = new QAction(this);
+        qa->setText(recents_[i]);
+        if(!current.isEmpty() && recents_[i]==current)
+        {
+            qa->setCheckable(true);
+            qa->setChecked(true);
+        }
+        QObject::connect(qa, &QAction::triggered,
+                         this, &MainWindow::on_RecentDocuments_triggered);
+        ui->menu_Recent_documets->addAction(qa);
+    }
+
 }
 
 void MainWindow::on_action_Add_current_check_states_triggered()

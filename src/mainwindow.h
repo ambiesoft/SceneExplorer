@@ -220,6 +220,8 @@ private slots:
     void on_action_Add_current_check_states_triggered();
     void on_FavoriteFolder_triggered(bool checked=false);
 
+    void on_RecentDocuments_triggered(bool checked=false);
+
     // void onTaskTimerTick();
     void on_actionSort_by_open_count_triggered();
 

@@ -151,7 +151,7 @@ bool Document::Load(const QString& file)
 //    }
 }
 
-void Document::Save(QListWidget* pLW)
+void Document::Store(QListWidget* pLW)
 {
 //    QStringList userDirs;
 //    QList<QVariant> userSelecteds;
