@@ -18,5 +18,7 @@ Qt::WindowFlags GetDefaultDialogFlags();
 // OSD
 bool showInGraphicalShell(QWidget *parent, const QString &pathIn);
 void MoveToTrashImpl( QString file );
+QString GetDefaultFFprobe();
+QString GetDefaultFFmpeg();
 
 #endif // HELPER_H

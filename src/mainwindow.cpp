@@ -42,7 +42,7 @@
 #include "optiondialog.h"
 #include "optionextension.h"
 #include "optionexternaltoolsdialog.h"
-
+#include "ffmpeg.h"
 #include "globals.h"
 #include "helper.h"
 #include "blockedbool.h"
@@ -221,6 +221,9 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
     {
         externalTools_.append(ExternalToolItem::Load(i, settings_));
     }
+
+    FFMpeg::GetFFprobe(settings);
+    FFMpeg::GetFFmpeg(settings);
 
     initialized_ = true;
 

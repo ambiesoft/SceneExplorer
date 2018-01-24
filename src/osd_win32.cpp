@@ -71,3 +71,13 @@ void MoveToTrashImpl( QString file ){
         throw ErrorInfoException( QObject::tr("move to trash failed" ));
     }
 }
+
+
+QString GetDefaultFFprobe()
+{
+    return "ffprobe.exe";
+}
+QString GetDefaultFFmpeg()
+{
+    return "ffmpeg.exe";
+}

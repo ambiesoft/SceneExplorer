@@ -47,6 +47,9 @@ namespace Consts
     const char KEY_RECENT_OPENDOCUMENTS[] = "recentdocuments";
     const char KEY_OPEN_LASTOPENEDDOCUMENT[] = "openlastdocument";
 
+    const char KEY_FFPROBE_EXECUTABLE[] = "ffprobeexecutable";
+    const char KEY_FFMPEG_EXECUTABLE[] = "ffmpegexecutable";
+
 
     const char ALL_TASK_FINISHED[] = "======== All Tasks finished ========";
     const char FILEPART_THUMBS[] = "thumbs";

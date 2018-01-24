@@ -36,6 +36,9 @@ void OptionDialog::showEvent(QShowEvent *ev)
 
     ui.chkOpenLastDocument->setChecked(openlastdoc_);
 
+    ui.lineffprobe->setText(ffprobe_);
+    ui.lineffmpeg->setText(ffmpeg_);
+
     QDialog::showEvent(ev);
 }
 void OptionDialog::on_buttonBox_accepted()

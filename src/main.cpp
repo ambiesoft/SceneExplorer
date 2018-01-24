@@ -19,7 +19,7 @@
 #include "helper.h"
 #include "tableitemdata.h"
 #include "settings.h"
-#include "exeffmpeg.h"
+#include "ffmpeg.h"
 
 #include "mainwindow.h"
 
@@ -128,29 +128,8 @@ enum PROGRAM_RETURN {
     PR_LAUNCHTHISAPPFAILED,
 };
 
-int main2(int argc, char *argv[], QApplication& app);
-int main(int argc, char *argv[])
-{
-    QCoreApplication::setOrganizationName(Consts::ORGANIZATION);
-    QCoreApplication::setOrganizationDomain(Consts::APPDOMAIN);
-    QCoreApplication::setApplicationName(Consts::APPNAME);
 
-    QApplication app(argc, argv);
-
-    int ret = main2(argc, argv, app);
-    if(gReboot)
-    {
-        QString thisapp = QCoreApplication::applicationFilePath();
-        if(!QProcess::startDetached(thisapp))
-        {
-            Alert(nullptr, QString(QObject::tr("Failed to launch \"%1\"")).
-                  arg(thisapp));
-            return PR_LAUNCHTHISAPPFAILED;
-        }
-    }
-    return ret;
-}
-int main2(int argc, char *argv[], QApplication& app)
+int main2(int argc, char *argv[], QApplication& theApp)
 {
     Q_UNUSED(argc);
     Q_UNUSED(argv);
@@ -187,8 +166,8 @@ int main2(int argc, char *argv[], QApplication& app)
 	testSQL();
 #endif
 
-    theFFmepg.SetFFmpeg("C:\\LegacyPrograms\\ffmpeg\\bin\\ffmpeg.exe");
-    theFFmepg.SetFFprobe("C:\\LegacyPrograms\\ffmpeg\\bin\\ffprobe.exe");
+//    theFFmepg.SetFFmpeg("C:\\LegacyPrograms\\ffmpeg\\bin\\ffmpeg.exe");
+//    theFFmepg.SetFFprobe("C:\\LegacyPrograms\\ffmpeg\\bin\\ffprobe.exe");
 //    theFFmepg.SetFFmpeg("ffmpeg");
 //    theFFmepg.SetFFprobe("ffprobe");
 
@@ -197,5 +176,27 @@ int main2(int argc, char *argv[], QApplication& app)
         return PR_WINDOWINITFAILED;
     w.show();
 
-    return app.exec();
+    return theApp.exec();
+}
+
+int main(int argc, char *argv[])
+{
+    QCoreApplication::setOrganizationName(Consts::ORGANIZATION);
+    QCoreApplication::setOrganizationDomain(Consts::APPDOMAIN);
+    QCoreApplication::setApplicationName(Consts::APPNAME);
+
+    QApplication app(argc, argv);
+
+    int ret = main2(argc, argv, app);
+    if(gReboot)
+    {
+        QString thisapp = QCoreApplication::applicationFilePath();
+        if(!QProcess::startDetached(thisapp))
+        {
+            Alert(nullptr, QString(QObject::tr("Failed to launch \"%1\"")).
+                  arg(thisapp));
+            return PR_LAUNCHTHISAPPFAILED;
+        }
+    }
+    return ret;
 }

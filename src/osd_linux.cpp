@@ -83,3 +83,12 @@ void MoveToTrashImpl( QString file ){
         throw ErrorInfoException( "Trash in server-mode not supported" );
     #endif
 }
+
+QString GetDefaultFFprobe()
+{
+    return "ffprobe";
+}
+QString GetDefaultFFmpeg()
+{
+    return "ffmpeg";
+}

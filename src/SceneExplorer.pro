@@ -52,9 +52,9 @@ SOURCES += \
     optionfontdialog.cpp \
     optionexternaltoolsdialog.cpp \
     externaltoolitem.cpp \
-    exeffmpeg.cpp \
     optionextension.cpp \
-    document.cpp
+    document.cpp \
+    ffmpeg.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -83,9 +83,9 @@ HEADERS += \
     optionfontdialog.h \
     optionexternaltoolsdialog.h \
     externaltoolitem.h \
-    exeffmpeg.h \
     optionextension.h \
-    document.h
+    document.h \
+    ffmpeg.h
 
 FORMS += \
         mainwindow.ui \

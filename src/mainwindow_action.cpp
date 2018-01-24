@@ -10,7 +10,7 @@
 #include "consts.h"
 #include "globals.h"
 #include "waitcursor.h"
-
+#include "ffmpeg.h"
 #include "taskmodel.h"
 #include "tableitemdata.h"
 
@@ -64,7 +64,9 @@ void MainWindow::on_action_Options_triggered()
     dlg.imagecache_ = tableModel_->GetImageCache();
     dlg.dbdir_ = QDir::currentPath();
     dlg.openlastdoc_ = settings_.valueBool(Consts::KEY_OPEN_LASTOPENEDDOCUMENT);
-    ggg
+    dlg.ffprobe_ = FFMpeg::GetFFprobe(settings_);
+    dlg.ffmpeg_ = FFMpeg::GetFFmpeg(settings_);
+
     if(QDialog::Accepted != dlg.exec())
         return;
 
@@ -73,6 +75,9 @@ void MainWindow::on_action_Options_triggered()
     tableModel_->SetImageCache(dlg.imagecache_);
     settings_.setValue(Consts::KEY_OPEN_LASTOPENEDDOCUMENT,dlg.openlastdoc_);
     settings_.setValue(Consts::KEY_DATABASE_PATH, dlg.dbdir_);
+    FFMpeg::SetFFprobe(settings_, dlg.ffprobe_);
+    FFMpeg::SetFFmpeg(settings_, dlg.ffmpeg_);
+
     if(QDir::current() != QDir(dlg.dbdir_))
     {
         if(YesNo(this,
