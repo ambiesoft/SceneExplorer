@@ -21,12 +21,15 @@ public:
     int maxff_;
     QString dbdir_;
     bool openlastdoc_;
+    QString ffprobe_, ffmpeg_;
 
 protected:
     void showEvent(QShowEvent *) override;
 private slots:
     void on_buttonBox_accepted();
     void on_tbDBDir_clicked();
+    void on_tbffprobe_clicked();
+    void on_tbffmpeg_clicked();
 };
 
 #endif // OPTIONDIALOG_H

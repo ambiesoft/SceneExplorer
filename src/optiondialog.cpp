@@ -55,6 +55,9 @@ void OptionDialog::on_buttonBox_accepted()
     dbdir_ = ui.lineDBDir->text();
 
     openlastdoc_ = ui.chkOpenLastDocument->isChecked();
+
+    ffprobe_ = ui.lineffprobe->text();
+    ffmpeg_ = ui.lineffmpeg->text();
 }
 
 void OptionDialog::on_tbDBDir_clicked()
@@ -67,4 +70,26 @@ void OptionDialog::on_tbDBDir_clicked()
         return;
 
     ui.lineDBDir->setText(dlg.selectedFiles()[0]);
+}
+
+void OptionDialog::on_tbffprobe_clicked()
+{
+    QFileDialog dlg(this);
+    dlg.setFileMode(QFileDialog::ExistingFile);
+
+    if(!dlg.exec())
+        return;
+
+    ui.lineffprobe->setText(dlg.selectedFiles()[0]);
+}
+
+void OptionDialog::on_tbffmpeg_clicked()
+{
+    QFileDialog dlg(this);
+    dlg.setFileMode(QFileDialog::ExistingFile);
+
+    if(!dlg.exec())
+        return;
+
+    ui.lineffmpeg->setText(dlg.selectedFiles()[0]);
 }

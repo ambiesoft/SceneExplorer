@@ -1,3 +1,5 @@
+#include <QFileDialog>
+
 #include "helper.h"
 #include "blockedbool.h"
 

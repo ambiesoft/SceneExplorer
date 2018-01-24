@@ -1,3 +1,4 @@
+#include <QTextBlock>
 
 #include "helper.h"
 #include "extension.h"

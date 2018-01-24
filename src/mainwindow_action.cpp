@@ -64,6 +64,7 @@ void MainWindow::on_action_Options_triggered()
     dlg.imagecache_ = tableModel_->GetImageCache();
     dlg.dbdir_ = QDir::currentPath();
     dlg.openlastdoc_ = settings_.valueBool(Consts::KEY_OPEN_LASTOPENEDDOCUMENT);
+    ggg
     if(QDialog::Accepted != dlg.exec())
         return;
 

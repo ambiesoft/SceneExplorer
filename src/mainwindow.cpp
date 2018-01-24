@@ -24,6 +24,7 @@
 #include <QElapsedTimer>
 #include <QSortFilterProxyModel>
 #include <QFontDialog>
+#include <QInputDialog>
 
 #include "ui_mainwindow.h"
 #include "taskgetdir.h"

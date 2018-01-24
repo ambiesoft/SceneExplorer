@@ -98,6 +98,9 @@ bool GetDefaultSceneDirectory(Settings& settings, QString& dbdir)
     }
 
 
+    if(dbdir.isEmpty())
+        dbdir = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+
     if(dbdir.isEmpty() || !QDir(dbdir).exists())
     {
         dbdir = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
