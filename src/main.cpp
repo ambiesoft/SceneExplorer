@@ -89,7 +89,7 @@ bool GetDefaultSceneDirectory(Settings& settings, QString& dbdir)
 
     if(!dbdir.isEmpty() && !QDir(dbdir).exists())
     {
-        QDir().mkdir(dbdir);
+        QDir().mkpath(dbdir);
         if(!QDir(dbdir).exists())
         {
             Alert(nullptr,QString(QObject::tr("Failed to create directory \"%1\"")).
@@ -101,7 +101,7 @@ bool GetDefaultSceneDirectory(Settings& settings, QString& dbdir)
 	if (dbdir.isEmpty())
 	{
 		dbdir = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
-		QDir().mkdir(dbdir);
+        QDir().mkpath(dbdir);
 	}
 
     if(dbdir.isEmpty() || !QDir(dbdir).exists())

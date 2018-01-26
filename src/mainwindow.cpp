@@ -236,7 +236,7 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
         if(recents_.isEmpty())
 		{ 
             QString docdir = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
-            QDir().mkdir(docdir);
+            QDir().mkpath(docdir);
             if(!QDir(docdir).exists())
             {
                 Alert(this,QString(tr("Failed to create directory. \"%1\"")).arg(docdir));
