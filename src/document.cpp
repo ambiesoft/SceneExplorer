@@ -16,10 +16,10 @@ const char KEY_USERENTRY_DIRECTORY[] = "entrydirectory";
 const char KEY_USERENTRY_SELECTED[] = "entryselected";
 const char KEY_USERENTRY_CHECKED[] = "entrychecked";
 
-bool Document::Load(const QString& file)
+bool Document::Load(const QString& file, const bool bExists)
 {
     file_ = file;
-    if(!QFile(file).exists())
+    if(bExists && !QFile(file).exists())
     {
         lastErr_ = QString(tr("\"%1\" does not exist.")).arg(file);
         return false;

@@ -233,18 +233,34 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
 
     if(settings_.valueBool(Consts::KEY_OPEN_LASTOPENEDDOCUMENT, true))
     {
-        if(!recents_.isEmpty())
+        if(recents_.isEmpty())
+		{ 
+            QString docdir = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+            QDir().mkdir(docdir);
+            if(!QDir(docdir).exists())
+            {
+                Alert(this,QString(tr("Failed to create directory. \"%1\"")).arg(docdir));
+                return;
+            }
+
+            QString defaultdoc = pathCombine(docdir,
+                                             "default.scexd");
+
+            OpenDocument(defaultdoc, false);
+
+		}
+		else
         {
-            OpenDocument(recents_[0]);
+            OpenDocument(recents_[0], true);
         }
     }
 
 }
 
-void MainWindow::OpenDocument(const QString& file)
+void MainWindow::OpenDocument(const QString& file, const bool bExists)
 {
     Document* pNewDoc = new Document;
-    if(!pNewDoc->Load(file))
+    if(!pNewDoc->Load(file, bExists))
     {
         Alert(this, pNewDoc->GetLastErr());
         delete pNewDoc;
@@ -983,16 +999,24 @@ void MainWindow::GetSqlAllSetTable(const QStringList& dirs, bool bOnlyMissing)
 
 void MainWindow::UpdateTitle(const QStringList& dirs, bool bOnlyMissing)
 {
-    QStringList titles;
+    QStringList titledirs;
 
     if(bOnlyMissing)
     {
-        titles << tr("Missing");
+        titledirs << tr("Missing");
     }
     else
     {
-        titles = dirs;
+        if(dirs.empty())
+        {
+            titledirs << tr("All");
+        }
+        else
+        {
+            titledirs = dirs;
+        }
     }
+
 
     QString title;
     if(pDoc_)
@@ -1000,10 +1024,10 @@ void MainWindow::UpdateTitle(const QStringList& dirs, bool bOnlyMissing)
         title.append(pDoc_->GetFileName());
         title.append(" - ");
     }
-    for(int i=0 ; i < titles.count(); ++i)
+    for(int i=0 ; i < titledirs.count(); ++i)
     {
-        title.append(titles[i]);
-        if((i+1) != titles.count())
+        title.append(titledirs[i]);
+        if((i+1) != titledirs.count())
             title.append(" | ");
     }
 
@@ -1183,7 +1207,7 @@ void MainWindow::on_action_Open_triggered()
     if(!dlg.exec())
         return;
 
-    OpenDocument(dlg.selectedFiles()[0]);
+    OpenDocument(dlg.selectedFiles()[0], true);
 }
 
 void MainWindow::on_action_Save_triggered()
@@ -1194,4 +1218,42 @@ void MainWindow::on_action_Save_triggered()
 void MainWindow::on_actionSave_as_triggered()
 {
 
+}
+
+
+bool MainWindow::checkExeCommon(const QString& exe, QString& errString) const
+{
+    QProcess process;
+    process.setProgram(exe);
+    process.setArguments( QStringList() <<
+                          "-version"
+                          );
+
+    process.start(QProcess::ReadOnly);
+    if(!process.waitForStarted(-1))
+    {
+        errString = process.errorString();
+        return false;
+    }
+    if(!process.waitForFinished(-1))
+    {
+        errString = process.errorString();
+        return false;
+    }
+
+    if(0 != process.exitCode())
+    {
+        errString = process.errorString();
+        return false;
+    }
+    return true;
+}
+
+bool MainWindow::checkFFprobe(QString& errString) const
+{
+    return checkExeCommon(FFMpeg::GetFFmpeg(), errString);
+}
+bool MainWindow::checkFFmpeg(QString& errString) const
+{
+    return checkExeCommon(FFMpeg::GetFFmpeg(), errString);
 }

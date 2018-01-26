@@ -58,12 +58,12 @@ bool TaskFFmpeg::getProbe(const QString& file,
     process.start(QProcess::ReadOnly);
     if(!process.waitForStarted(waitMax_))
     {
-        errorReason = tr("waitForStarted failed");
+        errorReason = process.errorString();
         return false;
     }
     if(!process.waitForFinished(waitMax_))
     {
-        errorReason = tr("waitForFinished failed");
+        errorReason = process.errorString();
         return false;
     }
 
@@ -239,28 +239,28 @@ bool TaskFFmpeg::run3(QString& errorReason)
         qsl.append(strWidthHeight);
         qsl.append(actualFile);
 
-        QProcess ffmpeg;
-        ffmpeg.setProgram(FFMpeg::GetFFmpeg());
-        ffmpeg.setArguments(qsl);
-        ffmpeg.start(QProcess::ReadOnly);
+        QProcess process;
+        process.setProgram(FFMpeg::GetFFmpeg());
+        process.setArguments(qsl);
+        process.start(QProcess::ReadOnly);
 
-        if (!ffmpeg.waitForStarted(waitMax_))
+        if (!process.waitForStarted(waitMax_))
 		{
-			errorReason = tr("ffmpeg.waitForStarted failed");
+            errorReason = process.errorString();
 			return false;
 		}
 
-        if (!ffmpeg.waitForFinished(waitMax_))
+        if (!process.waitForFinished(waitMax_))
 		{
-			errorReason = tr("ffmpeg.waitForFinished failed");
+            errorReason = process.errorString();
 			return false;
 		}
 
-		if (ffmpeg.exitCode() != 0)
+        if (process.exitCode() != 0)
 		{
 			errorReason = tr("ffmpeg.exitCode() != 0");
 			errorReason += "\n\n";
-			QByteArray baErr=ffmpeg.readAllStandardError();
+            QByteArray baErr=process.readAllStandardError();
 			errorReason += baErr.data();
 			return false;
 		}
@@ -274,7 +274,7 @@ bool TaskFFmpeg::run3(QString& errorReason)
 			if (!QFile(actualFile).exists())
 			{
 				errorReason = tr("Failed to create thumbnail");
-				QByteArray baErr = ffmpeg.readAllStandardError();
+                QByteArray baErr = process.readAllStandardError();
 				QString strErr = baErr.data();
 				if (!strErr.isEmpty())
 				{

@@ -63,7 +63,7 @@ void MainWindow::on_action_Options_triggered()
     dlg.maxff_ = optionThreadcountThumbnail_;
     dlg.imagecache_ = tableModel_->GetImageCache();
     dlg.dbdir_ = QDir::currentPath();
-    dlg.openlastdoc_ = settings_.valueBool(Consts::KEY_OPEN_LASTOPENEDDOCUMENT);
+    dlg.openlastdoc_ = settings_.valueBool(Consts::KEY_OPEN_LASTOPENEDDOCUMENT, true);
     dlg.ffprobe_ = FFMpeg::GetFFprobe(settings_);
     dlg.ffmpeg_ = FFMpeg::GetFFmpeg(settings_);
 
@@ -152,7 +152,7 @@ void MainWindow::on_RecentDocuments_triggered(bool checked)
     Q_ASSERT(qa);
 
     QString file = qa->text();
-    OpenDocument(file);
+    OpenDocument(file, true);
 }
 void MainWindow::onMenu_RecentDocuments_AboutToShow()
 {
@@ -328,8 +328,18 @@ void MainWindow::StartScan(const QString& dir)
     AddUserEntryDirectory(DirectoryItem::DI_NORMAL, canonicalDir(dir), false, false);
     StartScan2(dir);
 }
+
 void MainWindow::StartScan2(const QString& dir)
 {
+    QString errString;
+    if(!checkFFprobe(errString) || !checkFFmpeg(errString))
+    {
+        insertLog(TaskKind::App, 0, QString(tr("Failed to launch ffprobe or ffmpeg. (%1) ")).
+                  arg(errString));
+        insertLog(TaskKind::App, 0, tr("Check the option setting."));
+        return;
+    }
+
     TaskGetDir* pTaskGetDir = new TaskGetDir(gLoopId, idManager_->Increment(IDKIND_GetDir), dir);
     pTaskGetDir->setAutoDelete(true);
     QObject::connect(pTaskGetDir, &TaskGetDir::afterGetDir,
@@ -541,6 +551,7 @@ void MainWindow::on_directoryWidget_Remove()
 	if (!YesNo(this,QString(tr("Are you sure you want to remove \"%1\" from the lists?")).arg(item->text())))
 		return;
     
+    BlockedBool bt(&directoryChanging_);
 	delete ui->directoryWidget->takeItem(ui->directoryWidget->row(item));
 }
 void MainWindow::on_directoryWidget_RemoveMissingItems()

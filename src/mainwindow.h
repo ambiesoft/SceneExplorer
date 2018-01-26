@@ -291,8 +291,12 @@ private:
     QString getSelectedVideo(bool bNativeFormat = true);
     bool IsDirSelected(const QString& dir) const;
 
+    bool checkExeCommon(const QString& exe, QString& errString) const;
+    bool checkFFprobe(QString& errString) const;
+    bool checkFFmpeg(QString& errString) const;
+
 public:
-    void OpenDocument(const QString& file);
+    void OpenDocument(const QString& file, const bool bExists);
     void InitDocument();
 
 public slots:

@@ -36,7 +36,7 @@ public:
     ~Document() {
         delete s_;
     }
-    bool Load(const QString& file);
+    bool Load(const QString& file, const bool bExists);
 
     QString GetLastErr() const {
         return lastErr_;
