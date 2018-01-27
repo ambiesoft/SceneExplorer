@@ -12,6 +12,8 @@ OptionExternalToolsDialog::OptionExternalToolsDialog(QWidget *parent) :
     ui(new Ui::OptionExternalToolsDialog)
 {
     ui->setupUi(this);
+
+    setWindowTitle(tr("Option") + " | " + tr("External tools"));
 }
 void OptionExternalToolsDialog::showEvent(QShowEvent *ev)
 {
@@ -25,7 +27,9 @@ void OptionExternalToolsDialog::showEvent(QShowEvent *ev)
         if(i==0)
             itemToSelect=item;
     }
-    itemToSelect->setSelected(true);
+    if(itemToSelect)
+        itemToSelect->setSelected(true);
+
     QDialog::showEvent(ev);
 }
 OptionExternalToolsDialog::~OptionExternalToolsDialog()
@@ -64,6 +68,8 @@ int OptionExternalToolsDialog::GetItemIndex(QListWidgetItem* item) const
 }
 void OptionExternalToolsDialog::on_listWidget_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous)
 {
+    ui->lineName->setEnabled(current != nullptr);
+
     if(current==nullptr && previous==nullptr)
         return;
 
@@ -185,7 +191,9 @@ void OptionExternalToolsDialog::on_buttonBox_accepted()
 }
 void OptionExternalToolsDialog::UpdateData()
 {
-    if(ui->listWidget->selectedItems().isEmpty())
+    bool bNoSel = ui->listWidget->selectedItems().isEmpty();
+    ui->lineName->setEnabled(!bNoSel);
+    if(bNoSel)
         return;
 
     ExternalToolWidgetItem* item = (ExternalToolWidgetItem*)ui->listWidget->selectedItems()[0];

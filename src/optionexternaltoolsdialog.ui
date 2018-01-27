@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>448</width>
-    <height>406</height>
+    <height>463</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -183,6 +183,18 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>listWidget</tabstop>
+  <tabstop>lineName</tabstop>
+  <tabstop>lineExe</tabstop>
+  <tabstop>tbExecutable</tabstop>
+  <tabstop>lineArg</tabstop>
+  <tabstop>tbArguments</tabstop>
+  <tabstop>pbMoveUp</tabstop>
+  <tabstop>pbMoveDown</tabstop>
+  <tabstop>pbAdd</tabstop>
+  <tabstop>pbRemove</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
@@ -192,8 +204,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
+     <x>320</x>
+     <y>453</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -208,8 +220,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>316</x>
-     <y>260</y>
+     <x>388</x>
+     <y>453</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
