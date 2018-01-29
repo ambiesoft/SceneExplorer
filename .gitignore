@@ -3,6 +3,7 @@
 
 .qmake.stash
 .vs/
+ipch/
 SceneExplorer.VC.db
 SceneExplorer.sln
 SceneExplorer.vcxproj

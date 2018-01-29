@@ -5,11 +5,13 @@
 
 #include "tableitemdata.h"
 
+#define DBFILENAME "./db.sqlite3"
+
 class Sql : public QObject
 {
     Q_OBJECT
 
-	static constexpr const char* DBFILENAME = "./db.sqlite3";
+
 
     QSqlDatabase db_;
     bool ok_=false;

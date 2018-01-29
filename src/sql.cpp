@@ -15,6 +15,8 @@
 #include "globals.h"
 #include "sql.h"
 
+
+
 static void showFatal(const QString& error)
 {
     Alert(nullptr, error);
