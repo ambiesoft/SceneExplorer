@@ -490,14 +490,24 @@ void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
     // externl tools ----->
     QMenu menuExternalTools(tr("External &tools..."), this);
     QList< QSharedPointer<QAction> > actExts;
-    for(int i=0 ; i < externalTools_.count(); ++i)
+    if(externalTools_.isEmpty())
     {
-        QSharedPointer<QAction> act(new QAction(externalTools_[i].GetName()));
-        connect(act.data(), SIGNAL(triggered()),
-                this, SLOT(on_context_ExternalTools()));
+        QSharedPointer<QAction> act(new QAction(tr("No exteral tools")));
+        act->setEnabled(false);
         menuExternalTools.addAction(act.data());
-        act->setData(i);
         actExts.append(act);
+    }
+    else
+    {
+        for(int i=0 ; i < externalTools_.count(); ++i)
+        {
+            QSharedPointer<QAction> act(new QAction(externalTools_[i].GetName()));
+            connect(act.data(), SIGNAL(triggered()),
+                    this, SLOT(on_context_ExternalTools()));
+            menuExternalTools.addAction(act.data());
+            act->setData(i);
+            actExts.append(act);
+        }
     }
     contextMenu.addMenu(&menuExternalTools);
     // <---- external tools
