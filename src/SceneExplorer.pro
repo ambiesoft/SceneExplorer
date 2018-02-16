@@ -113,3 +113,6 @@ linux-g++ {
     SOURCES += \
             osd_linux.cpp
 }
+
+
+TRANSLATIONS += translations/i18n_jp.ts

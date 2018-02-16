@@ -71,7 +71,8 @@
 #include <QFontDialog>
 #include <QFileDialog>
 #include <QTextBlock>
-
+#include <QTranslator>
+#include <QLibraryInfo>
 
 #endif // __cplusplus
 

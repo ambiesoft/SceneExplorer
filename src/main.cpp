@@ -9,6 +9,8 @@
 #include <QDebug>
 #include <QFileDialog>
 #include <QProcess>
+#include <QTranslator>
+#include <QLibraryInfo>
 
 #include "consts.h"
 #include "globals.h"
@@ -136,6 +138,19 @@ int main2(int argc, char *argv[], QApplication& theApp)
 {
     Q_UNUSED(argc);
     Q_UNUSED(argv);
+
+    QTranslator qtTranslator;
+    QString qti18nFile = "qt_" + QLocale::system().name();
+    qtTranslator.load(qti18nFile,
+         QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+    theApp.installTranslator(&qtTranslator);
+
+
+    QTranslator myappTranslator;
+    QString i18nFile = "translations/i18n_jp"; // QLocale::system().language()
+    myappTranslator.load(i18nFile);
+    theApp.installTranslator(&myappTranslator);
+
 
 	RunGuard guard("SceneExplorer");
 	if (!guard.tryToRun())
