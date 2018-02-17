@@ -6,22 +6,22 @@
     <message>
         <location filename="../document.cpp" line="24"/>
         <source>&quot;%1&quot; does not exist.</source>
-        <translation type="unfinished">&quot;%1&quot; は存在しません。</translation>
+        <translation>&quot;%1&quot; は存在しません。</translation>
     </message>
     <message>
         <location filename="../document.cpp" line="29"/>
         <source>File size is too big.</source>
-        <translation type="unfinished">ファイルサイズが大きすぎます。</translation>
+        <translation>ファイルサイズが大きすぎます。</translation>
     </message>
     <message>
         <location filename="../document.cpp" line="75"/>
         <source>QException</source>
-        <translation type="unfinished">QException</translation>
+        <translation>QException</translation>
     </message>
     <message>
         <location filename="../document.cpp" line="80"/>
         <source>... Exception</source>
-        <translation type="unfinished">... 例外</translation>
+        <translation>... 例外</translation>
     </message>
 </context>
 <context>
@@ -29,339 +29,339 @@
     <message>
         <location filename="../mainwindow.ui" line="20"/>
         <source>MainWindow</source>
-        <translation type="unfinished"></translation>
+        <translation>MainWindow</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="77"/>
         <source>&amp;File</source>
-        <translation type="unfinished">ファイル(&amp;F)</translation>
+        <translation>ファイル(&amp;F)</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="81"/>
         <source>&amp;Recent documets</source>
-        <translation type="unfinished"></translation>
+        <translation>最近開いたファイル(&amp;R)</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="95"/>
         <source>&amp;Edit</source>
-        <translation type="unfinished"></translation>
+        <translation>編集(&amp;E)</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="103"/>
         <source>&amp;Help</source>
-        <translation type="unfinished"></translation>
+        <translation>ヘルプ(&amp;H)</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="109"/>
         <source>&amp;Option</source>
-        <translation type="unfinished"></translation>
+        <translation>オプション(&amp;O)</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="113"/>
         <source>&amp;Font</source>
-        <translation type="unfinished"></translation>
+        <translation>フォント(&amp;F)</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="127"/>
         <source>Task</source>
-        <translation type="unfinished"></translation>
+        <translation>タスク</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="134"/>
         <source>&amp;View</source>
-        <translation type="unfinished"></translation>
+        <translation>ビュー(&amp;V)</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="138"/>
         <source>&amp;Docking windows</source>
-        <translation type="unfinished"></translation>
+        <translation>ドッキングウィンドウ(&amp;D)</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="159"/>
         <source>&amp;Favorites</source>
-        <translation type="unfinished"></translation>
+        <translation>お気に入り(&amp;F)</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="166"/>
         <location filename="../mainwindow.ui" line="384"/>
         <source>&amp;Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>フォルダ(&amp;F)</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="181"/>
         <source>ToolBar</source>
-        <translation type="unfinished"></translation>
+        <translation>ツールバー</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="215"/>
         <source>Output</source>
-        <translation type="unfinished"></translation>
+        <translation>出力</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="273"/>
         <source>Folder</source>
-        <translation type="unfinished"></translation>
+        <translation>フォルダ</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="313"/>
         <source>Task Thumbnail</source>
-        <translation type="unfinished"></translation>
+        <translation>サムネイルタスク</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="343"/>
         <source>&amp;Close</source>
-        <translation type="unfinished"></translation>
+        <translation>閉じる(&amp;C)</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="348"/>
         <source>&amp;Copy</source>
-        <translation type="unfinished"></translation>
+        <translation>コピー(&amp;C)</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="353"/>
         <source>&amp;About...</source>
-        <translation type="unfinished"></translation>
+        <translation>バージョン情報(&amp;A)</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="358"/>
         <source>&amp;Add Folder...</source>
-        <translation type="unfinished"></translation>
+        <translation>フォルダを追加(&amp;A)...</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="363"/>
         <source>&amp;General Otions...</source>
-        <translation type="unfinished"></translation>
+        <translation>一般オプション(&amp;G)...</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="371"/>
         <source>&amp;Pause</source>
-        <translation type="unfinished"></translation>
+        <translation>一時停止(&amp;P)</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="376"/>
         <source>&amp;Stop</source>
-        <translation type="unfinished"></translation>
+        <translation>停止(&amp;S)</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="392"/>
         <source>&amp;Task</source>
-        <translation type="unfinished"></translation>
+        <translation>タスク(&amp;T)</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="400"/>
         <source>&amp;Output</source>
-        <translation type="unfinished"></translation>
+        <translation>出力(&amp;O)</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="405"/>
         <source>Sort by &amp;file name</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイル名でソート(&amp;F)</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="410"/>
         <source>Sort by file &amp;size</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイルサイズでソート(&amp;S)</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="415"/>
         <source>Sort by wtime</source>
-        <translation type="unfinished"></translation>
+        <translation>修正時刻でソート</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="420"/>
         <source>&amp;Top</source>
-        <translation type="unfinished"></translation>
+        <translation>先頭(&amp;T)</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="425"/>
         <source>&amp;Bottom</source>
-        <translation type="unfinished"></translation>
+        <translation>末尾(&amp;B)</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="430"/>
         <source>Sort by &amp;resolution</source>
-        <translation type="unfinished"></translation>
+        <translation>解像度でソート(&amp;R)</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="435"/>
         <source>Sort by &amp;duration</source>
-        <translation type="unfinished"></translation>
+        <translation>プレイ時間でソート(&amp;D)</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="440"/>
         <source>Sort by &amp;bitrate</source>
-        <translation type="unfinished"></translation>
+        <translation>ビットレートでソート(&amp;B)</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="445"/>
         <source>&amp;Find</source>
-        <translation type="unfinished"></translation>
+        <translation>検索(&amp;F)</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="450"/>
         <source>&amp;Clear</source>
-        <translation type="unfinished"></translation>
+        <translation>クリア(&amp;C)</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="455"/>
         <source>placeHolder_ShowMissing</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="460"/>
         <source>placeHolder_ComboBox</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="465"/>
         <source>&amp;Add current check states</source>
-        <translation type="unfinished"></translation>
+        <translation>現在のチェック状態を追加(&amp;A)</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="470"/>
         <source>Sort by open count</source>
-        <translation type="unfinished"></translation>
+        <translation>オープンカウントでソート</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="475"/>
         <source>&amp;Extentions...</source>
-        <translation type="unfinished"></translation>
+        <translation>拡張子(&amp;E)...</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="480"/>
         <source>&amp;Name...</source>
-        <translation type="unfinished"></translation>
+        <translation>名前(&amp;N)...</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="485"/>
         <source>&amp;Detail...</source>
-        <translation type="unfinished"></translation>
+        <translation>詳細(&amp;D)...</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="490"/>
         <source>&amp;Output..</source>
-        <translation type="unfinished"></translation>
+        <translation>出力(&amp;D)...</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="495"/>
         <source>External &amp;Tools...</source>
-        <translation type="unfinished"></translation>
+        <translation>外部ツール(&amp;T)...</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="500"/>
         <source>&amp;Open...</source>
-        <translation type="unfinished"></translation>
+        <translation>開く(&amp;O)...</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="505"/>
         <source>&amp;Save</source>
-        <translation type="unfinished"></translation>
+        <translation>保存する(&amp;S)</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="510"/>
         <source>Save &amp;as...</source>
-        <translation type="unfinished"></translation>
+        <translation>名前をつけて保存する(&amp;A)...</translation>
     </message>
     <message>
         <location filename="../mainwindow.ui" line="515"/>
         <source>dummy</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="106"/>
         <source>Show missing files</source>
-        <translation type="unfinished"></translation>
+        <translation>存在しないファイルを表示</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="242"/>
         <source>Failed to create directory. &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>ディレクトリの作成に失敗しました。 &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="369"/>
         <source>Clearing all tasks...</source>
-        <translation type="unfinished"></translation>
+        <translation>すべてのタスクをクリアしています...</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="408"/>
         <source>All tasks Cleared.</source>
-        <translation type="unfinished"></translation>
+        <translation>すべてのタスクがクリアされました。</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="467"/>
         <source>Iterate</source>
-        <translation type="unfinished"></translation>
+        <translation>繰り返し</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="473"/>
         <source>Thumbnail</source>
-        <translation type="unfinished"></translation>
+        <translation>サムネイル</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="479"/>
         <source>Database</source>
-        <translation type="unfinished"></translation>
+        <translation>データベース</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="486"/>
         <source>Application</source>
-        <translation type="unfinished"></translation>
+        <translation>アプリケーション</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="600"/>
         <source>Already exists. &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>すでに存在します。 &quot;%1&quot;</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="631"/>
         <source>Rename detected. &quot;%1&quot; -&gt; &quot;%2&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>リネームを発見しました。 &quot;%1&quot; -&gt; &quot;%2&quot;</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="670"/>
         <source>Scan directory finished. %1</source>
-        <translation type="unfinished"></translation>
+        <translation>ディレクトリの走査が完了しました。%1</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="694"/>
         <source>No new files found in %1</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;%1&quot; に新規ファイルは見つかりません</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="698"/>
         <source>%1 new items found in %2</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 個の新規アイテムを &quot;%2&quot; から発見しました。</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="731"/>
         <location filename="../mainwindow_action.cpp" line="352"/>
         <source>Task registered. %1</source>
-        <translation type="unfinished"></translation>
+        <translation>タスクを登録しました。 %1</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="784"/>
         <source>&amp;New name:</source>
-        <translation type="unfinished"></translation>
+        <translation>新しい名前(&amp;N):</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="796"/>
         <source>New name is same as old name.</source>
-        <translation type="unfinished"></translation>
+        <translation>新しい名前は古い名前と同じです。</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="803"/>
         <source>Failed to rename file. (%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイルのリネームに失敗しました。 (%1)</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="808"/>
         <source>Failed to rename in database.</source>
-        <translation type="unfinished"></translation>
+        <translation>データベース内のリネームに失敗しました。</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="819"/>
         <source>Movie file is empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>動画ファイルが空です。</translation>
     </message>
     <message>
         <location filename="../mainwindow.cpp" line="825"/>

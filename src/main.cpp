@@ -147,8 +147,12 @@ int main2(int argc, char *argv[], QApplication& theApp)
 
 
     QTranslator myappTranslator;
-    QString i18nFile = "translations/i18n_jp"; // QLocale::system().language()
-    myappTranslator.load(i18nFile);
+    // QString i18nFile = "i18n_ja_JP";// + QLocale::system().name();
+    QString i18nFile = "i18n_ja";// + QLocale::system().name();
+
+	QFileInfo trfi(QCoreApplication::applicationFilePath());
+	QString trdir = pathCombine(trfi.absolutePath(), "translations");
+    myappTranslator.load(i18nFile, trdir);
     theApp.installTranslator(&myappTranslator);
 
 
