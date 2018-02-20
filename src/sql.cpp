@@ -596,53 +596,128 @@ QString Sql::getErrorStrig(int thumbRet)
 //{
 //    return GetAll(v, QStringList(dir));
 //}
-bool Sql::GetAll(QList<TableItemDataPointer>& v,
-                 const QStringList& dirs,
-                 const QString& find,
-                 bool bOnlyMissing)
+
+bool GetAllSqlString(
+        QSqlQuery& query,
+        const QStringList& dirs,
+        const QString& find,
+        SORTCOLUMN sortcolumn,
+        bool sortrev)
 {
-    QSqlQuery query(db_);
+    QString sql = "SELECT *";
+
+    QString sortby;
+    switch(sortcolumn)
+    {
+    case SORT_NONE:
+        break;
+    case SORT_FILENAME:
+        sortby = "name";
+        break;
+    case SORT_SIZE:
+        sortby = "size";
+        break;
+    case SORT_WTIME:
+        sortby = "wtime";
+        break;
+    case SORT_RESOLUTION:
+        sql += ", vwidth * vheight AS resolution ";
+        sortby = "resolution";
+        break;
+    case SORT_DURATION:
+        sortby = "duration";
+        break;
+    case SORT_BITRATE:
+        sortby = "bitrate";
+        break;
+    case SORT_OPENCOUNT:
+        sortby = "opencount";
+        break;
+    default:
+        Q_ASSERT(false);
+        break;
+    }
+
+    sql += " FROM FileInfo";
+
+    QVector<QVariant> binds;
     if(dirs.isEmpty())
     {
-        if(find.isEmpty())
+        if(!find.isEmpty())
         {
-			SQC(query, exec("select * from FileInfo"));
+            sql += " WHERE name LIKE ?";
+            binds.append("%"+find+"%");
         }
-        else
+
+        if(!sortby.isEmpty())
         {
-            int i=0;
-            SQC(query,prepare("select * from FileInfo where name like ?"));
-            query.bindValue(i++, "%"+find+"%");
-            SQC(query,exec());
+            sql += " ORDER BY `";
+            sql += sortby;
+            sql += "` ";
+            sql += sortrev ? "ASC" : "DESC";
+        }
+
+        SQC(query, prepare(sql));
+        for(int i=0 ; i < binds.count(); ++i)
+        {
+            query.bindValue(i, binds[i]);
         }
     }
     else
     {
-        QString strPrepare("select * from FileInfo where (");
+        sql += " WHERE (";
+
         for(int i=0 ; i < dirs.count(); ++i)
         {
-            strPrepare += "directory like ?";
+            sql += "directory like ?";
             if((i+1)!=dirs.count())
-                strPrepare += " or ";
+                sql += " or ";
         }
-        strPrepare += ") ";
-        if(!find.isEmpty())
-            strPrepare += " and name like ?";
+        sql += ") ";
 
-		SQC(query, prepare(strPrepare));
+        if(!find.isEmpty())
+            sql += " and name like ?";
+
+        if(!sortby.isEmpty())
+        {
+            sql += " ORDER BY `";
+            sql += sortby;
+            sql += "` ";
+            sql += sortrev ? "ASC" : "DESC";
+        }
+        qDebug() << sql;
+        SQC(query, prepare(sql));
 
         int i;
         for(i=0 ; i < dirs.count(); ++i)
         {
-			Q_ASSERT(dirs[i].endsWith('/'));
+            Q_ASSERT(dirs[i].endsWith('/'));
             query.bindValue(i, dirs[i] + "%");
         }
         if(!find.isEmpty())
             query.bindValue(i++, "%"+find+"%");
-
-        SQC(query,exec());
     }
-    while (query.next()) {
+
+    return true;
+}
+bool Sql::GetAll(QList<TableItemDataPointer>& v,
+                 const QStringList& dirs,
+                 const QString& find,
+                 bool bOnlyMissing,
+                 SORTCOLUMN sortcolumn,
+                 bool sortrev)
+{
+    QSqlQuery query(db_);
+    GetAllSqlString(query,
+                    dirs,
+                    find,
+                    sortcolumn,
+                    sortrev);
+
+    SQC(query,exec());
+
+    while (query.next())
+    {
         QString directory = query.value("directory").toString();
         if(directory.isEmpty())
             continue;

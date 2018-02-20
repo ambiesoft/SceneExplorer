@@ -4,6 +4,7 @@
 #include <QSqlDatabase>
 
 #include "tableitemdata.h"
+#include "globals.h"
 
 #define DBFILENAME "./db.sqlite3"
 
@@ -79,7 +80,9 @@ public:
 	bool GetAll(QList<TableItemDataPointer>& v,
                 const QStringList& dirs = QStringList(),
                 const QString& find = QString(),
-                bool bOnlyMissing = false
+                bool bOnlyMissing = false,
+                SORTCOLUMN sortcolumn = SORT_NONE,
+                bool sortrev = false
             );
 
     bool IncrementOpenCount(const QString& movieFile);

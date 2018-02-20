@@ -417,38 +417,59 @@ void MainWindow::on_action_About_triggered()
 void MainWindow::on_actionSort_by_file_name_triggered()
 {
     WaitCursor wc;
-    tableModel_->Sort(TableModel::SORT_FILENAME);
+    // tableModel_->Sort(TableModel::SORT_FILENAME);
+    currentSort_ = SORT_FILENAME;
+    currentSortRev_ = !currentSortRev_;
+    GetSqlAllSetTable(currentDirs_);
 }
 void MainWindow::on_actionSort_by_file_size_triggered()
 {
     WaitCursor wc;
-    tableModel_->Sort(TableModel::SORT_SIZE);
+    //tableModel_->Sort(SORT_SIZE);
+    currentSort_ = SORT_SIZE;
+    currentSortRev_ = !currentSortRev_;
+    GetSqlAllSetTable(currentDirs_);
 }
 void MainWindow::on_actionSort_by_wtime_triggered()
 {
     WaitCursor wc;
-    tableModel_->Sort(TableModel::SORT_WTIME);
+    //tableModel_->Sort(SORT_WTIME);
+    currentSort_ = SORT_WTIME;
+    currentSortRev_ = !currentSortRev_;
+    GetSqlAllSetTable(currentDirs_);
 }
 void MainWindow::on_actionSort_by_resolution_triggered()
 {
     WaitCursor wc;
-    tableModel_->Sort(TableModel::SORT_RESOLUTION);
+    //tableModel_->Sort(SORT_RESOLUTION);
+    currentSort_ = SORT_RESOLUTION;
+    currentSortRev_ = !currentSortRev_;
+    GetSqlAllSetTable(currentDirs_);
 }
 void MainWindow::on_actionSort_by_duration_triggered()
 {
     WaitCursor wc;
-    tableModel_->Sort(TableModel::SORT_DURATION);
+    //tableModel_->Sort(SORT_DURATION);
+    currentSort_ = SORT_DURATION;
+    currentSortRev_ = !currentSortRev_;
+    GetSqlAllSetTable(currentDirs_);
 }
 void MainWindow::on_actionSort_by_bitrate_triggered()
 {
     WaitCursor wc;
-    tableModel_->Sort(TableModel::SORT_BITRATE);
+    //tableModel_->Sort(SORT_BITRATE);
+    currentSort_ = SORT_BITRATE;
+    currentSortRev_ = !currentSortRev_;
+    GetSqlAllSetTable(currentDirs_);
 }
 
 void MainWindow::on_actionSort_by_open_count_triggered()
 {
     WaitCursor wc;
-    tableModel_->Sort(TableModel::SORT_OPENCOUNT);
+    //tableModel_->Sort(SORT_OPENCOUNT);
+    currentSort_ = SORT_OPENCOUNT;
+    currentSortRev_ = !currentSortRev_;
+    GetSqlAllSetTable(currentDirs_);
 }
 
 void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)

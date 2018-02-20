@@ -981,7 +981,12 @@ void MainWindow::GetSqlAllSetTable(const QStringList& dirs, bool bOnlyMissing)
     timer.start();
 
     QList<TableItemDataPointer> all;
-    gpSQL->GetAll(all, dirs, comboFind_->currentText(), bOnlyMissing);
+    gpSQL->GetAll(all,
+                  dirs,
+                  comboFind_->currentText(),
+                  bOnlyMissing,
+                  currentSort_,
+                  currentSortRev_);
 
     UpdateTitle(dirs, bOnlyMissing);
 
@@ -1067,7 +1072,7 @@ void MainWindow::tableItemCountChanged()
     // slItemCount_->setText(QString(tr("Items: %1")).arg(tableModel_->GetItemCount()));
     slItemCount_->setText(QString(tr("Items: %1")).arg(proxyModel_->GetItemCount()));
 }
-void MainWindow::tableSortParameterChanged(TableModel::SORTCOLUMN sc, bool rev)
+void MainWindow::tableSortParameterChanged(SORTCOLUMN sc, bool rev)
 {
     QString text = QString(tr("Sort: %1 %2")).
             arg(TableModel::GetSortColumnName(sc)).

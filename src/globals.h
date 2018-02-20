@@ -28,5 +28,16 @@ enum ImageCacheType {
 };
 
 
+enum SORTCOLUMN{
+    SORT_NONE,
+    SORT_FILENAME,
+    SORT_SIZE,
+    SORT_WTIME,
+    SORT_RESOLUTION,
+    SORT_DURATION,
+    SORT_BITRATE,
+    SORT_OPENCOUNT,
+} ;
+
 
 #endif // GLOBALS_H

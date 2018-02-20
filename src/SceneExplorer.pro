@@ -116,3 +116,6 @@ linux-g++ {
 
 
 TRANSLATIONS += translations/i18n_jp.ts
+
+RESOURCES += \
+    resource.qrc

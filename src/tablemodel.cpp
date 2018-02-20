@@ -92,7 +92,7 @@ void TableModel::ResetData(const QList<TableItemDataPointer>& all)
 //                    (itemDatas_.count()*RowCountPerEntry)+RowCountPerEntry-1);
 
 //    endInsertRows();
-    Sort(GetSortColumn(), GetSortReverse());
+    //Sort_obsolete(GetSortColumn(), GetSortReverse());
     endResetModel();
 
     emit itemCountChanged();
@@ -377,26 +377,26 @@ Qt::ItemFlags TableModel::flags(const QModelIndex &index) const
 
 class SortFunctor
 {
-    TableModel::SORTCOLUMN sc_;
+    SORTCOLUMN sc_;
     bool rev_;
 
 	bool compare(const TableItemDataPointer& v1, const TableItemDataPointer& v2) const
 	{
 		switch (sc_)
 		{
-        case TableModel::SORTCOLUMN::SORT_FILENAME:
+        case SORTCOLUMN::SORT_FILENAME:
 			return (v1->getMovieFileFull() < v2->getMovieFileFull());
-        case TableModel::SORTCOLUMN::SORT_SIZE:
+        case SORTCOLUMN::SORT_SIZE:
 			return (v1->getSize() < v2->getSize());
-        case TableModel::SORTCOLUMN::SORT_WTIME:
+        case SORTCOLUMN::SORT_WTIME:
             return (v1->getWtime() < v2->getWtime());
-        case TableModel::SORTCOLUMN::SORT_RESOLUTION:
+        case SORTCOLUMN::SORT_RESOLUTION:
             return (v1->getResolutionMultiplied() < v2->getResolutionMultiplied());
-        case TableModel::SORTCOLUMN::SORT_DURATION:
+        case SORTCOLUMN::SORT_DURATION:
             return (v1->getDuration() < v2->getDuration());
-        case TableModel::SORTCOLUMN::SORT_BITRATE:
+        case SORTCOLUMN::SORT_BITRATE:
             return (v1->getBitrate() < v2->getBitrate());
-        case TableModel::SORTCOLUMN::SORT_OPENCOUNT:
+        case SORTCOLUMN::SORT_OPENCOUNT:
             return (v1->getOpenCount() < v2->getOpenCount());
         default:
 			Q_ASSERT(false);
@@ -404,7 +404,7 @@ class SortFunctor
 		return false;
 	}
 public:
-    SortFunctor(TableModel::SORTCOLUMN sc,bool rev):
+    SortFunctor(SORTCOLUMN sc,bool rev):
         sc_(sc), rev_(rev)
     {}
 
@@ -419,7 +419,7 @@ public:
 };
 
 
-TableModel::SORTCOLUMN TableModel::GetSortColumn() const
+SORTCOLUMN TableModel::GetSortColumn() const
 {
     return sortColumn_;
 }
@@ -483,7 +483,7 @@ void TableModel::SetSortReverse(bool rev)
     }
 }
 
-void TableModel::Sort(SORTCOLUMN column, bool rev)
+void TableModel::Sort_obsolete(SORTCOLUMN column, bool rev)
 {
     SetSortReverse(rev);
     SetSortColumn(column);
@@ -494,11 +494,11 @@ void TableModel::Sort(SORTCOLUMN column, bool rev)
     std::sort(itemDatas_.begin(), itemDatas_.end(), func);
     endResetModel();
 }
-void TableModel::Sort(SORTCOLUMN column)
+void TableModel::Sort_obsolete(SORTCOLUMN column)
 {
     if(column==GetSortColumn())
         SetSortReverse(!GetSortReverse());
-    Sort(column,GetSortReverse());
+    Sort_obsolete(column,GetSortReverse());
 }
 
 //bool TableModel::RenameEntries(const QString& dir,

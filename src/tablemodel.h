@@ -23,15 +23,7 @@ class TableModel : public QAbstractTableModel
 
 
 public:
-    enum SORTCOLUMN{
-        SORT_FILENAME,
-        SORT_SIZE,
-        SORT_WTIME,
-        SORT_RESOLUTION,
-        SORT_DURATION,
-        SORT_BITRATE,
-        SORT_OPENCOUNT,
-    } ;
+
     static QString GetSortColumnName(SORTCOLUMN sc);
     QString GetSortColumnValue(TableItemDataPointer item) const;
 private:
@@ -71,8 +63,8 @@ public:
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     Qt::ItemFlags flags(const QModelIndex & index) const override ;
 
-    void Sort(SORTCOLUMN column);
-    void Sort(SORTCOLUMN column, bool rev);
+    void Sort_obsolete(SORTCOLUMN column);
+    void Sort_obsolete(SORTCOLUMN column, bool rev);
 //    bool RenameEntries(const QString& dir,
 //                       const QStringList& renameOlds,
 //                       const QStringList& renameNews);

@@ -56,6 +56,9 @@ private:
 	bool closed_ = false;
 	bool directoryChanging_ = false;
     QStringList currentDirs_;
+    SORTCOLUMN currentSort_ = SORTCOLUMN::SORT_NONE;
+    bool currentSortRev_ = false;
+
     // bool bShowMissing_ = false;
     void GetSqlAllSetTable(const QStringList& dirs,
                            bool bOnlyMissing = false);
@@ -349,7 +352,7 @@ public slots:
     void on_context_ExternalTools();
 
     void tableItemCountChanged();
-    void tableSortParameterChanged(TableModel::SORTCOLUMN sc, bool rev);
+    void tableSortParameterChanged(SORTCOLUMN sc, bool rev);
 
 	void on_Rescan();
 	void on_directoryWidget_Remove();
