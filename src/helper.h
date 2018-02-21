@@ -20,5 +20,5 @@ bool showInGraphicalShell(QWidget *parent, const QString &pathIn);
 void MoveToTrashImpl( QString file );
 QString GetDefaultFFprobe();
 QString GetDefaultFFmpeg();
-
+QString getInifile();
 #endif // HELPER_H

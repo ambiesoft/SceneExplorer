@@ -166,13 +166,13 @@ int main2(int argc, char *argv[], QApplication& theApp)
     TaskGetDir::RegisterMetaType();
 
 
-
-    Settings settings;
+	QString inifile = getInifile();// "N:\\Ambiesoft\\SceneExplorer\\SceneExplorer.ini";
+    QScopedPointer<Settings> settings(inifile.isEmpty() ? new Settings : new Settings(inifile));
     QString dbdir;
-    if(!GetDefaultSceneDirectory(settings,dbdir))
+    if(!GetDefaultSceneDirectory(*settings,dbdir))
         return PR_GETDIRECTORYFAILED;
 
-    if(!OpenSceneDirectory(settings,dbdir))
+    if(!OpenSceneDirectory(*settings,dbdir))
         return PR_OPENSCENEDIRECTORYFAILED;
 
 	Sql theSql;
@@ -188,12 +188,8 @@ int main2(int argc, char *argv[], QApplication& theApp)
 	testSQL();
 #endif
 
-//    theFFmepg.SetFFmpeg("C:\\LegacyPrograms\\ffmpeg\\bin\\ffmpeg.exe");
-//    theFFmepg.SetFFprobe("C:\\LegacyPrograms\\ffmpeg\\bin\\ffprobe.exe");
-//    theFFmepg.SetFFmpeg("ffmpeg");
-//    theFFmepg.SetFFprobe("ffprobe");
 
-    MainWindow w(nullptr, settings);
+    MainWindow w(nullptr, *settings);
     if(!w.IsInitialized())
         return PR_WINDOWINITFAILED;
     w.show();

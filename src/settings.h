@@ -24,11 +24,14 @@ private:
 
     void init();
 public:
-    Settings() : s_(
-                     QSettings::Format::IniFormat,
-                     QSettings::Scope::UserScope,
-                     Consts::ORGANIZATION,
-                     Consts::APPNAME)
+    Settings() : s_(QSettings::Format::IniFormat,
+                    QSettings::Scope::UserScope,
+                    Consts::ORGANIZATION,
+                    Consts::APPNAME)
+    {
+        init();
+    }
+    Settings(const QString& inifile) : s_(inifile, QSettings::IniFormat)
     {
         init();
     }

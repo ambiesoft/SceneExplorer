@@ -19,12 +19,19 @@ if %VCVARSBAT% == x (
   goto :end
 )
 
-set QTBIN=Y:\G\Qt\5.10.0\msvc2017_64\bin
+set QTBIN1=Y:\G\Qt\5.10.0\msvc2017_64\bin
+set QTBIN2=C:\local\Qt\5.10.0\msvc2017_64\bin
 set QMAKE=x
-set QMAKECANDIDATE1=%QTBIN%\qmake.exe
-if exist %QMAKECANDIDATE1% (
-  set QMAKE=%QMAKECANDIDATE1%
-)
+if exist %QTBIN1%\qmake.exe (
+  set QTBIN=%QTBIN1%
+  set QMAKE=%QTBIN1%\qmake.exe
+) else (
+if exist %QTBIN2%\qmake.exe (
+  set QTBIN=%QTBIN2%
+  set QMAKE=%QTBIN2%\qmake.exe
+) )
+
+
 
 if %QMAKE% == x (
   echo "qmake not found."
