@@ -340,6 +340,12 @@ void MainWindow::StartScan2(const QString& dir)
         return;
     }
 
+    if(!QDir(dir).exists())
+    {
+        insertLog(TaskKind::App, 0, QString(tr("Directoy not found. (%1) ")).
+                  arg(dir));
+        return;
+    }
     TaskGetDir* pTaskGetDir = new TaskGetDir(gLoopId, idManager_->Increment(IDKIND_GetDir), dir);
     pTaskGetDir->setAutoDelete(true);
     QObject::connect(pTaskGetDir, &TaskGetDir::afterGetDir,

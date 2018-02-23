@@ -4,6 +4,7 @@
 #include <QFileInfo>
 #include <QDesktopServices>
 #include <QSet>
+#include <QCoreApplication>
 
 #include "../../profile/cpp/Profile/Profile/profile.h"
 
