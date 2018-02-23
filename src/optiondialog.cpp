@@ -32,12 +32,15 @@ void OptionDialog::showEvent(QShowEvent *ev)
         Q_ASSERT(false);
     }
 
+    ui.chkUseCustomDatabaseDirectory->setChecked(useCustomDBDir_);
     ui.lineDBDir->setText(dbdir_);
 
     ui.chkOpenLastDocument->setChecked(openlastdoc_);
 
     ui.lineffprobe->setText(ffprobe_);
     ui.lineffmpeg->setText(ffmpeg_);
+
+    on_chkUseCustomDatabaseDirectory_stateChanged(0);
 
     QDialog::showEvent(ev);
 }
@@ -55,6 +58,7 @@ void OptionDialog::on_buttonBox_accepted()
     else
         Q_ASSERT(false);
 
+    useCustomDBDir_ = ui.chkUseCustomDatabaseDirectory->isChecked();
     dbdir_ = ui.lineDBDir->text();
 
     openlastdoc_ = ui.chkOpenLastDocument->isChecked();
@@ -95,4 +99,13 @@ void OptionDialog::on_tbffmpeg_clicked()
         return;
 
     ui.lineffmpeg->setText(dlg.selectedFiles()[0]);
+}
+
+void OptionDialog::on_chkUseCustomDatabaseDirectory_stateChanged(int arg1)
+{
+    Q_UNUSED(arg1);
+    bool checked = ui.chkUseCustomDatabaseDirectory->isChecked();
+    ui.labelDBDir->setEnabled(checked);
+    ui.lineDBDir->setEnabled(checked);
+    ui.tbDBDir->setEnabled(checked);
 }

@@ -62,6 +62,8 @@ void MainWindow::on_action_Options_triggered()
     dlg.maxgd_ = optionThreadcountGetDir_;
     dlg.maxff_ = optionThreadcountThumbnail_;
     dlg.imagecache_ = tableModel_->GetImageCache();
+    dlg.useCustomDBDir_ = settings_.valueBool(Consts::KEY_USE_CUSTOMDATABASEDIR);
+    bool prevUseCustomDBDir = dlg.useCustomDBDir_;
     dlg.dbdir_ = QDir::currentPath();
     dlg.openlastdoc_ = settings_.valueBool(Consts::KEY_OPEN_LASTOPENEDDOCUMENT, true);
     dlg.ffprobe_ = FFMpeg::GetFFprobe(settings_);
@@ -74,11 +76,12 @@ void MainWindow::on_action_Options_triggered()
     optionThreadcountThumbnail_ = dlg.maxff_;
     tableModel_->SetImageCache(dlg.imagecache_);
     settings_.setValue(Consts::KEY_OPEN_LASTOPENEDDOCUMENT,dlg.openlastdoc_);
+    settings_.setValue(Consts::KEY_USE_CUSTOMDATABASEDIR, dlg.useCustomDBDir_);
     settings_.setValue(Consts::KEY_DATABASE_PATH, dlg.dbdir_);
     FFMpeg::SetFFprobe(settings_, dlg.ffprobe_);
     FFMpeg::SetFFmpeg(settings_, dlg.ffmpeg_);
 
-    if(QDir::current() != QDir(dlg.dbdir_))
+    if( (prevUseCustomDBDir != dlg.useCustomDBDir_) || (QDir::current() != QDir(dlg.dbdir_)) )
     {
         if(YesNo(this,
               tr("Application needs to restart to effect the change. Do you want to restart application now?")))

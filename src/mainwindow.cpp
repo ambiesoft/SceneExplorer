@@ -1262,3 +1262,32 @@ bool MainWindow::checkFFmpeg(QString& errString) const
 {
     return checkExeCommon(FFMpeg::GetFFmpeg(), errString);
 }
+
+void MainWindow::on_actionAbout_document_triggered()
+{
+    QString title = Consts::APPNAME_DISPLAY;
+    QString text;
+
+    text.append(tr("Document"));
+    text.append(": ");
+    text.append(pDoc_ ? pDoc_->GetFullName(): tr("<No document>"));
+
+    text.append("\n");
+
+    text.append(tr("Ini file"));
+    text.append(": ");
+    text.append(settings_.fileName());
+
+    text.append("\n");
+
+    text.append(tr("Database directory"));
+    text.append(": ");
+    text.append(QDir(".").absolutePath());
+
+
+    QMessageBox msgbox(this);
+    msgbox.setIcon(QMessageBox::Information);
+    msgbox.setText(text);
+    msgbox.setWindowTitle(title);
+    msgbox.exec();
+}

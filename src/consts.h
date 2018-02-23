@@ -18,6 +18,8 @@ namespace Consts
 
 	
     const char KEY_LASTSELECTEDDIRECTORY[] = "lastselecteddir";
+
+    const char KEY_USE_CUSTOMDATABASEDIR[] = "usecustomdatabasedir";
     const char KEY_DATABASE_PATH[] = "databasepath";
 
 

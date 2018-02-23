@@ -19,6 +19,7 @@ public:
     ImageCacheType imagecache_;
     int maxgd_;
     int maxff_;
+    bool useCustomDBDir_;
     QString dbdir_;
     bool openlastdoc_;
     QString ffprobe_, ffmpeg_;
@@ -30,6 +31,7 @@ private slots:
     void on_tbDBDir_clicked();
     void on_tbffprobe_clicked();
     void on_tbffmpeg_clicked();
+    void on_chkUseCustomDatabaseDirectory_stateChanged(int arg1);
 };
 
 #endif // OPTIONDIALOG_H

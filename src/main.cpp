@@ -87,7 +87,10 @@ bool OpenSceneDirectory(Settings& settings,const QString& dbDir)
 
 bool GetDefaultSceneDirectory(Settings& settings, QString& dbdir)
 {
-    dbdir = settings.valueString(Consts::KEY_DATABASE_PATH);
+    if(settings.valueBool(Consts::KEY_USE_CUSTOMDATABASEDIR))
+        dbdir = settings.valueString(Consts::KEY_DATABASE_PATH);
+    else
+        dbdir.clear();
 
     if(!dbdir.isEmpty() && !QDir(dbdir).exists())
     {

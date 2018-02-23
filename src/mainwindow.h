@@ -246,6 +246,8 @@ private slots:
 
     void on_actionSave_as_triggered();
 
+    void on_actionAbout_document_triggered();
+
 private:
     QThreadPool* pPoolFFmpeg_ = nullptr;
     QThreadPool* getPoolFFmpeg();

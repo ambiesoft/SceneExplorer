@@ -103,6 +103,7 @@
      <string>&amp;Help</string>
     </property>
     <addaction name="action_About"/>
+    <addaction name="actionAbout_document"/>
    </widget>
    <widget class="QMenu" name="menu_Option">
     <property name="title">
@@ -513,6 +514,11 @@
   <action name="actiondummy">
    <property name="text">
     <string>dummy</string>
+   </property>
+  </action>
+  <action name="actionAbout_document">
+   <property name="text">
+    <string>About &amp;document...</string>
    </property>
   </action>
  </widget>
