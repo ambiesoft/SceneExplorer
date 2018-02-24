@@ -159,6 +159,7 @@ private:
 
     int optionThreadcountGetDir_ = 1;
     int optionThreadcountThumbnail_ = 2;
+    int optionThumbCount_ = 3; // default is 3
 
     bool initShown=false;
 	bool IsClosed() const {

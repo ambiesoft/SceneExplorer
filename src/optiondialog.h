@@ -19,6 +19,7 @@ public:
     ImageCacheType imagecache_;
     int maxgd_;
     int maxff_;
+    int thumbCount_;
     bool useCustomDBDir_;
     QString dbdir_;
     bool openlastdoc_;

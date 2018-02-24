@@ -9,6 +9,10 @@ OptionDialog::OptionDialog(QWidget* parent)
       imagecache_(IC_NEVER)
 {
     ui.setupUi(this);
+
+    ui.cmbThumbCount->addItem("3");
+    ui.cmbThumbCount->addItem("5");
+
     setWindowTitle(tr("option"));
 }
 
@@ -16,6 +20,12 @@ void OptionDialog::showEvent(QShowEvent *ev)
 {
     ui.spinBoxGetDir->setValue(maxgd_);
     ui.spinBoxThumb->setValue(maxff_);
+
+    Q_ASSERT(ui.cmbThumbCount->count()==2);
+    if(thumbCount_==5)
+        ui.cmbThumbCount->setCurrentIndex(1);
+    else
+        ui.cmbThumbCount->setCurrentIndex(0);
 
     switch(imagecache_)
     {
@@ -48,6 +58,8 @@ void OptionDialog::on_buttonBox_accepted()
 {
     maxgd_ = ui.spinBoxGetDir->value();
     maxff_ = ui.spinBoxThumb->value();
+
+    thumbCount_ = ui.cmbThumbCount->currentIndex()==0 ? 3 : 5;
 
     if(ui.rbICNever->isChecked())
         imagecache_=IC_NEVER;

@@ -56,14 +56,14 @@ void TableModel:: AppendData(TableItemDataPointer pItemData, const bool enableUp
     int newRowImage = newRowFilename+1;
     int newRowInfo = newRowImage+1;
 
-    parent_->setSpan(newRowFilename,0,1,ColumnCountImage);
-    parent_->setSpan(newRowInfo,0,1,ColumnCountImage);
+    parent_->setSpan(newRowFilename,0,1,columnCountImage_);
+    parent_->setSpan(newRowInfo,0,1,columnCountImage_);
 
-    static bool initColumnWidth=false;
-    if(!initColumnWidth)
+    initColumnWidth_;
+    if(!initColumnWidth_)
     {
-        initColumnWidth=true;
-        for(int i=0 ; i < ColumnCountImage ; ++i)
+        initColumnWidth_=true;
+        for(int i=0 ; i < columnCountImage_ ; ++i)
         {
             parent_->setColumnWidth(i, Consts::THUMB_WIDTH);
         }
@@ -114,7 +114,7 @@ void TableModel::ClearData()
 
 int TableModel::columnCount(const QModelIndex & /*parent*/) const
 {
-    return ColumnCountImage;
+    return columnCountImage_;
 }
 
 // http://comments.gmane.org/gmane.comp.lib.qt.general/34914
@@ -304,7 +304,7 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
                 parent_->setRowHeight(index.row(), Consts::THUMB_HEIGHT);
 
                 QString imageFile = pathCombine(Consts::FILEPART_THUMBS,
-                                                itemDatas_[actualIndex]->getImageFiles()[index.column()]);
+                                                itemDatas_[actualIndex]->getImageFiles()[getActualColumnIndex(index.column())]);
                 if(imagecache_==ImageCacheType::IC_NEVER)
                 {
                     QImage image(imageFile);
@@ -437,7 +437,7 @@ QString TableModel::GetSortColumnName(SORTCOLUMN sc)
 {
     switch(sc)
     {
-
+    case SORT_NONE:return QString();
     case SORT_FILENAME:return tr("Filename");
     case SORT_SIZE:return tr("Size");
     case SORT_WTIME:return tr("Wtime");

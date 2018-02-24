@@ -61,6 +61,7 @@ void MainWindow::on_action_Options_triggered()
     OptionDialog dlg(this);
     dlg.maxgd_ = optionThreadcountGetDir_;
     dlg.maxff_ = optionThreadcountThumbnail_;
+    dlg.thumbCount_ = optionThumbCount_;
     dlg.imagecache_ = tableModel_->GetImageCache();
     dlg.useCustomDBDir_ = settings_.valueBool(Consts::KEY_USE_CUSTOMDATABASEDIR);
     bool prevUseCustomDBDir = dlg.useCustomDBDir_;
@@ -74,6 +75,8 @@ void MainWindow::on_action_Options_triggered()
 
     optionThreadcountGetDir_ = dlg.maxgd_;
     optionThreadcountThumbnail_ = dlg.maxff_;
+    optionThumbCount_ = dlg.thumbCount_;
+    tableModel_->SetColumnCountImage(dlg.thumbCount_);
     tableModel_->SetImageCache(dlg.imagecache_);
     settings_.setValue(Consts::KEY_OPEN_LASTOPENEDDOCUMENT,dlg.openlastdoc_);
     settings_.setValue(Consts::KEY_USE_CUSTOMDATABASEDIR, dlg.useCustomDBDir_);

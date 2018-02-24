@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>562</width>
-    <height>305</height>
+    <height>328</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -40,7 +40,7 @@
    <item row="3" column="1">
     <widget class="QSpinBox" name="spinBoxThumb"/>
    </item>
-   <item row="9" column="0">
+   <item row="10" column="0">
     <widget class="QLabel" name="label">
      <property name="text">
       <string>&amp;Image cache:</string>
@@ -50,7 +50,7 @@
      </property>
     </widget>
    </item>
-   <item row="16" column="1">
+   <item row="17" column="1">
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -60,7 +60,7 @@
      </property>
     </widget>
    </item>
-   <item row="14" column="1">
+   <item row="15" column="1">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -73,28 +73,28 @@
      </property>
     </spacer>
    </item>
-   <item row="9" column="1">
+   <item row="10" column="1">
     <widget class="QRadioButton" name="rbICNever">
      <property name="text">
       <string>&amp;Never</string>
      </property>
     </widget>
    </item>
-   <item row="10" column="1">
+   <item row="11" column="1">
     <widget class="QRadioButton" name="rbICPerfolder">
      <property name="text">
       <string>&amp;Per folder selections</string>
      </property>
     </widget>
    </item>
-   <item row="11" column="1">
+   <item row="12" column="1">
     <widget class="QRadioButton" name="rbICAlways">
      <property name="text">
       <string>&amp;Always</string>
      </property>
     </widget>
    </item>
-   <item row="8" column="0">
+   <item row="9" column="0">
     <widget class="QLabel" name="labelDBDir">
      <property name="text">
       <string>&amp;Database directory:</string>
@@ -104,7 +104,7 @@
      </property>
     </widget>
    </item>
-   <item row="8" column="1">
+   <item row="9" column="1">
     <layout class="QHBoxLayout" name="hlDatabaseDir">
      <property name="spacing">
       <number>0</number>
@@ -121,14 +121,14 @@
      </item>
     </layout>
    </item>
-   <item row="13" column="1">
+   <item row="14" column="1">
     <widget class="QCheckBox" name="chkOpenLastDocument">
      <property name="text">
       <string>Enable</string>
      </property>
     </widget>
    </item>
-   <item row="13" column="0">
+   <item row="14" column="0">
     <widget class="QLabel" name="labelOpenLastDocument">
      <property name="text">
       <string>Open &amp;last document:</string>
@@ -138,7 +138,7 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="0">
+   <item row="6" column="0">
     <widget class="QLabel" name="labelffprobe">
      <property name="text">
       <string>FF&amp;probe:</string>
@@ -148,7 +148,7 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="0">
+   <item row="7" column="0">
     <widget class="QLabel" name="label_3">
      <property name="text">
       <string>FF&amp;mpeg:</string>
@@ -158,7 +158,7 @@
      </property>
     </widget>
    </item>
-   <item row="5" column="1">
+   <item row="6" column="1">
     <layout class="QHBoxLayout" name="hlffprobe">
      <property name="spacing">
       <number>0</number>
@@ -175,7 +175,7 @@
      </item>
     </layout>
    </item>
-   <item row="6" column="1">
+   <item row="7" column="1">
     <layout class="QHBoxLayout" name="hlffmpeg">
      <property name="spacing">
       <number>0</number>
@@ -192,7 +192,7 @@
      </item>
     </layout>
    </item>
-   <item row="7" column="0">
+   <item row="8" column="0">
     <widget class="QLabel" name="label_useCustomDatabase">
      <property name="text">
       <string>Use custom database directory:</string>
@@ -202,12 +202,25 @@
      </property>
     </widget>
    </item>
-   <item row="7" column="1">
+   <item row="8" column="1">
     <widget class="QCheckBox" name="chkUseCustomDatabaseDirectory">
      <property name="text">
       <string>Enable</string>
      </property>
     </widget>
+   </item>
+   <item row="5" column="0">
+    <widget class="QLabel" name="labelThumbCountPerItem">
+     <property name="text">
+      <string>Thumbnail count per item:</string>
+     </property>
+     <property name="buddy">
+      <cstring>cmbThumbCount</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="5" column="1">
+    <widget class="QComboBox" name="cmbThumbCount"/>
    </item>
   </layout>
  </widget>
@@ -235,8 +248,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>435</x>
-     <y>296</y>
+     <x>552</x>
+     <y>318</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -251,8 +264,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>503</x>
-     <y>296</y>
+     <x>552</x>
+     <y>318</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>

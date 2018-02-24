@@ -179,6 +179,10 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
 
     optionThreadcountGetDir_ = settings_.valueInt(Consts::KEY_MAX_GETDIR_THREADCOUNT, optionThreadcountGetDir_);
     optionThreadcountThumbnail_ = settings_.valueInt(Consts::KEY_MAX_THUMBNAIL_THREADCOUNT, optionThreadcountThumbnail_);
+    optionThumbCount_ = settings_.valueInt(Consts::KEY_THUMBNAIL_COUNT, 3);
+    if(optionThumbCount_ != 3 && optionThumbCount_ != 5)
+        optionThumbCount_ = 3;
+
     tableModel_->SetImageCache((ImageCacheType)settings_.valueInt(Consts::KEY_IMAGECACHETYPE,1));
 
 
@@ -1000,6 +1004,9 @@ void MainWindow::GetSqlAllSetTable(const QStringList& dirs, bool bOnlyMissing)
     insertLog(TaskKind::App,
               0,
               QString(tr("Resetting data takes %1 milliseconds.")).arg(timer.elapsed()));
+
+
+    tableSortParameterChanged(currentSort_, currentSortRev_);
 }
 
 void MainWindow::UpdateTitle(const QStringList& dirs, bool bOnlyMissing)

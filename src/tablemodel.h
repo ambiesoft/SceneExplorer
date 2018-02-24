@@ -16,7 +16,9 @@ class TableModel : public QAbstractTableModel
     Q_OBJECT
 
     static const int RowCountPerEntry = 3;
-    static const int ColumnCountImage = 5;
+    // static const int ColumnCountImage = 5;
+    int columnCountImage_ = 3;
+    bool initColumnWidth_ = false;
 
     QFont fontInfo_;
     QFont fontDetail_;
@@ -106,6 +108,24 @@ public:
     }
     void SetImageCache(ImageCacheType ic) {
         imagecache_=ic;
+    }
+    void SetColumnCountImage(int i) {
+        beginResetModel();
+        columnCountImage_=i;
+        initColumnWidth_=false;
+        endResetModel();
+    }
+    int getActualColumnIndex(int ci) const {
+        if(columnCountImage_==5)
+            return ci;
+        switch(ci)
+        {
+        case 0:return 0;
+        case 1:return 2;
+        case 2:return 4;
+        }
+        Q_ASSERT(false);
+        return 0;
     }
 signals:
     void itemCountChanged();
