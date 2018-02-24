@@ -82,11 +82,11 @@
      </property>
      <addaction name="actiondummy"/>
     </widget>
+    <addaction name="action_New"/>
     <addaction name="action_Open"/>
     <addaction name="menu_Recent_documets"/>
     <addaction name="separator"/>
     <addaction name="action_Save"/>
-    <addaction name="actionSave_as"/>
     <addaction name="separator"/>
     <addaction name="action_Close"/>
    </widget>
@@ -506,11 +506,6 @@
     <string>&amp;Save</string>
    </property>
   </action>
-  <action name="actionSave_as">
-   <property name="text">
-    <string>Save &amp;as...</string>
-   </property>
-  </action>
   <action name="actiondummy">
    <property name="text">
     <string>dummy</string>
@@ -519,6 +514,11 @@
   <action name="actionAbout_document">
    <property name="text">
     <string>About &amp;document...</string>
+   </property>
+  </action>
+  <action name="action_New">
+   <property name="text">
+    <string>&amp;New..</string>
    </property>
   </action>
  </widget>

@@ -64,7 +64,8 @@ private:
                            bool bOnlyMissing = false);
 	QToolButton* btnShowNonExistant_ = nullptr;
 
-    void UpdateTitle(const QStringList& dirs, bool bOnlyMissing);
+    enum UpdateTitleType { DEFAULT, ONLYMISSING, INIT };
+    void UpdateTitle(const QStringList& dirs, UpdateTitleType utt);
 
     QList<ExternalToolItem> externalTools_;
 
@@ -249,6 +250,8 @@ private slots:
 
     void on_actionAbout_document_triggered();
 
+    void on_action_New_triggered();
+
 private:
     QThreadPool* pPoolFFmpeg_ = nullptr;
     QThreadPool* getPoolFFmpeg();
@@ -301,8 +304,9 @@ private:
     bool checkFFprobe(QString& errString) const;
     bool checkFFmpeg(QString& errString) const;
 
+    QString GetDefaultDocumentPath();
 public:
-    void OpenDocument(const QString& file, const bool bExists);
+    bool OpenDocument(const QString& file, const bool bExists);
     void InitDocument();
 
 public slots:

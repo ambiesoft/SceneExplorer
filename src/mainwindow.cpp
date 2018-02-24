@@ -237,39 +237,58 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
 
     if(settings_.valueBool(Consts::KEY_OPEN_LASTOPENEDDOCUMENT, true))
     {
-        if(recents_.isEmpty())
-		{ 
-            QString docdir = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
-			pathCombine(docdir, Consts::APPNAME);
-            QDir().mkpath(docdir);
-            if(!QDir(docdir).exists())
-            {
-                Alert(this,QString(tr("Failed to create directory. \"%1\"")).arg(docdir));
-                return;
-            }
-
-            QString defaultdoc = pathCombine(docdir,
-                                             "default.scexd");
-
-            OpenDocument(defaultdoc, false);
-		}
-		else
+        if(recents_.isEmpty() || !OpenDocument(recents_[0], true))
         {
-            OpenDocument(recents_[0], true);
-        }
-    }
+            // recents is empty or OpenDocument fails.
+            // open default document.
+            QString defaultdoc = GetDefaultDocumentPath();
+            if(defaultdoc.isEmpty())
+                return;
 
+            if(!OpenDocument(defaultdoc, false))
+                return ;
+		}
+    }
+    else
+    {
+        QString defaultdoc = GetDefaultDocumentPath();
+        if(defaultdoc.isEmpty())
+            return;
+
+        if(!OpenDocument(defaultdoc, false))
+            return;
+    }
+    UpdateTitle(QStringList(), UpdateTitleType::INIT);
 	initialized_ = true;
 }
 
-void MainWindow::OpenDocument(const QString& file, const bool bExists)
+QString MainWindow::GetDefaultDocumentPath()
+{
+    QString docdir = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+    if(docdir.isEmpty())
+    {
+        Alert(this,QString(tr("Failed to get document directory.")));
+        return QString();
+    }
+    docdir=pathCombine(docdir, Consts::APPNAME);
+    QDir().mkpath(docdir);
+    if(!QDir(docdir).exists())
+    {
+        Alert(this,QString(tr("Failed to create directory. \"%1\"")).arg(docdir));
+        return QString();
+    }
+
+    return pathCombine(docdir,"default.scexd");
+}
+
+bool MainWindow::OpenDocument(const QString& file, const bool bExists)
 {
     Document* pNewDoc = new Document;
     if(!pNewDoc->Load(file, bExists))
     {
         Alert(this, pNewDoc->GetLastErr());
         delete pNewDoc;
-        return;
+        return false;
     }
 
     qDebug() << "Document Loaded: " << file;
@@ -284,6 +303,7 @@ void MainWindow::OpenDocument(const QString& file, const bool bExists)
     }
     pDoc_ = pNewDoc;
     InitDocument();
+    return true;
 }
 void MainWindow::InitDocument()
 {
@@ -993,7 +1013,7 @@ void MainWindow::GetSqlAllSetTable(const QStringList& dirs, bool bOnlyMissing)
                   currentSort_,
                   currentSortRev_);
 
-    UpdateTitle(dirs, bOnlyMissing);
+    UpdateTitle(dirs, bOnlyMissing ? UpdateTitleType::ONLYMISSING : UpdateTitleType::DEFAULT);
 
     insertLog(TaskKind::App,
               0,
@@ -1010,16 +1030,17 @@ void MainWindow::GetSqlAllSetTable(const QStringList& dirs, bool bOnlyMissing)
     tableSortParameterChanged(currentSort_, currentSortRev_);
 }
 
-void MainWindow::UpdateTitle(const QStringList& dirs, bool bOnlyMissing)
+void MainWindow::UpdateTitle(const QStringList& dirs, UpdateTitleType utt)
 {
     QStringList titledirs;
 
-    if(bOnlyMissing)
+    switch(utt)
     {
+    case UpdateTitleType::ONLYMISSING:
         titledirs << tr("Missing");
-    }
-    else
-    {
+        break;
+
+    case UpdateTitleType::DEFAULT:
         if(dirs.empty())
         {
             titledirs << tr("All");
@@ -1028,8 +1049,12 @@ void MainWindow::UpdateTitle(const QStringList& dirs, bool bOnlyMissing)
         {
             titledirs = dirs;
         }
+        break;
+    case UpdateTitleType::INIT:
+        break;
+    default:
+        Q_ASSERT(false);
     }
-
 
     QString title;
     if(pDoc_)
@@ -1207,6 +1232,23 @@ void MainWindow::on_actionExternal_Tools_triggered()
     externalTools_ = dlg.items_;
 }
 
+void MainWindow::on_action_New_triggered()
+{
+    QFileDialog dlg(this);
+    dlg.setFileMode(QFileDialog::AnyFile);
+    dlg.setAcceptMode(QFileDialog::AcceptMode::AcceptSave);
+
+    QStringList filters;
+    filters << tr("SceneExplorer Document (*.scexd)")
+            << tr("Any files (*)");
+
+    dlg.setNameFilters(filters);
+    if(!dlg.exec())
+        return;
+
+    QString newFile = dlg.selectedFiles()[0];
+    OpenDocument(newFile, QFile(newFile).exists());
+}
 void MainWindow::on_action_Open_triggered()
 {
     QFileDialog dlg(this);
@@ -1305,3 +1347,5 @@ void MainWindow::on_actionAbout_document_triggered()
     msgbox.setWindowTitle(title);
     msgbox.exec();
 }
+
+

@@ -57,7 +57,7 @@ static void testSQL()
 #endif
 
 
-bool OpenDatabaseDirectory(Settings& settings,const QString& dbDir)
+bool OpenDatabaseDirectory(const QString& dbDir)
 {
     if(!QDir(dbDir).exists())
     {
@@ -194,7 +194,7 @@ int main2(int argc, char *argv[], QApplication& theApp)
     if(bQuit)
         return 0;
 
-    if(!OpenDatabaseDirectory(*settings,dbdir))
+    if(!OpenDatabaseDirectory(dbdir))
     {
         QString message = QString(QObject::tr("Failed to open database directory \"%1\".")).
                         arg(dbdir);
