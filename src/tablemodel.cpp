@@ -59,7 +59,6 @@ void TableModel:: AppendData(TableItemDataPointer pItemData, const bool enableUp
     parent_->setSpan(newRowFilename,0,1,columnCountImage_);
     parent_->setSpan(newRowInfo,0,1,columnCountImage_);
 
-    initColumnWidth_;
     if(!initColumnWidth_)
     {
         initColumnWidth_=true;

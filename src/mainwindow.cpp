@@ -229,7 +229,7 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
     FFMpeg::GetFFprobe(settings);
     FFMpeg::GetFFmpeg(settings);
 
-    initialized_ = true;
+
 
 
     // recents
@@ -240,6 +240,7 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
         if(recents_.isEmpty())
 		{ 
             QString docdir = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+			pathCombine(docdir, Consts::APPNAME);
             QDir().mkpath(docdir);
             if(!QDir(docdir).exists())
             {
@@ -251,7 +252,6 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
                                              "default.scexd");
 
             OpenDocument(defaultdoc, false);
-
 		}
 		else
         {
@@ -259,6 +259,7 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
         }
     }
 
+	initialized_ = true;
 }
 
 void MainWindow::OpenDocument(const QString& file, const bool bExists)
@@ -1274,6 +1275,12 @@ void MainWindow::on_actionAbout_document_triggered()
 {
     QString title = Consts::APPNAME_DISPLAY;
     QString text;
+
+    text.append(tr("Executable"));
+    text.append(": ");
+    text.append(QCoreApplication::applicationFilePath());
+
+    text.append("\n");
 
     text.append(tr("Document"));
     text.append(": ");

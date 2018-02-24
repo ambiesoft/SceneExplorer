@@ -57,7 +57,7 @@ static void testSQL()
 #endif
 
 
-bool OpenSceneDirectory(Settings& settings,const QString& dbDir)
+bool OpenDatabaseDirectory(Settings& settings,const QString& dbDir)
 {
     if(!QDir(dbDir).exists())
     {
@@ -81,48 +81,61 @@ bool OpenSceneDirectory(Settings& settings,const QString& dbDir)
         return false;
     }
 
-    settings.setValue(Consts::KEY_DATABASE_PATH, dbDir);
+
     return true;
 }
 
-bool GetDefaultSceneDirectory(Settings& settings, QString& dbdir)
+bool GetDefaultDatabaseDirectory(Settings& settings, QString& dbDir, bool& bQuit)
 {
+    bQuit = false;
     if(settings.valueBool(Consts::KEY_USE_CUSTOMDATABASEDIR))
-        dbdir = settings.valueString(Consts::KEY_DATABASE_PATH);
+        dbDir = settings.valueString(Consts::KEY_DATABASE_PATH);
     else
-        dbdir.clear();
+        dbDir.clear();
 
-    if(!dbdir.isEmpty() && !QDir(dbdir).exists())
+    if(!dbDir.isEmpty() && !QDir(dbDir).exists())
     {
-        QDir().mkpath(dbdir);
-        if(!QDir(dbdir).exists())
+        QDir().mkpath(dbDir);
+        if(!QDir(dbDir).exists())
         {
             Alert(nullptr,QString(QObject::tr("Failed to create directory \"%1\"")).
-                  arg(dbdir));
+                  arg(dbDir));
         }
     }
 
 
-	if (dbdir.isEmpty())
+    if (dbDir.isEmpty())
 	{
-		dbdir = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
-        QDir().mkpath(dbdir);
+        dbDir = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+        QDir().mkpath(dbDir);
 	}
 
-    if(dbdir.isEmpty() || !QDir(dbdir).exists())
+    if(dbDir.isEmpty() || !QDir(dbDir).exists())
     {
-        dbdir = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
-        QFileDialog dlg;
-        dlg.setFileMode(QFileDialog::FileMode::DirectoryOnly);
-        dlg.setDirectory(dbdir);
-        dlg.setWindowTitle(QObject::tr("Choose Database directory"));
-        if(!dlg.exec())
-            return false;
+        if(settings.valueBool(Consts::KEY_USE_CUSTOMDATABASEDIR))
+        {
+            dbDir = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+            QFileDialog dlg;
+            dlg.setFileMode(QFileDialog::FileMode::DirectoryOnly);
+            dlg.setDirectory(dbDir);
+            dlg.setWindowTitle(QObject::tr("Choose Database directory"));
+            if(!dlg.exec())
+            {
+                bQuit = true;
+                return true;
+            }
 
-        if(dlg.selectedFiles().isEmpty())
-            return false;
+            if(dlg.selectedFiles().isEmpty())
+                return false;
 
-        dbdir = dlg.selectedFiles()[0];
+            dbDir = dlg.selectedFiles()[0];
+            settings.setValue(Consts::KEY_DATABASE_PATH, dbDir);
+        }
+        else
+        {
+            // default dir
+            return false;
+        }
     }
     return true;
 }
@@ -172,11 +185,35 @@ int main2(int argc, char *argv[], QApplication& theApp)
 	QString inifile = getInifile();// "N:\\Ambiesoft\\SceneExplorer\\SceneExplorer.ini";
     QScopedPointer<Settings> settings(inifile.isEmpty() ? new Settings : new Settings(inifile));
     QString dbdir;
-    if(!GetDefaultSceneDirectory(*settings,dbdir))
+    bool bQuit = false;
+    if(!GetDefaultDatabaseDirectory(*settings,dbdir,bQuit))
+    {
+        Alert(nullptr, QString(QObject::tr("Failed to get default database directory.")));
         return PR_GETDIRECTORYFAILED;
+    }
+    if(bQuit)
+        return 0;
 
-    if(!OpenSceneDirectory(*settings,dbdir))
+    if(!OpenDatabaseDirectory(*settings,dbdir))
+    {
+        QString message = QString(QObject::tr("Failed to open database directory \"%1\".")).
+                        arg(dbdir);
+        if(settings->valueBool(Consts::KEY_USE_CUSTOMDATABASEDIR))
+        {
+            message += "\n\n";
+            message += QObject::tr("Do you want to set database directory to default?");
+            if(YesNo(nullptr, message))
+            {
+                settings->setValue(Consts::KEY_USE_CUSTOMDATABASEDIR, false);
+                gReboot = true;
+            }
+        }
+        else
+        {
+            Alert(nullptr, message);
+        }
         return PR_OPENSCENEDIRECTORYFAILED;
+    }
 
 	Sql theSql;
 	if (!theSql.isOK())
@@ -194,7 +231,10 @@ int main2(int argc, char *argv[], QApplication& theApp)
 
     MainWindow w(nullptr, *settings);
     if(!w.IsInitialized())
+    {
+        Alert(nullptr, QString(QObject::tr("Window initialization failed.")));
         return PR_WINDOWINITFAILED;
+    }
     w.show();
 
     return theApp.exec();
