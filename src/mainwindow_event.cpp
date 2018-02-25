@@ -24,7 +24,7 @@ void MainWindow::showEvent( QShowEvent* event )
     ui->txtLog->setMaximumSize(10000,10000);
     ui->listTask->setMaximumSize(10000,10000);
 
-    // directoryChangedCommon(true);
+    directoryChangedCommon();
     tableSortParameterChanged(tableModel_->GetSortColumn(), tableModel_->GetSortReverse());
 }
 void MainWindow::resizeEvent(QResizeEvent *event)
