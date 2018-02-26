@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QToolButton>
 #include <QFileIconProvider>
+#include <QPushButton>
 
 #include "tablemodel.h"
 #include "directoryentry.h"
@@ -68,6 +69,36 @@ private:
     void UpdateTitle(const QStringList& dirs, UpdateTitleType utt);
 
     QList<ExternalToolItem> externalTools_;
+
+    class LimitManager
+    {
+        int curIndex_ = 0;
+        int numOfRows_;
+    public:
+        LimitManager(int numOfRows) : numOfRows_(numOfRows){}
+        void Reset() {
+            curIndex_ = 0;
+        }
+        bool Increment() {
+            ++curIndex_;
+            return true;
+        }
+        int GetCurrentIndex() const {
+            return curIndex_;
+        }
+        int GetCurrentIndexAndIncrement() {
+            return curIndex_++;
+        }
+
+        int GetNumberOfRows() const {
+            return numOfRows_;
+        }
+        void SetNumberOfRows(int i) {
+            numOfRows_ = i;
+        }
+
+    };
+    LimitManager* limitManager_ = nullptr;
 
     class IDManager
     {
@@ -174,6 +205,13 @@ private:
 
     FindComboBox* comboFind_ = nullptr;
 
+    QAction* actionLimitFirst_ = nullptr;
+    QAction* actionLimitPrev_ = nullptr;
+    QComboBox* cmbLimit_ = nullptr;
+    QAction* actionLimitNext_ = nullptr;
+    QAction* actionLimitLast_ = nullptr;
+    QAction* sepLimit_ = nullptr;
+
     void onTaskStarted();
     void onTaskEnded();
     // QTimer* taskMonitorTimer = nullptr;
@@ -252,6 +290,7 @@ private slots:
 
     void on_action_New_triggered();
 
+    void on_LimitNext_triggered(bool checked=false);
 private:
     QThreadPool* pPoolFFmpeg_ = nullptr;
     QThreadPool* getPoolFFmpeg();
@@ -304,6 +343,7 @@ private:
     bool checkFFprobe(QString& errString) const;
     bool checkFFmpeg(QString& errString) const;
 
+    void CreateLimitManager();
     QString GetDefaultDocumentPath();
 public:
     bool OpenDocument(const QString& file, const bool bExists);

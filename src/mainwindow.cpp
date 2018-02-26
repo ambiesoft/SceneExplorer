@@ -127,6 +127,8 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
     ui->mainToolBar->removeAction(ui->placeHolder_ShowMissing);
     ui->mainToolBar->removeAction(ui->placeHolder_ComboBox);
 
+    CreateLimitManager();
+
 
     // status bar
     taskModel_ = new TaskModel(ui->listTask);
@@ -262,6 +264,90 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
 	initialized_ = true;
 }
 
+void MainWindow::CreateLimitManager()
+{
+    if(settings_.valueBool(Consts::KEY_LIMIT_ITEMS, false))
+    { // Create
+        if(limitManager_)
+        { // already exits
+            limitManager_->SetNumberOfRows(settings_.valueInt(Consts::KEY_LIMIT_NUMBEROFROWS, 1000));
+        }
+        else
+        {
+            int numofrows = settings_.valueInt(Consts::KEY_LIMIT_NUMBEROFROWS, 1000);
+            limitManager_ = new LimitManager(numofrows);
+
+            actionLimitFirst_ = new QAction("<<",ui->mainToolBar);
+            ui->mainToolBar->insertAction(ui->actionplaceHolder_Limit, actionLimitFirst_);
+
+            actionLimitPrev_ = new QAction("<",ui->mainToolBar);
+            ui->mainToolBar->insertAction(ui->actionplaceHolder_Limit, actionLimitPrev_);
+
+            if(!cmbLimit_)
+            {
+                cmbLimit_ = new QComboBox(ui->mainToolBar);  // intentional leak
+                ui->mainToolBar->insertWidget(ui->actionplaceHolder_Limit, cmbLimit_);
+            }
+            else
+            {
+                Q_ASSERT(false);
+            }
+
+            actionLimitNext_ = new QAction(">",ui->mainToolBar);
+            QObject::connect(actionLimitNext_, &QAction::triggered,
+                             this, &MainWindow::on_LimitNext_triggered);
+            ui->mainToolBar->insertAction(ui->actionplaceHolder_Limit, actionLimitNext_);
+
+            actionLimitLast_ = new QAction(">>",ui->mainToolBar);
+            ui->mainToolBar->insertAction(ui->actionplaceHolder_Limit, actionLimitLast_);
+
+
+            sepLimit_ = ui->mainToolBar->insertSeparator(ui->actionplaceHolder_Limit);
+        }
+    }
+    else
+    { //Destroy limit manager
+        if(limitManager_)
+        {
+            Q_ASSERT(actionLimitFirst_);
+            ui->mainToolBar->removeAction(actionLimitFirst_);
+            delete actionLimitFirst_;
+            actionLimitFirst_ = nullptr;
+
+            Q_ASSERT(actionLimitPrev_);
+            ui->mainToolBar->removeAction(actionLimitPrev_);
+            delete actionLimitPrev_;
+            actionLimitPrev_ = nullptr;
+
+            Q_ASSERT(cmbLimit_);
+            delete cmbLimit_;
+            cmbLimit_ = nullptr;
+
+            Q_ASSERT(actionLimitNext_);
+            QObject::disconnect(actionLimitNext_, &QAction::triggered,
+                             this, &MainWindow::on_LimitNext_triggered);
+            ui->mainToolBar->removeAction(actionLimitNext_);
+            delete actionLimitNext_;
+            actionLimitNext_ = nullptr;
+
+            Q_ASSERT(actionLimitLast_);
+            ui->mainToolBar->removeAction(actionLimitLast_);
+            delete actionLimitLast_;
+            actionLimitLast_ = nullptr;
+
+            ui->mainToolBar->removeAction(sepLimit_);
+            delete sepLimit_;
+            sepLimit_ = nullptr;
+
+            delete limitManager_;
+            limitManager_ = nullptr;
+        }
+    }
+    ui->actionplaceHolder_Limit->setVisible(false);
+    //QAction* sep = ui->mainToolBar->findChild("sepAfterLimit");
+
+    // ui->mainToolBar->removeAction(ui->actionplaceHolder_Limit);
+}
 QString MainWindow::GetDefaultDocumentPath()
 {
     QString docdir = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
@@ -935,6 +1021,8 @@ void MainWindow::on_directoryWidget_selectionChanged(const QItemSelection &selec
 {
     Q_UNUSED(selected);
     Q_UNUSED(deselected);
+    if(limitManager_)
+        limitManager_->Reset();
     directoryChangedCommon();
 }
 
@@ -1011,7 +1099,10 @@ void MainWindow::GetSqlAllSetTable(const QStringList& dirs, bool bOnlyMissing)
                   comboFind_->currentText(),
                   bOnlyMissing,
                   currentSort_,
-                  currentSortRev_);
+                  currentSortRev_,
+                  limitManager_ ?
+                      LimitArg(limitManager_->GetCurrentIndex(), limitManager_->GetNumberOfRows()): LimitArg());
+
 
     UpdateTitle(dirs, bOnlyMissing ? UpdateTitleType::ONLYMISSING : UpdateTitleType::DEFAULT);
 
@@ -1097,6 +1188,10 @@ void MainWindow::on_action_Bottom_triggered()
 void MainWindow::on_directoryWidget_itemChanged(QListWidgetItem *item)
 {
     Q_UNUSED(item);
+
+    if(limitManager_)
+        limitManager_->Reset();
+
     directoryChangedCommon();
 }
 

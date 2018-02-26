@@ -22,6 +22,8 @@ public:
     int thumbCount_;
     bool useCustomDBDir_;
     QString dbdir_;
+    bool limitItems_;
+    int maxRows_;
     bool openlastdoc_;
     QString ffprobe_, ffmpeg_;
 
@@ -33,6 +35,7 @@ private slots:
     void on_tbffprobe_clicked();
     void on_tbffmpeg_clicked();
     void on_chkUseCustomDatabaseDirectory_stateChanged(int arg1);
+    void on_chkLimitItems_stateChanged(int arg1);
 };
 
 #endif // OPTIONDIALOG_H

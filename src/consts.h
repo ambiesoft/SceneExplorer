@@ -49,6 +49,10 @@ namespace Consts
 
 
     const char KEY_RECENT_OPENDOCUMENTS[] = "recentdocuments";
+
+    const char KEY_LIMIT_ITEMS[] = "limititems";
+    const char KEY_LIMIT_NUMBEROFROWS[] = "limitnumberofrows";
+
     const char KEY_OPEN_LASTOPENEDDOCUMENT[] = "openlastdocument";
 
     const char KEY_FFPROBE_EXECUTABLE[] = "ffprobeexecutable";

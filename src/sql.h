@@ -8,6 +8,26 @@
 
 #define DBFILENAME "./db.sqlite3"
 
+class LimitArg
+{
+    bool enabled_;
+    int index_;
+    int num_;
+public:
+    LimitArg() : enabled_(false) {}
+    LimitArg(int index,int num) : enabled_(true), index_(index), num_(num) {}
+
+    operator bool() const {
+        return enabled_;
+    }
+    int GetOffset() const {
+        return index_ * num_;
+    }
+    int GetCount() const {
+        return num_;
+    }
+};
+
 class Sql : public QObject
 {
     Q_OBJECT
@@ -82,7 +102,8 @@ public:
                 const QString& find = QString(),
                 bool bOnlyMissing = false,
                 SORTCOLUMN sortcolumn = SORT_NONE,
-                bool sortrev = false
+                bool sortrev = false,
+                LimitArg& limit = LimitArg()
             );
 
     bool IncrementOpenCount(const QString& movieFile);

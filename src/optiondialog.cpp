@@ -45,12 +45,16 @@ void OptionDialog::showEvent(QShowEvent *ev)
     ui.chkUseCustomDatabaseDirectory->setChecked(useCustomDBDir_);
     ui.lineDBDir->setText(dbdir_);
 
+    ui.chkLimitItems->setChecked(limitItems_);
+    ui.spinNumberOfRows->setValue(maxRows_);
+
     ui.chkOpenLastDocument->setChecked(openlastdoc_);
 
     ui.lineffprobe->setText(ffprobe_);
     ui.lineffmpeg->setText(ffmpeg_);
 
     on_chkUseCustomDatabaseDirectory_stateChanged(0);
+    on_chkLimitItems_stateChanged(0);
 
     QDialog::showEvent(ev);
 }
@@ -72,6 +76,9 @@ void OptionDialog::on_buttonBox_accepted()
 
     useCustomDBDir_ = ui.chkUseCustomDatabaseDirectory->isChecked();
     dbdir_ = ui.lineDBDir->text();
+
+    limitItems_ = ui.chkLimitItems->isChecked();
+    maxRows_ = ui.spinNumberOfRows->value();
 
     openlastdoc_ = ui.chkOpenLastDocument->isChecked();
 
@@ -120,4 +127,12 @@ void OptionDialog::on_chkUseCustomDatabaseDirectory_stateChanged(int arg1)
     ui.labelDBDir->setEnabled(checked);
     ui.lineDBDir->setEnabled(checked);
     ui.tbDBDir->setEnabled(checked);
+}
+
+void OptionDialog::on_chkLimitItems_stateChanged(int arg1)
+{
+    Q_UNUSED(arg1);
+    bool checked = ui.chkLimitItems->isChecked();
+    ui.labelNumberOfRows->setEnabled(checked);
+    ui.spinNumberOfRows->setEnabled(checked);
 }

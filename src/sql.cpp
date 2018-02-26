@@ -597,12 +597,20 @@ QString Sql::getErrorStrig(int thumbRet)
 //    return GetAll(v, QStringList(dir));
 //}
 
+void AppendLitmiArg(QString& sql, LimitArg& limit)
+{
+    if(!limit)
+        return;
+
+    sql += QString(" LIMIT %1, %2").arg(limit.GetOffset()).arg(limit.GetCount());
+}
 bool GetAllSqlString(
         QSqlQuery& query,
         const QStringList& dirs,
         const QString& find,
         SORTCOLUMN sortcolumn,
-        bool sortrev)
+        bool sortrev,
+        LimitArg& limit)
 {
     QString sql = "SELECT *";
 
@@ -657,6 +665,8 @@ bool GetAllSqlString(
             sql += sortrev ? "ASC" : "DESC";
         }
 
+        AppendLitmiArg(sql, limit);
+
         SQC(query, prepare(sql));
         for(int i=0 ; i < binds.count(); ++i)
         {
@@ -685,6 +695,7 @@ bool GetAllSqlString(
             sql += "` ";
             sql += sortrev ? "ASC" : "DESC";
         }
+        AppendLitmiArg(sql, limit);
         qDebug() << sql;
         SQC(query, prepare(sql));
 
@@ -705,14 +716,16 @@ bool Sql::GetAll(QList<TableItemDataPointer>& v,
                  const QString& find,
                  bool bOnlyMissing,
                  SORTCOLUMN sortcolumn,
-                 bool sortrev)
+                 bool sortrev,
+                 LimitArg& limit)
 {
     QSqlQuery query(db_);
     GetAllSqlString(query,
                     dirs,
                     find,
                     sortcolumn,
-                    sortrev);
+                    sortrev,
+                    limit);
 
     SQC(query,exec());
 

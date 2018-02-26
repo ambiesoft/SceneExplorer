@@ -66,6 +66,8 @@ void MainWindow::on_action_Options_triggered()
     dlg.useCustomDBDir_ = settings_.valueBool(Consts::KEY_USE_CUSTOMDATABASEDIR);
     bool prevUseCustomDBDir = dlg.useCustomDBDir_;
     dlg.dbdir_ = QDir::currentPath();
+    dlg.limitItems_ = settings_.valueBool(Consts::KEY_LIMIT_ITEMS, false);
+    dlg.maxRows_ = settings_.valueInt(Consts::KEY_LIMIT_NUMBEROFROWS, 1000);
     dlg.openlastdoc_ = settings_.valueBool(Consts::KEY_OPEN_LASTOPENEDDOCUMENT, true);
     dlg.ffprobe_ = FFMpeg::GetFFprobe(settings_);
     dlg.ffmpeg_ = FFMpeg::GetFFmpeg(settings_);
@@ -78,11 +80,15 @@ void MainWindow::on_action_Options_triggered()
     optionThumbCount_ = dlg.thumbCount_;
     tableModel_->SetColumnCountImage(dlg.thumbCount_);
     tableModel_->SetImageCache(dlg.imagecache_);
+    settings_.setValue(Consts::KEY_LIMIT_ITEMS, dlg.limitItems_);
+    settings_.setValue(Consts::KEY_LIMIT_NUMBEROFROWS, dlg.maxRows_);
     settings_.setValue(Consts::KEY_OPEN_LASTOPENEDDOCUMENT,dlg.openlastdoc_);
     settings_.setValue(Consts::KEY_USE_CUSTOMDATABASEDIR, dlg.useCustomDBDir_);
     settings_.setValue(Consts::KEY_DATABASE_PATH, dlg.dbdir_);
     FFMpeg::SetFFprobe(settings_, dlg.ffprobe_);
     FFMpeg::SetFFmpeg(settings_, dlg.ffmpeg_);
+
+    CreateLimitManager();
 
     if( (prevUseCustomDBDir != dlg.useCustomDBDir_) || (QDir::current() != QDir(dlg.dbdir_)) )
     {
@@ -780,4 +786,15 @@ void MainWindow::on_action_ShowMissing(bool bToggle)
 
 
     GetSqlAllSetTable(currentDirs_);
+}
+
+void MainWindow::on_LimitNext_triggered(bool checked)
+{
+    Q_UNUSED(checked);
+
+    Q_ASSERT(limitManager_);
+    if(limitManager_->Increment())
+    {
+        directoryChangedCommon(true);
+    }
 }
