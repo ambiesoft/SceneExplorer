@@ -274,18 +274,22 @@ void MainWindow::CreateLimitManager()
         }
         else
         {
-            int numofrows = settings_.valueInt(Consts::KEY_LIMIT_NUMBEROFROWS, 1000);
-            limitManager_ = new LimitManager(numofrows);
-
             actionLimitFirst_ = new QAction("<<",ui->mainToolBar);
+            QObject::connect(actionLimitFirst_, &QAction::triggered,
+                             this, &MainWindow::on_LimitFirst_triggered);
             ui->mainToolBar->insertAction(ui->actionplaceHolder_Limit, actionLimitFirst_);
 
             actionLimitPrev_ = new QAction("<",ui->mainToolBar);
+            QObject::connect(actionLimitPrev_, &QAction::triggered,
+                             this, &MainWindow::on_LimitPrev_triggered);
             ui->mainToolBar->insertAction(ui->actionplaceHolder_Limit, actionLimitPrev_);
 
             if(!cmbLimit_)
             {
                 cmbLimit_ = new QComboBox(ui->mainToolBar);  // intentional leak
+                cmbLimit_->setEditable(true);
+                cmbLimit_->lineEdit()->setReadOnly(true);
+                cmbLimit_->lineEdit()->setAlignment(Qt::AlignCenter);
                 ui->mainToolBar->insertWidget(ui->actionplaceHolder_Limit, cmbLimit_);
             }
             else
@@ -299,10 +303,16 @@ void MainWindow::CreateLimitManager()
             ui->mainToolBar->insertAction(ui->actionplaceHolder_Limit, actionLimitNext_);
 
             actionLimitLast_ = new QAction(">>",ui->mainToolBar);
+            QObject::connect(actionLimitLast_, &QAction::triggered,
+                             this, &MainWindow::on_LimitLast_triggered);
+
+
             ui->mainToolBar->insertAction(ui->actionplaceHolder_Limit, actionLimitLast_);
 
-
             sepLimit_ = ui->mainToolBar->insertSeparator(ui->actionplaceHolder_Limit);
+
+            int numofrows = settings_.valueInt(Consts::KEY_LIMIT_NUMBEROFROWS, 1000);
+            limitManager_ = new LimitManager(numofrows, cmbLimit_);
         }
     }
     else
@@ -310,11 +320,15 @@ void MainWindow::CreateLimitManager()
         if(limitManager_)
         {
             Q_ASSERT(actionLimitFirst_);
+            QObject::disconnect(actionLimitFirst_, &QAction::triggered,
+                             this, &MainWindow::on_LimitFirst_triggered);
             ui->mainToolBar->removeAction(actionLimitFirst_);
             delete actionLimitFirst_;
             actionLimitFirst_ = nullptr;
 
             Q_ASSERT(actionLimitPrev_);
+            QObject::disconnect(actionLimitPrev_, &QAction::triggered,
+                             this, &MainWindow::on_LimitPrev_triggered);
             ui->mainToolBar->removeAction(actionLimitPrev_);
             delete actionLimitPrev_;
             actionLimitPrev_ = nullptr;
@@ -331,6 +345,8 @@ void MainWindow::CreateLimitManager()
             actionLimitNext_ = nullptr;
 
             Q_ASSERT(actionLimitLast_);
+            QObject::disconnect(actionLimitLast_, &QAction::triggered,
+                             this, &MainWindow::on_LimitLast_triggered);
             ui->mainToolBar->removeAction(actionLimitLast_);
             delete actionLimitLast_;
             actionLimitLast_ = nullptr;
@@ -1081,6 +1097,10 @@ void MainWindow::directoryChangedCommon(bool bForceRead)
         if (dirs == currentDirs_)
             return;
     }
+	if (limitManager_ && currentDirs_ != dirs)
+	{
+		limitManager_->Reset();
+	}
     currentDirs_ = dirs;
 
 
@@ -1093,13 +1113,29 @@ void MainWindow::GetSqlAllSetTable(const QStringList& dirs, bool bOnlyMissing)
     QElapsedTimer timer;
     timer.start();
 
+	if (limitManager_ && limitManager_->IsNotCounted())
+	{
+		qlonglong count = gpSQL->GetAllCount(dirs);
+		limitManager_->SetAllCount(count);
+
+		size_t cmbcount = (count / limitManager_->GetNumberOfRows());
+		if ((count % limitManager_->GetNumberOfRows()) != 0)
+			cmbcount++;
+
+        cmbLimit_->clear();
+		for (size_t i = 0; i < cmbcount; ++i)
+		{
+            cmbLimit_->addItem(QString("%1").arg(i+1));
+            cmbLimit_->setItemData((int)i, Qt::AlignCenter, Qt::TextAlignmentRole);
+		}
+	}
     QList<TableItemDataPointer> all;
     gpSQL->GetAll(all,
                   dirs,
                   comboFind_->currentText(),
                   bOnlyMissing,
-                  currentSort_,
-                  currentSortRev_,
+                  sortManager_.GetCurrentSort(),
+                  sortManager_.GetCurrentRev(),
                   limitManager_ ?
                       LimitArg(limitManager_->GetCurrentIndex(), limitManager_->GetNumberOfRows()): LimitArg());
 
@@ -1118,7 +1154,7 @@ void MainWindow::GetSqlAllSetTable(const QStringList& dirs, bool bOnlyMissing)
               QString(tr("Resetting data takes %1 milliseconds.")).arg(timer.elapsed()));
 
 
-    tableSortParameterChanged(currentSort_, currentSortRev_);
+	tableSortParameterChanged(sortManager_.GetCurrentSort(), sortManager_.GetCurrentRev());
 }
 
 void MainWindow::UpdateTitle(const QStringList& dirs, UpdateTitleType utt)

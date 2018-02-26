@@ -432,62 +432,42 @@ void MainWindow::on_action_About_triggered()
     msgbox.exec();
 }
 
+void MainWindow::onSortCommon(SORTCOLUMN sortColumn)
+{
+	WaitCursor wc;
+	sortManager_.onSort(sortColumn);
+	if (limitManager_)
+		limitManager_->Reset();
+	GetSqlAllSetTable(currentDirs_);
+}
 void MainWindow::on_actionSort_by_file_name_triggered()
 {
-    WaitCursor wc;
-    // tableModel_->Sort(TableModel::SORT_FILENAME);
-    currentSort_ = SORT_FILENAME;
-    currentSortRev_ = !currentSortRev_;
-    GetSqlAllSetTable(currentDirs_);
+	onSortCommon(SORT_FILENAME);
 }
 void MainWindow::on_actionSort_by_file_size_triggered()
 {
-    WaitCursor wc;
-    //tableModel_->Sort(SORT_SIZE);
-    currentSort_ = SORT_SIZE;
-    currentSortRev_ = !currentSortRev_;
-    GetSqlAllSetTable(currentDirs_);
+	onSortCommon(SORT_SIZE);
 }
 void MainWindow::on_actionSort_by_wtime_triggered()
 {
-    WaitCursor wc;
-    //tableModel_->Sort(SORT_WTIME);
-    currentSort_ = SORT_WTIME;
-    currentSortRev_ = !currentSortRev_;
-    GetSqlAllSetTable(currentDirs_);
+	onSortCommon(SORT_WTIME);
 }
 void MainWindow::on_actionSort_by_resolution_triggered()
 {
-    WaitCursor wc;
-    //tableModel_->Sort(SORT_RESOLUTION);
-    currentSort_ = SORT_RESOLUTION;
-    currentSortRev_ = !currentSortRev_;
-    GetSqlAllSetTable(currentDirs_);
+	onSortCommon(SORT_RESOLUTION);
 }
 void MainWindow::on_actionSort_by_duration_triggered()
 {
-    WaitCursor wc;
-    //tableModel_->Sort(SORT_DURATION);
-    currentSort_ = SORT_DURATION;
-    currentSortRev_ = !currentSortRev_;
-    GetSqlAllSetTable(currentDirs_);
+	onSortCommon(SORT_DURATION);
 }
 void MainWindow::on_actionSort_by_bitrate_triggered()
 {
-    WaitCursor wc;
-    //tableModel_->Sort(SORT_BITRATE);
-    currentSort_ = SORT_BITRATE;
-    currentSortRev_ = !currentSortRev_;
-    GetSqlAllSetTable(currentDirs_);
+	onSortCommon(SORT_BITRATE);
 }
 
 void MainWindow::on_actionSort_by_open_count_triggered()
 {
-    WaitCursor wc;
-    //tableModel_->Sort(SORT_OPENCOUNT);
-    currentSort_ = SORT_OPENCOUNT;
-    currentSortRev_ = !currentSortRev_;
-    GetSqlAllSetTable(currentDirs_);
+	onSortCommon(SORT_OPENCOUNT);
 }
 
 void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
@@ -788,6 +768,25 @@ void MainWindow::on_action_ShowMissing(bool bToggle)
     GetSqlAllSetTable(currentDirs_);
 }
 
+void MainWindow::on_LimitFirst_triggered(bool checked)
+{
+    Q_UNUSED(checked);
+
+    Q_ASSERT(limitManager_);
+    limitManager_->SetIndexFirst();
+    directoryChangedCommon(true);
+}
+void MainWindow::on_LimitPrev_triggered(bool checked)
+{
+    Q_UNUSED(checked);
+
+    Q_ASSERT(limitManager_);
+    if(limitManager_->Decrement())
+    {
+        directoryChangedCommon(true);
+    }
+}
+
 void MainWindow::on_LimitNext_triggered(bool checked)
 {
     Q_UNUSED(checked);
@@ -797,4 +796,31 @@ void MainWindow::on_LimitNext_triggered(bool checked)
     {
         directoryChangedCommon(true);
     }
+}
+void MainWindow::on_LimitLast_triggered(bool checked)
+{
+    Q_UNUSED(checked);
+
+    Q_ASSERT(limitManager_);
+    limitManager_->SetIndexLast();
+    directoryChangedCommon(true);
+}
+
+bool MainWindow::LimitManager::Decrement()
+{
+    int ci = cmb_->currentIndex();
+    --ci;
+    if(ci < 0)
+        return false;
+    cmb_->setCurrentIndex(ci);
+    return true;
+}
+bool MainWindow::LimitManager::Increment()
+{
+    int ci = cmb_->currentIndex();
+    ++ci;
+    if(cmb_->count() <= ci)
+        return false;
+    cmb_->setCurrentIndex(ci);
+    return true;
 }

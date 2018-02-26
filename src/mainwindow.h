@@ -57,8 +57,8 @@ private:
 	bool closed_ = false;
 	bool directoryChanging_ = false;
     QStringList currentDirs_;
-    SORTCOLUMN currentSort_ = SORTCOLUMN::SORT_NONE;
-    bool currentSortRev_ = false;
+    //SORTCOLUMN currentSort_ = SORTCOLUMN::SORT_NONE;
+    //bool currentSortRev_ = false;
 
     // bool bShowMissing_ = false;
     void GetSqlAllSetTable(const QStringList& dirs,
@@ -72,22 +72,22 @@ private:
 
     class LimitManager
     {
-        int curIndex_ = 0;
+        // int curIndex_ = 0;
         int numOfRows_;
+		qlonglong allCount_ = -1;
+        QComboBox* cmb_;
     public:
-        LimitManager(int numOfRows) : numOfRows_(numOfRows){}
+        LimitManager(int numOfRows, QComboBox* cmb) : numOfRows_(numOfRows), cmb_(cmb){}
         void Reset() {
-            curIndex_ = 0;
+            // curIndex_ = 0;
+            cmb_->setCurrentIndex(0);
+			allCount_ = -1;
         }
-        bool Increment() {
-            ++curIndex_;
-            return true;
-        }
+        bool Decrement();
+        bool Increment();
         int GetCurrentIndex() const {
-            return curIndex_;
-        }
-        int GetCurrentIndexAndIncrement() {
-            return curIndex_++;
+            // return curIndex_;
+            return cmb_->currentIndex();
         }
 
         int GetNumberOfRows() const {
@@ -96,7 +96,21 @@ private:
         void SetNumberOfRows(int i) {
             numOfRows_ = i;
         }
-
+		bool IsNotCounted() const {
+			return allCount_ == -1;
+		}
+		qlonglong GetAllCount() const {
+			return allCount_;
+		}
+		void SetAllCount(qlonglong& l) {
+			allCount_ = l;
+		}
+        void SetIndexFirst() {
+            cmb_->setCurrentIndex(0);
+        }
+        void SetIndexLast() {
+            cmb_->setCurrentIndex(cmb_->count()-1);
+        }
     };
     LimitManager* limitManager_ = nullptr;
 
@@ -222,6 +236,28 @@ protected:
     void closeEvent(QCloseEvent *event);
     void showEvent( QShowEvent* event );
 
+	class SortManager
+	{
+		SORTCOLUMN sort_;
+		bool rev_[COUNT_SORTCOLUMN];
+	public:
+		SortManager() {
+			sort_ = SORT_NONE;
+            for (size_t i = 0; i < _countof(rev_); ++i)
+				rev_[i] = true;
+		}
+		void onSort(SORTCOLUMN sc) {
+			sort_ = sc;
+			rev_[sc] = !rev_[sc];
+		}
+		SORTCOLUMN GetCurrentSort() const {
+			return sort_;
+		}
+		bool GetCurrentRev() const {
+			return rev_[sort_];
+		}
+	} sortManager_;
+	void onSortCommon(SORTCOLUMN sortColumn);
 private slots:
     void on_action_Close_triggered();
     void on_action_About_triggered();
@@ -290,7 +326,12 @@ private slots:
 
     void on_action_New_triggered();
 
+
+    void on_LimitFirst_triggered(bool checked=false);
+    void on_LimitPrev_triggered(bool checked=false);
     void on_LimitNext_triggered(bool checked=false);
+    void on_LimitLast_triggered(bool checked=false);
+
 private:
     QThreadPool* pPoolFFmpeg_ = nullptr;
     QThreadPool* getPoolFFmpeg();

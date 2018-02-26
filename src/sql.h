@@ -96,14 +96,14 @@ public:
     bool RemoveEntryThumb(const QString& dir,
                           const QString& name,
                           QString& removedThumbID);
-    // bool GetAll(QList<TableItemDataPointer>& v, const QString& dir = QString());
+	qlonglong GetAllCount(const QStringList& dirs);
 	bool GetAll(QList<TableItemDataPointer>& v,
                 const QStringList& dirs = QStringList(),
                 const QString& find = QString(),
                 bool bOnlyMissing = false,
                 SORTCOLUMN sortcolumn = SORT_NONE,
                 bool sortrev = false,
-                LimitArg& limit = LimitArg()
+                const LimitArg& limit = LimitArg()
             );
 
     bool IncrementOpenCount(const QString& movieFile);

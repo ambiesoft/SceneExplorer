@@ -597,22 +597,41 @@ QString Sql::getErrorStrig(int thumbRet)
 //    return GetAll(v, QStringList(dir));
 //}
 
-void AppendLitmiArg(QString& sql, LimitArg& limit)
+void AppendLitmiArg(QString& sql, const LimitArg& limit)
 {
     if(!limit)
         return;
 
     sql += QString(" LIMIT %1, %2").arg(limit.GetOffset()).arg(limit.GetCount());
 }
+void AppendSortArg(QString& sql, const QString& sortby, bool sortrev)
+{
+	if (!sortby.isEmpty())
+	{
+		sql += " ORDER BY `";
+		sql += sortby;
+		sql += "` ";
+		sql += sortrev ? "ASC" : "DESC";
+	}
+}
+
 bool GetAllSqlString(
         QSqlQuery& query,
+		const QStringList& selects,
         const QStringList& dirs,
         const QString& find,
         SORTCOLUMN sortcolumn,
         bool sortrev,
-        LimitArg& limit)
+        const LimitArg& limit)
 {
-    QString sql = "SELECT *";
+    QString sql = "SELECT ";
+	for (int i = 0; i < selects.count(); ++i)
+	{
+		sql.append(selects[i]);
+		
+		if((i+1) != selects.count())
+			sql.append(", ");
+	}
 
     QString sortby;
     switch(sortcolumn)
@@ -656,15 +675,8 @@ bool GetAllSqlString(
             sql += " WHERE name LIKE ?";
             binds.append("%"+find+"%");
         }
-
-        if(!sortby.isEmpty())
-        {
-            sql += " ORDER BY `";
-            sql += sortby;
-            sql += "` ";
-            sql += sortrev ? "ASC" : "DESC";
-        }
-
+		
+		AppendSortArg(sql, sortby, sortrev);
         AppendLitmiArg(sql, limit);
 
         SQC(query, prepare(sql));
@@ -688,13 +700,7 @@ bool GetAllSqlString(
         if(!find.isEmpty())
             sql += " and name like ?";
 
-        if(!sortby.isEmpty())
-        {
-            sql += " ORDER BY `";
-            sql += sortby;
-            sql += "` ";
-            sql += sortrev ? "ASC" : "DESC";
-        }
+		AppendSortArg(sql, sortby, sortrev);
         AppendLitmiArg(sql, limit);
         qDebug() << sql;
         SQC(query, prepare(sql));
@@ -711,16 +717,35 @@ bool GetAllSqlString(
 
     return true;
 }
+qlonglong Sql::GetAllCount(const QStringList& dirs)
+{
+	QSqlQuery query(db_);
+    GetAllSqlString(
+        query,
+		QStringList() << "Count(*) AS C",
+		dirs,
+		QString(),
+		SORT_NONE,
+		false,
+		LimitArg());
+	SQC(query, exec());
+	while (query.next())
+	{
+		return query.value("C").toLongLong();
+	}
+	return 0;
+}
 bool Sql::GetAll(QList<TableItemDataPointer>& v,
                  const QStringList& dirs,
                  const QString& find,
                  bool bOnlyMissing,
                  SORTCOLUMN sortcolumn,
                  bool sortrev,
-                 LimitArg& limit)
+                 const LimitArg& limit)
 {
     QSqlQuery query(db_);
     GetAllSqlString(query,
+					QStringList() << "*",
                     dirs,
                     find,
                     sortcolumn,
