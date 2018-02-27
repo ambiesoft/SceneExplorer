@@ -27,6 +27,8 @@
 #include "ui_mainwindow.h"
 #include "mainwindow.h"
 
+#include "aboutdialog.h"
+
 void MainWindow::openVideo(const QString& movieFile)
 {
     if(!QDesktopServices::openUrl(QUrl::fromLocalFile(movieFile)))
@@ -416,20 +418,23 @@ void MainWindow::on_action_Close_triggered()
 
 void MainWindow::on_action_About_triggered()
 {
-    QString title = Consts::APPNAME_DISPLAY;
-    QString text = Consts::APPNAME;
-    text.append(" ");
-    text.append("ver ");
-    text.append(Consts::VERSION);
-    text.append("\n");
-    text.append("\n");
-    text.append("copyright 2018 ");
-    text.append(Consts::ORGANIZATION);
-    QMessageBox msgbox(this);
-    msgbox.setIcon(QMessageBox::Information);
-    msgbox.setText(text);
-    msgbox.setWindowTitle(title);
-    msgbox.exec();
+    AboutDialog dlg(this);
+    dlg.exec();
+
+//    QString title = Consts::APPNAME_DISPLAY;
+//    QString text = Consts::APPNAME;
+//    text.append(" ");
+//    text.append("ver ");
+//    text.append(Consts::VERSION);
+//    text.append("\n");
+//    text.append("\n");
+//    text.append("copyright 2018 ");
+//    text.append(Consts::ORGANIZATION);
+//    QMessageBox msgbox(this);
+//    msgbox.setIcon(QMessageBox::Information);
+//    msgbox.setText(text);
+//    msgbox.setWindowTitle(title);
+//    msgbox.exec();
 }
 
 void MainWindow::onSortCommon(SORTCOLUMN sortColumn)

@@ -54,7 +54,8 @@ SOURCES += \
     externaltoolitem.cpp \
     optionextension.cpp \
     document.cpp \
-    ffmpeg.cpp
+    ffmpeg.cpp \
+    aboutdialog.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -85,14 +86,16 @@ HEADERS += \
     externaltoolitem.h \
     optionextension.h \
     document.h \
-    ffmpeg.h
+    ffmpeg.h \
+    aboutdialog.h
 
 FORMS += \
         mainwindow.ui \
     option.ui \
     optionfontdialog.ui \
     optionexternaltoolsdialog.ui \
-    optionextension.ui
+    optionextension.ui \
+    aboutdialog.ui
 
 RC_FILE = app.rc
 
