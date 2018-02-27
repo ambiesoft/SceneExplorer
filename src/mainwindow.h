@@ -276,7 +276,7 @@ private slots:
     void on_action_Stop_triggered();
     void onMenuTask_AboutToShow();
     void onMenuDocking_windows_AboutToShow();
-    void onMenu_Favorites_AboutToShow();
+    // void onMenu_Favorites_AboutToShow();
     void onMenu_RecentDocuments_AboutToShow();
 
     void on_actionSort_by_file_name_triggered();
@@ -305,8 +305,8 @@ private slots:
 
     void on_action_Clear_triggered();
 
-    void on_action_Add_current_check_states_triggered();
-    void on_FavoriteFolder_triggered(bool checked=false);
+//    void on_action_Add_current_check_states_triggered();
+//    void on_FavoriteFolder_triggered(bool checked=false);
 
     void on_RecentDocuments_triggered(bool checked=false);
 
@@ -341,6 +341,8 @@ private slots:
     void on_LimitNext_triggered(bool checked=false);
     void on_LimitLast_triggered(bool checked=false);
     void onCmbLint_currentIndexChanged(int index);
+    void on_actionStart_scan_to_create_thumnails_triggered();
+
 private:
     QThreadPool* pPoolFFmpeg_ = nullptr;
     QThreadPool* getPoolFFmpeg();
@@ -359,9 +361,9 @@ private:
             bool sel,
             bool check);
     void directoryChangedCommon(bool bForceRead=false);
-    void StartScan(const QString& dir);
+
     void StartScan(QListWidgetItem* item);
-    void StartScan2(const QString& dir);
+    void StartScan(const QString& dir);
 
     QFileIconProvider fiProvider_;
 

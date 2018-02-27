@@ -68,8 +68,8 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
                      this, &MainWindow::onMenuTask_AboutToShow);
     QObject::connect(ui->menu_Docking_windows, &QMenu::aboutToShow,
                      this, &MainWindow::onMenuDocking_windows_AboutToShow);
-    QObject::connect(ui->menu_Favorites, &QMenu::aboutToShow,
-                     this, &MainWindow::onMenu_Favorites_AboutToShow);
+//    QObject::connect(ui->menu_Favorites, &QMenu::aboutToShow,
+//                     this, &MainWindow::onMenu_Favorites_AboutToShow);
     QObject::connect(ui->menu_Recent_documets, &QMenu::aboutToShow,
                      this, &MainWindow::onMenu_RecentDocuments_AboutToShow);
 
@@ -101,6 +101,15 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
 
 
     // tool bar
+    QToolButton* tbLabel = new QToolButton(ui->mainToolBar);
+    QPalette sample_palette;
+    sample_palette.setColor(QPalette::WindowText, Qt::blue);
+    tbLabel->setText(tr("Sort:"));
+    tbLabel->setEnabled(false);
+    tbLabel->setPalette(sample_palette);
+    ui->mainToolBar->insertWidget(ui->actionSort_by_file_name, tbLabel);
+
+
     // tool bar show missing
 	btnShowNonExistant_ = new QToolButton(ui->mainToolBar);
 	btnShowNonExistant_->setText(tr("Show missing files"));
@@ -704,7 +713,7 @@ void MainWindow::afterGetDir(int loopId, int id,
     // BlockedBool btPause(&gPaused, true, gPaused);
 
     Q_UNUSED(id);
-    WaitCursor wc;
+    // WaitCursor wc;
 
     bool needUpdate = false;
 
@@ -1485,3 +1494,13 @@ void MainWindow::on_actionAbout_document_triggered()
 }
 
 
+
+void MainWindow::on_actionStart_scan_to_create_thumnails_triggered()
+{
+    QString dir = QFileDialog::getExistingDirectory(this, tr("Select Directory"),lastSelectedDir_);
+    if(dir.isEmpty())
+        return;
+    lastSelectedDir_ = dir;
+
+    StartScan(dir);
+}

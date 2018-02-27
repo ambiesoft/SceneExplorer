@@ -58,71 +58,65 @@ void Settings::init()
 	//    qDebug() << allColumns_;
 	//    ok_ = true;
 
-    int groupcount = valueInt(KEY_FAVORITE_COUNT);
-    for (int i = 0; i < groupcount; ++i)
-    {
-        QString group = GROUPPREFIX_FAVORITE + QString::number(i);
+//    int groupcount = valueInt(KEY_FAVORITE_COUNT);
+//    for (int i = 0; i < groupcount; ++i)
+//    {
+//        QString group = GROUPPREFIX_FAVORITE + QString::number(i);
 
-        s_.beginGroup(group);
-        QVariant vN = s_.value(KEY_FAVORITE_NAME);
-        QVariant vF = s_.value(KEY_FAVORITE_FOLDERS);
-        if (vN.isValid() && vF.isValid())
-        {
-            QString name = vN.toString();
-            QStringList folders = vF.toStringList();
+//        s_.beginGroup(group);
+//        QVariant vN = s_.value(KEY_FAVORITE_NAME);
+//        QVariant vF = s_.value(KEY_FAVORITE_FOLDERS);
+//        if (vN.isValid() && vF.isValid())
+//        {
+//            QString name = vN.toString();
+//            QStringList folders = vF.toStringList();
 
-            // favorites_[name] = folders;
-            favorites_.append(qMakePair(name,folders));
-        }
-        s_.endGroup();
-    }
+//            // favorites_[name] = folders;
+//            favorites_.append(qMakePair(name,folders));
+//        }
+//        s_.endGroup();
+//    }
 
 }
-void Settings::AddToFavorites(const QString& name, const QStringList& dirs)
-{
-	//    QString state = "INSERT OR";
-	//    for(const QString& dirc : lists)
-	//    {
-	//        QString dir = canonicalDir(dirc);
-	//    }
-    // favorites_[name] = dirs;
-    Q_ASSERT(!this->IsNameExists(name));
-    favorites_.append(qMakePair(name,dirs));
-}
-QStringList Settings::GetFavorites() const
-{
-	QStringList ret;
-    FAVTYPE::const_iterator it = favorites_.constBegin();
-	while (it != favorites_.constEnd())
-	{
-        // ret.append(it.key());
-        ret.append(it->first);
-		++it;
-	}
-	return ret;
-}
-QStringList Settings::GetFavorite(const QString& name) const
-{
-    // return favorites_[name];
-    for(int i=0 ; i < favorites_.count(); ++i)
-    {
-        if(favorites_[i].first==name)
-            return favorites_[i].second;
-    }
-    return QStringList();
-}
+//void Settings::AddToFavorites(const QString& name, const QStringList& dirs)
+//{
+//    Q_ASSERT(!this->IsNameExists(name));
+//    favorites_.append(qMakePair(name,dirs));
+//}
+//QStringList Settings::GetFavorites() const
+//{
+//	QStringList ret;
+//    FAVTYPE::const_iterator it = favorites_.constBegin();
+//	while (it != favorites_.constEnd())
+//	{
+//        // ret.append(it.key());
+//        ret.append(it->first);
+//		++it;
+//	}
+//	return ret;
+//}
+//QStringList Settings::GetFavorite(const QString& name) const
+//{
+//    // return favorites_[name];
+//    for(int i=0 ; i < favorites_.count(); ++i)
+//    {
+//        if(favorites_[i].first==name)
+//            return favorites_[i].second;
+//    }
+//    return QStringList();
+//}
 Settings::~Settings()
 {
-    int i;
-    for (i=0 ; i < favorites_.count(); ++i)
-	{
-        s_.beginGroup(GROUPPREFIX_FAVORITE + QString::number(i));
-        s_.setValue(KEY_FAVORITE_NAME, favorites_[i].first);
-        s_.setValue(KEY_FAVORITE_FOLDERS, favorites_[i].second);
-        s_.endGroup();
-	}
-	Q_ASSERT(favorites_.count() == i);
-    s_.setValue(KEY_FAVORITE_COUNT, favorites_.count());
+//    int i;
+//    for (i=0 ; i < favorites_.count(); ++i)
+//	{
+//        s_.beginGroup(GROUPPREFIX_FAVORITE + QString::number(i));
+//        s_.setValue(KEY_FAVORITE_NAME, favorites_[i].first);
+//        s_.setValue(KEY_FAVORITE_FOLDERS, favorites_[i].second);
+//        s_.endGroup();
+//	}
+//	Q_ASSERT(favorites_.count() == i);
+//    s_.setValue(KEY_FAVORITE_COUNT, favorites_.count());
 }
 int Settings::valueInt(const QString& key, int defaultvalue)
 {

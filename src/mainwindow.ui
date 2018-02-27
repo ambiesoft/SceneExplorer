@@ -69,7 +69,7 @@
      <x>0</x>
      <y>0</y>
      <width>1009</width>
-     <height>18</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">
@@ -89,14 +89,6 @@
     <addaction name="action_Save"/>
     <addaction name="separator"/>
     <addaction name="action_Close"/>
-   </widget>
-   <widget class="QMenu" name="menu_Edit">
-    <property name="title">
-     <string>&amp;Edit</string>
-    </property>
-    <addaction name="action_Copy"/>
-    <addaction name="action_Find"/>
-    <addaction name="action_Clear"/>
    </widget>
    <widget class="QMenu" name="menu_Help">
     <property name="title">
@@ -127,6 +119,7 @@
     <property name="title">
      <string>Task</string>
     </property>
+    <addaction name="actionStart_scan_to_create_thumnails"/>
     <addaction name="action_Pause"/>
     <addaction name="action_Stop"/>
    </widget>
@@ -155,13 +148,6 @@
     <addaction name="action_Top"/>
     <addaction name="action_Bottom"/>
    </widget>
-   <widget class="QMenu" name="menu_Favorites">
-    <property name="title">
-     <string>&amp;Favorites</string>
-    </property>
-    <addaction name="action_Add_current_check_states"/>
-    <addaction name="separator"/>
-   </widget>
    <widget class="QMenu" name="menu_Folder">
     <property name="title">
      <string>&amp;Folder</string>
@@ -170,8 +156,6 @@
    </widget>
    <addaction name="menu_File"/>
    <addaction name="menu_View"/>
-   <addaction name="menu_Edit"/>
-   <addaction name="menu_Favorites"/>
    <addaction name="menu_Task"/>
    <addaction name="menu_Folder"/>
    <addaction name="menu_Option"/>
@@ -204,8 +188,6 @@
    <addaction name="placeHolder_ShowMissing"/>
    <addaction name="separator"/>
    <addaction name="placeHolder_ComboBox"/>
-   <addaction name="action_Find"/>
-   <addaction name="action_Clear"/>
    <addaction name="separator"/>
    <addaction name="actionplaceHolder_Limit"/>
    <addaction name="action_Options"/>
@@ -345,11 +327,6 @@
     <string>&amp;Close</string>
    </property>
   </action>
-  <action name="action_Copy">
-   <property name="text">
-    <string>&amp;Copy</string>
-   </property>
-  </action>
   <action name="action_About">
    <property name="text">
     <string>&amp;About...</string>
@@ -442,16 +419,6 @@
     <string>Sort by &amp;bitrate</string>
    </property>
   </action>
-  <action name="action_Find">
-   <property name="text">
-    <string>&amp;Find</string>
-   </property>
-  </action>
-  <action name="action_Clear">
-   <property name="text">
-    <string>&amp;Clear</string>
-   </property>
-  </action>
   <action name="placeHolder_ShowMissing">
    <property name="text">
     <string>placeHolder_ShowMissing</string>
@@ -462,11 +429,6 @@
     <string>placeHolder_ComboBox</string>
    </property>
   </action>
-  <action name="action_Add_current_check_states">
-   <property name="text">
-    <string>&amp;Add current check states</string>
-   </property>
-  </action>
   <action name="actionSort_by_open_count">
    <property name="text">
     <string>Sort by open count</string>
@@ -474,7 +436,7 @@
   </action>
   <action name="action_Extentions">
    <property name="text">
-    <string>&amp;Extentions...</string>
+    <string>&amp;File extentions for scanning...</string>
    </property>
   </action>
   <action name="action_Font">
@@ -525,6 +487,11 @@
   <action name="actionplaceHolder_Limit">
    <property name="text">
     <string>placeHolder_Limit</string>
+   </property>
+  </action>
+  <action name="actionStart_scan_to_create_thumnails">
+   <property name="text">
+    <string>Start scan to create thumnails...</string>
    </property>
   </action>
  </widget>

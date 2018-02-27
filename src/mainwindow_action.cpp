@@ -113,52 +113,52 @@ void MainWindow::onMenuDocking_windows_AboutToShow()
 {
     ui->action_DockFolder->setChecked(!ui->dockLog->isHidden());
 }
-void MainWindow::on_FavoriteFolder_triggered(bool checked)
-{
-    Q_UNUSED(checked);
-    QAction* qa = (QAction*)QObject::sender();
-    Q_ASSERT(qa);
-    QStringList dirs = settings_.GetFavorite(qa->text());
-    ui->directoryWidget->SetCheck(dirs, true);
-    directoryChangedCommon(true);
-}
+//void MainWindow::on_FavoriteFolder_triggered(bool checked)
+//{
+//    Q_UNUSED(checked);
+//    QAction* qa = (QAction*)QObject::sender();
+//    Q_ASSERT(qa);
+//    QStringList dirs = settings_.GetFavorite(qa->text());
+//    ui->directoryWidget->SetCheck(dirs, true);
+//    directoryChangedCommon(true);
+//}
 
-void MainWindow::onMenu_Favorites_AboutToShow()
-{
-    int sepIndex = 2;
-    // TODO
-    QMenu* menu = ui->menu_Favorites;
-    foreach (QAction *action, menu->actions()) {
-         if (action->isSeparator()) {
-             qDebug("this action is a separator");
-         } else if (action->menu()) {
-             qDebug("action: %s", qUtf8Printable(action->text()));
-             qDebug(">>> this action is associated with a submenu, iterating it recursively...");
-             // enumerateMenu(action->menu());
-             qDebug("<<< finished iterating the submenu");
-         } else {
-             qDebug("action: %s", qUtf8Printable(action->text()));
-         }
-     }
+//void MainWindow::onMenu_Favorites_AboutToShow()
+//{
+//    int sepIndex = 2;
+//    // TODO
+//    QMenu* menu = ui->menu_Favorites;
+//    foreach (QAction *action, menu->actions()) {
+//         if (action->isSeparator()) {
+//             qDebug("this action is a separator");
+//         } else if (action->menu()) {
+//             qDebug("action: %s", qUtf8Printable(action->text()));
+//             qDebug(">>> this action is associated with a submenu, iterating it recursively...");
+//             // enumerateMenu(action->menu());
+//             qDebug("<<< finished iterating the submenu");
+//         } else {
+//             qDebug("action: %s", qUtf8Printable(action->text()));
+//         }
+//     }
 
-    while(ui->menu_Favorites->actions().count() > sepIndex)
-    {
-        QAction *qa = ui->menu_Favorites->actions()[sepIndex];
-        ui->menu_Favorites->removeAction(qa);
-        QObject::disconnect(qa, &QAction::triggered,
-                            this, &MainWindow::on_FavoriteFolder_triggered);
-        delete qa;
-    }
-    QStringList favs = settings_.GetFavorites();
-    for(int i=0; i < favs.count(); ++i)
-    {
-        QAction* qa = new QAction(this);
-        qa->setText(favs[i]);
-        QObject::connect(qa, &QAction::triggered,
-                         this, &MainWindow::on_FavoriteFolder_triggered);
-        ui->menu_Favorites->addAction(qa);
-    }
-}
+//    while(ui->menu_Favorites->actions().count() > sepIndex)
+//    {
+//        QAction *qa = ui->menu_Favorites->actions()[sepIndex];
+//        ui->menu_Favorites->removeAction(qa);
+//        QObject::disconnect(qa, &QAction::triggered,
+//                            this, &MainWindow::on_FavoriteFolder_triggered);
+//        delete qa;
+//    }
+//    QStringList favs = settings_.GetFavorites();
+//    for(int i=0; i < favs.count(); ++i)
+//    {
+//        QAction* qa = new QAction(this);
+//        qa->setText(favs[i]);
+//        QObject::connect(qa, &QAction::triggered,
+//                         this, &MainWindow::on_FavoriteFolder_triggered);
+//        ui->menu_Favorites->addAction(qa);
+//    }
+//}
 void MainWindow::on_RecentDocuments_triggered(bool checked)
 {
     Q_UNUSED(checked);
@@ -198,46 +198,46 @@ void MainWindow::onMenu_RecentDocuments_AboutToShow()
 
 }
 
-void MainWindow::on_action_Add_current_check_states_triggered()
-{
-    bool ok;
-    QString name = QInputDialog::getText(this,
-                                         Consts::APPNAME_DISPLAY,
-                                         tr("Name:"),
-                                         QLineEdit::Normal,
-                                         QString(),
-                                         &ok,
-                                         (Qt::WindowTitleHint | Qt::WindowCloseButtonHint | Qt::WindowFlags()) & ~Qt::WindowContextHelpButtonHint);
-    if(!ok)
-        return;
-    if(name.isEmpty())
-        return;
+//void MainWindow::on_action_Add_current_check_states_triggered()
+//{
+//    bool ok;
+//    QString name = QInputDialog::getText(this,
+//                                         Consts::APPNAME_DISPLAY,
+//                                         tr("Name:"),
+//                                         QLineEdit::Normal,
+//                                         QString(),
+//                                         &ok,
+//                                         (Qt::WindowTitleHint | Qt::WindowCloseButtonHint | Qt::WindowFlags()) & ~Qt::WindowContextHelpButtonHint);
+//    if(!ok)
+//        return;
+//    if(name.isEmpty())
+//        return;
 
-    if(settings_.IsNameExists(name))
-    {
-        if(!YesNo(this,
-              QString(tr("\"%1\" already exists. Do you want to overwirte it?")).
-              arg(name)))
-        {
-            return;
-        }
-    }
+//    if(settings_.IsNameExists(name))
+//    {
+//        if(!YesNo(this,
+//              QString(tr("\"%1\" already exists. Do you want to overwirte it?")).
+//              arg(name)))
+//        {
+//            return;
+//        }
+//    }
 
-    QStringList dirs;
-    foreach(DirectoryItem* item, ui->directoryWidget->GetCheckedItems())
-    {
-        dirs.append(item->text());
-    }
-    if(dirs.isEmpty())
-    {
-        if(!YesNo(this,
-              tr("No checkboxes is checked. Do you want to continue?")))
-        {
-            return;
-        }
-    }
-    settings_.AddToFavorites(name, dirs);
-}
+//    QStringList dirs;
+//    foreach(DirectoryItem* item, ui->directoryWidget->GetCheckedItems())
+//    {
+//        dirs.append(item->text());
+//    }
+//    if(dirs.isEmpty())
+//    {
+//        if(!YesNo(this,
+//              tr("No checkboxes is checked. Do you want to continue?")))
+//        {
+//            return;
+//        }
+//    }
+//    settings_.AddToFavorites(name, dirs);
+//}
 
 void MainWindow::on_action_Pause_triggered()
 {
@@ -335,22 +335,18 @@ bool MainWindow::IsDirSelected(const QString& dir) const
 
 void MainWindow::StartScan(QListWidgetItem* item)
 {
-    StartScan2(item->text());
-}
-void MainWindow::StartScan(const QString& dir)
-{
-    AddUserEntryDirectory(DirectoryItem::DI_NORMAL, canonicalDir(dir), false, false);
-    StartScan2(dir);
+    StartScan(item->text());
 }
 
-void MainWindow::StartScan2(const QString& dir)
+
+void MainWindow::StartScan(const QString& dir)
 {
     QString errString;
     if(!checkFFprobe(errString) || !checkFFmpeg(errString))
     {
-        insertLog(TaskKind::App, 0, QString(tr("Failed to launch ffprobe or ffmpeg. (%1) ")).
+        insertLog(TaskKind::App, 0,
+                  QString(tr("Failed to launch ffprobe or ffmpeg. (%1) ") + tr("Check the option setting.")).
                   arg(errString));
-        insertLog(TaskKind::App, 0, tr("Check the option setting."));
         return;
     }
 

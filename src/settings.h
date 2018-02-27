@@ -19,8 +19,9 @@ private:
 //    QSqlDatabase db_;
 //    QStringList allColumns_;
 //    bool ok_ = false;
-    typedef QList<QPair<QString,QStringList> > FAVTYPE;
-    FAVTYPE favorites_;
+
+//    typedef QList<QPair<QString,QStringList> > FAVTYPE;
+//    FAVTYPE favorites_;
 
     void init();
 public:
@@ -37,17 +38,17 @@ public:
     }
     ~Settings();
 
-    void AddToFavorites(const QString& name, const QStringList& dirs);
-    QStringList GetFavorites() const;
-    QStringList GetFavorite(const QString& name) const;
-    bool IsNameExists(const QString& name) const {
-        for(int i=0 ; i < favorites_.count(); ++i)
-        {
-            if(favorites_[i].first == name)
-                return true;
-        }
-        return false;
-    }
+//    void AddToFavorites(const QString& name, const QStringList& dirs);
+//    QStringList GetFavorites() const;
+//    QStringList GetFavorite(const QString& name) const;
+//    bool IsNameExists(const QString& name) const {
+//        for(int i=0 ; i < favorites_.count(); ++i)
+//        {
+//            if(favorites_[i].first == name)
+//                return true;
+//        }
+//        return false;
+//    }
     QString valueString(const QString& key, const QString& defaultvalue=QString());
     int valueInt(const QString& key, int defaultvalue=0);
     bool valueBool(const QString& key, bool defaultvalue=false);
