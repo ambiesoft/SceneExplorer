@@ -290,6 +290,10 @@ void MainWindow::CreateLimitManager()
                 cmbLimit_->setEditable(true);
                 cmbLimit_->lineEdit()->setReadOnly(true);
                 cmbLimit_->lineEdit()->setAlignment(Qt::AlignCenter);
+
+                QObject::connect(cmbLimit_, SIGNAL(currentIndexChanged(int)),
+                                 this, SLOT(onCmbLint_currentIndexChanged(int)));
+
                 ui->mainToolBar->insertWidget(ui->actionplaceHolder_Limit, cmbLimit_);
             }
             else
@@ -1122,6 +1126,7 @@ void MainWindow::GetSqlAllSetTable(const QStringList& dirs, bool bOnlyMissing)
 		if ((count % limitManager_->GetNumberOfRows()) != 0)
 			cmbcount++;
 
+        BlockedBool blc(limitManager_->GetBlockPointer());
         cmbLimit_->clear();
 		for (size_t i = 0; i < cmbcount; ++i)
 		{

@@ -13,6 +13,7 @@
 #include "settings.h"
 #include "externaltoolitem.h"
 #include "document.h"
+#include "blockedbool.h"
 
 class QThreadPool;
 class QLabel;
@@ -76,17 +77,17 @@ private:
         int numOfRows_;
 		qlonglong allCount_ = -1;
         QComboBox* cmb_;
+        bool blocking_ = false;
     public:
         LimitManager(int numOfRows, QComboBox* cmb) : numOfRows_(numOfRows), cmb_(cmb){}
         void Reset() {
-            // curIndex_ = 0;
+            BlockedBool bb(&blocking_);
             cmb_->setCurrentIndex(0);
 			allCount_ = -1;
         }
         bool Decrement();
         bool Increment();
         int GetCurrentIndex() const {
-            // return curIndex_;
             return cmb_->currentIndex();
         }
 
@@ -106,10 +107,18 @@ private:
 			allCount_ = l;
 		}
         void SetIndexFirst() {
+            BlockedBool bb(&blocking_);
             cmb_->setCurrentIndex(0);
         }
         void SetIndexLast() {
+            BlockedBool bb(&blocking_);
             cmb_->setCurrentIndex(cmb_->count()-1);
+        }
+        bool* GetBlockPointer() {
+            return &blocking_;
+        }
+        bool IsBlocking() const {
+            return blocking_;
         }
     };
     LimitManager* limitManager_ = nullptr;
@@ -331,7 +340,7 @@ private slots:
     void on_LimitPrev_triggered(bool checked=false);
     void on_LimitNext_triggered(bool checked=false);
     void on_LimitLast_triggered(bool checked=false);
-
+    void onCmbLint_currentIndexChanged(int index);
 private:
     QThreadPool* pPoolFFmpeg_ = nullptr;
     QThreadPool* getPoolFFmpeg();

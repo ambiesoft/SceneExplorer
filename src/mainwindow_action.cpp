@@ -805,6 +805,14 @@ void MainWindow::on_LimitLast_triggered(bool checked)
     limitManager_->SetIndexLast();
     directoryChangedCommon(true);
 }
+void MainWindow::onCmbLint_currentIndexChanged(int index)
+{
+    // qDebug() << index;
+    Q_UNUSED(index);
+    if(limitManager_->IsBlocking())
+        return;
+    directoryChangedCommon(true);
+}
 
 bool MainWindow::LimitManager::Decrement()
 {
@@ -812,6 +820,7 @@ bool MainWindow::LimitManager::Decrement()
     --ci;
     if(ci < 0)
         return false;
+    BlockedBool bb(&blocking_);
     cmb_->setCurrentIndex(ci);
     return true;
 }
@@ -821,6 +830,7 @@ bool MainWindow::LimitManager::Increment()
     ++ci;
     if(cmb_->count() <= ci)
         return false;
+    BlockedBool bb(&blocking_);
     cmb_->setCurrentIndex(ci);
     return true;
 }
