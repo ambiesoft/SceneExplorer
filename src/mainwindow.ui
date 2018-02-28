@@ -147,6 +147,11 @@
     <addaction name="separator"/>
     <addaction name="action_Top"/>
     <addaction name="action_Bottom"/>
+    <addaction name="separator"/>
+    <addaction name="action_Focus_find"/>
+    <addaction name="action_Find"/>
+    <addaction name="action_Clear"/>
+    <addaction name="action_Empty_find_texts"/>
    </widget>
    <widget class="QMenu" name="menu_Folder">
     <property name="title">
@@ -188,6 +193,8 @@
    <addaction name="placeHolder_ShowMissing"/>
    <addaction name="separator"/>
    <addaction name="placeHolder_ComboBox"/>
+   <addaction name="action_Find"/>
+   <addaction name="action_Clear"/>
    <addaction name="separator"/>
    <addaction name="actionplaceHolder_Limit"/>
    <addaction name="action_Options"/>
@@ -492,6 +499,26 @@
   <action name="actionStart_scan_to_create_thumnails">
    <property name="text">
     <string>Start scan to create thumnails...</string>
+   </property>
+  </action>
+  <action name="action_Focus_find">
+   <property name="text">
+    <string>&amp;Focus find</string>
+   </property>
+  </action>
+  <action name="action_Find">
+   <property name="text">
+    <string>&amp;Find</string>
+   </property>
+  </action>
+  <action name="action_Clear">
+   <property name="text">
+    <string>&amp;Clear</string>
+   </property>
+  </action>
+  <action name="action_Empty_find_texts">
+   <property name="text">
+    <string>&amp;Empty find texts...</string>
    </property>
   </action>
  </widget>

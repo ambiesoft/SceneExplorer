@@ -1,3 +1,21 @@
+//SceneExplorer
+//Exploring video files by viewer thumbnails
+//
+//Copyright (C) 2018  Ambiesoft
+//
+//This program is free software: you can redistribute it and/or modify
+//it under the terms of the GNU General Public License as published by
+//the Free Software Foundation, either version 3 of the License, or
+//(at your option) any later version.
+//
+//This program is distributed in the hope that it will be useful,
+//but WITHOUT ANY WARRANTY; without even the implied warranty of
+//MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//GNU General Public License for more details.
+//
+//You should have received a copy of the GNU General Public License
+//along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 #include <QDebug>
 #include <QStringList>
 #include <QDesktopServices>
@@ -122,16 +140,19 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
 //    QToolButton* myTooButton = new QToolButton(ui->mainToolBar);
 //    ui->mainToolBar->addWidget(myTooButton);
 
-    comboFind_ = new FindComboBox(ui->mainToolBar);
-    comboFind_->setMinimumWidth(160);
-    comboFind_->setMaximumWidth(160);
-    comboFind_->setEditable(true);
-    QObject::connect(comboFind_, &FindComboBox::on_EnterPressed,
+    cmbFind_ = new FindComboBox(ui->mainToolBar);
+    cmbFind_->setMinimumWidth(100);
+    cmbFind_->setMaximumWidth(100);
+    cmbFind_->setEditable(true);
+    QStringList findtexts = settings_.valueStringList(Consts::KEY_COMBO_FINDTEXTS);
+    cmbFind_->addItems(findtexts);
+    cmbFind_->setEditText("");
+    QObject::connect(cmbFind_, &FindComboBox::on_EnterPressed,
                      this, &MainWindow::on_FindCombo_EnterPressed);
 
 
     ui->mainToolBar->insertWidget(ui->placeHolder_ShowMissing, btnShowNonExistant_);
-    ui->mainToolBar->insertWidget(ui->placeHolder_ComboBox, comboFind_);
+    ui->mainToolBar->insertWidget(ui->placeHolder_ComboBox, cmbFind_);
 
     ui->mainToolBar->removeAction(ui->placeHolder_ShowMissing);
     ui->mainToolBar->removeAction(ui->placeHolder_ComboBox);
@@ -1146,7 +1167,7 @@ void MainWindow::GetSqlAllSetTable(const QStringList& dirs, bool bOnlyMissing)
     QList<TableItemDataPointer> all;
     gpSQL->GetAll(all,
                   dirs,
-                  comboFind_->currentText(),
+                  cmbFind_->currentText(),
                   bOnlyMissing,
                   sortManager_.GetCurrentSort(),
                   sortManager_.GetCurrentRev(),
@@ -1264,16 +1285,20 @@ bool MainWindow::IsInitialized() const
     return initialized_;
 }
 
+void MainWindow::on_action_Focus_find_triggered()
+{
+    cmbFind_->setFocus();
+}
 void MainWindow::on_action_Find_triggered()
 {
     directoryChangedCommon(true);
 }
-
 void MainWindow::on_action_Clear_triggered()
 {
-    comboFind_->setCurrentText(QString());
+    cmbFind_->setCurrentText(QString());
     directoryChangedCommon(true);
 }
+
 void MainWindow::on_FindCombo_EnterPressed()
 {
     directoryChangedCommon(true);
@@ -1503,4 +1528,18 @@ void MainWindow::on_actionStart_scan_to_create_thumnails_triggered()
     lastSelectedDir_ = dir;
 
     StartScan(dir);
+}
+
+
+void MainWindow::on_action_Empty_find_texts_triggered()
+{
+    int count = cmbFind_->count();
+    if(count==0)
+    {
+        Info(this, tr("There are no find texts."));
+        return;
+    }
+    if(!YesNo(this, QString(tr("Are you sure you want to empty %1 find texts?")).arg(count)))
+        return;
+    cmbFind_->clear();
 }
