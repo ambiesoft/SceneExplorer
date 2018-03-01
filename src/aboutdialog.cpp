@@ -41,17 +41,36 @@ AboutDialog::AboutDialog(QWidget *parent) :
     txtCopyright.append(Consts::ORGANIZATION);
     ui->lblCopyright->setText(txtCopyright);
 
-    QString webText;
 
+    QString webText;
     webText += QString("<a href=\"http://ambiesoft.fam.cx/main/index.php?page=sceneexplorer\">%1</a>").
             arg(tr("webpage"));
-    webText += " ";
     webText += QString("<a href=\"https://github.com/ambiesoft/SceneExplorer\">%1</a>").
             arg(tr("development"));
     ui->lblWebpage->setText(webText);
     ui->lblWebpage->setTextFormat(Qt::RichText);
     ui->lblWebpage->setTextInteractionFlags(Qt::TextBrowserInteraction);
     ui->lblWebpage->setOpenExternalLinks(true);
+
+    QString aboutText;
+    aboutText += "<h1>Qt</h1>";
+    aboutText += "<p>This software uses Qt.</p>";
+    aboutText += "<p>Source code: https://github.com/qt/qt5";
+    aboutText += "<p>Obtaining the source code: </p>"
+            "<pre>"
+            "git clone https://github.com/qt/qt5.git<br />"
+            "cd qt5<br />"
+            "git submodule init<br />"
+            "git submodule update<br />"
+            "</pre>";
+
+    aboutText += "<h1>FFmpeg</h1>";
+    aboutText += "<p>This software uses code of <a href=http://ffmpeg.org>FFmpeg</a> licensed under the"
+            "<a href=http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html>LGPLv2.1</a> and its"
+            "source can be downloaded <a href=https://github.com/ambiesoft/SceneExplorer>here</a></p>";
+    aboutText += "<p>Source code: https://github.com/FFmpeg/FFmpeg/tree/40102a21374096ce0ba05c67c6e7474f176af2d0</p>";
+    ui->tbAbout->setHtml(aboutText);
+
 
     QFile licensefile(":/resource/license.html");
     if (licensefile.open(QIODevice::ReadOnly | QIODevice::Text))
