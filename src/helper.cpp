@@ -254,3 +254,22 @@ QString getInifile()
 
 	return pathCombine(dir, "SceneExplorer.ini");
 }
+
+QString GetSortColumnName(SORTCOLUMN sc)
+{
+	switch (sc)
+	{
+	case SORT_NONE:return QString();
+	case SORT_FILENAME:return QObject::tr("Filename");
+	case SORT_SIZE:return QObject::tr("Size");
+	case SORT_WTIME:return QObject::tr("Wtime");
+	case SORT_RESOLUTION: return QObject::tr("Resolution");
+	case SORT_DURATION:return QObject::tr("Duration");
+	case SORT_BITRATE:return QObject::tr("Bitrate");
+	case SORT_OPENCOUNT:return QObject::tr("Open count");
+	default:
+		Q_ASSERT(false);
+
+	}
+	return QString();
+}

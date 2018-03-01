@@ -22,6 +22,8 @@
 #include <QString>
 #include <QWidget>
 
+#include "globals.h"
+
 QString rstrip(const QString& str, QChar c);
 QString pathCombine(const QString& path1, const QString& path2);
 QString canonicalDir(const QString& dir);
@@ -40,3 +42,5 @@ QString GetDefaultFFprobe();
 QString GetDefaultFFmpeg();
 QString getInifile();
 #endif // HELPER_H
+
+QString GetSortColumnName(SORTCOLUMN sc);

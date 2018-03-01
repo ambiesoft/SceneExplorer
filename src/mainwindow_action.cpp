@@ -451,6 +451,35 @@ void MainWindow::on_action_About_triggered()
 //    msgbox.exec();
 }
 
+void MainWindow::SortManager::setToolButton(SORTCOLUMN sc, QToolButton* tb)
+{
+	Q_ASSERT(tbs_[sc] == nullptr);
+	tbs_[sc] = tb;
+	tb->setText(GetSortColumnName(sc));
+}
+
+void MainWindow::SortManager::onSort(SORTCOLUMN sc) 
+{
+	sort_ = sc;
+	rev_[sc] = !rev_[sc];
+	for (int i = 0; i < _countof(tbs_); ++i)
+	{
+		if (!tbs_[i])
+			continue;
+
+		if(sc==i)
+		{
+			tbs_[i]->setText(GetSortColumnName((SORTCOLUMN)i) + (rev_[i] ? "-" : "+"));
+			tbs_[i]->setChecked(true);
+		}
+		else
+		{
+			tbs_[i]->setText(GetSortColumnName((SORTCOLUMN)i));
+			tbs_[i]->setChecked(false);
+		}
+	}
+}
+
 void MainWindow::onSortCommon(SORTCOLUMN sortColumn)
 {
 	WaitCursor wc;

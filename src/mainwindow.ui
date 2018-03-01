@@ -69,7 +69,7 @@
      <x>0</x>
      <y>0</y>
      <width>1009</width>
-     <height>21</height>
+     <height>18</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_File">
@@ -182,10 +182,7 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="actionSort_by_file_name"/>
-   <addaction name="actionSort_by_file_size"/>
-   <addaction name="actionSort_by_wtime"/>
-   <addaction name="actionSort_by_open_count"/>
+   <addaction name="placeHolder_Sort"/>
    <addaction name="separator"/>
    <addaction name="action_Top"/>
    <addaction name="action_Bottom"/>
@@ -519,6 +516,11 @@
   <action name="action_Empty_find_texts">
    <property name="text">
     <string>&amp;Empty find texts...</string>
+   </property>
+  </action>
+  <action name="placeHolder_Sort">
+   <property name="text">
+    <string>placeHolder_Sort</string>
    </property>
   </action>
  </widget>

@@ -267,24 +267,27 @@ protected:
 	{
 		SORTCOLUMN sort_;
 		bool rev_[COUNT_SORTCOLUMN];
+		QToolButton* tbs_[COUNT_SORTCOLUMN];
 	public:
-		SortManager() {
-			sort_ = SORT_NONE;
-            for (size_t i = 0; i < _countof(rev_); ++i)
-				rev_[i] = true;
-		}
-		void onSort(SORTCOLUMN sc) {
-			sort_ = sc;
-			rev_[sc] = !rev_[sc];
-		}
+		SortManager();
+		void onSort(SORTCOLUMN sc);
 		SORTCOLUMN GetCurrentSort() const {
 			return sort_;
 		}
 		bool GetCurrentRev() const {
 			return rev_[sort_];
 		}
+		void setToolButton(SORTCOLUMN sc, QToolButton* tb);
 	} sortManager_;
 	void onSortCommon(SORTCOLUMN sortColumn);
+	QToolButton* tbNameSort_ = nullptr;
+    QToolButton* tbSizeSort_ = nullptr;
+    QToolButton* tbWtime_ = nullptr;
+    QToolButton* tbOpenCount_ = nullptr;
+
+	QToolButton* tbLabel_ = nullptr;
+	
+
 private slots:
     void on_action_Close_triggered();
     void on_action_About_triggered();

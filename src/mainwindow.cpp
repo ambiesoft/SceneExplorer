@@ -119,13 +119,44 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
 
 
     // tool bar
-    QToolButton* tbLabel = new QToolButton(ui->mainToolBar);
+    tbLabel_ = new QToolButton(ui->mainToolBar);  // intensional leak
     QPalette sample_palette;
     sample_palette.setColor(QPalette::WindowText, Qt::blue);
-    tbLabel->setText(tr("Sort:"));
-    tbLabel->setEnabled(false);
-    tbLabel->setPalette(sample_palette);
-    ui->mainToolBar->insertWidget(ui->actionSort_by_file_name, tbLabel);
+	tbLabel_->setText(tr("Sort:"));
+	tbLabel_->setEnabled(false);
+	tbLabel_->setPalette(sample_palette);
+    ui->mainToolBar->insertWidget(ui->placeHolder_Sort, tbLabel_);
+
+	// ToolButton Sort
+	tbNameSort_ = new QToolButton(ui->mainToolBar);  // intensional leak
+	tbNameSort_->setCheckable(true);
+	sortManager_.setToolButton(SORT_FILENAME, tbNameSort_);
+	connect(tbNameSort_, SIGNAL(clicked()),
+		this, SLOT(on_actionSort_by_file_name_triggered()));
+    ui->mainToolBar->insertWidget(ui->placeHolder_Sort, tbNameSort_);
+
+    tbSizeSort_ = new QToolButton(ui->mainToolBar);  // intensional leak
+    tbSizeSort_->setCheckable(true);
+    sortManager_.setToolButton(SORT_SIZE, tbSizeSort_);
+    connect(tbSizeSort_, SIGNAL(clicked()),
+        this, SLOT(on_actionSort_by_file_size_triggered()));
+    ui->mainToolBar->insertWidget(ui->placeHolder_Sort, tbSizeSort_);
+
+    tbWtime_ = new QToolButton(ui->mainToolBar);  // intensional leak
+    tbWtime_->setCheckable(true);
+    sortManager_.setToolButton(SORT_WTIME, tbWtime_);
+    connect(tbWtime_, SIGNAL(clicked()),
+        this, SLOT(on_actionSort_by_wtime_triggered()));
+    ui->mainToolBar->insertWidget(ui->placeHolder_Sort, tbWtime_);
+
+    tbOpenCount_ = new QToolButton(ui->mainToolBar);  // intensional leak
+    tbOpenCount_->setCheckable(true);
+    sortManager_.setToolButton(SORT_OPENCOUNT, tbOpenCount_);
+    connect(tbOpenCount_, SIGNAL(clicked()),
+        this, SLOT(on_actionSort_by_open_count_triggered()));
+    ui->mainToolBar->insertWidget(ui->placeHolder_Sort, tbOpenCount_);
+
+    ui->mainToolBar->removeAction(ui->placeHolder_Sort);
 
 
     // tool bar show missing
@@ -292,6 +323,15 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
     }
     UpdateTitle(QStringList(), UpdateTitleType::INIT);
 	initialized_ = true;
+}
+MainWindow::SortManager::SortManager()
+{
+	sort_ = SORT_NONE;
+	for (size_t i = 0; i < _countof(rev_); ++i)
+	{
+		rev_[i] = true;
+		tbs_[i] = nullptr;
+	}
 }
 
 void MainWindow::CreateLimitManager()
@@ -1274,7 +1314,7 @@ void MainWindow::tableItemCountChanged()
 void MainWindow::tableSortParameterChanged(SORTCOLUMN sc, bool rev)
 {
     QString text = QString(tr("Sort: %1 %2")).
-            arg(TableModel::GetSortColumnName(sc)).
+            arg(GetSortColumnName(sc)).
             arg(rev ? "-" : "+");
     slItemSort_->setText(text);
 }

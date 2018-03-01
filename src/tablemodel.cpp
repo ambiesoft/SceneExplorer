@@ -450,24 +450,7 @@ void TableModel::SetSortColumn(SORTCOLUMN sc)
 }
 
 
-QString TableModel::GetSortColumnName(SORTCOLUMN sc)
-{
-    switch(sc)
-    {
-    case SORT_NONE:return QString();
-    case SORT_FILENAME:return tr("Filename");
-    case SORT_SIZE:return tr("Size");
-    case SORT_WTIME:return tr("Wtime");
-    case SORT_RESOLUTION: return tr("Resolution");
-    case SORT_DURATION:return tr("Duration");
-    case SORT_BITRATE:return tr("Bitrate");
-    case SORT_OPENCOUNT:return tr("Open count");
-    default :
-        Q_ASSERT(false);
 
-    }
-    return QString();
-}
 
 QString TableModel::GetSortColumnValue(TableItemDataPointer item) const
 {
