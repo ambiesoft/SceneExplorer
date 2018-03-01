@@ -1,15 +1,19 @@
 @echo off
 cd %~dp0
-if not exist param.bat (
-  echo Rename param.bat.sample to param.bat and edit it.
-  goto :end
-)
+REM if not exist param.bat (
+REM   echo Rename param.bat.sample to param.bat and edit it.
+REM   goto :end
+REM )
+REM call param.bat
 
-call param.bat
+set SOLUTION=%PRONAME%\.sln
+set VCXPROJ=%PRONAME%.vcxproj
+set VCXFILTERS=%PRONAME%.vcxproj.filters
+set PRO=%SOURCEDIR%\%PRONAME%.pro
 
-sdel SceneExplorer.sln
-sdel SceneExplorer.vcxproj
-sdel SceneExplorer.vcxproj.filters
+sdel %SOLUTION%
+sdel %VCXPROJ%
+sdel %VCXFILTERS%
 
 if not exist %VCVARSBAT% (
   echo %VCVARSBAT% not found.
@@ -29,7 +33,7 @@ if not exist %PRO% (
   goto :end
 )
 
-call %VCVARSBAT%
+call %VCVARSBAT% %VCVARSBATARG%
 cd %~dp0
 
 call %QMAKE% -tp vc %PRO%
@@ -38,7 +42,7 @@ cd %~dp0
 echo "==== Creating Visual Studio project successful ===="
 
 set PATH=%QTBIN%;%PATH%
-start "" %DEVENV% SceneExplorer.vcxproj
+start "" %DEVENV% %VCXPROJ%
 exit
 
 :end
