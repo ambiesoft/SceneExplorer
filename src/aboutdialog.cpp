@@ -16,6 +16,8 @@
 //You should have received a copy of the GNU General Public License
 //along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+
+
 #include "helper.h"
 #include "consts.h"
 
@@ -55,14 +57,7 @@ AboutDialog::AboutDialog(QWidget *parent) :
     QString aboutText;
     aboutText += "<h1>Qt</h1>";
     aboutText += "<p>This software uses Qt.</p>";
-    aboutText += "<p>Source code: https://github.com/qt/qt5";
-    aboutText += "<p>Obtaining the source code: </p>"
-            "<pre>"
-            "git clone https://github.com/qt/qt5.git<br />"
-            "cd qt5<br />"
-            "git submodule init<br />"
-            "git submodule update<br />"
-            "</pre>";
+    aboutText += "<p>Source code: https://github.com/ambiesoft/qt5/tree/5.10";
 
     aboutText += "<h1>FFmpeg</h1>";
     aboutText += "<p>This software uses code of <a href=http://ffmpeg.org>FFmpeg</a> licensed under the"
@@ -78,6 +73,11 @@ AboutDialog::AboutDialog(QWidget *parent) :
         ui->tbLicense->setHtml(QString::fromUtf8(licensefile.readAll().constData()));
         licensefile.close();
     }
+
+    QString qtText;
+    qtText += "Qt: ";
+    qtText += QT_VERSION_STR;
+    ui->tbOtherVersion->setText(qtText);
 }
 
 AboutDialog::~AboutDialog()
