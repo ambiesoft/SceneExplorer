@@ -2,6 +2,8 @@
 *.suo
 qtroot.bat
 
+out/
+
 .qmake.stash
 .vs/
 ipch/
