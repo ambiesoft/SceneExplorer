@@ -20,8 +20,8 @@ if not exist %VCVARSBAT% (
   goto :end
 )
 
-
-set QMAKE=%QTROOT%\%QTVER%\%QTTOOL%\bin\qmake.exe
+set QTBIN=%QTROOT%\%QTVER%\%QTTOOL%\bin
+set QMAKE=%QTBIN%\qmake.exe
 
 if not exist %QMAKE% (
   echo %QMAKE% not found.
