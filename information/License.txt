@@ -3,7 +3,55 @@ Qt License
 Qt licensed under the GNU Lesser General Public License (LGPL) version 3 is appropriate for the development of Qt applications provided you can comply with the terms and conditions of the GNU LGPL version 3 (or GNU GPL version 3).
 
 
+3.7. What are my obligations when using Qt under the LGPL?
+If you are using Qt under the LGPLv3, there are a couple of obligations you will need to fulfill :
+
+Firstly, you have to note that some Qt open source modules are not available for LGPLv3 license, for example Qt Charts, Qt Data Visualization and Qt Virtual Keyboard. These modules are only available under GPLv3 for open source usage.
+You will need to deliver the complete source code of Qt (including all modifications you did or applied) to your users/customers. Alternatively you need to provide a written offer with instructions on how to get the source code. Please also note that this has to be under your control, so a link to the source code provided by the Qt Project or Qt Company is not sufficient.
+The LGPL allows you to keep the source code of your application private as long as it is “work that uses” the library. Dynamic linking is usually recommended here.
+The user of your application has to be able to re-link your application against a different or modified version of the Qt library. With LGPLv3 it is also explicitly stated that the user needs to be able to run the re-linked binary on it’s intended target device. It is your obligation to provide the user with all necessary tools to enable this process. For embedded devices, this includes making the full toolchain used to compile the library available to users. For parts licensed under LGPLv3 you are obliged to provide full instructions on how to install the modified library on the target device (this is not clearly stated with LGPLv2.1, although running the application against the modified version of the library clearly is the stated intention of the license).
+The user of an application or device using LGPL licensed software has to be notified of their rights by providing a copy of the LGPL license to the end user and displaying a prominent notice about your usage of LGPL licensed software.
+The above freedoms cannot in any way be restricted by other licensing terms. If an application is not fully following all the obligations as outlined above, it is not allowed to be distributed at all.
+
+You will also need to make sure that you are not using any GPL licensed modules.
+
+
+
+-----------------------------------------------------------------------------------
+
+
 FFmpeg License
 
 FFmpeg is licensed under the GNU Lesser General Public License (LGPL) version 2.1 or later. However, FFmpeg incorporates several optional parts and optimizations that are covered by the GNU General Public License (GPL) version 2 or later. If those parts get used the GPL applies to all of FFmpeg.
+
+The following is a checklist for LGPL compliance when linking against the FFmpeg libraries. It is not
+the only way to comply with the license, but we think it is the easiest. There are also a few items that
+are not really related to LGPL compliance but are good ideas anyway.
+1. Compile FFmpeg without "--enable-gpl" and without "--enable-nonfree".
+2. Use dynamic linking (on windows, this means linking to dlls) for linking with FFmpeg libraries.
+3. Distribute the source code of FFmpeg, no matter if you modified it or not.
+4. Make sure the source code corresponds exactly to the library binaries you are distributing.
+5. Run the command "git diff > changes.diff" in the root directory of the FFmpeg source code to
+create a file with only the changes.
+6. Explain how you compiled FFmpeg, for example the configure line, in a text file added to the
+root directory of the source code.
+7. Use tarball or a zip file for distributing the source code.
+8. Host the FFmpeg source code on the same webserver as the binary you are distributing.
+9. Add "This software uses code of <a href=http://ffmpeg.org>FFmpeg</a> licensed under the
+<a href=http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html>LGPLv2.1</a> and its
+source can be downloaded <a href=link_to_your_sources>here</a>" to every page in your
+website where there is a download link to your application.
+10. Mention "This software uses libraries from the FFmpeg project under the LGPLv2.1" in your
+program "about box".
+11. Mention in your EULA that your program uses FFmpeg under the LGPLv2.1.
+12. If your EULA claims ownership over the code, you have to explicitly mention that you do not
+own FFmpeg, and where the relevant owners can be found.
+13. Remove any prohibition of reverse engineering from your EULA.
+14. Apply the same changes to all translations of your EULA.
+15. Do not misspell FFmpeg (two capitals F and lowercase "mpeg").
+16. Do not rename FFmpeg dlls to some obfuscated name, but adding a suffix or prefix is fine
+(renaming "avcodec.dll" to "MyProgDec.dll" is not fine, but to "avcodec-MyProg.dll" is).
+17. Go through all the items again for any LGPL external library you compiled into FFmpeg (for
+example LAME).
+18. Make sure your program is not using any GPL libraries (notably libx264).
 
