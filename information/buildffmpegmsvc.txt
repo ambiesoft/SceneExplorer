@@ -1,0 +1,6 @@
+1. edit msys2_shell.cmd, enable 'set MSYS2_PATH_TYPE=inherit' to make path inherit.
+2. run VS2013 x86 Native Tools Command Prompt
+3. open msys2_shell.cmd from previous prompt
+4. ./configure --toolset=msvc
+5. make
+6. make install
