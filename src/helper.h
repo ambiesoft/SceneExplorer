@@ -44,3 +44,4 @@ QString getInifile();
 #endif // HELPER_H
 
 QString GetSortColumnName(SORTCOLUMN sc);
+QString GetAppDir();

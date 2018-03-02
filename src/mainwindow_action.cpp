@@ -89,8 +89,8 @@ void MainWindow::on_action_Options_triggered()
     dlg.limitItems_ = settings_.valueBool(Consts::KEY_LIMIT_ITEMS, false);
     dlg.maxRows_ = settings_.valueInt(Consts::KEY_LIMIT_NUMBEROFROWS, 1000);
     dlg.openlastdoc_ = settings_.valueBool(Consts::KEY_OPEN_LASTOPENEDDOCUMENT, true);
-    dlg.ffprobe_ = FFMpeg::GetFFprobe(settings_);
-    dlg.ffmpeg_ = FFMpeg::GetFFmpeg(settings_);
+    dlg.ffprobe_ = settings_.valueString(Consts::KEY_FFPROBE_EXECUTABLE); // FFMpeg::GetFFprobe(settings_);
+    dlg.ffmpeg_ = settings_.valueString(Consts::KEY_FFMPEG_EXECUTABLE); //FFMpeg::GetFFmpeg(settings_);
 
     if(QDialog::Accepted != dlg.exec())
         return;

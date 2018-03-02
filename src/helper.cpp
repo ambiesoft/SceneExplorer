@@ -273,3 +273,8 @@ QString GetSortColumnName(SORTCOLUMN sc)
 	}
 	return QString();
 }
+
+QString GetAppDir()
+{
+    return QFileInfo(QCoreApplication::applicationFilePath()).absolutePath();
+}

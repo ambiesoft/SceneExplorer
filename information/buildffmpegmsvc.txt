@@ -4,3 +4,13 @@
 4. ./configure --toolset=msvc
 5. make
 6. make install
+
+
+# msys2
+remove mingw-w64-x86_64-ffmpeg mingw-w64-x86_64-libbluray mingw-w64-x86_64-libguess
+
+remove mingw64\x86_64-w64-mingw32\lib\libpthread.dll.a
+remove \mingw64\lib\libjpeg.dll.a
+remove \mingw64\lib\libiconv.dll.a
+
+pacman -S mingw-w64-i686-yasm mingw-w64-i686-SDL2 mingw-w64-i686-diffutils mingw-w64-i686-pkg-config
