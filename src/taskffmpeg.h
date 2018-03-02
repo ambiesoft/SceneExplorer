@@ -39,6 +39,9 @@ public:
 private:
     int loopId_;
     int id_;
+    QString ffprobe_;
+    QString ffmpeg_;
+
     QString movieFile_;
     // QMutex mutex_;
     // int fileIndex_=0;
@@ -60,7 +63,11 @@ private:
     bool run3(QString& errorReason);
 
 public:
-    TaskFFmpeg(int loopId, int id,const QString& file);
+    TaskFFmpeg(const QString& ffprobe,
+               const QString& ffmpeg,
+               int loopId,
+               int id,
+               const QString& file);
     virtual ~TaskFFmpeg();
     void run() override ;
     int GetId() const

@@ -25,31 +25,31 @@
 
 QReadWriteLock FFMpeg::sLock_;
 
-QString FFMpeg::ffprobe_;
-QString FFMpeg::ffmpeg_;
+//QString FFMpeg::ffprobe_;
+//QString FFMpeg::ffmpeg_;
 
 QString FFMpeg::GetFFprobe(Settings& setting)
 {
     QReadLocker locker(&sLock_);
-    ffprobe_ = setting.valueString(Consts::KEY_FFPROBE_EXECUTABLE);
-    return ffprobe_.isEmpty() ? GetDefaultFFprobe() : ffprobe_;
+    QString ffprobe = setting.valueString(Consts::KEY_FFPROBE_EXECUTABLE);
+    return ffprobe.isEmpty() ? GetDefaultFFprobe() : ffprobe;
 }
 void FFMpeg::SetFFprobe(Settings& setting, const QString& file)
 {
     QWriteLocker locker(&sLock_);
-    ffprobe_ = file;
+    // ffprobe_ = file;
     setting.setValue(Consts::KEY_FFPROBE_EXECUTABLE, file);
 }
 
 QString FFMpeg::GetFFmpeg(Settings& setting)
 {
     QReadLocker locker(&sLock_);
-    ffmpeg_ = setting.valueString(Consts::KEY_FFMPEG_EXECUTABLE);
-    return ffmpeg_.isEmpty() ? GetDefaultFFmpeg() : ffmpeg_;
+    QString ffmpeg = setting.valueString(Consts::KEY_FFMPEG_EXECUTABLE);
+    return ffmpeg.isEmpty() ? GetDefaultFFmpeg() : ffmpeg;
 }
 void FFMpeg::SetFFmpeg(Settings& setting, const QString& file)
 {
     QWriteLocker locker(&sLock_);
-    ffmpeg_ = file;
+    // ffmpeg_ = file;
     setting.setValue(Consts::KEY_FFMPEG_EXECUTABLE, file);
 }

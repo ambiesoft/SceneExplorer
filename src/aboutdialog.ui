@@ -39,13 +39,6 @@
     </widget>
    </item>
    <item>
-    <widget class="QLabel" name="lblWebpage">
-     <property name="text">
-      <string>http://example.com</string>
-     </property>
-    </widget>
-   </item>
-   <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
       <number>2</number>

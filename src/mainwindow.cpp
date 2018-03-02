@@ -910,7 +910,11 @@ void MainWindow::afterFilter2(int loopId,int id,
     for(int i=0 ; i < filteredFiles.length(); ++i)
     {
         QString file = pathCombine(dir, filteredFiles[i]);
-        TaskFFmpeg* pTask = new TaskFFmpeg(gLoopId, idManager_->Increment(IDKIND_FFmpeg), file);
+        TaskFFmpeg* pTask = new TaskFFmpeg(FFMpeg::GetFFprobe(settings_),
+                                           FFMpeg::GetFFmpeg(settings_),
+                                           gLoopId,
+                                           idManager_->Increment(IDKIND_FFmpeg),
+                                           file);
         pTask->setAutoDelete(true);
 //        QObject::connect(pTask, &TaskFFMpeg::sayBorn,
 //                         this, &MainWindow::sayBorn);
@@ -1516,11 +1520,11 @@ bool MainWindow::checkExeCommon(const QString& exe, QString& errString) const
 
 bool MainWindow::checkFFprobe(QString& errString) const
 {
-    return checkExeCommon(FFMpeg::GetFFmpeg(), errString);
+    return checkExeCommon(FFMpeg::GetFFmpeg(settings_), errString);
 }
 bool MainWindow::checkFFmpeg(QString& errString) const
 {
-    return checkExeCommon(FFMpeg::GetFFmpeg(), errString);
+    return checkExeCommon(FFMpeg::GetFFmpeg(settings_), errString);
 }
 
 void MainWindow::on_actionAbout_document_triggered()

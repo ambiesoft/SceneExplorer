@@ -69,8 +69,13 @@
      <x>0</x>
      <y>0</y>
      <width>1009</width>
-     <height>18</height>
+     <height>23</height>
     </rect>
+   </property>
+   <property name="font">
+    <font>
+     <pointsize>10</pointsize>
+    </font>
    </property>
    <widget class="QMenu" name="menu_File">
     <property name="title">
@@ -117,7 +122,7 @@
    </widget>
    <widget class="QMenu" name="menu_Task">
     <property name="title">
-     <string>Task</string>
+     <string>&amp;Task</string>
     </property>
     <addaction name="actionStart_scan_to_create_thumnails"/>
     <addaction name="action_Pause"/>
@@ -167,6 +172,11 @@
    <addaction name="menu_Help"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
+   <property name="font">
+    <font>
+     <pointsize>9</pointsize>
+    </font>
+   </property>
    <property name="windowTitle">
     <string>ToolBar</string>
    </property>
@@ -199,6 +209,11 @@
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <widget class="QDockWidget" name="dockLog">
+   <property name="font">
+    <font>
+     <pointsize>9</pointsize>
+    </font>
+   </property>
    <property name="windowTitle">
     <string>Output</string>
    </property>
@@ -251,6 +266,11 @@
      <verstretch>0</verstretch>
     </sizepolicy>
    </property>
+   <property name="font">
+    <font>
+     <pointsize>9</pointsize>
+    </font>
+   </property>
    <property name="floating">
     <bool>false</bool>
    </property>
@@ -297,6 +317,11 @@
    </widget>
   </widget>
   <widget class="QDockWidget" name="dockTask">
+   <property name="font">
+    <font>
+     <pointsize>9</pointsize>
+    </font>
+   </property>
    <property name="windowTitle">
     <string>Task Thumbnail</string>
    </property>

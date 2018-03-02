@@ -40,19 +40,25 @@ AboutDialog::AboutDialog(QWidget *parent) :
 
     QString txtCopyright;
     txtCopyright.append("copyright 2018 ");
-    txtCopyright.append(Consts::ORGANIZATION);
+    txtCopyright.append(QString("<a href=\"http://ambiesoft.fam.cx/main/index.php?page=sceneexplorer\">%1</a> ").
+                        arg(Consts::ORGANIZATION));
+    txtCopyright.append(QString("(<a href=\"https://github.com/ambiesoft/SceneExplorer\">%1</a>)").
+                        arg("github"));
+
     ui->lblCopyright->setText(txtCopyright);
+    ui->lblCopyright->setTextInteractionFlags(Qt::TextBrowserInteraction);
+    ui->lblCopyright->setOpenExternalLinks(true);
 
 
-    QString webText;
-    webText += QString("<a href=\"http://ambiesoft.fam.cx/main/index.php?page=sceneexplorer\">%1</a>").
-            arg(tr("webpage"));
-    webText += QString("<a href=\"https://github.com/ambiesoft/SceneExplorer\">%1</a>").
-            arg(tr("development"));
-    ui->lblWebpage->setText(webText);
-    ui->lblWebpage->setTextFormat(Qt::RichText);
-    ui->lblWebpage->setTextInteractionFlags(Qt::TextBrowserInteraction);
-    ui->lblWebpage->setOpenExternalLinks(true);
+//    QString webText;
+//    webText += QString("<a href=\"http://ambiesoft.fam.cx/main/index.php?page=sceneexplorer\">%1</a>").
+//            arg(tr("webpage"));
+//    webText += QString("<a href=\"https://github.com/ambiesoft/SceneExplorer\">%1</a>").
+//            arg(tr("development"));
+//    ui->lblWebpage->setText(webText);
+//    ui->lblWebpage->setTextFormat(Qt::RichText);
+//    ui->lblWebpage->setTextInteractionFlags(Qt::TextBrowserInteraction);
+//    ui->lblWebpage->setOpenExternalLinks(true);
 
     QString aboutText;
     aboutText += "<h1>Qt</h1>";
@@ -60,8 +66,8 @@ AboutDialog::AboutDialog(QWidget *parent) :
     aboutText += "<p>Source code: https://github.com/ambiesoft/qt5/tree/5.10";
 
     aboutText += "<h1>FFmpeg</h1>";
-    aboutText += "<p>This software uses code of <a href=http://ffmpeg.org>FFmpeg</a> licensed under the"
-            "<a href=http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html>LGPLv2.1</a> and its"
+    aboutText += "<p>This software uses code of <a href=http://ffmpeg.org>FFmpeg</a> licensed under the "
+            "<a href=https://www.gnu.org/licenses/gpl-3.0.html>GPLv3</a> and its "
             "source can be downloaded <a href=https://github.com/ambiesoft/SceneExplorer>here</a></p>";
     aboutText += "<p>Source code: https://github.com/FFmpeg/FFmpeg/tree/40102a21374096ce0ba05c67c6e7474f176af2d0</p>";
     ui->tbAbout->setHtml(aboutText);

@@ -34,10 +34,18 @@
 
 int TaskFFmpeg::waitMax_ = -1;
 
-TaskFFmpeg::TaskFFmpeg(int loopId, int id,const QString& file)
+TaskFFmpeg::TaskFFmpeg(const QString& ffprobe,
+                       const QString& ffmpeg,
+                       int loopId,
+                       int id,
+                       const QString& file)
 {
     loopId_ = loopId;
     id_=id;
+
+    ffprobe_ = ffprobe;
+    ffmpeg_ = ffmpeg;
+
     movieFile_=file;
 
     progress_ = Uninitialized;
@@ -61,7 +69,7 @@ bool TaskFFmpeg::getProbe(const QString& file,
               QString& errorReason)
 {
     QProcess process;
-    process.setProgram(FFMpeg::GetFFprobe());
+    process.setProgram(ffprobe_);
     process.setArguments( QStringList() <<
                           "-v" <<
                           "quiet" <<
@@ -258,7 +266,7 @@ bool TaskFFmpeg::run3(QString& errorReason)
         qsl.append(actualFile);
 
         QProcess process;
-        process.setProgram(FFMpeg::GetFFmpeg());
+        process.setProgram(ffmpeg_);
         process.setArguments(qsl);
         process.start(QProcess::ReadOnly);
 

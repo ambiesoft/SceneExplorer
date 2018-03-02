@@ -197,6 +197,10 @@ int main2(int argc, char *argv[], QApplication& theApp)
 		return 0;
 	}
     
+    // style:  "windows", "windowsvista", "fusion", or "macintosh".
+    QApplication::setStyle("fusion");
+
+
     TaskGetDir::RegisterMetaType();
 
 
@@ -264,7 +268,9 @@ int main(int argc, char *argv[])
     QCoreApplication::setOrganizationDomain(Consts::APPDOMAIN);
     QCoreApplication::setApplicationName(Consts::APPNAME);
 
+
     QApplication app(argc, argv);
+
 
     int ret = main2(argc, argv, app);
     if(gReboot)

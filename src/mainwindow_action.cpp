@@ -462,7 +462,7 @@ void MainWindow::SortManager::onSort(SORTCOLUMN sc)
 {
 	sort_ = sc;
 	rev_[sc] = !rev_[sc];
-	for (int i = 0; i < _countof(tbs_); ++i)
+    for (size_t i = 0; i < _countof(tbs_); ++i)
 	{
 		if (!tbs_[i])
 			continue;

@@ -2,7 +2,7 @@
 *.suo
 qtroot.bat
 
-out/
+out-*/
 
 .qmake.stash
 .vs/
