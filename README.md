@@ -9,7 +9,28 @@ SceneExplorer needs FFmpeg and FFprove to create thumbnails. In windows distribu
 
 ## Creating thumbnails
 
+
+## Buid
+### Windows
+Get the aource and build tools by running following command.
+```
+git clone https://github.com/ambiesoft/distSolution
+git clone https://github.com/ambiesoft/SceneExplorer
+```
+
+Rename *qtroot.bat.sample* (in directory *SceneExplorer*) to *qtroot.bat* and edit it to set correct Qt install directory as follows.
+```
+set QTROOT=C:\local\Qt
+```
+
+Rename *pythonexe.bat.sample* to *pythonexe.bat* and edit it to set correct python executable as follows.
+```
+set PYTHONEXE=C:\local\python3.5\python.exe
+```
+
+Run build.bat. This will build SceneExplorer into *C:\Linkout\SceneExplorer*.
+
 ## Add
-This software uses code of <a href=http://ffmpeg.org>FFmpeg</a> licensed under the
-<a href=http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html>LGPLv2.1</a> and its
-source can be downloaded <a href=https://github.com/ambiesoft/SceneExplorer>here</a>
+This software uses code of <a href=http://ffmpeg.org>FFmpeg</a> licensed under the 
+<a href=https://www.gnu.org/licenses/gpl-3.0.html>GPLv3</a> and its 
+source can be downloaded <a href=https://github.com/ambiesoft/SceneExplorer>here</a>.
