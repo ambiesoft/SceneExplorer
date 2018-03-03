@@ -1,6 +1,7 @@
 *.sdf
 *.suo
 qtroot.bat
+pythonexe.bat
 
 out-*/
 
