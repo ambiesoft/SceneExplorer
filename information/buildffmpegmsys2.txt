@@ -1,0 +1,35 @@
+# msys2
+remove mingw-w64-x86_64-ffmpeg mingw-w64-x86_64-libbluray mingw-w64-x86_64-libguess 
+
+remove mingw64\x86_64-w64-mingw32\lib\libpthread.dll.a
+remove \mingw64\lib\libjpeg.dll.a
+remove \mingw64\lib\libiconv.dll.a
+
+
+pacman -S mingw-w64-i686-yasm mingw-w64-i686-SDL2 mingw-w64-i686-diffutils mingw-w64-i686-pkg-config mingw-w64-i686-libass mingw-w64-i686-gnutls mingw-w64-i686-libbluray mingw-w64-i686-lame mingw-w64-i686-twolame mingw-w64-i686-openjpeg2 mingw-w64-i686-opus mingw-w64-i686-shine mingw-w64-i686-snappy mingw-w64-i686-libsoxr mingw-w64-i686-libtheora mingw-w64-i686-vid.stab mingw-w64-i686-libvpx mingw-w64-i686-wavpack mingw-w64-i686-libwebp mingw-w64-i686-x264-git mingw-w64-i686-x265 mingw-w64-i686-zimg 
+
+libass-9.dll
+libwinpthread-1.dll
+libbluray-2.dll
+ libbz2-1.dll
+
+rename them to hide
+mingw32/i686-w64-mingw32/lib/libpthread.dll.a
+ mingw32/lib/libbz2.dll.a
+ C:\local\msys2\mingw32\lib\libbluray.dll.a <- not necessary, see blow
+ C:\local\msys2\mingw32\lib\libbz2.dll.a
+ 
+../FFmpeg/configure --prefix=./dist --enable-gpl --enable-version3 --disable-debug --enable-gmp --enable-gnutls --enable-libass --enable-fontconfig --enable-libfreetype --enable-libmfx --enable-libmp3lame --enable-libopenjpeg --enable-libopus --enable-libshine --enable-libsnappy --enable-libsoxr --enable-libtheora --enable-libtwolame --enable-libvidstab --enable-libvorbis --enable-libvpx --enable-libwavpack --enable-libwebp --enable-libx264 --enable-libx265 --enable-libzimg --enable-libxml2 --enable-bzlib --enable-iconv --enable-lzma --enable-sdl2 --enable-zlib --enable-d3d11va --enable-dxva2 --enable-avisynth 2>&1 | tee configure.out
+
+ERROR: cuvid requested, but not all dependencies are satisfied: cuda
+ERROR: nvenc requested, but not all dependencies are satisfied: cuda
+ --enable-cuvid
+ --enable-nvenc
+  --enable-cuda 
+   --enable-libbluray 
+  
+C:/local/msys2/mingw32/lib/libass.a(ass_shaper.o):(.text+0x162c): more undefined references to `hb_language_from_string' follow
+C:/local/msys2/mingw32/lib/libass.a(ass_shaper.o):(.text+0x1b39): undefined reference to `fribidi_reorder_line'
+collect2.exe: error: ld returned 1 exit status
+make: *** [/home/fjUnc/gitdev/SceneExplorer/FFmpeg/Makefile:107: ffmpeg_g.exe] Error 1
+
