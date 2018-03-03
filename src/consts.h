@@ -68,7 +68,9 @@ namespace Consts
     const char KEY_EXTERNALTOOLS_ARG[] = "externaltoolarg";
 
 
-    const char KEY_RECENT_OPENDOCUMENTS[] = "recentdocuments";
+	const char KEY_RECENT_OPENDOCUMENTS[] = "recentdocuments";
+	const char KEY_SORT[] = "sort";
+	const char KEY_SORTREV[] = "sortrev";
 
     const char KEY_LIMIT_ITEMS[] = "limititems";
     const char KEY_LIMIT_NUMBEROFROWS[] = "limitnumberofrows";

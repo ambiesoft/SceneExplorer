@@ -12,6 +12,10 @@ if not exist %~dp0\qtroot.bat (
 )
 call %~dp0\qtroot.bat
 
+if [%DEL%] == [] (
+  echo DEL not defined.
+  goto :end
+)
 if [%QTROOT%] == [] (
   echo QTROOT not defined.
   goto :end
@@ -48,7 +52,7 @@ if [%SOURCEDIR%] == [] (
 
 
 
-set SOLUTION=%PRONAME%\.sln
+set SOLUTION=%PRONAME%.sln
 set VCXPROJ=%PRONAME%.vcxproj
 set VCXFILTERS=%PRONAME%.vcxproj.filters
 set PRO=%SOURCEDIR%\%PRONAME%.pro
@@ -57,9 +61,9 @@ if not exist %PRO% (
   echo %PRO% not found.
   goto :end
 )
-sdel %SOLUTION%
-sdel %VCXPROJ%
-sdel %VCXFILTERS%
+%DEL% %SOLUTION%
+%DEL% %VCXPROJ%
+%DEL% %VCXFILTERS%
 
 if not exist %VCVARSBAT% (
   echo %VCVARSBAT% not found.

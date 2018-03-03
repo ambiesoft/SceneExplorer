@@ -293,6 +293,9 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
     FFMpeg::GetFFmpeg(settings);
 
 
+	// sort
+	sortManager_.InitCurrentSort((SORTCOLUMN)settings.valueInt(Consts::KEY_SORT, (int)SORT_NONE),
+		settings_.valueBool(Consts::KEY_SORTREV, false));
 
 
     // recents

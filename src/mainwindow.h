@@ -271,6 +271,7 @@ protected:
 	public:
 		SortManager();
 		void onSort(SORTCOLUMN sc);
+		void UpdateButtonText();
 		SORTCOLUMN GetCurrentSort() const {
 			return sort_;
 		}
@@ -278,6 +279,12 @@ protected:
 			return rev_[sort_];
 		}
 		void setToolButton(SORTCOLUMN sc, QToolButton* tb);
+
+		void InitCurrentSort(SORTCOLUMN sc, bool b) {
+			sort_ = sc;
+			rev_[sort_] = b;
+			UpdateButtonText();
+		}
 	} sortManager_;
 	void onSortCommon(SORTCOLUMN sortColumn);
 	QToolButton* tbNameSort_ = nullptr;

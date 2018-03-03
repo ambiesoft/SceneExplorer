@@ -458,16 +458,20 @@ void MainWindow::SortManager::setToolButton(SORTCOLUMN sc, QToolButton* tb)
 	tb->setText(GetSortColumnName(sc));
 }
 
-void MainWindow::SortManager::onSort(SORTCOLUMN sc) 
+void MainWindow::SortManager::onSort(SORTCOLUMN sc)
 {
 	sort_ = sc;
 	rev_[sc] = !rev_[sc];
-    for (size_t i = 0; i < (sizeof(tbs_)/sizeof(tbs_[0])); ++i)
+	UpdateButtonText();
+}
+void MainWindow::SortManager::UpdateButtonText()
+{
+	for (size_t i = 0; i < (sizeof(tbs_) / sizeof(tbs_[0])); ++i)
 	{
 		if (!tbs_[i])
 			continue;
 
-		if(sc==i)
+		if (sort_ == i)
 		{
 			tbs_[i]->setText(GetSortColumnName((SORTCOLUMN)i) + (rev_[i] ? "-" : "+"));
 			tbs_[i]->setChecked(true);
@@ -479,6 +483,7 @@ void MainWindow::SortManager::onSort(SORTCOLUMN sc)
 		}
 	}
 }
+
 
 void MainWindow::onSortCommon(SORTCOLUMN sortColumn)
 {

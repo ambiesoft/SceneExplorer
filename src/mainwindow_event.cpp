@@ -97,4 +97,8 @@ void MainWindow::closeEvent(QCloseEvent *event) {
 
     // recents
     settings_.setValue(Consts::KEY_RECENT_OPENDOCUMENTS,recents_);
+
+	// sort
+	settings_.setValue(Consts::KEY_SORT, (int)sortManager_.GetCurrentSort());
+	settings_.setValue(Consts::KEY_SORTREV, sortManager_.GetCurrentRev());
 }
