@@ -327,7 +327,7 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
 MainWindow::SortManager::SortManager()
 {
 	sort_ = SORT_NONE;
-	for (size_t i = 0; i < _countof(rev_); ++i)
+    for (size_t i = 0; i < (sizeof(rev_)/sizeof(rev_[0])); ++i)
 	{
 		rev_[i] = true;
 		tbs_[i] = nullptr;
