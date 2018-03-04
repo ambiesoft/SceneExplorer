@@ -63,16 +63,19 @@ void OptionExternalToolsDialog::on_listWidget_itemSelectionChanged()
         ui->lineName->setEnabled(false);
         ui->lineExe->setEnabled(false);
         ui->lineArg->setEnabled(false);
+        ui->chkCountAsOpen->setEnabled(false);
         return;
     }
     ui->lineName->setEnabled(true);
     ui->lineExe->setEnabled(true);
     ui->lineArg->setEnabled(true);
+    ui->chkCountAsOpen->setEnabled(true);
 
     ExternalToolWidgetItem* item = (ExternalToolWidgetItem*)ui->listWidget->selectedItems()[0];
     ui->lineName->setText(item->GetItemName());
     ui->lineExe->setText(item->GetItemExe());
     ui->lineArg->setText(item->GetItemArg());
+    ui->chkCountAsOpen->setChecked(item->IsCountAsOpen());
 }
 int OptionExternalToolsDialog::GetItemIndex(QListWidgetItem* item) const
 {
@@ -140,23 +143,59 @@ void OptionExternalToolsDialog::on_pbAdd_clicked()
         }
     }
 
-    ExternalToolWidgetItem* newitem = new ExternalToolWidgetItem(ExternalToolItem(newitemname, QString(), QString()));
+    ExternalToolWidgetItem* newitem = new ExternalToolWidgetItem(ExternalToolItem(newitemname, QString(), QString(), false));
     ui->listWidget->addItem(newitem);
+    ui->listWidget->setCurrentItem(newitem);
+//    for(int i=0 ; i < ui->listWidget->count(); ++i)
+//    {
+//        if(ui->listWidget->item(i) != newitem)
+//        {
+//            ui->listWidget->item(i)->setSelected(false);
+//        }
+//        else
+//        {
+//            ui->listWidget->item(i)->setSelected(true);
+//        }
+//    }
 }
 
 void OptionExternalToolsDialog::on_pbRemove_clicked()
 {
+    QListWidgetItem* current = ui->listWidget->currentItem();
+    if(!current)
+        return;
 
+    if(!YesNo(this, QString(tr("Are you sure you want to remove \"%1\"?")).arg(current->text())))
+        return;
+
+    ui->listWidget->removeItemWidget(current);
+    delete current;
 }
 
 void OptionExternalToolsDialog::on_pbMoveUp_clicked()
 {
+    QModelIndex current = ui->listWidget->currentIndex();
+    if(current.row() <= 0)
+        return;
 
+    QListWidgetItem* hold = ui->listWidget->takeItem(current.row());
+    Q_ASSERT(hold);
+    int next = current.row() - 1;
+    ui->listWidget->insertItem(next, hold);
+    ui->listWidget->setCurrentItem(hold);
 }
 
 void OptionExternalToolsDialog::on_pbMoveDown_clicked()
 {
+    QModelIndex current = ui->listWidget->currentIndex();
+    if( (current.row()+1) >= ui->listWidget->count())
+        return;
 
+    QListWidgetItem* hold = ui->listWidget->takeItem(current.row());
+    Q_ASSERT(hold);
+    int next = current.row() + 1;
+    ui->listWidget->insertItem(next, hold);
+    ui->listWidget->setCurrentItem(hold);
 }
 
 
@@ -218,6 +257,7 @@ void OptionExternalToolsDialog::UpdateData()
     item->SetItemName(ui->lineName->text());
     item->SetItemExe(ui->lineExe->text());
     item->SetItemArg(ui->lineArg->text());
+    item->SetCountAsOpen(ui->chkCountAsOpen->isChecked());
 }
 
 void OptionExternalToolsDialog::on_tbExecutable_clicked()
@@ -240,3 +280,15 @@ void OptionExternalToolsDialog::on_tbArguments_clicked()
 
 }
 
+
+void OptionExternalToolsDialog::on_chkCountAsOpen_stateChanged(int arg1)
+{
+    if(selectionChanging_)
+        return;
+
+    if(ui->listWidget->selectedItems().isEmpty())
+        return;
+
+    ExternalToolWidgetItem* item = (ExternalToolWidgetItem*)ui->listWidget->selectedItems()[0];
+    item->SetCountAsOpen(!!arg1);
+}

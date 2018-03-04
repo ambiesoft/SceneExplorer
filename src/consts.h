@@ -66,6 +66,7 @@ namespace Consts
     const char KEY_EXTERNALTOOLS_NAME[] = "externaltoolname";
     const char KEY_EXTERNALTOOLS_EXE[] = "externaltoolexe";
     const char KEY_EXTERNALTOOLS_ARG[] = "externaltoolarg";
+    const char KEY_EXTERNALTOOLS_COUNTASOPEN[] = "externaltoolcountasopen";
 
 
 	const char KEY_RECENT_OPENDOCUMENTS[] = "recentdocuments";

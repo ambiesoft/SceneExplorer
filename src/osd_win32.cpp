@@ -93,9 +93,9 @@ void MoveToTrashImpl( QString file ){
 
 QString GetDefaultFFprobe()
 {
-    return pathCombine(GetAppDir(), "ffprobe.exe");
+    return pathCombine(GetAppDir(), "ffmpeg/bin/ffprobe.exe");
 }
 QString GetDefaultFFmpeg()
 {
-    return pathCombine(GetAppDir(), "ffmpeg.exe");
+    return pathCombine(GetAppDir(), "ffmpeg/bin/ffmpeg.exe");
 }

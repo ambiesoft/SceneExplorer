@@ -26,13 +26,16 @@ class ExternalToolItem
     QString name_;
     QString exe_;
     QString arg_;
+    bool countAsOpen_;
 public:
     ExternalToolItem(const QString& name,
                      const QString& exe,
-                     const QString& arg):
+                     const QString& arg,
+                     bool bCountAsOpen):
         name_(name),
         exe_(exe),
-        arg_(arg) {}
+        arg_(arg),
+        countAsOpen_(bCountAsOpen){}
 
     ExternalToolItem(const ExternalToolItem& that) {
         if(this==&that)
@@ -40,6 +43,7 @@ public:
         this->name_ = that.name_;
         this->exe_ = that.exe_;
         this->arg_ = that.arg_;
+        this->countAsOpen_ = that.countAsOpen_;
     }
     static ExternalToolItem Load(int i, Settings& settings);
     void Save(int i, Settings& settings);
@@ -63,6 +67,13 @@ public:
     }
     void SetArg(const QString& arg) {
         arg_=arg;
+    }
+
+    bool IsCountAsOpen() const {
+        return countAsOpen_;
+    }
+    void SetCountAsOpen(bool b) {
+        countAsOpen_ = b;
     }
 };
 

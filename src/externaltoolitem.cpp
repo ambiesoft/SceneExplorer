@@ -29,9 +29,10 @@ ExternalToolItem ExternalToolItem::Load(int i, Settings& settings)
     QString name = settings.valueString(Consts::KEY_EXTERNALTOOLS_NAME);
     QString exe = settings.valueString(Consts::KEY_EXTERNALTOOLS_EXE);
     QString arg = settings.valueString(Consts::KEY_EXTERNALTOOLS_ARG);
+    bool bCountAsOpen = settings.valueBool(Consts::KEY_EXTERNALTOOLS_COUNTASOPEN);
     settings.endGroup();
 
-    return ExternalToolItem(name,exe,arg);
+    return ExternalToolItem(name,exe,arg,bCountAsOpen);
 }
 void ExternalToolItem::Save(int i, Settings& settings)
 {
@@ -41,6 +42,7 @@ void ExternalToolItem::Save(int i, Settings& settings)
     settings.setValue(Consts::KEY_EXTERNALTOOLS_NAME, name_);
     settings.setValue(Consts::KEY_EXTERNALTOOLS_EXE, exe_);
     settings.setValue(Consts::KEY_EXTERNALTOOLS_ARG, arg_);
+    settings.setValue(Consts::KEY_EXTERNALTOOLS_COUNTASOPEN, countAsOpen_);
     settings.endGroup();
 
 }

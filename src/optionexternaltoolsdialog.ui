@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>448</width>
-    <height>463</height>
+    <height>435</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -51,7 +51,7 @@
     </widget>
    </item>
    <item row="5" column="1">
-    <layout class="QHBoxLayout" name="horizontalLayout_3">
+    <layout class="QHBoxLayout" name="hlExecutable">
      <property name="spacing">
       <number>0</number>
      </property>
@@ -67,9 +67,46 @@
      </item>
     </layout>
    </item>
-   <item row="12" column="1">
-    <widget class="QWidget" name="widget" native="true">
+   <item row="6" column="0">
+    <widget class="QLabel" name="labelArg">
+     <property name="text">
+      <string>&amp;Arguments:</string>
+     </property>
+     <property name="buddy">
+      <cstring>lineArg</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="1">
+    <layout class="QHBoxLayout" name="hlArguments">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="QLineEdit" name="lineArg"/>
+     </item>
+     <item>
+      <widget class="QToolButton" name="tbArguments">
+       <property name="text">
+        <string>...</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="8" column="1">
+    <widget class="QCheckBox" name="chkCountAsOpen">
+     <property name="text">
+      <string>Enable</string>
+     </property>
+    </widget>
+   </item>
+   <item row="9" column="1">
+    <widget class="QWidget" name="widgetMove" native="true">
      <layout class="QHBoxLayout" name="horizontalLayout">
+      <property name="spacing">
+       <number>0</number>
+      </property>
       <property name="leftMargin">
        <number>0</number>
       </property>
@@ -99,9 +136,12 @@
      </layout>
     </widget>
    </item>
-   <item row="15" column="1">
-    <widget class="QWidget" name="widget_2" native="true">
+   <item row="10" column="1">
+    <widget class="QWidget" name="widgetAddRemove" native="true">
      <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <property name="spacing">
+       <number>0</number>
+      </property>
       <property name="leftMargin">
        <number>0</number>
       </property>
@@ -131,20 +171,7 @@
      </layout>
     </widget>
    </item>
-   <item row="16" column="1">
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>40</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item row="17" column="1">
+   <item row="18" column="1">
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -154,30 +181,13 @@
      </property>
     </widget>
    </item>
-   <item row="10" column="1">
-    <layout class="QHBoxLayout" name="horizontalLayout_4">
-     <property name="spacing">
-      <number>0</number>
-     </property>
-     <item>
-      <widget class="QLineEdit" name="lineArg"/>
-     </item>
-     <item>
-      <widget class="QToolButton" name="tbArguments">
-       <property name="text">
-        <string>...</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
-   <item row="10" column="0">
-    <widget class="QLabel" name="labelArg">
+   <item row="8" column="0">
+    <widget class="QLabel" name="labelCountAsOpen">
      <property name="text">
-      <string>&amp;Arguments:</string>
+      <string>&amp;Count as Open:</string>
      </property>
      <property name="buddy">
-      <cstring>lineArg</cstring>
+      <cstring>chkCountAsOpen</cstring>
      </property>
     </widget>
    </item>
@@ -190,6 +200,7 @@
   <tabstop>tbExecutable</tabstop>
   <tabstop>lineArg</tabstop>
   <tabstop>tbArguments</tabstop>
+  <tabstop>chkCountAsOpen</tabstop>
   <tabstop>pbMoveUp</tabstop>
   <tabstop>pbMoveDown</tabstop>
   <tabstop>pbAdd</tabstop>

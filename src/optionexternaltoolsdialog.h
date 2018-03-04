@@ -64,7 +64,12 @@ public:
         item_.SetArg(arg);
     }
 
-
+    bool IsCountAsOpen() const {
+        return item_.IsCountAsOpen();
+    }
+    void SetCountAsOpen(bool b) {
+        item_.SetCountAsOpen(b);
+    }
 };
 
 class OptionExternalToolsDialog : public QDialog
@@ -111,6 +116,8 @@ private slots:
     void on_lineExe_textChanged(const QString &arg1);
 
     void on_lineArg_textChanged(const QString &arg1);
+
+    void on_chkCountAsOpen_stateChanged(int arg1);
 
 private:
     Ui::OptionExternalToolsDialog *ui;

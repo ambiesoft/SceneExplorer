@@ -1095,8 +1095,19 @@ void MainWindow::on_context_ExternalTools()
     QStringList arg;
     arg << movieFile;
 
-    QProcess::startDetached(exe,arg);
+    if(!QProcess::startDetached(exe,arg))
+    {
+        Alert(this, QString(tr("Failed to start new process \"%1\".")).arg(exe));
+        return;
+    }
+    if(externalTools_[i].IsCountAsOpen())
+    {
+        QString movieFileCanon = getSelectedVideo(false);
+        gpSQL->IncrementOpenCount(movieFileCanon);
+        tableModel_->UpdateItem(movieFileCanon);
+    }
 }
+
 void MainWindow::on_context_copySelectedVideoFilename()
 {
     QFileInfo fi(getSelectedVideo());
