@@ -149,6 +149,9 @@
     <addaction name="actionSort_by_duration"/>
     <addaction name="actionSort_by_bitrate"/>
     <addaction name="actionSort_by_open_count"/>
+    <addaction name="actionSort_by_last_access"/>
+    <addaction name="separator"/>
+    <addaction name="actionShow_missing_files"/>
     <addaction name="separator"/>
     <addaction name="action_Top"/>
     <addaction name="action_Bottom"/>
@@ -546,6 +549,19 @@
   <action name="placeHolder_Sort">
    <property name="text">
     <string>placeHolder_Sort</string>
+   </property>
+  </action>
+  <action name="actionSort_by_last_access">
+   <property name="text">
+    <string>Sort by &amp;last access</string>
+   </property>
+  </action>
+  <action name="actionShow_missing_files">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Show &amp;missing files</string>
    </property>
   </action>
  </widget>

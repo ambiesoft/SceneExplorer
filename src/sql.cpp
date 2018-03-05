@@ -75,6 +75,8 @@ Sql::Sql() : db_(QSqlDatabase::addDatabase("QSQLITE"))
 		 "vheight INT NOT NULL DEFAULT '0',"
 		 "opencount INT NOT NULL DEFAULT '0')"
 	 );
+     query.exec("ALTER TABLE FileInfo Add lastaccess");
+
 	 qDebug() << query.lastError().text();
 	 
 	 query.exec("CREATE INDEX idx_directory ON FileInfo(directory)");
@@ -82,6 +84,7 @@ Sql::Sql() : db_(QSqlDatabase::addDatabase("QSQLITE"))
 	 // make "INSERT OR REPLACE" to work
 	 query.exec("CREATE UNIQUE INDEX idx_directoryname ON FileInfo(directory,name)");
 	 query.exec("CREATE INDEX idx_salient ON FileInfo(salient)");
+     query.exec("CREATE INDEX idx_lastaccess ON FileInfo(lastaccess)");
 
 #ifdef QT__DEBUG
      for (int i = 0; i < db_.tables().count(); i ++) {
@@ -678,6 +681,9 @@ bool GetAllSqlString(
     case SORT_OPENCOUNT:
         sortby = "opencount";
         break;
+    case SORT_LASTACCESS:
+        sortby = "lastaccess";
+        break;
     default:
         Q_ASSERT(false);
         break;
@@ -813,6 +819,7 @@ bool Sql::GetAll(QList<TableItemDataPointer>& v,
         int vheight = query.value("vheight").toInt();
 
         int opencount = query.value("opencount").toInt();
+        qint64 lastaccess = query.value("lastaccess").toLongLong();
 		TableItemDataPointer pID = TableItemData::Create(thumbs,
                                                directory,
                                                name,
@@ -829,7 +836,8 @@ bool Sql::GetAll(QList<TableItemDataPointer>& v,
                                                vcodec,acodec,
                                                vwidth,vheight,
 
-                                               opencount);
+                                               opencount,
+                                               lastaccess);
         v.append(pID);
     }
     return true;
@@ -840,17 +848,20 @@ bool Sql::IncrementOpenCount(const QString& movieFile)
     QString dir = canonicalDir(fi.absolutePath());
     QString file = fi.fileName();
 
-    QString state = "UPDATE FileInfo SET opencount=opencount+1 WHERE "
+    QString state = "UPDATE FileInfo SET opencount=opencount+1, lastaccess=? WHERE "
             "directory=? AND name=?";
     QSqlQuery query;
     SQC(query,prepare(state));
 
     int i=0;
+    query.bindValue(i++, QDateTime::currentSecsSinceEpoch());
     query.bindValue(i++, dir);
     query.bindValue(i++, file);
 
     SQC(query,exec());
-	Q_ASSERT(query.numRowsAffected() == 1);
+    Q_ASSERT(query.numRowsAffected() == 1);
+
+
     return true;
 }
 bool Sql::RenameEntry(const QString& oldDirc,

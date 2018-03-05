@@ -69,7 +69,8 @@ static void testSQL()
 		"ac",
 		640,
 		480,
-        soc++);
+        soc++,
+        0);
 	gpSQL->AppendData(tid);
 }
 #endif

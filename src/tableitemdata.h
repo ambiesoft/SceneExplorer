@@ -48,6 +48,7 @@ class TableItemData
     QString acodec_;
     int vWidth_,vHeight_;
     int opencount_ = 0;
+    qint64 lastaccess_ = 0;
     TableItemData(const QStringList& files,
                   const QString& movieDirectory,
                   const QString& movieFileName,
@@ -64,7 +65,8 @@ class TableItemData
                   const QString& vcodec,
                   const QString& acodec,
                   int vWidth,int vHeight,
-                  int opencount);
+                  int opencount,
+                  const qint64& lastaccess);
 
 public:
 	static TableItemDataPointer Create(
@@ -84,7 +86,8 @@ public:
 		const QString& vcodec,
 		const QString& acodec,
         int vWidth, int vHeight,
-        int opencount)
+        int opencount,
+        const qint64& lastaccess)
 	{
         Q_ASSERT(!movieDirectory.isEmpty());
         Q_ASSERT(!movieFileName.isEmpty());
@@ -111,7 +114,8 @@ public:
 
             vWidth, vHeight,
 
-            opencount));
+            opencount,
+            lastaccess));
 	}
 	~TableItemData()
 	{
@@ -171,6 +175,9 @@ public:
 
     int getOpenCount() const {
         return opencount_;
+    }
+    qint64 getLastAccess() const {
+        return lastaccess_;
     }
     int getResolutionMultiplied() const {
         return vWidth_*vHeight_;

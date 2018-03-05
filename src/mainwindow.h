@@ -82,7 +82,7 @@ private:
     // bool bShowMissing_ = false;
     void GetSqlAllSetTable(const QStringList& dirs,
                            bool bOnlyMissing = false);
-	QToolButton* btnShowNonExistant_ = nullptr;
+    QToolButton* tbShowNonExistant_ = nullptr;
 
     enum UpdateTitleType { DEFAULT, ONLYMISSING, INIT };
     void UpdateTitle(const QStringList& dirs, UpdateTitleType utt);
@@ -294,6 +294,7 @@ protected:
 
 	QToolButton* tbLabel_ = nullptr;
 	
+    void on_ShowMissingClicked_common(bool nNextCheck);
 
 private slots:
     void on_action_Close_triggered();
@@ -328,7 +329,7 @@ private slots:
     void on_actionSort_by_duration_triggered();
 
     void on_actionSort_by_bitrate_triggered();
-    void on_action_ShowMissing(bool bToggle);
+    void on_action_ShowMissingClicked();
     void on_action_Find_triggered();
 
     void on_action_Clear_triggered();
@@ -374,6 +375,13 @@ private slots:
     void on_action_Focus_find_triggered();
 
     void on_action_Empty_find_texts_triggered();
+
+    void on_actionSort_by_last_access_triggered();
+
+
+
+
+    void on_actionShow_missing_files_triggered();
 
 private:
     QThreadPool* pPoolFFmpeg_ = nullptr;

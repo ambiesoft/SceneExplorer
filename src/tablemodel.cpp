@@ -415,6 +415,8 @@ class SortFunctor
             return (v1->getBitrate() < v2->getBitrate());
         case SORTCOLUMN::SORT_OPENCOUNT:
             return (v1->getOpenCount() < v2->getOpenCount());
+        case SORTCOLUMN::SORT_LASTACCESS:
+            return (v1->getLastAccess() < v2->getLastAccess());
         default:
 			Q_ASSERT(false);
 		}

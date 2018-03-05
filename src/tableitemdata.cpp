@@ -45,7 +45,8 @@ TableItemData::TableItemData(const QStringList& files,
                              const QString& vcodec,
                              const QString& acodec,
                              int vWidth,int vHeight,
-                             int opencount)
+                             int opencount,
+                             const qint64& lastaccess)
 {
 #ifdef QT_DEBUG
 	++dinstcount_;
@@ -71,6 +72,7 @@ TableItemData::TableItemData(const QStringList& files,
     vHeight_=vHeight;
 
     opencount_=opencount;
+    lastaccess_ = lastaccess;
 }
 QString TableItemData::getMovieFileFull() const {
     Q_ASSERT(!movieDirectory_.isEmpty());
@@ -110,5 +112,6 @@ QMap<QString,QVariant> TableItemData::getColumnValues() const
     ret["vwidth"]=getVWidth();
     ret["vheight"]=getVHeight();
 	ret["opencount"] = getOpenCount();
+	ret["lastaccess"] = getLastAccess();
     return ret;
 }

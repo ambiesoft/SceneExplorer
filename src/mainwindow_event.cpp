@@ -76,7 +76,7 @@ void MainWindow::closeEvent(QCloseEvent *event) {
     }
     settings_.setValue(Consts::KEY_COMBO_FINDTEXTS, findtexts);
 
-    settings_.setValue(Consts::KEY_SHOWMISSING, btnShowNonExistant_->isChecked());
+    settings_.setValue(Consts::KEY_SHOWMISSING, tbShowNonExistant_->isChecked());
 
 
     pDoc_->Store(ui->directoryWidget);

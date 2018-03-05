@@ -267,6 +267,7 @@ QString GetSortColumnName(SORTCOLUMN sc)
 	case SORT_DURATION:return QObject::tr("Duration");
 	case SORT_BITRATE:return QObject::tr("Bitrate");
 	case SORT_OPENCOUNT:return QObject::tr("Open count");
+    case SORT_LASTACCESS:return QObject::tr("Last Access");
 	default:
 		Q_ASSERT(false);
 
@@ -278,3 +279,4 @@ QString GetAppDir()
 {
     return QFileInfo(QCoreApplication::applicationFilePath()).absolutePath();
 }
+

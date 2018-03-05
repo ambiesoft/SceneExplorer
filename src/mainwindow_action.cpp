@@ -522,6 +522,10 @@ void MainWindow::on_actionSort_by_open_count_triggered()
 {
 	onSortCommon(SORT_OPENCOUNT);
 }
+void MainWindow::on_actionSort_by_last_access_triggered()
+{
+    onSortCommon(SORT_LASTACCESS);
+}
 
 void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
 {
@@ -806,19 +810,23 @@ void MainWindow::on_directoryWidget_customContextMenuRequested(const QPoint &pos
     }
 }
 
-void MainWindow::on_action_ShowMissing(bool bToggle)
+void MainWindow::on_ShowMissingClicked_common(bool bNextCheck)
 {
-	Q_UNUSED(bToggle);
+    if (!IsInitialized() || IsClosed())
+        return;
 
-	if (!IsInitialized() || IsClosed())
-		return;
-    //if(bShowMissing_==bToggle)
-    //    return;
-    //bShowMissing_ = bToggle;
+    static bool sIn = false;
+    if(sIn)
+        return;
+    BlockedBool bb(&sIn);
 
-
-
+    ui->actionShow_missing_files->setChecked(bNextCheck);
+    tbShowNonExistant_->setChecked(bNextCheck);
     GetSqlAllSetTable(currentDirs_);
+}
+void MainWindow::on_action_ShowMissingClicked()
+{
+    on_ShowMissingClicked_common(tbShowNonExistant_->isChecked());
 }
 
 void MainWindow::on_LimitFirst_triggered(bool checked)

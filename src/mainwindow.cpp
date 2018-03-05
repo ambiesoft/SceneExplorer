@@ -160,11 +160,11 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
 
 
     // tool bar show missing
-	btnShowNonExistant_ = new QToolButton(ui->mainToolBar);
-	btnShowNonExistant_->setText(tr("Show missing files"));
-	btnShowNonExistant_->setCheckable(true);
-    QObject::connect(btnShowNonExistant_, &QToolButton::toggled,
-                     this, &MainWindow::on_action_ShowMissing);
+    tbShowNonExistant_ = new QToolButton(ui->mainToolBar);
+    tbShowNonExistant_->setText(tr("Show missing files"));
+    tbShowNonExistant_->setCheckable(true);
+    QObject::connect(tbShowNonExistant_, SIGNAL(toggled(bool)),
+                     this, SLOT(on_action_ShowMissingClicked()));
 
 
 
@@ -182,7 +182,7 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
                      this, &MainWindow::on_FindCombo_EnterPressed);
 
 
-    ui->mainToolBar->insertWidget(ui->placeHolder_ShowMissing, btnShowNonExistant_);
+    ui->mainToolBar->insertWidget(ui->placeHolder_ShowMissing, tbShowNonExistant_);
     ui->mainToolBar->insertWidget(ui->placeHolder_ComboBox, cmbFind_);
 
     ui->mainToolBar->removeAction(ui->placeHolder_ShowMissing);
@@ -235,8 +235,10 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
 
 	vVal = settings.value(Consts::KEY_SHOWMISSING);
 	if (vVal.isValid())
-		btnShowNonExistant_->setChecked(vVal.toBool());
-
+    {
+        ui->actionShow_missing_files->setChecked(vVal.toBool());
+        tbShowNonExistant_->setChecked(vVal.toBool());
+    }
 
 
 
@@ -1100,6 +1102,7 @@ void MainWindow::on_context_ExternalTools()
         Alert(this, QString(tr("Failed to start new process \"%1\".")).arg(exe));
         return;
     }
+
     if(externalTools_[i].IsCountAsOpen())
     {
         QString movieFileCanon = getSelectedVideo(false);
@@ -1182,7 +1185,7 @@ void MainWindow::directoryChangedCommon(bool bForceRead)
         }
     }
 
-    btnShowNonExistant_->setEnabled(!bOnlyMissing);
+    tbShowNonExistant_->setEnabled(!bOnlyMissing);
 
     if(!bForceRead)
     {
@@ -1201,7 +1204,7 @@ void MainWindow::directoryChangedCommon(bool bForceRead)
 
 void MainWindow::GetSqlAllSetTable(const QStringList& dirs, bool bOnlyMissing)
 {
-	tableModel_->SetShowMissing(btnShowNonExistant_->isChecked() );
+    tableModel_->SetShowMissing(tbShowNonExistant_->isChecked() );
     QElapsedTimer timer;
     timer.start();
 
@@ -1600,4 +1603,12 @@ void MainWindow::on_action_Empty_find_texts_triggered()
     if(!YesNo(this, QString(tr("Are you sure you want to empty %1 find texts?")).arg(count)))
         return;
     cmbFind_->clear();
+}
+
+
+
+
+void MainWindow::on_actionShow_missing_files_triggered()
+{
+    on_ShowMissingClicked_common(ui->actionShow_missing_files->isChecked());
 }
