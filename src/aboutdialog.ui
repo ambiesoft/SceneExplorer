@@ -41,11 +41,11 @@
    <item>
     <widget class="QTabWidget" name="tabWidget">
      <property name="currentIndex">
-      <number>2</number>
+      <number>0</number>
      </property>
-     <widget class="QWidget" name="tab">
+     <widget class="QWidget" name="tabLicense">
       <attribute name="title">
-       <string>Tab 1</string>
+       <string>License</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <property name="spacing">
@@ -72,9 +72,9 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_2">
+     <widget class="QWidget" name="tabGPLv3">
       <attribute name="title">
-       <string>Tab 2</string>
+       <string>GPLv3</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_3">
        <property name="spacing">
@@ -104,9 +104,9 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="tab_3">
+     <widget class="QWidget" name="tabComponentVersion">
       <attribute name="title">
-       <string>Page</string>
+       <string>Component Version</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>

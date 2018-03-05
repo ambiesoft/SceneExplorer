@@ -61,15 +61,32 @@ AboutDialog::AboutDialog(QWidget *parent) :
 //    ui->lblWebpage->setOpenExternalLinks(true);
 
     QString aboutText;
+    aboutText += QString() + "<h1>" + Consts::APPNAME_DISPLAY + "</h1>";
+    aboutText +=
+    "Copyright (C) 2018 Ambiesoft<br />"
+    "<br />"
+    "This program is free software: you can redistribute it and/or modify<br />"
+    "it under the terms of the GNU General Public License as published by<br />"
+    "the Free Software Foundation, either version 3 of the License, or<br />"
+    "(at your option) any later version.<br />"
+    "<br />"
+    "This program is distributed in the hope that it will be useful,<br />"
+    "but WITHOUT ANY WARRANTY; without even the implied warranty of<br />"
+    "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the<br />"
+    "GNU General Public License for more details.<br />"
+    "<br />"
+    "You should have received a copy of the GNU General Public License<br />"
+    "along with this program.  If not, see &lt;https://www.gnu.org/licenses/&gt;.<br />";
+
     aboutText += "<h1>Qt</h1>";
-    aboutText += "<p>This software uses Qt.</p>";
-    aboutText += "<p>Source code: https://github.com/ambiesoft/qt5/tree/5.10";
+    aboutText += "<p>This software uses Qt.<br />";
+    aboutText += "Source code: https://github.com/ambiesoft/qt5/tree/5.10</p>";
 
     aboutText += "<h1>FFmpeg</h1>";
     aboutText += "<p>This software uses code of <a href=http://ffmpeg.org>FFmpeg</a> licensed under the "
             "<a href=https://www.gnu.org/licenses/gpl-3.0.html>GPLv3</a> and its "
-            "source can be downloaded <a href=https://github.com/ambiesoft/SceneExplorer>here</a></p>";
-    aboutText += "<p>Source code: https://github.com/FFmpeg/FFmpeg/tree/40102a21374096ce0ba05c67c6e7474f176af2d0</p>";
+            "source can be downloaded <a href=https://github.com/ambiesoft/SceneExplorer>here</a><br />";
+    aboutText += "Source code: https://github.com/FFmpeg/FFmpeg/tree/40102a21374096ce0ba05c67c6e7474f176af2d0</p>";
     ui->tbAbout->setHtml(aboutText);
 
 
