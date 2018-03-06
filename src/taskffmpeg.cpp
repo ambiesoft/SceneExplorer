@@ -93,7 +93,7 @@ bool TaskFFmpeg::getProbe(const QString& file,
         return false;
     }
 
-    qDebug() << "exitCode()=" << process.exitCode();
+    // qDebug() << "exitCode()=" << process.exitCode();
     if(0 != process.exitCode())
     {
         errorReason = tr("existCode != 0");
