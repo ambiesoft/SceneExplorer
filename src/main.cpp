@@ -263,6 +263,30 @@ int main2(int argc, char *argv[], QApplication& theApp)
     return theApp.exec();
 }
 
+void noMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
+{
+    Q_UNUSED(type);
+    Q_UNUSED(context);
+    Q_UNUSED(msg);
+//    QByteArray localMsg = msg.toLocal8Bit();
+//    switch (type) {
+//    case QtDebugMsg:
+//        fprintf(stderr, "Debug: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
+//        break;
+//    case QtInfoMsg:
+//        fprintf(stderr, "Info: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
+//        break;
+//    case QtWarningMsg:
+//        fprintf(stderr, "Warning: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
+//        break;
+//    case QtCriticalMsg:
+//        fprintf(stderr, "Critical: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
+//        break;
+//    case QtFatalMsg:
+//        fprintf(stderr, "Fatal: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
+//        abort();
+//    }
+}
 int main(int argc, char *argv[])
 {
     QCoreApplication::setOrganizationName(Consts::ORGANIZATION);
@@ -272,6 +296,10 @@ int main(int argc, char *argv[])
 
     QApplication app(argc, argv);
 
+    if ( ! app.arguments().contains(QLatin1String("--with-debug") ))
+    {
+        qInstallMessageHandler(noMessageOutput);
+    }
 
     int ret = main2(argc, argv, app);
     if(gReboot)
