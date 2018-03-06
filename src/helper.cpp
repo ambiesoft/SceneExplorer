@@ -24,7 +24,7 @@
 #include <QSet>
 #include <QCoreApplication>
 
-#include "../../profile/cpp/Profile/Profile/profile.h"
+#include "../../profile/cpp/Profile/include/ambiesoft.profile.h"
 
 #if defined(Q_OS_WIN)
 #else
