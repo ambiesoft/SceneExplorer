@@ -12,7 +12,7 @@ SceneExplorer needs FFmpeg and FFprove to create thumbnails. In windows distribu
 
 ## Buid
 ### Windows
-Get the aource and build tools by running following command.
+Get the source and build tools by running following command.
 ```
 git clone https://github.com/ambiesoft/distSolution
 git clone https://github.com/ambiesoft/SceneExplorer
