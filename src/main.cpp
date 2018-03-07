@@ -183,7 +183,8 @@ int main2(int argc, char *argv[], QApplication& theApp)
 
     QTranslator myappTranslator;
     // QString i18nFile = "i18n_ja_JP";// + QLocale::system().name();
-    QString i18nFile = "i18n_ja";// + QLocale::system().name();
+    // QString i18nFile = "i18n_ja";
+    QString i18nFile = "i18n_" + GetSystemDefaultLang();
 
 	QFileInfo trfi(QCoreApplication::applicationFilePath());
 	QString trdir = pathCombine(trfi.absolutePath(), "translations");

@@ -45,3 +45,4 @@ QString getInifile();
 
 QString GetSortColumnName(SORTCOLUMN sc);
 QString GetAppDir();
+QString GetSystemDefaultLang();

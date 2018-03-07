@@ -23,6 +23,7 @@
 #include <QDesktopServices>
 #include <QSet>
 #include <QCoreApplication>
+#include <QLocale>
 
 #include "../../profile/cpp/Profile/include/ambiesoft.profile.h"
 
@@ -280,3 +281,7 @@ QString GetAppDir()
     return QFileInfo(QCoreApplication::applicationFilePath()).absolutePath();
 }
 
+QString GetSystemDefaultLang()
+{
+    return QLocale::languageToString(QLocale::system().language());
+}
