@@ -9,35 +9,27 @@
     </message>
     <message>
         <source>version</source>
-        <translation>version</translation>
+        <translation>バージョン</translation>
     </message>
     <message>
         <source>copyright</source>
         <translation>copyright</translation>
     </message>
     <message>
-        <source>http://example.com</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Tab 1</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Tab 2</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>Page</source>
-        <translation></translation>
-    </message>
-    <message>
-        <source>webpage</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>development</source>
-        <translation>開発</translation>
+        <translation type="vanished">開発</translation>
+    </message>
+    <message>
+        <source>License</source>
+        <translation>ライセンス</translation>
+    </message>
+    <message>
+        <source>GPLv3</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Component Version</source>
+        <translation>コンポーネント バージョン</translation>
     </message>
 </context>
 <context>
@@ -91,7 +83,7 @@
     </message>
     <message>
         <source>Task</source>
-        <translation>タスク</translation>
+        <translation type="vanished">タスク</translation>
     </message>
     <message>
         <source>&amp;View</source>
@@ -367,15 +359,15 @@
     </message>
     <message>
         <source>Failed to get document directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>ドキュメントディレクトリの取得に失敗しました。</translation>
     </message>
     <message>
         <source>Also remove from external media</source>
-        <translation type="unfinished"></translation>
+        <translation>外部メディアからも削除する</translation>
     </message>
     <message>
         <source>Do you want to remove &quot;%1&quot; from database?</source>
-        <translation type="unfinished"></translation>
+        <translation>データベースから &quot;%1&quot; を削除しますか？</translation>
     </message>
     <message>
         <source>Directory or name is empty.</source>
@@ -565,6 +557,18 @@
         <source>Done</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Sort by &amp;last access</source>
+        <translation>オープン時刻でソート(&amp;L)</translation>
+    </message>
+    <message>
+        <source>Show &amp;missing files</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Failed to start new process &quot;%1&quot;.</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Option</name>
@@ -574,78 +578,78 @@
     </message>
     <message>
         <source>Thread count of &amp;iterating direcotry:</source>
-        <translation type="unfinished"></translation>
+        <translation>ディレクトリ列挙のスレッド数(&amp;I):</translation>
     </message>
     <message>
         <source>Thread count of &amp;creating thumbnail:</source>
-        <translation type="unfinished"></translation>
+        <translation>サムネイル作成のスレッド数(&amp;C):</translation>
     </message>
     <message>
         <source>&amp;Image cache:</source>
-        <translation type="unfinished"></translation>
+        <translation>画像キャッシュ(&amp;I):</translation>
     </message>
     <message>
         <source>&amp;Never</source>
-        <translation type="unfinished"></translation>
+        <translation>なし(&amp;N)</translation>
     </message>
     <message>
         <source>&amp;Per folder selections</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>&amp;Always</source>
-        <translation type="unfinished"></translation>
+        <translation>常に(&amp;A)</translation>
     </message>
     <message>
         <source>&amp;Database directory:</source>
-        <translation type="unfinished"></translation>
+        <translation>データベースディレクトリ(&amp;D):</translation>
     </message>
     <message>
         <source>...</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Enable</source>
-        <translation type="unfinished"></translation>
+        <translation>有効</translation>
     </message>
     <message>
         <source>Open &amp;last document:</source>
-        <translation type="unfinished"></translation>
+        <translation>最後に開いたドキュメントを開く(&amp;L):</translation>
     </message>
     <message>
         <source>FF&amp;probe:</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>FF&amp;mpeg:</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Use custom database directory:</source>
-        <translation type="unfinished"></translation>
+        <translation>カスタムデータベースディレクトリを使う:</translation>
     </message>
     <message>
         <source>Thumbnail count per item:</source>
-        <translation type="unfinished"></translation>
+        <translation>最大サムネイル数:</translation>
     </message>
     <message>
         <source>Limit items:</source>
-        <translation type="unfinished"></translation>
+        <translation>最大数:</translation>
     </message>
     <message>
         <source>Enab&amp;le</source>
-        <translation type="unfinished"></translation>
+        <translation>有効(&amp;L)</translation>
     </message>
     <message>
         <source>Number of rows:</source>
-        <translation type="unfinished"></translation>
+        <translation>行の数:</translation>
     </message>
 </context>
 <context>
     <name>OptionDialog</name>
     <message>
         <source>option</source>
-        <translation type="unfinished"></translation>
+        <translation>オプション</translation>
     </message>
 </context>
 <context>
@@ -745,6 +749,18 @@
         <source>No file selected.</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <source>Enable</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>&amp;Count as Open:</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Are you sure you want to remove &quot;%1&quot;?</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>OptionFontDialog</name>
@@ -841,6 +857,10 @@
     </message>
     <message>
         <source>move to trash failed</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>Last Access</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

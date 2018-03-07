@@ -149,7 +149,7 @@ QString size_human(const qint64& size)
         unit = i.next();
         num /= 1024.0;
     }
-    return QString().setNum(num,'f',2)+ " " +unit;
+    return QString().setNum(num,'f',2)+ "" +unit;
 }
 
 QString filetime_human(const qint64& filetime)
@@ -212,7 +212,7 @@ QString TableModel::GetTitleText(TableItemDataPointer item) const
 QString TableModel::GetInfoText(TableItemDataPointer item) const
 {
     QString ret;
-    static const char* sep = "   ";
+    static const char* sep = " ";
 
     ret.append(size_human(item->getSize()));
 	ret.append(sep);

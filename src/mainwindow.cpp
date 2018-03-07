@@ -162,6 +162,9 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
     // tool bar show missing
     tbShowNonExistant_ = new QToolButton(ui->mainToolBar);
     tbShowNonExistant_->setText(tr("Show missing files"));
+    tbShowNonExistant_->setIcon(QIcon(":/images/missing.png"));
+    //pixmap = style()->standardPixmap(QStyle::SP_MediaPlay);
+
     tbShowNonExistant_->setCheckable(true);
     QObject::connect(tbShowNonExistant_, SIGNAL(toggled(bool)),
                      this, SLOT(on_action_ShowMissingClicked()));

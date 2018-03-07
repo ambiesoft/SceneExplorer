@@ -1,5 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>resource/license.html</file>
+        <file>images/bottom.png</file>
+        <file>images/missing.png</file>
     </qresource>
 </RCC>

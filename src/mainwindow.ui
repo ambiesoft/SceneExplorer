@@ -432,6 +432,10 @@
    </property>
   </action>
   <action name="action_Bottom">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/images/bottom.png</normaloff>:/images/bottom.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Bottom</string>
    </property>
@@ -573,6 +577,8 @@
    <header>directoryentry.h</header>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="resource.qrc"/>
+ </resources>
  <connections/>
 </ui>
