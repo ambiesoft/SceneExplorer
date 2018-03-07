@@ -118,7 +118,7 @@ linux-g++ {
 }
 
 
-TRANSLATIONS += translations/i18n_ja.ts
+TRANSLATIONS += translations/i18n_Japanese.ts
 
 RESOURCES += \
     resource.qrc
