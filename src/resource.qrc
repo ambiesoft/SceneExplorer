@@ -3,5 +3,9 @@
         <file>resource/license.html</file>
         <file>images/bottom.png</file>
         <file>images/missing.png</file>
+        <file>images/research.png</file>
+        <file>images/eraser.png</file>
+        <file>images/settings.png</file>
+        <file>images/sort-by-alphabet.png</file>
     </qresource>
 </RCC>

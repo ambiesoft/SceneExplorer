@@ -87,6 +87,9 @@ AboutDialog::AboutDialog(QWidget *parent) :
             "<a href=https://www.gnu.org/licenses/gpl-3.0.html>GPLv3</a> and its "
             "source can be downloaded <a href=https://github.com/ambiesoft/SceneExplorer>here</a><br />";
     aboutText += "Source code: https://github.com/FFmpeg/FFmpeg/tree/40102a21374096ce0ba05c67c6e7474f176af2d0</p>";
+
+    aboutText += "<h1>Icons</h1>";
+    aboutText += "<div>Icons made by <a href=\"http://www.freepik.com\" title=\"Freepik\">Freepik</a> from <a href=\"https://www.flaticon.com/\" title=\"Flaticon\">www.flaticon.com</a> is licensed by <a href=\"http://creativecommons.org/licenses/by/3.0/\" title=\"Creative Commons BY 3.0\" target=\"_blank\">CC 3.0 BY</a></div>";
     ui->tbAbout->setHtml(aboutText);
 
 

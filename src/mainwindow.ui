@@ -370,6 +370,10 @@
    </property>
   </action>
   <action name="action_Options">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/images/settings.png</normaloff>:/images/settings.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;General Otions...</string>
    </property>
@@ -412,6 +416,10 @@
    </property>
   </action>
   <action name="actionSort_by_file_name">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/images/sort-by-alphabet.png</normaloff>:/images/sort-by-alphabet.png</iconset>
+   </property>
    <property name="text">
     <string>Sort by &amp;file name</string>
    </property>
@@ -536,11 +544,19 @@
    </property>
   </action>
   <action name="action_Find">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/images/research.png</normaloff>:/images/research.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Find</string>
    </property>
   </action>
   <action name="action_Clear">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/images/eraser.png</normaloff>:/images/eraser.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Clear</string>
    </property>

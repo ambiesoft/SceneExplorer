@@ -8,7 +8,7 @@ If you are using Qt under the LGPLv3, there are a couple of obligations you will
 
 Firstly, you have to note that some Qt open source modules are not available for LGPLv3 license, for example Qt Charts, Qt Data Visualization and Qt Virtual Keyboard. These modules are only available under GPLv3 for open source usage.
 You will need to deliver the complete source code of Qt (including all modifications you did or applied) to your users/customers. Alternatively you need to provide a written offer with instructions on how to get the source code. Please also note that this has to be under your control, so a link to the source code provided by the Qt Project or Qt Company is not sufficient.
-The LGPL allows you to keep the source code of your application private as long as it is ìwork that usesî the library. Dynamic linking is usually recommended here.
+The LGPL allows you to keep the source code of your application private as long as it is ìwork that usesÅEthe library. Dynamic linking is usually recommended here.
 The user of your application has to be able to re-link your application against a different or modified version of the Qt library. With LGPLv3 it is also explicitly stated that the user needs to be able to run the re-linked binary on itís intended target device. It is your obligation to provide the user with all necessary tools to enable this process. For embedded devices, this includes making the full toolchain used to compile the library available to users. For parts licensed under LGPLv3 you are obliged to provide full instructions on how to install the modified library on the target device (this is not clearly stated with LGPLv2.1, although running the application against the modified version of the library clearly is the stated intention of the license).
 The user of an application or device using LGPL licensed software has to be notified of their rights by providing a copy of the LGPL license to the end user and displaying a prominent notice about your usage of LGPL licensed software.
 The above freedoms cannot in any way be restricted by other licensing terms. If an application is not fully following all the obligations as outlined above, it is not allowed to be distributed at all.
@@ -55,3 +55,11 @@ own FFmpeg, and where the relevant owners can be found.
 example LAME).
 18. Make sure your program is not using any GPL libraries (notably libx264).
 
+
+
+---icon
+<div>Icons made by <a href="http://www.freepik.com" title="Freepik">Freepik</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
+
+<div>Icons made by <a href="https://www.flaticon.com/authors/kiranshastry" title="Kiranshastry">Kiranshastry</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
+<div>Icons made by <a href="https://www.flaticon.com/authors/gregor-cresnar" title="Gregor Cresnar">Gregor Cresnar</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
+<div>Icons made by <a href="https://www.flaticon.com/authors/dave-gandy" title="Dave Gandy">Dave Gandy</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a> is licensed by <a href="http://creativecommons.org/licenses/by/3.0/" title="Creative Commons BY 3.0" target="_blank">CC 3.0 BY</a></div>
