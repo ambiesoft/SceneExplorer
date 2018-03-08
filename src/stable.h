@@ -91,6 +91,7 @@
 #include <QTextBlock>
 #include <QTranslator>
 #include <QLibraryInfo>
+#include <QRegExp>
 
 #endif // __cplusplus
 

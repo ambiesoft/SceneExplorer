@@ -55,6 +55,7 @@ private:
 	bool bShowMissing_ = false;
 
     QTableView* parent_;
+    QString ExtractInfoText(TableItemDataPointer item, const QString& str) const;
     QString GetTitleText(TableItemDataPointer item) const;
     QString GetInfoText(TableItemDataPointer item) const;
 

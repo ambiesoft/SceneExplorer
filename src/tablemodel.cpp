@@ -26,6 +26,7 @@
 #include <QSharedPointer>
 #include <QMap>
 #include <QDateTime>
+#include <QRegExp>
 
 #include "consts.h"
 #include "helper.h"
@@ -209,41 +210,110 @@ QString TableModel::GetTitleText(TableItemDataPointer item) const
 
     return ret;
 }
+QString TableModel::ExtractInfoText(TableItemDataPointer item, const QString& str) const
+{
+    static QRegExp rx("(\\$\\{\\w+\\})");
+    QString result;
+    int prevpos = 0;
+    int pos = 0;
+    int i=0;
+    while ((pos = rx.indexIn(str, pos)) != -1)
+    {
+        result += str.mid(prevpos,pos-prevpos);
+        int matchedlen = rx.matchedLength();
+        QString s = rx.cap(i++);
+        if(s=="${name}")
+        {
+            result += item->getMovieFileName();
+        }
+        else if(s=="${size}")
+        {
+            result += size_human(item->getSize());
+        }
+        else if(s=="${wtime}")
+        {
+            result += filetime_human(item->getWtime());
+        }
+        else if(s=="${duration}")
+        {
+            result += duration_human(item->getDuration());
+        }
+        else if(s=="${format}")
+        {
+            result += item->getFormat();
+        }
+        else if(s=="${bitrate}")
+        {
+            result += bitrate_human(item->getBitrate());
+        }
+        else if(s=="${vcodec}")
+        {
+            result += item->getVcodec();
+        }
+        else if(s=="${acodec}")
+        {
+            result += item->getAcodec();
+        }
+        else if(s=="${resolution}")
+        {
+            result += resolution_human(item->getVWidth(),item->getVHeight());
+        }
+        else if(s=="${directory}")
+        {
+            result += item->getMovieDirectory();
+        }
+        else if(s=="${opencount}")
+        {
+            result += opencount_human(item->getOpenCount());
+        }
+        else
+        {
+            result += str.mid(pos, matchedlen);
+        }
+        pos += matchedlen;
+        prevpos = pos;
+    }
+    result += str.mid(prevpos);
+    return result;
+}
 QString TableModel::GetInfoText(TableItemDataPointer item) const
 {
-    QString ret;
-    static const char* sep = " ";
+    QString str = "${size}, name=\"${name}\"";
+    return ExtractInfoText(item, str);
 
-    ret.append(size_human(item->getSize()));
-	ret.append(sep);
+//    QString ret;
+//    static const char* sep = " ";
 
-    ret.append(filetime_human(item->getWtime()));
-	ret.append(sep);
+//    ret.append(size_human(item->getSize()));
+//	ret.append(sep);
 
-    ret.append(duration_human(item->getDuration()));
-    ret.append(sep);
+//    ret.append(filetime_human(item->getWtime()));
+//	ret.append(sep);
 
-    ret.append(dq(item->getFormat()));
-    ret.append(sep);
+//    ret.append(duration_human(item->getDuration()));
+//    ret.append(sep);
 
-    ret.append(bitrate_human(item->getBitrate()));
-    ret.append(sep);
+//    ret.append(dq(item->getFormat()));
+//    ret.append(sep);
 
-    ret.append(item->getVcodec());
-    ret.append(sep);
-    ret.append(resolution_human(item->getVWidth(),item->getVHeight()));
-    ret.append(sep);
+//    ret.append(bitrate_human(item->getBitrate()));
+//    ret.append(sep);
 
-    ret.append(item->getAcodec());
-	ret.append(sep);
+//    ret.append(item->getVcodec());
+//    ret.append(sep);
+//    ret.append(resolution_human(item->getVWidth(),item->getVHeight()));
+//    ret.append(sep);
 
-    ret.append(dq(item->getMovieDirectory()));
-    ret.append(sep);
+//    ret.append(item->getAcodec());
+//	ret.append(sep);
 
-    ret.append(opencount_human(item->getOpenCount()));
-    // ret.append(sep);
+//    ret.append(dq(item->getMovieDirectory()));
+//    ret.append(sep);
 
-    return ret;
+//    ret.append(opencount_human(item->getOpenCount()));
+//    // ret.append(sep);
+
+//    return ret;
 }
 
 QVariant TableModel::data(const QModelIndex &index, int role) const
