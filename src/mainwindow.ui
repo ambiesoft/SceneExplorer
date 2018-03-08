@@ -372,7 +372,7 @@
   <action name="action_Options">
    <property name="icon">
     <iconset resource="resource.qrc">
-     <normaloff>:/images/settings.png</normaloff>:/images/settings.png</iconset>
+     <normaloff>:/resource/images/settings.png</normaloff>:/resource/images/settings.png</iconset>
    </property>
    <property name="text">
     <string>&amp;General Otions...</string>
@@ -418,7 +418,7 @@
   <action name="actionSort_by_file_name">
    <property name="icon">
     <iconset resource="resource.qrc">
-     <normaloff>:/images/sort-by-alphabet.png</normaloff>:/images/sort-by-alphabet.png</iconset>
+     <normaloff>:/resource/images/sort-by-alphabet.png</normaloff>:/resource/images/sort-by-alphabet.png</iconset>
    </property>
    <property name="text">
     <string>Sort by &amp;file name</string>
@@ -435,6 +435,10 @@
    </property>
   </action>
   <action name="action_Top">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/resource/images/top.png</normaloff>:/resource/images/top.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Top</string>
    </property>
@@ -442,7 +446,7 @@
   <action name="action_Bottom">
    <property name="icon">
     <iconset resource="resource.qrc">
-     <normaloff>:/images/bottom.png</normaloff>:/images/bottom.png</iconset>
+     <normaloff>:/resource/images/bottom.png</normaloff>:/resource/images/bottom.png</iconset>
    </property>
    <property name="text">
     <string>&amp;Bottom</string>
@@ -546,7 +550,7 @@
   <action name="action_Find">
    <property name="icon">
     <iconset resource="resource.qrc">
-     <normaloff>:/images/research.png</normaloff>:/images/research.png</iconset>
+     <normaloff>:/resource/images/research.png</normaloff>:/resource/images/research.png</iconset>
    </property>
    <property name="text">
     <string>&amp;Find</string>
@@ -555,7 +559,7 @@
   <action name="action_Clear">
    <property name="icon">
     <iconset resource="resource.qrc">
-     <normaloff>:/images/eraser.png</normaloff>:/images/eraser.png</iconset>
+     <normaloff>:/resource/images/eraser.png</normaloff>:/resource/images/eraser.png</iconset>
    </property>
    <property name="text">
     <string>&amp;Clear</string>

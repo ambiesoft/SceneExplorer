@@ -130,6 +130,7 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
 	// ToolButton Sort
 	tbNameSort_ = new QToolButton(ui->mainToolBar);  // intensional leak
 	tbNameSort_->setCheckable(true);
+    tbNameSort_->setIcon(QIcon(":/resource/images/sort-by-alphabet.png"));
 	sortManager_.setToolButton(SORT_FILENAME, tbNameSort_);
 	connect(tbNameSort_, SIGNAL(clicked()),
 		this, SLOT(on_actionSort_by_file_name_triggered()));
@@ -162,7 +163,7 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
     // tool bar show missing
     tbShowNonExistant_ = new QToolButton(ui->mainToolBar);
     tbShowNonExistant_->setText(tr("Show missing files"));
-    tbShowNonExistant_->setIcon(QIcon(":/images/missing.png"));
+    tbShowNonExistant_->setIcon(QIcon(":/resource/images/missing.png"));
     //pixmap = style()->standardPixmap(QStyle::SP_MediaPlay);
 
     tbShowNonExistant_->setCheckable(true);

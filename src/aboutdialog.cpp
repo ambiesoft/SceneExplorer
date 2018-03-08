@@ -93,11 +93,15 @@ AboutDialog::AboutDialog(QWidget *parent) :
     ui->tbAbout->setHtml(aboutText);
 
 
-    QFile licensefile(":/resource/license.html");
+    QFile licensefile(":/resource/license/GPLv3.html");
     if (licensefile.open(QIODevice::ReadOnly | QIODevice::Text))
     {
         ui->tbLicense->setHtml(QString::fromUtf8(licensefile.readAll().constData()));
         licensefile.close();
+    }
+    else
+    {
+        ui->tbLicense->setText(tr("<Resource not found>"));
     }
 
     QString qtText;

@@ -1,11 +1,12 @@
 <RCC>
     <qresource prefix="/">
-        <file>resource/license.html</file>
-        <file>images/bottom.png</file>
-        <file>images/missing.png</file>
-        <file>images/research.png</file>
-        <file>images/eraser.png</file>
-        <file>images/settings.png</file>
-        <file>images/sort-by-alphabet.png</file>
+        <file>resource/images/bottom.png</file>
+        <file>resource/images/eraser.png</file>
+        <file>resource/images/missing.png</file>
+        <file>resource/images/research.png</file>
+        <file>resource/images/settings.png</file>
+        <file>resource/images/sort-by-alphabet.png</file>
+        <file>resource/license/GPLv3.html</file>
+        <file>resource/images/top.png</file>
     </qresource>
 </RCC>
