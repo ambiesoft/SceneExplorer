@@ -130,29 +130,35 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
 	// ToolButton Sort
 	tbNameSort_ = new QToolButton(ui->mainToolBar);  // intensional leak
 	tbNameSort_->setCheckable(true);
-    tbNameSort_->setIcon(QIcon(":/resource/images/sort-by-alphabet.png"));
-	sortManager_.setToolButton(SORT_FILENAME, tbNameSort_);
+    sortManager_.setToolButton(SORT_FILENAME, tbNameSort_,
+                               QIcon(":/resource/images/sort-by-alphabet.png"),
+                               QIcon(":/resource/images/sort-by-alphabet-rev.png"));
 	connect(tbNameSort_, SIGNAL(clicked()),
 		this, SLOT(on_actionSort_by_file_name_triggered()));
     ui->mainToolBar->insertWidget(ui->placeHolder_Sort, tbNameSort_);
 
     tbSizeSort_ = new QToolButton(ui->mainToolBar);  // intensional leak
     tbSizeSort_->setCheckable(true);
-    sortManager_.setToolButton(SORT_SIZE, tbSizeSort_);
+    sortManager_.setToolButton(SORT_SIZE, tbSizeSort_,
+                               QIcon(":/resource/images/sort-by-size.png"),
+                               QIcon(":/resource/images/sort-by-size-rev.png"));
     connect(tbSizeSort_, SIGNAL(clicked()),
         this, SLOT(on_actionSort_by_file_size_triggered()));
     ui->mainToolBar->insertWidget(ui->placeHolder_Sort, tbSizeSort_);
 
     tbWtime_ = new QToolButton(ui->mainToolBar);  // intensional leak
     tbWtime_->setCheckable(true);
-    sortManager_.setToolButton(SORT_WTIME, tbWtime_);
+    sortManager_.setToolButton(SORT_WTIME, tbWtime_,
+                               QIcon(":/resource/images/sort-wtime.png"),
+                               QIcon(":/resource/images/sort-wtime-rev.png"));
     connect(tbWtime_, SIGNAL(clicked()),
         this, SLOT(on_actionSort_by_wtime_triggered()));
     ui->mainToolBar->insertWidget(ui->placeHolder_Sort, tbWtime_);
-
     tbOpenCount_ = new QToolButton(ui->mainToolBar);  // intensional leak
     tbOpenCount_->setCheckable(true);
-    sortManager_.setToolButton(SORT_OPENCOUNT, tbOpenCount_);
+    sortManager_.setToolButton(SORT_OPENCOUNT, tbOpenCount_,
+                               QIcon(":/resource/images/sort-opencount.png"),
+                               QIcon(":/resource/images/sort-opencount-rev.png"));
     connect(tbOpenCount_, SIGNAL(clicked()),
         this, SLOT(on_actionSort_by_open_count_triggered()));
     ui->mainToolBar->insertWidget(ui->placeHolder_Sort, tbOpenCount_);
@@ -336,9 +342,9 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
 MainWindow::SortManager::SortManager()
 {
 	sort_ = SORT_NONE;
-    for (size_t i = 0; i < (sizeof(rev_)/sizeof(rev_[0])); ++i)
+    for (size_t i = 0; i < (sizeof(ascending_)/sizeof(ascending_[0])); ++i)
 	{
-		rev_[i] = true;
+        ascending_[i] = false;
 		tbs_[i] = nullptr;
 	}
 }

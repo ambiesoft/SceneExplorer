@@ -425,11 +425,19 @@
    </property>
   </action>
   <action name="actionSort_by_file_size">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/resource/images/sort-by-size.png</normaloff>:/resource/images/sort-by-size.png</iconset>
+   </property>
    <property name="text">
     <string>Sort by file &amp;size</string>
    </property>
   </action>
   <action name="actionSort_by_wtime">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/resource/images/sort-wtime-rev.png</normaloff>:/resource/images/sort-wtime-rev.png</iconset>
+   </property>
    <property name="text">
     <string>Sort by wtime</string>
    </property>
@@ -478,6 +486,10 @@
    </property>
   </action>
   <action name="actionSort_by_open_count">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/resource/images/sort-opencount-rev.png</normaloff>:/resource/images/sort-opencount-rev.png</iconset>
+   </property>
    <property name="text">
     <string>Sort by open count</string>
    </property>
@@ -583,6 +595,10 @@
   <action name="actionShow_missing_files">
    <property name="checkable">
     <bool>true</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/resource/images/missing.png</normaloff>:/resource/images/missing.png</iconset>
    </property>
    <property name="text">
     <string>Show &amp;missing files</string>

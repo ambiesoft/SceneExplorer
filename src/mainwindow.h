@@ -266,7 +266,9 @@ protected:
 	class SortManager
 	{
 		SORTCOLUMN sort_;
-		bool rev_[COUNT_SORTCOLUMN];
+        bool ascending_[COUNT_SORTCOLUMN];
+        QIcon iconsAscend_[COUNT_SORTCOLUMN];
+        QIcon iconsDescend_[COUNT_SORTCOLUMN];
 		QToolButton* tbs_[COUNT_SORTCOLUMN];
 	public:
 		SortManager();
@@ -276,13 +278,20 @@ protected:
 			return sort_;
 		}
 		bool GetCurrentRev() const {
-			return rev_[sort_];
+            return ascending_[sort_];
 		}
-		void setToolButton(SORTCOLUMN sc, QToolButton* tb);
+        void setToolButton(SORTCOLUMN sc,
+                           QToolButton* tb,
+                           const QIcon& iconNormal,
+                           const QIcon& iconRev);
+//        void setToolButton(SORTCOLUMN sc,
+//                           QToolButton* tb) {
+//            setToolButton(sc,tb,QIcon(),QIcon());
+//        }
 
 		void InitCurrentSort(SORTCOLUMN sc, bool b) {
 			sort_ = sc;
-			rev_[sort_] = b;
+            ascending_[sort_] = b;
 			UpdateButtonText();
 		}
 	} sortManager_;
