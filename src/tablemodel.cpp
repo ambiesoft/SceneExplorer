@@ -48,10 +48,9 @@ static QString dq(const QString& s)
 
 	return "\"" + s + "\"";
 }
-TableModel::TableModel(QTableView *parent)
-    :QAbstractTableModel(parent)
+TableModel::TableModel(QTableView *parent, IMainWindow* mainWindow)
+    :QAbstractTableModel(parent), parent_(parent), mainWindow_(mainWindow)
 {
-    parent_=parent;
 }
 void TableModel:: AppendData(TableItemDataPointer pItemData, const bool enableUpdate)
 {
@@ -199,16 +198,26 @@ static QString opencount_human(int count)
 }
 QString TableModel::GetTitleText(TableItemDataPointer item) const
 {
-    static const char* sep = "   ";
+    return ExtractInfoText(item, titleTemplate_);
+//    static const char* sep = "   ";
 
-    if(GetSortColumn()==SORT_FILENAME)
-        return item->getMovieFileName();
+//    if(GetSortColumn()==SORT_FILENAME)
+//        return item->getMovieFileName();
 
-    QString ret = GetSortColumnValue(item);
-    ret.append(sep);
-    ret.append(item->getMovieFileName());
+//    QString ret = GetSortColumnValue(item);
+//    ret.append(sep);
+//    ret.append(item->getMovieFileName());
 
-    return ret;
+//    return ret;
+}
+
+static bool checkDup(const QString& s, QSet<QString>& map)
+{
+    if(map.contains(s))
+        return false;
+
+    map.insert(s);
+    return true;
 }
 QString TableModel::ExtractInfoText(TableItemDataPointer item, const QString& str) const
 {
@@ -216,13 +225,14 @@ QString TableModel::ExtractInfoText(TableItemDataPointer item, const QString& st
     QString result;
     int prevpos = 0;
     int pos = 0;
-    int i=0;
+    // int i=0;
+    QSet<QString> mapExist;
     while ((pos = rx.indexIn(str, pos)) != -1)
     {
         result += str.mid(prevpos,pos-prevpos);
         int matchedlen = rx.matchedLength();
-        QString s = rx.cap(i++);
-        if(s=="${name}")
+        QString s = str.mid(pos,matchedlen);// rx.cap(i++);
+        if(s=="${name}" && checkDup("name", mapExist))
         {
             result += item->getMovieFileName();
         }
@@ -266,6 +276,14 @@ QString TableModel::ExtractInfoText(TableItemDataPointer item, const QString& st
         {
             result += opencount_human(item->getOpenCount());
         }
+        else if(s=="${sortname}")
+        {
+            result += GetSortColumnName(mainWindow_->GetCurrentSort());
+        }
+        else if(s=="${sortvalue}")
+        {
+            result += GetSortColumnValue(mainWindow_->GetCurrentSort(), item);
+        }
         else
         {
             result += str.mid(pos, matchedlen);
@@ -278,8 +296,8 @@ QString TableModel::ExtractInfoText(TableItemDataPointer item, const QString& st
 }
 QString TableModel::GetInfoText(TableItemDataPointer item) const
 {
-    QString str = "${size}, name=\"${name}\"";
-    return ExtractInfoText(item, str);
+    // QString str = "${size}, name=\"${name}\"";
+    return ExtractInfoText(item, infoTemplate_);
 
 //    QString ret;
 //    static const char* sep = " ";
@@ -462,79 +480,80 @@ Qt::ItemFlags TableModel::flags(const QModelIndex &index) const
 }
 
 
-class SortFunctor
+//class SortFunctor
+//{
+//    SORTCOLUMN sc_;
+//    bool rev_;
+
+//	bool compare(const TableItemDataPointer& v1, const TableItemDataPointer& v2) const
+//	{
+//		switch (sc_)
+//		{
+//        case SORTCOLUMN::SORT_FILENAME:
+//			return (v1->getMovieFileFull() < v2->getMovieFileFull());
+//        case SORTCOLUMN::SORT_SIZE:
+//			return (v1->getSize() < v2->getSize());
+//        case SORTCOLUMN::SORT_WTIME:
+//            return (v1->getWtime() < v2->getWtime());
+//        case SORTCOLUMN::SORT_RESOLUTION:
+//            return (v1->getResolutionMultiplied() < v2->getResolutionMultiplied());
+//        case SORTCOLUMN::SORT_DURATION:
+//            return (v1->getDuration() < v2->getDuration());
+//        case SORTCOLUMN::SORT_BITRATE:
+//            return (v1->getBitrate() < v2->getBitrate());
+//        case SORTCOLUMN::SORT_OPENCOUNT:
+//            return (v1->getOpenCount() < v2->getOpenCount());
+//        case SORTCOLUMN::SORT_LASTACCESS:
+//            return (v1->getLastAccess() < v2->getLastAccess());
+//        default:
+//			Q_ASSERT(false);
+//		}
+//		return false;
+//	}
+//public:
+//    SortFunctor(SORTCOLUMN sc,bool rev):
+//        sc_(sc), rev_(rev)
+//    {}
+
+//	bool operator()(const TableItemDataPointer& v1, const TableItemDataPointer& v2) const
+//	{
+//		if (rev_)
+//			return compare(v2, v1);
+//		else
+//			return compare(v1, v2);
+//	}
+
+//};
+
+
+//SORTCOLUMN TableModel::GetSortColumn() const
+//{
+//    return sortColumn_;
+//}
+//void TableModel::SetSortColumn(SORTCOLUMN sc)
+//{
+//    if(sortColumn_ != sc)
+//    {
+//        sortColumn_ = sc;
+//        emit sortParameterChanged(sc,GetSortReverse());
+//    }
+//}
+
+
+
+
+QString TableModel::GetSortColumnValue(SORTCOLUMN sc, TableItemDataPointer item) const
 {
-    SORTCOLUMN sc_;
-    bool rev_;
-
-	bool compare(const TableItemDataPointer& v1, const TableItemDataPointer& v2) const
-	{
-		switch (sc_)
-		{
-        case SORTCOLUMN::SORT_FILENAME:
-			return (v1->getMovieFileFull() < v2->getMovieFileFull());
-        case SORTCOLUMN::SORT_SIZE:
-			return (v1->getSize() < v2->getSize());
-        case SORTCOLUMN::SORT_WTIME:
-            return (v1->getWtime() < v2->getWtime());
-        case SORTCOLUMN::SORT_RESOLUTION:
-            return (v1->getResolutionMultiplied() < v2->getResolutionMultiplied());
-        case SORTCOLUMN::SORT_DURATION:
-            return (v1->getDuration() < v2->getDuration());
-        case SORTCOLUMN::SORT_BITRATE:
-            return (v1->getBitrate() < v2->getBitrate());
-        case SORTCOLUMN::SORT_OPENCOUNT:
-            return (v1->getOpenCount() < v2->getOpenCount());
-        case SORTCOLUMN::SORT_LASTACCESS:
-            return (v1->getLastAccess() < v2->getLastAccess());
-        default:
-			Q_ASSERT(false);
-		}
-		return false;
-	}
-public:
-    SortFunctor(SORTCOLUMN sc,bool rev):
-        sc_(sc), rev_(rev)
-    {}
-
-	bool operator()(const TableItemDataPointer& v1, const TableItemDataPointer& v2) const
-	{
-		if (rev_)
-			return compare(v2, v1);
-		else
-			return compare(v1, v2);
-	}
-
-};
-
-
-SORTCOLUMN TableModel::GetSortColumn() const
-{
-    return sortColumn_;
-}
-void TableModel::SetSortColumn(SORTCOLUMN sc)
-{
-    if(sortColumn_ != sc)
+    switch(sc)
     {
-        sortColumn_ = sc;
-        emit sortParameterChanged(sc,GetSortReverse());
-    }
-}
-
-
-
-
-QString TableModel::GetSortColumnValue(TableItemDataPointer item) const
-{
-    switch(GetSortColumn())
-    {
-    case SORT_FILENAME:return item->getMovieFileFull();
+    case SORT_FILENAME:return item->getMovieFileName();
     case SORT_SIZE:return size_human(item->getSize());
     case SORT_WTIME:return filetime_human(item->getWtime());
     case SORT_RESOLUTION: return resolution_human(item->getVWidth(),item->getVHeight());
     case SORT_DURATION:return duration_human(item->getDuration());
     case SORT_BITRATE:return bitrate_human(item->getBitrate());
     case SORT_OPENCOUNT:return opencount_human(item->getOpenCount());
+    case SORT_LASTACCESS:return filetime_human(item->getLastAccess());
     default :
         Q_ASSERT(false);
 
@@ -542,36 +561,36 @@ QString TableModel::GetSortColumnValue(TableItemDataPointer item) const
     return QString();
 }
 
-bool TableModel::GetSortReverse() const
-{
-    return sortReverse_;
-}
-void TableModel::SetSortReverse(bool rev)
-{
-    if(sortReverse_ != rev)
-    {
-        sortReverse_ = rev;
-        emit sortParameterChanged(GetSortColumn(), rev);
-    }
-}
+//bool TableModel::GetSortReverse() const
+//{
+//    return sortReverse_;
+//}
+//void TableModel::SetSortReverse(bool rev)
+//{
+//    if(sortReverse_ != rev)
+//    {
+//        sortReverse_ = rev;
+//        emit sortParameterChanged(GetSortColumn(), rev);
+//    }
+//}
 
-void TableModel::Sort_obsolete(SORTCOLUMN column, bool rev)
-{
-    SetSortReverse(rev);
-    SetSortColumn(column);
+//void TableModel::Sort_obsolete(SORTCOLUMN column, bool rev)
+//{
+//    SetSortReverse(rev);
+//    SetSortColumn(column);
 
-    SortFunctor func(column,rev);
+//    SortFunctor func(column,rev);
 
-    beginResetModel();
-    std::sort(itemDatas_.begin(), itemDatas_.end(), func);
-    endResetModel();
-}
-void TableModel::Sort_obsolete(SORTCOLUMN column)
-{
-    if(column==GetSortColumn())
-        SetSortReverse(!GetSortReverse());
-    Sort_obsolete(column,GetSortReverse());
-}
+//    beginResetModel();
+//    std::sort(itemDatas_.begin(), itemDatas_.end(), func);
+//    endResetModel();
+//}
+//void TableModel::Sort_obsolete(SORTCOLUMN column)
+//{
+//    if(column==GetSortColumn())
+//        SetSortReverse(!GetSortReverse());
+//    Sort_obsolete(column,GetSortReverse());
+//}
 
 //bool TableModel::RenameEntries(const QString& dir,
 //                   const QStringList& renameOlds,

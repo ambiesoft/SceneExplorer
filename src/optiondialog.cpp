@@ -19,6 +19,7 @@
 #include <QWidget>
 #include <QFileDialog>
 
+#include "consts.h"
 #include "helper.h"
 #include "optiondialog.h"
 
@@ -44,6 +45,9 @@ void OptionDialog::showEvent(QShowEvent *ev)
         ui.cmbThumbCount->setCurrentIndex(1);
     else
         ui.cmbThumbCount->setCurrentIndex(0);
+
+    ui.lineInfoMain->setText(mainText_);
+    ui.lineInfoSub->setText(subText_);
 
     switch(imagecache_)
     {
@@ -82,6 +86,9 @@ void OptionDialog::on_buttonBox_accepted()
     maxff_ = ui.spinBoxThumb->value();
 
     thumbCount_ = ui.cmbThumbCount->currentIndex()==0 ? 3 : 5;
+
+    mainText_ = ui.lineInfoMain->text();
+    subText_ = ui.lineInfoSub->text();
 
     if(ui.rbICNever->isChecked())
         imagecache_=IC_NEVER;
@@ -153,4 +160,14 @@ void OptionDialog::on_chkLimitItems_stateChanged(int arg1)
     bool checked = ui.chkLimitItems->isChecked();
     ui.labelNumberOfRows->setEnabled(checked);
     ui.spinNumberOfRows->setEnabled(checked);
+}
+
+void OptionDialog::on_tbInfoMain_clicked()
+{
+    ui.lineInfoMain->setText(Consts::DEFAULT_ITEM_MAIN_TEXT);
+}
+
+void OptionDialog::on_tbInfoSub_clicked()
+{
+    ui.lineInfoSub->setText(Consts::DEFAULT_ITEM_SUB_TEXT);
 }

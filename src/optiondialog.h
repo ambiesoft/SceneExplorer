@@ -34,6 +34,7 @@ private:
 public:
     OptionDialog(QWidget* parent = nullptr);
 
+    QString mainText_,subText_;
     ImageCacheType imagecache_;
     int maxgd_;
     int maxff_;
@@ -54,6 +55,8 @@ private slots:
     void on_tbffmpeg_clicked();
     void on_chkUseCustomDatabaseDirectory_stateChanged(int arg1);
     void on_chkLimitItems_stateChanged(int arg1);
+    void on_tbInfoMain_clicked();
+    void on_tbInfoSub_clicked();
 };
 
 #endif // OPTIONDIALOG_H

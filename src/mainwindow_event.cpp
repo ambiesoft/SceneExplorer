@@ -43,7 +43,7 @@ void MainWindow::showEvent( QShowEvent* event )
     ui->listTask->setMaximumSize(10000,10000);
 
     directoryChangedCommon();
-    tableSortParameterChanged(tableModel_->GetSortColumn(), tableModel_->GetSortReverse());
+    tableSortParameterChanged(sortManager_.GetCurrentSort(), sortManager_.GetCurrentRev());  // tableModel_->GetSortColumn(), tableModel_->GetSortReverse());
 }
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
@@ -85,6 +85,8 @@ void MainWindow::closeEvent(QCloseEvent *event) {
     settings_.setValue(Consts::KEY_MAX_THUMBNAIL_THREADCOUNT, optionThreadcountThumbnail_);
     settings_.setValue(Consts::KEY_THUMBNAIL_COUNT, optionThumbCount_);
 
+    settings_.setValue(Consts::KEY_TITLE_TEXT_TEMPLATE, tableModel_->GetTitleTextTemplate());
+    settings_.setValue(Consts::KEY_INFO_TEXT_TEMPLATE, tableModel_->GetInfoTextTemplate());
     settings_.setValue(Consts::KEY_IMAGECACHETYPE, (int)tableModel_->GetImageCache());
 
     Extension::Save(settings_);

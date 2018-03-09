@@ -32,6 +32,7 @@
 #include "externaltoolitem.h"
 #include "document.h"
 #include "blockedbool.h"
+#include "imainwindow.h"
 
 class QThreadPool;
 class QLabel;
@@ -50,7 +51,7 @@ namespace Ui {
 class MainWindow;
 }
 
-class MainWindow : public QMainWindow
+class MainWindow : public QMainWindow, IMainWindow
 {
     Q_OBJECT
 
@@ -301,6 +302,9 @@ protected:
     QToolButton* tbWtime_ = nullptr;
     QToolButton* tbOpenCount_ = nullptr;
 
+    virtual SORTCOLUMN GetCurrentSort() {
+        return sortManager_.GetCurrentSort();
+    }
 	QToolButton* tbLabel_ = nullptr;
 	
     void on_ShowMissingClicked_common(bool nNextCheck);

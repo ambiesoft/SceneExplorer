@@ -82,6 +82,8 @@ void MainWindow::on_action_Options_triggered()
     dlg.maxgd_ = optionThreadcountGetDir_;
     dlg.maxff_ = optionThreadcountThumbnail_;
     dlg.thumbCount_ = optionThumbCount_;
+    dlg.mainText_ = tableModel_->GetTitleTextTemplate();
+    dlg.subText_ = tableModel_->GetInfoTextTemplate();
     dlg.imagecache_ = tableModel_->GetImageCache();
     dlg.useCustomDBDir_ = settings_.valueBool(Consts::KEY_USE_CUSTOMDATABASEDIR);
     bool prevUseCustomDBDir = dlg.useCustomDBDir_;
@@ -99,6 +101,8 @@ void MainWindow::on_action_Options_triggered()
     optionThreadcountThumbnail_ = dlg.maxff_;
     optionThumbCount_ = dlg.thumbCount_;
     tableModel_->SetColumnCountImage(dlg.thumbCount_);
+    tableModel_->SetTitleTextTemplate(dlg.mainText_);
+    tableModel_->SetInfoTextTemplate(dlg.subText_);
     tableModel_->SetImageCache(dlg.imagecache_);
     settings_.setValue(Consts::KEY_LIMIT_ITEMS, dlg.limitItems_);
     settings_.setValue(Consts::KEY_LIMIT_NUMBEROFROWS, dlg.maxRows_);

@@ -87,7 +87,8 @@ HEADERS += \
     optionextension.h \
     document.h \
     ffmpeg.h \
-    aboutdialog.h
+    aboutdialog.h \
+    imainwindow.h
 
 FORMS += \
         mainwindow.ui \

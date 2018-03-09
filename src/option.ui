@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>562</width>
-    <height>361</height>
+    <height>405</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -40,7 +40,7 @@
    <item row="3" column="1">
     <widget class="QSpinBox" name="spinBoxThumb"/>
    </item>
-   <item row="10" column="0">
+   <item row="12" column="0">
     <widget class="QLabel" name="label">
      <property name="text">
       <string>&amp;Image cache:</string>
@@ -50,7 +50,7 @@
      </property>
     </widget>
    </item>
-   <item row="18" column="1">
+   <item row="20" column="1">
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -60,7 +60,7 @@
      </property>
     </widget>
    </item>
-   <item row="16" column="1">
+   <item row="18" column="1">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -73,21 +73,21 @@
      </property>
     </spacer>
    </item>
-   <item row="10" column="1">
+   <item row="12" column="1">
     <widget class="QRadioButton" name="rbICNever">
      <property name="text">
       <string>&amp;Never</string>
      </property>
     </widget>
    </item>
-   <item row="11" column="1">
+   <item row="13" column="1">
     <widget class="QRadioButton" name="rbICPerfolder">
      <property name="text">
       <string>&amp;Per folder selections</string>
      </property>
     </widget>
    </item>
-   <item row="12" column="1">
+   <item row="14" column="1">
     <widget class="QRadioButton" name="rbICAlways">
      <property name="text">
       <string>&amp;Always</string>
@@ -121,14 +121,14 @@
      </item>
     </layout>
    </item>
-   <item row="15" column="1">
+   <item row="17" column="1">
     <widget class="QCheckBox" name="chkOpenLastDocument">
      <property name="text">
       <string>Enable</string>
      </property>
     </widget>
    </item>
-   <item row="15" column="0">
+   <item row="17" column="0">
     <widget class="QLabel" name="labelOpenLastDocument">
      <property name="text">
       <string>Open &amp;last document:</string>
@@ -164,7 +164,11 @@
       <number>0</number>
      </property>
      <item>
-      <widget class="QLineEdit" name="lineffprobe"/>
+      <widget class="QLineEdit" name="lineffprobe">
+       <property name="toolTip">
+        <string>Keep empty to use default</string>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QToolButton" name="tbffprobe">
@@ -181,7 +185,11 @@
       <number>0</number>
      </property>
      <item>
-      <widget class="QLineEdit" name="lineffmpeg"/>
+      <widget class="QLineEdit" name="lineffmpeg">
+       <property name="toolTip">
+        <string>Keep empty to use default</string>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QToolButton" name="tbffmpeg">
@@ -222,7 +230,7 @@
    <item row="5" column="1">
     <widget class="QComboBox" name="cmbThumbCount"/>
    </item>
-   <item row="13" column="0">
+   <item row="15" column="0">
     <widget class="QLabel" name="labelLimit">
      <property name="text">
       <string>Limit items:</string>
@@ -232,14 +240,14 @@
      </property>
     </widget>
    </item>
-   <item row="13" column="1">
+   <item row="15" column="1">
     <widget class="QCheckBox" name="chkLimitItems">
      <property name="text">
       <string>Enab&amp;le</string>
      </property>
     </widget>
    </item>
-   <item row="14" column="0">
+   <item row="16" column="0">
     <widget class="QLabel" name="labelNumberOfRows">
      <property name="text">
       <string>Number of rows:</string>
@@ -249,7 +257,7 @@
      </property>
     </widget>
    </item>
-   <item row="14" column="1">
+   <item row="16" column="1">
     <widget class="QSpinBox" name="spinNumberOfRows">
      <property name="minimum">
       <number>1</number>
@@ -259,11 +267,72 @@
      </property>
     </widget>
    </item>
+   <item row="10" column="0">
+    <widget class="QLabel" name="labelInfoMain">
+     <property name="text">
+      <string>Item Title:</string>
+     </property>
+     <property name="buddy">
+      <cstring>lineInfoMain</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="11" column="0">
+    <widget class="QLabel" name="labelInfoSub">
+     <property name="text">
+      <string>Item Information:</string>
+     </property>
+     <property name="buddy">
+      <cstring>lineInfoSub</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="10" column="1">
+    <layout class="QHBoxLayout" name="hlInfoMain">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="QLineEdit" name="lineInfoMain"/>
+     </item>
+     <item>
+      <widget class="QToolButton" name="tbInfoMain">
+       <property name="toolTip">
+        <string>Reset to default</string>
+       </property>
+       <property name="text">
+        <string>&gt;&gt;</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="11" column="1">
+    <layout class="QHBoxLayout" name="hlInfoSub">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="QLineEdit" name="lineInfoSub"/>
+     </item>
+     <item>
+      <widget class="QToolButton" name="tbInfoSub">
+       <property name="toolTip">
+        <string>Reset to default</string>
+       </property>
+       <property name="text">
+        <string>&gt;&gt;</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
   </layout>
  </widget>
  <tabstops>
   <tabstop>spinBoxGetDir</tabstop>
   <tabstop>spinBoxThumb</tabstop>
+  <tabstop>cmbThumbCount</tabstop>
   <tabstop>lineffprobe</tabstop>
   <tabstop>tbffprobe</tabstop>
   <tabstop>lineffmpeg</tabstop>
@@ -271,9 +340,15 @@
   <tabstop>chkUseCustomDatabaseDirectory</tabstop>
   <tabstop>lineDBDir</tabstop>
   <tabstop>tbDBDir</tabstop>
+  <tabstop>lineInfoMain</tabstop>
+  <tabstop>tbInfoMain</tabstop>
+  <tabstop>lineInfoSub</tabstop>
+  <tabstop>tbInfoSub</tabstop>
   <tabstop>rbICNever</tabstop>
   <tabstop>rbICPerfolder</tabstop>
   <tabstop>rbICAlways</tabstop>
+  <tabstop>chkLimitItems</tabstop>
+  <tabstop>spinNumberOfRows</tabstop>
   <tabstop>chkOpenLastDocument</tabstop>
  </tabstops>
  <resources/>

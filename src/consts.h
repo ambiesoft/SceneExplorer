@@ -50,6 +50,9 @@ namespace Consts
     const char KEY_MAX_THUMBNAIL_THREADCOUNT[] = "maxthumbnailthreadcount";
     const char KEY_THUMBNAIL_COUNT[] = "thumbcount";
 
+    const char KEY_TITLE_TEXT_TEMPLATE[] = "titletexttemplate";
+    const char KEY_INFO_TEXT_TEMPLATE[] = "infotexttemplate";
+
     const char KEY_IMAGECACHETYPE[] = "imagecachetype";
 
 
@@ -90,5 +93,8 @@ namespace Consts
 
     const int UUID_LENGTH=37;
     const int THUMB_FILENAME_LENGTH=42;
+
+    const char DEFAULT_ITEM_MAIN_TEXT[] = "${name}";
+    const char DEFAULT_ITEM_SUB_TEXT[] = "${size}";
 }
 #endif // CONSTS_H

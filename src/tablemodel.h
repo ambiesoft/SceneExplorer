@@ -26,6 +26,7 @@
 
 #include "globals.h"
 #include "tableitemdata.h"
+#include "imainwindow.h"
 
 class QTableView;
 
@@ -45,7 +46,7 @@ class TableModel : public QAbstractTableModel
 public:
 
     // static QString GetSortColumnName(SORTCOLUMN sc);
-    QString GetSortColumnValue(TableItemDataPointer item) const;
+    QString GetSortColumnValue(SORTCOLUMN sc, TableItemDataPointer item) const;
 private:
     QList<TableItemDataPointer> itemDatas_;
     QMap<QString, TableItemDataPointer> mapsFullpathToItem_;
@@ -54,6 +55,7 @@ private:
 
 	bool bShowMissing_ = false;
 
+    IMainWindow* mainWindow_;
     QTableView* parent_;
     QString ExtractInfoText(TableItemDataPointer item, const QString& str) const;
     QString GetTitleText(TableItemDataPointer item) const;
@@ -62,20 +64,20 @@ private:
     // static bool itemDataLessThan(const TableItemDataPointer v1, const TableItemDataPointer v2);
 
     void ClearData();
-    SORTCOLUMN sortColumn_ = SORT_FILENAME;
-    bool sortReverse_ = false;
+    // SORTCOLUMN sortColumn_ = SORT_FILENAME;
+    // bool sortReverse_ = false;
 
     void SetSortColumn(SORTCOLUMN sc);
 
     void SetSortReverse(bool rev);
 public:
-    SORTCOLUMN GetSortColumn() const;
-    bool GetSortReverse() const;
+    //SORTCOLUMN GetSortColumn() const;
+    //bool GetSortReverse() const;
 
     enum TableRole {
         MovieFileFull = Qt::UserRole + 1,
     };
-    TableModel(QTableView *parent);
+    TableModel(QTableView *parent, IMainWindow* mainWindow);
     void AppendData(TableItemDataPointer pItemData, const bool enableUpdate = true);
     // void AppendDatas(const QList<TableItemData*>&v);
 
@@ -84,8 +86,8 @@ public:
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     Qt::ItemFlags flags(const QModelIndex & index) const override ;
 
-    void Sort_obsolete(SORTCOLUMN column);
-    void Sort_obsolete(SORTCOLUMN column, bool rev);
+//    void Sort_obsolete(SORTCOLUMN column);
+//    void Sort_obsolete(SORTCOLUMN column, bool rev);
 //    bool RenameEntries(const QString& dir,
 //                       const QStringList& renameOlds,
 //                       const QStringList& renameNews);
@@ -125,6 +127,20 @@ public:
     ImageCacheType GetImageCache() const {
         return imagecache_;
     }
+    QString titleTemplate_, infoTemplate_;
+    QString GetTitleTextTemplate() const {
+        return titleTemplate_;
+    }
+    QString GetInfoTextTemplate() {
+        return infoTemplate_;
+    }
+    void SetTitleTextTemplate(const QString& s) {
+        titleTemplate_=s;
+    }
+    void SetInfoTextTemplate(const QString& s) {
+        infoTemplate_=s;
+    }
+
     void SetImageCache(ImageCacheType ic) {
         imagecache_=ic;
     }
