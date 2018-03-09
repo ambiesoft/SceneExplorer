@@ -55,8 +55,9 @@ private:
 
 	bool bShowMissing_ = false;
 
-    IMainWindow* mainWindow_;
     QTableView* parent_;
+    IMainWindow* mainWindow_;
+
     QString ExtractInfoText(TableItemDataPointer item, const QString& str) const;
     QString GetTitleText(TableItemDataPointer item) const;
     QString GetInfoText(TableItemDataPointer item) const;
@@ -82,6 +83,7 @@ public:
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override ;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
+    QSize calculateSize(const QModelIndex& index, const QString& str) const;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     Qt::ItemFlags flags(const QModelIndex & index) const override ;
 

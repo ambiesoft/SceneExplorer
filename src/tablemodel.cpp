@@ -336,6 +336,21 @@ QString TableModel::GetInfoText(TableItemDataPointer item) const
 //    return ret;
 }
 
+QSize TableModel::calculateSize(const QModelIndex& index, const QString& str) const
+{
+    int colWidth = parent_->columnWidth(index.column())*columnCountImage_;
+    QSize baseSize(colWidth , 10000);
+
+    QFontMetrics metrics(this->data(index, Qt::FontRole).value<QFont>());
+    QRect outRect = metrics.boundingRect(
+                QRect(QPoint(0, 0), baseSize),
+                Qt::AlignLeft | Qt::TextWordWrap,
+                str); //this->data(index, Qt::DisplayRole).toString());
+
+    // int multi = outRect.width() / parent_->columnWidth(index.column());
+    baseSize.setHeight(outRect.height());
+    return baseSize;
+}
 QVariant TableModel::data(const QModelIndex &index, int role) const
 {
     int actualIndex = index.row()/RowCountPerEntry;
@@ -349,14 +364,6 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
         return itemDatas_[actualIndex]->getMovieFileFull();
     }
 
-// never comes
-//    if(role==Qt::SizeHintRole)
-//    {
-//        if(isFilename)
-//        {
-//            parent_->setSpan(index.row(),0,1,5);
-//        }
-//    }
 
     if(isFilename)
     {
@@ -371,6 +378,8 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
 //                parent_->setSpan(index.row(),0,1,5);
 //                parent_->setSpan(index.row()+3,0,1,5);
 //                parent_->setSpan(index.row()+6,0,1,5);
+                QSize qs = calculateSize(index,GetTitleText(itemDatas_[actualIndex]));
+                parent_->setRowHeight(index.row(), qs.height());
                 return GetTitleText(itemDatas_[actualIndex]); //->getMovieFileName();
             }
             break;
@@ -399,19 +408,11 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
             }
             break;
 
-			case Qt::SizeHintRole:
-			{
-				QSize baseSize(Consts::THUMB_WIDTH * 3, 10000);// getFixedWidth(index.column()));
-				// baseSize.setHeight(10000));//something very high, or the maximum height of your text block
-
-				QFontMetrics metrics(this->data(index, Qt::FontRole).value<QFont>());
-				QRect outRect = metrics.boundingRect(QRect(QPoint(0, 0), baseSize),
-					Qt::AlignLeft,
-					this->data(index, Qt::DisplayRole).toString());
-				baseSize.setHeight(outRect.height());
-				return baseSize;
-			}
-			break;
+            // never comes
+//			case Qt::SizeHintRole:
+//			{
+//			}
+//			break;
         }
     }
     else if(isImage)

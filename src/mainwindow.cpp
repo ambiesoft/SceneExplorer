@@ -67,6 +67,7 @@
 
 #include "extension.h"
 #include "sql.h"
+#include "tableitemdelegate.h"
 
 #include "mainwindow.h"
 
@@ -104,12 +105,18 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
 	//	SLOT(resizeRowsToContents()));
 
     tableModel_=new TableModel(ui->tableView, this);
-	proxyModel_ = new FileMissingFilterProxyModel(ui->tableView);
-	proxyModel_->setSourceModel(tableModel_);
-	// very slow
-	// ui->tableView->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+
+    //static TableItemDelegate* tigate = new TableItemDelegate(ui->tableView);
+    //ui->tableView->setItemDelegateForRow(0,tigate);
+
+
+    proxyModel_ = new FileMissingFilterProxyModel(ui->tableView);
+    proxyModel_->setSourceModel(tableModel_);
+    // very slow
+    // ui->tableView->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     ui->tableView->setModel(proxyModel_);
-	
+
+
     QObject::connect(tableModel_, &TableModel::itemCountChanged,
                      this, &MainWindow::tableItemCountChanged);
     //QObject::connect(tableModel_, &TableModel::sortParameterChanged,
@@ -1400,6 +1407,7 @@ void MainWindow::on_tableView_scrollChanged(int pos)
     {
         QModelIndex mi = proxyModel_->index(i,0);
         proxyModel_->data(mi, Qt::DecorationRole);
+        proxyModel_->data(mi, Qt::DisplayRole);
     }
 
 
@@ -1409,6 +1417,7 @@ void MainWindow::on_tableView_scrollChanged(int pos)
     {
         QModelIndex mi = proxyModel_->index(i,0);
         proxyModel_->data(mi, Qt::DecorationRole);
+        proxyModel_->data(mi, Qt::DisplayRole);
     }
 }
 
