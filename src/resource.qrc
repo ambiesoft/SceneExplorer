@@ -15,5 +15,7 @@
         <file>resource/images/sort-wtime-rev.png</file>
         <file>resource/images/sort-opencount.png</file>
         <file>resource/images/sort-opencount-rev.png</file>
+        <file>resource/images/sort-lastaccess.png</file>
+        <file>resource/images/sort-lastaccess-rev.png</file>
     </qresource>
 </RCC>

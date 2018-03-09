@@ -301,6 +301,7 @@ protected:
     QToolButton* tbSizeSort_ = nullptr;
     QToolButton* tbWtime_ = nullptr;
     QToolButton* tbOpenCount_ = nullptr;
+    QToolButton* tbLastAccess_ = nullptr;
 
     virtual SORTCOLUMN GetCurrentSort() {
         return sortManager_.GetCurrentSort();

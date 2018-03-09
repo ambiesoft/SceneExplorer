@@ -169,6 +169,7 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
     connect(tbWtime_, SIGNAL(clicked()),
         this, SLOT(on_actionSort_by_wtime_triggered()));
     ui->mainToolBar->insertWidget(ui->placeHolder_Sort, tbWtime_);
+
     tbOpenCount_ = new QToolButton(ui->mainToolBar);  // intensional leak
     tbOpenCount_->setCheckable(true);
     sortManager_.setToolButton(SORT_OPENCOUNT, tbOpenCount_,
@@ -177,6 +178,15 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
     connect(tbOpenCount_, SIGNAL(clicked()),
         this, SLOT(on_actionSort_by_open_count_triggered()));
     ui->mainToolBar->insertWidget(ui->placeHolder_Sort, tbOpenCount_);
+
+    tbLastAccess_ = new QToolButton(ui->mainToolBar);  // intensional leak
+    tbLastAccess_->setCheckable(true);
+    sortManager_.setToolButton(SORT_LASTACCESS, tbLastAccess_,
+                               QIcon(":/resource/images/sort-lastaccess.png"),
+                               QIcon(":/resource/images/sort-lastaccess-rev.png"));
+    connect(tbLastAccess_, SIGNAL(clicked()),
+        this, SLOT(on_actionSort_by_last_access_triggered()));
+    ui->mainToolBar->insertWidget(ui->placeHolder_Sort, tbLastAccess_);
 
     ui->mainToolBar->removeAction(ui->placeHolder_Sort);
 

@@ -461,7 +461,10 @@ void MainWindow::SortManager::setToolButton(SORTCOLUMN sc,
                                             const QIcon& iconRev)
 {
 	Q_ASSERT(tbs_[sc] == nullptr);
-	tbs_[sc] = tb;
+    Q_ASSERT(!iconNormal.isNull());
+    Q_ASSERT(!iconRev.isNull());
+
+    tbs_[sc] = tb;
     iconsAscend_[sc] = iconNormal;
     iconsDescend_[sc]=iconRev;
 	tb->setText(GetSortColumnName(sc));
@@ -469,8 +472,9 @@ void MainWindow::SortManager::setToolButton(SORTCOLUMN sc,
 
 void MainWindow::SortManager::onSort(SORTCOLUMN sc)
 {
+    if(sort_==sc)
+        ascending_[sc] = !ascending_[sc];
 	sort_ = sc;
-    ascending_[sc] = !ascending_[sc];
 	UpdateButtonText();
 }
 void MainWindow::SortManager::UpdateButtonText()

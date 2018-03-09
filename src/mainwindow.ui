@@ -588,6 +588,10 @@
    </property>
   </action>
   <action name="actionSort_by_last_access">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/resource/images/sort-lastaccess.png</normaloff>:/resource/images/sort-lastaccess.png</iconset>
+   </property>
    <property name="text">
     <string>Sort by &amp;last access</string>
    </property>
