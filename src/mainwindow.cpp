@@ -95,6 +95,14 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
 	// table
     QObject::connect(ui->tableView->verticalScrollBar(), &QScrollBar::valueChanged,
                      this, &MainWindow::on_tableView_scrollChanged);
+
+	// does not work to wordwrap
+	//connect(
+	//	ui->tableView->horizontalHeader(),
+	//	SIGNAL(sectionResized(int, int, int)),
+	//	ui->tableView,
+	//	SLOT(resizeRowsToContents()));
+
     tableModel_=new TableModel(ui->tableView, this);
 	proxyModel_ = new FileMissingFilterProxyModel(ui->tableView);
 	proxyModel_->setSourceModel(tableModel_);
@@ -104,8 +112,8 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
 	
     QObject::connect(tableModel_, &TableModel::itemCountChanged,
                      this, &MainWindow::tableItemCountChanged);
-    QObject::connect(tableModel_, &TableModel::sortParameterChanged,
-                     this, &MainWindow::tableSortParameterChanged);
+    //QObject::connect(tableModel_, &TableModel::sortParameterChanged,
+    //                 this, &MainWindow::tableSortParameterChanged);
 	// not called
 	// ui->tableView->setItemDelegate(new ImageSizeDelegate(ui->tableView));
 

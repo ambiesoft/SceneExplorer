@@ -67,9 +67,8 @@ private:
     // SORTCOLUMN sortColumn_ = SORT_FILENAME;
     // bool sortReverse_ = false;
 
-    void SetSortColumn(SORTCOLUMN sc);
-
-    void SetSortReverse(bool rev);
+    //void SetSortColumn(SORTCOLUMN sc);
+    //void SetSortReverse(bool rev);
 public:
     //SORTCOLUMN GetSortColumn() const;
     //bool GetSortReverse() const;
@@ -164,7 +163,7 @@ public:
     }
 signals:
     void itemCountChanged();
-    void sortParameterChanged(SORTCOLUMN sc, bool rev);
+    //void sortParameterChanged(SORTCOLUMN sc, bool rev);
 };
 
 class FileMissingFilterProxyModel : public QSortFilterProxyModel

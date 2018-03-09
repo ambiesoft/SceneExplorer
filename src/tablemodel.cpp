@@ -76,8 +76,10 @@ void TableModel:: AppendData(TableItemDataPointer pItemData, const bool enableUp
 
     parent_->setSpan(newRowFilename,0,1,columnCountImage_);
     parent_->setSpan(newRowInfo,0,1,columnCountImage_);
-
-    if(!initColumnWidth_)
+	
+	// parent_->resizeRowsToContents();
+    
+	if(!initColumnWidth_)
     {
         initColumnWidth_=true;
         for(int i=0 ; i < columnCountImage_ ; ++i)
@@ -397,6 +399,19 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
             }
             break;
 
+			case Qt::SizeHintRole:
+			{
+				QSize baseSize(Consts::THUMB_WIDTH * 3, 10000);// getFixedWidth(index.column()));
+				// baseSize.setHeight(10000));//something very high, or the maximum height of your text block
+
+				QFontMetrics metrics(this->data(index, Qt::FontRole).value<QFont>());
+				QRect outRect = metrics.boundingRect(QRect(QPoint(0, 0), baseSize),
+					Qt::AlignLeft,
+					this->data(index, Qt::DisplayRole).toString());
+				baseSize.setHeight(outRect.height());
+				return baseSize;
+			}
+			break;
         }
     }
     else if(isImage)
