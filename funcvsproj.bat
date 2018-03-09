@@ -6,11 +6,11 @@ REM   goto :end
 REM )
 REM call param.bat
 
-if not exist %~dp0\qtroot.bat (
-  echo qtroot.bat not found. Rename qtroot.bat.sample and edit.
-  goto end:
+if not exist %~dp0prepare.bat (
+  echo prepare.bat not exist. Rename prepare.bat.sample and edit it.
+  goto :error
 )
-call %~dp0\qtroot.bat
+call %~dp0prepare.bat
 
 if [%DEL%] == [] (
   echo DEL not defined.
@@ -87,6 +87,7 @@ cd %~dp0
 echo "==== Creating Visual Studio project successful ===="
 
 set PATH=%QTBIN%;%PATH%
+echo launching %DEVENV% %VCXPROJ%
 start "" %DEVENV% %VCXPROJ%
 exit /b
 
