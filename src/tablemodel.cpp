@@ -348,7 +348,7 @@ QSize TableModel::calculateSize(const QModelIndex& index, const QString& str) co
                 str); //this->data(index, Qt::DisplayRole).toString());
 
     // int multi = outRect.width() / parent_->columnWidth(index.column());
-    baseSize.setHeight(outRect.height());
+    baseSize.setHeight(outRect.height() + 5);
     return baseSize;
 }
 QVariant TableModel::data(const QModelIndex &index, int role) const
@@ -378,9 +378,10 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
 //                parent_->setSpan(index.row(),0,1,5);
 //                parent_->setSpan(index.row()+3,0,1,5);
 //                parent_->setSpan(index.row()+6,0,1,5);
-                QSize qs = calculateSize(index,GetTitleText(itemDatas_[actualIndex]));
+				QString titleText = GetTitleText(itemDatas_[actualIndex]);
+                QSize qs = calculateSize(index, titleText);
                 parent_->setRowHeight(index.row(), qs.height());
-                return GetTitleText(itemDatas_[actualIndex]); //->getMovieFileName();
+                return titleText; //->getMovieFileName();
             }
             break;
 
@@ -457,7 +458,14 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
 //            parent_->setSpan(index.row(),0,1,5);
 //            parent_->setSpan(index.row()+3,0,1,5);
 //            parent_->setSpan(index.row()+6,0,1,5);
-            return GetInfoText(itemDatas_[actualIndex]);
+			QString infoText = GetInfoText(itemDatas_[actualIndex]);
+            QSize qs = calculateSize(index, infoText);
+            parent_->setRowHeight(index.row(), qs.height());
+
+            // reentrant stack overflow
+            // parent_->resizeRowToContents(index.row());
+            // parent_->resizeColumnToContents(index.column());
+            return infoText;
 		}
 		break;
 

@@ -1418,6 +1418,7 @@ void MainWindow::on_tableView_scrollChanged(int pos)
         QModelIndex mi = proxyModel_->index(i,0);
         proxyModel_->data(mi, Qt::DecorationRole);
         proxyModel_->data(mi, Qt::DisplayRole);
+        // ui->tableView->resizeRowToContents(mi.row());
     }
 
 
@@ -1428,6 +1429,7 @@ void MainWindow::on_tableView_scrollChanged(int pos)
         QModelIndex mi = proxyModel_->index(i,0);
         proxyModel_->data(mi, Qt::DecorationRole);
         proxyModel_->data(mi, Qt::DisplayRole);
+        // ui->tableView->resizeRowToContents(mi.row());
     }
 }
 
