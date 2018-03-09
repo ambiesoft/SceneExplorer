@@ -1,3 +1,9 @@
 set PYTHONEXE=C:\local\python3.5\python.exe
 set QTROOT=C:\local\Qt
 
+set SOURCEDIR=src
+set PRONAME=SceneExplorer
+
+set FFMPEGSOURCEDIR=C:\LegacyPrograms\ffmpeg
+set FFCEXE=C:\LegacyPrograms\FFC\FFC.exe
+set DISTDIR=C:\Linkout\SceneExplorer

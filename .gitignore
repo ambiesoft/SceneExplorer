@@ -1,6 +1,7 @@
 *.sdf
 *.suo
 prepare.bat
+prepare.bat.sample
 
 out-*/
 

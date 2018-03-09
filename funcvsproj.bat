@@ -7,8 +7,8 @@ REM )
 REM call param.bat
 
 if not exist %~dp0prepare.bat (
-  echo prepare.bat not exist. Rename prepare.bat.sample and edit it.
-  goto :error
+  echo prepare.bat not exist. Copy prepare.bat.sample and edit it.
+  goto :end
 )
 call %~dp0prepare.bat
 
@@ -61,9 +61,32 @@ if not exist %PRO% (
   echo %PRO% not found.
   goto :end
 )
+
+
 %DEL% %SOLUTION%
+if exist %SOLUTION% (
+  echo Failed to delete %SOLUTION%.
+  goto :end
+)
 %DEL% %VCXPROJ%
+if exist %VCXPROJ% (
+  echo Failed to delete %VCXPROJ%.
+  goto :end
+)
 %DEL% %VCXFILTERS%
+if exist %VCXFILTERS% (
+  echo Failed to delete %VCXFILTERS%.
+  goto :end
+)
+
+REM set OPENDBFILE=.vs\%PRONAME%\v15\Browse.VC.opendb
+REM if exist %OPENDBFILE% (
+REM   DEL %OPENDBFILE%
+REM   if exist %OPENDBFILE% (
+REM     echo %OPENDBFILE% exists. Close VS first.
+REM     goto :end
+REM   )
+REM )
 
 if not exist %VCVARSBAT% (
   echo %VCVARSBAT% not found.

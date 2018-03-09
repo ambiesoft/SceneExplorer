@@ -18,19 +18,23 @@ git clone https://github.com/ambiesoft/distSolution
 git clone https://github.com/ambiesoft/SceneExplorer
 ```
 
-Rename *qtroot.bat.sample* (in directory *SceneExplorer*) to *qtroot.bat* and edit it to set correct Qt install directory as follows.
-```
-set QTROOT=C:\local\Qt
-```
-
-Rename *pythonexe.bat.sample* to *pythonexe.bat* and edit it to set correct python executable as follows.
+Copy and rename *prepare.bat.sample* (in directory *SceneExplorer*) to *prepare.bat* and edit it to set correct Environment values like as follows.
 ```
 set PYTHONEXE=C:\local\python3.5\python.exe
+set QTROOT=C:\local\Qt
+
+set SOURCEDIR=src
+set PRONAME=SceneExplorer
+
+set FFMPEGSOURCEDIR=C:\LegacyPrograms\ffmpeg
+set FFCEXE=C:\LegacyPrograms\FFC\FFC.exe
+set DISTDIR=C:\Linkout\SceneExplorer
 ```
+
 
 Run build.bat. This will build SceneExplorer into *C:\Linkout\SceneExplorer*.
 
-## Add
+## Legal
 ### FFmpeg
 This software uses code of <a href=http://ffmpeg.org>FFmpeg</a> licensed under the 
 <a href=https://www.gnu.org/licenses/gpl-3.0.html>GPLv3</a> and its 
