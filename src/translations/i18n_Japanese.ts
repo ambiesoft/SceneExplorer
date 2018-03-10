@@ -31,6 +31,10 @@
         <source>Component Version</source>
         <translation>コンポーネント バージョン</translation>
     </message>
+    <message>
+        <source>&lt;Resource not found&gt;</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Document</name>
@@ -83,7 +87,7 @@
     </message>
     <message>
         <source>Task</source>
-        <translation type="vanished">タスク</translation>
+        <translation>タスク</translation>
     </message>
     <message>
         <source>&amp;View</source>
@@ -115,7 +119,7 @@
     </message>
     <message>
         <source>Task Thumbnail</source>
-        <translation>サムネイルタスク</translation>
+        <translation type="vanished">サムネイルタスク</translation>
     </message>
     <message>
         <source>&amp;Close</source>
@@ -127,7 +131,7 @@
     </message>
     <message>
         <source>&amp;About...</source>
-        <translation type="unfinished">バージョン情報(&amp;A)...</translation>
+        <translation>バージョン情報(&amp;A)...</translation>
     </message>
     <message>
         <source>&amp;Add Folder...</source>
@@ -251,7 +255,7 @@
     </message>
     <message>
         <source>Iterate</source>
-        <translation>繰り返し</translation>
+        <translation>列挙</translation>
     </message>
     <message>
         <source>Thumbnail</source>
@@ -371,191 +375,191 @@
     </message>
     <message>
         <source>Directory or name is empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>ディレクトリか名前が空です。</translation>
     </message>
     <message>
         <source>Failed to remove &quot;%1&quot;.</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;%1&quot;の削除に失敗しました。</translation>
     </message>
     <message>
         <source>Quering Database takes %1 milliseconds.</source>
-        <translation type="unfinished"></translation>
+        <translation>データベースのクエリに %1 ミリ秒かかりました。</translation>
     </message>
     <message>
         <source>Resetting data takes %1 milliseconds.</source>
-        <translation type="unfinished"></translation>
+        <translation>データをセットするのに %1 ミリ秒かかりました。</translation>
     </message>
     <message>
         <source>Missing</source>
-        <translation type="unfinished"></translation>
+        <translation>存在しない</translation>
     </message>
     <message>
         <source>All</source>
-        <translation type="unfinished"></translation>
+        <translation>すべて</translation>
     </message>
     <message>
         <source>Items: %1</source>
-        <translation type="unfinished"></translation>
+        <translation>アイテム: %1</translation>
     </message>
     <message>
         <source>Sort: %1 %2</source>
-        <translation type="unfinished"></translation>
+        <translation>ソート: %1 %2</translation>
     </message>
     <message>
         <source>Open Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>ディレクトリを開く</translation>
     </message>
     <message>
         <source>SceneExplorer Document (*.scexd)</source>
-        <translation type="unfinished"></translation>
+        <translation>SceneExplorer ドキュメント (*.scexd)</translation>
     </message>
     <message>
         <source>Any files (*)</source>
-        <translation type="unfinished"></translation>
+        <translation>すべてのファイル (*)</translation>
     </message>
     <message>
         <source>Executable</source>
-        <translation type="unfinished"></translation>
+        <translation>実行ファイル</translation>
     </message>
     <message>
         <source>Document</source>
-        <translation type="unfinished"></translation>
+        <translation>ドキュメント</translation>
     </message>
     <message>
         <source>&lt;No document&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;ドキュメントがありません&gt;</translation>
     </message>
     <message>
         <source>Ini file</source>
-        <translation type="unfinished"></translation>
+        <translation>INIファイル</translation>
     </message>
     <message>
         <source>Database directory</source>
-        <translation type="unfinished"></translation>
+        <translation>データベースディレクトリ</translation>
     </message>
     <message>
         <source>Select Directory</source>
-        <translation type="unfinished"></translation>
+        <translation>ディレクトリ選択</translation>
     </message>
     <message>
         <source>There are no find texts.</source>
-        <translation type="unfinished"></translation>
+        <translation>検索テキストがありません。</translation>
     </message>
     <message>
         <source>Are you sure you want to empty %1 find texts?</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 個の検索テキストをクリアしますか？</translation>
     </message>
     <message>
         <source>failed to launch %1.</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 の起動に失敗しました。</translation>
     </message>
     <message>
         <source>Failed to open folder.</source>
-        <translation type="unfinished"></translation>
+        <translation>フォルダをオープンできませんでした。</translation>
     </message>
     <message>
         <source>Application needs to restart to effect the change. Do you want to restart application now?</source>
-        <translation type="unfinished"></translation>
+        <translation>変更を反映するためにアプリケーションを再起動する必要があります。 今再起動しますか？</translation>
     </message>
     <message>
         <source>Paused</source>
-        <translation type="unfinished"></translation>
+        <translation>一時停止中</translation>
     </message>
     <message>
         <source>Failed to launch ffprobe or ffmpeg. (%1) </source>
-        <translation type="unfinished"></translation>
+        <translation>FFprobeかFFmpegの起動に失敗しました。(%1)</translation>
     </message>
     <message>
         <source>Check the option setting.</source>
-        <translation type="unfinished"></translation>
+        <translation>オプション設定をチェックしてください。</translation>
     </message>
     <message>
         <source>Directoy not found. (%1) </source>
-        <translation type="unfinished"></translation>
+        <translation>ディレクトリが見つかりません。(%1)</translation>
     </message>
     <message>
         <source>Context menu</source>
-        <translation type="unfinished"></translation>
+        <translation>コンテキストメニュー</translation>
     </message>
     <message>
         <source>C&amp;opy others...</source>
-        <translation type="unfinished"></translation>
+        <translation>他のものをコピー(&amp;O)...</translation>
     </message>
     <message>
         <source>External &amp;tools...</source>
-        <translation type="unfinished"></translation>
+        <translation>外部ツール(&amp;T)...</translation>
     </message>
     <message>
         <source>No exteral tools</source>
-        <translation type="unfinished"></translation>
+        <translation>外部ツールが存在しません</translation>
     </message>
     <message>
         <source>Re&amp;name</source>
-        <translation type="unfinished"></translation>
+        <translation>リネーム(&amp;N)</translation>
     </message>
     <message>
         <source>&amp;Remove from database</source>
-        <translation type="unfinished"></translation>
+        <translation>データベースから削除(&amp;R)</translation>
     </message>
     <message>
         <source>Are you sure you want to remove &quot;%1&quot; from the lists?</source>
-        <translation type="unfinished"></translation>
+        <translation>リストから %1 を削除しますか？</translation>
     </message>
     <message>
         <source>Are you sure you want to remove missing items from database?</source>
-        <translation type="unfinished"></translation>
+        <translation>データベースから存在しないファイルのアイテムを削除しますか？</translation>
     </message>
     <message>
         <source>&amp;Rescan to create thumbnails</source>
-        <translation type="unfinished"></translation>
+        <translation>スキャンしてサムネイルを作成(&amp;R)</translation>
     </message>
     <message>
         <source>&amp;Uncheck all</source>
-        <translation type="unfinished"></translation>
+        <translation>すべてのチェックをはずす(&amp;U)</translation>
     </message>
     <message>
         <source>Move &amp;up</source>
-        <translation type="unfinished"></translation>
+        <translation>上へ移動(&amp;U)</translation>
     </message>
     <message>
         <source>Move &amp;down</source>
-        <translation type="unfinished"></translation>
+        <translation>下へ移動(&amp;D)</translation>
     </message>
     <message>
         <source>&amp;Sort by name</source>
-        <translation type="unfinished"></translation>
+        <translation>名前でソート(&amp;S)</translation>
     </message>
     <message>
         <source>Re&amp;move this folder from database</source>
-        <translation type="unfinished"></translation>
+        <translation>データベースからフォルダを削除(&amp;M)</translation>
     </message>
     <message>
         <source>Remove &amp;missing items from database</source>
-        <translation type="unfinished"></translation>
+        <translation type="vanished">存在しないアイテムをデータベースから削除(&amp;M)</translation>
     </message>
     <message>
         <source>Started</source>
-        <translation type="unfinished"></translation>
+        <translation>開始しました</translation>
     </message>
     <message>
         <source>Not a video</source>
-        <translation type="unfinished"></translation>
+        <translation>動画ではありません</translation>
     </message>
     <message>
         <source>Thumbnail %1 has been removed from database</source>
-        <translation type="unfinished"></translation>
+        <translation>データベースからサムネイル %1 を削除しました</translation>
     </message>
     <message>
         <source>Written in Database</source>
-        <translation type="unfinished"></translation>
+        <translation>データベースに書き込まれました</translation>
     </message>
     <message>
         <source>Failed to write on Database</source>
-        <translation type="unfinished"></translation>
+        <translation>データベースの書き込みに失敗しました。</translation>
     </message>
     <message>
         <source>Done</source>
-        <translation type="unfinished"></translation>
+        <translation>完了</translation>
     </message>
     <message>
         <source>Sort by &amp;last access</source>
@@ -563,18 +567,22 @@
     </message>
     <message>
         <source>Show &amp;missing files</source>
-        <translation type="unfinished"></translation>
+        <translation>存在しないファイルを表示(&amp;M)</translation>
     </message>
     <message>
         <source>Failed to start new process &quot;%1&quot;.</source>
-        <translation type="unfinished"></translation>
+        <translation>新規プロセスの起動に失敗しました。&quot;%1&quot;</translation>
+    </message>
+    <message>
+        <source>R&amp;emove missing items from database</source>
+        <translation>データベースから存在しないファイルを削除(&amp;E)</translation>
     </message>
 </context>
 <context>
     <name>Option</name>
     <message>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Thread count of &amp;iterating direcotry:</source>
@@ -644,6 +652,26 @@
         <source>Number of rows:</source>
         <translation>行の数:</translation>
     </message>
+    <message>
+        <source>Keep empty to use default</source>
+        <translation>空だとデフォルト</translation>
+    </message>
+    <message>
+        <source>Item Title:</source>
+        <translation>アイテム タイトル:</translation>
+    </message>
+    <message>
+        <source>Item Information:</source>
+        <translation>アイテム 情報:</translation>
+    </message>
+    <message>
+        <source>Reset to default</source>
+        <translation>デフォルトに設定</translation>
+    </message>
+    <message>
+        <source>&gt;&gt;</source>
+        <translation></translation>
+    </message>
 </context>
 <context>
     <name>OptionDialog</name>
@@ -656,273 +684,273 @@
     <name>OptionExtension</name>
     <message>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>&amp;Allow:</source>
-        <translation type="unfinished"></translation>
+        <translation>許可(&amp;A):</translation>
     </message>
     <message>
         <source>&amp;Deny:</source>
-        <translation type="unfinished"></translation>
+        <translation>拒否(&amp;D):</translation>
     </message>
     <message>
         <source>A&amp;ll -&gt; Deny</source>
-        <translation type="unfinished"></translation>
+        <translation>すべて→拒否(&amp;L)</translation>
     </message>
     <message>
         <source>Restore &amp;Default</source>
-        <translation type="unfinished"></translation>
+        <translation>デフォルトに戻す</translation>
     </message>
     <message>
         <source>&amp;Nothing -&gt; Allow</source>
-        <translation type="unfinished"></translation>
+        <translation>何もなし→許可(&amp;N)</translation>
     </message>
     <message>
         <source>&amp;Order:</source>
-        <translation type="unfinished"></translation>
+        <translation>並び(&amp;O):</translation>
     </message>
     <message>
         <source>Option</source>
-        <translation type="unfinished"></translation>
+        <translation>オプション</translation>
     </message>
     <message>
         <source>Extension</source>
-        <translation type="unfinished"></translation>
+        <translation>拡張子</translation>
     </message>
 </context>
 <context>
     <name>OptionExternalToolsDialog</name>
     <message>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>&amp;Entry:</source>
-        <translation type="unfinished"></translation>
+        <translation>エントリ(&amp;E):</translation>
     </message>
     <message>
         <source>&amp;Name:</source>
-        <translation type="unfinished"></translation>
+        <translation>名前(&amp;N):</translation>
     </message>
     <message>
         <source>&amp;Executable:</source>
-        <translation type="unfinished"></translation>
+        <translation>実行ファイル(&amp;E):</translation>
     </message>
     <message>
         <source>...</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>&amp;Move up</source>
-        <translation type="unfinished"></translation>
+        <translation>上へ移動(&amp;M)</translation>
     </message>
     <message>
         <source>Move &amp;down</source>
-        <translation type="unfinished"></translation>
+        <translation>下へ移動(&amp;D)</translation>
     </message>
     <message>
         <source>&amp;Add</source>
-        <translation type="unfinished"></translation>
+        <translation>追加(&amp;A)</translation>
     </message>
     <message>
         <source>&amp;Remove</source>
-        <translation type="unfinished"></translation>
+        <translation>削除(&amp;R)</translation>
     </message>
     <message>
         <source>&amp;Arguments:</source>
-        <translation type="unfinished"></translation>
+        <translation>引数(&amp;A):</translation>
     </message>
     <message>
         <source>Option</source>
-        <translation type="unfinished"></translation>
+        <translation>オプション</translation>
     </message>
     <message>
         <source>External tools</source>
-        <translation type="unfinished"></translation>
+        <translation>外部ツール</translation>
     </message>
     <message>
         <source>New Item</source>
-        <translation type="unfinished"></translation>
+        <translation>新規アイテム</translation>
     </message>
     <message>
         <source>No file selected.</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイルが選択されていません。</translation>
     </message>
     <message>
         <source>Enable</source>
-        <translation type="unfinished"></translation>
+        <translation>有効</translation>
     </message>
     <message>
         <source>&amp;Count as Open:</source>
-        <translation type="unfinished"></translation>
+        <translation>オープンとしてカウント(&amp;C):</translation>
     </message>
     <message>
         <source>Are you sure you want to remove &quot;%1&quot;?</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;%1&quot;を削除しますか？</translation>
     </message>
 </context>
 <context>
     <name>OptionFontDialog</name>
     <message>
         <source>Dialog</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>&amp;Infomation Table:</source>
-        <translation type="unfinished"></translation>
+        <translation>情報テーブル(&amp;I):</translation>
     </message>
 </context>
 <context>
     <name>QObject</name>
     <message>
         <source>Filename</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイル名</translation>
     </message>
     <message>
         <source>Size</source>
-        <translation type="unfinished"></translation>
+        <translation>サイズ</translation>
     </message>
     <message>
         <source>Wtime</source>
-        <translation type="unfinished"></translation>
+        <translation>修正時刻</translation>
     </message>
     <message>
         <source>Resolution</source>
-        <translation type="unfinished"></translation>
+        <translation>解像度</translation>
     </message>
     <message>
         <source>Duration</source>
-        <translation type="unfinished"></translation>
+        <translation>プレイ時間</translation>
     </message>
     <message>
         <source>Bitrate</source>
-        <translation type="unfinished"></translation>
+        <translation>ビットレート</translation>
     </message>
     <message>
         <source>Open count</source>
-        <translation type="unfinished"></translation>
+        <translation>オープンカウント</translation>
     </message>
     <message>
         <source>&quot;%1&quot; is not directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;%1&quot;はディレクトリではありません。</translation>
     </message>
     <message>
         <source>Failed to set &quot;%1&quot; as current directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;%1%をカレントディレクトリに設定できません。</translation>
     </message>
     <message>
         <source>Failed to mkdir &quot;%1&quot; or it is not a directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;%1&quot;のmkdirできませんでした。またはディレクトリではありません。</translation>
     </message>
     <message>
         <source>Failed to create directory &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>ディレクトリ &quot;%1&quot; を作成できません。</translation>
     </message>
     <message>
         <source>Choose Database directory</source>
-        <translation type="unfinished"></translation>
+        <translation>データベースディレクトリを選択</translation>
     </message>
     <message>
         <source>Another instance is already running.</source>
-        <translation type="unfinished"></translation>
+        <translation>他のインスタンスがすでに起動しています。</translation>
     </message>
     <message>
         <source>Failed to get default database directory.</source>
-        <translation type="unfinished"></translation>
+        <translation>デフォルトのデータベースディレクトリを取得できません。</translation>
     </message>
     <message>
         <source>Failed to open database directory &quot;%1&quot;.</source>
-        <translation type="unfinished"></translation>
+        <translation>データベースディレクトリ &quot;%1&quot; を開くことができません。</translation>
     </message>
     <message>
         <source>Do you want to set database directory to default?</source>
-        <translation type="unfinished"></translation>
+        <translation>データベースディレクトリをデフォルトに設定しますか？</translation>
     </message>
     <message>
         <source>Failed to open or create database. &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>データベースディレクトリ &quot;%1&quot;を開くか作成に失敗しました。</translation>
     </message>
     <message>
         <source>Window initialization failed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Windowの初期化に失敗しました。</translation>
     </message>
     <message>
         <source>Failed to launch &quot;%1&quot;</source>
-        <translation type="unfinished"></translation>
+        <translation>&quot;%1&quot;の起動に失敗しました</translation>
     </message>
     <message>
         <source>File doesnt exists, cant move to trash</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>move to trash failed</source>
-        <translation type="unfinished"></translation>
+        <translation>ごみ箱に移動できません</translation>
     </message>
     <message>
         <source>Last Access</source>
-        <translation type="unfinished"></translation>
+        <translation>最終アクセス</translation>
     </message>
 </context>
 <context>
     <name>Sql</name>
     <message>
         <source>No Error</source>
-        <translation type="unfinished"></translation>
+        <translation>エラーなし</translation>
     </message>
     <message>
         <source>Video file not found.</source>
-        <translation type="unfinished"></translation>
+        <translation>動画が見つかりません。</translation>
     </message>
     <message>
         <source>File size is under 0.</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイルサイズが０以下です。</translation>
     </message>
     <message>
         <source>Failed to create Salient.</source>
-        <translation type="unfinished"></translation>
+        <translation>Salientの作成に失敗しました。</translation>
     </message>
     <message>
         <source>Thumbnail file(s) not found.</source>
-        <translation type="unfinished"></translation>
+        <translation>サムネイルファイルが見つかりません。</translation>
     </message>
     <message>
         <source>UUID format error.</source>
-        <translation type="unfinished"></translation>
+        <translation>UUIDフォーマットエラー</translation>
     </message>
     <message>
         <source>Sql failed.</source>
-        <translation type="unfinished"></translation>
+        <translation>Sqlが失敗しました。</translation>
     </message>
     <message>
         <source>Thumb exists.</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Thumb not exists.</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>numRowAffected is not 1 but %1.</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
 </context>
 <context>
     <name>TableModel</name>
     <message>
         <source>File is empty.</source>
-        <translation type="unfinished"></translation>
+        <translation>ファイルが空です。</translation>
     </message>
 </context>
 <context>
     <name>TaskFFmpeg</name>
     <message>
         <source>existCode != 0</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>QJsonDocument is Null</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>QJsonObject is Empty</source>

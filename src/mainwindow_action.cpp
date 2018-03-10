@@ -842,7 +842,7 @@ void MainWindow::on_directoryWidget_customContextMenuRequested(const QPoint &pos
             this, SLOT(on_directoryWidget_Remove()));
         menu.addAction(&actRemove);
 
-        QAction actRemoveMissingItems(tr("Remove &missing items from database"));
+        QAction actRemoveMissingItems(tr("R&emove missing items from database"));
         connect(&actRemoveMissingItems, SIGNAL(triggered(bool)),
             this, SLOT(on_directoryWidget_RemoveMissingItems()));
         menu.addAction(&actRemoveMissingItems);
