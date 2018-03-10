@@ -133,8 +133,34 @@ void MainWindow::onMenuTask_AboutToShow()
 }
 void MainWindow::onMenuDocking_windows_AboutToShow()
 {
-    ui->action_DockFolder->setChecked(!ui->dockLog->isHidden());
+    ui->action_DockFolder->setChecked(!ui->dockFolder->isHidden());
+    ui->action_DockTask->setChecked(!ui->dockTask->isHidden());
+    ui->action_DockOutput->setChecked(!ui->dockOutput->isHidden());
 }
+void MainWindow::on_action_DockFolder_triggered()
+{
+    if(ui->dockFolder->isHidden())
+        ui->dockFolder->show();
+    else
+        ui->dockFolder->hide();
+}
+
+void MainWindow::on_action_DockTask_triggered()
+{
+    if(ui->dockTask->isHidden())
+        ui->dockTask->show();
+    else
+        ui->dockTask->hide();
+}
+
+void MainWindow::on_action_DockOutput_triggered()
+{
+    if(ui->dockOutput->isHidden())
+        ui->dockOutput->show();
+    else
+        ui->dockOutput->hide();
+}
+
 //void MainWindow::on_FavoriteFolder_triggered(bool checked)
 //{
 //    Q_UNUSED(checked);

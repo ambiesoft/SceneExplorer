@@ -306,7 +306,7 @@ protected:
     virtual SORTCOLUMN GetCurrentSort() {
         return sortManager_.GetCurrentSort();
     }
-	QToolButton* tbLabel_ = nullptr;
+	QToolButton* tbLabelSort_ = nullptr;
 	
     void on_ShowMissingClicked_common(bool nNextCheck);
 
@@ -396,6 +396,12 @@ private slots:
 
 
     void on_actionShow_missing_files_triggered();
+
+    void on_action_DockFolder_triggered();
+
+    void on_action_DockTask_triggered();
+
+    void on_action_DockOutput_triggered();
 
 private:
     QThreadPool* pPoolFFmpeg_ = nullptr;

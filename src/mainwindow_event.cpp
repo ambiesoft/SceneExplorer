@@ -47,8 +47,8 @@ void MainWindow::showEvent( QShowEvent* event )
 }
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
-    resizeDock(ui->dockTree, ui->directoryWidget->size());
-    resizeDock(ui->dockLog, ui->txtLog->size());
+    resizeDock(ui->dockFolder, ui->directoryWidget->size());
+    resizeDock(ui->dockOutput, ui->txtLog->size());
     resizeDock(ui->dockTask, ui->listTask->size());
     QMainWindow::resizeEvent(event);
 }
@@ -59,6 +59,8 @@ void MainWindow::closeEvent(QCloseEvent *event) {
     WaitCursor wc;
 
     clearAllPool();
+
+    settings_.setValue("windowState", saveState());
 
     if(!this->isMaximized() && !this->isMinimized())
     {
@@ -103,4 +105,6 @@ void MainWindow::closeEvent(QCloseEvent *event) {
 	// sort
 	settings_.setValue(Consts::KEY_SORT, (int)sortManager_.GetCurrentSort());
 	settings_.setValue(Consts::KEY_SORTREV, sortManager_.GetCurrentRev());
+
+    QMainWindow::closeEvent(event);
 }

@@ -82,6 +82,8 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
 
     this->setWindowTitle(Consts::APPNAME_DISPLAY);
 
+    restoreState(settings.value("windowState").toByteArray());
+
 	// menu
     QObject::connect(ui->menu_Task, &QMenu::aboutToShow,
                      this, &MainWindow::onMenuTask_AboutToShow);
@@ -134,17 +136,18 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
 
 
     // tool bar
-    tbLabel_ = new QToolButton(ui->mainToolBar);  // intensional leak
+    tbLabelSort_ = new QToolButton(ui->mainToolBar);  // intensional leak
     QPalette sample_palette;
     sample_palette.setColor(QPalette::WindowText, Qt::blue);
-	tbLabel_->setText(tr("Sort:"));
-	tbLabel_->setEnabled(false);
-	tbLabel_->setPalette(sample_palette);
-    ui->mainToolBar->insertWidget(ui->placeHolder_Sort, tbLabel_);
+    tbLabelSort_->setText(tr("Sort:"));
+    tbLabelSort_->setEnabled(false);
+    tbLabelSort_->setPalette(sample_palette);
+    ui->mainToolBar->insertWidget(ui->placeHolder_Sort, tbLabelSort_);
 
 	// ToolButton Sort
 	tbNameSort_ = new QToolButton(ui->mainToolBar);  // intensional leak
 	tbNameSort_->setCheckable(true);
+    tbNameSort_->setToolTip(ui->actionSort_by_file_name->toolTip());
     sortManager_.setToolButton(SORT_FILENAME, tbNameSort_,
                                QIcon(":/resource/images/sort-by-alphabet.png"),
                                QIcon(":/resource/images/sort-by-alphabet-rev.png"));
@@ -154,6 +157,7 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
 
     tbSizeSort_ = new QToolButton(ui->mainToolBar);  // intensional leak
     tbSizeSort_->setCheckable(true);
+    tbSizeSort_->setToolTip(ui->actionSort_by_file_size->toolTip());
     sortManager_.setToolButton(SORT_SIZE, tbSizeSort_,
                                QIcon(":/resource/images/sort-by-size.png"),
                                QIcon(":/resource/images/sort-by-size-rev.png"));
@@ -163,6 +167,7 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
 
     tbWtime_ = new QToolButton(ui->mainToolBar);  // intensional leak
     tbWtime_->setCheckable(true);
+    tbWtime_->setToolTip(ui->actionSort_by_wtime->toolTip());
     sortManager_.setToolButton(SORT_WTIME, tbWtime_,
                                QIcon(":/resource/images/sort-wtime.png"),
                                QIcon(":/resource/images/sort-wtime-rev.png"));
@@ -172,6 +177,7 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
 
     tbOpenCount_ = new QToolButton(ui->mainToolBar);  // intensional leak
     tbOpenCount_->setCheckable(true);
+    tbOpenCount_->setToolTip(ui->actionSort_by_open_count->toolTip());
     sortManager_.setToolButton(SORT_OPENCOUNT, tbOpenCount_,
                                QIcon(":/resource/images/sort-opencount.png"),
                                QIcon(":/resource/images/sort-opencount-rev.png"));
@@ -181,6 +187,7 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
 
     tbLastAccess_ = new QToolButton(ui->mainToolBar);  // intensional leak
     tbLastAccess_->setCheckable(true);
+    tbLastAccess_->setToolTip(ui->actionSort_by_last_access->toolTip());
     sortManager_.setToolButton(SORT_LASTACCESS, tbLastAccess_,
                                QIcon(":/resource/images/sort-lastaccess.png"),
                                QIcon(":/resource/images/sort-lastaccess-rev.png"));
@@ -1654,3 +1661,4 @@ void MainWindow::on_actionShow_missing_files_triggered()
 {
     on_ShowMissingClicked_common(ui->actionShow_missing_files->isChecked());
 }
+

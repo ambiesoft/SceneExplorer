@@ -211,7 +211,7 @@
    <addaction name="separator"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
-  <widget class="QDockWidget" name="dockLog">
+  <widget class="QDockWidget" name="dockOutput">
    <property name="font">
     <font>
      <pointsize>9</pointsize>
@@ -262,7 +262,7 @@
     </layout>
    </widget>
   </widget>
-  <widget class="QDockWidget" name="dockTree">
+  <widget class="QDockWidget" name="dockFolder">
    <property name="sizePolicy">
     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
      <horstretch>0</horstretch>
@@ -326,7 +326,7 @@
     </font>
    </property>
    <property name="windowTitle">
-    <string>Task Thumbnail</string>
+    <string>Task</string>
    </property>
    <attribute name="dockWidgetArea">
     <number>2</number>
