@@ -1035,7 +1035,7 @@ void MainWindow::on_context_Rename()
 
     bool ok;
     QString newname = QInputDialog::getText(this,
-                                         Consts::APPNAME_DISPLAY,
+                                         tr("Rename"),
                                          tr("&New name:"),
                                          QLineEdit::Normal,
                                          oldname,
