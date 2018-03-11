@@ -155,3 +155,22 @@ for(tsfile, TRANSLATIONS) {
 #  TRANSLATIONS_FILES += $$qmfile
 }
 # I18n ends ----------------------------------------------------------------------
+
+
+
+## Copy misc files starts ---------------------------------
+#OTHER_FILES += \
+#    dist/History.txt \
+#    dist/License.txt
+
+#win32 {
+#    DESTDIR_WIN = $${DESTDIR}
+#    DESTDIR_WIN ~= s,/,\\,g
+#    PWD_WIN = $${PWD}
+#    PWD_WIN ~= s,/,\\,g
+#    OTHER_FILES ~= s,/,\\,g
+#    for(FILE, OTHER_FILES){
+#        QMAKE_POST_LINK += $$quote(cmd /c copy /y $${PWD_WIN}\\$${FILE} $${DESTDIR_WIN}$$escape_expand(\\n\\t))
+#    }
+#}
+## Copy misc files enss ------------------------------------

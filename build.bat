@@ -6,6 +6,15 @@ if not exist %~dp0prepare.bat (
 )
 call %~dp0prepare.bat
 
+mkdir %DISTDIR%
+if not exist %DISTDIR%\ (
+  echo %DISTDIR% is not accessible.
+  goto :error
+)
+
+copy /y %~dp0history.txt "%DISTDIR%\"
+copy /y %~dp0README.md "%DISTDIR%\"
+copy /y %~dp0LICENSE "%DISTDIR%\"
 
 if not exist %PYTHONEXE% (
   echo %PYTHONEXE% not found. Check the directory.
@@ -20,6 +29,8 @@ set QTPROJECTFILE=%SOURCEDIR%\%PRONAME%.pro
 @echo on
 %PYTHONEXE% ../distSolution/distqt.py %QTPROJECTFILE% -qtroot %QTROOT%
 %FFCEXE% /t12 "%FFMPEGSOURCEDIR%" /to:%DISTDIR%\
+
+
 @echo off
 
 echo "Goint to close in 30 sec"
