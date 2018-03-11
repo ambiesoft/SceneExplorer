@@ -577,6 +577,26 @@
         <source>R&amp;emove missing items from database</source>
         <translation>データベースから存在しないファイルを削除(&amp;E)</translation>
     </message>
+    <message>
+        <source>Rename</source>
+        <translation>リネーム</translation>
+    </message>
+    <message>
+        <source>&amp;Open</source>
+        <translation>開く(&amp;O)</translation>
+    </message>
+    <message>
+        <source>Open &amp;Folder</source>
+        <translation>フォルダを開く(&amp;F)</translation>
+    </message>
+    <message>
+        <source>&amp;Copy Path</source>
+        <translation>パスをコピー(&amp;C)</translation>
+    </message>
+    <message>
+        <source>&amp;Filename</source>
+        <translation>ファイル名(&amp;F)</translation>
+    </message>
 </context>
 <context>
     <name>Option</name>

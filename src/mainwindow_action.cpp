@@ -572,20 +572,20 @@ void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
 {
     QMenu contextMenu(tr("Context menu"), this);
 
-    QAction actionOpen("&Open", this);
+    QAction actionOpen(tr("&Open"), this);
     connect(&actionOpen, SIGNAL(triggered()),
             this, SLOT(on_context_openSelectedVideo()));
     contextMenu.addAction(&actionOpen);
 
 
-    QAction actionOpenFolder("Open &Folder", this);
+    QAction actionOpenFolder(tr("Open &Folder"), this);
     connect(&actionOpenFolder, SIGNAL(triggered()),
             this, SLOT(on_context_openSelectedVideoInFolder()));
     contextMenu.addAction(&actionOpenFolder);
 
     contextMenu.addSeparator();
 
-    QAction actionCopyPath("&Copy Path");
+    QAction actionCopyPath(tr("&Copy Path"));
     connect(&actionCopyPath, SIGNAL(triggered()),
             this, SLOT(on_context_copySelectedVideoPath()));
     contextMenu.addAction(&actionCopyPath);
@@ -594,7 +594,7 @@ void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
     // sub menu start --->
     QMenu menuCopyOther(tr("C&opy others..."), this);
 
-    QAction actionCopyFilename("&Filename");
+    QAction actionCopyFilename(tr("&Filename"));
     connect(&actionCopyFilename, SIGNAL(triggered()),
             this, SLOT(on_context_copySelectedVideoFilename()));
     menuCopyOther.addAction(&actionCopyFilename);

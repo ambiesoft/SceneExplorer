@@ -38,6 +38,8 @@ struct DE
 
 class Document : public QObject
 {
+    Q_OBJECT
+
     QSettings* s_ = nullptr;
 
     bool bAllSel_ = false;

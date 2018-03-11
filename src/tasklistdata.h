@@ -30,6 +30,7 @@ typedef QSharedPointer<TaskListData> TaskListDataPointer;
 
 class TaskListData
 {
+
 private:
 #ifdef QT_DEBUG
 	static int dinstcount_;
