@@ -33,7 +33,7 @@
     </message>
     <message>
         <source>&lt;Resource not found&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;リソースが見つかりません&gt;</translation>
     </message>
 </context>
 <context>
@@ -139,7 +139,7 @@
     </message>
     <message>
         <source>&amp;General Otions...</source>
-        <translation>一般オプション(&amp;G)...</translation>
+        <translation type="vanished">一般オプション(&amp;G)...</translation>
     </message>
     <message>
         <source>&amp;Pause</source>
@@ -597,6 +597,46 @@
         <source>&amp;Filename</source>
         <translation>ファイル名(&amp;F)</translation>
     </message>
+    <message>
+        <source>Sort by file name</source>
+        <translation>ファイル名でソート</translation>
+    </message>
+    <message>
+        <source>Sort by file size</source>
+        <translation>ファイルサイズでソート</translation>
+    </message>
+    <message>
+        <source>Sort by resolution</source>
+        <translation>解像度でソート</translation>
+    </message>
+    <message>
+        <source>Sort by duration</source>
+        <translation>プレイ時間でソート</translation>
+    </message>
+    <message>
+        <source>Top</source>
+        <translation>先頭</translation>
+    </message>
+    <message>
+        <source>Bottom</source>
+        <translation>末尾</translation>
+    </message>
+    <message>
+        <source>Find</source>
+        <translation>検索</translation>
+    </message>
+    <message>
+        <source>Clear</source>
+        <translation>クリア</translation>
+    </message>
+    <message>
+        <source>&amp;General Options...</source>
+        <translation>一般オプション(&amp;G)...</translation>
+    </message>
+    <message>
+        <source>General Options</source>
+        <translation>一般オプション</translation>
+    </message>
 </context>
 <context>
     <name>Option</name>
@@ -974,31 +1014,31 @@
     </message>
     <message>
         <source>QJsonObject is Empty</source>
-        <translation type="unfinished"></translation>
+        <translation>QJsonObjectが空です</translation>
     </message>
     <message>
         <source>tty format ignored</source>
-        <translation type="unfinished"></translation>
+        <translation>ttyフォーマットは無視されます</translation>
     </message>
     <message>
         <source>duration is not a string</source>
-        <translation type="unfinished"></translation>
+        <translation>プレイ時間が文字列ではありません</translation>
     </message>
     <message>
         <source>duration is not double</source>
-        <translation type="unfinished"></translation>
+        <translation>プレイ時間がdoubleではありません</translation>
     </message>
     <message>
         <source>No video streams found</source>
-        <translation type="unfinished"></translation>
+        <translation>動画ストリームが見つかりません</translation>
     </message>
     <message>
         <source>ffmpeg.exitCode() != 0</source>
-        <translation type="unfinished"></translation>
+        <translation>ffmpegの終了コードが 0 ではありません</translation>
     </message>
     <message>
         <source>Failed to create thumbnail</source>
-        <translation type="unfinished"></translation>
+        <translation>サムネイルの作成に失敗しました</translation>
     </message>
 </context>
 </TS>

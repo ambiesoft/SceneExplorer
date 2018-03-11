@@ -375,7 +375,10 @@
      <normaloff>:/resource/images/settings.png</normaloff>:/resource/images/settings.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;General Otions...</string>
+    <string>&amp;General Options...</string>
+   </property>
+   <property name="toolTip">
+    <string>General Options</string>
    </property>
   </action>
   <action name="action_Pause">
@@ -423,6 +426,9 @@
    <property name="text">
     <string>Sort by &amp;file name</string>
    </property>
+   <property name="toolTip">
+    <string>Sort by file name</string>
+   </property>
   </action>
   <action name="actionSort_by_file_size">
    <property name="icon">
@@ -431,6 +437,9 @@
    </property>
    <property name="text">
     <string>Sort by file &amp;size</string>
+   </property>
+   <property name="toolTip">
+    <string>Sort by file size</string>
    </property>
   </action>
   <action name="actionSort_by_wtime">
@@ -450,6 +459,9 @@
    <property name="text">
     <string>&amp;Top</string>
    </property>
+   <property name="toolTip">
+    <string>Top</string>
+   </property>
   </action>
   <action name="action_Bottom">
    <property name="icon">
@@ -459,15 +471,24 @@
    <property name="text">
     <string>&amp;Bottom</string>
    </property>
+   <property name="toolTip">
+    <string>Bottom</string>
+   </property>
   </action>
   <action name="actionSort_by_resolution">
    <property name="text">
     <string>Sort by &amp;resolution</string>
    </property>
+   <property name="toolTip">
+    <string>Sort by resolution</string>
+   </property>
   </action>
   <action name="actionSort_by_duration">
    <property name="text">
     <string>Sort by &amp;duration</string>
+   </property>
+   <property name="toolTip">
+    <string>Sort by duration</string>
    </property>
   </action>
   <action name="actionSort_by_bitrate">
@@ -567,6 +588,9 @@
    <property name="text">
     <string>&amp;Find</string>
    </property>
+   <property name="toolTip">
+    <string>Find</string>
+   </property>
   </action>
   <action name="action_Clear">
    <property name="icon">
@@ -575,6 +599,9 @@
    </property>
    <property name="text">
     <string>&amp;Clear</string>
+   </property>
+   <property name="toolTip">
+    <string>Clear</string>
    </property>
   </action>
   <action name="action_Empty_find_texts">
