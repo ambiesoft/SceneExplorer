@@ -14,6 +14,7 @@ if not exist %DISTDIR%\ (
 
 copy /y %~dp0history.txt "%DISTDIR%\"
 copy /y %~dp0README.md "%DISTDIR%\"
+copy /y %~dp0README.jp.md "%DISTDIR%\"
 copy /y %~dp0LICENSE "%DISTDIR%\"
 
 if not exist %PYTHONEXE% (
