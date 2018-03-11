@@ -6,6 +6,9 @@ SceneExplore explores video files by viewing its thumbnails.
 * You can explorers video files by viewing its thumbnails.
 * Supported video format is dependent on FFmpeg.
 
+## Download
+Download the binary from <https://github.com/ambiesoft/SceneExplorer/releases>.
+
 ## Environment
 Windows7 or above and Linux, maybe MacOS too.
 
