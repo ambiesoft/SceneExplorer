@@ -264,6 +264,7 @@ protected:
     void closeEvent(QCloseEvent *event);
     void showEvent( QShowEvent* event );
 
+    void initLangMenus();
 	class SortManager
 	{
 		SORTCOLUMN sort_;
@@ -318,6 +319,7 @@ private slots:
     void on_action_Pause_triggered();
     void on_action_Stop_triggered();
     void onMenuTask_AboutToShow();
+    void onMenuLanguage_AboutToShow();
     void onMenuDocking_windows_AboutToShow();
     // void onMenu_Favorites_AboutToShow();
     void onMenu_RecentDocuments_AboutToShow();
@@ -403,6 +405,14 @@ private slots:
 
     void on_action_DockOutput_triggered();
 
+
+
+    void on_action_English_triggered();
+
+    void on_action_Japanese_triggered();
+
+    void on_action_System_default_triggered();
+
 private:
     QThreadPool* pPoolFFmpeg_ = nullptr;
     QThreadPool* getPoolFFmpeg();
@@ -421,6 +431,8 @@ private:
             bool sel,
             bool check);
     void directoryChangedCommon(bool bForceRead=false);
+
+    void langChanged_common(const QString& lang);
 
     void StartScan(QListWidgetItem* item);
     void StartScan(const QString& dir);

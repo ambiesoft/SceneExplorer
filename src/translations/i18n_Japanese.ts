@@ -637,6 +637,42 @@
         <source>General Options</source>
         <translation>一般オプション</translation>
     </message>
+    <message>
+        <source>Sort by last access</source>
+        <translation>オープン時刻でソート</translation>
+    </message>
+    <message>
+        <source>&amp;Language</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>&amp;System default</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>&amp;English</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>&amp;Japanese</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>System default</source>
+        <translation>システムデフォルト</translation>
+    </message>
+    <message>
+        <source>English</source>
+        <translation>英語</translation>
+    </message>
+    <message>
+        <source>Japanese</source>
+        <translation>日本語</translation>
+    </message>
+    <message>
+        <source>Language</source>
+        <translation>言語</translation>
+    </message>
 </context>
 <context>
     <name>Option</name>

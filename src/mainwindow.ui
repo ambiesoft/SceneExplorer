@@ -69,7 +69,7 @@
      <x>0</x>
      <y>0</y>
      <width>1009</width>
-     <height>23</height>
+     <height>21</height>
     </rect>
    </property>
    <property name="font">
@@ -115,10 +115,20 @@
      <addaction name="separator"/>
      <addaction name="action_Output"/>
     </widget>
+    <widget class="QMenu" name="menu_Language">
+     <property name="title">
+      <string>&amp;Language</string>
+     </property>
+     <addaction name="action_System_default"/>
+     <addaction name="separator"/>
+     <addaction name="action_English"/>
+     <addaction name="action_Japanese"/>
+    </widget>
     <addaction name="action_Options"/>
     <addaction name="action_Extentions"/>
     <addaction name="actionExternal_Tools"/>
     <addaction name="menu_Font"/>
+    <addaction name="menu_Language"/>
    </widget>
    <widget class="QMenu" name="menu_Task">
     <property name="title">
@@ -622,6 +632,9 @@
    <property name="text">
     <string>Sort by &amp;last access</string>
    </property>
+   <property name="toolTip">
+    <string>Sort by last access</string>
+   </property>
   </action>
   <action name="actionShow_missing_files">
    <property name="checkable">
@@ -633,6 +646,30 @@
    </property>
    <property name="text">
     <string>Show &amp;missing files</string>
+   </property>
+  </action>
+  <action name="action_System_default">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;System default</string>
+   </property>
+  </action>
+  <action name="action_English">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;English</string>
+   </property>
+  </action>
+  <action name="action_Japanese">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>&amp;Japanese</string>
    </property>
   </action>
  </widget>

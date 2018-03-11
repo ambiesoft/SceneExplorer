@@ -78,6 +78,7 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
     settings_(settings)
 {
     ui->setupUi(this);
+    initLangMenus();
     idManager_ = new IDManager(this);
 
     this->setWindowTitle(Consts::APPNAME_DISPLAY);
@@ -93,6 +94,9 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
 //                     this, &MainWindow::onMenu_Favorites_AboutToShow);
     QObject::connect(ui->menu_Recent_documets, &QMenu::aboutToShow,
                      this, &MainWindow::onMenu_RecentDocuments_AboutToShow);
+    connect(ui->menu_Language, &QMenu::aboutToShow,
+            this, &MainWindow::onMenuLanguage_AboutToShow);
+
 
 
 	// table
@@ -1665,3 +1669,16 @@ void MainWindow::on_actionShow_missing_files_triggered()
     on_ShowMissingClicked_common(ui->actionShow_missing_files->isChecked());
 }
 
+
+
+void MainWindow::initLangMenus()
+{
+    QString lang = settings_.valueString(Consts::KEY_LANGUAGE);
+    if(lang.isEmpty() || lang=="English")
+        return;
+
+    ui->menu_Language->setTitle(tr("Language") + " (" + ("Language") + ")");
+    ui->action_System_default->setText(tr("System default") + " (" + ("System default") + ")");
+    ui->action_English->setText(tr("English") + " (" + ("English") + ")");
+    ui->action_Japanese->setText(tr("Japanese") + " (" + ("Japanese") + ")");
+}

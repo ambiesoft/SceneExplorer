@@ -936,3 +936,64 @@ bool MainWindow::LimitManager::Increment()
     cmb_->setCurrentIndex(ci);
     return true;
 }
+
+
+void MainWindow::langChanged_common(const QString& lang)
+{
+    if(settings_.value(Consts::KEY_LANGUAGE)==lang)
+        return;
+    settings_.setValue(Consts::KEY_LANGUAGE, lang);
+    if(YesNo(this,
+          tr("Application needs to restart to effect the change. Do you want to restart application now?")))
+    {
+        gReboot = true;
+        this->close();
+        return;
+    }
+}
+void MainWindow::onMenuLanguage_AboutToShow()
+{
+    foreach (QAction *action, ui->menu_Language->actions())
+    {
+        if (action->isSeparator())
+            continue;
+        else if (action->menu())
+            continue;
+        else
+        {
+            action->setChecked(false);
+        }
+    }
+
+    QString lang = settings_.valueString(Consts::KEY_LANGUAGE);
+    if(lang.isEmpty())
+    {
+        ui->action_System_default->setChecked(true);
+    }
+    else if(lang=="English")
+    {
+        ui->action_English->setChecked(true);
+    }
+    else if(lang=="Japanese")
+    {
+        ui->action_Japanese->setChecked(true);
+    }
+    else
+    {
+        Q_ASSERT(false);
+    }
+}
+void MainWindow::on_action_System_default_triggered()
+{
+    langChanged_common(QString());
+}
+
+void MainWindow::on_action_English_triggered()
+{
+    langChanged_common("English");
+}
+
+void MainWindow::on_action_Japanese_triggered()
+{
+    langChanged_common("Japanese");
+}
