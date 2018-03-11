@@ -17,5 +17,6 @@
         <file>resource/images/sort-opencount-rev.png</file>
         <file>resource/images/sort-lastaccess.png</file>
         <file>resource/images/sort-lastaccess-rev.png</file>
+        <file>translations/i18n_Japanese.qm</file>
     </qresource>
 </RCC>

@@ -27,6 +27,9 @@ namespace Consts
     const char APPNAME_DISPLAY[] = "Scene Explorer";
     const char VERSION[] = "0.3";
 
+
+    const char KEY_LANGUAGE[] = "language";
+
     const char KEY_SIZE[] = "size";
     const char KEY_TREESIZE[] = "treesize";
     const char KEY_TXTLOGSIZE[] = "txtlogsize";

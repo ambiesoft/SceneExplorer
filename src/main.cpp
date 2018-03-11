@@ -174,6 +174,10 @@ int main2(int argc, char *argv[], QApplication& theApp)
     Q_UNUSED(argc);
     Q_UNUSED(argv);
 
+    QString inifile = getInifile();// "N:\\Ambiesoft\\SceneExplorer\\SceneExplorer.ini";
+    QScopedPointer<Settings> settings(inifile.isEmpty() ? new Settings : new Settings(inifile));
+
+
     QTranslator qtTranslator;
     QString qti18nFile = "qt_" + QLocale::system().name();
     qtTranslator.load(qti18nFile,
@@ -182,13 +186,24 @@ int main2(int argc, char *argv[], QApplication& theApp)
 
 
     QTranslator myappTranslator;
-    // QString i18nFile = "i18n_ja_JP";// + QLocale::system().name();
-    // QString i18nFile = "i18n_ja";
-    QString i18nFile = "i18n_" + GetSystemDefaultLang();
-
-	QFileInfo trfi(QCoreApplication::applicationFilePath());
-	QString trdir = pathCombine(trfi.absolutePath(), "translations");
-    myappTranslator.load(i18nFile, trdir);
+    QString i18nFile = ":/translations/i18n_";
+    QString lang = settings->valueString(Consts::KEY_LANGUAGE);
+    if(lang.isEmpty())
+    {
+        // default
+        i18nFile += GetSystemDefaultLang();
+    }
+    else if(lang=="English")
+    {
+        i18nFile.clear();
+    }
+    else
+    {
+        i18nFile += lang;
+    }
+//	QFileInfo trfi(QCoreApplication::applicationFilePath());
+//	QString trdir = pathCombine(trfi.absolutePath(), "translations");
+    myappTranslator.load(i18nFile);//, trdir);
     theApp.installTranslator(&myappTranslator);
 
 
@@ -206,8 +221,6 @@ int main2(int argc, char *argv[], QApplication& theApp)
     TaskGetDir::RegisterMetaType();
 
 
-	QString inifile = getInifile();// "N:\\Ambiesoft\\SceneExplorer\\SceneExplorer.ini";
-    QScopedPointer<Settings> settings(inifile.isEmpty() ? new Settings : new Settings(inifile));
     QString dbdir;
     bool bQuit = false;
     if(!GetDefaultDatabaseDirectory(*settings,dbdir,bQuit))

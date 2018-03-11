@@ -382,6 +382,9 @@ MainWindow::SortManager::SortManager()
         ascending_[i] = false;
 		tbs_[i] = nullptr;
 	}
+
+	ascending_[SORT_FILENAME] = true;
+	ascending_[SORT_SIZE] = true;
 }
 
 void MainWindow::CreateLimitManager()
