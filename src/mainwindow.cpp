@@ -663,7 +663,7 @@ void MainWindow::clearAllPool(bool bAppendLog)
 	taskModel_->ClearAllTasks();
 
     if(bAppendLog)
-        insertLog(TaskKind::App, 0, tr("All tasks Cleared."));
+        insertLog(TaskKind::App, 0, tr("======== All tasks Cleared ========"));
 }
 
 
@@ -1004,7 +1004,7 @@ void MainWindow::checkTaskFinished()
     if(idManager_->isAllTaskFinished())
     {
         onTaskEnded();
-        insertLog(TaskKind::App, 0, tr(Consts::ALL_TASK_FINISHED));
+        insertLog(TaskKind::App, 0, tr("======== All Tasks finished ========"));
     }
 }
 

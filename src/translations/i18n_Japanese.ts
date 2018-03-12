@@ -251,7 +251,7 @@
     </message>
     <message>
         <source>All tasks Cleared.</source>
-        <translation>すべてのタスクがクリアされました。</translation>
+        <translation type="vanished">すべてのタスクがクリアされました。</translation>
     </message>
     <message>
         <source>Iterate</source>
@@ -672,6 +672,14 @@
     <message>
         <source>Language</source>
         <translation>言語</translation>
+    </message>
+    <message>
+        <source>======== All Tasks finished ========</source>
+        <translation>======== すべてのタスクが終了しました ========</translation>
+    </message>
+    <message>
+        <source>======== All tasks Cleared ========</source>
+        <translation type="unfinished">======== すべてのタスクがクリアされました ========</translation>
     </message>
 </context>
 <context>

@@ -88,7 +88,6 @@ namespace Consts
     const char KEY_FFMPEG_EXECUTABLE[] = "ffmpegexecutable";
 
 
-    const char ALL_TASK_FINISHED[] = "======== All Tasks finished ========";
     const char FILEPART_THUMBS[] = "thumbs";
 
     const int THUMB_WIDTH=240;

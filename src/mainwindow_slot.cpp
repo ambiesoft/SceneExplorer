@@ -145,6 +145,6 @@ void MainWindow::finished_FFMpeg(int loopId, int id)
     if(idManager_->isAllTaskFinished())
     {
         onTaskEnded();
-        insertLog(TaskKind::App, 0, tr(Consts::ALL_TASK_FINISHED));
+        insertLog(TaskKind::App, 0, tr("======== All Tasks finished ========"));
     }
 }
