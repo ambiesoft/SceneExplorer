@@ -679,7 +679,7 @@
     </message>
     <message>
         <source>======== All tasks Cleared ========</source>
-        <translation type="unfinished">======== すべてのタスクがクリアされました ========</translation>
+        <translation>======== すべてのタスクがクリアされました ========</translation>
     </message>
 </context>
 <context>
@@ -706,7 +706,7 @@
     </message>
     <message>
         <source>&amp;Per folder selections</source>
-        <translation></translation>
+        <translation>フォルダごと(&amp;)</translation>
     </message>
     <message>
         <source>&amp;Always</source>

@@ -46,6 +46,11 @@ public:
     bool openlastdoc_;
     QString ffprobe_, ffmpeg_;
 
+private:
+    void constructTitleTemplateMenu(QMenu& contextMenu,
+                  QList< QSharedPointer<QAction> >& acts,
+                  bool isMain);
+
 protected:
     void showEvent(QShowEvent *) override;
 private slots:
@@ -57,6 +62,10 @@ private slots:
     void on_chkLimitItems_stateChanged(int arg1);
     void on_tbInfoMain_clicked();
     void on_tbInfoSub_clicked();
+
+
+    void on_context_titleTemplateCommonMain();
+    void on_context_titleTemplateCommonSub();
 };
 
 #endif // OPTIONDIALOG_H

@@ -18,6 +18,9 @@
 
 #include <QWidget>
 #include <QFileDialog>
+#include <QMenu>
+#include <QAction>
+#include <QSharedPointer>
 
 #include "consts.h"
 #include "helper.h"
@@ -161,13 +164,72 @@ void OptionDialog::on_chkLimitItems_stateChanged(int arg1)
     ui.labelNumberOfRows->setEnabled(checked);
     ui.spinNumberOfRows->setEnabled(checked);
 }
+void OptionDialog::on_context_titleTemplateCommonMain()
+{
+    QAction* act = (QAction*)QObject::sender();
+    QString target = act->data().toString();
 
+    ui.lineInfoMain->setText(ui.lineInfoMain->text()+target);
+}
+void OptionDialog::on_context_titleTemplateCommonSub()
+{
+    QAction* act = (QAction*)QObject::sender();
+    QString target = act->data().toString();
+
+    ui.lineInfoSub->setText(ui.lineInfoSub->text()+target);
+}
+
+void OptionDialog::constructTitleTemplateMenu(QMenu& contextMenu,
+                            QList< QSharedPointer<QAction> >& acts,
+                            bool isMain)
+{
+    const char* alltargets[] = {
+        "name",
+        "size",
+        "wtime",
+        "duration",
+        "format",
+        "bitrate",
+        "vcodec",
+        "acodec",
+        "resolution",
+        "directory",
+        "opencount",
+    };
+
+    for(int i=0 ; i < _countof(alltargets); ++i )
+    {
+        QSharedPointer<QAction> act(new QAction(tr(alltargets[i])));
+        act->setData(QString("${") + alltargets[i] + "}");
+        connect(act.data(), SIGNAL(triggered()),
+                this, isMain ? SLOT(on_context_titleTemplateCommonMain()):SLOT(on_context_titleTemplateCommonSub()) );
+        contextMenu.addAction(act.data());
+        acts.append(act);
+    }
+
+}
 void OptionDialog::on_tbInfoMain_clicked()
 {
-    ui.lineInfoMain->setText(Consts::DEFAULT_ITEM_MAIN_TEXT);
+    QPoint pos = ui.tbInfoMain->pos();
+    pos.setX(pos.x() + ui.tbInfoMain->width());
+
+    QMenu contextMenu(tr("Context menu"), this);
+    QList< QSharedPointer<QAction> > acts;
+
+    constructTitleTemplateMenu(contextMenu, acts, true);
+
+    contextMenu.exec(mapToGlobal(pos));
 }
 
 void OptionDialog::on_tbInfoSub_clicked()
 {
-    ui.lineInfoSub->setText(Consts::DEFAULT_ITEM_SUB_TEXT);
+    QPoint pos = ui.tbInfoSub->pos();
+    pos.setX(pos.x() + ui.tbInfoSub->width());
+
+    QMenu contextMenu(tr("Context menu"), this);
+    QList< QSharedPointer<QAction> > acts;
+
+    constructTitleTemplateMenu(contextMenu, acts, false);
+
+    contextMenu.exec(mapToGlobal(pos));
 }

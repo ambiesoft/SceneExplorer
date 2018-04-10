@@ -1,2 +1,5 @@
+2018/04/10 ver0.4
+Dialog's title template can be added by << button.
+
 2018/03/11 ver0.3
 Initial Release
