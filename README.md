@@ -9,6 +9,9 @@ SceneExplore explores video files by viewing its thumbnails.
 ## Download
 Download the binary from <https://github.com/ambiesoft/SceneExplorer/releases>.
 
+## License
+This software is freeware. See LICENSE.
+
 ## Environment
 Windows7 or above and Linux, maybe MacOS too.
 
@@ -19,10 +22,18 @@ Installation is not required, extract an arhive file.
 ## FFmpeg and FFprobe
 SceneExplorer needs FFmpeg and FFprove to create thumbnails. In windows distribution, as these files are included in the archive file, you do not need to obtain them by yourself. But these files are built by LGPL compatible mode, some feature needed to create particular thumbnails is missing. You can configure SceneExplore to use custom FFmpeg and FFprobe from Option.
 
-## Add a directory to filter thumbnails
 
-## Creating thumbnails
+## How to use
+### Add a folder(directory)
+You can add a folder from [Folder]->[Add Folder].
 
+
+### Creating thumbnails
+Select [Task]->[start scan to create thumbnails...] to start creating thumbnails.
+
+
+### View thumbnails
+From folder pane, choose a folder to view its thumbnails. Clicking [All] shows all thumbnails and [Missing] shows thumbnails which original video files are missing.
 
 ## Buid
 ### Windows
@@ -62,9 +73,9 @@ If you have troubles, post *Issue* on <https://github.com/ambiesoft/SceneExplore
 
 ## Legal
 ### FFmpeg
-This software uses code of <a href=http://ffmpeg.org>FFmpeg</a> licensed under the 
-<a href=https://www.gnu.org/licenses/gpl-3.0.html>GPLv3</a> and its 
-source can be downloaded <a href=https://github.com/ambiesoft/SceneExplorer>here</a>.
+This software uses code of [FFmpeg](http://ffmpeg.org) licensed under the 
+[GPLv3](https://www.gnu.org/licenses/gpl-3.0.html) and its 
+source can be downloaded [here](https://github.com/ambiesoft/SceneExplorer).
 
 ### Qt
 This software uses Qt.
