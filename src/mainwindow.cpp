@@ -296,7 +296,7 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
     optionThumbCount_ = settings_.valueInt(Consts::KEY_THUMBNAIL_COUNT, 3);
     if(optionThumbCount_ != 3 && optionThumbCount_ != 5)
         optionThumbCount_ = 3;
-
+    tableModel_->SetColumnCountImage(optionThumbCount_);
     tableModel_->SetTitleTextTemplate(settings_.valueString(Consts::KEY_TITLE_TEXT_TEMPLATE, Consts::DEFAULT_ITEM_MAIN_TEXT));
     tableModel_->SetInfoTextTemplate(settings_.valueString(Consts::KEY_INFO_TEXT_TEMPLATE, Consts::DEFAULT_ITEM_SUB_TEXT));
 
