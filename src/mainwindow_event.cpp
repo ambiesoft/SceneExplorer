@@ -74,7 +74,8 @@ void MainWindow::closeEvent(QCloseEvent *event) {
     settings_.setValue(Consts::KEY_LASTSELECTEDDIRECTORY, lastSelectedDir_);
 
     QStringList findtexts;
-    for(int i=0; i < cmbFind_->count(); ++i)
+    int combosavecount = qMin(cmbFind_->count(), Consts::MAX_COMBOFIND_SAVECOUNT);
+    for(int i=0; i < combosavecount; ++i)
     {
         findtexts << cmbFind_->itemText(i);
     }

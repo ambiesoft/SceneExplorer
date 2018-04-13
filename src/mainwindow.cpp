@@ -1408,6 +1408,9 @@ void MainWindow::on_action_Focus_find_triggered()
 void MainWindow::on_action_Find_triggered()
 {
     directoryChangedCommon(true);
+    QString cur = cmbFind_->currentText();
+    InsertUniqueTextToComboBox(*cmbFind_, cur);
+    cmbFind_->setCurrentIndex(0);
 }
 void MainWindow::on_action_Clear_triggered()
 {
@@ -1417,7 +1420,7 @@ void MainWindow::on_action_Clear_triggered()
 
 void MainWindow::on_FindCombo_EnterPressed()
 {
-    directoryChangedCommon(true);
+    on_action_Find_triggered();
 }
 
 

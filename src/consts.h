@@ -98,5 +98,7 @@ namespace Consts
 
     const char DEFAULT_ITEM_MAIN_TEXT[] = "${name}";
     const char DEFAULT_ITEM_SUB_TEXT[] = "${size}";
+
+    const int MAX_COMBOFIND_SAVECOUNT = 256;
 }
 #endif // CONSTS_H

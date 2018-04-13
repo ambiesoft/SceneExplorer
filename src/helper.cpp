@@ -24,6 +24,8 @@
 #include <QSet>
 #include <QCoreApplication>
 #include <QLocale>
+#include <QComboBox>
+#include <QList>
 
 #include "../../profile/cpp/Profile/include/ambiesoft.profile.h"
 
@@ -284,4 +286,27 @@ QString GetAppDir()
 QString GetSystemDefaultLang()
 {
     return QLocale::languageToString(QLocale::system().language());
+}
+
+void InsertUniqueTextToComboBox(QComboBox& combo, const QString& text)
+{
+    if(text.isEmpty())
+        return;
+
+    QList<int> dels;
+    for(int i=0 ; i < combo.count(); ++i)
+    {
+        QString t = combo.itemText(i);
+        if(t==text)
+            dels.append(i);
+    }
+
+    QList<int>::const_reverse_iterator rit = dels.crbegin();
+    for (; rit != dels.crend(); ++rit)
+    {
+        int deli = *rit;
+        combo.removeItem(deli);
+    }
+
+    combo.insertItem(0, text);
 }
