@@ -44,6 +44,8 @@ void MainWindow::showEvent( QShowEvent* event )
 
     directoryChangedCommon();
     tableSortParameterChanged(sortManager_.GetCurrentSort(), sortManager_.GetCurrentRev());  // tableModel_->GetSortColumn(), tableModel_->GetSortReverse());
+
+    on_tableView_scrollChanged(-1);
 }
 void MainWindow::resizeEvent(QResizeEvent *event)
 {

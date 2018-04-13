@@ -169,14 +169,14 @@ void OptionDialog::on_context_titleTemplateCommonMain()
     QAction* act = (QAction*)QObject::sender();
     QString target = act->data().toString();
 
-    ui.lineInfoMain->setText(ui.lineInfoMain->text()+target);
+    ui.lineInfoMain->insert(target);
 }
 void OptionDialog::on_context_titleTemplateCommonSub()
 {
     QAction* act = (QAction*)QObject::sender();
     QString target = act->data().toString();
 
-    ui.lineInfoSub->setText(ui.lineInfoSub->text()+target);
+    ui.lineInfoSub->insert(target);
 }
 
 void OptionDialog::constructTitleTemplateMenu(QMenu& contextMenu,
@@ -197,7 +197,7 @@ void OptionDialog::constructTitleTemplateMenu(QMenu& contextMenu,
         "opencount",
     };
 
-    for(int i=0 ; i < _countof(alltargets); ++i )
+    for(size_t i=0 ; i < _countof(alltargets); ++i )
     {
         QSharedPointer<QAction> act(new QAction(tr(alltargets[i])));
         act->setData(QString("${") + alltargets[i] + "}");

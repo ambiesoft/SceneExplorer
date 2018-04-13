@@ -310,11 +310,12 @@ int main(int argc, char *argv[])
 
     QApplication app(argc, argv);
 
-    if ( ! app.arguments().contains(QLatin1String("--with-debug") ))
+#ifdef QT_NO_DEBUG
+    if ( !app.arguments().contains(QLatin1String("--with-debug") ))
     {
         qInstallMessageHandler(noMessageOutput);
     }
-
+#endif
     int ret = main2(argc, argv, app);
     if(gReboot)
     {

@@ -279,11 +279,14 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
     if(vVal.isValid())
         ui->listTask->setMaximumSize(vVal.toSize());
 
-	vVal = settings.value(Consts::KEY_SHOWMISSING);
-	if (vVal.isValid())
+    vVal = settings.value(Consts::KEY_SHOWMISSING);
+
+    // make default true
+    bool bShowMissing = (!vVal.isValid() || vVal.toBool());
+    if(bShowMissing)
     {
-        ui->actionShow_missing_files->setChecked(vVal.toBool());
-        tbShowNonExistant_->setChecked(vVal.toBool());
+        ui->actionShow_missing_files->setChecked(true);
+        tbShowNonExistant_->setChecked(true);
     }
 
 
@@ -1420,14 +1423,13 @@ void MainWindow::on_FindCombo_EnterPressed()
 
 void MainWindow::on_tableView_scrollChanged(int pos)
 {
-    Q_UNUSED(pos);
-
     QModelIndex indexTop = ui->tableView->indexAt(ui->tableView->rect().topLeft());
     QModelIndex indexBottom = ui->tableView->indexAt(ui->tableView->rect().bottomLeft());
     int rowCountPerScreen = indexBottom.row()-indexTop.row()+1;
 
     int top = qMax(0, indexTop.row()-rowCountPerScreen);
-    for(int i=top ; i <= indexTop.row(); ++i)
+    int topEnd = pos < 0 ? indexBottom.row() : indexTop.row();
+    for(int i=top ; i <= topEnd; ++i)
     {
         QModelIndex mi = proxyModel_->index(i,0);
         proxyModel_->data(mi, Qt::DecorationRole);

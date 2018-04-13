@@ -422,6 +422,8 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
         {
             case Qt::DecorationRole:
             {
+				qDebug() << "Image DecorationRoll: Index=" << index.row();
+
                 parent_->setColumnWidth(index.row(), Consts::THUMB_WIDTH);
                 parent_->setRowHeight(index.row(), Consts::THUMB_HEIGHT);
 
