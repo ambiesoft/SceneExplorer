@@ -263,9 +263,13 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
     if(vVal.isValid())
         resize(vVal.toSize());
 
-    vVal = settings.value(Consts::KEY_LASTSELECTEDDIRECTORY);
+    vVal = settings.value(Consts::KEY_LASTSELECTEDADDFOLDERDIRECTORY);
     if(vVal.isValid())
-        lastSelectedDir_ = vVal.toString();
+        lastSelectedAddFolderDir_ = vVal.toString();
+
+    vVal = settings.value(Consts::KEY_LASTSELECTEDSCANDIRECTORY);
+    if(vVal.isValid())
+        lastSelectedScanDir_ = vVal.toString();
 
     vVal = settings.value(Consts::KEY_TREESIZE);
     if(vVal.isValid())
@@ -1454,10 +1458,10 @@ void MainWindow::on_tableView_scrollChanged(int pos)
 
 void MainWindow::on_action_Add_Folder_triggered()
 {
-    QString dir = QFileDialog::getExistingDirectory(this, tr("Open Directory"),lastSelectedDir_);
+    QString dir = QFileDialog::getExistingDirectory(this, tr("Open Directory"),lastSelectedAddFolderDir_);
     if(dir.isEmpty())
         return;
-    lastSelectedDir_ = dir;
+    lastSelectedAddFolderDir_ = dir;
 
     AddUserEntryDirectory(DirectoryItem::DI_NORMAL, canonicalDir(dir), false, false);
 }
@@ -1517,7 +1521,7 @@ void MainWindow::on_action_Output_triggered()
 
 void MainWindow::on_actionExternal_Tools_triggered()
 {
-    OptionExternalToolsDialog dlg(this);
+    OptionExternalToolsDialog dlg(settings_, this);
     dlg.items_ = externalTools_;
     if(QDialog::Accepted != dlg.exec())
         return;
@@ -1644,10 +1648,10 @@ void MainWindow::on_actionAbout_document_triggered()
 
 void MainWindow::on_actionStart_scan_to_create_thumnails_triggered()
 {
-    QString dir = QFileDialog::getExistingDirectory(this, tr("Select Directory"),lastSelectedDir_);
+    QString dir = QFileDialog::getExistingDirectory(this, tr("Select Directory"),lastSelectedScanDir_);
     if(dir.isEmpty())
         return;
-    lastSelectedDir_ = dir;
+    lastSelectedScanDir_ = dir;
 
     StartScan(dir);
 }

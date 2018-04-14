@@ -22,6 +22,7 @@
 #include <QDialog>
 #include <QListWidgetItem>
 
+#include "settings.h"
 #include "externaltoolitem.h"
 
 namespace Ui {
@@ -80,9 +81,10 @@ class OptionExternalToolsDialog : public QDialog
 
     bool HasItemWithName(const QString& name);
     void UpdateData();
-
+	Settings& settings_;
+	QString lastSelectedExeDir_;
 public:
-    explicit OptionExternalToolsDialog(QWidget *parent = 0);
+    explicit OptionExternalToolsDialog(Settings& settings, QWidget *parent = 0);
     ~OptionExternalToolsDialog();
 
     QList<ExternalToolItem> items_;

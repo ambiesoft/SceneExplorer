@@ -71,7 +71,8 @@ void MainWindow::closeEvent(QCloseEvent *event) {
         settings_.setValue(Consts::KEY_TXTLOGSIZE, ui->txtLog->size());
         settings_.setValue(Consts::KEY_LISTTASKSIZE, ui->listTask->size());
     }
-    settings_.setValue(Consts::KEY_LASTSELECTEDDIRECTORY, lastSelectedDir_);
+    settings_.setValue(Consts::KEY_LASTSELECTEDADDFOLDERDIRECTORY, lastSelectedAddFolderDir_);
+    settings_.setValue(Consts::KEY_LASTSELECTEDSCANDIRECTORY, lastSelectedScanDir_);
 
     QStringList findtexts;
     int combosavecount = qMin(cmbFind_->count(), Consts::MAX_COMBOFIND_SAVECOUNT);

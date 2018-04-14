@@ -442,7 +442,8 @@ private:
 
     TableModel* tableModel_;
 	FileMissingFilterProxyModel *proxyModel_;
-    QString lastSelectedDir_;
+    QString lastSelectedAddFolderDir_;
+    QString lastSelectedScanDir_;
 
     TaskModel* taskModel_;
 

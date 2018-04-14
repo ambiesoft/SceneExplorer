@@ -783,6 +783,10 @@
         <source>option</source>
         <translation>オプション</translation>
     </message>
+    <message>
+        <source>Context menu</source>
+        <translation>コンテキストメニュー</translation>
+    </message>
 </context>
 <context>
     <name>OptionExtension</name>
@@ -892,6 +896,10 @@
     <message>
         <source>Are you sure you want to remove &quot;%1&quot;?</source>
         <translation>&quot;%1&quot;を削除しますか？</translation>
+    </message>
+    <message>
+        <source>Choose Executable</source>
+        <translation>実行ファイルを選択</translation>
     </message>
 </context>
 <context>

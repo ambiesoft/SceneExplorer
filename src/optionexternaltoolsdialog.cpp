@@ -21,16 +21,18 @@
 #include "helper.h"
 #include "blockedbool.h"
 
+
 #include "optionexternaltoolsdialog.h"
 #include "ui_optionexternaltoolsdialog.h"
 
 
-OptionExternalToolsDialog::OptionExternalToolsDialog(QWidget *parent) :
+OptionExternalToolsDialog::OptionExternalToolsDialog(Settings& settings, QWidget *parent) :
     QDialog(parent,GetDefaultDialogFlags()),
+	settings_(settings),
     ui(new Ui::OptionExternalToolsDialog)
 {
     ui->setupUi(this);
-
+	lastSelectedExeDir_ = settings_.valueString(Consts::KEY_EXTERNALTOOLS_LASTSELECTEDEXEDIR);
     setWindowTitle(tr("Option") + " | " + tr("External tools"));
 }
 void OptionExternalToolsDialog::showEvent(QShowEvent *ev)
@@ -262,7 +264,10 @@ void OptionExternalToolsDialog::UpdateData()
 
 void OptionExternalToolsDialog::on_tbExecutable_clicked()
 {
-    QFileDialog dialog(this);
+	// QString filefull = ui->lineExe->text();
+	// QDir dir = QDir(filefull);
+
+	QFileDialog dialog(this, tr("Choose Executable"), lastSelectedExeDir_);
     dialog.setFileMode(QFileDialog::ExistingFile);
     if(!dialog.exec())
         return;
@@ -272,7 +277,12 @@ void OptionExternalToolsDialog::on_tbExecutable_clicked()
         Alert(this, tr("No file selected."));
         return;
     }
-    ui->lineExe->setText(dialog.selectedFiles()[0]);
+
+	QString selectedFile = dialog.selectedFiles()[0];
+    ui->lineExe->setText(selectedFile);
+
+    lastSelectedExeDir_ = QFileInfo(selectedFile).absoluteDir().absolutePath();
+    settings_.setValue(Consts::KEY_EXTERNALTOOLS_LASTSELECTEDEXEDIR, lastSelectedExeDir_);
 }
 
 void OptionExternalToolsDialog::on_tbArguments_clicked()
