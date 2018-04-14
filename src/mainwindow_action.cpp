@@ -51,11 +51,7 @@ void MainWindow::openVideo(const QString& movieFile)
 {
     if(!QDesktopServices::openUrl(QUrl::fromLocalFile(movieFile)))
     {
-        QMessageBox msgBox;
-        msgBox.setText(Consts::APPNAME_DISPLAY);
-        msgBox.setInformativeText(QString(tr("failed to launch %1.")).arg(movieFile));
-        msgBox.setStandardButtons(QMessageBox::Ok);
-        msgBox.exec();
+        Alert(this, QString(tr("failed to launch %1.")).arg(movieFile));
         return;
     }
     gpSQL->IncrementOpenCount(movieFile);
@@ -63,7 +59,12 @@ void MainWindow::openVideo(const QString& movieFile)
 }
 void MainWindow::openVideoInFolder(const QString& movieFile)
 {
-    if(!showInGraphicalShell(this, movieFile))
+    QString openfile = movieFile;
+    if(!QFileInfo(movieFile).exists())
+    {
+        openfile = QFileInfo(movieFile).absoluteDir().absolutePath();
+    }
+    if(!showInGraphicalShell(this, openfile))
         Alert(this, tr("Failed to open folder."));
 }
 void MainWindow::on_tableView_doubleClicked(const QModelIndex &index)
