@@ -62,7 +62,8 @@ void MainWindow::closeEvent(QCloseEvent *event) {
 
     clearAllPool();
 
-    settings_.setValue("windowState", saveState());
+    settings_.setValue(Consts::KEY_GEOMETRY, saveGeometry());
+    settings_.setValue(Consts::KEY_WINDOWSTATE, saveState());
 
     if(!this->isMaximized() && !this->isMinimized())
     {

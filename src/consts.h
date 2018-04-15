@@ -30,6 +30,10 @@ namespace Consts
 
     const char KEY_LANGUAGE[] = "language";
 
+
+    const char KEY_GEOMETRY[] = "geometry";
+    const char KEY_WINDOWSTATE[] = "windowState";
+
     const char KEY_SIZE[] = "size";
     const char KEY_TREESIZE[] = "treesize";
     const char KEY_TXTLOGSIZE[] = "txtlogsize";

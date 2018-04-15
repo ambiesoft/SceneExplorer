@@ -83,7 +83,7 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
 
     this->setWindowTitle(Consts::APPNAME_DISPLAY);
 
-    restoreState(settings.value("windowState").toByteArray());
+
 
 	// menu
     QObject::connect(ui->menu_Task, &QMenu::aboutToShow,
@@ -382,6 +382,9 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
         if(!OpenDocument(defaultdoc, false))
             return;
     }
+
+    restoreGeometry(settings.value(Consts::KEY_GEOMETRY).toByteArray());
+    restoreState(settings.value(Consts::KEY_WINDOWSTATE).toByteArray());
     UpdateTitle(QStringList(), UpdateTitleType::INIT);
 	initialized_ = true;
 }
@@ -1411,13 +1414,20 @@ void MainWindow::on_action_Focus_find_triggered()
 }
 void MainWindow::on_action_Find_triggered()
 {
+    if(limitManager_)
+        limitManager_->Reset();
+
     directoryChangedCommon(true);
+
     QString cur = cmbFind_->currentText();
     InsertUniqueTextToComboBox(*cmbFind_, cur);
     cmbFind_->setCurrentIndex(0);
 }
 void MainWindow::on_action_Clear_triggered()
 {
+    if(limitManager_)
+        limitManager_->Reset();
+
     cmbFind_->setCurrentText(QString());
     directoryChangedCommon(true);
 }
