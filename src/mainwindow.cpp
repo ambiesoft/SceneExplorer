@@ -1156,12 +1156,52 @@ void MainWindow::on_context_ExternalTools()
     QAction* act = (QAction*)QObject::sender();
     int i = act->data().toInt();
     QString exe = externalTools_[i].GetExe();
-    QStringList arg;
-    arg << movieFile;
+    QString arg = externalTools_[i].GetArg();
+    QString argparsed;
 
-    if(!QProcess::startDetached(exe,arg))
+    static QRegExp rx("(\\$\\{\\w+\\})");
+
+    int prevpos = 0;
+    int pos = 0;
+
+    while ((pos = rx.indexIn(arg, pos)) != -1)
     {
-        Alert(this, QString(tr("Failed to start new process \"%1\".")).arg(exe));
+        argparsed += arg.mid(prevpos,pos-prevpos);
+        int matchedlen = rx.matchedLength();
+        QString s = arg.mid(pos,matchedlen);// rx.cap(i++);
+        if(s=="${filefullpath}")
+        {
+            argparsed += movieFile;
+        }
+        else if(s=="${directoryfullpath}")
+        {
+            argparsed += QFileInfo(movieFile).dir().absolutePath();
+        }
+        pos += matchedlen;
+        prevpos = pos;
+    }
+    argparsed += arg.mid(prevpos);
+
+
+
+
+//    QStringList argconst;
+//    arg << movieFile;
+
+    QString command;
+    command += dq(exe);
+    command += " ";
+    command += argparsed;
+    qDebug() << "QProcess::startDetached:" << command;
+    if(!QProcess::startDetached(command))
+    {
+        QString message;
+        message += tr("Failed to start new process.");
+        message += "\n\n";
+        message += tr("Command line:");
+        message += "\n";
+        message += command;
+        Alert(this, message);
         return;
     }
 

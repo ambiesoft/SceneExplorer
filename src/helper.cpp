@@ -310,3 +310,20 @@ void InsertUniqueTextToComboBox(QComboBox& combo, const QString& text)
 
     combo.insertItem(0, text);
 }
+
+QString dq(const QString& s)
+{
+    if (s.isEmpty())
+        return "\"\"";
+
+    if (s[0] == '\\')
+        return s;
+
+    if(s[0] == '"')
+        return s;
+
+    if (!s.contains(" ") && !s.contains(","))
+        return s;
+
+    return "\"" + s + "\"";
+}

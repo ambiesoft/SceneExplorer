@@ -206,8 +206,8 @@ void OptionDialog::constructTitleTemplateMenu(QMenu& contextMenu,
         contextMenu.addAction(act.data());
         acts.append(act);
     }
-
 }
+
 void OptionDialog::on_tbInfoMain_clicked()
 {
     QPoint pos = ui.tbInfoMain->pos();

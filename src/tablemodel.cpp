@@ -35,19 +35,7 @@
 #include "tableitemdata.h"
 #include "tablemodel.h"
 
-static QString dq(const QString& s)
-{
-	if (s.isEmpty())
-		return "\"\"";
 
-	if (s[0] == '\\')
-		return s;
-
-	if (!s.contains(" ") && !s.contains(","))
-		return s;
-
-	return "\"" + s + "\"";
-}
 TableModel::TableModel(QTableView *parent, IMainWindow* mainWindow)
     :QAbstractTableModel(parent), parent_(parent), mainWindow_(mainWindow)
 {
@@ -227,7 +215,7 @@ QString TableModel::ExtractInfoText(TableItemDataPointer item, const QString& st
     QString result;
     int prevpos = 0;
     int pos = 0;
-    // int i=0;
+
     QSet<QString> mapExist;
     while ((pos = rx.indexIn(str, pos)) != -1)
     {

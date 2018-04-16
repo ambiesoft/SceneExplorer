@@ -17,6 +17,7 @@
 //along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <QFileDialog>
+#include <QMenu>
 
 #include "helper.h"
 #include "blockedbool.h"
@@ -145,7 +146,8 @@ void OptionExternalToolsDialog::on_pbAdd_clicked()
         }
     }
 
-    ExternalToolWidgetItem* newitem = new ExternalToolWidgetItem(ExternalToolItem(newitemname, QString(), QString(), false));
+    ExternalToolWidgetItem* newitem = new ExternalToolWidgetItem(
+                ExternalToolItem(newitemname, QString(), "\"${filefullpath}\"", false));
     ui->listWidget->addItem(newitem);
     ui->listWidget->setCurrentItem(newitem);
 //    for(int i=0 ; i < ui->listWidget->count(); ++i)
@@ -285,9 +287,42 @@ void OptionExternalToolsDialog::on_tbExecutable_clicked()
     settings_.setValue(Consts::KEY_EXTERNALTOOLS_LASTSELECTEDEXEDIR, lastSelectedExeDir_);
 }
 
+void OptionExternalToolsDialog::on_context_titleTemplateCommonMain()
+{
+    QAction* act = (QAction*)QObject::sender();
+    QString target = act->data().toString();
+
+    ui->lineArg->insert(target);
+}
+void OptionExternalToolsDialog::constructTitleTemplateMenu(QMenu& contextMenu,
+                            QList< QSharedPointer<QAction> >& acts)
+{
+    const char* alltargets[] = {
+        "filefullpath",
+        "directoryfullpath",
+    };
+
+    for(size_t i=0 ; i < _countof(alltargets); ++i )
+    {
+        QSharedPointer<QAction> act(new QAction(tr(alltargets[i])));
+        act->setData(QString("${") + alltargets[i] + "}");
+        connect(act.data(), SIGNAL(triggered()),
+                SLOT(on_context_titleTemplateCommonMain()));
+        contextMenu.addAction(act.data());
+        acts.append(act);
+    }
+}
 void OptionExternalToolsDialog::on_tbArguments_clicked()
 {
+    QPoint pos = ui->tbArguments->pos();
+    pos.setX(pos.x() + ui->tbArguments->width());
 
+    QMenu contextMenu(tr("Context menu"), this);
+    QList< QSharedPointer<QAction> > acts;
+
+    constructTitleTemplateMenu(contextMenu, acts);
+
+    contextMenu.exec(mapToGlobal(pos));
 }
 
 

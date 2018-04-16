@@ -47,3 +47,5 @@ QString GetSortColumnName(SORTCOLUMN sc);
 QString GetAppDir();
 QString GetSystemDefaultLang();
 void InsertUniqueTextToComboBox(QComboBox& combo, const QString& text);
+
+QString dq(const QString& s);

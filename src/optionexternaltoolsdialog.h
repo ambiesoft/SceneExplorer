@@ -93,6 +93,10 @@ public:
 protected:
     void showEvent(QShowEvent *) override;
 
+    void constructTitleTemplateMenu(
+            QMenu& contextMenu,
+            QList< QSharedPointer<QAction> >& acts);
+
 private slots:
     void on_listWidget_itemSelectionChanged();
 
@@ -120,6 +124,8 @@ private slots:
     void on_lineArg_textChanged(const QString &arg1);
 
     void on_chkCountAsOpen_stateChanged(int arg1);
+
+    void on_context_titleTemplateCommonMain();
 
 private:
     Ui::OptionExternalToolsDialog *ui;
