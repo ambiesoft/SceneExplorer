@@ -25,15 +25,16 @@ SceneExplorer needs FFmpeg and FFprove to create thumbnails. In windows distribu
 
 ## How to use
 ### Add a folder(directory)
-You can add a folder from [Folder]->[Add Folder].
+You can add a folder from **[Folder]->[Add Folder]**.
 
 
 ### Creating thumbnails
-Select [Task]->[start scan to create thumbnails...] to start creating thumbnails.
+* From the folder pane, Right-click a folder and select **[Rescan to create thumbnails]**.
+* From the menu, select **[Task]->[start scan to create thumbnails...]** to start creating thumbnails.
 
 
 ### View thumbnails
-From folder pane, choose a folder to view its thumbnails. Clicking [All] shows all thumbnails and [Missing] shows thumbnails which original video files are missing.
+From the folder pane, choose a folder to view its thumbnails. Clicking **[All]** shows all thumbnails and **[Missing]** shows thumbnails which original video files are missing.
 
 ## Buid
 ### Windows
