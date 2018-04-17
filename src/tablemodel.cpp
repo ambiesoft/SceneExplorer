@@ -27,6 +27,7 @@
 #include <QMap>
 #include <QDateTime>
 #include <QRegExp>
+#include <QDebug>
 
 #include "consts.h"
 #include "helper.h"

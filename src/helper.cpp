@@ -26,6 +26,7 @@
 #include <QLocale>
 #include <QComboBox>
 #include <QList>
+#include <QCommandLineParser>
 
 #include "../../profile/cpp/Profile/include/ambiesoft.profile.h"
 

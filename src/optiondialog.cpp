@@ -197,7 +197,7 @@ void OptionDialog::constructTitleTemplateMenu(QMenu& contextMenu,
         "opencount",
     };
 
-    for(size_t i=0 ; i < _countof(alltargets); ++i )
+    for(size_t i=0 ; i < sizeof(alltargets)/sizeof(alltargets[0]); ++i )
     {
         QSharedPointer<QAction> act(new QAction(tr(alltargets[i])));
         act->setData(QString("${") + alltargets[i] + "}");

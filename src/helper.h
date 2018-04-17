@@ -21,6 +21,7 @@
 
 #include <QString>
 #include <QWidget>
+#include <QComboBox>
 
 #include "globals.h"
 

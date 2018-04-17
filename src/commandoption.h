@@ -1,6 +1,7 @@
 #ifndef COMMANDOPTION_H
 #define COMMANDOPTION_H
 
+#include <QString>
 
 class CommandOption
 {

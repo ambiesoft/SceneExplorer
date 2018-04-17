@@ -22,6 +22,7 @@
 #include <QObject>
 #include <QSettings>
 #include <QList>
+#include <QListWidget>
 
 struct DE
 {
