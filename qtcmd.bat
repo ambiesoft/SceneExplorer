@@ -1,8 +1,24 @@
 @echo off
 call %~dp0prepare.bat
-set PATH=%QTROOT%\5.10.0\mingw53_32\bin;%PATH%
-set PATH=%QTROOT%\Tools\mingw530_32\bin;%PATH%
+
+set TEST=%QTROOT%\%QTVERSION%\%QTVERSIONTOOLS%\bin
+if not exist %TEST%\ (
+  echo %TEST% not found
+  goto err
+)
+set PATH=%TEST%;%PATH%
+
+set TEST=%QTROOT%\Tools\%QTTOOLS%\bin
+if not exist %TEST%\ (
+  echo %TEST% not found
+  goto err
+)
+set PATH=%TEST%;%PATH%
 
 echo Qt is inserted in path.
 @echo on
 cmd /k
+
+
+:err
+pause
