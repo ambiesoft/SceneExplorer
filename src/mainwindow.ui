@@ -69,7 +69,7 @@
      <x>0</x>
      <y>0</y>
      <width>1009</width>
-     <height>21</height>
+     <height>23</height>
     </rect>
    </property>
    <property name="font">
@@ -101,6 +101,7 @@
     </property>
     <addaction name="action_About"/>
     <addaction name="actionAbout_document"/>
+    <addaction name="action_Command_Line"/>
    </widget>
    <widget class="QMenu" name="menu_Option">
     <property name="title">
@@ -670,6 +671,11 @@
    </property>
    <property name="text">
     <string>&amp;Japanese</string>
+   </property>
+  </action>
+  <action name="action_Command_Line">
+   <property name="text">
+    <string>&amp;Command Line...</string>
    </property>
   </action>
  </widget>

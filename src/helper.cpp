@@ -29,11 +29,13 @@
 
 #include "../../profile/cpp/Profile/include/ambiesoft.profile.h"
 
+
 #if defined(Q_OS_WIN)
 #else
 
 #endif
 
+#include "commandoption.h"
 #include "consts.h"
 #include "helper.h"
 
@@ -326,4 +328,62 @@ QString dq(const QString& s)
         return s;
 
     return "\"" + s + "\"";
+}
+
+
+bool processCommandLine(QString* helpText)
+{
+    QCommandLineParser parser;
+    parser.setApplicationDescription("SceneExplorer");
+
+    QCommandLineOption helpOption = parser.addHelpOption();
+    QCommandLineOption versionOption = parser.addVersionOption();
+//    parser.addPositionalArgument("source", QCoreApplication::translate("main", "Source file to copy."));
+//    parser.addPositionalArgument("destination", QCoreApplication::translate("main", "Destination directory."));
+
+    // A boolean option with a single name (-p)
+//    QCommandLineOption showProgressOption("p", QCoreApplication::translate("main", "Show progress during copy"));
+//    parser.addOption(showProgressOption);
+
+    // A boolean option with multiple names (-f, --force)
+//    QCommandLineOption forceOption(QStringList() << "f" << "force",
+//                                   QCoreApplication::translate("main", "Overwrite existing files."));
+//    parser.addOption(forceOption);
+
+    // An option with a value
+    QCommandLineOption dbDirectoryOption(QStringList() << "d" << "database-directory",
+                                             QCoreApplication::translate("main", "Set database directory <directory>."),
+                                             "directory");
+    parser.addOption(dbDirectoryOption);
+
+    // Process the actual command line arguments given by the user
+    parser.parse(QCoreApplication::arguments());
+
+    // const QStringList args = parser.positionalArguments();
+    // source is args.at(0), destination is args.at(1)
+
+    // bool showProgress = parser.isSet(showProgressOption);
+    // bool force = parser.isSet(forceOption);
+
+    if(helpText != nullptr)
+    {
+        *helpText = parser.helpText();
+        return false;
+    }
+    if(parser.isSet(helpOption))
+    {
+        // Info(nullptr, parser.sh);
+        parser.showHelp();
+        return false;
+    }
+    if(parser.isSet(versionOption))
+    {
+        parser.showVersion();
+        return false;
+    }
+    QString dbdir = parser.value(dbDirectoryOption);
+
+    gpCommandOption = new CommandOption(dbdir);
+
+    return true;
 }

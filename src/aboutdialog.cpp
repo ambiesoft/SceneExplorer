@@ -35,7 +35,7 @@ AboutDialog::AboutDialog(QWidget *parent) :
     QString txtVersion = Consts::APPNAME_DISPLAY;
     txtVersion.append(" ");
     txtVersion.append("ver ");
-    txtVersion.append(Consts::VERSION);
+    txtVersion.append(Consts::APPVERSION);
     ui->lblVersion->setText(txtVersion);
 
     QString txtCopyright;

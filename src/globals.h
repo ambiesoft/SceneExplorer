@@ -26,7 +26,8 @@ class Sql;
 extern Sql* gpSQL;
 extern volatile int gLoopId;
 extern volatile bool gReboot;
-
+class CommandOption;
+extern CommandOption* gpCommandOption;
 #if !defined(VERIFY)
 # if !defined(QT_NO_DEBUG)
 #  define VERIFY Q_ASSERT

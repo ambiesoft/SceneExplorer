@@ -29,6 +29,7 @@
 #include <QProcess>
 #include <QTranslator>
 #include <QLibraryInfo>
+#include <QCommandLineParser>
 
 #include "consts.h"
 #include "globals.h"
@@ -40,7 +41,7 @@
 #include "tableitemdata.h"
 #include "settings.h"
 #include "ffmpeg.h"
-
+#include "commandoption.h"
 #include "mainwindow.h"
 
 #ifdef QT_DEBUG
@@ -168,6 +169,7 @@ enum PROGRAM_RETURN {
     PR_LAUNCHTHISAPPFAILED,
 };
 
+CommandOption* gpCommandOption;
 
 int main2(int argc, char *argv[], QApplication& theApp)
 {
@@ -222,15 +224,18 @@ int main2(int argc, char *argv[], QApplication& theApp)
 
 
     QString dbdir;
-    bool bQuit = false;
-    if(!GetDefaultDatabaseDirectory(*settings,dbdir,bQuit))
+    dbdir = gpCommandOption->DBDir();
+    if(dbdir.isEmpty())
     {
-        Alert(nullptr, QString(QObject::tr("Failed to get default database directory.")));
-        return PR_GETDIRECTORYFAILED;
+        bool bQuit = false;
+        if(!GetDefaultDatabaseDirectory(*settings,dbdir,bQuit))
+        {
+            Alert(nullptr, QString(QObject::tr("Failed to get default database directory.")));
+            return PR_GETDIRECTORYFAILED;
+        }
+        if(bQuit)
+            return 0;
     }
-    if(bQuit)
-        return 0;
-
     if(!OpenDatabaseDirectory(dbdir))
     {
         QString message = QString(QObject::tr("Failed to open database directory \"%1\".")).
@@ -301,12 +306,13 @@ void noMessageOutput(QtMsgType type, const QMessageLogContext &context, const QS
 //        abort();
 //    }
 }
+
 int main(int argc, char *argv[])
 {
     QCoreApplication::setOrganizationName(Consts::ORGANIZATION);
     QCoreApplication::setOrganizationDomain(Consts::APPDOMAIN);
     QCoreApplication::setApplicationName(Consts::APPNAME);
-
+    QCoreApplication::setApplicationVersion(Consts::APPVERSION);
 
     QApplication app(argc, argv);
 
@@ -316,11 +322,15 @@ int main(int argc, char *argv[])
         qInstallMessageHandler(noMessageOutput);
     }
 #endif
+
+    if(!processCommandLine())
+        return 0;
+
     int ret = main2(argc, argv, app);
     if(gReboot)
     {
         QString thisapp = QCoreApplication::applicationFilePath();
-        if(!QProcess::startDetached(thisapp))
+        if(!QProcess::startDetached(thisapp, QCoreApplication::arguments()))
         {
             Alert(nullptr, QString(QObject::tr("Failed to launch \"%1\"")).
                   arg(thisapp));

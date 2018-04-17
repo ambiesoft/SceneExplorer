@@ -1741,3 +1741,11 @@ void MainWindow::initLangMenus()
     ui->action_English->setText(tr("English") + " (" + ("English") + ")");
     ui->action_Japanese->setText(tr("Japanese") + " (" + ("Japanese") + ")");
 }
+
+void MainWindow::on_action_Command_Line_triggered()
+{
+    QString helpText;
+    processCommandLine(&helpText);
+
+    Info(this,helpText);
+}

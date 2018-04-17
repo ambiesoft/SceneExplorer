@@ -26,6 +26,7 @@
 #include <QApplication>
 #include <QClipboard>
 #include <QColor>
+#include <QCommandLineParser>
 #include <QDateTime>
 #include <QDebug>
 #include <QDesktopServices>

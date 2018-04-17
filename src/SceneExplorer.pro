@@ -56,7 +56,8 @@ SOURCES += \
     document.cpp \
     ffmpeg.cpp \
     aboutdialog.cpp \
-    tableitemdelegate.cpp
+    tableitemdelegate.cpp \
+    commandoption.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -90,7 +91,8 @@ HEADERS += \
     ffmpeg.h \
     aboutdialog.h \
     imainwindow.h \
-    tableitemdelegate.h
+    tableitemdelegate.h \
+    commandoption.h
 
 FORMS += \
         mainwindow.ui \

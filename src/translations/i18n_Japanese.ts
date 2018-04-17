@@ -467,7 +467,7 @@
     </message>
     <message>
         <source>Failed to launch ffprobe or ffmpeg. (%1) </source>
-        <translation>FFprobeかFFmpegの起動に失敗しました。(%1)</translation>
+        <translation type="vanished">FFprobeかFFmpegの起動に失敗しました。(%1)</translation>
     </message>
     <message>
         <source>Check the option setting.</source>
@@ -571,7 +571,7 @@
     </message>
     <message>
         <source>Failed to start new process &quot;%1&quot;.</source>
-        <translation>新規プロセスの起動に失敗しました。&quot;%1&quot;</translation>
+        <translation type="vanished">新規プロセスの起動に失敗しました。&quot;%1&quot;</translation>
     </message>
     <message>
         <source>R&amp;emove missing items from database</source>
@@ -680,6 +680,22 @@
     <message>
         <source>======== All tasks Cleared ========</source>
         <translation>======== すべてのタスクがクリアされました ========</translation>
+    </message>
+    <message>
+        <source>Failed to start new process.</source>
+        <translation>新規プロセスの起動に失敗しました。</translation>
+    </message>
+    <message>
+        <source>Command line:</source>
+        <translation>コマンドライン：</translation>
+    </message>
+    <message>
+        <source>Failed to launch ffprobe or ffmpeg. (%1)</source>
+        <translation>新規プロセスの起動に失敗しました。&quot;%1&quot;</translation>
+    </message>
+    <message>
+        <source>&amp;Command Line...</source>
+        <translation>コマンドライン(&amp;C)...</translation>
     </message>
 </context>
 <context>
@@ -901,6 +917,10 @@
         <source>Choose Executable</source>
         <translation>実行ファイルを選択</translation>
     </message>
+    <message>
+        <source>Context menu</source>
+        <translation>コンテキストメニュー</translation>
+    </message>
 </context>
 <context>
     <name>OptionFontDialog</name>
@@ -1091,6 +1111,17 @@
     <message>
         <source>Failed to create thumbnail</source>
         <translation>サムネイルの作成に失敗しました</translation>
+    </message>
+</context>
+<context>
+    <name>main</name>
+    <message>
+        <source>Database directory &lt;directory&gt;.</source>
+        <translation type="vanished">データベースディレクトリ &lt;directory&gt;</translation>
+    </message>
+    <message>
+        <source>Set database directory &lt;directory&gt;.</source>
+        <translation type="unfinished">データベースディレクトリを指定 &lt;directory&gt;</translation>
     </message>
 </context>
 </TS>
