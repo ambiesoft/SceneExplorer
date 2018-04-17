@@ -28,16 +28,16 @@ if [%DEVENV%] == [] (
   echo DEVENV not defined.
   goto :end
 )
-if [%QTVER%] == [] (
-  echo QTVER not defined.
+if [%VSQTVER%] == [] (
+  echo VSQTVER not defined.
   goto :end
 )
 if [%PRONAME%] == [] (
   echo PRONAME not defined.
   goto :end
 )
-if [%QTTOOL%] == [] (
-  echo QTTOOL not defined.
+if [%VSQTTOOL%] == [] (
+  echo VSQTTOOL not defined.
   goto :end
 )
 if [%PRONAME%] == [] (
@@ -93,7 +93,7 @@ if not exist %VCVARSBAT% (
   goto :end
 )
 
-set QTBIN=%QTROOT%\%QTVER%\%QTTOOL%\bin
+set QTBIN=%QTROOT%\%VSQTVER%\%VSQTTOOL%\bin
 set QMAKE=%QTBIN%\qmake.exe
 
 if not exist %QMAKE% (

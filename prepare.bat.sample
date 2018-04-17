@@ -6,6 +6,7 @@ set QTTOOLS=mingw530_32
 
 set SOURCEDIR=src
 set PRONAME=SceneExplorer
+set DISTDIR=C:\Linkout\SceneExplorer
 
 set FFMPEGSOURCEDIR=C:\LegacyPrograms\ffmpeg
 set FFCEXE=C:\LegacyPrograms\FFC\FFC.exe
