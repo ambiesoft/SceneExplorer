@@ -559,7 +559,7 @@
     </message>
     <message>
         <source>Done</source>
-        <translation>完了</translation>
+        <translation>完了しました</translation>
     </message>
     <message>
         <source>Sort by &amp;last access</source>
@@ -1023,6 +1023,22 @@
         <source>Last Access</source>
         <translation>最終アクセス</translation>
     </message>
+    <message>
+        <source>Failed to get folder location.</source>
+        <translation>特定フォルダの場所を取得できませんでした。</translation>
+    </message>
+    <message>
+        <source>Folder settings does not have sufficient data. Lanuch FolderConfig.exe and reconfigure.</source>
+        <translation>フォルダ設定が不十分です。FolderConfig.exeを実行して再設定してください。</translation>
+    </message>
+    <message>
+        <source>&quot;%1&quot; does not exist. Do you want to create it?</source>
+        <translation>&quot;%1&quot; は存在しません。作成しますか？</translation>
+    </message>
+    <message>
+        <source>Failed to create directory.</source>
+        <translation>ディレクトリの作成に失敗しました。</translation>
+    </message>
 </context>
 <context>
     <name>Sql</name>
@@ -1121,7 +1137,7 @@
     </message>
     <message>
         <source>Set database directory &lt;directory&gt;.</source>
-        <translation type="unfinished">データベースディレクトリを指定 &lt;directory&gt;</translation>
+        <translation>データベースディレクトリを指定 &lt;directory&gt;</translation>
     </message>
 </context>
 </TS>
