@@ -110,3 +110,8 @@ QString GetDefaultFFmpeg()
 {
     return "ffmpeg";
 }
+
+QString getInifile(bool& bExit)
+{
+    return QString();
+}

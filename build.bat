@@ -17,6 +17,9 @@ copy /y %~dp0README.md "%DISTDIR%\"
 copy /y %~dp0README.jp.md "%DISTDIR%\"
 copy /y %~dp0LICENSE "%DISTDIR%\"
 
+copy /y C:\Linkout\FolderConfig\* "%DISTDIR%\"
+copy /y %~dp0src\FolderConfig.ini "%DISTDIR%\"
+
 if not exist %PYTHONEXE% (
   echo %PYTHONEXE% not found. Check the directory.
   goto :error

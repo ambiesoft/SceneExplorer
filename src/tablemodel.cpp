@@ -557,7 +557,7 @@ Qt::ItemFlags TableModel::flags(const QModelIndex &index) const
 
 
 
-QString TableModel::GetSortColumnValue(SORTCOLUMN sc, TableItemDataPointer item) const
+QString TableModel::GetSortColumnValue(SORTCOLUMNMY sc, TableItemDataPointer item) const
 {
     switch(sc)
     {

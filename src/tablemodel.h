@@ -46,7 +46,7 @@ class TableModel : public QAbstractTableModel
 public:
 
     // static QString GetSortColumnName(SORTCOLUMN sc);
-    QString GetSortColumnValue(SORTCOLUMN sc, TableItemDataPointer item) const;
+    QString GetSortColumnValue(SORTCOLUMNMY sc, TableItemDataPointer item) const;
 private:
     QList<TableItemDataPointer> itemDatas_;
     QMap<QString, TableItemDataPointer> mapsFullpathToItem_;

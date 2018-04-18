@@ -47,7 +47,7 @@ enum ImageCacheType {
 };
 
 
-enum SORTCOLUMN{
+enum SORTCOLUMNMY{
     SORT_NONE,
     SORT_FILENAME,
     SORT_SIZE,

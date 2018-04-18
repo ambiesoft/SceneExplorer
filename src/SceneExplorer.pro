@@ -115,8 +115,19 @@ PRECOMPILED_HEADER = stable.h
 message($$QMAKESPEC)
 
 win32 {
-    SOURCES += \
+   SOURCES += \
             osd_win32.cpp
+
+
+
+
+
+#    win32-g++ {
+#        LIBS += -lOle32
+#    }
+#    win32-msvc* {
+#        LIBS += Ole32.lib
+#    }
 }
 linux-g++ {
     SOURCES += \

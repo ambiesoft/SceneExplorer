@@ -267,22 +267,22 @@ protected:
     void initLangMenus();
 	class SortManager
 	{
-		SORTCOLUMN sort_;
+		SORTCOLUMNMY sort_;
         bool ascending_[COUNT_SORTCOLUMN];
         QIcon iconsAscend_[COUNT_SORTCOLUMN];
         QIcon iconsDescend_[COUNT_SORTCOLUMN];
 		QToolButton* tbs_[COUNT_SORTCOLUMN];
 	public:
 		SortManager();
-		void onSort(SORTCOLUMN sc);
+		void onSort(SORTCOLUMNMY sc);
 		void UpdateButtonText();
-		SORTCOLUMN GetCurrentSort() const {
+		SORTCOLUMNMY GetCurrentSort() const {
 			return sort_;
 		}
 		bool GetCurrentRev() const {
             return ascending_[sort_];
 		}
-        void setToolButton(SORTCOLUMN sc,
+        void setToolButton(SORTCOLUMNMY sc,
                            QToolButton* tb,
                            const QIcon& iconNormal,
                            const QIcon& iconRev);
@@ -291,20 +291,20 @@ protected:
 //            setToolButton(sc,tb,QIcon(),QIcon());
 //        }
 
-		void InitCurrentSort(SORTCOLUMN sc, bool b) {
+		void InitCurrentSort(SORTCOLUMNMY sc, bool b) {
 			sort_ = sc;
             ascending_[sort_] = b;
 			UpdateButtonText();
 		}
 	} sortManager_;
-	void onSortCommon(SORTCOLUMN sortColumn);
+	void onSortCommon(SORTCOLUMNMY sortColumn);
 	QToolButton* tbNameSort_ = nullptr;
     QToolButton* tbSizeSort_ = nullptr;
     QToolButton* tbWtime_ = nullptr;
     QToolButton* tbOpenCount_ = nullptr;
     QToolButton* tbLastAccess_ = nullptr;
 
-    virtual SORTCOLUMN GetCurrentSort() {
+    virtual SORTCOLUMNMY GetCurrentSort() {
         return sortManager_.GetCurrentSort();
     }
 	QToolButton* tbLabelSort_ = nullptr;
@@ -526,7 +526,7 @@ public slots:
     void on_context_ExternalTools();
 
     void tableItemCountChanged();
-    void tableSortParameterChanged(SORTCOLUMN sc, bool rev);
+    void tableSortParameterChanged(SORTCOLUMNMY sc, bool rev);
 
 	void on_Rescan();
 	void on_directoryWidget_Remove();

@@ -5,7 +5,7 @@
 class IMainWindow
 {
 public:
-    virtual SORTCOLUMN GetCurrentSort() = 0;
+    virtual SORTCOLUMNMY GetCurrentSort() = 0;
 };
 
 #endif // IMAINWINDOW_H

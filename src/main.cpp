@@ -176,7 +176,10 @@ int main2(int argc, char *argv[], QApplication& theApp)
     Q_UNUSED(argc);
     Q_UNUSED(argv);
 
-    QString inifile = getInifile();// "N:\\Ambiesoft\\SceneExplorer\\SceneExplorer.ini";
+    bool bExit = false;
+    QString inifile = getInifile(bExit);// "N:\\Ambiesoft\\SceneExplorer\\SceneExplorer.ini";
+    if(bExit)
+        return 1;
     QScopedPointer<Settings> settings(inifile.isEmpty() ? new Settings : new Settings(inifile));
 
 

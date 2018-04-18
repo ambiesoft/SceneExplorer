@@ -482,7 +482,7 @@ void MainWindow::on_action_About_triggered()
 //    msgbox.exec();
 }
 
-void MainWindow::SortManager::setToolButton(SORTCOLUMN sc,
+void MainWindow::SortManager::setToolButton(SORTCOLUMNMY sc,
                                             QToolButton* tb,
                                             const QIcon& iconNormal,
                                             const QIcon& iconRev)
@@ -497,7 +497,7 @@ void MainWindow::SortManager::setToolButton(SORTCOLUMN sc,
 	tb->setText(GetSortColumnName(sc));
 }
 
-void MainWindow::SortManager::onSort(SORTCOLUMN sc)
+void MainWindow::SortManager::onSort(SORTCOLUMNMY sc)
 {
     if(sort_==sc)
         ascending_[sc] = !ascending_[sc];
@@ -513,13 +513,13 @@ void MainWindow::SortManager::UpdateButtonText()
 
 		if (sort_ == i)
 		{
-            tbs_[i]->setText(GetSortColumnName((SORTCOLUMN)i) + (ascending_[i] ? " ASC" : " DESC"));
+            tbs_[i]->setText(GetSortColumnName((SORTCOLUMNMY)i) + (ascending_[i] ? " ASC" : " DESC"));
 			tbs_[i]->setChecked(true);
             tbs_[i]->setIcon(ascending_[i] ? iconsAscend_[i] : iconsDescend_[i]);
 		}
 		else
 		{
-            tbs_[i]->setText(GetSortColumnName((SORTCOLUMN)i));
+            tbs_[i]->setText(GetSortColumnName((SORTCOLUMNMY)i));
 			tbs_[i]->setChecked(false);
             tbs_[i]->setIcon(ascending_[i] ? iconsAscend_[i] : iconsDescend_[i]);
 		}
@@ -527,7 +527,7 @@ void MainWindow::SortManager::UpdateButtonText()
 }
 
 
-void MainWindow::onSortCommon(SORTCOLUMN sortColumn)
+void MainWindow::onSortCommon(SORTCOLUMNMY sortColumn)
 {
 	WaitCursor wc;
 	sortManager_.onSort(sortColumn);

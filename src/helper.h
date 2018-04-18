@@ -41,10 +41,10 @@ bool showInGraphicalShell(QWidget *parent, const QString &pathIn);
 void MoveToTrashImpl( QString file );
 QString GetDefaultFFprobe();
 QString GetDefaultFFmpeg();
-QString getInifile();
+QString getInifile(bool& bExit);
 #endif // HELPER_H
 
-QString GetSortColumnName(SORTCOLUMN sc);
+QString GetSortColumnName(SORTCOLUMNMY sc);
 QString GetAppDir();
 QString GetSystemDefaultLang();
 void InsertUniqueTextToComboBox(QComboBox& combo, const QString& text);

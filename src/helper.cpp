@@ -28,7 +28,7 @@
 #include <QList>
 #include <QCommandLineParser>
 
-#include "../../profile/cpp/Profile/include/ambiesoft.profile.h"
+
 
 
 #if defined(Q_OS_WIN)
@@ -228,40 +228,8 @@ Qt::WindowFlags GetDefaultDialogFlags()
     return ((Qt::WindowTitleHint | Qt::WindowCloseButtonHint| Qt::WindowFlags()) & ~Qt::WindowContextHelpButtonHint);
 }
 
-using namespace Ambiesoft;
-QString getInifile()
-{
-	QFileInfo trfi(QCoreApplication::applicationFilePath());
-	std::string folini = pathCombine(trfi.absolutePath(), "folder.ini").toStdString();
-	int intval = -1;
-	Profile::GetInt("Main", "PathType", -1, intval, folini);
 
-	QString dir;
-	switch (intval)
-	{
-	default:
-		return QString();
-
-	case 0:
-		dir = trfi.absolutePath();
-		break;
-
-	case 3:
-	{
-		std::string t;
-		Profile::GetString("Main", "folder", "", t, folini);
-		dir = t.c_str();
-	}
-	break;
-	} // switch
-
-	if (dir.isEmpty())
-		return QString();
-
-	return pathCombine(dir, "SceneExplorer.ini");
-}
-
-QString GetSortColumnName(SORTCOLUMN sc)
+QString GetSortColumnName(SORTCOLUMNMY sc)
 {
 	switch (sc)
 	{

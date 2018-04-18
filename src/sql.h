@@ -119,7 +119,7 @@ public:
                 const QStringList& dirs = QStringList(),
                 const QString& find = QString(),
                 bool bOnlyMissing = false,
-                SORTCOLUMN sortcolumn = SORT_NONE,
+                SORTCOLUMNMY sortcolumn = SORT_NONE,
                 bool sortrev = false,
                 const LimitArg& limit = LimitArg()
             );

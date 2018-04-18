@@ -352,7 +352,7 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
 
 
 	// sort
-	sortManager_.InitCurrentSort((SORTCOLUMN)settings.valueInt(Consts::KEY_SORT, (int)SORT_NONE),
+	sortManager_.InitCurrentSort((SORTCOLUMNMY)settings.valueInt(Consts::KEY_SORT, (int)SORT_NONE),
 		settings_.valueBool(Consts::KEY_SORTREV, false));
 
 
@@ -1434,7 +1434,7 @@ void MainWindow::tableItemCountChanged()
     // slItemCount_->setText(QString(tr("Items: %1")).arg(tableModel_->GetItemCount()));
     slItemCount_->setText(QString(tr("Items: %1")).arg(proxyModel_->GetItemCount()));
 }
-void MainWindow::tableSortParameterChanged(SORTCOLUMN sc, bool rev)
+void MainWindow::tableSortParameterChanged(SORTCOLUMNMY sc, bool rev)
 {
     QString text = QString(tr("Sort: %1 %2")).
             arg(GetSortColumnName(sc)).

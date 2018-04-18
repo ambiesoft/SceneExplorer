@@ -641,7 +641,7 @@ bool GetAllSqlString(
 		const QStringList& selects,
         const QStringList& dirs,
         const QString& find,
-        SORTCOLUMN sortcolumn,
+        SORTCOLUMNMY sortcolumn,
         bool sortrev,
         const LimitArg& limit)
 {
@@ -763,7 +763,7 @@ bool Sql::GetAll(QList<TableItemDataPointer>& v,
                  const QStringList& dirs,
                  const QString& find,
                  bool bOnlyMissing,
-                 SORTCOLUMN sortcolumn,
+                 SORTCOLUMNMY sortcolumn,
                  bool sortrev,
                  const LimitArg& limit)
 {
