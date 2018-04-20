@@ -1402,6 +1402,9 @@ void MainWindow::UpdateTitle(const QStringList& dirs, UpdateTitleType utt)
         title.append(Consts::APPNAME_DISPLAY);
     }
 
+#ifdef QT_DEBUG
+    title.append(" (Debug)");
+#endif
     this->setWindowTitle(title);
 }
 void MainWindow::on_action_Top_triggered()
