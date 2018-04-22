@@ -100,6 +100,9 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
 
 
 	// table
+    ui->tableView->setSelectionBehavior( QAbstractItemView::SelectItems );
+    ui->tableView->setSelectionMode( QAbstractItemView::SingleSelection );
+
     QObject::connect(ui->tableView->verticalScrollBar(), &QScrollBar::valueChanged,
                      this, &MainWindow::on_tableView_scrollChanged);
 
@@ -541,7 +544,9 @@ bool MainWindow::OpenDocument(const QString& file, const bool bExists)
 
     if(pDoc_)
     {
-        pDoc_->Store(ui->directoryWidget);
+        pDoc_->Store(ui->directoryWidget,
+                     ui->tableView->verticalScrollBar()->value(),
+                     ui->tableView->currentIndex());
         delete pDoc_;
     }
     pDoc_ = pNewDoc;
@@ -1468,11 +1473,26 @@ void MainWindow::on_action_Find_triggered()
 }
 void MainWindow::on_action_Clear_triggered()
 {
+    QModelIndex curSel = ui->tableView->currentIndex();
+    QString selPath;
+    if(curSel.isValid())
+    {
+        QVariant v = proxyModel_->data(curSel, TableModel::TableRole::MovieFileFull);
+        if(v.isValid())
+            selPath = v.toString();
+    }
     if(limitManager_)
         limitManager_->Reset();
 
     cmbFind_->setCurrentText(QString());
     directoryChangedCommon(true);
+
+    if(!selPath.isEmpty())
+    {
+        QModelIndex miToSelect = proxyModel_->findIndex(selPath);
+        proxyModel_->ensureIndex(miToSelect);
+        ui->tableView->scrollTo(miToSelect);
+    }
 }
 
 void MainWindow::on_FindCombo_EnterPressed()
@@ -1616,7 +1636,9 @@ void MainWindow::on_action_Open_triggered()
 
 void MainWindow::on_action_Save_triggered()
 {
-    pDoc_->Store(ui->directoryWidget);
+    pDoc_->Store(ui->directoryWidget,
+                 ui->tableView->verticalScrollBar()->value(),
+                 ui->tableView->currentIndex());
 }
 
 void MainWindow::on_actionSave_as_triggered()

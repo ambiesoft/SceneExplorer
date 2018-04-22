@@ -62,7 +62,9 @@ public:
     QString GetLastErr() const {
         return lastErr_;
     }
-    void Store(QListWidget* pLW);
+    void Store(QListWidget* pLW,
+               int scrollPos,
+               const QModelIndex& index);
 
     bool IsAllSelected() const {
         return bAllSel_;
@@ -86,6 +88,10 @@ public:
 
     QString GetFileName() const;
     QString GetFullName() const;
+
+    int scrollPos() const ;
+    int modeIndexRow() const;
+    int modeIndexColumn() const;
 };
 
 #endif // DOCUMENT_H

@@ -21,6 +21,7 @@
 #include <QListWidget>
 #include <QFileInfo>
 
+
 #include "directoryentry.h"
 
 #include "document.h"
@@ -33,6 +34,9 @@ const char KEY_USERENTRY_GROUPPRIFIX[] = "directoryentry_";
 const char KEY_USERENTRY_DIRECTORY[] = "entrydirectory";
 const char KEY_USERENTRY_SELECTED[] = "entryselected";
 const char KEY_USERENTRY_CHECKED[] = "entrychecked";
+const char KEY_SCROLL_POS[] = "scrollpos";
+const char KEY_TABLE_INDEX_ROW[] = "tableindexrow";
+const char KEY_TABLE_INDEX_COLUMN[] = "tableindexcolumn";
 
 bool Document::Load(const QString& file, const bool bExists)
 {
@@ -169,7 +173,9 @@ bool Document::Load(const QString& file, const bool bExists)
 //    }
 }
 
-void Document::Store(QListWidget* pLW)
+void Document::Store(QListWidget* pLW,
+                     int scrollPos,
+                     const QModelIndex& index)
 {
 //    QStringList userDirs;
 //    QList<QVariant> userSelecteds;
@@ -208,6 +214,10 @@ void Document::Store(QListWidget* pLW)
         s_->endGroup();
     }
     s_->setValue(KEY_USERENTRY_COUNT, delist_.count());
+
+    s_->setValue(KEY_SCROLL_POS, scrollPos);
+    s_->setValue(KEY_TABLE_INDEX_ROW, index.row());
+    s_->setValue(KEY_TABLE_INDEX_COLUMN, index.column());
 }
 QString Document::GetFileName() const
 {
@@ -215,4 +225,29 @@ QString Document::GetFileName() const
 }
 QString Document::GetFullName() const {
     return file_;
+}
+
+int Document::scrollPos() const
+{
+    QVariant v = s_->value(KEY_SCROLL_POS);
+    if(!v.isValid())
+        return 0;
+
+    return v.toInt();
+}
+int Document::modeIndexRow() const
+{
+    QVariant vRow = s_->value(KEY_TABLE_INDEX_ROW);
+    if(!vRow.isValid())
+        return 0;
+
+    return vRow.toInt();
+}
+int Document::modeIndexColumn() const
+{
+    QVariant vColumn = s_->value(KEY_TABLE_INDEX_COLUMN);
+    if(!vColumn.isValid())
+        return 0;
+
+    return vColumn.toInt();
 }

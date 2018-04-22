@@ -110,7 +110,7 @@ public:
 	}
 	void UpdateItem(const QString& movieFile);
     void RemoveItem(const QString& movieFile);
-
+    QModelIndex GetIndex(const QString& movieFile) const;
     QFont GetInfoFont() {
         return fontInfo_;
     }
@@ -201,10 +201,40 @@ public:
 			sourceModel()->data(sourceModel()->index(i,4),Qt::DecorationRole);
         }
     }
+    void ensureIndex(const QModelIndex& mi)
+    {
+        int startI = mi.row();
+        startI = startI -(3*10);
+        if(startI < 0)
+            startI=0;
+
+        int endI = mi.row() + 10;
+        if(endI >= rowCount())
+            endI = rowCount();
+        for(int i=startI; i < endI; ++i)
+        {
+            sourceModel()->data(sourceModel()->index(i,0),Qt::DecorationRole);
+            sourceModel()->data(sourceModel()->index(i,1),Qt::DecorationRole);
+            sourceModel()->data(sourceModel()->index(i,2),Qt::DecorationRole);
+            sourceModel()->data(sourceModel()->index(i,3),Qt::DecorationRole);
+            sourceModel()->data(sourceModel()->index(i,4),Qt::DecorationRole);
+        }
+    }
     int GetItemCount() const {
         return rowCount()/3;
     }
+//    QString pathInfo(const QModelIndex& mi) const {
+//        int amari = mi.row() % 3;
+//        QModelIndex newI = createIndex(mi.row()-amari, mi.column());
+//        QVariant v=data(newI);
+//        if(!v.isValid())
+//            return QString;
+//        return v.toString();
+//    }
+    QModelIndex findIndex(const QString& selPath) const {
+       int row = ((TableModel*) sourceModel())->GetIndex(selPath);
 
+    }
 
 };
 //#include <QItemDelegate>

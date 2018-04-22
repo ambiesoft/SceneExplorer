@@ -653,6 +653,19 @@ void TableModel::UpdateItem(const QString& movieFile)
 		emit dataChanged(createIndex(row * 3, 0), createIndex((row * 3) + 2, 0));
 	}
 }
+QModelIndex TableModel::GetIndex(const QString& movieFile) const
+{
+    TableItemDataPointer pID = mapsFullpathToItem_[movieFile];
+    if (pID)
+    {
+        VERIFY(1==mapsFullpathToItem_.remove(movieFile));
+
+        int row = itemDatas_.indexOf(pID);
+        Q_ASSERT(row >= 0);
+        return row*RowCountPerEntry;
+    }
+    return -1;
+}
 void TableModel::RemoveItem(const QString& movieFile)
 {
     if(movieFile.isEmpty())

@@ -17,6 +17,7 @@
 //along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <QListWidgetItem>
+#include <QScrollBar>
 
 #include "consts.h"
 #include "globals.h"
@@ -45,7 +46,42 @@ void MainWindow::showEvent( QShowEvent* event )
     directoryChangedCommon();
     tableSortParameterChanged(sortManager_.GetCurrentSort(), sortManager_.GetCurrentRev());  // tableModel_->GetSortColumn(), tableModel_->GetSortReverse());
 
+
     on_tableView_scrollChanged(-1);
+
+    QModelIndex mi = proxyModel_->index(pDoc_->modeIndexRow(),pDoc_->modeIndexColumn());
+    //QModelIndex mi = tableModel_->index(pDoc_->modeIndexRow(),pDoc_->modeIndexColumn());
+
+
+    ui->tableView->selectionModel()->select(mi,
+                                            QItemSelectionModel::ClearAndSelect);
+    proxyModel_->ensureIndex(mi);
+    QApplication::processEvents();
+    ui->tableView->scrollTo(mi);
+//    int sv = 0;
+//    int tried=0;
+//    do
+//    {
+//        ui->tableView->scrollTo(mi);
+//        QApplication::processEvents();
+//        int newsv = ui->tableView->verticalScrollBar()->value();
+//        on_tableView_scrollChanged(newsv);
+//        newsv = ui->tableView->verticalScrollBar()->value();
+//        QApplication::processEvents();
+//        newsv = ui->tableView->verticalScrollBar()->value();
+//        ui->tableView->scrollTo(mi);
+//        QApplication::processEvents();
+//        newsv = ui->tableView->verticalScrollBar()->value();
+//        if(sv==newsv)
+//        {
+//            tried++;
+//            if(tried > 10)
+//                break;
+//        }
+
+//        sv = newsv;
+//    } while(true);
+//    ui->tableView->selectionModel()->select(mi, QItemSelectionModel::SelectCurrent);
 }
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
@@ -86,7 +122,9 @@ void MainWindow::closeEvent(QCloseEvent *event) {
     settings_.setValue(Consts::KEY_SHOWMISSING, tbShowNonExistant_->isChecked());
 
 
-    pDoc_->Store(ui->directoryWidget);
+    pDoc_->Store(ui->directoryWidget,
+                 ui->tableView->verticalScrollBar()->value(),
+                 ui->tableView->currentIndex());
 
     settings_.setValue(Consts::KEY_MAX_GETDIR_THREADCOUNT, optionThreadcountGetDir_);
     settings_.setValue(Consts::KEY_MAX_THUMBNAIL_THREADCOUNT, optionThreadcountThumbnail_);
