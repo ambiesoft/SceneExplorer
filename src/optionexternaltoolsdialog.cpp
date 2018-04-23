@@ -51,6 +51,9 @@ void OptionExternalToolsDialog::showEvent(QShowEvent *ev)
     if(itemToSelect)
         itemToSelect->setSelected(true);
 
+    // make widget enable or disable
+    on_listWidget_itemSelectionChanged();
+
     QDialog::showEvent(ev);
 }
 OptionExternalToolsDialog::~OptionExternalToolsDialog()
@@ -65,14 +68,27 @@ void OptionExternalToolsDialog::on_listWidget_itemSelectionChanged()
     {
         ui->lineName->setEnabled(false);
         ui->lineExe->setEnabled(false);
+        ui->tbExecutable->setEnabled(false);
         ui->lineArg->setEnabled(false);
+        ui->tbArguments->setEnabled(false);
         ui->chkCountAsOpen->setEnabled(false);
+
+        ui->pbMoveDown->setEnabled(false);
+        ui->pbMoveUp->setEnabled(false);
+        ui->pbRemove->setEnabled(false);
         return;
     }
     ui->lineName->setEnabled(true);
     ui->lineExe->setEnabled(true);
+    ui->tbExecutable->setEnabled(true);
     ui->lineArg->setEnabled(true);
+    ui->tbArguments->setEnabled(true);
     ui->chkCountAsOpen->setEnabled(true);
+
+    ui->pbMoveDown->setEnabled(true);
+    ui->pbMoveUp->setEnabled(true);
+    ui->pbRemove->setEnabled(true);
+
 
     ExternalToolWidgetItem* item = (ExternalToolWidgetItem*)ui->listWidget->selectedItems()[0];
     ui->lineName->setText(item->GetItemName());

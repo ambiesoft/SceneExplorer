@@ -1097,34 +1097,25 @@ void MainWindow::on_context_removeFromDatabase()
         return;
     }
 
+    static bool sbRemoveFromHardDisk;
 
     QMessageBox msgbox(this);
-    QCheckBox cb(tr("Also remove from external media"));
-    cb.setEnabled(QFile(movieFile).exists());
+    QCheckBox cbRemoveFromMedia(tr("Also remove from external media"));
+    cbRemoveFromMedia.setEnabled(QFile(movieFile).exists());
+    cbRemoveFromMedia.setChecked(sbRemoveFromHardDisk);
     msgbox.setText(QString(tr("Do you want to remove \"%1\" from database?")).
                    arg(movieFile));
     msgbox.setIcon(QMessageBox::Icon::Question);
     msgbox.addButton(QMessageBox::Yes);
     msgbox.addButton(QMessageBox::No);
     msgbox.setDefaultButton(QMessageBox::No);
-    msgbox.setCheckBox(&cb);
+    msgbox.setCheckBox(&cbRemoveFromMedia);
 
-//    QObject::connect(&cb, &QCheckBox::stateChanged, [this](int state){
-//        if (static_cast<Qt::CheckState>(state) == Qt::CheckState::Checked) {
-//            this->showMsgBox = false;
-//        }
-//    });
 
     if(msgbox.exec() != QMessageBox::Yes)
         return;
-    bool bRemoveFromHardDisk = cb.checkState()==Qt::Checked;
+    sbRemoveFromHardDisk = cbRemoveFromMedia.checkState()==Qt::Checked;
 
-//    if(!YesNo(this,
-//          QString(tr("Do you want to remove \"%1\" from database?")).
-//          arg(movieFile)))
-//    {
-//        return;
-//    }
     QString error;
     QString dir,name;
     canonicalDirAndName(movieFile, dir, name);
@@ -1142,7 +1133,7 @@ void MainWindow::on_context_removeFromDatabase()
     }
     tableModel_->RemoveItem(movieFile);
 
-    if(bRemoveFromHardDisk)
+    if(sbRemoveFromHardDisk)
     {
         try
         {
@@ -1434,6 +1425,7 @@ void MainWindow::on_directoryWidget_itemChanged(QListWidgetItem *item)
     if(limitManager_)
         limitManager_->Reset();
 
+
     directoryChangedCommon();
 }
 
@@ -1462,12 +1454,15 @@ void MainWindow::on_action_Focus_find_triggered()
 }
 void MainWindow::on_action_Find_triggered()
 {
+    QString cur = cmbFind_->currentText();
+    if(cur.isEmpty())
+        return;
+
     if(limitManager_)
         limitManager_->Reset();
 
     directoryChangedCommon(true);
 
-    QString cur = cmbFind_->currentText();
     InsertUniqueTextToComboBox(*cmbFind_, cur);
     cmbFind_->setCurrentIndex(0);
 }
@@ -1490,8 +1485,14 @@ void MainWindow::on_action_Clear_triggered()
     if(!selPath.isEmpty())
     {
         QModelIndex miToSelect = proxyModel_->findIndex(selPath);
-        proxyModel_->ensureIndex(miToSelect);
-        ui->tableView->scrollTo(miToSelect);
+        if(miToSelect.isValid())
+        {
+            ui->tableView->selectionModel()->select(miToSelect,
+                                                    QItemSelectionModel::ClearAndSelect);
+            proxyModel_->ensureIndex(miToSelect);
+            QApplication::processEvents();
+            ui->tableView->scrollTo(miToSelect);
+        }
     }
 }
 

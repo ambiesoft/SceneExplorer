@@ -232,8 +232,8 @@ public:
 //        return v.toString();
 //    }
     QModelIndex findIndex(const QString& selPath) const {
-       int row = ((TableModel*) sourceModel())->GetIndex(selPath);
-
+        QModelIndex sourceIndex = ((TableModel*) sourceModel())->GetIndex(selPath);
+        return index(sourceIndex.row(),sourceIndex.column());
     }
 
 };

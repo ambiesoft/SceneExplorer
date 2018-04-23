@@ -658,13 +658,11 @@ QModelIndex TableModel::GetIndex(const QString& movieFile) const
     TableItemDataPointer pID = mapsFullpathToItem_[movieFile];
     if (pID)
     {
-        VERIFY(1==mapsFullpathToItem_.remove(movieFile));
-
         int row = itemDatas_.indexOf(pID);
         Q_ASSERT(row >= 0);
-        return row*RowCountPerEntry;
+        return createIndex(row*RowCountPerEntry,0);
     }
-    return -1;
+    return QModelIndex();
 }
 void TableModel::RemoveItem(const QString& movieFile)
 {
