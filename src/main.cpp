@@ -44,6 +44,8 @@
 #include "commandoption.h"
 #include "mainwindow.h"
 
+using namespace Consts;
+
 #ifdef QT_DEBUG
 static void testSQL()
 {
@@ -93,11 +95,11 @@ bool OpenDatabaseDirectory(const QString& dbDir)
     qDebug() << "Current Directory =" << dbDir;
 
     // create and check thumbs dir
-    QDir(".").mkdir(Consts::FILEPART_THUMBS);
-    if(!QDir(Consts::FILEPART_THUMBS).exists())
+    QDir(".").mkdir(FILEPART_THUMBS);
+    if(!QDir(FILEPART_THUMBS).exists())
     {
         Alert(nullptr, QString(QObject::tr("Failed to mkdir \"%1\" or it is not a directory.")).
-            arg(QFileInfo(Consts::FILEPART_THUMBS).absoluteFilePath()));
+            arg(QFileInfo(FILEPART_THUMBS).absoluteFilePath()));
         return false;
     }
 
@@ -108,9 +110,9 @@ bool OpenDatabaseDirectory(const QString& dbDir)
 bool GetDatabaseDirectory(Settings& settings, QString& dbDirToSet, bool& bQuit)
 {
     bQuit = false;
-    if(settings.valueBool(Consts::KEY_USE_CUSTOMDATABASEDIR))
+    if(settings.valueBool(KEY_USE_CUSTOMDATABASEDIR))
     {
-        dbDirToSet = ExpandEnv(settings.valueString(Consts::KEY_DATABASE_PATH));
+        dbDirToSet = ExpandEnv(settings.valueString(KEY_DATABASE_PATH));
     }
     else
         dbDirToSet.clear();
@@ -134,7 +136,7 @@ bool GetDatabaseDirectory(Settings& settings, QString& dbDirToSet, bool& bQuit)
 
     if(dbDirToSet.isEmpty() || !QDir(dbDirToSet).exists())
     {
-        if(settings.valueBool(Consts::KEY_USE_CUSTOMDATABASEDIR))
+        if(settings.valueBool(KEY_USE_CUSTOMDATABASEDIR))
         {
             dbDirToSet = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
             QFileDialog dlg;
@@ -151,7 +153,7 @@ bool GetDatabaseDirectory(Settings& settings, QString& dbDirToSet, bool& bQuit)
                 return false;
 
             dbDirToSet = dlg.selectedFiles()[0];
-            settings.setValue(Consts::KEY_DATABASE_PATH, dbDirToSet);
+            settings.setValue(KEY_DATABASE_PATH, dbDirToSet);
         }
         else
         {
@@ -194,7 +196,7 @@ int main2(int argc, char *argv[], QApplication& theApp)
 
     QTranslator myappTranslator;
     QString i18nFile = ":/translations/i18n_";
-    QString lang = settings->valueString(Consts::KEY_LANGUAGE);
+    QString lang = settings->valueString(KEY_LANGUAGE);
     if(lang.isEmpty())
     {
         // default
@@ -245,13 +247,13 @@ int main2(int argc, char *argv[], QApplication& theApp)
     {
         QString message = QString(QObject::tr("Failed to open database directory \"%1\".")).
                         arg(dbdir);
-        if(settings->valueBool(Consts::KEY_USE_CUSTOMDATABASEDIR))
+        if(settings->valueBool(KEY_USE_CUSTOMDATABASEDIR))
         {
             message += "\n\n";
             message += QObject::tr("Do you want to set database directory to default?");
             if(YesNo(nullptr, message))
             {
-                settings->setValue(Consts::KEY_USE_CUSTOMDATABASEDIR, false);
+                settings->setValue(KEY_USE_CUSTOMDATABASEDIR, false);
                 gReboot = true;
             }
         }
@@ -276,7 +278,7 @@ int main2(int argc, char *argv[], QApplication& theApp)
 #endif
 
 
-    MainWindow w(nullptr, *settings);
+    MainWindow w(nullptr, *settings, gpCommandOption->doc());
     if(!w.IsInitialized())
     {
         Alert(nullptr, QString(QObject::tr("Window initialization failed.")));
@@ -314,10 +316,10 @@ void noMessageOutput(QtMsgType type, const QMessageLogContext &context, const QS
 
 int main(int argc, char *argv[])
 {
-    QCoreApplication::setOrganizationName(Consts::ORGANIZATION);
-    QCoreApplication::setOrganizationDomain(Consts::APPDOMAIN);
-    QCoreApplication::setApplicationName(Consts::APPNAME);
-    QCoreApplication::setApplicationVersion(Consts::APPVERSION);
+    QCoreApplication::setOrganizationName(ORGANIZATION);
+    QCoreApplication::setOrganizationDomain(APPDOMAIN);
+    QCoreApplication::setApplicationName(APPNAME);
+    QCoreApplication::setApplicationVersion(APPVERSION);
 
     QApplication app(argc, argv);
 

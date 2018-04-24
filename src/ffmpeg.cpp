@@ -23,6 +23,8 @@
 #include "helper.h"
 #include "ffmpeg.h"
 
+using namespace Consts;
+
 QReadWriteLock FFMpeg::sLock_;
 
 //QString FFMpeg::ffprobe_;
@@ -31,25 +33,25 @@ QReadWriteLock FFMpeg::sLock_;
 QString FFMpeg::GetFFprobe(Settings& setting)
 {
     QReadLocker locker(&sLock_);
-    QString ffprobe = setting.valueString(Consts::KEY_FFPROBE_EXECUTABLE);
+    QString ffprobe = setting.valueString(KEY_FFPROBE_EXECUTABLE);
     return ffprobe.isEmpty() ? GetDefaultFFprobe() : ffprobe;
 }
 void FFMpeg::SetFFprobe(Settings& setting, const QString& file)
 {
     QWriteLocker locker(&sLock_);
     // ffprobe_ = file;
-    setting.setValue(Consts::KEY_FFPROBE_EXECUTABLE, file);
+    setting.setValue(KEY_FFPROBE_EXECUTABLE, file);
 }
 
 QString FFMpeg::GetFFmpeg(Settings& setting)
 {
     QReadLocker locker(&sLock_);
-    QString ffmpeg = setting.valueString(Consts::KEY_FFMPEG_EXECUTABLE);
+    QString ffmpeg = setting.valueString(KEY_FFMPEG_EXECUTABLE);
     return ffmpeg.isEmpty() ? GetDefaultFFmpeg() : ffmpeg;
 }
 void FFMpeg::SetFFmpeg(Settings& setting, const QString& file)
 {
     QWriteLocker locker(&sLock_);
     // ffmpeg_ = file;
-    setting.setValue(Consts::KEY_FFMPEG_EXECUTABLE, file);
+    setting.setValue(KEY_FFMPEG_EXECUTABLE, file);
 }

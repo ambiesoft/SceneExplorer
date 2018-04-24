@@ -159,7 +159,7 @@ bool Document::Load(const QString& file, const bool bExists)
 //    if(!dirOK)
 //    {
 //        QMessageBox msgBox;
-//        msgBox.setWindowTitle(Consts::APPNAME_DISPLAY);
+//        msgBox.setWindowTitle(APPNAME_DISPLAY);
 //        msgBox.setText(QString(tr("Failed to load user directory data from %1. Do you want to continue?")).
 //                       arg(settings.fileName()));
 //        msgBox.setStandardButtons(QMessageBox::Yes);

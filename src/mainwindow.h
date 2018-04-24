@@ -62,7 +62,9 @@ class MainWindow : public QMainWindow, IMainWindow
     QStringList recents_;
 
 public:
-    explicit MainWindow(QWidget *parent, Settings& settings);
+    explicit MainWindow(QWidget *parent,
+                        Settings& settings,
+                        const QString& docToOpen);
     ~MainWindow();
 
     bool IsInitialized() const;

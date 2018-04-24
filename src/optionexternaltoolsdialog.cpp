@@ -26,6 +26,7 @@
 #include "optionexternaltoolsdialog.h"
 #include "ui_optionexternaltoolsdialog.h"
 
+using namespace Consts;
 
 OptionExternalToolsDialog::OptionExternalToolsDialog(Settings& settings, QWidget *parent) :
     QDialog(parent,GetDefaultDialogFlags()),
@@ -33,7 +34,7 @@ OptionExternalToolsDialog::OptionExternalToolsDialog(Settings& settings, QWidget
     ui(new Ui::OptionExternalToolsDialog)
 {
     ui->setupUi(this);
-	lastSelectedExeDir_ = settings_.valueString(Consts::KEY_EXTERNALTOOLS_LASTSELECTEDEXEDIR);
+	lastSelectedExeDir_ = settings_.valueString(KEY_EXTERNALTOOLS_LASTSELECTEDEXEDIR);
     setWindowTitle(tr("Option") + " | " + tr("External tools"));
 }
 void OptionExternalToolsDialog::showEvent(QShowEvent *ev)
@@ -300,7 +301,7 @@ void OptionExternalToolsDialog::on_tbExecutable_clicked()
     ui->lineExe->setText(selectedFile);
 
     lastSelectedExeDir_ = QFileInfo(selectedFile).absoluteDir().absolutePath();
-    settings_.setValue(Consts::KEY_EXTERNALTOOLS_LASTSELECTEDEXEDIR, lastSelectedExeDir_);
+    settings_.setValue(KEY_EXTERNALTOOLS_LASTSELECTEDEXEDIR, lastSelectedExeDir_);
 }
 
 void OptionExternalToolsDialog::on_context_titleTemplateCommonMain()

@@ -21,28 +21,30 @@
 
 #include "externaltoolitem.h"
 
+using namespace Consts;
+
 ExternalToolItem ExternalToolItem::Load(int i, Settings& settings)
 {
-    QString group = Consts::KEY_EXTERNALTOOLS_GROUPPRIX + QString::number(i);
+    QString group = KEY_EXTERNALTOOLS_GROUPPRIX + QString::number(i);
 
     settings.beginGroup(group);
-    QString name = settings.valueString(Consts::KEY_EXTERNALTOOLS_NAME);
-    QString exe = settings.valueString(Consts::KEY_EXTERNALTOOLS_EXE);
-    QString arg = settings.valueString(Consts::KEY_EXTERNALTOOLS_ARG);
-    bool bCountAsOpen = settings.valueBool(Consts::KEY_EXTERNALTOOLS_COUNTASOPEN);
+    QString name = settings.valueString(KEY_EXTERNALTOOLS_NAME);
+    QString exe = settings.valueString(KEY_EXTERNALTOOLS_EXE);
+    QString arg = settings.valueString(KEY_EXTERNALTOOLS_ARG);
+    bool bCountAsOpen = settings.valueBool(KEY_EXTERNALTOOLS_COUNTASOPEN);
     settings.endGroup();
 
     return ExternalToolItem(name,exe,arg,bCountAsOpen);
 }
 void ExternalToolItem::Save(int i, Settings& settings)
 {
-    QString group = Consts::KEY_EXTERNALTOOLS_GROUPPRIX + QString::number(i);
+    QString group = KEY_EXTERNALTOOLS_GROUPPRIX + QString::number(i);
 
     settings.beginGroup(group);
-    settings.setValue(Consts::KEY_EXTERNALTOOLS_NAME, name_);
-    settings.setValue(Consts::KEY_EXTERNALTOOLS_EXE, exe_);
-    settings.setValue(Consts::KEY_EXTERNALTOOLS_ARG, arg_);
-    settings.setValue(Consts::KEY_EXTERNALTOOLS_COUNTASOPEN, countAsOpen_);
+    settings.setValue(KEY_EXTERNALTOOLS_NAME, name_);
+    settings.setValue(KEY_EXTERNALTOOLS_EXE, exe_);
+    settings.setValue(KEY_EXTERNALTOOLS_ARG, arg_);
+    settings.setValue(KEY_EXTERNALTOOLS_COUNTASOPEN, countAsOpen_);
     settings.endGroup();
 
 }

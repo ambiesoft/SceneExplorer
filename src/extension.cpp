@@ -20,6 +20,8 @@
 
 #include "extension.h"
 
+using namespace Consts;
+
 QReadWriteLock Extension::sLock_;
 bool Extension::bOrderAllow_;
 
@@ -232,10 +234,10 @@ void Extension::SetOrderAllow(bool b)
 
 void Extension::Load(Settings& settings)
 {
-    bOrderAllow_ = settings.valueBool(Consts::KEY_EXTENSION_ORDERALLOW, true);
+    bOrderAllow_ = settings.valueBool(KEY_EXTENSION_ORDERALLOW, true);
 
     QVariant vVal;
-    vVal = settings.value(Consts::KEY_ALLOW_EXTENSIONS);
+    vVal = settings.value(KEY_ALLOW_EXTENSIONS);
     if(vVal.isValid())
     {
         Extension::SetMovieExtensionAllow(vVal.toStringList());
@@ -245,7 +247,7 @@ void Extension::Load(Settings& settings)
         Extension::SetMovieExtensionAllow(Extension::GetDefaultAllow());
     }
 
-    vVal = settings.value(Consts::KEY_DENY_EXTENSIONS);
+    vVal = settings.value(KEY_DENY_EXTENSIONS);
     if(vVal.isValid())
     {
         Extension::SetMovieExtensionDeny(vVal.toStringList());
@@ -257,7 +259,7 @@ void Extension::Load(Settings& settings)
 }
 void Extension::Save(Settings& settings)
 {
-    settings.setValue(Consts::KEY_EXTENSION_ORDERALLOW, bOrderAllow_);
-    settings.setValue(Consts::KEY_ALLOW_EXTENSIONS, GetMovieExtensionAllow());
-    settings.setValue(Consts::KEY_DENY_EXTENSIONS, GetMovieExtensionDeny());
+    settings.setValue(KEY_EXTENSION_ORDERALLOW, bOrderAllow_);
+    settings.setValue(KEY_ALLOW_EXTENSIONS, GetMovieExtensionAllow());
+    settings.setValue(KEY_DENY_EXTENSIONS, GetMovieExtensionDeny());
 }

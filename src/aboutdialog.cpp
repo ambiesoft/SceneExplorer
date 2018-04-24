@@ -24,24 +24,26 @@
 #include "aboutdialog.h"
 #include "ui_aboutdialog.h"
 
+using namespace Consts;
+
 AboutDialog::AboutDialog(QWidget *parent) :
     QDialog(parent,GetDefaultDialogFlags()),
     ui(new Ui::AboutDialog)
 {
     ui->setupUi(this);
 
-    // QString title = Consts::APPNAME_DISPLAY;
+    // QString title = APPNAME_DISPLAY;
 
-    QString txtVersion = Consts::APPNAME_DISPLAY;
+    QString txtVersion = APPNAME_DISPLAY;
     txtVersion.append(" ");
     txtVersion.append("ver ");
-    txtVersion.append(Consts::APPVERSION);
+    txtVersion.append(APPVERSION);
     ui->lblVersion->setText(txtVersion);
 
     QString txtCopyright;
     txtCopyright.append("copyright 2018 ");
     txtCopyright.append(QString("<a href=\"http://ambiesoft.fam.cx/main/index.php?page=sceneexplorer\">%1</a> ").
-                        arg(Consts::ORGANIZATION));
+                        arg(ORGANIZATION));
     txtCopyright.append(QString("(<a href=\"https://github.com/ambiesoft/SceneExplorer\">%1</a>)").
                         arg("github"));
 
@@ -61,7 +63,7 @@ AboutDialog::AboutDialog(QWidget *parent) :
 //    ui->lblWebpage->setOpenExternalLinks(true);
 
     QString aboutText;
-    aboutText += QString() + "<h1>" + Consts::APPNAME_DISPLAY + "</h1>";
+    aboutText += QString() + "<h1>" + APPNAME_DISPLAY + "</h1>";
     aboutText +=
     "Copyright (C) 2018 Ambiesoft<br />"
     "<br />"

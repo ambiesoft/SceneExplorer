@@ -27,10 +27,10 @@
 
 #include "globals.h"
 #include "consts.h"
-
 #include "ffmpeg.h"
-
 #include "taskffmpeg.h"
+
+using namespace Consts;
 
 int TaskFFmpeg::waitMax_ = -1;
 
@@ -230,9 +230,9 @@ bool TaskFFmpeg::run3(QString& errorReason)
     }
 
     QString strWidthHeight;
-    strWidthHeight.append(QString::number(Consts::THUMB_WIDTH));
+    strWidthHeight.append(QString::number(THUMB_WIDTH));
     strWidthHeight.append("x");
-    strWidthHeight.append(QString::number(Consts::THUMB_HEIGHT));
+    strWidthHeight.append(QString::number(THUMB_HEIGHT));
 
     QString thumbfile = QUuid::createUuid().toString();
     thumbfile = thumbfile.remove(L'{');
@@ -245,7 +245,7 @@ bool TaskFFmpeg::run3(QString& errorReason)
         filename.append(QString::number(i));
         filename.append(".png");
 
-        QString actualFile = QString(Consts::FILEPART_THUMBS) + QDir::separator() + filename;
+        QString actualFile = QString(FILEPART_THUMBS) + QDir::separator() + filename;
 
         double timepoint = (((double)i-0.5)*duration/5);
         QStringList qsl;
@@ -313,12 +313,12 @@ bool TaskFFmpeg::run3(QString& errorReason)
         emitFiles.append(filename);
     }
 
-    // emit sayGoodby(id_,emitFiles, Consts::THUMB_WIDTH, Consts::THUMB_HEIGHT, movieFile_, format);
+    // emit sayGoodby(id_,emitFiles, THUMB_WIDTH, THUMB_HEIGHT, movieFile_, format);
     emit sayGoodby(loopId_,id_,
                    emitFiles,
                    movieFile_,
-                   Consts::THUMB_WIDTH,
-                   Consts::THUMB_HEIGHT,
+                   THUMB_WIDTH,
+                   THUMB_HEIGHT,
                    duration,
                    format,
                    bitrate,

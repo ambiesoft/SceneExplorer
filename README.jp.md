@@ -38,6 +38,22 @@ SceneExplorerはサムネイルを作成するためにFFmpegとFFproveが必要
 フォルダペインからフォルダを選択するとそのフォルダのサムネイルが表示されます。[すべて]を選択するとすべてのサムネイルが表示されます。[存在しない]を選択するとファイルがなくなったサムネイルが表示されます。
 
 
+## ファイルやディレクトリ
+このアプリが使う3つのタイプのパスがあります。
+### データベースディレクトリ
+サムネイルの画像ファイルとその管理のデータベースを置くディレクトリです。設定やコマンドライン(-d)から変えられます。デフォルトの位置は*C:\Users<Username>\AppData\Local\Ambiesoft\SceneExplorer*です。
+
+### 設定ファイル
+アプリの設定を保存するファイルです。*FolderConfig.exe*ツールで変更できます。デフォルトの位置は*C:\Users<Username>\AppData\Roaming\Ambiesoft\SceneExplorer\SceneExplorer.ini*です。
+
+### ドキュメントファイル
+アプリで追加したフォルダが保存されます。コマンドラインのメイン引数で指定できます。デフォルトの位置は*C:\Users<Username>\Documents\SceneExplorer\default.scexd*です。
+
+
+## ポータブル
+ポータブルで使いたいときは以下の手順で行います。
+1. **FolderConfig.exe**を起動して、
+
 ## ビルド
 ### Windows
 以下のコマンドでソースとビルドツールを取得します。

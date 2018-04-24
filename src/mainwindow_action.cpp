@@ -47,6 +47,8 @@
 
 #include "aboutdialog.h"
 
+using namespace Consts;
+
 void MainWindow::openVideo(const QString& movieFile)
 {
     if(!QDesktopServices::openUrl(QUrl::fromLocalFile(movieFile)))
@@ -86,14 +88,14 @@ void MainWindow::on_action_Options_triggered()
     dlg.mainText_ = tableModel_->GetTitleTextTemplate();
     dlg.subText_ = tableModel_->GetInfoTextTemplate();
     dlg.imagecache_ = tableModel_->GetImageCache();
-    dlg.useCustomDBDir_ = settings_.valueBool(Consts::KEY_USE_CUSTOMDATABASEDIR);
+    dlg.useCustomDBDir_ = settings_.valueBool(KEY_USE_CUSTOMDATABASEDIR);
     bool prevUseCustomDBDir = dlg.useCustomDBDir_;
-    dlg.dbdir_ = QDir::currentPath();
-    dlg.limitItems_ = settings_.valueBool(Consts::KEY_LIMIT_ITEMS, false);
-    dlg.maxRows_ = settings_.valueInt(Consts::KEY_LIMIT_NUMBEROFROWS, 1000);
-    dlg.openlastdoc_ = settings_.valueBool(Consts::KEY_OPEN_LASTOPENEDDOCUMENT, true);
-    dlg.ffprobe_ = settings_.valueString(Consts::KEY_FFPROBE_EXECUTABLE); // FFMpeg::GetFFprobe(settings_);
-    dlg.ffmpeg_ = settings_.valueString(Consts::KEY_FFMPEG_EXECUTABLE); //FFMpeg::GetFFmpeg(settings_);
+    dlg.dbdir_ = settings_.valueString(KEY_DATABASE_PATH); //QDir::currentPath();
+    dlg.limitItems_ = settings_.valueBool(KEY_LIMIT_ITEMS, false);
+    dlg.maxRows_ = settings_.valueInt(KEY_LIMIT_NUMBEROFROWS, 1000);
+    dlg.openlastdoc_ = settings_.valueBool(KEY_OPEN_LASTOPENEDDOCUMENT, true);
+    dlg.ffprobe_ = settings_.valueString(KEY_FFPROBE_EXECUTABLE); // FFMpeg::GetFFprobe(settings_);
+    dlg.ffmpeg_ = settings_.valueString(KEY_FFMPEG_EXECUTABLE); //FFMpeg::GetFFmpeg(settings_);
 
     if(QDialog::Accepted != dlg.exec())
         return;
@@ -105,11 +107,11 @@ void MainWindow::on_action_Options_triggered()
     tableModel_->SetTitleTextTemplate(dlg.mainText_);
     tableModel_->SetInfoTextTemplate(dlg.subText_);
     tableModel_->SetImageCache(dlg.imagecache_);
-    settings_.setValue(Consts::KEY_LIMIT_ITEMS, dlg.limitItems_);
-    settings_.setValue(Consts::KEY_LIMIT_NUMBEROFROWS, dlg.maxRows_);
-    settings_.setValue(Consts::KEY_OPEN_LASTOPENEDDOCUMENT,dlg.openlastdoc_);
-    settings_.setValue(Consts::KEY_USE_CUSTOMDATABASEDIR, dlg.useCustomDBDir_);
-    settings_.setValue(Consts::KEY_DATABASE_PATH, dlg.dbdir_);
+    settings_.setValue(KEY_LIMIT_ITEMS, dlg.limitItems_);
+    settings_.setValue(KEY_LIMIT_NUMBEROFROWS, dlg.maxRows_);
+    settings_.setValue(KEY_OPEN_LASTOPENEDDOCUMENT,dlg.openlastdoc_);
+    settings_.setValue(KEY_USE_CUSTOMDATABASEDIR, dlg.useCustomDBDir_);
+    settings_.setValue(KEY_DATABASE_PATH, dlg.dbdir_);
     FFMpeg::SetFFprobe(settings_, dlg.ffprobe_);
     FFMpeg::SetFFmpeg(settings_, dlg.ffmpeg_);
 
@@ -251,7 +253,7 @@ void MainWindow::onMenu_RecentDocuments_AboutToShow()
 //{
 //    bool ok;
 //    QString name = QInputDialog::getText(this,
-//                                         Consts::APPNAME_DISPLAY,
+//                                         APPNAME_DISPLAY,
 //                                         tr("Name:"),
 //                                         QLineEdit::Normal,
 //                                         QString(),
@@ -466,15 +468,15 @@ void MainWindow::on_action_About_triggered()
     AboutDialog dlg(this);
     dlg.exec();
 
-//    QString title = Consts::APPNAME_DISPLAY;
-//    QString text = Consts::APPNAME;
+//    QString title = APPNAME_DISPLAY;
+//    QString text = APPNAME;
 //    text.append(" ");
 //    text.append("ver ");
-//    text.append(Consts::VERSION);
+//    text.append(VERSION);
 //    text.append("\n");
 //    text.append("\n");
 //    text.append("copyright 2018 ");
-//    text.append(Consts::ORGANIZATION);
+//    text.append(ORGANIZATION);
 //    QMessageBox msgbox(this);
 //    msgbox.setIcon(QMessageBox::Information);
 //    msgbox.setText(text);
@@ -941,9 +943,9 @@ bool MainWindow::LimitManager::Increment()
 
 void MainWindow::langChanged_common(const QString& lang)
 {
-    if(settings_.value(Consts::KEY_LANGUAGE)==lang)
+    if(settings_.value(KEY_LANGUAGE)==lang)
         return;
-    settings_.setValue(Consts::KEY_LANGUAGE, lang);
+    settings_.setValue(KEY_LANGUAGE, lang);
     if(YesNo(this,
           tr("Application needs to restart to effect the change. Do you want to restart application now?")))
     {
@@ -966,7 +968,7 @@ void MainWindow::onMenuLanguage_AboutToShow()
         }
     }
 
-    QString lang = settings_.valueString(Consts::KEY_LANGUAGE);
+    QString lang = settings_.valueString(KEY_LANGUAGE);
     if(lang.isEmpty())
     {
         ui->action_System_default->setChecked(true);

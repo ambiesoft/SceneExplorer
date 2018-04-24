@@ -31,6 +31,8 @@
 #include "ui_mainwindow.h"
 #include "mainwindow.h"
 
+using namespace Consts;
+
 void MainWindow::showEvent( QShowEvent* event )
 {
     QMainWindow::showEvent( event );
@@ -98,41 +100,41 @@ void MainWindow::closeEvent(QCloseEvent *event) {
 
     clearAllPool();
 
-    settings_.setValue(Consts::KEY_GEOMETRY, saveGeometry());
-    settings_.setValue(Consts::KEY_WINDOWSTATE, saveState());
+    settings_.setValue(KEY_GEOMETRY, saveGeometry());
+    settings_.setValue(KEY_WINDOWSTATE, saveState());
 
     if(!this->isMaximized() && !this->isMinimized())
     {
-        settings_.setValue(Consts::KEY_SIZE, this->size());
-        settings_.setValue(Consts::KEY_TREESIZE, ui->directoryWidget->size());
-        settings_.setValue(Consts::KEY_TXTLOGSIZE, ui->txtLog->size());
-        settings_.setValue(Consts::KEY_LISTTASKSIZE, ui->listTask->size());
+        settings_.setValue(KEY_SIZE, this->size());
+        settings_.setValue(KEY_TREESIZE, ui->directoryWidget->size());
+        settings_.setValue(KEY_TXTLOGSIZE, ui->txtLog->size());
+        settings_.setValue(KEY_LISTTASKSIZE, ui->listTask->size());
     }
-    settings_.setValue(Consts::KEY_LASTSELECTEDADDFOLDERDIRECTORY, lastSelectedAddFolderDir_);
-    settings_.setValue(Consts::KEY_LASTSELECTEDSCANDIRECTORY, lastSelectedScanDir_);
+    settings_.setValue(KEY_LASTSELECTEDADDFOLDERDIRECTORY, lastSelectedAddFolderDir_);
+    settings_.setValue(KEY_LASTSELECTEDSCANDIRECTORY, lastSelectedScanDir_);
 
     QStringList findtexts;
-    int combosavecount = qMin(cmbFind_->count(), Consts::MAX_COMBOFIND_SAVECOUNT);
+    int combosavecount = qMin(cmbFind_->count(), MAX_COMBOFIND_SAVECOUNT);
     for(int i=0; i < combosavecount; ++i)
     {
         findtexts << cmbFind_->itemText(i);
     }
-    settings_.setValue(Consts::KEY_COMBO_FINDTEXTS, findtexts);
+    settings_.setValue(KEY_COMBO_FINDTEXTS, findtexts);
 
-    settings_.setValue(Consts::KEY_SHOWMISSING, tbShowNonExistant_->isChecked());
+    settings_.setValue(KEY_SHOWMISSING, tbShowNonExistant_->isChecked());
 
 
     pDoc_->Store(ui->directoryWidget,
                  ui->tableView->verticalScrollBar()->value(),
                  ui->tableView->currentIndex());
 
-    settings_.setValue(Consts::KEY_MAX_GETDIR_THREADCOUNT, optionThreadcountGetDir_);
-    settings_.setValue(Consts::KEY_MAX_THUMBNAIL_THREADCOUNT, optionThreadcountThumbnail_);
-    settings_.setValue(Consts::KEY_THUMBNAIL_COUNT, optionThumbCount_);
+    settings_.setValue(KEY_MAX_GETDIR_THREADCOUNT, optionThreadcountGetDir_);
+    settings_.setValue(KEY_MAX_THUMBNAIL_THREADCOUNT, optionThreadcountThumbnail_);
+    settings_.setValue(KEY_THUMBNAIL_COUNT, optionThumbCount_);
 
-    settings_.setValue(Consts::KEY_TITLE_TEXT_TEMPLATE, tableModel_->GetTitleTextTemplate());
-    settings_.setValue(Consts::KEY_INFO_TEXT_TEMPLATE, tableModel_->GetInfoTextTemplate());
-    settings_.setValue(Consts::KEY_IMAGECACHETYPE, (int)tableModel_->GetImageCache());
+    settings_.setValue(KEY_TITLE_TEXT_TEMPLATE, tableModel_->GetTitleTextTemplate());
+    settings_.setValue(KEY_INFO_TEXT_TEMPLATE, tableModel_->GetInfoTextTemplate());
+    settings_.setValue(KEY_IMAGECACHETYPE, (int)tableModel_->GetImageCache());
 
     Extension::Save(settings_);
 
@@ -140,14 +142,14 @@ void MainWindow::closeEvent(QCloseEvent *event) {
     {
         externalTools_[i].Save(i, settings_);
     }
-    settings_.setValue(Consts::KEY_EXTERNALTOOLS_COUNT, externalTools_.count());
+    settings_.setValue(KEY_EXTERNALTOOLS_COUNT, externalTools_.count());
 
     // recents
-    settings_.setValue(Consts::KEY_RECENT_OPENDOCUMENTS,recents_);
+    settings_.setValue(KEY_RECENT_OPENDOCUMENTS,recents_);
 
 	// sort
-	settings_.setValue(Consts::KEY_SORT, (int)sortManager_.GetCurrentSort());
-	settings_.setValue(Consts::KEY_SORTREV, sortManager_.GetCurrentRev());
+	settings_.setValue(KEY_SORT, (int)sortManager_.GetCurrentSort());
+	settings_.setValue(KEY_SORTREV, sortManager_.GetCurrentRev());
 
     QMainWindow::closeEvent(event);
 }

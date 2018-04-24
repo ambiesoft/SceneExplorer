@@ -40,6 +40,10 @@
 #include "consts.h"
 #include "helper.h"
 
+
+using namespace Consts;
+
+
 QString rstrip(const QString& str, QChar c) {
   int n = str.size() - 1;
   for (; n >= 0; --n) {
@@ -74,7 +78,7 @@ void Info(QWidget* parent, QString message)
 {
 	QMessageBox msgBox(parent);
 	
-    msgBox.setWindowTitle(Consts::APPNAME_DISPLAY);
+    msgBox.setWindowTitle(APPNAME_DISPLAY);
 	// msgBox.setInformativeText(message);
 	msgBox.setText(message);
 	msgBox.setStandardButtons(QMessageBox::Ok);
@@ -95,7 +99,7 @@ bool YesNo(QWidget* parent, QString message)
 {
 	QMessageBox msgBox(parent);
 	
-    msgBox.setWindowTitle(Consts::APPNAME_DISPLAY);
+    msgBox.setWindowTitle(APPNAME_DISPLAY);
 	msgBox.setText(message);
 	msgBox.setStandardButtons(QMessageBox::Yes);
 	msgBox.addButton(QMessageBox::No);
@@ -350,9 +354,22 @@ bool processCommandLine(QString* helpText)
         parser.showVersion();
         return false;
     }
-    QString dbdir = parser.value(dbDirectoryOption);
 
-    gpCommandOption = new CommandOption(dbdir);
+    QString dbdir = parser.value(dbDirectoryOption);
+    QString doc;
+
+    const QStringList args = parser.positionalArguments();
+    if(!args.isEmpty())
+    {
+        doc = args[0];
+        if(doc=="/?")
+        {
+            parser.showHelp();
+            return false;
+        }
+    }
+
+    gpCommandOption = new CommandOption(dbdir,doc);
 
     return true;
 }
@@ -369,7 +386,7 @@ QString ExpandEnv(const QString& str)
         result += str.mid(prevpos,pos-prevpos);
         int matchedlen = rx.matchedLength();
         QString s = str.mid(pos,matchedlen);
-        if(s==Consts::STR_ENV_SCENEEXPLORER_ROOT)
+        if(s==STR_ENV_SCENEEXPLORER_ROOT)
         {
             static QString thisdir = GetAppDir();
             result += thisdir;

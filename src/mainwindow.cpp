@@ -71,8 +71,11 @@
 
 #include "mainwindow.h"
 
+using namespace Consts;
 
-MainWindow::MainWindow(QWidget *parent, Settings& settings) :
+MainWindow::MainWindow(QWidget *parent,
+                       Settings& settings,
+                       const QString& docToOpen) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
     settings_(settings)
@@ -81,7 +84,7 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
     initLangMenus();
     idManager_ = new IDManager(this);
 
-    this->setWindowTitle(Consts::APPNAME_DISPLAY);
+    this->setWindowTitle(APPNAME_DISPLAY);
 
 
 
@@ -224,7 +227,7 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
     cmbFind_->setMinimumWidth(100);
     cmbFind_->setMaximumWidth(100);
     cmbFind_->setEditable(true);
-    QStringList findtexts = settings_.valueStringList(Consts::KEY_COMBO_FINDTEXTS);
+    QStringList findtexts = settings_.valueStringList(KEY_COMBO_FINDTEXTS);
     cmbFind_->addItems(findtexts);
     cmbFind_->setEditText("");
     QObject::connect(cmbFind_, &FindComboBox::on_EnterPressed,
@@ -262,31 +265,31 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
 
     QVariant vVal;
 
-    vVal = settings.value(Consts::KEY_SIZE);
+    vVal = settings.value(KEY_SIZE);
     if(vVal.isValid())
         resize(vVal.toSize());
 
-    vVal = settings.value(Consts::KEY_LASTSELECTEDADDFOLDERDIRECTORY);
+    vVal = settings.value(KEY_LASTSELECTEDADDFOLDERDIRECTORY);
     if(vVal.isValid())
         lastSelectedAddFolderDir_ = vVal.toString();
 
-    vVal = settings.value(Consts::KEY_LASTSELECTEDSCANDIRECTORY);
+    vVal = settings.value(KEY_LASTSELECTEDSCANDIRECTORY);
     if(vVal.isValid())
         lastSelectedScanDir_ = vVal.toString();
 
-    vVal = settings.value(Consts::KEY_TREESIZE);
+    vVal = settings.value(KEY_TREESIZE);
     if(vVal.isValid())
         ui->directoryWidget->setMaximumSize(vVal.toSize());
 
-    vVal = settings.value(Consts::KEY_TXTLOGSIZE);
+    vVal = settings.value(KEY_TXTLOGSIZE);
     if(vVal.isValid())
         ui->txtLog->setMaximumSize(vVal.toSize());
 
-    vVal = settings.value(Consts::KEY_LISTTASKSIZE);
+    vVal = settings.value(KEY_LISTTASKSIZE);
     if(vVal.isValid())
         ui->listTask->setMaximumSize(vVal.toSize());
 
-    vVal = settings.value(Consts::KEY_SHOWMISSING);
+    vVal = settings.value(KEY_SHOWMISSING);
 
     // make default true
     bool bShowMissing = (!vVal.isValid() || vVal.toBool());
@@ -298,16 +301,16 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
 
 
 
-    optionThreadcountGetDir_ = settings_.valueInt(Consts::KEY_MAX_GETDIR_THREADCOUNT, optionThreadcountGetDir_);
-    optionThreadcountThumbnail_ = settings_.valueInt(Consts::KEY_MAX_THUMBNAIL_THREADCOUNT, optionThreadcountThumbnail_);
-    optionThumbCount_ = settings_.valueInt(Consts::KEY_THUMBNAIL_COUNT, 3);
+    optionThreadcountGetDir_ = settings_.valueInt(KEY_MAX_GETDIR_THREADCOUNT, optionThreadcountGetDir_);
+    optionThreadcountThumbnail_ = settings_.valueInt(KEY_MAX_THUMBNAIL_THREADCOUNT, optionThreadcountThumbnail_);
+    optionThumbCount_ = settings_.valueInt(KEY_THUMBNAIL_COUNT, 3);
     if(optionThumbCount_ != 3 && optionThumbCount_ != 5)
         optionThumbCount_ = 3;
     tableModel_->SetColumnCountImage(optionThumbCount_);
-    tableModel_->SetTitleTextTemplate(settings_.valueString(Consts::KEY_TITLE_TEXT_TEMPLATE, Consts::DEFAULT_ITEM_MAIN_TEXT));
-    tableModel_->SetInfoTextTemplate(settings_.valueString(Consts::KEY_INFO_TEXT_TEMPLATE, Consts::DEFAULT_ITEM_SUB_TEXT));
+    tableModel_->SetTitleTextTemplate(settings_.valueString(KEY_TITLE_TEXT_TEMPLATE, DEFAULT_ITEM_MAIN_TEXT));
+    tableModel_->SetInfoTextTemplate(settings_.valueString(KEY_INFO_TEXT_TEMPLATE, DEFAULT_ITEM_SUB_TEXT));
 
-    tableModel_->SetImageCache((ImageCacheType)settings_.valueInt(Consts::KEY_IMAGECACHETYPE,1));
+    tableModel_->SetImageCache((ImageCacheType)settings_.valueInt(KEY_IMAGECACHETYPE,1));
 
 
     // extension
@@ -316,7 +319,7 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
 
     // font
     QFont font;
-    vVal = settings_.value(Consts::KEY_FONT_TABLEINFO);
+    vVal = settings_.value(KEY_FONT_TABLEINFO);
     if(vVal.isValid() && font.fromString(vVal.toString()))
     {
         tableModel_->SetInfoFont(font);
@@ -326,7 +329,7 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
         tableModel_->SetInfoFont(ui->tableView->font());
     }
 
-    vVal = settings_.value(Consts::KEY_FONT_TABLEDETAIL);
+    vVal = settings_.value(KEY_FONT_TABLEDETAIL);
     if(vVal.isValid() && font.fromString(vVal.toString()))
     {
         tableModel_->SetDetailFont(font);
@@ -336,7 +339,7 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
         tableModel_->SetDetailFont(ui->tableView->font());
     }
 
-    vVal = settings_.value(Consts::KEY_FONT_OUPUT);
+    vVal = settings_.value(KEY_FONT_OUPUT);
     if(vVal.isValid() && font.fromString(vVal.toString()))
     {
         ui->txtLog->setFont(font);
@@ -344,7 +347,7 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
 
 
     // external tools
-    int externalToolsCount = settings_.valueInt(Consts::KEY_EXTERNALTOOLS_COUNT, 0);
+    int externalToolsCount = settings_.valueInt(KEY_EXTERNALTOOLS_COUNT, 0);
     for(int i=0 ; i < externalToolsCount; ++i)
     {
         externalTools_.append(ExternalToolItem::Load(i, settings_));
@@ -355,39 +358,48 @@ MainWindow::MainWindow(QWidget *parent, Settings& settings) :
 
 
 	// sort
-	sortManager_.InitCurrentSort((SORTCOLUMNMY)settings.valueInt(Consts::KEY_SORT, (int)SORT_NONE),
-		settings_.valueBool(Consts::KEY_SORTREV, false));
+	sortManager_.InitCurrentSort((SORTCOLUMNMY)settings.valueInt(KEY_SORT, (int)SORT_NONE),
+		settings_.valueBool(KEY_SORTREV, false));
 
 
     // recents
-    recents_ = settings_.valueStringList(Consts::KEY_RECENT_OPENDOCUMENTS);
+    recents_ = settings_.valueStringList(KEY_RECENT_OPENDOCUMENTS);
 
-    if(settings_.valueBool(Consts::KEY_OPEN_LASTOPENEDDOCUMENT, true))
+    if(!docToOpen.isEmpty())
     {
-        if(recents_.isEmpty() || !OpenDocument(recents_[0], true))
+        if(!OpenDocument(docToOpen, false))
+            return ;
+    }
+    else
+    {
+        if(settings_.valueBool(KEY_OPEN_LASTOPENEDDOCUMENT, true))
         {
-            // recents is empty or OpenDocument fails.
-            // open default document.
+            if(recents_.isEmpty() || !OpenDocument(recents_[0], true))
+            {
+                // recents is empty or OpenDocument fails.
+                // open default document.
+                QString defaultdoc = GetDefaultDocumentPath();
+                if(defaultdoc.isEmpty())
+                    return;
+
+                if(!OpenDocument(defaultdoc, false))
+                    return ;
+            }
+        }
+        else
+        {
             QString defaultdoc = GetDefaultDocumentPath();
             if(defaultdoc.isEmpty())
                 return;
 
             if(!OpenDocument(defaultdoc, false))
-                return ;
-		}
-    }
-    else
-    {
-        QString defaultdoc = GetDefaultDocumentPath();
-        if(defaultdoc.isEmpty())
-            return;
-
-        if(!OpenDocument(defaultdoc, false))
-            return;
+                return;
+        }
     }
 
-    restoreGeometry(settings.value(Consts::KEY_GEOMETRY).toByteArray());
-    restoreState(settings.value(Consts::KEY_WINDOWSTATE).toByteArray());
+
+    restoreGeometry(settings.value(KEY_GEOMETRY).toByteArray());
+    restoreState(settings.value(KEY_WINDOWSTATE).toByteArray());
     UpdateTitle(QStringList(), UpdateTitleType::INIT);
 	initialized_ = true;
 }
@@ -406,11 +418,11 @@ MainWindow::SortManager::SortManager()
 
 void MainWindow::CreateLimitManager()
 {
-    if(settings_.valueBool(Consts::KEY_LIMIT_ITEMS, false))
+    if(settings_.valueBool(KEY_LIMIT_ITEMS, false))
     { // Create
         if(limitManager_)
         { // already exits
-            limitManager_->SetNumberOfRows(settings_.valueInt(Consts::KEY_LIMIT_NUMBEROFROWS, 1000));
+            limitManager_->SetNumberOfRows(settings_.valueInt(KEY_LIMIT_NUMBEROFROWS, 1000));
         }
         else
         {
@@ -455,7 +467,7 @@ void MainWindow::CreateLimitManager()
 
             sepLimit_ = ui->mainToolBar->insertSeparator(ui->actionplaceHolder_Limit);
 
-            int numofrows = settings_.valueInt(Consts::KEY_LIMIT_NUMBEROFROWS, 1000);
+            int numofrows = settings_.valueInt(KEY_LIMIT_NUMBEROFROWS, 1000);
             limitManager_ = new LimitManager(numofrows, cmbLimit_);
         }
     }
@@ -516,7 +528,7 @@ QString MainWindow::GetDefaultDocumentPath()
         Alert(this,QString(tr("Failed to get document directory.")));
         return QString();
     }
-    docdir=pathCombine(docdir, Consts::APPNAME);
+    docdir=pathCombine(docdir, APPNAME);
     QDir().mkpath(docdir);
     if(!QDir(docdir).exists())
     {
@@ -537,7 +549,7 @@ bool MainWindow::OpenDocument(const QString& file, const bool bExists)
         return false;
     }
 
-    qDebug() << "Document Loaded: " << file;
+    qDebug() << "Document Opened: " << file;
     recents_.removeDuplicates();
     recents_.removeOne(file);
     recents_.insert(0, file);
@@ -590,11 +602,11 @@ void MainWindow::InitDocument()
 //        initColumnWidth=true;
 //        for(int i=0 ; i < 5 ; ++i)
 //        {
-//            ui->tableView->setColumnWidth(i, Consts::THUMB_WIDTH);
+//            ui->tableView->setColumnWidth(i, THUMB_WIDTH);
 //        }
 //    }
 
-//    ui->tableView->setRowHeight(newRowImage, Consts::THUMB_HEIGHT);
+//    ui->tableView->setRowHeight(newRowImage, THUMB_HEIGHT);
 //}
 
 QThreadPool* MainWindow::getPoolGetDir()
@@ -1391,11 +1403,11 @@ void MainWindow::UpdateTitle(const QStringList& dirs, UpdateTitleType utt)
     }
 
     if(title.isEmpty())
-        title = Consts::APPNAME_DISPLAY;
+        title = APPNAME_DISPLAY;
     else
     {
         title.append(" - ");
-        title.append(Consts::APPNAME_DISPLAY);
+        title.append(APPNAME_DISPLAY);
     }
 
 #ifdef QT_DEBUG
@@ -1561,7 +1573,7 @@ void MainWindow::on_action_Font_triggered()
         return;
 
     tableModel_->SetInfoFont(font);
-    settings_.setValue(Consts::KEY_FONT_TABLEINFO, font.toString());
+    settings_.setValue(KEY_FONT_TABLEINFO, font.toString());
 }
 
 void MainWindow::on_action_FontDetail_triggered()
@@ -1575,7 +1587,7 @@ void MainWindow::on_action_FontDetail_triggered()
         return;
 
     tableModel_->SetDetailFont(font);
-    settings_.setValue(Consts::KEY_FONT_TABLEDETAIL, font.toString());
+    settings_.setValue(KEY_FONT_TABLEDETAIL, font.toString());
 }
 
 void MainWindow::on_action_Output_triggered()
@@ -1589,7 +1601,7 @@ void MainWindow::on_action_Output_triggered()
         return;
 
     ui->txtLog->setFont(font);
-    settings_.setValue(Consts::KEY_FONT_OUPUT, font.toString());
+    settings_.setValue(KEY_FONT_OUPUT, font.toString());
 }
 
 
@@ -1687,7 +1699,7 @@ bool MainWindow::checkFFmpeg(QString& errString) const
 
 void MainWindow::on_actionAbout_document_triggered()
 {
-    QString title = Consts::APPNAME_DISPLAY;
+    QString title = APPNAME_DISPLAY;
     QString text;
 
     text.append(tr("Executable"));
@@ -1758,7 +1770,7 @@ void MainWindow::on_actionShow_missing_files_triggered()
 
 void MainWindow::initLangMenus()
 {
-    QString lang = settings_.valueString(Consts::KEY_LANGUAGE);
+    QString lang = settings_.valueString(KEY_LANGUAGE);
     if(lang.isEmpty() || lang=="English")
         return;
 

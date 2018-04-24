@@ -36,6 +36,7 @@
 #include "tableitemdata.h"
 #include "tablemodel.h"
 
+using namespace Consts;
 
 TableModel::TableModel(QTableView *parent, IMainWindow* mainWindow)
     :QAbstractTableModel(parent), parent_(parent), mainWindow_(mainWindow)
@@ -73,11 +74,11 @@ void TableModel:: AppendData(TableItemDataPointer pItemData, const bool enableUp
         initColumnWidth_=true;
         for(int i=0 ; i < columnCountImage_ ; ++i)
         {
-            parent_->setColumnWidth(i, Consts::THUMB_WIDTH);
+            parent_->setColumnWidth(i, THUMB_WIDTH);
         }
     }
 
-    // parent_->setRowHeight(newRowImage, Consts::THUMB_HEIGHT);
+    // parent_->setRowHeight(newRowImage, THUMB_HEIGHT);
 
     emit itemCountChanged();
 }
@@ -455,10 +456,10 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
             {
 				qDebug() << "Image DecorationRoll: Index=" << index.row();
 
-                parent_->setColumnWidth(index.row(), Consts::THUMB_WIDTH);
-                parent_->setRowHeight(index.row(), Consts::THUMB_HEIGHT);
+                parent_->setColumnWidth(index.row(), THUMB_WIDTH);
+                parent_->setRowHeight(index.row(), THUMB_HEIGHT);
 
-                QString imageFile = pathCombine(Consts::FILEPART_THUMBS,
+                QString imageFile = pathCombine(FILEPART_THUMBS,
                                                 itemDatas_[actualIndex]->getImageFiles()[getActualColumnIndex(index.column())]);
                 if(imagecache_==ImageCacheType::IC_NEVER)
                 {

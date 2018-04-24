@@ -30,6 +30,8 @@
 #include "ui_mainwindow.h"
 #include "mainwindow.h"
 
+using namespace Consts;
+
 void MainWindow::sayHello(int loopId, int id,
                const QString& movieFile)
 {
@@ -65,9 +67,9 @@ void MainWindow::sayGoodby(int loopId,  int id,
 	{
         for(const QString& thumbfile:files)
         {
-            if(thumbfile.count() == Consts::THUMB_FILENAME_LENGTH)
+            if(thumbfile.count() == THUMB_FILENAME_LENGTH)
             {
-                QFile fi(pathCombine(Consts::FILEPART_THUMBS, thumbfile));
+                QFile fi(pathCombine(FILEPART_THUMBS, thumbfile));
                 if(fi.exists())
                 {
                     VERIFY(fi.remove());
