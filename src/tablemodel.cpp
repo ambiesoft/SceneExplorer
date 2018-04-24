@@ -210,6 +210,47 @@ static bool checkDup(const QString& s, QSet<QString>& map)
     map.insert(s);
     return true;
 }
+QString parseYen(const QString& str)
+{
+    static QRegExp rx("(\\\\.)");
+    QString result;
+    int prevpos = 0;
+    int pos = 0;
+
+    while ((pos = rx.indexIn(str, pos)) != -1)
+    {
+        result += str.mid(prevpos,pos-prevpos);
+        int matchedlen = rx.matchedLength();
+        QString s = str.mid(pos,matchedlen);
+        if(false)
+        {}
+        else if(s=="\\n")
+        {
+            result += "\n";
+        }
+        else if(s=="\\r")
+        {
+            result += "\r";
+        }
+        else if(s=="\\\\")
+        {
+            result += "\\";
+        }
+        else if(s=="\\t")
+        {
+            result += "\t";
+        }
+        else
+        {
+            result += str.mid(pos, matchedlen);
+        }
+        pos += matchedlen;
+        prevpos = pos;
+    }
+    result += str.mid(prevpos);
+
+    return result;
+}
 QString TableModel::ExtractInfoText(TableItemDataPointer item, const QString& str) const
 {
     static QRegExp rx("(\\$\\{\\w+\\})");
@@ -283,7 +324,8 @@ QString TableModel::ExtractInfoText(TableItemDataPointer item, const QString& st
         prevpos = pos;
     }
     result += str.mid(prevpos);
-    return result;
+
+    return parseYen(result);
 }
 QString TableModel::GetInfoText(TableItemDataPointer item) const
 {

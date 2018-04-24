@@ -356,3 +356,32 @@ bool processCommandLine(QString* helpText)
 
     return true;
 }
+
+QString ExpandEnv(const QString& str)
+{
+    static QRegExp rx("(\\$\\{\\w+\\})");
+    QString result;
+    int prevpos = 0;
+    int pos = 0;
+
+    while ((pos = rx.indexIn(str, pos)) != -1)
+    {
+        result += str.mid(prevpos,pos-prevpos);
+        int matchedlen = rx.matchedLength();
+        QString s = str.mid(pos,matchedlen);
+        if(s==Consts::STR_ENV_SCENEEXPLORER_ROOT)
+        {
+            static QString thisdir = GetAppDir();
+            result += thisdir;
+        }
+        else
+        {
+            result += str.mid(pos, matchedlen);
+        }
+        pos += matchedlen;
+        prevpos = pos;
+    }
+    result += str.mid(prevpos);
+
+    return result;
+}

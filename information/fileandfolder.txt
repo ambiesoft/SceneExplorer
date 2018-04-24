@@ -1,0 +1,8 @@
+ファイルとフォルダの関係
+
+設定ファイルSceneExplorer.ini (C:\Users\kineko\AppData\Roaming\Ambiesoft\SceneExplorer)
+データベースディレクトリ　（ローカル）
+ドキュメント　（ドキュメントフォルダ）
+
+
+ドキュメントが読めないときの処理

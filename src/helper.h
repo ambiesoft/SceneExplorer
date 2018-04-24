@@ -52,3 +52,5 @@ void InsertUniqueTextToComboBox(QComboBox& combo, const QString& text);
 QString dq(const QString& s);
 
 bool processCommandLine(QString* helpText=nullptr);
+
+QString ExpandEnv(const QString& str);

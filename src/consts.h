@@ -107,5 +107,8 @@ namespace Consts
     const char DEFAULT_ITEM_SUB_TEXT[] = "${size}";
 
     const int MAX_COMBOFIND_SAVECOUNT = 256;
+
+    const char STR_ENV_SCENEEXPLORER_ROOT[] = "${SCENEEXPLORER_ROOT}";
+
 }
 #endif // CONSTS_H

@@ -105,39 +105,41 @@ bool OpenDatabaseDirectory(const QString& dbDir)
     return true;
 }
 
-bool GetDefaultDatabaseDirectory(Settings& settings, QString& dbDir, bool& bQuit)
+bool GetDatabaseDirectory(Settings& settings, QString& dbDirToSet, bool& bQuit)
 {
     bQuit = false;
     if(settings.valueBool(Consts::KEY_USE_CUSTOMDATABASEDIR))
-        dbDir = settings.valueString(Consts::KEY_DATABASE_PATH);
-    else
-        dbDir.clear();
-
-    if(!dbDir.isEmpty() && !QDir(dbDir).exists())
     {
-        QDir().mkpath(dbDir);
-        if(!QDir(dbDir).exists())
+        dbDirToSet = ExpandEnv(settings.valueString(Consts::KEY_DATABASE_PATH));
+    }
+    else
+        dbDirToSet.clear();
+
+    if(!dbDirToSet.isEmpty() && !QDir(dbDirToSet).exists())
+    {
+        QDir().mkpath(dbDirToSet);
+        if(!QDir(dbDirToSet).exists())
         {
             Alert(nullptr,QString(QObject::tr("Failed to create directory \"%1\"")).
-                  arg(dbDir));
+                  arg(dbDirToSet));
         }
     }
 
 
-    if (dbDir.isEmpty())
+    if (dbDirToSet.isEmpty())
 	{
-        dbDir = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
-        QDir().mkpath(dbDir);
+        dbDirToSet = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+        QDir().mkpath(dbDirToSet);
 	}
 
-    if(dbDir.isEmpty() || !QDir(dbDir).exists())
+    if(dbDirToSet.isEmpty() || !QDir(dbDirToSet).exists())
     {
         if(settings.valueBool(Consts::KEY_USE_CUSTOMDATABASEDIR))
         {
-            dbDir = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
+            dbDirToSet = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
             QFileDialog dlg;
             dlg.setFileMode(QFileDialog::FileMode::DirectoryOnly);
-            dlg.setDirectory(dbDir);
+            dlg.setDirectory(dbDirToSet);
             dlg.setWindowTitle(QObject::tr("Choose Database directory"));
             if(!dlg.exec())
             {
@@ -148,8 +150,8 @@ bool GetDefaultDatabaseDirectory(Settings& settings, QString& dbDir, bool& bQuit
             if(dlg.selectedFiles().isEmpty())
                 return false;
 
-            dbDir = dlg.selectedFiles()[0];
-            settings.setValue(Consts::KEY_DATABASE_PATH, dbDir);
+            dbDirToSet = dlg.selectedFiles()[0];
+            settings.setValue(Consts::KEY_DATABASE_PATH, dbDirToSet);
         }
         else
         {
@@ -231,7 +233,7 @@ int main2(int argc, char *argv[], QApplication& theApp)
     if(dbdir.isEmpty())
     {
         bool bQuit = false;
-        if(!GetDefaultDatabaseDirectory(*settings,dbdir,bQuit))
+        if(!GetDatabaseDirectory(*settings,dbdir,bQuit))
         {
             Alert(nullptr, QString(QObject::tr("Failed to get default database directory.")));
             return PR_GETDIRECTORYFAILED;
