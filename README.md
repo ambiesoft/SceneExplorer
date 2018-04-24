@@ -53,6 +53,7 @@ This file holds Folders which user assigns. If you supply filename in command-li
 If you want to make SceneExplorer portable, follow these instructions.
 1. Launch **FolderConfig.exe** and select "Under this folder".
 2. Launch SceneExplorer.exe, open **option**, Check **Use custom database directory**, and enter **Database directory** as *${SCENEEXPLORER_ROOT}/db*.
+3. Create a document file in this directory.
 
 See *Help -> About Documents* to confirm data is correct.
 
