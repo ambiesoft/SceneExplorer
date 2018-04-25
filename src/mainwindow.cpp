@@ -1787,3 +1787,20 @@ void MainWindow::on_action_Command_Line_triggered()
 
     Info(this,helpText);
 }
+
+void MainWindow::on_action_Help_triggered()
+{
+    QString lang = settings_.valueString(KEY_LANGUAGE);
+    QString url = "https://github.com/ambiesoft/SceneExplorer/blob/master/";
+    if(lang=="Japanese")
+        url += "README.jp.md";
+    else
+        url += "README.md";
+
+    if(!QDesktopServices::openUrl(url))
+    {
+        Alert(this, QString(tr("failed to launch %1.")).arg(url));
+        return;
+    }
+
+}

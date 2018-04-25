@@ -98,7 +98,7 @@ If you have troubles, post *Issue* on <https://github.com/ambiesoft/SceneExplore
 ### FFmpeg
 This software uses code of [FFmpeg](http://ffmpeg.org) licensed under the 
 [GPLv3](https://www.gnu.org/licenses/gpl-3.0.html) and its 
-source can be downloaded [here](https://github.com/ambiesoft/SceneExplorer).
+source can be downloaded [here](https://github.com/ambiesoft/FFmpeg).
 
 ### Qt
 This software uses Qt.
