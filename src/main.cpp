@@ -337,7 +337,11 @@ int main(int argc, char *argv[])
     if(gReboot)
     {
         QString thisapp = QCoreApplication::applicationFilePath();
-        if(!QProcess::startDetached(thisapp, QCoreApplication::arguments()))
+        QStringList args = QCoreApplication::arguments();
+        if(args.length() != 0)
+            args.removeFirst();;
+
+        if(!QProcess::startDetached(thisapp, args))
         {
             Alert(nullptr, QString(QObject::tr("Failed to launch \"%1\"")).
                   arg(thisapp));

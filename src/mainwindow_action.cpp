@@ -88,9 +88,8 @@ void MainWindow::on_action_Options_triggered()
     dlg.mainText_ = tableModel_->GetTitleTextTemplate();
     dlg.subText_ = tableModel_->GetInfoTextTemplate();
     dlg.imagecache_ = tableModel_->GetImageCache();
-    dlg.useCustomDBDir_ = settings_.valueBool(KEY_USE_CUSTOMDATABASEDIR);
-    bool prevUseCustomDBDir = dlg.useCustomDBDir_;
-    dlg.dbdir_ = settings_.valueString(KEY_DATABASE_PATH); //QDir::currentPath();
+    bool prevUseCustomDBDir = dlg.useCustomDBDir_ = settings_.valueBool(KEY_USE_CUSTOMDATABASEDIR);
+    QString prevDbdir = dlg.dbdir_ = settings_.valueString(KEY_DATABASE_PATH); //QDir::currentPath();
     dlg.limitItems_ = settings_.valueBool(KEY_LIMIT_ITEMS, false);
     dlg.maxRows_ = settings_.valueInt(KEY_LIMIT_NUMBEROFROWS, 1000);
     dlg.openlastdoc_ = settings_.valueBool(KEY_OPEN_LASTOPENEDDOCUMENT, true);
@@ -117,7 +116,7 @@ void MainWindow::on_action_Options_triggered()
 
     CreateLimitManager();
 
-    if( (prevUseCustomDBDir != dlg.useCustomDBDir_) || (QDir::current() != QDir(dlg.dbdir_)) )
+    if( (prevUseCustomDBDir != dlg.useCustomDBDir_) || (prevDbdir != dlg.dbdir_) )
     {
         if(YesNo(this,
               tr("Application needs to restart to effect the change. Do you want to restart application now?")))

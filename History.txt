@@ -1,3 +1,6 @@
+2018/04/26 ver1.1
+Various fixes
+
 2018/04/18 ver1.0
 Add FolderConfig
 

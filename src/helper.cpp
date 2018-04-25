@@ -329,6 +329,17 @@ bool processCommandLine(QString* helpText)
                                              "directory");
     parser.addOption(dbDirectoryOption);
 
+
+
+//    QStringList lll = QCoreApplication::arguments();
+//    QString sss;
+//    for(QString s: lll)
+//    {
+//        sss += s;
+//        sss += "   ";
+//    }
+//    Alert(nullptr,"arg=" + sss);
+
     // Process the actual command line arguments given by the user
     parser.parse(QCoreApplication::arguments());
 
@@ -361,6 +372,7 @@ bool processCommandLine(QString* helpText)
     const QStringList args = parser.positionalArguments();
     if(!args.isEmpty())
     {
+        doc = parser.value(QString());
         doc = args[0];
         if(doc=="/?")
         {

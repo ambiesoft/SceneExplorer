@@ -20,7 +20,7 @@ ui_optionexternaltoolsdialog.h
 ui_optionfontdialog.h
 ui_optionextension.h
 ui_aboutdialog.h
-
+ui_docinfodialog.h
 
 /build-*
 *.user

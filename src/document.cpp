@@ -23,7 +23,7 @@
 
 
 #include "directoryentry.h"
-
+#include "helper.h"
 #include "document.h"
 
 const char KEY_KEY_USERENTRY_DIRECTORY_ALL_SELECTED[] = "entrydirectoryallselected";
@@ -38,10 +38,21 @@ const char KEY_SCROLL_POS[] = "scrollpos";
 const char KEY_TABLE_INDEX_ROW[] = "tableindexrow";
 const char KEY_TABLE_INDEX_COLUMN[] = "tableindexcolumn";
 
-bool Document::Load(const QString& file, const bool bExists)
+const char KEY_IDENTITY_SCENEEXPLORER_DOCUMENT[] = "identity";
+
+
+static std::string getIdentity()
+{
+    std::string ret="SceneExplorer_";
+    ret += "Document_";
+    ret += "Identity";
+    return ret;
+}
+bool Document::Load(const QString& file, const bool bMustExists)
 {
     file_ = file;
-    if(bExists && !QFile(file).exists())
+    const bool bExist = QFile(file).exists();
+    if(bMustExists && !bExist)
     {
         lastErr_ = QString(tr("\"%1\" does not exist.")).arg(file);
         return false;
@@ -50,6 +61,33 @@ bool Document::Load(const QString& file, const bool bExists)
     {
         lastErr_ = tr("File size is too big.");
         return false;
+    }
+
+    qDebug() << "Start opening document " << file;
+
+    if(bExist)
+    {
+        QFile theFile(file);
+        theFile.open(QIODevice::ReadWrite);
+        if(!theFile.isReadable())
+        {
+            lastErr_=QString(tr("\"%1\" is not readable.")).arg(file);
+            return false;
+        }
+        if(!theFile.isWritable())
+        {
+            lastErr_=QString(tr("\"%1\" is not writable.")).arg(file);
+            return false;
+        }
+
+        // check if this is a SceneExplorer Document
+        std::string bare = theFile.readAll().toStdString();
+        std::string::size_type pos = bare.find(getIdentity());
+        if(pos == std::string::npos)
+        {
+            lastErr_=QString(tr("%1 is not a SceneExplorer document.")).arg(file);
+            return false;
+        }
     }
 
     if(s_)
@@ -218,6 +256,10 @@ void Document::Store(QListWidget* pLW,
     s_->setValue(KEY_SCROLL_POS, scrollPos);
     s_->setValue(KEY_TABLE_INDEX_ROW, index.row());
     s_->setValue(KEY_TABLE_INDEX_COLUMN, index.column());
+
+    s_->setValue(KEY_IDENTITY_SCENEEXPLORER_DOCUMENT,QString(getIdentity().c_str()));
+
+    s_->sync();
 }
 QString Document::GetFileName() const
 {

@@ -57,7 +57,8 @@ SOURCES += \
     ffmpeg.cpp \
     aboutdialog.cpp \
     tableitemdelegate.cpp \
-    commandoption.cpp
+    commandoption.cpp \
+    docinfodialog.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -92,7 +93,8 @@ HEADERS += \
     aboutdialog.h \
     imainwindow.h \
     tableitemdelegate.h \
-    commandoption.h
+    commandoption.h \
+    docinfodialog.h
 
 FORMS += \
         mainwindow.ui \
@@ -100,7 +102,8 @@ FORMS += \
     optionfontdialog.ui \
     optionexternaltoolsdialog.ui \
     optionextension.ui \
-    aboutdialog.ui
+    aboutdialog.ui \
+    docinfodialog.ui
 
 RC_FILE = app.rc
 

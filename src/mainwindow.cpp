@@ -64,11 +64,10 @@
 #include "globals.h"
 #include "helper.h"
 #include "blockedbool.h"
-
 #include "extension.h"
 #include "sql.h"
 #include "tableitemdelegate.h"
-
+#include "docinfodialog.h"
 #include "mainwindow.h"
 
 using namespace Consts;
@@ -364,9 +363,11 @@ MainWindow::MainWindow(QWidget *parent,
 
     // recents
     recents_ = settings_.valueStringList(KEY_RECENT_OPENDOCUMENTS);
+    qDebug() << "recents" << recents_;
 
     if(!docToOpen.isEmpty())
     {
+        // Alert(this, "docToOpen" + docToOpen);
         if(!OpenDocument(docToOpen, false))
             return ;
     }
@@ -374,6 +375,7 @@ MainWindow::MainWindow(QWidget *parent,
     {
         if(settings_.valueBool(KEY_OPEN_LASTOPENEDDOCUMENT, true))
         {
+            // Alert(this, "recnet[0]=" +recents_[0]);
             if(recents_.isEmpty() || !OpenDocument(recents_[0], true))
             {
                 // recents is empty or OpenDocument fails.
@@ -1700,36 +1702,46 @@ bool MainWindow::checkFFmpeg(QString& errString) const
 void MainWindow::on_actionAbout_document_triggered()
 {
     QString title = APPNAME_DISPLAY;
-    QString text;
+//    QString text;
 
-    text.append(tr("Executable"));
-    text.append(": ");
-    text.append(QCoreApplication::applicationFilePath());
+//    text.append(tr("Executable"));
+//    text.append(": ");
+//    text.append(QCoreApplication::applicationFilePath());
 
-    text.append("\n");
+//    text.append("\n\n");
 
-    text.append(tr("Document"));
-    text.append(": ");
-    text.append(pDoc_ ? pDoc_->GetFullName(): tr("<No document>"));
+//    text.append(tr("Document"));
+//    text.append(": ");
+//    text.append(pDoc_ ? pDoc_->GetFullName(): tr("<No document>"));
 
-    text.append("\n");
+//    text.append("\n\n");
 
-    text.append(tr("Ini file"));
-    text.append(": ");
-    text.append(settings_.fileName());
+//    text.append(tr("Ini file"));
+//    text.append(": ");
+//    text.append(settings_.fileName());
 
-    text.append("\n");
+//    text.append("\n\n");
 
-    text.append(tr("Database directory"));
-    text.append(": ");
-    text.append(QDir(".").absolutePath());
+//    text.append(tr("Database directory"));
+//    text.append(": ");
+//    text.append(QDir(".").absolutePath());
 
 
-    QMessageBox msgbox(this);
-    msgbox.setIcon(QMessageBox::Information);
-    msgbox.setText(text);
-    msgbox.setWindowTitle(title);
-    msgbox.exec();
+//    QMessageBox msgbox(this);
+//    msgbox.setIcon(QMessageBox::Information);
+//    msgbox.setText(text);
+//    msgbox.setWindowTitle(title);
+//    msgbox.exec();
+
+    DocinfoDialog dlg(this,
+                      QCoreApplication::applicationFilePath(),
+                      pDoc_ ? pDoc_->GetFullName(): tr("<No document>"),
+                      settings_.fileName(),
+                      QDir(".").absolutePath());
+
+    if(QDialog::Accepted != dlg.exec())
+        return;
+
 }
 
 

@@ -85,6 +85,10 @@ public:
         s_.endGroup();
     }
 
+    void sync() {
+        s_.sync();
+    }
+
 };
 
 #endif // SETTINGS_H
