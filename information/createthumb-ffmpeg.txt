@@ -1,0 +1,4 @@
+every 300 FRAME, 5 thumbs
+
+	
+ffmpeg -i in.avi -vf "thumbnail=300,setpts=N/TB" -r 1 -vframes 5 fff%03d.png
