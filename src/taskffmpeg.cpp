@@ -154,11 +154,13 @@ bool TaskFFmpeg::getProbe(const QString& file,
             errorReason = tr("duration is not double");
             return false;
         }
+
     }
 
     // stream
     outVideoCodec.clear();
     outAudioCodec.clear();
+    // QJsonValue jTag;
     {
         QJsonValue streams = jo.value(QString("streams"));
         for(const QJsonValue& value : streams.toArray())
@@ -168,6 +170,7 @@ bool TaskFFmpeg::getProbe(const QString& file,
             QString ctype = item["codec_type"].toString();
             if(outVideoCodec.isEmpty() && ctype=="video")
             {
+                // jTag = item["tags"];
                 outVideoCodec = item["codec_name"].toString();
                 outVWidth = item["coded_width"].toInt();
                 outVHeight = item["coded_height"].toInt();
@@ -186,6 +189,27 @@ bool TaskFFmpeg::getProbe(const QString& file,
         errorReason = tr("No video streams found");
         return false;
     }
+
+//    if(!jTag.isObject())
+//    {
+//        errorReason = tr("No Tags found");
+//        return false;
+//    }
+//    QJsonValue jNoF = jTag.toObject()["NUMBER_OF_FRAMES"];
+//    if(!jNoF.isString())
+//    {
+//        errorReason = tr("No NUMBER_OF_FRAMES");
+//        return false;
+//    }
+//    QString strNof = jNoF.toString();
+//    bool ok = false;
+//    double nof = strNof.toDouble(&ok);
+//    if(!ok)
+//    {
+//        errorReason=tr("Number of rames not double");
+//        return false;
+//    }
+
     return true;
 }
 void TaskFFmpeg::run()

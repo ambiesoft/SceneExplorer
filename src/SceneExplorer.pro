@@ -104,11 +104,7 @@ FORMS += \
 
 RC_FILE = app.rc
 
-DISTFILES += \
-    info/info-ffprobe-json.txt \
-    info/db-update.txt \
-    info/Scenario-rename.txt \
-    info/i18n.txt
+DISTFILES +=
 
 PRECOMPILED_HEADER = stable.h
 
