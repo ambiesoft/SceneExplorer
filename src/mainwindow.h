@@ -417,6 +417,8 @@ private slots:
 
     void on_action_Command_Line_triggered();
 
+    void on_action_Help_triggered();
+
 private:
     QThreadPool* pPoolFFmpeg_ = nullptr;
     QThreadPool* getPoolFFmpeg();

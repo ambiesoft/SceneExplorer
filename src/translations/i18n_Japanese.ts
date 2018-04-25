@@ -697,6 +697,10 @@
         <source>&amp;Command Line...</source>
         <translation>コマンドライン(&amp;C)...</translation>
     </message>
+    <message>
+        <source>&amp;Help...</source>
+        <translation>ヘルプ(&amp;H)...</translation>
+    </message>
 </context>
 <context>
     <name>Option</name>

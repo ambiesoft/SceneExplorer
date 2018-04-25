@@ -2,5 +2,7 @@
 2, cd src\transrations
 3, lupdate ..\SceneExplorer.pro
 4, linguist i18n_ja.ts (updating the file)
+<edit .ts>
 5, lrelease ..\SceneExplorer.pro (*.qm created)
-6, place "translation" directory on exe-reside directory.
+
+(automated in .pro)6, place "translation" directory on exe-reside directory.

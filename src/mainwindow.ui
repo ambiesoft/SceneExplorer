@@ -69,7 +69,7 @@
      <x>0</x>
      <y>0</y>
      <width>1009</width>
-     <height>23</height>
+     <height>21</height>
     </rect>
    </property>
    <property name="font">
@@ -99,6 +99,7 @@
     <property name="title">
      <string>&amp;Help</string>
     </property>
+    <addaction name="action_Help"/>
     <addaction name="action_About"/>
     <addaction name="actionAbout_document"/>
     <addaction name="action_Command_Line"/>
@@ -676,6 +677,11 @@
   <action name="action_Command_Line">
    <property name="text">
     <string>&amp;Command Line...</string>
+   </property>
+  </action>
+  <action name="action_Help">
+   <property name="text">
+    <string>&amp;Help...</string>
    </property>
   </action>
  </widget>
