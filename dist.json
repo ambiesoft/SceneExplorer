@@ -1,6 +1,7 @@
 {
     "name": "SceneExplorer",
     "ShouldBeFiles": [
+    	"ja-JP\\Ambiesoft.FolderConfig.resources.dll",
         "Ambiesoft.FolderConfig.dll",
         "Ambiesoft.FolderConfigHelper.dll",
         "Ambiesoft.FolderConfigHelper.pdb",
@@ -119,7 +120,7 @@
         "platforms\\qwindows.dll",
         "sqldrivers\\qsqlite.dll"
     ],
-    "TotalFileCount": 117,
+    "TotalFileCount": 118,
     "archivedir": "C:\\Linkout",
     "remotedir": "http://example.com/ffdav/uploads/SceneExplorer/",
     "remotesha1": "http://example.com/ffdav/uploads/getSha1.php?file=SceneExplorer/{}",

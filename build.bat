@@ -17,7 +17,7 @@ copy /y %~dp0README.md "%DISTDIR%\"
 copy /y %~dp0README.jp.md "%DISTDIR%\"
 copy /y %~dp0LICENSE "%DISTDIR%\"
 
-xcopy C:\Linkout\FolderConfig\* "%DISTDIR%\" /E
+xcopy C:\Linkout\FolderConfig\* "%DISTDIR%\" /E /Y
 copy /y %~dp0src\FolderConfig.ini "%DISTDIR%\"
 
 if not exist %PYTHONEXE% (
