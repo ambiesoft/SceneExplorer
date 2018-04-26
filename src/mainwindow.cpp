@@ -1631,7 +1631,14 @@ void MainWindow::on_action_New_triggered()
         return;
 
     QString newFile = dlg.selectedFiles()[0];
-    OpenDocument(newFile, QFile(newFile).exists());
+    if(!OpenDocument(newFile, QFile(newFile).exists()))
+        return;
+
+    // create a file
+    pDoc_->Store(ui->directoryWidget,
+                 ui->tableView->verticalScrollBar()->value(),
+                 ui->tableView->currentIndex());
+
 }
 void MainWindow::on_action_Open_triggered()
 {
@@ -1803,11 +1810,21 @@ void MainWindow::on_action_Command_Line_triggered()
 void MainWindow::on_action_Help_triggered()
 {
     QString lang = settings_.valueString(KEY_LANGUAGE);
+    if(lang.isEmpty())
+    {
+        lang = GetSystemDefaultLang();
+    }
+
+
     QString url = "https://github.com/ambiesoft/SceneExplorer/blob/master/";
     if(lang=="Japanese")
+    {
         url += "README.jp.md";
+    }
     else
+    {
         url += "README.md";
+    }
 
     if(!QDesktopServices::openUrl(url))
     {
