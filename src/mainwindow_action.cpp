@@ -209,6 +209,7 @@ void MainWindow::on_action_DockOutput_triggered()
 //        ui->menu_Favorites->addAction(qa);
 //    }
 //}
+
 void MainWindow::on_RecentDocuments_triggered(bool checked)
 {
     Q_UNUSED(checked);
@@ -217,6 +218,13 @@ void MainWindow::on_RecentDocuments_triggered(bool checked)
 
     QString file = qa->text();
     OpenDocument(file, true);
+}
+void MainWindow::on_ClearRecentItems_triggered(bool checked)
+{
+    Q_UNUSED(checked);
+    recents_.clear();
+    if(pDoc_)
+        recents_.append(pDoc_->GetFullName());
 }
 void MainWindow::onMenu_RecentDocuments_AboutToShow()
 {
@@ -235,7 +243,15 @@ void MainWindow::onMenu_RecentDocuments_AboutToShow()
     for(int i=0; i < recents_.count(); ++i)
     {
         QAction* qa = new QAction(this);
+
+        // Text
         qa->setText(recents_[i]);
+
+        // Fi file not exists, disable it
+        if(!QFile(recents_[i]).exists())
+            qa->setEnabled(false);
+
+        // check Current item
         if(!current.isEmpty() && recents_[i]==current)
         {
             qa->setCheckable(true);
@@ -246,6 +262,15 @@ void MainWindow::onMenu_RecentDocuments_AboutToShow()
         ui->menu_Recent_documets->addAction(qa);
     }
 
+    ui->menu_Recent_documets->addSeparator();
+
+
+    // Append Clear Recent
+    QAction* qaClearRecent = new QAction(this);
+    qaClearRecent->setText(tr("&Clear Recent items"));
+    connect(qaClearRecent, &QAction::triggered,
+            this, &MainWindow::on_ClearRecentItems_triggered);
+    ui->menu_Recent_documets->addAction(qaClearRecent);
 }
 
 //void MainWindow::on_action_Add_current_check_states_triggered()

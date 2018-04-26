@@ -356,6 +356,7 @@ private slots:
 //    void on_FavoriteFolder_triggered(bool checked=false);
 
     void on_RecentDocuments_triggered(bool checked=false);
+    void on_ClearRecentItems_triggered(bool checked=false);
 
     // void onTaskTimerTick();
     void on_actionSort_by_open_count_triggered();
