@@ -21,13 +21,12 @@
 
 #include "consts.h"
 #include "globals.h"
-
 #include "waitcursor.h"
-
 #include "settings.h"
-
 #include "sql.h"
 #include "extension.h"
+#include "helper.h"
+
 #include "ui_mainwindow.h"
 #include "mainwindow.h"
 
@@ -51,8 +50,9 @@ void MainWindow::showEvent( QShowEvent* event )
 
     on_tableView_scrollChanged(-1);
 
+    // Alert(this, QString("ScrollIndex:%1-%2").arg(pDoc_->modeIndexRow()).arg(pDoc_->modeIndexColumn()));
     QModelIndex mi = proxyModel_->index(pDoc_->modeIndexRow(),pDoc_->modeIndexColumn());
-    //QModelIndex mi = tableModel_->index(pDoc_->modeIndexRow(),pDoc_->modeIndexColumn());
+    // Alert(this, QString("ScrollIndex:%1-%2").arg(mi.row()).arg(mi.column()));
 
 
     ui->tableView->selectionModel()->select(mi,
@@ -92,6 +92,18 @@ void MainWindow::resizeEvent(QResizeEvent *event)
     resizeDock(ui->dockTask, ui->listTask->size());
     QMainWindow::resizeEvent(event);
 }
+
+void MainWindow::StoreDocument()
+{
+    QModelIndexList sels = ui->tableView->selectionModel()->selectedIndexes();
+    QModelIndex mi;
+    if(!sels.isEmpty())
+        mi = sels[0];
+    pDoc_->Store(ui->directoryWidget,
+                 ui->tableView->verticalScrollBar()->value(),
+                 mi);
+}
+
 void MainWindow::closeEvent(QCloseEvent *event) {
     Q_UNUSED(event);
 
@@ -124,9 +136,7 @@ void MainWindow::closeEvent(QCloseEvent *event) {
     settings_.setValue(KEY_SHOWMISSING, tbShowNonExistant_->isChecked());
 
 
-    pDoc_->Store(ui->directoryWidget,
-                 ui->tableView->verticalScrollBar()->value(),
-                 ui->tableView->currentIndex());
+    StoreDocument();
 
     settings_.setValue(KEY_MAX_GETDIR_THREADCOUNT, optionThreadcountGetDir_);
     settings_.setValue(KEY_MAX_THUMBNAIL_THREADCOUNT, optionThreadcountThumbnail_);

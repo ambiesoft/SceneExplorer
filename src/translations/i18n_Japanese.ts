@@ -37,6 +37,29 @@
     </message>
 </context>
 <context>
+    <name>DocinfoDialog</name>
+    <message>
+        <source>Files and Directory</source>
+        <translation>ファイルとフォルダ</translation>
+    </message>
+    <message>
+        <source>Database Directory:</source>
+        <translation>データベースディレクトリ:</translation>
+    </message>
+    <message>
+        <source>Ini file:</source>
+        <translation>INIファイル:</translation>
+    </message>
+    <message>
+        <source>Executable:</source>
+        <translation>実行ファイル:</translation>
+    </message>
+    <message>
+        <source>Document file:</source>
+        <translation>ドキュメントファイル:</translation>
+    </message>
+</context>
+<context>
     <name>Document</name>
     <message>
         <source>&quot;%1&quot; does not exist.</source>
@@ -53,6 +76,18 @@
     <message>
         <source>... Exception</source>
         <translation>... 例外</translation>
+    </message>
+    <message>
+        <source>&quot;%1&quot; is not readable.</source>
+        <translation>&quot;%1&quot; を読めません。</translation>
+    </message>
+    <message>
+        <source>&quot;%1&quot; is not writable.</source>
+        <translation>&quot;%1&quot; に書き込めません。</translation>
+    </message>
+    <message>
+        <source>%1 is not a SceneExplorer document.</source>
+        <translation>%1 はSceneExplorerのドキュメントではありません。</translation>
     </message>
 </context>
 <context>
@@ -419,11 +454,11 @@
     </message>
     <message>
         <source>Executable</source>
-        <translation>実行ファイル</translation>
+        <translation type="vanished">実行ファイル</translation>
     </message>
     <message>
         <source>Document</source>
-        <translation>ドキュメント</translation>
+        <translation type="vanished">ドキュメント</translation>
     </message>
     <message>
         <source>&lt;No document&gt;</source>
@@ -431,11 +466,11 @@
     </message>
     <message>
         <source>Ini file</source>
-        <translation>INIファイル</translation>
+        <translation type="vanished">INIファイル</translation>
     </message>
     <message>
         <source>Database directory</source>
-        <translation>データベースディレクトリ</translation>
+        <translation type="vanished">データベースディレクトリ</translation>
     </message>
     <message>
         <source>Select Directory</source>
@@ -700,6 +735,10 @@
     <message>
         <source>&amp;Help...</source>
         <translation>ヘルプ(&amp;H)...</translation>
+    </message>
+    <message>
+        <source>&amp;Clear Recent items</source>
+        <translation>一覧をクリア(&amp;C)</translation>
     </message>
 </context>
 <context>
@@ -1042,6 +1081,10 @@
     <message>
         <source>Failed to create directory.</source>
         <translation>ディレクトリの作成に失敗しました。</translation>
+    </message>
+    <message>
+        <source>&quot;%1&quot; is not accessible.</source>
+        <translation>&quot;%1&quot; にアクセスできません。</translation>
     </message>
 </context>
 <context>

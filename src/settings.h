@@ -85,6 +85,9 @@ public:
         s_.endGroup();
     }
 
+    bool isAccessible() const {
+        return s_.isWritable();
+    }
     void sync() {
         s_.sync();
     }

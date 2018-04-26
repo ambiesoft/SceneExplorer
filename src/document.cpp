@@ -257,6 +257,7 @@ void Document::Store(QListWidget* pLW,
     s_->setValue(KEY_TABLE_INDEX_ROW, index.row());
     s_->setValue(KEY_TABLE_INDEX_COLUMN, index.column());
 
+    // Alert(nullptr, QString("Saved index:%1, %2").arg(index.row()).arg(index.column()));
     s_->setValue(KEY_IDENTITY_SCENEEXPLORER_DOCUMENT,QString(getIdentity().c_str()));
 
     s_->sync();

@@ -558,9 +558,7 @@ bool MainWindow::OpenDocument(const QString& file, const bool bExists)
 
     if(pDoc_)
     {
-        pDoc_->Store(ui->directoryWidget,
-                     ui->tableView->verticalScrollBar()->value(),
-                     ui->tableView->currentIndex());
+        StoreDocument();
         delete pDoc_;
     }
     pDoc_ = pNewDoc;
@@ -1635,10 +1633,7 @@ void MainWindow::on_action_New_triggered()
         return;
 
     // create a file
-    pDoc_->Store(ui->directoryWidget,
-                 ui->tableView->verticalScrollBar()->value(),
-                 ui->tableView->currentIndex());
-
+    StoreDocument();
 }
 void MainWindow::on_action_Open_triggered()
 {
@@ -1658,9 +1653,7 @@ void MainWindow::on_action_Open_triggered()
 
 void MainWindow::on_action_Save_triggered()
 {
-    pDoc_->Store(ui->directoryWidget,
-                 ui->tableView->verticalScrollBar()->value(),
-                 ui->tableView->currentIndex());
+    StoreDocument();
 }
 
 void MainWindow::on_actionSave_as_triggered()

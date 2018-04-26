@@ -92,6 +92,8 @@ private:
 
     QList<ExternalToolItem> externalTools_;
 
+    void StoreDocument();
+
     class LimitManager
     {
         // int curIndex_ = 0;

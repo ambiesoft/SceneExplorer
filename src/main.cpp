@@ -185,7 +185,12 @@ int main2(int argc, char *argv[], QApplication& theApp)
     if(bExit)
         return 1;
     QScopedPointer<Settings> settings(inifile.isEmpty() ? new Settings : new Settings(inifile));
-
+    if(!settings->isAccessible())
+    {
+        Alert(nullptr,
+              QString(QObject::tr("\"%1\" is not accessible.")).arg(settings->fileName()));
+        return 1;
+    }
 
     QTranslator qtTranslator;
     QString qti18nFile = "qt_" + QLocale::system().name();
