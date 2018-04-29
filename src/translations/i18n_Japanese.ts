@@ -67,27 +67,38 @@
     </message>
     <message>
         <source>File size is too big.</source>
-        <translation>ファイルサイズが大きすぎます。</translation>
+        <translation type="vanished">ファイルサイズが大きすぎます。</translation>
     </message>
     <message>
         <source>QException</source>
-        <translation>QException</translation>
+        <translation type="vanished">QException</translation>
     </message>
     <message>
         <source>... Exception</source>
-        <translation>... 例外</translation>
+        <translation type="vanished">... 例外</translation>
     </message>
     <message>
         <source>&quot;%1&quot; is not readable.</source>
-        <translation>&quot;%1&quot; を読めません。</translation>
+        <translation type="vanished">&quot;%1&quot; を読めません。</translation>
     </message>
     <message>
         <source>&quot;%1&quot; is not writable.</source>
-        <translation>&quot;%1&quot; に書き込めません。</translation>
+        <translation type="vanished">&quot;%1&quot; に書き込めません。</translation>
     </message>
     <message>
         <source>%1 is not a SceneExplorer document.</source>
-        <translation>%1 はSceneExplorerのドキュメントではありません。</translation>
+        <translation type="vanished">%1 はSceneExplorerのドキュメントではありません。</translation>
+    </message>
+</context>
+<context>
+    <name>DocumentSql</name>
+    <message>
+        <source>Table Settings could not be created.</source>
+        <translation>Settingsテーブルを作成できませんでした。</translation>
+    </message>
+    <message>
+        <source>Table Directories could not be created.</source>
+        <translation>Directoriesテーブルを作成できませんでした。</translation>
     </message>
 </context>
 <context>
@@ -1128,6 +1139,10 @@
     <message>
         <source>numRowAffected is not 1 but %1.</source>
         <translation></translation>
+    </message>
+    <message>
+        <source>dbid is not null but incorrect. Do you want to override it with new id?</source>
+        <translation>dbidはnullではありませんが不正です。上書きしますか？</translation>
     </message>
 </context>
 <context>

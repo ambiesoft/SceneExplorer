@@ -11,6 +11,8 @@ class DocinfoDialog : public QDialog
 {
     Q_OBJECT
 
+    Ui::DocinfoDialog *ui;
+
     QString exe_;
     QString doc_;
     QString ini_;
@@ -25,7 +27,7 @@ public:
     ~DocinfoDialog();
 
 
-    Ui::DocinfoDialog *ui;
+
 };
 
 #endif // DOCINFODIALOG_H

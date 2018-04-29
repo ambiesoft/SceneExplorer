@@ -50,9 +50,8 @@ class Sql : public QObject
 {
     Q_OBJECT
 
-
-
     QSqlDatabase db_;
+    QString _dbid;
     bool ok_=false;
     QStringList allColumns_;
     int GetMovieFileInfo(const QString& movieFile,
@@ -68,6 +67,7 @@ class Sql : public QObject
     QStringList getAllColumnNames();
     QString getAllColumns(bool bBrace, bool bQ);
     // QString getAllColumnsUpdate(TableItemDataPointer tid);
+    QString lastError_;
 public:
     enum SQL_ERROR {
         NO_ERROR,
@@ -88,7 +88,9 @@ public:
 	static QString getDBFileName() {
 		return DBFILENAME;
 	}
-
+    QString getLastError() const {
+        return lastError_;
+    }
     static QString getErrorStrig(int thumbRet);
 
     QSqlQuery* pQDeleteFromDirectoryName_ = nullptr;

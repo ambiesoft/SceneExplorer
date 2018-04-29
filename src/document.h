@@ -24,18 +24,20 @@
 #include <QList>
 #include <QListWidget>
 
-struct DE
-{
-    QString dir_;
-    bool chk_;
-    bool sel_;
+#include "documentsql.h"
 
-    DE(const QString& dir, bool chk, bool sel) :
-        dir_(dir),
-        chk_(chk),
-        sel_(sel){}
+//struct DE
+//{
+//    QString dir_;
+//    bool chk_;
+//    bool sel_;
 
-};
+//    DE(const QString& dir, bool chk, bool sel) :
+//        dir_(dir),
+//        chk_(chk),
+//        sel_(sel){}
+
+//};
 
 class Document : public QObject
 {
@@ -43,15 +45,16 @@ class Document : public QObject
 
     QSettings* s_ = nullptr;
 
-    bool bAllSel_ = false;
-    bool bAllChecked_ = false;
+    // bool bAllSel_ = false;
+    // bool bAllChecked_ = false;
 
-    QList<DE> delist_;
+    // QList<DE> delist_;
 
     QString lastErr_;
 
     QString file_;
 
+    DocumentSql* docSql_ = nullptr;
 public:
     Document(){}
     ~Document() {
@@ -63,35 +66,31 @@ public:
         return lastErr_;
     }
     void Store(QListWidget* pLW,
-               int scrollPos,
                const QModelIndex& index);
 
     bool IsAllSelected() const {
-        return bAllSel_;
+        return docSql_->isAllSelected();
     }
     bool IsAllChecked() const {
-        return bAllChecked_;
+        return docSql_->isAllChecked();
     }
 
-    int dirCount() const {
-        return delist_.count();
+    int dirCount() const;
+    QString GetDEText(int index) const {
+        return docSql_->getDirText(index);
     }
-    QString GetDEText(int i) const {
-        return delist_[i].dir_;
+    bool IsDESelected(int index) const {
+        return docSql_->isDirSelected(index);
     }
-    bool IsDESelected(int i) const {
-        return delist_[i].sel_;
-    }
-    bool IsDEChecked(int i) const {
-        return delist_[i].chk_;
+    bool IsDEChecked(int index) const {
+        return docSql_->isDirChecked(index);
     }
 
     QString GetFileName() const;
     QString GetFullName() const;
 
-    int scrollPos() const ;
-    int modeIndexRow() const;
-    int modeIndexColumn() const;
+    // int scrollPos() const ;
+    bool getLastPos(int& row, int& column) const;
 };
 
 #endif // DOCUMENT_H

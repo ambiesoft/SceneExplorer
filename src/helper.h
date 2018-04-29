@@ -31,7 +31,9 @@ QString canonicalDir(const QString& dir);
 void canonicalDirAndName(const QString& full, QString&dir, QString& name);
 void Info(QWidget* parent, QString message);
 void Alert(QWidget* parent, QString message);
-bool YesNo(QWidget* parent, QString message);
+bool YesNo(QWidget* parent,
+           QString message,
+           QMessageBox::Icon = QMessageBox::Question);
 QString createSalient(const QString& file, const qint64& size);
 QString getUUIDFromThumbfile(const QString& file);
 Qt::WindowFlags GetDefaultDialogFlags();
@@ -54,3 +56,5 @@ QString dq(const QString& s);
 bool processCommandLine(QString* helpText=nullptr);
 
 QString ExpandEnv(const QString& str);
+
+bool isUUID(const QString& s);

@@ -574,7 +574,8 @@ void MainWindow::InitDocument()
     AddUserEntryDirectory(DirectoryItem::DI_ALL, QString(),
                           pDoc_->IsAllSelected(),
                           pDoc_->IsAllChecked());
-    for(int i=0 ; i < pDoc_->dirCount() ; ++i)
+	const int count = pDoc_->dirCount();
+    for(int i=1 ; i <= count ; ++i)
     {
         AddUserEntryDirectory(DirectoryItem::DI_NORMAL,
                               pDoc_->GetDEText(i),

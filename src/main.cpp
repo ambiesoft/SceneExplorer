@@ -49,32 +49,32 @@ using namespace Consts;
 #ifdef QT_DEBUG
 static void testSQL()
 {
-	QStringList files;
-	files << "00c75732-e92b-4e3c-90a1-914bd137797f-1.png";
-	files << "00c75732-e92b-4e3c-90a1-914bd137797f-2.png";
-	files << "00c75732-e92b-4e3c-90a1-914bd137797f-3.png";
-	files << "00c75732-e92b-4e3c-90a1-914bd137797f-4.png";
-	files << "00c75732-e92b-4e3c-90a1-914bd137797f-5.png";
+    QStringList files;
+    files << "00c75732-e92b-4e3c-90a1-914bd137797f-1.png";
+    files << "00c75732-e92b-4e3c-90a1-914bd137797f-2.png";
+    files << "00c75732-e92b-4e3c-90a1-914bd137797f-3.png";
+    files << "00c75732-e92b-4e3c-90a1-914bd137797f-4.png";
+    files << "00c75732-e92b-4e3c-90a1-914bd137797f-5.png";
 
     static int soc=11;
-	TableItemDataPointer tid = TableItemData::Create(files,
-		"X:/aaa/bbb/",
-		"moviefile.mp3",
-		33333,
-		22344,
-		33333,
-		240,
-		160,
-		33.33,
-		"frm",
-		33,
-		"vc",
-		"ac",
-		640,
-		480,
-        soc++,
-        0);
-	gpSQL->AppendData(tid);
+    TableItemDataPointer tid = TableItemData::Create(files,
+                                                     "X:/aaa/bbb/",
+                                                     "moviefile.mp3",
+                                                     33333,
+                                                     22344,
+                                                     33333,
+                                                     240,
+                                                     160,
+                                                     33.33,
+                                                     "frm",
+                                                     33,
+                                                     "vc",
+                                                     "ac",
+                                                     640,
+                                                     480,
+                                                     soc++,
+                                                     0);
+    gpSQL->AppendData(tid);
 }
 #endif
 
@@ -99,7 +99,7 @@ bool OpenDatabaseDirectory(const QString& dbDir)
     if(!QDir(FILEPART_THUMBS).exists())
     {
         Alert(nullptr, QString(QObject::tr("Failed to mkdir \"%1\" or it is not a directory.")).
-            arg(QFileInfo(FILEPART_THUMBS).absoluteFilePath()));
+              arg(QFileInfo(FILEPART_THUMBS).absoluteFilePath()));
         return false;
     }
 
@@ -129,10 +129,10 @@ bool GetDatabaseDirectory(Settings& settings, QString& dbDirToSet, bool& bQuit)
 
 
     if (dbDirToSet.isEmpty())
-	{
+    {
         dbDirToSet = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
         QDir().mkpath(dbDirToSet);
-	}
+    }
 
     if(dbDirToSet.isEmpty() || !QDir(dbDirToSet).exists())
     {
@@ -195,7 +195,7 @@ int main2(int argc, char *argv[], QApplication& theApp)
     QTranslator qtTranslator;
     QString qti18nFile = "qt_" + QLocale::system().name();
     qtTranslator.load(qti18nFile,
-         QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+                      QLibraryInfo::location(QLibraryInfo::TranslationsPath));
     theApp.installTranslator(&qtTranslator);
 
 
@@ -215,18 +215,18 @@ int main2(int argc, char *argv[], QApplication& theApp)
     {
         i18nFile += lang;
     }
-//	QFileInfo trfi(QCoreApplication::applicationFilePath());
-//	QString trdir = pathCombine(trfi.absolutePath(), "translations");
+    //	QFileInfo trfi(QCoreApplication::applicationFilePath());
+    //	QString trdir = pathCombine(trfi.absolutePath(), "translations");
     myappTranslator.load(i18nFile);//, trdir);
     theApp.installTranslator(&myappTranslator);
 
 
-	RunGuard guard("SceneExplorer");
-	if (!guard.tryToRun())
-	{
-		Info(nullptr, QObject::tr("Another instance is already running."));
-		return 0;
-	}
+    RunGuard guard("SceneExplorer");
+    if (!guard.tryToRun())
+    {
+        Info(nullptr, QObject::tr("Another instance is already running."));
+        return 0;
+    }
     
     // style:  "windows", "windowsvista", "fusion", or "macintosh".
     QApplication::setStyle("fusion");
@@ -251,7 +251,7 @@ int main2(int argc, char *argv[], QApplication& theApp)
     if(!OpenDatabaseDirectory(dbdir))
     {
         QString message = QString(QObject::tr("Failed to open database directory \"%1\".")).
-                        arg(dbdir);
+                arg(dbdir);
         if(settings->valueBool(KEY_USE_CUSTOMDATABASEDIR))
         {
             message += "\n\n";
@@ -269,17 +269,21 @@ int main2(int argc, char *argv[], QApplication& theApp)
         return PR_OPENSCENEDIRECTORYFAILED;
     }
 
-	Sql theSql;
-	if (!theSql.isOK())
-	{
-		Alert(nullptr, QString(QObject::tr("Failed to open or create database. \"%1\"")).
-			arg(QFileInfo(Sql::getDBFileName()).absoluteFilePath()));
+    Sql theSql;
+    if (!theSql.isOK())
+    {
+        QString errMessage =
+                QString(QObject::tr("Failed to open or create database. \"%1\"")).
+                arg(QFileInfo(Sql::getDBFileName()).absoluteFilePath());
+        errMessage += "\n\n";
+        errMessage += theSql.getLastError();
+        Alert(nullptr, errMessage);
         return PR_SQLOPENFAILED;
-	}
-	gpSQL = &theSql;
+    }
+    gpSQL = &theSql;
 #ifdef QT_DEBUG
-	testSQL();
-	testSQL();
+    testSQL();
+    testSQL();
 #endif
 
 
@@ -299,24 +303,24 @@ void noMessageOutput(QtMsgType type, const QMessageLogContext &context, const QS
     Q_UNUSED(type);
     Q_UNUSED(context);
     Q_UNUSED(msg);
-//    QByteArray localMsg = msg.toLocal8Bit();
-//    switch (type) {
-//    case QtDebugMsg:
-//        fprintf(stderr, "Debug: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
-//        break;
-//    case QtInfoMsg:
-//        fprintf(stderr, "Info: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
-//        break;
-//    case QtWarningMsg:
-//        fprintf(stderr, "Warning: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
-//        break;
-//    case QtCriticalMsg:
-//        fprintf(stderr, "Critical: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
-//        break;
-//    case QtFatalMsg:
-//        fprintf(stderr, "Fatal: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
-//        abort();
-//    }
+    //    QByteArray localMsg = msg.toLocal8Bit();
+    //    switch (type) {
+    //    case QtDebugMsg:
+    //        fprintf(stderr, "Debug: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
+    //        break;
+    //    case QtInfoMsg:
+    //        fprintf(stderr, "Info: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
+    //        break;
+    //    case QtWarningMsg:
+    //        fprintf(stderr, "Warning: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
+    //        break;
+    //    case QtCriticalMsg:
+    //        fprintf(stderr, "Critical: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
+    //        break;
+    //    case QtFatalMsg:
+    //        fprintf(stderr, "Fatal: %s (%s:%u, %s)\n", localMsg.constData(), context.file, context.line, context.function);
+    //        abort();
+    //    }
 }
 
 int main(int argc, char *argv[])

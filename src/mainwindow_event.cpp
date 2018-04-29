@@ -51,15 +51,20 @@ void MainWindow::showEvent( QShowEvent* event )
     on_tableView_scrollChanged(-1);
 
     // Alert(this, QString("ScrollIndex:%1-%2").arg(pDoc_->modeIndexRow()).arg(pDoc_->modeIndexColumn()));
-    QModelIndex mi = proxyModel_->index(pDoc_->modeIndexRow(),pDoc_->modeIndexColumn());
-    // Alert(this, QString("ScrollIndex:%1-%2").arg(mi.row()).arg(mi.column()));
+    int row = 0;
+    int column = 0;
+    if(pDoc_->getLastPos(row,column))
+    {
+        QModelIndex mi = proxyModel_->index(row,column);
+        // Alert(this, QString("ScrollIndex:%1-%2").arg(mi.row()).arg(mi.column()));
 
 
-    ui->tableView->selectionModel()->select(mi,
-                                            QItemSelectionModel::ClearAndSelect);
-    proxyModel_->ensureIndex(mi);
-    QApplication::processEvents();
-    ui->tableView->scrollTo(mi);
+        ui->tableView->selectionModel()->select(mi,
+                                                QItemSelectionModel::ClearAndSelect);
+        proxyModel_->ensureIndex(mi);
+        QApplication::processEvents();
+        ui->tableView->scrollTo(mi);
+    }
 //    int sv = 0;
 //    int tried=0;
 //    do
@@ -100,7 +105,6 @@ void MainWindow::StoreDocument()
     if(!sels.isEmpty())
         mi = sels[0];
     pDoc_->Store(ui->directoryWidget,
-                 ui->tableView->verticalScrollBar()->value(),
                  mi);
 }
 

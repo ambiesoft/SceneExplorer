@@ -58,7 +58,8 @@ SOURCES += \
     aboutdialog.cpp \
     tableitemdelegate.cpp \
     commandoption.cpp \
-    docinfodialog.cpp
+    docinfodialog.cpp \
+    documentsql.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -94,7 +95,8 @@ HEADERS += \
     imainwindow.h \
     tableitemdelegate.h \
     commandoption.h \
-    docinfodialog.h
+    docinfodialog.h \
+    documentsql.h
 
 FORMS += \
         mainwindow.ui \

@@ -95,7 +95,9 @@ void Alert(QWidget* parent, QString message)
     msgBox.setIcon(QMessageBox::Warning);
 	msgBox.exec();
 }
-bool YesNo(QWidget* parent, QString message)
+bool YesNo(QWidget* parent,
+           QString message,
+           QMessageBox::Icon icon)
 {
 	QMessageBox msgBox(parent);
 	
@@ -104,7 +106,7 @@ bool YesNo(QWidget* parent, QString message)
 	msgBox.setStandardButtons(QMessageBox::Yes);
 	msgBox.addButton(QMessageBox::No);
 	msgBox.setDefaultButton(QMessageBox::No);
-	msgBox.setIcon(QMessageBox::Question);
+    msgBox.setIcon(icon);
 	return msgBox.exec() == QMessageBox::Yes;
 }
 
@@ -413,4 +415,13 @@ QString ExpandEnv(const QString& str)
     result += str.mid(prevpos);
 
     return result;
+}
+
+bool isUUID(const QString& s)
+{
+    if(s.isEmpty())
+        return false;
+    if(s.length()!=36)
+        return false;
+    return true;
 }

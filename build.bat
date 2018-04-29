@@ -45,10 +45,13 @@ if not exist %QTROOT%\Tools\%QTTOOLS%\ (
 set QTPROJECTFILE=%SOURCEDIR%\%PRONAME%.pro
 @echo on
 %PYTHONEXE% ../distSolution/distqt.py %QTPROJECTFILE% -qtroot %QTROOT% -qtversion %QTVERSION% -qtversiontools %QTVERSIONTOOLS% -qttools %QTTOOLS% -distfile dist.json
-
-
-
 @echo off
+if ERRORLEVEL 1 (
+  goto :error
+)
+
+
+
 
 echo "Goint to close in 30 sec"
 ping 127.0.0.1 -n 30 > nul
