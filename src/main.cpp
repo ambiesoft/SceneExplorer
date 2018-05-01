@@ -56,7 +56,7 @@ static void testSQL()
     files << "00c75732-e92b-4e3c-90a1-914bd137797f-4.png";
     files << "00c75732-e92b-4e3c-90a1-914bd137797f-5.png";
 
-    static int soc=11;
+    static int la=11;
     TableItemDataPointer tid = TableItemData::Create(files,
                                                      "X:/aaa/bbb/",
                                                      "moviefile.mp3",
@@ -72,8 +72,7 @@ static void testSQL()
                                                      "ac",
                                                      640,
                                                      480,
-                                                     soc++,
-                                                     0);
+                                                     la);
     gpSQL->AppendData(tid);
 }
 #endif

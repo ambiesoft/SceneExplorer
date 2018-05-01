@@ -87,6 +87,7 @@ Sql::Sql() : db_(QSqlDatabase::addDatabase("QSQLITE"))
     }
 
     query.exec("CREATE TABLE FileInfo( "
+               "id NOT NULL INTEGER PRIMARY KEY,"
                "directory TEXT,"
                "name TEXT,"
                "size INT NOT NULL DEFAULT '0',"
@@ -100,8 +101,8 @@ Sql::Sql() : db_(QSqlDatabase::addDatabase("QSQLITE"))
                "vcodec TEXT,"
                "acodec TEXT,"
                "vwidth INT NOT NULL DEFAULT '0',"
-               "vheight INT NOT NULL DEFAULT '0',"
-               "opencount INT NOT NULL DEFAULT '0')"
+               "vheight INT NOT NULL DEFAULT '0')"
+               // "opencount INT NOT NULL DEFAULT '0')"
                );
     query.exec("ALTER TABLE FileInfo Add lastaccess");
 
@@ -253,9 +254,10 @@ QSqlQuery* Sql::getInsertQuery(TableItemDataPointer tid)
         QString preparing;
         allcolumns = getAllColumnNames();
 
+        VERIFY(allcolumns.removeOne("id"));
         VERIFY(allcolumns.removeOne("directory"));
         VERIFY(allcolumns.removeOne("name"));
-        VERIFY(allcolumns.removeOne("opencount"));
+        // VERIFY(allcolumns.removeOne("opencount"));
 
         preparing = "INSERT OR REPLACE INTO FileInfo (";
 
@@ -264,7 +266,7 @@ QSqlQuery* Sql::getInsertQuery(TableItemDataPointer tid)
             preparing += allcolumns[i];
             preparing += ",";
         }
-        preparing += "directory,name,opencount ";
+        preparing += "id,directory,name ";
 
         preparing += ") VALUES ( ";
 
@@ -273,9 +275,11 @@ QSqlQuery* Sql::getInsertQuery(TableItemDataPointer tid)
             preparing += "?";
             preparing += ",";
         }
+
+        preparing += "COALESCE(SELECT id FROM FileInfo WHERE directory=? and name=?),";
         preparing += "COALESCE((SELECT directory FROM FileInfo WHERE directory=? and name=?), ?),";
         preparing += "COALESCE((SELECT name FROM FileInfo WHERE directory=? and name=?), ?),";
-        preparing += "COALESCE((SELECT opencount FROM FileInfo WHERE directory=? and name=?), ?)";
+        // preparing += "COALESCE((SELECT opencount FROM FileInfo WHERE directory=? and name=?), ?)";
 
         preparing+=")";
 
@@ -312,20 +316,23 @@ QSqlQuery* Sql::getInsertQuery(TableItemDataPointer tid)
         pQInsert_->bindValue(bindIndex++, allmap[c]);
     }
 
-    // first COALEASE
-    pQInsert_->bindValue(bindIndex++, tid->getMovieDirectory());
-    pQInsert_->bindValue(bindIndex++, tid->getMovieFileName());
-    pQInsert_->bindValue(bindIndex++, tid->getMovieDirectory());
+    // 1st COALEASE
+    pQInsert_->bindValue(bindIndex++, tid->getID());
 
     // 2nd COALEASE
     pQInsert_->bindValue(bindIndex++, tid->getMovieDirectory());
     pQInsert_->bindValue(bindIndex++, tid->getMovieFileName());
-    pQInsert_->bindValue(bindIndex++, tid->getMovieFileName());
+    pQInsert_->bindValue(bindIndex++, tid->getMovieDirectory());
 
     // 3rd COALEASE
     pQInsert_->bindValue(bindIndex++, tid->getMovieDirectory());
     pQInsert_->bindValue(bindIndex++, tid->getMovieFileName());
-    pQInsert_->bindValue(bindIndex++, tid->getOpenCount());
+    pQInsert_->bindValue(bindIndex++, tid->getMovieFileName());
+
+//    // 3rd COALEASE
+//    pQInsert_->bindValue(bindIndex++, tid->getMovieDirectory());
+//    pQInsert_->bindValue(bindIndex++, tid->getMovieFileName());
+//    pQInsert_->bindValue(bindIndex++, tid->getOpenCount());
 
     return pQInsert_;
 }

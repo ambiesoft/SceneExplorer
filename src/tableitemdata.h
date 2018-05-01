@@ -47,7 +47,7 @@ class TableItemData
     QString vcodec_;
     QString acodec_;
     int vWidth_,vHeight_;
-    int opencount_ = 0;
+
     qint64 lastaccess_ = 0;
     TableItemData(const QStringList& files,
                   const QString& movieDirectory,
@@ -65,7 +65,7 @@ class TableItemData
                   const QString& vcodec,
                   const QString& acodec,
                   int vWidth,int vHeight,
-                  int opencount,
+
                   const qint64& lastaccess);
 
 public:
@@ -86,7 +86,6 @@ public:
 		const QString& vcodec,
 		const QString& acodec,
         int vWidth, int vHeight,
-        int opencount,
         const qint64& lastaccess)
 	{
         Q_ASSERT(!movieDirectory.isEmpty());
@@ -114,7 +113,6 @@ public:
 
             vWidth, vHeight,
 
-            opencount,
             lastaccess));
 	}
 	~TableItemData()
@@ -173,9 +171,9 @@ public:
     qint64 getCtime() const;
     qint64 getWtime() const;
 
-    int getOpenCount() const {
-        return opencount_;
-    }
+//    int getOpenCount() const {
+//        return opencount_;
+//    }
     qint64 getLastAccess() const {
         return lastaccess_;
     }
