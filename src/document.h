@@ -25,6 +25,8 @@
 #include <QListWidget>
 
 #include "documentsql.h"
+#include "globals.h"
+
 
 //struct DE
 //{
@@ -91,6 +93,12 @@ public:
 
     // int scrollPos() const ;
     bool getLastPos(int& row, int& column) const;
+
+    bool IncrementOpenCount(const qint64& id) {
+        return docSql_->IncrementOpenCount(id);
+    }
+    bool setOpenCountAndLascAccess(const QList<TableItemDataPointer>& all);
+    bool sort(QList<TableItemDataPointer>& all, SORTCOLUMNMY sc, bool rev) const;
 };
 
 #endif // DOCUMENT_H

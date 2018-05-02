@@ -3,6 +3,7 @@
 #include <QSqlDatabase>
 #include <QSqlQuery>
 
+#include "tableitemdata.h"
 #include "helper.h"
 
 static void showFatal(const QString& error)
@@ -48,6 +49,8 @@ DocumentSql::DocumentSql(const QString& file) :
         return;
     }
 
+
+
 	db_.exec("CREATE TABLE Directories ( "
                "id INT NOT NULL PRIMARY KEY,"
                "directory TEXT,"
@@ -58,6 +61,22 @@ DocumentSql::DocumentSql(const QString& file) :
 	query = db_.exec("SELECT name FROM sqlite_master WHERE type='table' AND name='Directories';");
 	query.next();
     if("Directories" != query.value("name").toString())
+    {
+        lastError_ = tr("Table Directories could not be created.");
+        return;
+    }
+
+
+
+    db_.exec("CREATE TABLE Access ( "
+               "id INT NOT NULL PRIMARY KEY,"
+               "opencount INT NOT NULL DEFAULT 0,"
+               "lastaccess INT)"
+               );
+    qDebug() << query.lastError().text();
+    query = db_.exec("SELECT name FROM sqlite_master WHERE type='table' AND name='Access';");
+    query.next();
+    if("Access" != query.value("name").toString())
     {
         lastError_ = tr("Table Directories could not be created.");
         return;
@@ -221,6 +240,80 @@ bool DocumentSql::GetLastPos(int& row, int& column) const
     column = query.value("lastcolumn").toInt(&ok);
     if(!ok)
         return false;
+
+    return true;
+}
+
+bool DocumentSql::IncrementOpenCount(const qint64& id)
+{
+//    QFileInfo fi(movieFile);
+//    QString dir = canonicalDir(fi.absolutePath());
+//    QString file = fi.fileName();
+    {
+        QString state =
+                "REPLACE into Access (id,opencount,lastaccess) VALUES "
+                "(?,"
+                "COALESCE((SELECT opencount FROM Access WHERE id=?),0)+1,"
+                "?)";
+
+        QSqlQuery query(db_);
+        SQC(query,prepare(state));
+
+        int i=0;
+        query.bindValue(i++, id);
+        query.bindValue(i++, id);
+        query.bindValue(i++, QDateTime::currentSecsSinceEpoch());
+
+
+
+        SQC(query,exec());
+        Q_ASSERT(query.numRowsAffected() == 1);
+    }
+
+//    {
+//        QString state = "UPDATE Access SET opencount=opencount+1 WHERE "
+//                        "id=?";
+
+//        QSqlQuery query(db_);
+//        SQC(query,prepare(state));
+
+//        int i=0;
+//        query.bindValue(i++, id);
+
+//        SQC(query,exec());
+//        Q_ASSERT(query.numRowsAffected() == 1);
+
+//    }
+    return true;
+}
+
+bool DocumentSql::setOpenCountAndLascAccess(const QList<TableItemDataPointer>& all)
+{
+    QString state =
+            "SELECT id,opencount,lastaccess FROM Access ";
+
+    QSqlQuery query(db_);
+    SQC(query,exec(state));
+    QMap<qint64, int> mapOpenCount;
+    QMap<qint64, qint64> mapLastAccess;
+    while(query.next())
+    {
+        mapOpenCount.insert(query.value("id").toLongLong(), query.value("opencount").toInt());
+        mapLastAccess.insert(query.value("id").toLongLong(), query.value("lastaccess").toLongLong());
+    }
+
+    for(TableItemDataPointer td : all)
+    {
+        if(mapOpenCount.contains(td->getID()))
+        {
+            td->setOpenCount(mapOpenCount[td->getID()]);
+        }
+
+        if(mapLastAccess.contains(td->getID()))
+        {
+            td->setLastAccess(mapLastAccess[td->getID()]);
+        }
+    }
 
     return true;
 }

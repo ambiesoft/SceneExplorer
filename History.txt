@@ -1,3 +1,7 @@
+2018/05/02 ver1.2
+DB Schema changed. 
+Document format changed to sqlite.
+
 2018/04/26 ver1.1
 Various fixes
 

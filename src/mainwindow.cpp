@@ -692,6 +692,8 @@ void MainWindow::clearAllPool(bool bAppendLog)
 
     if(bAppendLog)
         insertLog(TaskKind::App, 0, tr("======== All tasks Cleared ========"));
+
+
 }
 
 
@@ -1032,6 +1034,7 @@ void MainWindow::checkTaskFinished()
     if(idManager_->isAllTaskFinished())
     {
         onTaskEnded();
+        clearAllPool(false);
         insertLog(TaskKind::App, 0, tr("======== All Tasks finished ========"));
     }
 }
@@ -1049,9 +1052,22 @@ QString MainWindow::getSelectedVideo(bool bNativeFormat)
 
     return bNativeFormat ? QDir::toNativeSeparators(s) : s;
 }
+qint64 MainWindow::getSelectedID()
+{
+    QItemSelectionModel *select = ui->tableView->selectionModel();
+
+    Q_ASSERT(select->hasSelection());
+    if(!select->hasSelection())
+        return 0;
+    QVariant v = proxyModel_->data(select->selectedIndexes()[0], TableModel::ID);
+
+
+    return v.toLongLong();
+}
+
 void MainWindow::on_context_openSelectedVideo()
 {
-    openVideo(getSelectedVideo());
+    openVideo(getSelectedID(), getSelectedVideo());
 }
 void MainWindow::on_context_openSelectedVideoInFolder()
 {
@@ -1217,7 +1233,7 @@ void MainWindow::on_context_ExternalTools()
     if(externalTools_[i].IsCountAsOpen())
     {
         QString movieFileCanon = getSelectedVideo(false);
-        gpSQL->IncrementOpenCount(movieFileCanon);
+        pDoc_->IncrementOpenCount(getSelectedID());
         tableModel_->UpdateItem(movieFileCanon);
     }
 }
@@ -1352,6 +1368,9 @@ void MainWindow::GetSqlAllSetTable(const QStringList& dirs, bool bOnlyMissing)
     insertLog(TaskKind::App,
               0,
               QString(tr("Quering Database takes %1 milliseconds.")).arg(timer.elapsed()));
+
+    pDoc_->setOpenCountAndLascAccess(all);
+    pDoc_->sort(all, sortManager_.GetCurrentSort(), sortManager_.GetCurrentRev());
 
     timer.start();
     tableModel_->ResetData(all);

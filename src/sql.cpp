@@ -87,7 +87,7 @@ Sql::Sql() : db_(QSqlDatabase::addDatabase("QSQLITE"))
     }
 
     query.exec("CREATE TABLE FileInfo( "
-               "id NOT NULL INTEGER PRIMARY KEY,"
+               "id INTEGER PRIMARY KEY,"
                "directory TEXT,"
                "name TEXT,"
                "size INT NOT NULL DEFAULT '0',"
@@ -104,16 +104,15 @@ Sql::Sql() : db_(QSqlDatabase::addDatabase("QSQLITE"))
                "vheight INT NOT NULL DEFAULT '0')"
                // "opencount INT NOT NULL DEFAULT '0')"
                );
-    query.exec("ALTER TABLE FileInfo Add lastaccess");
-
     qDebug() << query.lastError().text();
+    //query.exec("ALTER TABLE FileInfo Add lastaccess");
 
     query.exec("CREATE INDEX idx_directory ON FileInfo(directory)");
     query.exec("CREATE INDEX idx_name ON FileInfo(name)");
     // make "INSERT OR REPLACE" to work
     query.exec("CREATE UNIQUE INDEX idx_directoryname ON FileInfo(directory,name)");
     query.exec("CREATE INDEX idx_salient ON FileInfo(salient)");
-    query.exec("CREATE INDEX idx_lastaccess ON FileInfo(lastaccess)");
+    // query.exec("CREATE INDEX idx_lastaccess ON FileInfo(lastaccess)");
 
 #ifdef QT__DEBUG
     for (int i = 0; i < db_.tables().count(); i ++) {
@@ -276,9 +275,9 @@ QSqlQuery* Sql::getInsertQuery(TableItemDataPointer tid)
             preparing += ",";
         }
 
-        preparing += "COALESCE(SELECT id FROM FileInfo WHERE directory=? and name=?),";
+        preparing += "COALESCE((SELECT id FROM FileInfo WHERE directory=? and name=?),?),";
         preparing += "COALESCE((SELECT directory FROM FileInfo WHERE directory=? and name=?), ?),";
-        preparing += "COALESCE((SELECT name FROM FileInfo WHERE directory=? and name=?), ?),";
+        preparing += "COALESCE((SELECT name FROM FileInfo WHERE directory=? and name=?), ?)";
         // preparing += "COALESCE((SELECT opencount FROM FileInfo WHERE directory=? and name=?), ?)";
 
         preparing+=")";
@@ -317,7 +316,9 @@ QSqlQuery* Sql::getInsertQuery(TableItemDataPointer tid)
     }
 
     // 1st COALEASE
-    pQInsert_->bindValue(bindIndex++, tid->getID());
+    pQInsert_->bindValue(bindIndex++, tid->getMovieDirectory());
+    pQInsert_->bindValue(bindIndex++, tid->getMovieFileName());
+    pQInsert_->bindValue(bindIndex++, tid->getIDVariant());
 
     // 2nd COALEASE
     pQInsert_->bindValue(bindIndex++, tid->getMovieDirectory());
@@ -336,7 +337,7 @@ QSqlQuery* Sql::getInsertQuery(TableItemDataPointer tid)
 
     return pQInsert_;
 }
-int Sql::AppendData(TableItemDataPointer tid)
+qint64 Sql::AppendData(TableItemDataPointer tid)
 {
     Q_ASSERT(tid->getImageFiles().count()==5);
     if(tid->getImageFiles().isEmpty())
@@ -353,6 +354,7 @@ int Sql::AppendData(TableItemDataPointer tid)
         qDebug() << pQInsert->lastError();
         return SQL_EXEC_FAILED;
     }
+    tid->setID(pQInsert->lastInsertId().toLongLong());
     return 0;
 }
 QSqlQuery* Sql::getGetInfoQuery()
@@ -710,10 +712,10 @@ bool GetAllSqlString(
         sortby = "bitrate";
         break;
     case SORT_OPENCOUNT:
-        sortby = "opencount";
+        sortby = "id";
         break;
     case SORT_LASTACCESS:
-        sortby = "lastaccess";
+        sortby = "id";
         break;
     default:
         Q_ASSERT(false);
@@ -811,6 +813,8 @@ bool Sql::GetAll(QList<TableItemDataPointer>& v,
 
     while (query.next())
     {
+        qint64 id = query.value("id").toLongLong();
+
         QString directory = query.value("directory").toString();
         if(directory.isEmpty())
             continue;
@@ -849,9 +853,10 @@ bool Sql::GetAll(QList<TableItemDataPointer>& v,
         int vwidth = query.value("vwidth").toInt();
         int vheight = query.value("vheight").toInt();
 
-        int opencount = query.value("opencount").toInt();
-        qint64 lastaccess = query.value("lastaccess").toLongLong();
-        TableItemDataPointer pID = TableItemData::Create(thumbs,
+        // int opencount = query.value("opencount").toInt();
+        // qint64 lastaccess = query.value("lastaccess").toLongLong();
+        TableItemDataPointer pID = TableItemData::Create(id,
+                                                         thumbs,
                                                          directory,
                                                          name,
 
@@ -867,34 +872,12 @@ bool Sql::GetAll(QList<TableItemDataPointer>& v,
                                                          vcodec,acodec,
                                                          vwidth,vheight,
 
-                                                         opencount,
-                                                         lastaccess);
+                                                         0);
         v.append(pID);
     }
     return true;
 }
-bool Sql::IncrementOpenCount(const QString& movieFile)
-{
-    QFileInfo fi(movieFile);
-    QString dir = canonicalDir(fi.absolutePath());
-    QString file = fi.fileName();
 
-    QString state = "UPDATE FileInfo SET opencount=opencount+1, lastaccess=? WHERE "
-                    "directory=? AND name=?";
-    QSqlQuery query;
-    SQC(query,prepare(state));
-
-    int i=0;
-    query.bindValue(i++, QDateTime::currentSecsSinceEpoch());
-    query.bindValue(i++, dir);
-    query.bindValue(i++, file);
-
-    SQC(query,exec());
-    Q_ASSERT(query.numRowsAffected() == 1);
-
-
-    return true;
-}
 bool Sql::RenameEntry(const QString& oldDirc,
                       const QString& oldFile,
                       const QString& newDirc,

@@ -24,6 +24,7 @@
 #include <QFileDialog>
 #include <QListWidget>
 #include <QInputDialog>
+#include <QColor>
 
 #include "consts.h"
 #include "globals.h"
@@ -49,14 +50,14 @@
 
 using namespace Consts;
 
-void MainWindow::openVideo(const QString& movieFile)
+void MainWindow::openVideo(const qint64& id, const QString& movieFile)
 {
     if(!QDesktopServices::openUrl(QUrl::fromLocalFile(movieFile)))
     {
         Alert(this, QString(tr("failed to launch %1.")).arg(movieFile));
         return;
     }
-    gpSQL->IncrementOpenCount(movieFile);
+    pDoc_->IncrementOpenCount(id);
 	tableModel_->UpdateItem(movieFile);
 }
 void MainWindow::openVideoInFolder(const QString& movieFile)
@@ -75,7 +76,8 @@ void MainWindow::on_tableView_doubleClicked(const QModelIndex &index)
     Q_ASSERT(v.isValid());
     Q_ASSERT(!v.toString().isEmpty());
 
-    openVideo(v.toString());
+    QVariant vID = proxyModel_->data(index, TableModel::TableRole::ID);
+    openVideo(vID.toLongLong(), v.toString());
 }
 
 
@@ -445,34 +447,14 @@ void MainWindow::StartScan(const QString& dir)
 
 void MainWindow::onTaskStarted()
 {
-    //if(!taskMonitorTimer)
-    //{
-    //    taskMonitorTimer = new QTimer(this);
-    //    connect(taskMonitorTimer, SIGNAL(timeout()),
-    //            this, SLOT(onTaskTimerTick()));
+    // statusBar()->palette().setColor(QPalette::Background, QColor("palegreen"));
 
-    //    taskMonitorTimer->start(1000);
-    //}
+    statusBar()->setStyleSheet("background-color : red; color : white;");
 }
-//void MainWindow::onTaskTimerTick()
-//{
-//    if(IsClosed())
-//        return;
-//
-//    QApplication::processEvents();
-//}
 void MainWindow::onTaskEnded()
 {
-    //if(taskMonitorTimer)
-    //{
-    //    disconnect(taskMonitorTimer, SIGNAL(timeout()),
-    //            this, SLOT(onTaskTimerTick()));
-    //    delete taskMonitorTimer;
-    //    taskMonitorTimer=nullptr;
-    //}
-
-    // make pool null to make thread count effective
-    clearAllPool(false);
+    // statusBar()->setPalette(QApplication::palette());
+    statusBar()->setStyleSheet(QString());
 }
 void MainWindow::on_action_Stop_triggered()
 {
@@ -480,6 +462,7 @@ void MainWindow::on_action_Stop_triggered()
     WaitCursor wc;
 
     clearAllPool();
+    onTaskEnded();
 }
 
 void MainWindow::on_action_Close_triggered()

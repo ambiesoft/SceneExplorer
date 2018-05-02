@@ -76,6 +76,7 @@ public:
 
     enum TableRole {
         MovieFileFull = Qt::UserRole + 1,
+        ID,
     };
     TableModel(QTableView *parent, IMainWindow* mainWindow);
     void AppendData(TableItemDataPointer pItemData, const bool enableUpdate = true);

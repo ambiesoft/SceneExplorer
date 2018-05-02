@@ -1,6 +1,7 @@
 #ifndef DOCUMENTSQL_H
 #define DOCUMENTSQL_H
 
+#include "tableitemdata.h"
 
 class DocumentSql : public QObject
 {
@@ -39,6 +40,9 @@ public:
 
     bool SetLastPos(int row, int column);
     bool GetLastPos(int& row, int& column) const;
+
+    bool IncrementOpenCount(const qint64& id);
+    bool setOpenCountAndLascAccess(const QList<TableItemDataPointer>& all);
 };
 
 #endif // DOCUMENTSQL_H

@@ -104,7 +104,7 @@ public:
 
     Sql();
     ~Sql();
-    int AppendData(TableItemDataPointer tid);
+    qint64 AppendData(TableItemDataPointer tid);
     bool IsSameFile(const QString& dir,
                     const QString& name,
                     const qint64& size,
@@ -126,7 +126,7 @@ public:
                 const LimitArg& limit = LimitArg()
             );
 
-    bool IncrementOpenCount(const QString& movieFile);
+    // bool IncrementOpenCount(const QString& movieFile);
 
     int GetAllEntry(const QString& dir,
                     QStringList& entries,

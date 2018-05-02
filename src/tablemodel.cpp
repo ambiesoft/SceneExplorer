@@ -395,6 +395,10 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
     {
         return itemDatas_[actualIndex]->getMovieFileFull();
     }
+    else if(role==TableRole::ID)
+    {
+        return itemDatas_[actualIndex]->getID();
+    }
 
 
     if(isFilename)

@@ -25,7 +25,7 @@
 #include "directoryentry.h"
 #include "helper.h"
 #include "documentsql.h"
-
+#include "tableitemdata.h"
 #include "document.h"
 
 //const char KEY_KEY_USERENTRY_DIRECTORY_ALL_SELECTED[] = "entrydirectoryallselected";
@@ -216,18 +216,41 @@ QString Document::GetFullName() const {
 bool Document::getLastPos(int& row, int& column) const
 {
     return docSql_->GetLastPos(row,column);
-
-//    QVariant vRow = s_->value(KEY_TABLE_INDEX_ROW);
-//    if(!vRow.isValid())
-//        return 0;
-
-//    return vRow.toInt();
 }
-//int Document::modeIndexColumn() const
-//{
-//    QVariant vColumn = s_->value(KEY_TABLE_INDEX_COLUMN);
-//    if(!vColumn.isValid())
-//        return 0;
 
-//    return vColumn.toInt();
-//}
+bool Document::setOpenCountAndLascAccess(const QList<TableItemDataPointer>& all)
+{
+    return docSql_->setOpenCountAndLascAccess(all);
+}
+
+static bool stRev;
+static bool openCountLessThan(const TableItemDataPointer &v1, const TableItemDataPointer &v2)
+{
+    if(stRev)
+        return v2->getOpenCount() < v1->getOpenCount();
+    else
+        return v1->getOpenCount() < v2->getOpenCount();
+}
+static bool lastaccessLessThan(const TableItemDataPointer &v1, const TableItemDataPointer &v2)
+{
+    if(stRev)
+        return v2->getLastAccess() < v1->getLastAccess();
+    else
+        return v1->getLastAccess() < v2->getLastAccess();
+}
+
+bool Document::sort(QList<TableItemDataPointer>& all, SORTCOLUMNMY sc, bool rev) const
+{
+
+    if(sc==SORT_OPENCOUNT)
+    {
+        stRev = !rev;
+        std::sort(all.begin(),all.end(),openCountLessThan);
+    }
+    else if(sc==SORT_LASTACCESS)
+    {
+        stRev = rev;
+        std::sort(all.begin(),all.end(),lastaccessLessThan);
+    }
+    return true;
+}

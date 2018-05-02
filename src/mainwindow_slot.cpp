@@ -84,6 +84,7 @@ void MainWindow::sayGoodby(int loopId,  int id,
     QString dir,name;
     canonicalDirAndName(fi.canonicalFilePath(), dir, name);
     TableItemDataPointer pTID = TableItemData::Create(
+                            0,
                             files,
                             dir,
                             name,
@@ -97,7 +98,6 @@ void MainWindow::sayGoodby(int loopId,  int id,
                             vcodec,acodec,
                             vWidth,vHeight,
 
-                            0,
                             0
                 );
     if(IsDirSelected(canonicalDir(fi.canonicalPath())))
@@ -113,7 +113,9 @@ void MainWindow::sayGoodby(int loopId,  int id,
                                              arg(removedThumbID)));
     }
 
+
     int sqlError = gpSQL->AppendData(pTID);
+
     if(sqlError==0)
     {
         insertLog(TaskKind::SQL, id, QString("%1 \"%2\"").arg(tr("Written in Database"), movieFile));
@@ -147,6 +149,7 @@ void MainWindow::finished_FFMpeg(int loopId, int id)
     if(idManager_->isAllTaskFinished())
     {
         onTaskEnded();
+        clearAllPool(false);
         insertLog(TaskKind::App, 0, tr("======== All Tasks finished ========"));
     }
 }

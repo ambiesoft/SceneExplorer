@@ -34,6 +34,7 @@ class TableItemData
     QString movieDirectory_;
     QString movieFilename_;
 
+    qint64 id_ = 0;
     int width_;
     int height_;
     qint64 size_=-1;
@@ -49,7 +50,8 @@ class TableItemData
     int vWidth_,vHeight_;
 
     qint64 lastaccess_ = 0;
-    TableItemData(const QStringList& files,
+    TableItemData(const qint64& id,
+                  const QStringList& files,
                   const QString& movieDirectory,
                   const QString& movieFileName,
 
@@ -70,6 +72,7 @@ class TableItemData
 
 public:
 	static TableItemDataPointer Create(
+            const qint64& id,
 		const QStringList& files,
 		const QString& movieDirectory,
 		const QString& movieFileName,
@@ -95,6 +98,7 @@ public:
             return nullptr;
         }
         return TableItemDataPointer(new TableItemData(
+            id,
 			files,
 			movieDirectory,
 			movieFileName,
@@ -127,6 +131,16 @@ public:
 		return dinstcount_ == 0;
 	}
 #endif
+    qint64 getID() const {
+        return id_;
+    }
+    QVariant getIDVariant() const {
+        return id_==0 ? QVariant() : id_;
+    }
+    void setID(const qint64& id) {
+        Q_ASSERT(id_==0 || id_==id);
+        id_=id;
+    }
     QStringList getImageFiles() const {
         return files_;
     }
@@ -171,11 +185,17 @@ public:
     qint64 getCtime() const;
     qint64 getWtime() const;
 
-//    int getOpenCount() const {
-//        return opencount_;
-//    }
+    int getOpenCount() const {
+        return opencountTmp_;
+    }
+    void setOpenCount(int v) {
+        opencountTmp_ = v;
+    }
     qint64 getLastAccess() const {
         return lastaccess_;
+    }
+    void setLastAccess(const qint64& v) {
+        lastaccess_ = v;
     }
     int getResolutionMultiplied() const {
         return vWidth_*vHeight_;
@@ -199,8 +219,10 @@ public:
         return true;
     }
     QMap<QString,QVariant> getColumnValues() const;
+
+    int opencountTmp_ = 0;
 	void IncrementOpenCount() {
-		++opencount_;
+        ++opencountTmp_;
 	}
 };
 

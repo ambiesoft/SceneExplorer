@@ -29,7 +29,8 @@
 int TableItemData::dinstcount_ = 0;
 #endif
 
-TableItemData::TableItemData(const QStringList& files,
+TableItemData::TableItemData(const qint64& id,
+                             const QStringList& files,
                              const QString& movieDirectory,
                              const QString& movieFileName,
 
@@ -45,12 +46,12 @@ TableItemData::TableItemData(const QStringList& files,
                              const QString& vcodec,
                              const QString& acodec,
                              int vWidth,int vHeight,
-                             int opencount,
                              const qint64& lastaccess)
 {
 #ifdef QT_DEBUG
 	++dinstcount_;
 #endif
+    id_=id;
     files_ = files;
     movieDirectory_=movieDirectory;
     movieFilename_=movieFileName;
@@ -71,7 +72,7 @@ TableItemData::TableItemData(const QStringList& files,
     vWidth_=vWidth;
     vHeight_=vHeight;
 
-    opencount_=opencount;
+    // opencount_=opencount;
     lastaccess_ = lastaccess;
 }
 QString TableItemData::getMovieFileFull() const {
