@@ -51,7 +51,7 @@ class Sql : public QObject
     Q_OBJECT
 
     QSqlDatabase db_;
-    QString _dbid;
+    QString dbid_;
     bool ok_=false;
     QStringList allColumns_;
     int GetMovieFileInfo(const QString& movieFile,
@@ -84,6 +84,9 @@ public:
     };
     bool isOK() const {
         return ok_;
+    }
+    QString getDbID() const {
+        return dbid_;
     }
 	static QString getDBFileName() {
 		return DBFILENAME;

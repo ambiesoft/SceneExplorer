@@ -56,15 +56,15 @@ Sql::Sql() : db_(QSqlDatabase::addDatabase("QSQLITE"))
 
     // Create DbInfo, insert database id
     query.exec("CREATE TABLE DbInfo("
-               "id INT NOT NULL PRIMARY KEY, "
+               "id INTEGER PRIMARY KEY, "
                "dbid TEXT NOT NULL)");
     query.exec("SELECT dbid FROM DbInfo WHERE id=1");
     query.next();
-    _dbid = query.value("dbid").toString();
+    dbid_ = query.value("dbid").toString();
 
-    if(!isUUID(_dbid))
+    if(!isUUID(dbid_))
     {
-        if(!_dbid.isEmpty())
+        if(!dbid_.isEmpty())
         {
             if(!YesNo(nullptr,
                       tr("dbid is not null but incorrect. Do you want to override it with new id?"),
@@ -73,11 +73,11 @@ Sql::Sql() : db_(QSqlDatabase::addDatabase("QSQLITE"))
                 return;
             }
         }
-        _dbid = QUuid::createUuid().toString();
-        _dbid = _dbid.mid(1,_dbid.length()-2);
-        if(!isUUID(_dbid))
+        dbid_ = QUuid::createUuid().toString();
+        dbid_ = dbid_.mid(1,dbid_.length()-2);
+        if(!isUUID(dbid_))
             return;
-        QString sql ="INSERT OR REPLACE INTO DbInfo (id, dbid) VALUES (1, '" + _dbid + "')";
+        QString sql ="INSERT OR REPLACE INTO DbInfo (id, dbid) VALUES (1, '" + dbid_ + "')";
         if(!query.exec(sql))
         {
             qDebug() << query.lastError().text();

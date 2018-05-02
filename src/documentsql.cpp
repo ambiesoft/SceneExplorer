@@ -5,6 +5,7 @@
 
 #include "tableitemdata.h"
 #include "helper.h"
+#include "sql.h"
 
 static void showFatal(const QString& error)
 {
@@ -34,13 +35,17 @@ DocumentSql::DocumentSql(const QString& file) :
 
     
     db_.exec("CREATE TABLE Settings ( "
-               "id INT NOT NULL PRIMARY KEY,"
+               "id INTEGER NOT NULL PRIMARY KEY,"
                "allselected INT NOT NULL DEFAULT '0',"
                "allchecked INT NOT NULL DEFAULT '0',"
                "lastrow INT NOT NULL DEFAULT '0',"
-               "lastcolumn INT NOT NULL DEFAULT '0')"
+               "lastcolumn INT NOT NULL DEFAULT '0'"
+               ")"
                );
     qDebug() << db_.lastError().text();
+//    db_.exec("CREATE UNIQUE INDEX idx_Settings_id_dbid ON Settings(id,dbid)");
+//    qDebug() << db_.lastError().text();
+
 	QSqlQuery query = db_.exec("SELECT name FROM sqlite_master WHERE type='table' AND name='Settings';");
     query.next();
     if("Settings" != query.value("name").toString())
@@ -52,12 +57,13 @@ DocumentSql::DocumentSql(const QString& file) :
 
 
 	db_.exec("CREATE TABLE Directories ( "
-               "id INT NOT NULL PRIMARY KEY,"
+               "id INTEGER NOT NULL PRIMARY KEY,"
                "directory TEXT,"
                "selected INT,"
                "checked INT)"
                );
     qDebug() << query.lastError().text();
+
 	query = db_.exec("SELECT name FROM sqlite_master WHERE type='table' AND name='Directories';");
 	query.next();
     if("Directories" != query.value("name").toString())
@@ -69,11 +75,14 @@ DocumentSql::DocumentSql(const QString& file) :
 
 
     db_.exec("CREATE TABLE Access ( "
-               "id INT NOT NULL PRIMARY KEY,"
+               "id INTEGER NOT NULL,"
                "opencount INT NOT NULL DEFAULT 0,"
-               "lastaccess INT)"
+               "lastaccess INT,"
+               "dbid TEXT NOT NULL)"
                );
     qDebug() << query.lastError().text();
+    db_.exec("CREATE UNIQUE INDEX idx_Access_id_dbid ON Access(id,dbid)");
+    qDebug() << db_.lastError().text();
     query = db_.exec("SELECT name FROM sqlite_master WHERE type='table' AND name='Access';");
     query.next();
     if("Access" != query.value("name").toString())
@@ -251,9 +260,10 @@ bool DocumentSql::IncrementOpenCount(const qint64& id)
 //    QString file = fi.fileName();
     {
         QString state =
-                "REPLACE into Access (id,opencount,lastaccess) VALUES "
+                "REPLACE into Access (id,opencount,lastaccess,dbid) VALUES "
                 "(?,"
                 "COALESCE((SELECT opencount FROM Access WHERE id=?),0)+1,"
+                "?,"
                 "?)";
 
         QSqlQuery query(db_);
@@ -263,6 +273,7 @@ bool DocumentSql::IncrementOpenCount(const qint64& id)
         query.bindValue(i++, id);
         query.bindValue(i++, id);
         query.bindValue(i++, QDateTime::currentSecsSinceEpoch());
+        query.bindValue(i++, gpSQL->getDbID());
 
 
 
@@ -290,10 +301,12 @@ bool DocumentSql::IncrementOpenCount(const qint64& id)
 bool DocumentSql::setOpenCountAndLascAccess(const QList<TableItemDataPointer>& all)
 {
     QString state =
-            "SELECT id,opencount,lastaccess FROM Access ";
+            "SELECT id,opencount,lastaccess,dbid FROM Access WHERE dbid=?";
 
     QSqlQuery query(db_);
-    SQC(query,exec(state));
+    SQC(query,prepare(state));
+    query.bindValue(0, gpSQL->getDbID());
+    SQC(query,exec());
     QMap<qint64, int> mapOpenCount;
     QMap<qint64, qint64> mapLastAccess;
     while(query.next())
