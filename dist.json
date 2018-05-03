@@ -122,8 +122,8 @@
     ],
     "TotalFileCount": 118,
     "archivedir": "C:\\Linkout",
-    "remotedir": "http://example.com/ffdav/uploads/SceneExplorer/",
-    "remotesha1": "http://example.com/ffdav/uploads/getSha1.php?file=SceneExplorer/{}",
+    "remotedir": "http://ambiesoft.fam.cx/ffdav/uploads/SceneExplorer/",
+    "remotesha1": "http://ambiesoft.fam.cx/ffdav/uploads/getSha1.php?file=SceneExplorer/{}",
     "ShouldNotBeFiles": [
     	"folder.ini"
     ],
