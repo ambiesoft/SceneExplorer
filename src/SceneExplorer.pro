@@ -59,7 +59,8 @@ SOURCES += \
     tableitemdelegate.cpp \
     commandoption.cpp \
     docinfodialog.cpp \
-    documentsql.cpp
+    documentsql.cpp \
+    taginputdialog.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -96,7 +97,8 @@ HEADERS += \
     tableitemdelegate.h \
     commandoption.h \
     docinfodialog.h \
-    documentsql.h
+    documentsql.h \
+    taginputdialog.h
 
 FORMS += \
         mainwindow.ui \
@@ -105,7 +107,8 @@ FORMS += \
     optionexternaltoolsdialog.ui \
     optionextension.ui \
     aboutdialog.ui \
-    docinfodialog.ui
+    docinfodialog.ui \
+    taginputdialog.ui
 
 RC_FILE = app.rc
 

@@ -584,6 +584,11 @@ void MainWindow::InitDocument()
     }
     AddUserEntryDirectory(DirectoryItem::DI_MISSING, QString(), false, false);
 
+    ui->listTag->clear();
+    QStringList tags;
+    if(pDoc_->GetAllTags(tags))
+        ui->listTag->addItems(tags);
+
     directoryChangedCommon(true);
 }
 //void MainWindow::setTableSpan()
@@ -1447,6 +1452,9 @@ void MainWindow::on_action_Bottom_triggered()
     proxyModel_->ensureBottom();
 	QApplication::processEvents();
     ui->tableView->scrollToBottom();
+
+    QApplication::processEvents();
+    ui->tableView->scrollToBottom();
 }
 
 
@@ -1845,4 +1853,33 @@ void MainWindow::on_action_Help_triggered()
         return;
     }
 
+}
+
+#include "taginputdialog.h"
+void MainWindow::on_action_Add_new_tag_triggered()
+{
+    qint64 id = getSelectedID();
+    if(id <=0)
+    {
+        Alert(this,tr("No item selected"));
+        return;
+    }
+
+    TagInputDialog dlg(this);
+    if(!dlg.exec())
+        return;
+
+    QString tag=dlg.tag();
+    QString yomi=dlg.yomi();
+    if(pDoc_->IsTagExist(tag))
+    {
+        if(!YesNo(this,tr("Tag \"{0}\" already exists. Do you want to overwrite?").arg(tag)))
+            return;
+    }
+
+    if(!pDoc_->InsertOrReplaceTag(id, tag, yomi))
+    {
+        Alert(this,tr("Failed to insert or replace Tag."));
+        return;
+    }
 }

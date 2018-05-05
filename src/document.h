@@ -99,6 +99,19 @@ public:
     }
     bool setOpenCountAndLascAccess(const QList<TableItemDataPointer>& all);
     bool sort(QList<TableItemDataPointer>& all, SORTCOLUMNMY sc, bool rev) const;
+
+    bool GetAllTags(QStringList& tags) const
+    {
+        return docSql_->GetAllTags(tags);
+    }
+    bool IsTagExist(const QString& tag) const
+    {
+        return docSql_->IsTagExist(tag);
+    }
+    bool InsertOrReplaceTag(const qint64& id,const QString& tag, const QString& yomi) const
+    {
+        return docSql_->InsertOrReplaceTag(id,tag,yomi);
+    }
 };
 
 #endif // DOCUMENT_H

@@ -87,17 +87,29 @@ DocumentSql::DocumentSql(const QString& file) :
     query.next();
     if("Access" != query.value("name").toString())
     {
-        lastError_ = tr("Table Directories could not be created.");
+        lastError_ = tr("Table Access could not be created.");
         return;
     }
 
-//    query.exec("SELECT * FROM Directories");
-//    while(query.next())
-//    {
-//        int id = query.value("id").toInt();
-//        QString dir = query.value("directory").toString();
-//        bool
-//    }
+
+    db_.exec("CREATE TABLE Tag ( "
+             "tagid INTEGER NOT NULL PRIMARY KEY,"
+             "id INTEGER NOT NULL,"
+             "tag,"
+             "yomi,"
+             "dbid TEXT NOT NULL)"
+             );
+    qDebug() << query.lastError().text();
+    db_.exec("CREATE UNIQUE INDEX idx_Tag_tagid_id_dbid ON Tag(tagid,id,dbid)");
+    qDebug() << db_.lastError().text();
+    query = db_.exec("SELECT name FROM sqlite_master WHERE type='table' AND name='Tag';");
+    query.next();
+    if("Tag" != query.value("name").toString())
+    {
+        lastError_ = tr("Table Tag could not be created.");
+        return;
+    }
+
     ok_ = true;
 }
 bool DocumentSql::isAllSelected() const
@@ -327,6 +339,43 @@ bool DocumentSql::setOpenCountAndLascAccess(const QList<TableItemDataPointer>& a
             td->setLastAccess(mapLastAccess[td->getID()]);
         }
     }
+
+    return true;
+}
+
+bool DocumentSql::GetAllTags(QStringList& ret) const
+{
+    QSqlQuery query(db_);
+    SQC(query,prepare("SELECT * FROM Tag WHERE dbid=?"));
+    int i=0;
+    query.bindValue(i++, gpSQL->getDbID());
+    SQC(query,exec());
+    while(query.next())
+    {
+        ret.append(query.value("tag").toString());
+    }
+    return true;
+}
+bool DocumentSql::IsTagExist(const QString& tag) const
+{
+    QSqlQuery query(db_);
+    SQC(query,prepare("SELECT tagid FROM Tag WHERE tag=? AND dbid=?"));
+    int i=0;
+    query.bindValue(i++, tag);
+    query.bindValue(i++, gpSQL->getDbID());
+    SQC(query,exec());
+    return query.next();
+}
+bool DocumentSql::InsertOrReplaceTag(const qint64& id,const QString& tag, const QString& yomi) const
+{
+    QSqlQuery query(db_);
+    SQC(query,prepare("REPLACE INTO Tag (id,tag,yomi,dbid) VALUES (?,?,?,?)"));
+    int i=0;
+    query.bindValue(i++, id);
+    query.bindValue(i++,tag);
+    query.bindValue(i++,yomi);
+    query.bindValue(i++,gpSQL->getDbID());
+    SQC(query,exec());
 
     return true;
 }

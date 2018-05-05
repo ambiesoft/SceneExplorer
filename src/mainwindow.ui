@@ -179,10 +179,17 @@
     </property>
     <addaction name="action_Add_Folder"/>
    </widget>
+   <widget class="QMenu" name="menu_Tag">
+    <property name="title">
+     <string>&amp;Tag</string>
+    </property>
+    <addaction name="action_Add_new_tag"/>
+   </widget>
    <addaction name="menu_File"/>
    <addaction name="menu_View"/>
    <addaction name="menu_Task"/>
    <addaction name="menu_Folder"/>
+   <addaction name="menu_Tag"/>
    <addaction name="menu_Option"/>
    <addaction name="menu_Help"/>
   </widget>
@@ -235,7 +242,7 @@
    <attribute name="dockWidgetArea">
     <number>8</number>
    </attribute>
-   <widget class="QWidget" name="dockWidgetContents">
+   <widget class="QWidget" name="dockWidgetContentsLog">
     <property name="enabled">
      <bool>true</bool>
     </property>
@@ -298,7 +305,7 @@
    <attribute name="dockWidgetArea">
     <number>2</number>
    </attribute>
-   <widget class="QWidget" name="dockWidgetContents_2">
+   <widget class="QWidget" name="dockWidgetContentsDirectory">
     <property name="sizePolicy">
      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
       <horstretch>0</horstretch>
@@ -343,7 +350,7 @@
    <attribute name="dockWidgetArea">
     <number>2</number>
    </attribute>
-   <widget class="QWidget" name="dockWidgetContents_3">
+   <widget class="QWidget" name="dockWidgetContentsTask">
     <layout class="QHBoxLayout" name="horizontalLayout_2">
      <property name="spacing">
       <number>0</number>
@@ -362,6 +369,36 @@
      </property>
      <item>
       <widget class="QListView" name="listTask"/>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QDockWidget" name="dockTag">
+   <property name="windowTitle">
+    <string>Tag</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>2</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContentsTag">
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <property name="spacing">
+      <number>0</number>
+     </property>
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="QListWidget" name="listTag"/>
      </item>
     </layout>
    </widget>
@@ -682,6 +719,11 @@
   <action name="action_Help">
    <property name="text">
     <string>&amp;Help...</string>
+   </property>
+  </action>
+  <action name="action_Add_new_tag">
+   <property name="text">
+    <string>&amp;Add New Tag...</string>
    </property>
   </action>
  </widget>

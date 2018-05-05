@@ -422,6 +422,8 @@ private slots:
 
     void on_action_Help_triggered();
 
+    void on_action_Add_new_tag_triggered();
+
 private:
     QThreadPool* pPoolFFmpeg_ = nullptr;
     QThreadPool* getPoolFFmpeg();
