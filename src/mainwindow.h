@@ -424,6 +424,8 @@ private slots:
 
     void on_action_Add_new_tag_triggered();
 
+    void on_action_DockTag_triggered();
+
 private:
     QThreadPool* pPoolFFmpeg_ = nullptr;
     QThreadPool* getPoolFFmpeg();
@@ -535,6 +537,7 @@ public slots:
     void on_context_removeFromDatabase();
     void on_context_Rename();
     void on_context_ExternalTools();
+    void on_context_AddTags();
 
     void tableItemCountChanged();
     void tableSortParameterChanged(SORTCOLUMNMY sc, bool rev);

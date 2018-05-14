@@ -140,6 +140,7 @@ void MainWindow::onMenuDocking_windows_AboutToShow()
     ui->action_DockFolder->setChecked(!ui->dockFolder->isHidden());
     ui->action_DockTask->setChecked(!ui->dockTask->isHidden());
     ui->action_DockOutput->setChecked(!ui->dockOutput->isHidden());
+    ui->action_DockTag->setChecked(!ui->dockTag->isHidden());
 }
 void MainWindow::on_action_DockFolder_triggered()
 {
@@ -164,7 +165,13 @@ void MainWindow::on_action_DockOutput_triggered()
     else
         ui->dockOutput->hide();
 }
-
+void MainWindow::on_action_DockTag_triggered()
+{
+    if(ui->dockTag->isHidden())
+        ui->dockTag->show();
+    else
+        ui->dockTag->hide();
+}
 //void MainWindow::on_FavoriteFolder_triggered(bool checked)
 //{
 //    Q_UNUSED(checked);
@@ -381,8 +388,16 @@ void MainWindow::AddUserEntryDirectory(
 	if(hasCheckbox)
 		newitem->setCheckState(check ? Qt::Checked : Qt::Unchecked);
 
-    if(itemType==DirectoryItem::DI_NORMAL)
+    // set icon
+    if(itemType==DirectoryItem::DI_ALL)
+        newitem->setIcon(QIcon(":resource/images/mailbox.png"));
+    else if(itemType==DirectoryItem::DI_NORMAL)
         newitem->setIcon(fiProvider_.icon(QFileIconProvider::Folder));
+    else if(itemType==DirectoryItem::DI_MISSING)
+        newitem->setIcon(QIcon(":resource/images/missing.png"));
+    else
+        Q_ASSERT(false);
+
     ui->directoryWidget->addItem(newitem);
 }
 
@@ -638,6 +653,48 @@ void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
     }
     contextMenu.addMenu(&menuExternalTools);
     // <---- external tools
+
+    contextMenu.addSeparator();
+
+    // Tags tools ----->
+    QMenu menuAddTags(tr("Add Ta&g..."), this);
+    QList< QSharedPointer<QAction> > actTags;
+    QStringList tags;
+    pDoc_->GetAllTags(tags);
+    if(tags.isEmpty())
+    {
+        QSharedPointer<QAction> act(new QAction(tr("No tags")));
+        act->setEnabled(false);
+        menuAddTags.addAction(act.data());
+        actTags.append(act);
+    }
+    else
+    {
+        for(int i=0 ; i < tags.count(); ++i)
+        {
+            QSharedPointer<QAction> act(new QAction(tags[i]));
+            connect(act.data(), SIGNAL(triggered()),
+                    this, SLOT(on_context_AddTags()));
+            menuAddTags.addAction(act.data());
+            act->setData(i);
+            actTags.append(act);
+        }
+    }
+    contextMenu.addMenu(&menuAddTags);
+    // <---- Tags
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     contextMenu.addSeparator();
 

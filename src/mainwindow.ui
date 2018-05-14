@@ -69,7 +69,7 @@
      <x>0</x>
      <y>0</y>
      <width>1009</width>
-     <height>23</height>
+     <height>21</height>
     </rect>
    </property>
    <property name="font">
@@ -149,6 +149,7 @@
       <string>&amp;Docking windows</string>
      </property>
      <addaction name="action_DockFolder"/>
+     <addaction name="action_DockTag"/>
      <addaction name="action_DockTask"/>
      <addaction name="action_DockOutput"/>
     </widget>
@@ -724,6 +725,14 @@
   <action name="action_Add_new_tag">
    <property name="text">
     <string>&amp;Add New Tag...</string>
+   </property>
+  </action>
+  <action name="action_DockTag">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Ta&amp;g</string>
    </property>
   </action>
  </widget>

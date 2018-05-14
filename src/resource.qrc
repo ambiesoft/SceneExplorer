@@ -18,5 +18,7 @@
         <file>resource/images/sort-lastaccess.png</file>
         <file>resource/images/sort-lastaccess-rev.png</file>
         <file>translations/i18n_Japanese.qm</file>
+        <file>resource/images/mailbox.png</file>
+        <file>resource/images/tag.png</file>
     </qresource>
 </RCC>

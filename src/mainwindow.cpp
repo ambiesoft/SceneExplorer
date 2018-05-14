@@ -68,6 +68,7 @@
 #include "sql.h"
 #include "tableitemdelegate.h"
 #include "docinfodialog.h"
+#include "tagitem.h"
 #include "mainwindow.h"
 
 using namespace Consts;
@@ -585,10 +586,27 @@ void MainWindow::InitDocument()
     }
     AddUserEntryDirectory(DirectoryItem::DI_MISSING, QString(), false, false);
 
+
+    // Tags
     ui->listTag->clear();
+    TagItem* tagAll = new TagItem(ui->listTag, TagItem::TI_ALL);
+    tagAll->setText(tr("All"));
+    tagAll->setIcon(QIcon(":resource/images/mailbox.png"));
+    ui->listTag->addItem(tagAll);
+
     QStringList tags;
     if(pDoc_->GetAllTags(tags))
-        ui->listTag->addItems(tags);
+    {
+        for(QString& tag : tags)
+        {
+            TagItem* tagUser = new TagItem(ui->listTag, TagItem::TI_NORMAL);
+            tagUser->setText(tag);
+            tagUser->setIcon(QIcon(":resource/images/tag.png"));
+            tagUser->setFlags(tagUser->flags() | Qt::ItemIsUserCheckable); // set checkable flag
+            tagUser->setCheckState(Qt::Unchecked); // AND initialize check state
+            ui->listTag->addItem(tagUser);
+        }
+    }
 
     directoryChangedCommon(true);
 }
@@ -1180,6 +1198,15 @@ void MainWindow::on_context_removeFromDatabase()
         }
     }
 }
+
+void MainWindow::on_context_AddTags()
+{
+    QString movieFile = getSelectedVideo(true);
+
+    QAction* act = (QAction*)QObject::sender();
+    int i = act->data().toInt();
+}
+
 void MainWindow::on_context_ExternalTools()
 {
     QString movieFile = getSelectedVideo(true);
@@ -1884,3 +1911,5 @@ void MainWindow::on_action_Add_new_tag_triggered()
         return;
     }
 }
+
+

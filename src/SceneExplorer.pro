@@ -60,7 +60,8 @@ SOURCES += \
     commandoption.cpp \
     docinfodialog.cpp \
     documentsql.cpp \
-    taginputdialog.cpp
+    taginputdialog.cpp \
+    tagitem.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -98,7 +99,8 @@ HEADERS += \
     commandoption.h \
     docinfodialog.h \
     documentsql.h \
-    taginputdialog.h
+    taginputdialog.h \
+    tagitem.h
 
 FORMS += \
         mainwindow.ui \
