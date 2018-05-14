@@ -76,7 +76,7 @@ void canonicalDirAndName(const QString& full, QString&dir, QString& name)
 }
 void Info(QWidget* parent, QString message)
 {
-	QMessageBox msgBox(parent);
+    QMessageBox msgBox(parent && parent->isVisible() ? parent:nullptr);
 	
     msgBox.setWindowTitle(APPNAME_DISPLAY);
 	// msgBox.setInformativeText(message);
@@ -87,7 +87,7 @@ void Info(QWidget* parent, QString message)
 }
 void Alert(QWidget* parent, QString message)
 {
-	QMessageBox msgBox(parent);
+    QMessageBox msgBox(parent && parent->isVisible() ? parent:nullptr);
 	
 	// msgBox.setInformativeText(message);
 	msgBox.setText(message);
@@ -99,7 +99,7 @@ bool YesNo(QWidget* parent,
            QString message,
            QMessageBox::Icon icon)
 {
-	QMessageBox msgBox(parent);
+    QMessageBox msgBox(parent && parent->isVisible() ? parent:nullptr);
 	
     msgBox.setWindowTitle(APPNAME_DISPLAY);
 	msgBox.setText(message);

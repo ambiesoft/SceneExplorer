@@ -36,15 +36,15 @@ if not exist %QTROOT%\%QTVERSION%\%QTVERSIONTOOLS%\ (
   echo %QTVERSIONTOOLS% not found. Check the directory.
   goto :error
 )
-if not exist %QTROOT%\Tools\%QTTOOLS%\ (
-  echo %QTROOT%\Tools\%QTTOOLS% not found. Check the directory.
-  goto :error
-)
+::if not exist %QTROOT%\Tools\%QTTOOLS%\ (
+::  echo %QTROOT%\Tools\%QTTOOLS% not found. Check the directory.
+::  goto :error
+::)
 
 %FFCEXE% /t12 "%FFMPEGSOURCEDIR%" /to:%DISTDIR%\
 set QTPROJECTFILE=%SOURCEDIR%\%PRONAME%.pro
 @echo on
-%PYTHONEXE% ../distSolution/distqt.py %QTPROJECTFILE% -qtroot %QTROOT% -qtversion %QTVERSION% -qtversiontools %QTVERSIONTOOLS% -qttools %QTTOOLS% -distfile dist.json
+%PYTHONEXE% ../distSolution/distqt.py %QTPROJECTFILE% -qtroot %QTROOT% -qtversion %QTVERSION% -qtversiontools %QTVERSIONTOOLS% -distfile dist.json -make %MAKE%
 @echo off
 if ERRORLEVEL 1 (
   goto :error

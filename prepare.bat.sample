@@ -2,7 +2,9 @@ set PYTHONEXE=C:\local\python3.5\python.exe
 set QTROOT=C:\local\Qt
 set QTVERSION=5.10.1
 set QTVERSIONTOOLS=mingw53_32
-set QTTOOLS=mingw530_32
+
+:: set PATH=
+:: set MAKE=nmake
 
 set SOURCEDIR=src
 set PRONAME=SceneExplorer

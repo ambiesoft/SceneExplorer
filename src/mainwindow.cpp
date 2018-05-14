@@ -546,7 +546,8 @@ bool MainWindow::OpenDocument(const QString& file, const bool bExists)
     Document* pNewDoc = new Document;
     if(!pNewDoc->Load(file, bExists))
     {
-        Alert(this, pNewDoc->GetLastErr());
+        Alert(this,
+              QString("%0\n%1").arg(pNewDoc->GetLastErr()).arg(file));
         delete pNewDoc;
         return false;
     }

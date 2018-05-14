@@ -100,6 +100,14 @@
         <source>Table Directories could not be created.</source>
         <translation>Directoriesテーブルを作成できませんでした。</translation>
     </message>
+    <message>
+        <source>Table Access could not be created.</source>
+        <translation>テーブル Access を作成できませんでした。</translation>
+    </message>
+    <message>
+        <source>Table Tag could not be created.</source>
+        <translation>テーブル Tag を作成できませんでした。</translation>
+    </message>
 </context>
 <context>
     <name>MainWindow</name>
@@ -737,7 +745,7 @@
     </message>
     <message>
         <source>Failed to launch ffprobe or ffmpeg. (%1)</source>
-        <translation>新規プロセスの起動に失敗しました。&quot;%1&quot;</translation>
+        <translation>ffprobeまたはffmpegの起動に失敗しました。&quot;%1&quot;</translation>
     </message>
     <message>
         <source>&amp;Command Line...</source>
@@ -750,6 +758,30 @@
     <message>
         <source>&amp;Clear Recent items</source>
         <translation>一覧をクリア(&amp;C)</translation>
+    </message>
+    <message>
+        <source>&amp;Tag</source>
+        <translation>タグ(&amp;T)</translation>
+    </message>
+    <message>
+        <source>Tag</source>
+        <translation>タグ</translation>
+    </message>
+    <message>
+        <source>&amp;Add New Tag...</source>
+        <translation>新しいタグを追加(&amp;A)...</translation>
+    </message>
+    <message>
+        <source>No item selected</source>
+        <translation>アイテムが選択されていません</translation>
+    </message>
+    <message>
+        <source>Tag &quot;{0}&quot; already exists. Do you want to overwrite?</source>
+        <translation>タグ &quot;{0}&quot; は既に存在します。上書きしますか？</translation>
+    </message>
+    <message>
+        <source>Failed to insert or replace Tag.</source>
+        <translation>タグの挿入または置換に失敗しました。</translation>
     </message>
 </context>
 <context>
@@ -1150,6 +1182,21 @@
     <message>
         <source>File is empty.</source>
         <translation>ファイルが空です。</translation>
+    </message>
+</context>
+<context>
+    <name>TagInputDialog</name>
+    <message>
+        <source>Dialog</source>
+        <translation>ダイアログ</translation>
+    </message>
+    <message>
+        <source>Tag:</source>
+        <translation>タグ:</translation>
+    </message>
+    <message>
+        <source>Yomi:</source>
+        <translation>読み:</translation>
     </message>
 </context>
 <context>
