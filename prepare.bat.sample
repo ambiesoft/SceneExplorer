@@ -6,8 +6,8 @@ set QTVERSIONTOOLS=mingw53_32
 :: set PATH=
 :: set MAKE=nmake
 
-:: set PATH=Y:\G\Qt\Tools\mingw530_32\bin;%PATH%
-:: set MAKE=mingw32-make.exe
+set PATH=C:\local\Qt\Tools\mingw530_32\bin;%PATH%
+set MAKE=mingw32-make.exe
 
 set SOURCEDIR=src
 set PRONAME=SceneExplorer
