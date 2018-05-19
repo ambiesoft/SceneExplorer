@@ -659,7 +659,7 @@ void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
     // Tags tools ----->
     QMenu menuAddTags(tr("Add Ta&g..."), this);
     QList< QSharedPointer<QAction> > actTags;
-    QStringList tags;
+    QMap<qint64,QString> tags;
     pDoc_->GetAllTags(tags);
     if(tags.isEmpty())
     {
@@ -670,13 +670,13 @@ void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
     }
     else
     {
-        for(int i=0 ; i < tags.count(); ++i)
+        for(const qint64& key : tags.keys())
         {
-            QSharedPointer<QAction> act(new QAction(tags[i]));
+            QSharedPointer<QAction> act(new QAction(tags[key]));
             connect(act.data(), SIGNAL(triggered()),
                     this, SLOT(on_context_AddTags()));
             menuAddTags.addAction(act.data());
-            act->setData(i);
+            act->setData(key);
             actTags.append(act);
         }
     }

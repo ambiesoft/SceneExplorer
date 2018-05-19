@@ -676,7 +676,8 @@ bool GetAllSqlString(
         const QString& find,
         SORTCOLUMNMY sortcolumn,
         bool sortrev,
-        const LimitArg& limit)
+        const LimitArg& limit,
+        const QList<qint64>& tagids)
 {
     QString sql = "SELECT ";
     for (int i = 0; i < selects.count(); ++i)
@@ -757,6 +758,18 @@ bool GetAllSqlString(
         if(!find.isEmpty())
             sql += " and name like ?";
 
+        if(!tagids.isEmpty())
+        {
+            sql += " AND (";
+            for(int i=0 ; i < tagids.count(); ++i)
+            {
+                sql += "id=?";
+                if( (i+1) != tagids.count())
+                    sql += " or ";
+            }
+            sql += ")";
+        }
+
         AppendSortArg(sql, sortby, sortrev);
         AppendLitmiArg(sql, limit);
         qDebug() << sql;
@@ -770,6 +783,14 @@ bool GetAllSqlString(
         }
         if(!find.isEmpty())
             query.bindValue(i++, "%"+find+"%");
+
+        if(!tagids.isEmpty())
+        {
+            for(int i=0 ; i < tagids.count(); ++i)
+            {
+                query.bindValue(i++, tagids[i]);
+            }
+        }
     }
 
     return true;
@@ -784,7 +805,8 @@ qlonglong Sql::GetAllCount(const QStringList& dirs)
                 QString(),
                 SORT_NONE,
                 false,
-                LimitArg());
+                LimitArg(),
+                QList<qint64>());
     SQC(query, exec());
     while (query.next())
     {
@@ -798,7 +820,8 @@ bool Sql::GetAll(QList<TableItemDataPointer>& v,
                  bool bOnlyMissing,
                  SORTCOLUMNMY sortcolumn,
                  bool sortrev,
-                 const LimitArg& limit)
+                 const LimitArg& limit,
+                 const QList<qint64>& tagids)
 {
     QSqlQuery query(db_);
     GetAllSqlString(query,
@@ -807,7 +830,8 @@ bool Sql::GetAll(QList<TableItemDataPointer>& v,
                     find,
                     sortcolumn,
                     sortrev,
-                    limit);
+                    limit,
+                    tagids);
 
     SQC(query,exec());
 

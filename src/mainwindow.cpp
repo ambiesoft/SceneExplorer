@@ -69,6 +69,7 @@
 #include "tableitemdelegate.h"
 #include "docinfodialog.h"
 #include "tagitem.h"
+#include "taginputdialog.h"
 #include "mainwindow.h"
 
 using namespace Consts;
@@ -567,6 +568,30 @@ bool MainWindow::OpenDocument(const QString& file, const bool bExists)
     InitDocument();
     return true;
 }
+void MainWindow::LoadTags()
+{
+
+    // Tags
+    ui->listTag->clear();
+    TagItem* tagAll = new TagItem(ui->listTag, -1, TagItem::TI_ALL);
+    tagAll->setText(tr("All"));
+    tagAll->setIcon(QIcon(":resource/images/mailbox.png"));
+    ui->listTag->addItem(tagAll);
+
+    QMap<qint64, QString> tags;
+    if(pDoc_->GetAllTags(tags))
+    {
+        for(qint64& key : tags.keys())
+        {
+            TagItem* tagUser = new TagItem(ui->listTag, key, TagItem::TI_NORMAL);
+            tagUser->setText(tags[key]);
+            tagUser->setIcon(QIcon(":resource/images/tag.png"));
+            tagUser->setFlags(tagUser->flags() | Qt::ItemIsUserCheckable); // set checkable flag
+            tagUser->setCheckState(Qt::Unchecked); // AND initialize check state
+            ui->listTag->addItem(tagUser);
+        }
+    }
+}
 void MainWindow::InitDocument()
 {
     BlockedBool btD(&directoryChanging_);
@@ -586,27 +611,7 @@ void MainWindow::InitDocument()
     }
     AddUserEntryDirectory(DirectoryItem::DI_MISSING, QString(), false, false);
 
-
-    // Tags
-    ui->listTag->clear();
-    TagItem* tagAll = new TagItem(ui->listTag, TagItem::TI_ALL);
-    tagAll->setText(tr("All"));
-    tagAll->setIcon(QIcon(":resource/images/mailbox.png"));
-    ui->listTag->addItem(tagAll);
-
-    QStringList tags;
-    if(pDoc_->GetAllTags(tags))
-    {
-        for(QString& tag : tags)
-        {
-            TagItem* tagUser = new TagItem(ui->listTag, TagItem::TI_NORMAL);
-            tagUser->setText(tag);
-            tagUser->setIcon(QIcon(":resource/images/tag.png"));
-            tagUser->setFlags(tagUser->flags() | Qt::ItemIsUserCheckable); // set checkable flag
-            tagUser->setCheckState(Qt::Unchecked); // AND initialize check state
-            ui->listTag->addItem(tagUser);
-        }
-    }
+    LoadTags();
 
     directoryChangedCommon(true);
 }
@@ -1201,10 +1206,18 @@ void MainWindow::on_context_removeFromDatabase()
 
 void MainWindow::on_context_AddTags()
 {
-    QString movieFile = getSelectedVideo(true);
+    qint64 id = getSelectedID();
+    if(id <= 0)
+    {
+        Alert(this,
+              tr("No Video Selected."));
+        return;
+    }
 
     QAction* act = (QAction*)QObject::sender();
-    int i = act->data().toInt();
+    qint64 tagid = act->data().toLongLong();
+
+    pDoc_->SetTagged(id, tagid);
 }
 
 void MainWindow::on_context_ExternalTools()
@@ -1362,8 +1375,37 @@ void MainWindow::directoryChangedCommon(bool bForceRead)
     GetSqlAllSetTable(dirs, bOnlyMissing);
 }
 
+void MainWindow::GetSelectedTagIDs(QList<qint64>& taggedids)
+{
+    QList<qint64> tagids;
+    for(int i=0 ; i < ui->listTag->count(); ++i)
+    {
+        TagItem* ti = (TagItem*)ui->listTag->item(i);
+        if(ti->IsAllItem())
+        {
+            if(ti->isSelected())
+            {
+                taggedids.clear();
+                return;
+            }
+        }
+        else
+        {
+            Q_ASSERT(!ti->IsAllItem());
+            if(ti->isSelected() || ti->IsChecked())
+                tagids.append(ti->tagid());
+        }
+    }
+
+    pDoc_->GetTaggedIDs(tagids, taggedids);
+}
+
 void MainWindow::GetSqlAllSetTable(const QStringList& dirs, bool bOnlyMissing)
 {
+    QList<qint64> tagids;
+    GetSelectedTagIDs(tagids);
+
+
     tableModel_->SetShowMissing(tbShowNonExistant_->isChecked() );
     QElapsedTimer timer;
     timer.start();
@@ -1393,7 +1435,8 @@ void MainWindow::GetSqlAllSetTable(const QStringList& dirs, bool bOnlyMissing)
                   sortManager_.GetCurrentSort(),
                   sortManager_.GetCurrentRev(),
                   limitManager_ ?
-                      LimitArg(limitManager_->GetCurrentIndex(), limitManager_->GetNumberOfRows()): LimitArg());
+                      LimitArg(limitManager_->GetCurrentIndex(), limitManager_->GetNumberOfRows()): LimitArg(),
+                  tagids);
 
 
     UpdateTitle(dirs, bOnlyMissing ? UpdateTitleType::ONLYMISSING : UpdateTitleType::DEFAULT);
@@ -1883,15 +1926,15 @@ void MainWindow::on_action_Help_triggered()
 
 }
 
-#include "taginputdialog.h"
+
 void MainWindow::on_action_Add_new_tag_triggered()
 {
-    qint64 id = getSelectedID();
-    if(id <=0)
-    {
-        Alert(this,tr("No item selected"));
-        return;
-    }
+//    qint64 id = getSelectedID();
+//    if(id <=0)
+//    {
+//        Alert(this,tr("No item selected"));
+//        return;
+//    }
 
     TagInputDialog dlg(this);
     if(!dlg.exec())
@@ -1905,11 +1948,13 @@ void MainWindow::on_action_Add_new_tag_triggered()
             return;
     }
 
-    if(!pDoc_->InsertOrReplaceTag(id, tag, yomi))
+    if(!pDoc_->InsertOrReplaceTag(tag, yomi))
     {
         Alert(this,tr("Failed to insert or replace Tag."));
         return;
     }
+
+    LoadTags();
 }
 
 

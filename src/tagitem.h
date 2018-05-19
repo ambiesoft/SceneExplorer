@@ -13,15 +13,20 @@ public:
         TI_MISSING,
     } ;
 private:
+    qint64 tagid_;
     TagItemType itemType_;
 
 public:
     TagItem(QListWidget* parent,
-                  TagItemType itemType) :
+                  const qint64& tagid, TagItemType itemType) :
         QListWidgetItem(parent),
+        tagid_(tagid),
         itemType_(itemType)
     {
 
+    }
+    qint64 tagid() const {
+        return tagid_;
     }
     bool IsNormalItem() const {
         return itemType_==TI_NORMAL;

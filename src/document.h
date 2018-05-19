@@ -100,7 +100,7 @@ public:
     bool setOpenCountAndLascAccess(const QList<TableItemDataPointer>& all);
     bool sort(QList<TableItemDataPointer>& all, SORTCOLUMNMY sc, bool rev) const;
 
-    bool GetAllTags(QStringList& tags) const
+    bool GetAllTags(QMap<qint64, QString>& tags) const
     {
         return docSql_->GetAllTags(tags);
     }
@@ -108,9 +108,17 @@ public:
     {
         return docSql_->IsTagExist(tag);
     }
-    bool InsertOrReplaceTag(const qint64& id,const QString& tag, const QString& yomi) const
+    bool InsertOrReplaceTag(const QString& tag, const QString& yomi) const
     {
-        return docSql_->InsertOrReplaceTag(id,tag,yomi);
+        return docSql_->Insert(tag,yomi);
+    }
+    bool GetTaggedIDs(const QList<qint64>& tagids, QList<qint64>& taggedids) const
+    {
+        return docSql_->GetTaggedIDs(tagids, taggedids);
+    }
+    bool SetTagged(const qint64& tagid, const qint64& id) const
+    {
+        return docSql_->SetTagged(tagid,id);
     }
 };
 

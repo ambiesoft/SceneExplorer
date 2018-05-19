@@ -126,7 +126,8 @@ public:
                 bool bOnlyMissing = false,
                 SORTCOLUMNMY sortcolumn = SORT_NONE,
                 bool sortrev = false,
-                const LimitArg& limit = LimitArg()
+                const LimitArg& limit = LimitArg(),
+                const QList<qint64>& tagids = QList<qint64>()
             );
 
     // bool IncrementOpenCount(const QString& movieFile);

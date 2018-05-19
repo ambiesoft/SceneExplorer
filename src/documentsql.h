@@ -44,9 +44,11 @@ public:
     bool IncrementOpenCount(const qint64& id);
     bool setOpenCountAndLascAccess(const QList<TableItemDataPointer>& all);
 
-    bool GetAllTags(QStringList& ret) const;
+    bool GetAllTags(QMap<qint64, QString>& tags) const;
     bool IsTagExist(const QString& tag) const;
-    bool InsertOrReplaceTag(const qint64& id,const QString& tag, const QString& yomi) const;
+    bool Insert(const QString& tag, const QString& yomi) const;
+    bool GetTaggedIDs(const QList<qint64>& tagids, QList<qint64>& taggedids) const;
+    bool SetTagged(const qint64& tagid, const qint64& id) const;
 };
 
 #endif // DOCUMENTSQL_H

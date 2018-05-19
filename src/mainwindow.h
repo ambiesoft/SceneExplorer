@@ -83,6 +83,7 @@ private:
     //bool currentSortRev_ = false;
 
     // bool bShowMissing_ = false;
+    void GetSelectedTagIDs(QList<qint64>& taggedids);
     void GetSqlAllSetTable(const QStringList& dirs,
                            bool bOnlyMissing = false);
     QToolButton* tbShowNonExistant_ = nullptr;
@@ -464,7 +465,6 @@ private:
 
     enum TaskKind {
         GetDir,
-        // Filter,
         FFMpeg,
         SQL,
         App,
@@ -485,10 +485,10 @@ private:
 
     void CreateLimitManager();
     QString GetDefaultDocumentPath();
-public:
+
     bool OpenDocument(const QString& file, const bool bExists);
     void InitDocument();
-
+    void LoadTags();
 public slots:
 //    void sayBorn(int id,
 //                   const QString& movieFile);
