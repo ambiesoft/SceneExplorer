@@ -110,17 +110,8 @@ MainWindow::MainWindow(QWidget *parent,
     QObject::connect(ui->tableView->verticalScrollBar(), &QScrollBar::valueChanged,
                      this, &MainWindow::on_tableView_scrollChanged);
 
-	// does not work to wordwrap
-	//connect(
-	//	ui->tableView->horizontalHeader(),
-	//	SIGNAL(sectionResized(int, int, int)),
-	//	ui->tableView,
-	//	SLOT(resizeRowsToContents()));
 
     tableModel_=new TableModel(ui->tableView, this);
-
-    //static TableItemDelegate* tigate = new TableItemDelegate(ui->tableView);
-    //ui->tableView->setItemDelegateForRow(0,tigate);
 
 
     proxyModel_ = new FileMissingFilterProxyModel(ui->tableView);
@@ -138,13 +129,14 @@ MainWindow::MainWindow(QWidget *parent,
 	// ui->tableView->setItemDelegate(new ImageSizeDelegate(ui->tableView));
 
 
-	// tree
+    // folder
     QItemSelectionModel* treeSelectionModel = ui->directoryWidget->selectionModel();
     QObject::connect(treeSelectionModel, &QItemSelectionModel::selectionChanged,
                      this, &MainWindow::on_directoryWidget_selectionChanged);
 	QObject::connect(ui->directoryWidget, &DirectoryEntry::itemChanged,
                      this, &MainWindow::on_directoryWidget_itemChanged);
 
+    // Tag
 
     // tool bar
     tbLabelSort_ = new QToolButton(ui->mainToolBar);  // intensional leak
@@ -1958,3 +1950,36 @@ void MainWindow::on_action_Add_new_tag_triggered()
 }
 
 
+
+void MainWindow::on_listTag_itemSelectionChanged()
+{
+    if(tagChanging_)
+        return;
+    directoryChangedCommon(true);
+}
+
+void MainWindow::on_actionShow_All_Item_triggered()
+{
+    {
+        BlockedBool dc(&directoryChanging_);
+        BlockedBool tc(&tagChanging_);
+
+        if(limitManager_)
+            limitManager_->Reset();
+
+        // clear find
+        cmbFind_->setCurrentText(QString());
+
+        // directory, select all
+        DirectoryItem* dall = (DirectoryItem*)ui->directoryWidget->item(0);
+        Q_ASSERT(dall->IsAllItem());
+        dall->setSelected(true);
+
+
+        // tag select all
+        TagItem* tall = (TagItem*)ui->listTag->item(0);
+        Q_ASSERT(tall->IsAllItem());
+        tall->setSelected(true);
+    }
+    directoryChangedCommon(true);
+}

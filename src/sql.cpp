@@ -728,19 +728,43 @@ bool GetAllSqlString(
     QVector<QVariant> binds;
     if(dirs.isEmpty())
     {
+        sql += " WHERE 1=1 ";
         if(!find.isEmpty())
         {
-            sql += " WHERE name LIKE ?";
+            sql += " AND name LIKE ?";
             binds.append("%"+find+"%");
         }
+
+        if(!tagids.isEmpty())
+        {
+            sql += " AND (";
+            for(int i=0 ; i < tagids.count(); ++i)
+            {
+                sql += "id=?";
+                if( (i+1) != tagids.count())
+                    sql += " or ";
+            }
+            sql += ")";
+        }
+        sql += " AND 1=1";
+
 
         AppendSortArg(sql, sortby, sortrev);
         AppendLitmiArg(sql, limit);
 
         SQC(query, prepare(sql));
+        int bindIndex=0;
         for(int i=0 ; i < binds.count(); ++i)
         {
-            query.bindValue(i, binds[i]);
+            query.bindValue(bindIndex++, binds[i]);
+        }
+
+        if(!tagids.isEmpty())
+        {
+            for(int i=0 ; i < tagids.count(); ++i)
+            {
+                query.bindValue(bindIndex++, tagids[i]);
+            }
         }
     }
     else
@@ -775,20 +799,20 @@ bool GetAllSqlString(
         qDebug() << sql;
         SQC(query, prepare(sql));
 
-        int i;
-        for(i=0 ; i < dirs.count(); ++i)
+        int bindIndex;
+        for(bindIndex=0 ; bindIndex < dirs.count(); ++bindIndex)
         {
-            Q_ASSERT(dirs[i].endsWith('/'));
-            query.bindValue(i, dirs[i] + "%");
+            Q_ASSERT(dirs[bindIndex].endsWith('/'));
+            query.bindValue(bindIndex, dirs[bindIndex] + "%");
         }
         if(!find.isEmpty())
-            query.bindValue(i++, "%"+find+"%");
+            query.bindValue(bindIndex++, "%"+find+"%");
 
         if(!tagids.isEmpty())
         {
             for(int i=0 ; i < tagids.count(); ++i)
             {
-                query.bindValue(i++, tagids[i]);
+                query.bindValue(bindIndex++, tagids[i]);
             }
         }
     }

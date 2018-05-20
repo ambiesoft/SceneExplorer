@@ -1,3 +1,6 @@
+2018/05/20 ver1.3
+Tags
+
 2018/05/02 ver1.2
 DB Schema changed. 
 Document format changed to sqlite.

@@ -32,10 +32,13 @@ You can add a folder from **[Folder]->[Add Folder]**.
 * From the folder pane, Right-click a folder and select **[Rescan to create thumbnails]**.
 * From the menu, select **[Task]->[start scan to create thumbnails...]** to start creating thumbnails.
 
-
 ### View thumbnails
 From the folder pane, choose a folder to view its thumbnails. Clicking **[All]** shows all thumbnails and **[Missing]** shows thumbnails which original video files are missing.
 
+### Adding Tags
+Tags provide a useful way to group related videos together and tell what a video is about. Tags also make it easier to find your content. Tags are similar to, but more specific than, directories. The use of tags is completely optional.
+
+You can create a new tag from **[Tag]->[Add New Tag...]** and it will be shown on Tag pane. If you select Tag,  tagged videoes will be shown.
 
 ## Files and Directories
 There are 3 types of path SceneExplorer uses.

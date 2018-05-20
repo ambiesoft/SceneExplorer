@@ -108,6 +108,14 @@
         <source>Table Tag could not be created.</source>
         <translation>テーブル Tag を作成できませんでした。</translation>
     </message>
+    <message>
+        <source>Table Tagged could not be created.</source>
+        <translation>テーブル Tagged を作成できませんでした。</translation>
+    </message>
+    <message>
+        <source>Tagid or ID is below 0.</source>
+        <translation>Tagid または ID が０より小さいです。</translation>
+    </message>
 </context>
 <context>
     <name>MainWindow</name>
@@ -125,7 +133,7 @@
     </message>
     <message>
         <source>&amp;Edit</source>
-        <translation type="vanished">編集(&amp;E)</translation>
+        <translation>編集(&amp;E)</translation>
     </message>
     <message>
         <source>&amp;Help</source>
@@ -773,7 +781,7 @@
     </message>
     <message>
         <source>No item selected</source>
-        <translation>アイテムが選択されていません</translation>
+        <translation type="vanished">アイテムが選択されていません</translation>
     </message>
     <message>
         <source>Tag &quot;{0}&quot; already exists. Do you want to overwrite?</source>
@@ -782,6 +790,26 @@
     <message>
         <source>Failed to insert or replace Tag.</source>
         <translation>タグの挿入または置換に失敗しました。</translation>
+    </message>
+    <message>
+        <source>Ta&amp;g</source>
+        <translation>タグ(&amp;G)</translation>
+    </message>
+    <message>
+        <source>Show &amp;All Item</source>
+        <translation>すべてのアイテムを表示(&amp;A)</translation>
+    </message>
+    <message>
+        <source>No Video Selected.</source>
+        <translation>ビデオが選択されていません。</translation>
+    </message>
+    <message>
+        <source>Add Ta&amp;g...</source>
+        <translation>タグを追加(&amp;G)...</translation>
+    </message>
+    <message>
+        <source>No tags</source>
+        <translation>タグがありません</translation>
     </message>
 </context>
 <context>
@@ -1188,7 +1216,7 @@
     <name>TagInputDialog</name>
     <message>
         <source>Dialog</source>
-        <translation>ダイアログ</translation>
+        <translation type="vanished">ダイアログ</translation>
     </message>
     <message>
         <source>Tag:</source>
@@ -1197,6 +1225,10 @@
     <message>
         <source>Yomi:</source>
         <translation>読み:</translation>
+    </message>
+    <message>
+        <source>Tag</source>
+        <translation>タグ</translation>
     </message>
 </context>
 <context>

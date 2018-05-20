@@ -77,7 +77,8 @@ private:
     };
 	bool initialized_ = false;
 	bool closed_ = false;
-	bool directoryChanging_ = false;
+    bool directoryChanging_ = false;
+    bool tagChanging_ = false;
     QStringList currentDirs_;
     //SORTCOLUMN currentSort_ = SORTCOLUMN::SORT_NONE;
     //bool currentSortRev_ = false;
@@ -426,6 +427,10 @@ private slots:
     void on_action_Add_new_tag_triggered();
 
     void on_action_DockTag_triggered();
+
+    void on_listTag_itemSelectionChanged();
+
+    void on_actionShow_All_Item_triggered();
 
 private:
     QThreadPool* pPoolFFmpeg_ = nullptr;

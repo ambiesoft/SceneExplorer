@@ -48,7 +48,7 @@ public:
     bool IsTagExist(const QString& tag) const;
     bool Insert(const QString& tag, const QString& yomi) const;
     bool GetTaggedIDs(const QList<qint64>& tagids, QList<qint64>& taggedids) const;
-    bool SetTagged(const qint64& tagid, const qint64& id) const;
+    bool SetTagged(const qint64& id, const qint64& tagid) const;
 };
 
 #endif // DOCUMENTSQL_H

@@ -43,8 +43,18 @@ DocumentSql::DocumentSql(const QString& file) :
                ")"
                );
     qDebug() << db_.lastError().text();
-//    db_.exec("CREATE UNIQUE INDEX idx_Settings_id_dbid ON Settings(id,dbid)");
-//    qDebug() << db_.lastError().text();
+
+    {
+        // Create record 1
+        QSqlQuery query = db_.exec("SELECT id FROM Settings WHERE id=1");
+        query.exec();
+        qDebug() << db_.lastError().text();
+        if(!query.next())
+        {
+            db_.exec("INSERT INTO Settings (id) VALUES (1)");
+            qDebug() << db_.lastError().text();
+        }
+    }
 
 	QSqlQuery query = db_.exec("SELECT name FROM sqlite_master WHERE type='table' AND name='Settings';");
     query.next();
@@ -115,6 +125,8 @@ DocumentSql::DocumentSql(const QString& file) :
              "dbid TEXT NOT NULL)"
              );
     qDebug() << query.lastError().text();
+    db_.exec("CREATE UNIQUE INDEX idx_Tagged_id_tagid_dbid ON Tagged(id,tagid,dbid)");
+    qDebug() << query.lastError().text();
     query = db_.exec("SELECT name FROM sqlite_master WHERE type='table' AND name='Tagged';");
     query.next();
     if("Tagged" != query.value("name").toString())
@@ -140,7 +152,7 @@ bool DocumentSql::isAllSelected() const
 bool DocumentSql::setAllSelected(bool b)
 {
 	QSqlQuery query(db_);
-	SQC(query, prepare("INSERT OR REPLACE INTO Settings (id, allselected) VALUES (1,?)"));
+    SQC(query, prepare("UPDATE Settings SET allselected=? WHERE id=1"));
 	query.bindValue(0, b ? 1 : 0);
 	SQC(query,exec());
 	return true;
@@ -161,7 +173,7 @@ bool DocumentSql::isAllChecked() const
 bool DocumentSql::setAllChecked(bool b)
 {
 	QSqlQuery query(db_);
-	SQC(query, prepare("INSERT OR REPLACE INTO Settings (id, allchecked) VALUES (1,?)"));
+    SQC(query, prepare("UPDATE Settings SET allchecked=? WHERE id=1"));
 	query.bindValue(0, b ? 1 : 0);
 	SQC(query, exec());
 	return true;
@@ -253,7 +265,7 @@ bool DocumentSql::removeDirectoryOver(int index)
 bool DocumentSql::SetLastPos(int row, int column)
 {
     QSqlQuery query(db_);
-    SQC(query,prepare("INSERT OR REPLACE INTO Settings (id, lastrow, lastcolumn) VALUES (1,?,?)"));
+    SQC(query,prepare("UPDATE Settings SET lastrow=?, lastcolumn=? WHERE id=1"));
     int i=0;
     query.bindValue(i++, row);
     query.bindValue(i++, column);
@@ -424,16 +436,22 @@ bool DocumentSql::GetTaggedIDs(const QList<qint64>& tagids, QList<qint64>& tagge
     }
     return true;
 }
-bool DocumentSql::SetTagged(const qint64& tagid, const qint64& id) const
+bool DocumentSql::SetTagged(const qint64& id, const qint64& tagid) const
 {
-    if(0 <= tagid || 0 <= id)
+    if(tagid <= 0 || id <= 0)
     {
-        Alert(null,tr("Tagid or ID is below 0."));
+        Alert(nullptr,tr("Tagid or ID is below 0."));
         return false;
     }
 
     QSqlQuery query(db_);
-    query.prepare("")
-    dd
+    SQC(query,prepare("REPLACE INTO Tagged (id,tagid,dbid) VALUES (?,?,?)"));
+    int i=0;
+    query.bindValue(i++, id);
+    query.bindValue(i++,tagid);
+    query.bindValue(i++,gpSQL->getDbID());
 
+    SQC(query,exec());
+
+    return true;
 }

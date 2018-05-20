@@ -153,7 +153,7 @@
      <addaction name="action_DockTask"/>
      <addaction name="action_DockOutput"/>
     </widget>
-    <addaction name="menu_Docking_windows"/>
+    <addaction name="actionShow_All_Item"/>
     <addaction name="separator"/>
     <addaction name="actionSort_by_file_name"/>
     <addaction name="actionSort_by_file_size"/>
@@ -169,10 +169,13 @@
     <addaction name="action_Top"/>
     <addaction name="action_Bottom"/>
     <addaction name="separator"/>
+    <addaction name="menu_Docking_windows"/>
+    <addaction name="separator"/>
     <addaction name="action_Focus_find"/>
     <addaction name="action_Find"/>
     <addaction name="action_Clear"/>
     <addaction name="action_Empty_find_texts"/>
+    <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menu_Folder">
     <property name="title">
@@ -186,7 +189,13 @@
     </property>
     <addaction name="action_Add_new_tag"/>
    </widget>
+   <widget class="QMenu" name="menu_Edit">
+    <property name="title">
+     <string>&amp;Edit</string>
+    </property>
+   </widget>
    <addaction name="menu_File"/>
+   <addaction name="menu_Edit"/>
    <addaction name="menu_View"/>
    <addaction name="menu_Task"/>
    <addaction name="menu_Folder"/>
@@ -215,6 +224,7 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
+   <addaction name="actionShow_All_Item"/>
    <addaction name="placeHolder_Sort"/>
    <addaction name="separator"/>
    <addaction name="action_Top"/>
@@ -733,6 +743,15 @@
    </property>
    <property name="text">
     <string>Ta&amp;g</string>
+   </property>
+  </action>
+  <action name="actionShow_All_Item">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/resource/images/mailbox.png</normaloff>:/resource/images/mailbox.png</iconset>
+   </property>
+   <property name="text">
+    <string>Show &amp;All Item</string>
    </property>
   </action>
  </widget>

@@ -116,9 +116,9 @@ public:
     {
         return docSql_->GetTaggedIDs(tagids, taggedids);
     }
-    bool SetTagged(const qint64& tagid, const qint64& id) const
+    bool SetTagged(const qint64& id, const qint64& tagid) const
     {
-        return docSql_->SetTagged(tagid,id);
+        return docSql_->SetTagged(id,tagid);
     }
 };
 
