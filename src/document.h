@@ -132,7 +132,10 @@ public:
     {
         return docSql_->DeleteTag(tagid);
     }
-
+    bool GetTagsFromID(const qint64& id, QList<qint64>& tagids)
+    {
+        return docSql_->GetTagsFromID(id,tagids);
+    }
 };
 
 #endif // DOCUMENT_H

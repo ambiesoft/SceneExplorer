@@ -313,6 +313,7 @@ protected:
     virtual SORTCOLUMNMY GetCurrentSort() {
         return sortManager_.GetCurrentSort();
     }
+    virtual QString GetTags(const qint64& id);
 	QToolButton* tbLabelSort_ = nullptr;
 	
     void on_ShowMissingClicked_common(bool nNextCheck);

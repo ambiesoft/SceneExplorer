@@ -317,6 +317,10 @@ QString TableModel::ExtractInfoText(TableItemDataPointer item, const QString& st
         {
             result += GetSortColumnValue(mainWindow_->GetCurrentSort(), item);
         }
+        else if(s=="${tags}")
+        {
+            result += mainWindow_->GetTags(item->getID());
+        }
         else
         {
             result += str.mid(pos, matchedlen);

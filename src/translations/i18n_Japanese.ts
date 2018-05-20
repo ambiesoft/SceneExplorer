@@ -811,6 +811,34 @@
         <source>No tags</source>
         <translation>タグがありません</translation>
     </message>
+    <message>
+        <source>Failed to get tag data.</source>
+        <translation>tagデータが取得できませんでした。</translation>
+    </message>
+    <message>
+        <source>Failed to Replace Tag.</source>
+        <translation>Replace Tagに失敗しました。</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to delete Tag &quot;%1&quot;</source>
+        <translation>タグ &quot;%1&quot; を削除しますか？</translation>
+    </message>
+    <message>
+        <source>Failed to delete tag.</source>
+        <translation>タグの削除に失敗しました。</translation>
+    </message>
+    <message>
+        <source>&amp;Delete</source>
+        <translation>削除(&amp;D)</translation>
+    </message>
+    <message>
+        <source>Failed to Get Tags From ID.</source>
+        <translation>IDからタグを取得できませんでした。</translation>
+    </message>
+    <message>
+        <source>Failed to GetTag.</source>
+        <translation>GetTagに失敗しました。</translation>
+    </message>
 </context>
 <context>
     <name>Option</name>

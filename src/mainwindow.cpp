@@ -2057,3 +2057,31 @@ void MainWindow::showTagContextMenu(const QPoint &pos)
     // Show context menu at handling position
     myMenu.exec(globalPos);
 }
+QString MainWindow::GetTags(const qint64& id)
+{
+    QList<qint64> tagids;
+    if(!pDoc_->GetTagsFromID(id, tagids))
+    {
+        Alert(this,
+              tr("Failed to Get Tags From ID."));
+        return QString();
+    }
+
+    QString ret;
+    for(int i=0; i < tagids.count(); ++i)
+    {
+        qint64 tagid = tagids[i];
+        QString tag,yomi;
+        if(!pDoc_->GetTag(tagid,tag,yomi))
+        {
+            Alert(this,
+                  tr("Failed to GetTag."));
+            return QString();
+        }
+
+        ret += tag;
+        if((i+1) != tagids.count())
+            ret += ",";
+    }
+    return ret;
+}

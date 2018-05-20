@@ -52,6 +52,7 @@ public:
     bool GetTag(const qint64& tagid, QString& tag, QString& yomi) const;
     bool ReplaceTag(const qint64& tagid, const QString& tag, const QString& yomi);
     bool DeleteTag(const qint64& tagid);
+    bool GetTagsFromID(const qint64& id, QList<qint64>& tagids);
 };
 
 #endif // DOCUMENTSQL_H

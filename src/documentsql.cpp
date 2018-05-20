@@ -103,7 +103,7 @@ DocumentSql::DocumentSql(const QString& file) :
 
 
     db_.exec("CREATE TABLE Tag ( "
-             "tagid INTEGER NOT NULL PRIMARY KEY,"
+             "tagid INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
              "tag,"
              "yomi,"
              "dbid TEXT NOT NULL)"
@@ -464,8 +464,10 @@ bool DocumentSql::GetTag(const qint64& tagid, QString& tag, QString& yomi) const
     query.bindValue(i++,gpSQL->getDbID());
     SQC(query,exec());
     if(!query.next())
-        return false;
-
+    {
+        tag=yomi=QString();
+        return true;
+    }
     tag = query.value("tag").toString();
     yomi = query.value("yomi").toString();
 
@@ -494,5 +496,20 @@ bool DocumentSql::DeleteTag(const qint64& tagid)
     SQC(query,exec());
 
     // query.prepare("DELETE FROM Tagged WHERE ")
+    return true;
+}
+bool DocumentSql::GetTagsFromID(const qint64& id, QList<qint64>& tagids)
+{
+    QSqlQuery query(db_);
+    SQC(query,prepare("SELECT tagid FROM Tagged WHERE id=? AND dbid=?"));
+    int i=0;
+    query.bindValue(i++, id);
+    query.bindValue(i++, gpSQL->getDbID());
+    SQC(query,exec());
+    while(query.next())
+    {
+        tagids.append(query.value("tagid").toLongLong());
+    }
+
     return true;
 }
