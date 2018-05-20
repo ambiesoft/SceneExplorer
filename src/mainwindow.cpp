@@ -137,6 +137,9 @@ MainWindow::MainWindow(QWidget *parent,
                      this, &MainWindow::on_directoryWidget_itemChanged);
 
     // Tag
+    ui->listTag->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(ui->listTag, SIGNAL(customContextMenuRequested(QPoint)),
+            this, SLOT(showTagContextMenu(QPoint)));
 
     // tool bar
     tbLabelSort_ = new QToolButton(ui->mainToolBar);  // intensional leak
@@ -562,6 +565,8 @@ bool MainWindow::OpenDocument(const QString& file, const bool bExists)
 }
 void MainWindow::LoadTags()
 {
+    Q_ASSERT(!tagChanging_);
+    BlockedBool blockUpdate(&tagChanging_);
 
     // Tags
     ui->listTag->clear();
@@ -1940,7 +1945,7 @@ void MainWindow::on_action_Add_new_tag_triggered()
             return;
     }
 
-    if(!pDoc_->InsertOrReplaceTag(tag, yomi))
+    if(!pDoc_->Insert(tag, yomi))
     {
         Alert(this,tr("Failed to insert or replace Tag."));
         return;
@@ -1982,4 +1987,73 @@ void MainWindow::on_actionShow_All_Item_triggered()
         tall->setSelected(true);
     }
     directoryChangedCommon(true);
+}
+
+void MainWindow::editTag()
+{
+    TagItem* ti =(TagItem*) ui->listTag->currentItem();
+    if(ti->IsAllItem())
+        return;
+
+    QString tag,yomi;
+    if(!pDoc_->GetTag(ti->tagid(), tag, yomi))
+    {
+        Alert(this,
+              tr("Failed to get tag data."));
+        return;
+    }
+
+    TagInputDialog dlg(this);
+    dlg.setTag(tag);
+    dlg.setYomi(yomi);
+    if(!dlg.exec())
+        return;
+
+    if(!pDoc_->ReplaceTag(ti->tagid(), dlg.tag(), dlg.yomi()))
+    {
+        Alert(this,
+              tr("Failed to Replace Tag."));
+        return;
+    }
+
+    ti->setText(dlg.tag());
+}
+void MainWindow::deleteTag()
+{
+    TagItem* ti =(TagItem*) ui->listTag->currentItem();
+     if(ti->IsAllItem())
+         return;
+
+     if(!YesNo(this,
+           tr("Are you sure you want to delete Tag \"%1\"").arg(ti->text())))
+     {
+         return;
+     }
+
+     if(!pDoc_->DeleteTag(ti->tagid()))
+     {
+         Alert(this,
+               tr("Failed to delete tag."));
+         return;
+     }
+
+     delete ui->listTag->takeItem(ui->listTag->row(ti));
+}
+
+void MainWindow::showTagContextMenu(const QPoint &pos)
+{
+    TagItem* ti =(TagItem*) ui->listTag->currentItem();
+    if(ti->IsAllItem())
+        return;
+
+    // Handle global position
+    QPoint globalPos = ui->listTag->mapToGlobal(pos);
+
+    // Create menu and insert some actions
+    QMenu myMenu;
+    myMenu.addAction(tr("&Edit"), this, SLOT(editTag()));
+    myMenu.addAction(tr("&Delete"), this, SLOT(deleteTag()));
+
+    // Show context menu at handling position
+    myMenu.exec(globalPos);
 }

@@ -318,6 +318,9 @@ protected:
     void on_ShowMissingClicked_common(bool nNextCheck);
 
 private slots:
+    void editTag();
+    void deleteTag();
+    void showTagContextMenu(const QPoint&);
     void on_action_Close_triggered();
     void on_action_About_triggered();
     void on_tableView_doubleClicked(const QModelIndex &index);

@@ -20,6 +20,11 @@ copy /y %~dp0LICENSE "%DISTDIR%\"
 xcopy C:\Linkout\FolderConfig\* "%DISTDIR%\" /E /Y
 copy /y %~dp0src\FolderConfig.ini "%DISTDIR%\"
 
+if %PYTHONEXE%x==x (
+  echo PYTHONEXE not defined.
+  goto :error
+)
+
 if not exist %PYTHONEXE% (
   echo %PYTHONEXE% not found. Check the directory.
   goto :error

@@ -49,6 +49,9 @@ public:
     bool Insert(const QString& tag, const QString& yomi) const;
     bool GetTaggedIDs(const QList<qint64>& tagids, QList<qint64>& taggedids) const;
     bool SetTagged(const qint64& id, const qint64& tagid) const;
+    bool GetTag(const qint64& tagid, QString& tag, QString& yomi) const;
+    bool ReplaceTag(const qint64& tagid, const QString& tag, const QString& yomi);
+    bool DeleteTag(const qint64& tagid);
 };
 
 #endif // DOCUMENTSQL_H

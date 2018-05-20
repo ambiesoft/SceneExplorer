@@ -19,7 +19,11 @@ public:
     ~TagInputDialog();
 
     QString tag() const;
+    void setTag(const QString& txt);
+
     QString yomi() const;
+    void setYomi(const QString& txt);
+
 private slots:
     void on_lineTag_textChanged(const QString &arg1);
 

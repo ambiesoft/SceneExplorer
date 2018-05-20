@@ -108,7 +108,7 @@ public:
     {
         return docSql_->IsTagExist(tag);
     }
-    bool InsertOrReplaceTag(const QString& tag, const QString& yomi) const
+    bool Insert(const QString& tag, const QString& yomi) const
     {
         return docSql_->Insert(tag,yomi);
     }
@@ -120,6 +120,19 @@ public:
     {
         return docSql_->SetTagged(id,tagid);
     }
+    bool GetTag(const qint64& tagid, QString& tag, QString& yomi) const
+    {
+        return docSql_->GetTag(tagid,tag,yomi);
+    }
+    bool ReplaceTag(const qint64& tagid, const QString& tag, const QString& yomi)
+    {
+        return docSql_->ReplaceTag(tagid,tag,yomi);
+    }
+    bool DeleteTag(const qint64& tagid)
+    {
+        return docSql_->DeleteTag(tagid);
+    }
+
 };
 
 #endif // DOCUMENT_H

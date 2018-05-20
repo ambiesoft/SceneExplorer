@@ -371,7 +371,7 @@ bool DocumentSql::setOpenCountAndLascAccess(const QList<TableItemDataPointer>& a
 bool DocumentSql::GetAllTags(QMap<qint64, QString>& tags) const
 {
     QSqlQuery query(db_);
-    SQC(query,prepare("SELECT * FROM Tag WHERE dbid=?"));
+    SQC(query,prepare("SELECT * FROM Tag WHERE dbid=? ORDER BY yomi"));
     int i=0;
     query.bindValue(i++, gpSQL->getDbID());
     SQC(query,exec());
@@ -453,5 +453,46 @@ bool DocumentSql::SetTagged(const qint64& id, const qint64& tagid) const
 
     SQC(query,exec());
 
+    return true;
+}
+bool DocumentSql::GetTag(const qint64& tagid, QString& tag, QString& yomi) const
+{
+    QSqlQuery query(db_);
+    SQC(query,prepare("SELECT tag,yomi FROM Tag WHERE tagid=? AND dbid=?"));
+    int i=0;
+    query.bindValue(i++, tagid);
+    query.bindValue(i++,gpSQL->getDbID());
+    SQC(query,exec());
+    if(!query.next())
+        return false;
+
+    tag = query.value("tag").toString();
+    yomi = query.value("yomi").toString();
+
+    return true;
+}
+bool DocumentSql::ReplaceTag(const qint64& tagid, const QString& tag, const QString& yomi)
+{
+    QSqlQuery query(db_);
+    SQC(query,prepare("UPDATE Tag SET tag=?,yomi=? WHERE tagid=? AND dbid=?"));
+    int i=0;
+    query.bindValue(i++,tag);
+    query.bindValue(i++,yomi);
+    query.bindValue(i++,tagid);
+    query.bindValue(i++,gpSQL->getDbID());
+    SQC(query,exec());
+
+    return true;
+}
+bool DocumentSql::DeleteTag(const qint64& tagid)
+{
+    QSqlQuery query(db_);
+    SQC(query,prepare("DELETE FROM Tag WHERE tagid=? AND dbid=?"));
+    int i=0;
+    query.bindValue(i++,tagid);
+    query.bindValue(i++,gpSQL->getDbID());
+    SQC(query,exec());
+
+    // query.prepare("DELETE FROM Tagged WHERE ")
     return true;
 }

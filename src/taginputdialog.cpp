@@ -41,7 +41,15 @@ QString TagInputDialog::tag() const
 {
     return ui->lineTag->text();
 }
+void TagInputDialog::setTag(const QString& txt)
+{
+    ui->lineTag->setText(txt);
+}
 QString TagInputDialog::yomi() const
 {
     return ui->lineYomi->text();
+}
+void TagInputDialog::setYomi(const QString& txt)
+{
+    ui->lineYomi->setText(txt);
 }
