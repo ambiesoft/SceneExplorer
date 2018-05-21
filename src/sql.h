@@ -127,7 +127,7 @@ public:
                 SORTCOLUMNMY sortcolumn = SORT_NONE,
                 bool sortrev = false,
                 const LimitArg& limit = LimitArg(),
-                const QList<qint64>& tagids = QList<qint64>()
+                const QList<qint64>* tagids = nullptr
             );
 
     // bool IncrementOpenCount(const QString& movieFile);

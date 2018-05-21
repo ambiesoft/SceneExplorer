@@ -1372,7 +1372,7 @@ void MainWindow::directoryChangedCommon(bool bForceRead)
     GetSqlAllSetTable(dirs, bOnlyMissing);
 }
 
-void MainWindow::GetSelectedTagIDs(QList<qint64>& taggedids)
+bool MainWindow::GetSelectedTagIDs(QList<qint64>& taggedids)
 {
     QList<qint64> tagids;
     for(int i=0 ; i < ui->listTag->count(); ++i)
@@ -1383,25 +1383,33 @@ void MainWindow::GetSelectedTagIDs(QList<qint64>& taggedids)
             if(ti->isSelected())
             {
                 taggedids.clear();
-                return;
+                return false;
             }
         }
         else
         {
             Q_ASSERT(!ti->IsAllItem());
             if(ti->isSelected() || ti->IsChecked())
+            {
                 tagids.append(ti->tagid());
+            }
         }
     }
 
+    if(tagids.isEmpty())
+    {
+        // nothing is selected
+        return false;
+    }
     pDoc_->GetTaggedIDs(tagids, taggedids);
+    return true;
 }
 
 void MainWindow::GetSqlAllSetTable(const QStringList& dirs, bool bOnlyMissing)
 {
+    // Get Tag selected
     QList<qint64> tagids;
-    GetSelectedTagIDs(tagids);
-
+    bool isTagValid = GetSelectedTagIDs(tagids);
 
     tableModel_->SetShowMissing(tbShowNonExistant_->isChecked() );
     QElapsedTimer timer;
@@ -1433,7 +1441,7 @@ void MainWindow::GetSqlAllSetTable(const QStringList& dirs, bool bOnlyMissing)
                   sortManager_.GetCurrentRev(),
                   limitManager_ ?
                       LimitArg(limitManager_->GetCurrentIndex(), limitManager_->GetNumberOfRows()): LimitArg(),
-                  tagids);
+                  isTagValid ? &tagids : nullptr);
 
 
     UpdateTitle(dirs, bOnlyMissing ? UpdateTitleType::ONLYMISSING : UpdateTitleType::DEFAULT);

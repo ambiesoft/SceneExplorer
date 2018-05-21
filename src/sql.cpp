@@ -677,7 +677,7 @@ bool GetAllSqlString(
         SORTCOLUMNMY sortcolumn,
         bool sortrev,
         const LimitArg& limit,
-        const QList<qint64>& tagids)
+        const QList<qint64>* tagids)
 {
     QString sql = "SELECT ";
     for (int i = 0; i < selects.count(); ++i)
@@ -735,16 +735,23 @@ bool GetAllSqlString(
             binds.append("%"+find+"%");
         }
 
-        if(!tagids.isEmpty())
+        if(tagids)
         {
-            sql += " AND (";
-            for(int i=0 ; i < tagids.count(); ++i)
+            if(tagids->isEmpty())
             {
-                sql += "id=?";
-                if( (i+1) != tagids.count())
-                    sql += " or ";
+                sql += " AND 1=0 ";
             }
-            sql += ")";
+            else
+            {
+                sql += " AND (";
+                for(int i=0 ; i < tagids->count(); ++i)
+                {
+                    sql += "id=?";
+                    if( (i+1) != tagids->count())
+                        sql += " or ";
+                }
+                sql += ")";
+            }
         }
         sql += " AND 1=1";
 
@@ -759,11 +766,11 @@ bool GetAllSqlString(
             query.bindValue(bindIndex++, binds[i]);
         }
 
-        if(!tagids.isEmpty())
+        if(tagids && !tagids->isEmpty())
         {
-            for(int i=0 ; i < tagids.count(); ++i)
+            for(int i=0 ; i < tagids->count(); ++i)
             {
-                query.bindValue(bindIndex++, tagids[i]);
+                query.bindValue(bindIndex++, (*tagids)[i]);
             }
         }
     }
@@ -782,16 +789,23 @@ bool GetAllSqlString(
         if(!find.isEmpty())
             sql += " and name like ?";
 
-        if(!tagids.isEmpty())
+        if(tagids)
         {
-            sql += " AND (";
-            for(int i=0 ; i < tagids.count(); ++i)
+            if(tagids->isEmpty())
             {
-                sql += "id=?";
-                if( (i+1) != tagids.count())
-                    sql += " or ";
+                sql += " AND 0=1 ";
             }
-            sql += ")";
+            else
+            {
+                sql += " AND (";
+                for(int i=0 ; i < tagids->count(); ++i)
+                {
+                    sql += "id=?";
+                    if( (i+1) != tagids->count())
+                        sql += " or ";
+                }
+                sql += ")";
+            }
         }
 
         AppendSortArg(sql, sortby, sortrev);
@@ -808,11 +822,11 @@ bool GetAllSqlString(
         if(!find.isEmpty())
             query.bindValue(bindIndex++, "%"+find+"%");
 
-        if(!tagids.isEmpty())
+        if(tagids && !tagids->isEmpty())
         {
-            for(int i=0 ; i < tagids.count(); ++i)
+            for(int i=0 ; i < tagids->count(); ++i)
             {
-                query.bindValue(bindIndex++, tagids[i]);
+                query.bindValue(bindIndex++, (*tagids)[i]);
             }
         }
     }
@@ -830,7 +844,7 @@ qlonglong Sql::GetAllCount(const QStringList& dirs)
                 SORT_NONE,
                 false,
                 LimitArg(),
-                QList<qint64>());
+                nullptr);
     SQC(query, exec());
     while (query.next())
     {
@@ -845,7 +859,7 @@ bool Sql::GetAll(QList<TableItemDataPointer>& v,
                  SORTCOLUMNMY sortcolumn,
                  bool sortrev,
                  const LimitArg& limit,
-                 const QList<qint64>& tagids)
+                 const QList<qint64>* tagids)
 {
     QSqlQuery query(db_);
     GetAllSqlString(query,

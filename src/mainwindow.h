@@ -84,7 +84,7 @@ private:
     //bool currentSortRev_ = false;
 
     // bool bShowMissing_ = false;
-    void GetSelectedTagIDs(QList<qint64>& taggedids);
+    bool GetSelectedTagIDs(QList<qint64>& taggedids);
     void GetSqlAllSetTable(const QStringList& dirs,
                            bool bOnlyMissing = false);
     QToolButton* tbShowNonExistant_ = nullptr;
