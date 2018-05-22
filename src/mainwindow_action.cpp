@@ -657,10 +657,12 @@ void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
     contextMenu.addSeparator();
 
     // Tags tools ----->
-    QMenu menuAddTags(tr("Add Ta&g..."), this);
+    QMenu menuAddTags(tr("Ta&g..."), this);
     QList< QSharedPointer<QAction> > actTags;
     QMap<qint64,QString> tags;
     pDoc_->GetAllTags(tags);
+	QSet<qint64> tagsCurrent;
+	pDoc_->GetTagsFromID(getSelectedID(), tagsCurrent);
     if(tags.isEmpty())
     {
         QSharedPointer<QAction> act(new QAction(tr("No tags")));
@@ -677,6 +679,9 @@ void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
                     this, SLOT(on_context_AddTags()));
             menuAddTags.addAction(act.data());
             act->setData(key);
+			act->setCheckable(true);
+			if (tagsCurrent.contains(key))
+				act->setChecked(true);
             actTags.append(act);
         }
     }

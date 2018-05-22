@@ -1213,8 +1213,8 @@ void MainWindow::on_context_AddTags()
 
     QAction* act = (QAction*)QObject::sender();
     qint64 tagid = act->data().toLongLong();
-
-    pDoc_->SetTagged(id, tagid);
+    // check state is already updated
+    pDoc_->SetTagged(id, tagid, act->isChecked());
 }
 
 void MainWindow::on_context_ExternalTools()
@@ -2067,7 +2067,7 @@ void MainWindow::showTagContextMenu(const QPoint &pos)
 }
 QString MainWindow::GetTags(const qint64& id)
 {
-    QList<qint64> tagids;
+	QSet<qint64> tagids;
     if(!pDoc_->GetTagsFromID(id, tagids))
     {
         Alert(this,
@@ -2076,9 +2076,9 @@ QString MainWindow::GetTags(const qint64& id)
     }
 
     QString ret;
-    for(int i=0; i < tagids.count(); ++i)
+    for(const qint64& tagid : tagids) // int i=0; i < tagids.count(); ++i)
     {
-        qint64 tagid = tagids[i];
+        // qint64 tagid = tagids[i];
         QString tag,yomi;
         if(!pDoc_->GetTag(tagid,tag,yomi))
         {
@@ -2086,10 +2086,11 @@ QString MainWindow::GetTags(const qint64& id)
                   tr("Failed to GetTag."));
             return QString();
         }
-
+		if (!ret.isEmpty())
+			ret += ",";
         ret += tag;
-        if((i+1) != tagids.count())
-            ret += ",";
+        //if((i+1) != tagids.count())
+        //    ret += ",";
     }
     return ret;
 }

@@ -116,9 +116,9 @@ public:
     {
         return docSql_->GetTaggedIDs(tagids, taggedids);
     }
-    bool SetTagged(const qint64& id, const qint64& tagid) const
+    bool SetTagged(const qint64& id, const qint64& tagid, const bool bSet) const
     {
-        return docSql_->SetTagged(id,tagid);
+        return docSql_->SetTagged(id,tagid,bSet);
     }
     bool GetTag(const qint64& tagid, QString& tag, QString& yomi) const
     {
@@ -132,7 +132,7 @@ public:
     {
         return docSql_->DeleteTag(tagid);
     }
-    bool GetTagsFromID(const qint64& id, QList<qint64>& tagids)
+    bool GetTagsFromID(const qint64& id, QSet<qint64>& tagids)
     {
         return docSql_->GetTagsFromID(id,tagids);
     }

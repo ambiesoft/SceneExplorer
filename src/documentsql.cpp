@@ -494,7 +494,7 @@ bool DocumentSql::GetTaggedIDs(const QList<qint64>& tagids, QList<qint64>& tagge
     }
     return true;
 }
-bool DocumentSql::SetTagged(const qint64& id, const qint64& tagid) const
+bool DocumentSql::SetTagged(const qint64& id, const qint64& tagid, const bool bSet) const
 {
     if(tagid <= 0 || id <= 0)
     {
@@ -502,15 +502,22 @@ bool DocumentSql::SetTagged(const qint64& id, const qint64& tagid) const
         return false;
     }
 
-    QSqlQuery query(db_);
-    SQC(query,prepare("REPLACE INTO Tagged (id,tagid,dbid) VALUES (?,?,?)"));
-    int i=0;
-    query.bindValue(i++, id);
-    query.bindValue(i++,tagid);
-    query.bindValue(i++,gpSQL->getDbID());
+	QSqlQuery query(db_);
+	if (bSet)
+	{
+		SQC(query, prepare("REPLACE INTO Tagged (id,tagid,dbid) VALUES (?,?,?)"));
+		int i = 0;
+		query.bindValue(i++, id);
+		query.bindValue(i++, tagid);
+		query.bindValue(i++, gpSQL->getDbID());
 
-    SQC(query,exec());
-
+		SQC(query, exec());
+	}
+	else
+	{
+		SQC(query, prepare("DELETE FROM Tagged WHERE id=?,tagid=?,dbid=?"));
+		SQC(query, exec());
+	}
     return true;
 }
 bool DocumentSql::GetTag(const qint64& tagid, QString& tag, QString& yomi) const
@@ -556,7 +563,7 @@ bool DocumentSql::DeleteTag(const qint64& tagid)
     // query.prepare("DELETE FROM Tagged WHERE ")
     return true;
 }
-bool DocumentSql::GetTagsFromID(const qint64& id, QList<qint64>& tagids)
+bool DocumentSql::GetTagsFromID(const qint64& id, QSet<qint64>& tagids)
 {
     QSqlQuery query(db_);
     SQC(query,prepare("SELECT tagid FROM Tagged WHERE id=? AND dbid=?"));
@@ -566,7 +573,7 @@ bool DocumentSql::GetTagsFromID(const qint64& id, QList<qint64>& tagids)
     SQC(query,exec());
     while(query.next())
     {
-        tagids.append(query.value("tagid").toLongLong());
+        tagids.insert(query.value("tagid").toLongLong());
     }
 
     return true;

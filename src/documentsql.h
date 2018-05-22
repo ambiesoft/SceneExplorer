@@ -54,11 +54,11 @@ public:
     bool IsTagExist(const QString& tag) const;
     bool Insert(const QString& tag, const QString& yomi) const;
     bool GetTaggedIDs(const QList<qint64>& tagids, QList<qint64>& taggedids) const;
-    bool SetTagged(const qint64& id, const qint64& tagid) const;
+    bool SetTagged(const qint64& id, const qint64& tagid, const bool bSet) const;
     bool GetTag(const qint64& tagid, QString& tag, QString& yomi) const;
     bool ReplaceTag(const qint64& tagid, const QString& tag, const QString& yomi);
     bool DeleteTag(const qint64& tagid);
-    bool GetTagsFromID(const qint64& id, QList<qint64>& tagids);
+    bool GetTagsFromID(const qint64& id, QSet<qint64>& tagids);
 };
 
 #endif // DOCUMENTSQL_H

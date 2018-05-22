@@ -805,7 +805,7 @@
     </message>
     <message>
         <source>Add Ta&amp;g...</source>
-        <translation>タグを追加(&amp;G)...</translation>
+        <translation type="vanished">タグを追加(&amp;G)...</translation>
     </message>
     <message>
         <source>No tags</source>
@@ -838,6 +838,10 @@
     <message>
         <source>Failed to GetTag.</source>
         <translation>GetTagに失敗しました。</translation>
+    </message>
+    <message>
+        <source>Ta&amp;g...</source>
+        <translation>タグ(&amp;G)...</translation>
     </message>
 </context>
 <context>
