@@ -12,13 +12,61 @@ static void showFatal(const QString& error)
     Alert(nullptr, error);
 }
 
-#define SQC(Q,siki) do { if(!( Q.siki )) { showFatal((Q).lastError().text()); Q_ASSERT(false); return false;}} while(false)
+#define SQC_BASE(Q,siki,RET) do { if(!( Q.siki )) { showFatal(lastError_=(Q).lastError().text()); Q_ASSERT(false); RET;}} while(false)
+#define SQC(Q,siki) SQC_BASE(Q,siki,return false)
+#define SQCN(Q,siki) SQC_BASE(Q,siki,return)
+#define SQCI(Q,siki) SQC_BASE(Q,siki,return -1)
 
 static QString getDBConnection()
 {
     static int i=0;
     ++i;
     return "DOC" + QString::number(i);
+}
+bool DocumentSql::CreateDBInfoTableDoc()
+{
+    QSqlQuery query(db_);
+
+    // Create DbInfo, insert database id
+    query.exec("CREATE TABLE DbInfoDoc( "
+               "id INTEGER PRIMARY KEY)");
+    query.exec("ALTER TABLE DbInfoDoc ADD COLUMN version INTEGER");
+
+    if (!query.exec("PRAGMA table_info('DbInfoDoc')"))
+    {
+        lastError_ = query.lastError().text();
+        return false;
+    }
+
+    QStringList allColumnsMust;
+    allColumnsMust << "id" << "version";
+
+    QStringList allColumns;
+    while(query.next())
+    {
+        QString col=query.value("name").toString();
+        allColumns.append(col);
+    }
+
+    if(allColumnsMust.count() != allColumns.count())
+    {
+        return false;
+    }
+
+    SQC(query,exec("SELECT * FROM DbInfoDoc WHERE id=1"));
+    if(!query.next())
+    {
+        SQC(query,exec("INSERT INTO DbInfoDoc (id) VALUES (1)"));
+    }
+    return true;
+}
+int DocumentSql::GetDBVersionDoc()
+{
+    QSqlQuery query(db_);
+    SQCI(query,exec("SELECT version FROM DbInfoDoc WHERE id=1"));
+    if(!query.next())
+        return -1;
+    return query.value("version").toInt();
 }
 DocumentSql::DocumentSql(const QString& file) :
     db_(QSqlDatabase:: addDatabase("QSQLITE",getDBConnection())),
@@ -33,7 +81,10 @@ DocumentSql::DocumentSql(const QString& file) :
         return;
     }
 
-    
+    if(!CreateDBInfoTableDoc())
+        return;
+    int version = GetDBVersionDoc();
+
     db_.exec("CREATE TABLE Settings ( "
                "id INTEGER NOT NULL PRIMARY KEY,"
                "allselected INT NOT NULL DEFAULT '0',"
@@ -135,12 +186,19 @@ DocumentSql::DocumentSql(const QString& file) :
         return;
     }
 
+    if(version != DBVERSIONDOC)
+    {
+        SQCN(query,prepare("UPDATE DbInfoDoc SET version=?"));
+        query.bindValue(0, DBVERSIONDOC);
+        SQCN(query,exec());
+    }
     ok_ = true;
 }
 bool DocumentSql::isAllSelected() const
 {
     QSqlQuery query(db_);
-	SQC(query, exec("SELECT allselected FROM Settings WHERE id=1"));
+
+    SQC(query,exec("SELECT allselected FROM Settings WHERE id=1"));
     if(!query.next())
         return false;
     bool ok;

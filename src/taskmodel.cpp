@@ -109,8 +109,8 @@ void TaskModel::SetProgress(int id, TaskFFmpeg::Progress progress)
     p->SetProgress(progress);
 
     //myupdate();
-//    int row = findRow(p);
-//    emit dataChanged(createIndex(row,0), createIndex(row,0));
+    int row = findRow(p);
+    emit dataChanged(createIndex(row,0), createIndex(row,0));
 }
 int TaskModel::rowCount(const QModelIndex &parent) const
 {

@@ -25,6 +25,7 @@
 #include "globals.h"
 
 #define DBFILENAME "./db.sqlite3"
+#define DBVERSION 1
 
 class LimitArg
 {
@@ -68,6 +69,18 @@ class Sql : public QObject
     QString getAllColumns(bool bBrace, bool bQ);
     // QString getAllColumnsUpdate(TableItemDataPointer tid);
     QString lastError_;
+
+    bool GetAllSqlString(
+            QSqlQuery& query,
+            const QStringList& selects,
+            const QStringList& dirs,
+            const QString& find,
+            SORTCOLUMNMY sortcolumn,
+            bool sortrev,
+            const LimitArg& limit,
+            const QList<qint64>* tagids);
+    bool CreateDBInfoTable();
+    int GetDBVersion();
 public:
     enum SQL_ERROR {
         NO_ERROR,

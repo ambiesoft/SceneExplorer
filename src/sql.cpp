@@ -41,8 +41,57 @@ static void showFatal(const QString& error)
     Alert(nullptr, error);
 }
 
-#define SQC(Q,siki) do { if(!( Q.siki )) { showFatal((Q).lastError().text()); Q_ASSERT(false); return false;}} while(false)
+#define SQC_BASE(Q,siki,RET) do { if(!( Q.siki )) { showFatal(lastError_=(Q).lastError().text()); Q_ASSERT(false); RET;}} while(false)
+#define SQC(Q,siki) SQC_BASE(Q,siki,return false)
+#define SQCN(Q,siki) SQC_BASE(Q,siki,return)
+#define SQCI(Q,siki) SQC_BASE(Q,siki,return -1)
 
+bool Sql::CreateDBInfoTable()
+{
+    QSqlQuery query;
+
+    // Create DbInfo, insert database id
+    query.exec("CREATE TABLE DbInfo("
+               "id INTEGER PRIMARY KEY, "
+               "dbid TEXT NOT NULL)");
+    query.exec("ALTER TABLE DbInfo ADD COLUMN version INTEGER");
+
+    if (!query.exec("PRAGMA table_info('DbInfo')"))
+    {
+        lastError_ = query.lastError().text();
+        return false;
+    }
+
+    QStringList allColumnsMust;
+    allColumnsMust << "id" << "dbid" << "version";
+
+    QStringList allColumns;
+    while(query.next())
+    {
+        QString col=query.value("name").toString();
+        allColumns.append(col);
+    }
+
+    if(allColumnsMust.count() != allColumns.count())
+    {
+        return false;
+    }
+
+//    SQC(query,exec("SELECT * FROM DbInfo WHERE id=1"));
+//    if(!query.next())
+//    {
+//        SQC(query,exec("INSERT INTO DbInfo (id) VALUES (1)"));
+//    }
+    return true;
+}
+int Sql::GetDBVersion()
+{
+    QSqlQuery query;
+    SQCI(query,exec("SELECT version FROM DbInfo WHERE id=1"));
+    if(!query.next())
+        return -1;
+    return query.value("version").toInt();
+}
 Sql::Sql() : db_(QSqlDatabase::addDatabase("QSQLITE"))
 {
     db_.setDatabaseName(DBFILENAME);
@@ -52,12 +101,12 @@ Sql::Sql() : db_(QSqlDatabase::addDatabase("QSQLITE"))
         return;
     }
 
+    if(!CreateDBInfoTable())
+        return;
+    int version = GetDBVersion();
+
     QSqlQuery query;
 
-    // Create DbInfo, insert database id
-    query.exec("CREATE TABLE DbInfo("
-               "id INTEGER PRIMARY KEY, "
-               "dbid TEXT NOT NULL)");
     query.exec("SELECT dbid FROM DbInfo WHERE id=1");
     query.next();
     dbid_ = query.value("dbid").toString();
@@ -132,6 +181,14 @@ Sql::Sql() : db_(QSqlDatabase::addDatabase("QSQLITE"))
         allColumns_.append(col);
     }
     qDebug() << allColumns_;
+
+
+    if(version != DBVERSION)
+    {
+        SQCN(query,prepare("UPDATE DbInfo SET version=?"));
+        query.bindValue(0, DBVERSION);
+        SQCN(query,exec());
+    }
     ok_ = true;
 }
 Sql::~Sql()
@@ -669,7 +726,7 @@ void AppendSortArg(QString& sql, const QString& sortby, bool sortrev)
     }
 }
 
-bool GetAllSqlString(
+bool Sql::GetAllSqlString(
         QSqlQuery& query,
         const QStringList& selects,
         const QStringList& dirs,

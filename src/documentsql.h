@@ -3,13 +3,19 @@
 
 #include "tableitemdata.h"
 
+#define DBVERSIONDOC 1
+
 class DocumentSql : public QObject
 {
     Q_OBJECT
 
     QSqlDatabase db_;
     bool ok_ = false;
-    QString lastError_;
+    mutable QString lastError_;
+
+    int GetDBVersionDoc();
+    bool CreateDBInfoTableDoc();
+
 public:
     DocumentSql(const QString& file);
 
