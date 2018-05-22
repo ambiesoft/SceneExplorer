@@ -515,7 +515,11 @@ bool DocumentSql::SetTagged(const qint64& id, const qint64& tagid, const bool bS
 	}
 	else
 	{
-		SQC(query, prepare("DELETE FROM Tagged WHERE id=?,tagid=?,dbid=?"));
+        SQC(query, prepare("DELETE FROM Tagged WHERE id=? AND tagid=? AND dbid=?"));
+		int i = 0;
+        query.bindValue(i++, id);
+		query.bindValue(i++, tagid);
+		query.bindValue(i++, gpSQL->getDbID());
 		SQC(query, exec());
 	}
     return true;

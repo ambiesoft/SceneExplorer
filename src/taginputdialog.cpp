@@ -1,9 +1,10 @@
 #include "taginputdialog.h"
 #include "ui_taginputdialog.h"
 #include "blockedbool.h"
+#include "helper.h"
 
 TagInputDialog::TagInputDialog(QWidget *parent) :
-    QDialog(parent),
+    QDialog(parent,GetDefaultDialogFlags()),
     ui(new Ui::TagInputDialog)
 {
     ui->setupUi(this);
