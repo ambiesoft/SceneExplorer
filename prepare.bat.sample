@@ -3,7 +3,12 @@ set QTROOT=C:\local\Qt
 set QTVERSION=5.10.1
 set QTVERSIONTOOLS=mingw53_32
 
-:: set PATH=
+:: For Visual Studio 2017 x64
+::call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
+::set MAKE=nmake
+
+:: For MingW
+:: set PATH=<path to mingw bin>
 :: set MAKE=nmake
 
 set PATH=C:\local\Qt\Tools\mingw530_32\bin;%PATH%
