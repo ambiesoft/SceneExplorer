@@ -48,7 +48,7 @@ public:
     bool GetLastPos(int& row, int& column) const;
 
     bool IncrementOpenCount(const qint64& id);
-    // bool setOpenCountAndLascAccess(const QList<TableItemDataPointer>& all);
+    bool setOpenCountAndLascAccess(const QList<TableItemDataPointer>& all);
 
     bool GetAllTags(QMap<qint64, QString>& tags) const;
     bool IsTagExist(const QString& tag) const;

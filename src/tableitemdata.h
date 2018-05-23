@@ -192,9 +192,9 @@ public:
     int getOpenCount() const {
         return opencount_;
     }
-//    void setOpenCount(int v) {
-//        opencountTmp_ = v;
-//    }
+    void setOpenCount(int v) {
+        opencount_ = v;
+    }
     qint64 getLastAccess() const {
         return lastaccess_;
     }

@@ -218,10 +218,6 @@ bool Document::getLastPos(int& row, int& column) const
     return docSql_->GetLastPos(row,column);
 }
 
-//bool Document::setOpenCountAndLascAccess(const QList<TableItemDataPointer>& all)
-//{
-//    return docSql_->setOpenCountAndLascAccess(all);
-//}
 
 static bool stRev;
 static bool openCountLessThan(const TableItemDataPointer &v1, const TableItemDataPointer &v2)

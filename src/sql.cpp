@@ -256,11 +256,6 @@ QSqlQuery* Sql::getDeleteFromDirectoryName()
 }
 QStringList Sql::getAllColumnNames()
 {
-    //    QSet<QString> ret;
-    //    for(const QString& s:allColumns_)
-    //    {
-    //       ret.insert(s);
-    //    }
     return allColumns_;
 }
 QString Sql::getAllColumns(bool bBrace, bool bQ)
@@ -290,20 +285,7 @@ QString Sql::getAllColumns(bool bBrace, bool bQ)
     ret += " "; //safe space
     return ret;
 }
-//QString Sql::getAllColumnsUpdate(TableItemDataPointer tid)
-//{
-//    QString ret;
-//    for(int i=0 ; i < allColumns_.count(); ++i)
-//    {
-//        ret += allColumns_[i];
-//        ret += "=?";
-//        if((i+1)!=allColumns_.count())
-//        {
-//            ret+=",";
-//        }
-//    }
-//    return ret;
-//}
+
 QSqlQuery* Sql::getInsertQuery(TableItemDataPointer tid)
 {
     static QStringList allcolumns;
@@ -402,10 +384,6 @@ qint64 Sql::AppendData(TableItemDataPointer tid)
     Q_ASSERT(tid->getImageFiles().count()==5);
     if(tid->getImageFiles().isEmpty())
         return THUMBFILE_NOT_FOUND;
-
-    //    QString uuid = getUUID(tid.getImageFiles()[0]);
-    //    if(!isUUID(uuid))
-    //        return UUID_FORMAT_ERROR;
 
     QSqlQuery* pQInsert = getInsertQuery(tid);
 
@@ -525,14 +503,9 @@ int Sql::GetAllEntry(const QString& dir,
                      QVector<qint64>& wtimes,
                      QStringList& salients)
 {
-    QSqlQuery query(db_);
-    if(!query.prepare("select name, size, ctime, wtime, salient from FileInfo where "
-                      "directory=?"))
-    {
-        qDebug() << query.lastError();
-        Q_ASSERT(false);
-        return SQL_PREPARE_FAILED;
-    }
+    static QSqlQuery query("select name, size, ctime, wtime, salient from FileInfo where "
+                           "directory=?",
+                           db_);
     query.bindValue(0, dir);
 
     if(!query.exec())
@@ -638,9 +611,9 @@ bool Sql::RemoveEntryThumb(const QString& dir,
         Q_ASSERT(false);
         return false;
     }
-    QSqlQuery query;
-    SQC(query,prepare("SELECT thumbid FROM FileInfo WHERE "
-                      "directory=? and name=?"));
+    QSqlQuery query("SELECT thumbid FROM FileInfo WHERE "
+                   "directory=? and name=?");
+
     int i=0;
     query.bindValue(i++, dir);
     query.bindValue(i++, name);
@@ -671,14 +644,10 @@ int Sql::RemoveEntryFromThumbID(const QString& thumbid)
     if(!isUUID(thumbid))
         return THUMBID_IS_NOT_UUID;
 
-    QSqlQuery query(db_);
+    static QSqlQuery query("delete from FileInfo where "
+                    "thumbid=?",
+                    db_);
 
-    if(!query.prepare("delete from FileInfo where "
-                      "thumbid=?"))
-    {
-        qDebug() << query.lastError();
-        return SQL_EXEC_FAILED;
-    }
     int i = 0;
     query.bindValue(i++, thumbid);
     if(!query.exec())
@@ -705,11 +674,6 @@ QString Sql::getErrorStrig(int thumbRet)
     Q_ASSERT(false);
     return QString();
 }
-
-//bool Sql::GetAll(QList<TableItemDataPointer>& v, const QString& dir)
-//{
-//    return GetAll(v, QStringList(dir));
-//}
 
 void AppendLitmiArg(QString& sql, const LimitArg& limit)
 {
@@ -1014,10 +978,10 @@ bool Sql::RenameEntry(const QString& oldDirc,
 
     if(!QFile(pathCombine(oldDir, oldFile)).exists())
     {
-        QSqlQuery query;
-        SQC(query,prepare("update FileInfo "
-                          "set directory=?,name=? "
-                          "where directory=? and name=?"));
+        static QSqlQuery query("update FileInfo "
+                        "set directory=?,name=? "
+                        "where directory=? and name=?");
+
         int i=0;
         query.bindValue(i++, newDir);
         query.bindValue(i++, newFile);
@@ -1032,7 +996,6 @@ bool Sql::RenameEntries(const QString& dir,
                         const QStringList& renameOlds,
                         const QStringList& renameNews)
 {
-
     for(int i=0 ; i < renameOlds.count(); ++i)
     {
         // check old file not exists
@@ -1044,14 +1007,9 @@ bool Sql::RenameEntries(const QString& dir,
         Q_ASSERT(!QFile(pathCombine(dir, oldfile)).exists());
         if(!QFile(pathCombine(dir, oldfile)).exists())
         {
-            QSqlQuery query;
-            if(!query.prepare("update FileInfo "
-                              "set name=? "
-                              "where directory=? and name=?"))
-            {
-                Q_ASSERT(false);
-                return false;
-            }
+            static QSqlQuery query("update FileInfo "
+                            "set name=? "
+                            "where directory=? and name=?");
             int i=0;
             query.bindValue(i++, newfile);
             query.bindValue(i++, dir);
@@ -1073,9 +1031,9 @@ bool Sql::getEntryFromSalient(const QString& salient,
                               QStringList& filesDB,
                               QList<qint64>& sizesDB)
 {
-    QSqlQuery query;
-    SQC(query, prepare("select directory, name, size from FileInfo where "
-                       "salient = ?"));
+    static QSqlQuery query("select directory, name, size from FileInfo where "
+                           "salient = ?");
+
     query.bindValue(0, salient);
     SQC(query, exec());
 
@@ -1101,9 +1059,9 @@ bool Sql::hasEntry(const QString& dir,
                    const qint64& wtime,
                    const QString& sa)
 {
-    QSqlQuery query;
-    SQC(query,prepare("select name from FileInfo where "
-                      "directory=? and name=? and size=? and wtime=? and salient=?"));
+    static QSqlQuery query("select name from FileInfo where "
+                           "directory=? and name=? and size=? and wtime=? and salient=?");
+
     int i=0;
     query.bindValue(i++, dir);
     query.bindValue(i++, file);
@@ -1189,22 +1147,21 @@ bool Sql::RemoveAllMissingEntries(const QString& dirc)
         SQC(query, exec());
     }
 
-
-
     return true;
 }
 bool Sql::ApplyOpenCount(const QMap<qint64,int>& opencounts)
 {
-    QSqlQuery query;
+    {
+        static QSqlQuery query("UPDATE FileInfo SET opencount_tmp=0");
 
-    // clear
-    query.exec("UPDATE FileInfo SET opencount_tmp=0");
+        // clear
+        query.exec();
+    }
 
     for(const qint64& id : opencounts.keys())
     {
-        QString sql = "UPDATE FileInfo SET opencount_tmp=? WHERE id=?";
+        static QSqlQuery query("UPDATE FileInfo SET opencount_tmp=? WHERE id=?");
 
-        SQC(query,prepare(sql));
         int i=0;
         query.bindValue(i++, opencounts[id]);
         query.bindValue(i++, id);
@@ -1215,16 +1172,17 @@ bool Sql::ApplyOpenCount(const QMap<qint64,int>& opencounts)
 }
 bool Sql::ApplyLastAccesses(const QMap<qint64,qint64>& lastaccesses)
 {
-    QSqlQuery query;
+    {
+        static QSqlQuery query("UPDATE FileInfo SET lastaccess_tmp=0");
 
-    // clear
-    query.exec("UPDATE FileInfo SET lastaccess_tmp=0");
+        // clear
+        query.exec();
+    }
 
     for(const qint64& id : lastaccesses.keys())
     {
-        QString sql = "UPDATE FileInfo SET lastaccess_tmp=? WHERE id=?";
+        static QSqlQuery query("UPDATE FileInfo SET lastaccess_tmp=? WHERE id=?");
 
-        SQC(query,prepare(sql));
         int i=0;
         query.bindValue(i++, lastaccesses[id]);
         query.bindValue(i++, id);

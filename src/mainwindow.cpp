@@ -1481,7 +1481,7 @@ void MainWindow::GetSqlAllSetTable(const QStringList& dirs, bool bOnlyMissing)
               0,
               QString(tr("Quering Database takes %1 milliseconds.")).arg(timer.elapsed()));
 
-    // pDoc_->setOpenCountAndLascAccess(all);
+    pDoc_->setOpenCountAndLascAccess(all);
     // pDoc_->sort(all, sortManager_.GetCurrentSort(), sortManager_.GetCurrentRev());
 
     timer.start();

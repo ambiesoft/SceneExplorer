@@ -105,7 +105,10 @@ public:
     void SetOpenCountAndLastAccessClean() {
         bOpenCountAndLastAccessClean_ = true;
     }
-    // bool setOpenCountAndLascAccess(const QList<TableItemDataPointer>& all);
+    bool setOpenCountAndLascAccess(const QList<TableItemDataPointer>& all)
+    {
+        return docSql_->setOpenCountAndLascAccess(all);
+    }
     // bool sort(QList<TableItemDataPointer>& all, SORTCOLUMNMY sc, bool rev) const;
 
     bool GetAllTags(QMap<qint64, QString>& tags) const
