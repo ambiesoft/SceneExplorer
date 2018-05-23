@@ -100,7 +100,8 @@ HEADERS += \
     docinfodialog.h \
     documentsql.h \
     taginputdialog.h \
-    tagitem.h
+    tagitem.h \
+    sqlcommon.h
 
 FORMS += \
         mainwindow.ui \

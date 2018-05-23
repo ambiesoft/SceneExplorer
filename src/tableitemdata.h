@@ -20,6 +20,7 @@
 #define LISTITEMDATA_H
 
 #include <QSharedPointer>
+#include <QVariant>
 
 class TableItemData;
 typedef QSharedPointer<TableItemData> TableItemDataPointer;

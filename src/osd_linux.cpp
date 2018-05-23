@@ -113,5 +113,6 @@ QString GetDefaultFFmpeg()
 
 QString getInifile(bool& bExit)
 {
+    Q_UNUSED(bExit);
     return QString();
 }

@@ -20,7 +20,7 @@
 #include <QException>
 #include <QListWidget>
 #include <QFileInfo>
-
+#include <QDebug>
 
 #include "directoryentry.h"
 #include "helper.h"

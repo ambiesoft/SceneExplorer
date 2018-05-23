@@ -22,6 +22,8 @@
 #include <QString>
 #include <QWidget>
 #include <QComboBox>
+#include <QMessageBox>
+#include <QSqlQuery>
 
 #include "globals.h"
 
@@ -44,7 +46,7 @@ void MoveToTrashImpl( QString file );
 QString GetDefaultFFprobe();
 QString GetDefaultFFmpeg();
 QString getInifile(bool& bExit);
-#endif // HELPER_H
+
 
 QString GetSortColumnName(SORTCOLUMNMY sc);
 QString GetAppDir();
@@ -58,3 +60,6 @@ bool processCommandLine(QString* helpText=nullptr);
 QString ExpandEnv(const QString& str);
 
 bool isUUID(const QString& s);
+QSqlQuery myq(const QString& sql);
+
+#endif // HELPER_H

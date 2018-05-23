@@ -68,6 +68,8 @@ void OptionExtension::on_btnRestoreDefault_clicked()
 {
     ui.txtAllow->setPlainText(Extension::GetDefaultAllowAsString());
     ui.txtDeny->setPlainText(Extension::GetDefaultDenyAsString());
+    ui.radioAllow->setChecked(true);
+    on_radioAllow_clicked_common();
 }
 
 void OptionExtension::on_radioAllow_clicked_common()

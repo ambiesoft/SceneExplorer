@@ -28,12 +28,13 @@
 #include <QSqlError>
 #include <QSet>
 #include <QMessageBox>
+#include <QUuid>
 
 #include "tableitemdata.h"
 #include "helper.h"
 #include "globals.h"
 #include "sql.h"
-
+#include "sqlcommon.h"
 
 
 static void showFatal(const QString& error)
@@ -503,7 +504,7 @@ int Sql::GetAllEntry(const QString& dir,
                      QVector<qint64>& wtimes,
                      QStringList& salients)
 {
-    static QSqlQuery query("select name, size, ctime, wtime, salient from FileInfo where "
+    MYQMODIFIER QSqlQuery query("select name, size, ctime, wtime, salient from FileInfo where "
                            "directory=?",
                            db_);
     query.bindValue(0, dir);
@@ -611,7 +612,7 @@ bool Sql::RemoveEntryThumb(const QString& dir,
         Q_ASSERT(false);
         return false;
     }
-    QSqlQuery query("SELECT thumbid FROM FileInfo WHERE "
+    QSqlQuery query = myq("SELECT thumbid FROM FileInfo WHERE "
                    "directory=? and name=?");
 
     int i=0;
@@ -644,7 +645,7 @@ int Sql::RemoveEntryFromThumbID(const QString& thumbid)
     if(!isUUID(thumbid))
         return THUMBID_IS_NOT_UUID;
 
-    static QSqlQuery query("delete from FileInfo where "
+    MYQMODIFIER QSqlQuery query("delete from FileInfo where "
                     "thumbid=?",
                     db_);
 
@@ -979,7 +980,7 @@ bool Sql::RenameEntry(const QString& oldDirc,
 
     if(!QFile(pathCombine(oldDir, oldFile)).exists())
     {
-        static QSqlQuery query("update FileInfo "
+        MYQMODIFIER QSqlQuery query = myq("update FileInfo "
                         "set directory=?,name=? "
                         "where directory=? and name=?");
 
@@ -1008,7 +1009,7 @@ bool Sql::RenameEntries(const QString& dir,
         Q_ASSERT(!QFile(pathCombine(dir, oldfile)).exists());
         if(!QFile(pathCombine(dir, oldfile)).exists())
         {
-            static QSqlQuery query("update FileInfo "
+            MYQMODIFIER QSqlQuery query = myq("update FileInfo "
                             "set name=? "
                             "where directory=? and name=?");
             int i=0;
@@ -1032,7 +1033,7 @@ bool Sql::getEntryFromSalient(const QString& salient,
                               QStringList& filesDB,
                               QList<qint64>& sizesDB)
 {
-    static QSqlQuery query("select directory, name, size from FileInfo where "
+    MYQMODIFIER QSqlQuery query("select directory, name, size from FileInfo where "
                            "salient = ?");
 
     query.bindValue(0, salient);
@@ -1060,7 +1061,7 @@ bool Sql::hasEntry(const QString& dir,
                    const qint64& wtime,
                    const QString& sa)
 {
-    static QSqlQuery query("select name from FileInfo where "
+    MYQMODIFIER QSqlQuery query = myq("select name from FileInfo where "
                            "directory=? and name=? and size=? and wtime=? and salient=?");
 
     int i=0;
@@ -1153,7 +1154,7 @@ bool Sql::RemoveAllMissingEntries(const QString& dirc)
 //bool Sql::ApplyOpenCount(const QMap<qint64,int>& opencounts)
 //{
 //    {
-//        static QSqlQuery query("UPDATE FileInfo SET opencount_tmp=0");
+//        MYQMODIFIER QSqlQuery query("UPDATE FileInfo SET opencount_tmp=0");
 
 //        // clear
 //        query.exec();
@@ -1161,7 +1162,7 @@ bool Sql::RemoveAllMissingEntries(const QString& dirc)
 
 //    for(const qint64& id : opencounts.keys())
 //    {
-//        static QSqlQuery query("UPDATE FileInfo SET opencount_tmp=? WHERE id=?");
+//        MYQMODIFIER QSqlQuery query("UPDATE FileInfo SET opencount_tmp=? WHERE id=?");
 
 //        int i=0;
 //        query.bindValue(i++, opencounts[id]);
@@ -1174,7 +1175,7 @@ bool Sql::RemoveAllMissingEntries(const QString& dirc)
 //bool Sql::ApplyLastAccesses(const QMap<qint64,qint64>& lastaccesses)
 //{
 //    {
-//        static QSqlQuery query("UPDATE FileInfo SET lastaccess_tmp=0");
+//        MYQMODIFIER QSqlQuery query("UPDATE FileInfo SET lastaccess_tmp=0");
 
 //        // clear
 //        query.exec();
@@ -1182,7 +1183,7 @@ bool Sql::RemoveAllMissingEntries(const QString& dirc)
 
 //    for(const qint64& id : lastaccesses.keys())
 //    {
-//        static QSqlQuery query("UPDATE FileInfo SET lastaccess_tmp=? WHERE id=?");
+//        MYQMODIFIER QSqlQuery query("UPDATE FileInfo SET lastaccess_tmp=? WHERE id=?");
 
 //        int i=0;
 //        query.bindValue(i++, lastaccesses[id]);

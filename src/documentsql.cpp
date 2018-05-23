@@ -1,11 +1,34 @@
-#include "documentsql.h"
+//SceneExplorer
+//Exploring video files by viewer thumbnails
+//
+//Copyright (C) 2018  Ambiesoft
+//
+//This program is free software: you can redistribute it and/or modify
+//it under the terms of the GNU General Public License as published by
+//the Free Software Foundation, either version 3 of the License, or
+//(at your option) any later version.
+//
+//This program is distributed in the hope that it will be useful,
+//but WITHOUT ANY WARRANTY; without even the implied warranty of
+//MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//GNU General Public License for more details.
+//
+//You should have received a copy of the GNU General Public License
+//along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
 
 #include <QSqlDatabase>
 #include <QSqlQuery>
+#include <QSqlError>
+#include <QDebug>
+#include <QDateTime>
 
+#include "sqlcommon.h"
 #include "tableitemdata.h"
 #include "helper.h"
 #include "sql.h"
+
+#include "documentsql.h"
 
 static void showFatal(const QString& error)
 {
@@ -209,10 +232,10 @@ DocumentSql::~DocumentSql()
 {
     gpSQL->DetachDocument();
 }
-#define MYSTATIC
+
 bool DocumentSql::isAllSelected() const
 {
-    MYSTATIC QSqlQuery query("SELECT allselected FROM Settings WHERE id=1");
+    MYQMODIFIER QSqlQuery query("SELECT allselected FROM Settings WHERE id=1");
 
     SQC(query,exec());
     if(!query.next())
@@ -225,7 +248,7 @@ bool DocumentSql::isAllSelected() const
 }
 bool DocumentSql::setAllSelected(bool b)
 {
-    MYSTATIC QSqlQuery query("UPDATE Settings SET allselected=? WHERE id=1");
+    MYQMODIFIER QSqlQuery query("UPDATE Settings SET allselected=? WHERE id=1");
 
 	query.bindValue(0, b ? 1 : 0);
 	SQC(query,exec());
@@ -234,7 +257,7 @@ bool DocumentSql::setAllSelected(bool b)
 
 bool DocumentSql::isAllChecked() const
 {
-    MYSTATIC QSqlQuery query("SELECT allchecked FROM Settings WHERE id=1");
+    MYQMODIFIER QSqlQuery query("SELECT allchecked FROM Settings WHERE id=1");
     SQC(query,exec());
     if(!query.next())
         return false;
@@ -246,7 +269,7 @@ bool DocumentSql::isAllChecked() const
 }
 bool DocumentSql::setAllChecked(bool b)
 {
-    MYSTATIC QSqlQuery query("UPDATE Settings SET allchecked=? WHERE id=1");
+    MYQMODIFIER QSqlQuery query("UPDATE Settings SET allchecked=? WHERE id=1");
 
 	query.bindValue(0, b ? 1 : 0);
 	SQC(query, exec());
@@ -256,7 +279,7 @@ bool DocumentSql::setAllChecked(bool b)
 
 int DocumentSql::dirCount() const
 {
-    MYSTATIC QSqlQuery query("SELECT count(*) FROM Directories");
+    MYQMODIFIER QSqlQuery query("SELECT count(*) FROM Directories");
     SQC(query,exec());
     if(!query.next())
         return 0;
@@ -264,7 +287,7 @@ int DocumentSql::dirCount() const
 }
 QString DocumentSql::getDirText(int index) const
 {
-    MYSTATIC QSqlQuery query("SELECT directory FROM Directories WHERE id=?");
+    MYQMODIFIER QSqlQuery query("SELECT directory FROM Directories WHERE id=?");
 
     query.bindValue(0, index);
     if(!query.exec())
@@ -275,7 +298,7 @@ QString DocumentSql::getDirText(int index) const
 }
 bool DocumentSql::setDirectory(int index, const QString& text, bool bSel, bool bCheck)
 {
-    MYSTATIC QSqlQuery query("INSERT OR REPLACE INTO Directories (id, directory, selected, checked) VALUES (?,?,?,?)");
+    MYQMODIFIER QSqlQuery query = myq("INSERT OR REPLACE INTO Directories (id, directory, selected, checked) VALUES (?,?,?,?)");
 
 	int i = 0;
 	query.bindValue(i++, index);
@@ -288,7 +311,7 @@ bool DocumentSql::setDirectory(int index, const QString& text, bool bSel, bool b
 
 bool DocumentSql::isDirSelected(int index) const
 {
-    MYSTATIC QSqlQuery query("SELECT selected FROM Directories WHERE id=?");
+    MYQMODIFIER QSqlQuery query("SELECT selected FROM Directories WHERE id=?");
 
 	query.bindValue(0, index);
 	SQC(query, exec());
@@ -299,7 +322,7 @@ bool DocumentSql::isDirSelected(int index) const
 
 bool DocumentSql::isDirChecked(int index) const
 {
-    MYSTATIC QSqlQuery query("SELECT checked FROM Directories WHERE id=?");
+    MYQMODIFIER QSqlQuery query("SELECT checked FROM Directories WHERE id=?");
 
 	query.bindValue(0, index);
 	SQC(query, exec());
@@ -310,7 +333,7 @@ bool DocumentSql::isDirChecked(int index) const
 
 bool DocumentSql::removeDirectoryOver(int index)
 {
-    MYSTATIC QSqlQuery query("DELETE FROM Directories WHERE id > ?");
+    MYQMODIFIER QSqlQuery query("DELETE FROM Directories WHERE id > ?");
 
 	query.bindValue(0, index);
 	SQC(query, exec());
@@ -319,7 +342,10 @@ bool DocumentSql::removeDirectoryOver(int index)
 
 bool DocumentSql::SetLastPos(int row, int column)
 {
-    MYSTATIC QSqlQuery query("UPDATE Settings SET lastrow=?, lastcolumn=? WHERE id=1");
+    // this caused sigsegv in linux
+    // QSqlQuery query("UPDATE Settings SET lastrow=?, lastcolumn=? WHERE id=1");
+    QSqlQuery query;
+    SQC(query,prepare("UPDATE Settings SET lastrow=?, lastcolumn=? WHERE id=1"));
 
     int i=0;
     query.bindValue(i++, row);
@@ -330,7 +356,7 @@ bool DocumentSql::SetLastPos(int row, int column)
 }
 bool DocumentSql::GetLastPos(int& row, int& column) const
 {
-    MYSTATIC QSqlQuery query("SELECT * FROM Settings WHERE id=1");
+    MYQMODIFIER QSqlQuery query("SELECT * FROM Settings WHERE id=1");
     SQC(query,exec());
     if(!query.next())
         return false;
@@ -347,14 +373,14 @@ bool DocumentSql::GetLastPos(int& row, int& column) const
 
 bool DocumentSql::IncrementOpenCount(const qint64& id)
 {
-    MYSTATIC QString state =
+    MYQMODIFIER QString state =
             "REPLACE into Access (id,opencount,lastaccess,dbid) VALUES "
             "(?,"
             "COALESCE((SELECT opencount FROM Access WHERE id=?),0)+1,"
             "?,"
             "?)";
 
-    MYSTATIC QSqlQuery query(state);
+    MYQMODIFIER QSqlQuery query = myq(state);
 
     int i=0;
     query.bindValue(i++, id);
@@ -370,7 +396,7 @@ bool DocumentSql::IncrementOpenCount(const qint64& id)
 
 bool DocumentSql::setOpenCountAndLascAccess_obsolete(const QList<TableItemDataPointer>& all)
 {
-    MYSTATIC QSqlQuery query("SELECT id,opencount,lastaccess,dbid FROM Access WHERE dbid=?");
+    MYQMODIFIER QSqlQuery query("SELECT id,opencount,lastaccess,dbid FROM Access WHERE dbid=?");
 
     query.bindValue(0, gpSQL->getDbID());
     SQC(query,exec());
@@ -400,7 +426,7 @@ bool DocumentSql::setOpenCountAndLascAccess_obsolete(const QList<TableItemDataPo
 
 bool DocumentSql::GetAllTags(QMap<qint64, QString>& tags) const
 {
-    MYSTATIC QSqlQuery query("SELECT * FROM Tag WHERE dbid=? ORDER BY yomi");
+    MYQMODIFIER QSqlQuery query("SELECT * FROM Tag WHERE dbid=? ORDER BY yomi");
 
     int i=0;
     query.bindValue(i++, gpSQL->getDbID());
@@ -414,7 +440,7 @@ bool DocumentSql::GetAllTags(QMap<qint64, QString>& tags) const
 }
 bool DocumentSql::IsTagExist(const QString& tag) const
 {
-    MYSTATIC QSqlQuery query("SELECT tagid FROM Tag WHERE tag=? AND dbid=?");
+    MYQMODIFIER QSqlQuery query = myq("SELECT tagid FROM Tag WHERE tag=? AND dbid=?");
 
     int i=0;
     query.bindValue(i++, tag);
@@ -424,7 +450,7 @@ bool DocumentSql::IsTagExist(const QString& tag) const
 }
 bool DocumentSql::Insert(const QString& tag, const QString& yomi) const
 {
-    MYSTATIC QSqlQuery query("REPLACE INTO Tag (tag,yomi,dbid) VALUES (?,?,?)");
+    MYQMODIFIER QSqlQuery query = myq("REPLACE INTO Tag (tag,yomi,dbid) VALUES (?,?,?)");
 
     int i=0;
     // query.bindValue(i++, id);
@@ -477,7 +503,7 @@ bool DocumentSql::SetTagged(const qint64& id, const qint64& tagid, const bool bS
 
 	if (bSet)
 	{
-        MYSTATIC QSqlQuery query("REPLACE INTO Tagged (id,tagid,dbid) VALUES (?,?,?)");
+        MYQMODIFIER QSqlQuery query = myq("REPLACE INTO Tagged (id,tagid,dbid) VALUES (?,?,?)");
 
 		int i = 0;
 		query.bindValue(i++, id);
@@ -488,7 +514,7 @@ bool DocumentSql::SetTagged(const qint64& id, const qint64& tagid, const bool bS
 	}
 	else
 	{
-        QSqlQuery query("DELETE FROM Tagged WHERE id=? AND tagid=? AND dbid=?");
+        QSqlQuery query = myq("DELETE FROM Tagged WHERE id=? AND tagid=? AND dbid=?");
 
 		int i = 0;
         query.bindValue(i++, id);
@@ -500,7 +526,7 @@ bool DocumentSql::SetTagged(const qint64& id, const qint64& tagid, const bool bS
 }
 bool DocumentSql::GetTag(const qint64& tagid, QString& tag, QString& yomi) const
 {
-    MYSTATIC QSqlQuery query("SELECT tag,yomi FROM Tag WHERE tagid=? AND dbid=?");
+    MYQMODIFIER QSqlQuery query = myq("SELECT tag,yomi FROM Tag WHERE tagid=? AND dbid=?");
     qDebug() << query.isValid();
     int i=0;
     query.bindValue(i++, tagid);
@@ -518,7 +544,7 @@ bool DocumentSql::GetTag(const qint64& tagid, QString& tag, QString& yomi) const
 }
 bool DocumentSql::ReplaceTag(const qint64& tagid, const QString& tag, const QString& yomi)
 {
-    MYSTATIC QSqlQuery query("UPDATE Tag SET tag=?,yomi=? WHERE tagid=? AND dbid=?");
+    MYQMODIFIER QSqlQuery query = myq("UPDATE Tag SET tag=?,yomi=? WHERE tagid=? AND dbid=?");
 
     int i=0;
     query.bindValue(i++,tag);
@@ -531,7 +557,7 @@ bool DocumentSql::ReplaceTag(const qint64& tagid, const QString& tag, const QStr
 }
 bool DocumentSql::DeleteTag(const qint64& tagid)
 {
-    MYSTATIC QSqlQuery query("DELETE FROM Tag WHERE tagid=? AND dbid=?");
+    MYQMODIFIER QSqlQuery query = myq("DELETE FROM Tag WHERE tagid=? AND dbid=?");
 
     int i=0;
     query.bindValue(i++,tagid);
@@ -545,7 +571,7 @@ bool DocumentSql::GetTagsFromID(const qint64& id, QSet<qint64>& tagids)
 //    QSqlQuery query;
 //    SQC(query,prepare("SELECT tagid FROM Tagged WHERE id=? AND dbid=?"));
 
-    MYSTATIC QSqlQuery query("SELECT tagid FROM Tagged WHERE id=? AND dbid=?");
+    MYQMODIFIER QSqlQuery query = myq("SELECT tagid FROM Tagged WHERE id=? AND dbid=?");
 
     int i=0;
     query.bindValue(i++, id);
@@ -560,7 +586,7 @@ bool DocumentSql::GetTagsFromID(const qint64& id, QSet<qint64>& tagids)
 }
 bool DocumentSql::GetOpenCounts(QMap<qint64,int>& opencounts)
 {
-    MYSTATIC QSqlQuery query("SELECT id,opencount FROM Access");
+    MYQMODIFIER QSqlQuery query("SELECT id,opencount FROM Access");
     while(query.next())
     {
         opencounts[query.value("id").toLongLong()]=query.value("opencount").toInt();
@@ -569,8 +595,8 @@ bool DocumentSql::GetOpenCounts(QMap<qint64,int>& opencounts)
 }
 bool DocumentSql::GetLastAccesses(QMap<qint64,qint64>& lastaccesses)
 {
-    MYSTATIC QSqlQuery query("SELECT id,lastaccess FROM Access");
-//    MYSTATIC bool prepared=false;
+    MYQMODIFIER QSqlQuery query("SELECT id,lastaccess FROM Access");
+//    MYQMODIFIER bool prepared=false;
 //    if(!prepared)
 //    {
 //        SQC(query,prepare("SELECT id,lastaccess FROM Access"));
