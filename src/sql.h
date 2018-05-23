@@ -175,6 +175,8 @@ public:
                      QString* error = nullptr);
 
 	bool RemoveAllMissingEntries(const QString& dir);
+    bool ApplyOpenCount(const QMap<qint64,int>& opencounts);
+    bool ApplyLastAccesses(const QMap<qint64,qint64>& lastaccesses);
 };
 
 #endif // SQL_H

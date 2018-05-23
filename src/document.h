@@ -94,11 +94,19 @@ public:
     // int scrollPos() const ;
     bool getLastPos(int& row, int& column) const;
 
+    bool bOpenCountAndLastAccessClean_ = false;
     bool IncrementOpenCount(const qint64& id) {
+        bOpenCountAndLastAccessClean_ = false;
         return docSql_->IncrementOpenCount(id);
     }
-    bool setOpenCountAndLascAccess(const QList<TableItemDataPointer>& all);
-    bool sort(QList<TableItemDataPointer>& all, SORTCOLUMNMY sc, bool rev) const;
+    bool IsOpenCountAndLastAccessClean() const {
+        return bOpenCountAndLastAccessClean_;
+    }
+    void SetOpenCountAndLastAccessClean() {
+        bOpenCountAndLastAccessClean_ = true;
+    }
+    // bool setOpenCountAndLascAccess(const QList<TableItemDataPointer>& all);
+    // bool sort(QList<TableItemDataPointer>& all, SORTCOLUMNMY sc, bool rev) const;
 
     bool GetAllTags(QMap<qint64, QString>& tags) const
     {
@@ -135,6 +143,14 @@ public:
     bool GetTagsFromID(const qint64& id, QSet<qint64>& tagids)
     {
         return docSql_->GetTagsFromID(id,tagids);
+    }
+    bool GetOpenCounts(QMap<qint64,int>& opencounts)
+    {
+        return docSql_->GetOpenCounts(opencounts);
+    }
+    bool GetLastAccesses(QMap<qint64,qint64>& lastaccesses)
+    {
+        return docSql_->GetLastAccesses(lastaccesses);
     }
 };
 

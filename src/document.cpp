@@ -218,10 +218,10 @@ bool Document::getLastPos(int& row, int& column) const
     return docSql_->GetLastPos(row,column);
 }
 
-bool Document::setOpenCountAndLascAccess(const QList<TableItemDataPointer>& all)
-{
-    return docSql_->setOpenCountAndLascAccess(all);
-}
+//bool Document::setOpenCountAndLascAccess(const QList<TableItemDataPointer>& all)
+//{
+//    return docSql_->setOpenCountAndLascAccess(all);
+//}
 
 static bool stRev;
 static bool openCountLessThan(const TableItemDataPointer &v1, const TableItemDataPointer &v2)
@@ -239,18 +239,17 @@ static bool lastaccessLessThan(const TableItemDataPointer &v1, const TableItemDa
         return v1->getLastAccess() < v2->getLastAccess();
 }
 
-bool Document::sort(QList<TableItemDataPointer>& all, SORTCOLUMNMY sc, bool rev) const
-{
-
-    if(sc==SORT_OPENCOUNT)
-    {
-        stRev = !rev;
-        std::sort(all.begin(),all.end(),openCountLessThan);
-    }
-    else if(sc==SORT_LASTACCESS)
-    {
-        stRev = rev;
-        std::sort(all.begin(),all.end(),lastaccessLessThan);
-    }
-    return true;
-}
+//bool Document::sort(QList<TableItemDataPointer>& all, SORTCOLUMNMY sc, bool rev) const
+//{
+//    if(sc==SORT_OPENCOUNT)
+//    {
+//        stRev = !rev;
+//        std::sort(all.begin(),all.end(),openCountLessThan);
+//    }
+//    else if(sc==SORT_LASTACCESS)
+//    {
+//        stRev = rev;
+//        std::sort(all.begin(),all.end(),lastaccessLessThan);
+//    }
+//    return true;
+//}

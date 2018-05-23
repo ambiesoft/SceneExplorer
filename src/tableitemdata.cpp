@@ -46,6 +46,7 @@ TableItemData::TableItemData(const qint64& id,
                              const QString& vcodec,
                              const QString& acodec,
                              int vWidth,int vHeight,
+                             int opencount,
                              const qint64& lastaccess)
 {
 #ifdef QT_DEBUG
@@ -72,7 +73,7 @@ TableItemData::TableItemData(const qint64& id,
     vWidth_=vWidth;
     vHeight_=vHeight;
 
-    // opencount_=opencount;
+    opencount_=opencount;
     lastaccess_ = lastaccess;
 }
 QString TableItemData::getMovieFileFull() const {

@@ -393,38 +393,38 @@ bool DocumentSql::IncrementOpenCount(const qint64& id)
     return true;
 }
 
-bool DocumentSql::setOpenCountAndLascAccess(const QList<TableItemDataPointer>& all)
-{
-    QString state =
-            "SELECT id,opencount,lastaccess,dbid FROM Access WHERE dbid=?";
+//bool DocumentSql::setOpenCountAndLascAccess(const QList<TableItemDataPointer>& all)
+//{
+//    QString state =
+//            "SELECT id,opencount,lastaccess,dbid FROM Access WHERE dbid=?";
 
-    QSqlQuery query(db_);
-    SQC(query,prepare(state));
-    query.bindValue(0, gpSQL->getDbID());
-    SQC(query,exec());
-    QMap<qint64, int> mapOpenCount;
-    QMap<qint64, qint64> mapLastAccess;
-    while(query.next())
-    {
-        mapOpenCount.insert(query.value("id").toLongLong(), query.value("opencount").toInt());
-        mapLastAccess.insert(query.value("id").toLongLong(), query.value("lastaccess").toLongLong());
-    }
+//    QSqlQuery query(db_);
+//    SQC(query,prepare(state));
+//    query.bindValue(0, gpSQL->getDbID());
+//    SQC(query,exec());
+//    QMap<qint64, int> mapOpenCount;
+//    QMap<qint64, qint64> mapLastAccess;
+//    while(query.next())
+//    {
+//        mapOpenCount.insert(query.value("id").toLongLong(), query.value("opencount").toInt());
+//        mapLastAccess.insert(query.value("id").toLongLong(), query.value("lastaccess").toLongLong());
+//    }
 
-    for(TableItemDataPointer td : all)
-    {
-        if(mapOpenCount.contains(td->getID()))
-        {
-            td->setOpenCount(mapOpenCount[td->getID()]);
-        }
+//    for(TableItemDataPointer td : all)
+//    {
+//        if(mapOpenCount.contains(td->getID()))
+//        {
+//            td->setOpenCount(mapOpenCount[td->getID()]);
+//        }
 
-        if(mapLastAccess.contains(td->getID()))
-        {
-            td->setLastAccess(mapLastAccess[td->getID()]);
-        }
-    }
+//        if(mapLastAccess.contains(td->getID()))
+//        {
+//            td->setLastAccess(mapLastAccess[td->getID()]);
+//        }
+//    }
 
-    return true;
-}
+//    return true;
+//}
 
 bool DocumentSql::GetAllTags(QMap<qint64, QString>& tags) const
 {
@@ -580,5 +580,31 @@ bool DocumentSql::GetTagsFromID(const qint64& id, QSet<qint64>& tagids)
         tagids.insert(query.value("tagid").toLongLong());
     }
 
+    return true;
+}
+bool DocumentSql::GetOpenCounts(QMap<qint64,int>& opencounts)
+{
+    QSqlQuery query(db_);
+    SQC(query,exec("SELECT id,opencount FROM Access"));
+    while(query.next())
+    {
+        opencounts[query.value("id").toLongLong()]=query.value("opencount").toInt();
+    }
+    return true;
+}
+bool DocumentSql::GetLastAccesses(QMap<qint64,qint64>& lastaccesses)
+{
+    static QSqlQuery query(db_);
+    static bool prepared=false;
+    if(!prepared)
+    {
+        SQC(query,prepare("SELECT id,lastaccess FROM Access"));
+        prepared=true;
+    }
+    SQC(query,exec());
+    while(query.next())
+    {
+        lastaccesses[query.value("id").toLongLong()]=query.value("lastaccess").toLongLong();
+    }
     return true;
 }

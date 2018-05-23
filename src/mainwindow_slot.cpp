@@ -98,6 +98,7 @@ void MainWindow::sayGoodby(int loopId,  int id,
                             vcodec,acodec,
                             vWidth,vHeight,
 
+                            0,
                             0
                 );
     if(IsDirSelected(canonicalDir(fi.canonicalPath())))

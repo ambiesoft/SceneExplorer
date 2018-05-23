@@ -48,7 +48,7 @@ public:
     bool GetLastPos(int& row, int& column) const;
 
     bool IncrementOpenCount(const qint64& id);
-    bool setOpenCountAndLascAccess(const QList<TableItemDataPointer>& all);
+    // bool setOpenCountAndLascAccess(const QList<TableItemDataPointer>& all);
 
     bool GetAllTags(QMap<qint64, QString>& tags) const;
     bool IsTagExist(const QString& tag) const;
@@ -59,6 +59,8 @@ public:
     bool ReplaceTag(const qint64& tagid, const QString& tag, const QString& yomi);
     bool DeleteTag(const qint64& tagid);
     bool GetTagsFromID(const qint64& id, QSet<qint64>& tagids);
+    bool GetOpenCounts(QMap<qint64,int>& opencounts);
+    bool GetLastAccesses(QMap<qint64,qint64>& lastaccesses);
 };
 
 #endif // DOCUMENTSQL_H

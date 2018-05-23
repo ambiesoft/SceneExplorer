@@ -1432,6 +1432,37 @@ void MainWindow::GetSqlAllSetTable(const QStringList& dirs, bool bOnlyMissing)
             cmbLimit_->setItemData((int)i, Qt::AlignCenter, Qt::TextAlignmentRole);
 		}
 	}
+
+    // these 2 columns exists in doc, so copy them into main DB.
+    switch(sortManager_.GetCurrentSort())
+    {
+        case SORTCOLUMNMY::SORT_OPENCOUNT:
+        {
+            if(!pDoc_->IsOpenCountAndLastAccessClean())
+            {
+                QMap<qint64,int> opencounts;
+                pDoc_->GetOpenCounts(opencounts);
+                gpSQL->ApplyOpenCount(opencounts);
+                pDoc_->SetOpenCountAndLastAccessClean();
+            }
+        }
+        break;
+
+        case SORTCOLUMNMY::SORT_LASTACCESS:
+        {
+            if(!pDoc_->IsOpenCountAndLastAccessClean())
+            {
+                QMap<qint64,qint64> lastaccesses;
+                pDoc_->GetLastAccesses(lastaccesses);
+                gpSQL->ApplyLastAccesses(lastaccesses);
+                pDoc_->SetOpenCountAndLastAccessClean();
+            }
+        }
+        break;
+
+    default:
+        break;
+    }
     QList<TableItemDataPointer> all;
     gpSQL->GetAll(all,
                   dirs,
@@ -1450,8 +1481,8 @@ void MainWindow::GetSqlAllSetTable(const QStringList& dirs, bool bOnlyMissing)
               0,
               QString(tr("Quering Database takes %1 milliseconds.")).arg(timer.elapsed()));
 
-    pDoc_->setOpenCountAndLascAccess(all);
-    pDoc_->sort(all, sortManager_.GetCurrentSort(), sortManager_.GetCurrentRev());
+    // pDoc_->setOpenCountAndLascAccess(all);
+    // pDoc_->sort(all, sortManager_.GetCurrentSort(), sortManager_.GetCurrentRev());
 
     timer.start();
     tableModel_->ResetData(all);

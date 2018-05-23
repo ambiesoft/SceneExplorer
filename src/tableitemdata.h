@@ -49,6 +49,7 @@ class TableItemData
     QString acodec_;
     int vWidth_,vHeight_;
 
+    int opencount_=0;
     qint64 lastaccess_ = 0;
     TableItemData(const qint64& id,
                   const QStringList& files,
@@ -68,28 +69,30 @@ class TableItemData
                   const QString& acodec,
                   int vWidth,int vHeight,
 
+                  int opencount,
                   const qint64& lastaccess);
 
 public:
 	static TableItemDataPointer Create(
             const qint64& id,
-		const QStringList& files,
-		const QString& movieDirectory,
-		const QString& movieFileName,
+            const QStringList& files,
+            const QString& movieDirectory,
+            const QString& movieFileName,
 
-		const qint64& size,
-		const qint64& ctime,
-		const qint64& wtime,
+            const qint64& size,
+            const qint64& ctime,
+            const qint64& wtime,
 
-		int thumbwidth,
-		int thumbheight,
-		const double& duration,
-		const QString& format,
-        int bitrate,
-		const QString& vcodec,
-		const QString& acodec,
-        int vWidth, int vHeight,
-        const qint64& lastaccess)
+            int thumbwidth,
+            int thumbheight,
+            const double& duration,
+            const QString& format,
+            int bitrate,
+            const QString& vcodec,
+            const QString& acodec,
+            int vWidth, int vHeight,
+            int opencount,
+            const qint64& lastaccess)
 	{
         Q_ASSERT(!movieDirectory.isEmpty());
         Q_ASSERT(!movieFileName.isEmpty());
@@ -117,6 +120,7 @@ public:
 
             vWidth, vHeight,
 
+            opencount,
             lastaccess));
 	}
 	~TableItemData()
@@ -186,11 +190,11 @@ public:
     qint64 getWtime() const;
 
     int getOpenCount() const {
-        return opencountTmp_;
+        return opencount_;
     }
-    void setOpenCount(int v) {
-        opencountTmp_ = v;
-    }
+//    void setOpenCount(int v) {
+//        opencountTmp_ = v;
+//    }
     qint64 getLastAccess() const {
         return lastaccess_;
     }
@@ -220,9 +224,9 @@ public:
     }
     QMap<QString,QVariant> getColumnValues() const;
 
-    int opencountTmp_ = 0;
+    // int opencountTmp_ = 0;
 	void IncrementOpenCount() {
-        ++opencountTmp_;
+        ++opencount_;
 	}
 };
 
