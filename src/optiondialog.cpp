@@ -185,6 +185,7 @@ void OptionDialog::constructTitleTemplateMenu(QMenu& contextMenu,
 {
     const char* alltargets[] = {
         "name",
+        "id",
         "size",
         "wtime",
         "duration",
@@ -195,6 +196,7 @@ void OptionDialog::constructTitleTemplateMenu(QMenu& contextMenu,
         "resolution",
         "directory",
         "opencount",
+        "tags",
     };
 
     for(size_t i=0 ; i < sizeof(alltargets)/sizeof(alltargets[0]); ++i )

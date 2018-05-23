@@ -269,6 +269,10 @@ QString TableModel::ExtractInfoText(TableItemDataPointer item, const QString& st
         {
             result += item->getMovieFileName();
         }
+        else if(s=="${id}")
+        {
+            result += QString::number(item->getID());
+        }
         else if(s=="${size}")
         {
             result += size_human(item->getSize());
