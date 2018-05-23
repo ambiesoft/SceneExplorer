@@ -86,6 +86,20 @@ set DISTDIR=C:\Linkout\SceneExplorer
 
 build.batを実行します。*C:\Linkout\SceneExplorer* にビルドされます。
 
+### Linux
+以下のコマンドでソースとビルドツールを取得します。
+```
+git clone https://github.com/ambiesoft/SceneExplorer
+```
+
+以下のコマンドでビルドします。
+```
+$ mkdir build
+$ cd build
+$ qmake ../src/SceneExplorer.pro
+$ make
+```
+
 
 ## サポート
 If you have troubles, post *Issue* on <https://github.com/ambiesoft/SceneExplorer/issues>.
