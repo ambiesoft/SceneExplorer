@@ -82,8 +82,24 @@ set FFCEXE=C:\LegacyPrograms\FFC\FFC.exe
 set DISTDIR=C:\Linkout\SceneExplorer
 ```
 
+Run *build.bat*. This will build SceneExplorer into *C:\Linkout\SceneExplorer*.
 
-Run build.bat. This will build SceneExplorer into *C:\Linkout\SceneExplorer*.
+### Linux
+Get the source and build tools by running following command.
+```
+git clone https://github.com/ambiesoft/SceneExplorer
+```
+
+Build SceneExplorer as follows.
+```
+$ mkdir build
+$ cd build
+$ qmake ../src/SceneExplorer.pro
+$ make
+```
+
+
+
 
 
 ## Support
