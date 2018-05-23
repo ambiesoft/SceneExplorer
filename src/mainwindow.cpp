@@ -362,6 +362,7 @@ MainWindow::MainWindow(QWidget *parent,
     recents_ = settings_.valueStringList(KEY_RECENT_OPENDOCUMENTS);
     qDebug() << "recents" << recents_;
 
+
     if(!docToOpen.isEmpty())
     {
         // Alert(this, "docToOpen" + docToOpen);
@@ -373,7 +374,9 @@ MainWindow::MainWindow(QWidget *parent,
         if(settings_.valueBool(KEY_OPEN_LASTOPENEDDOCUMENT, true))
         {
             // Alert(this, "recnet[0]=" +recents_[0]);
-            if(recents_.isEmpty() || !OpenDocument(recents_[0], true))
+            if(recents_.isEmpty() ||
+                    !QFile(recents_[0]).exists() ||
+                    !OpenDocument(recents_[0], true))
             {
                 // recents is empty or OpenDocument fails.
                 // open default document.
@@ -540,6 +543,8 @@ QString MainWindow::GetDefaultDocumentPath()
 
 bool MainWindow::OpenDocument(const QString& file, const bool bExists)
 {
+    CloseDocument();
+
     Document* pNewDoc = new Document;
     if(!pNewDoc->Load(file, bExists))
     {
@@ -554,15 +559,28 @@ bool MainWindow::OpenDocument(const QString& file, const bool bExists)
     recents_.removeOne(file);
     recents_.insert(0, file);
 
-    if(pDoc_)
-    {
-        StoreDocument();
-        delete pDoc_;
-    }
     pDoc_ = pNewDoc;
     InitDocument();
     return true;
 }
+bool MainWindow::CloseDocument()
+{
+    if(!pDoc_)
+        return true;
+
+    BlockedBool dc(&directoryChanging_);
+    BlockedBool tc(&tagChanging_);
+
+    StoreDocument();
+    delete pDoc_;
+    pDoc_=nullptr;
+
+    ui->directoryWidget->clear();
+    ui->listTag->clear();
+
+    return true;
+}
+
 void MainWindow::LoadTags()
 {
     Q_ASSERT(!tagChanging_);
@@ -576,7 +594,7 @@ void MainWindow::LoadTags()
     ui->listTag->addItem(tagAll);
 
     QMap<qint64, QString> tags;
-    if(pDoc_->GetAllTags(tags))
+    if(pDoc_ && pDoc_->GetAllTags(tags))
     {
         for(qint64& key : tags.keys())
         {
@@ -591,6 +609,9 @@ void MainWindow::LoadTags()
 }
 void MainWindow::InitDocument()
 {
+    if(!pDoc_)
+        return;
+
     BlockedBool btD(&directoryChanging_);
 
     ui->directoryWidget->clear();
@@ -598,7 +619,7 @@ void MainWindow::InitDocument()
     AddUserEntryDirectory(DirectoryItem::DI_ALL, QString(),
                           pDoc_->IsAllSelected(),
                           pDoc_->IsAllChecked());
-	const int count = pDoc_->dirCount();
+    const int count = pDoc_==nullptr ? 0 : pDoc_->dirCount();
     for(int i=1 ; i <= count ; ++i)
     {
         AddUserEntryDirectory(DirectoryItem::DI_NORMAL,
@@ -1203,6 +1224,8 @@ void MainWindow::on_context_removeFromDatabase()
 
 void MainWindow::on_context_AddTags()
 {
+    if(!pDoc_)
+        return;
     qint64 id = getSelectedID();
     if(id <= 0)
     {
@@ -1275,9 +1298,12 @@ void MainWindow::on_context_ExternalTools()
 
     if(externalTools_[i].IsCountAsOpen())
     {
-        QString movieFileCanon = getSelectedVideo(false);
-        pDoc_->IncrementOpenCount(getSelectedID());
-        tableModel_->UpdateItem(movieFileCanon);
+        if(pDoc_)
+        {
+            QString movieFileCanon = getSelectedVideo(false);
+            pDoc_->IncrementOpenCount(getSelectedID());
+            tableModel_->UpdateItem(movieFileCanon);
+        }
     }
 }
 
@@ -1372,7 +1398,7 @@ void MainWindow::directoryChangedCommon(bool bForceRead)
     GetSqlAllSetTable(dirs, bOnlyMissing);
 }
 
-bool MainWindow::GetSelectedTagIDs(QList<qint64>& taggedids)
+bool MainWindow::GetSelectedTagIDs(QSet<qint64>& taggedids)
 {
     QList<qint64> tagids;
     for(int i=0 ; i < ui->listTag->count(); ++i)
@@ -1401,14 +1427,14 @@ bool MainWindow::GetSelectedTagIDs(QList<qint64>& taggedids)
         // nothing is selected
         return false;
     }
-    pDoc_->GetTaggedIDs(tagids, taggedids);
+    pDoc_ && pDoc_->GetTaggedIDs(tagids, taggedids);
     return true;
 }
 
 void MainWindow::GetSqlAllSetTable(const QStringList& dirs, bool bOnlyMissing)
 {
     // Get Tag selected
-    QList<qint64> tagids;
+    QSet<qint64> tagids;
     bool isTagValid = GetSelectedTagIDs(tagids);
 
     tableModel_->SetShowMissing(tbShowNonExistant_->isChecked() );
@@ -1434,35 +1460,35 @@ void MainWindow::GetSqlAllSetTable(const QStringList& dirs, bool bOnlyMissing)
 	}
 
     // these 2 columns exists in doc, so copy them into main DB.
-    switch(sortManager_.GetCurrentSort())
-    {
-        case SORTCOLUMNMY::SORT_OPENCOUNT:
-        {
-            if(!pDoc_->IsOpenCountAndLastAccessClean())
-            {
-                QMap<qint64,int> opencounts;
-                pDoc_->GetOpenCounts(opencounts);
-                gpSQL->ApplyOpenCount(opencounts);
-                pDoc_->SetOpenCountAndLastAccessClean();
-            }
-        }
-        break;
+//    switch(sortManager_.GetCurrentSort())
+//    {
+//        case SORTCOLUMNMY::SORT_OPENCOUNT:
+//        {
+//            if(!pDoc_->IsOpenCountAndLastAccessClean())
+//            {
+//                QMap<qint64,int> opencounts;
+//                pDoc_->GetOpenCounts(opencounts);
+//                gpSQL->ApplyOpenCount(opencounts);
+//                pDoc_->SetOpenCountAndLastAccessClean();
+//            }
+//        }
+//        break;
 
-        case SORTCOLUMNMY::SORT_LASTACCESS:
-        {
-            if(!pDoc_->IsOpenCountAndLastAccessClean())
-            {
-                QMap<qint64,qint64> lastaccesses;
-                pDoc_->GetLastAccesses(lastaccesses);
-                gpSQL->ApplyLastAccesses(lastaccesses);
-                pDoc_->SetOpenCountAndLastAccessClean();
-            }
-        }
-        break;
+//        case SORTCOLUMNMY::SORT_LASTACCESS:
+//        {
+//            if(!pDoc_->IsOpenCountAndLastAccessClean())
+//            {
+//                QMap<qint64,qint64> lastaccesses;
+//                pDoc_->GetLastAccesses(lastaccesses);
+//                gpSQL->ApplyLastAccesses(lastaccesses);
+//                pDoc_->SetOpenCountAndLastAccessClean();
+//            }
+//        }
+//        break;
 
-    default:
-        break;
-    }
+//    default:
+//        break;
+//    }
     QList<TableItemDataPointer> all;
     gpSQL->GetAll(all,
                   dirs,
@@ -1481,7 +1507,7 @@ void MainWindow::GetSqlAllSetTable(const QStringList& dirs, bool bOnlyMissing)
               0,
               QString(tr("Quering Database takes %1 milliseconds.")).arg(timer.elapsed()));
 
-    pDoc_->setOpenCountAndLascAccess(all);
+    // pDoc_->setOpenCountAndLascAccess_obsolete(all);
     // pDoc_->sort(all, sortManager_.GetCurrentSort(), sortManager_.GetCurrentRev());
 
     timer.start();
@@ -1971,6 +1997,12 @@ void MainWindow::on_action_Add_new_tag_triggered()
 //        Alert(this,tr("No item selected"));
 //        return;
 //    }
+    if(!pDoc_)
+    {
+        Alert(this,
+              tr("No Document"));
+        return;
+    }
 
     TagInputDialog dlg(this);
     if(!dlg.exec())
@@ -2034,6 +2066,13 @@ void MainWindow::editTag()
     if(ti->IsAllItem())
         return;
 
+    if(!pDoc_)
+    {
+        Alert(this,
+              tr("No Document"));
+        return;
+    }
+
     QString tag,yomi;
     if(!pDoc_->GetTag(ti->tagid(), tag, yomi))
     {
@@ -2062,6 +2101,13 @@ void MainWindow::deleteTag()
     TagItem* ti =(TagItem*) ui->listTag->currentItem();
      if(ti->IsAllItem())
          return;
+
+     if(!pDoc_)
+     {
+         Alert(this,
+               tr("No Document"));
+         return;
+     }
 
      if(!YesNo(this,
            tr("Are you sure you want to delete Tag \"%1\"").arg(ti->text())))
@@ -2098,6 +2144,9 @@ void MainWindow::showTagContextMenu(const QPoint &pos)
 }
 QString MainWindow::GetTags(const qint64& id)
 {
+    if(!pDoc_)
+        return QString();
+
 	QSet<qint64> tagids;
     if(!pDoc_->GetTagsFromID(id, tagids))
     {

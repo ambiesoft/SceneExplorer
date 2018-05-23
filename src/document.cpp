@@ -219,21 +219,21 @@ bool Document::getLastPos(int& row, int& column) const
 }
 
 
-static bool stRev;
-static bool openCountLessThan(const TableItemDataPointer &v1, const TableItemDataPointer &v2)
-{
-    if(stRev)
-        return v2->getOpenCount() < v1->getOpenCount();
-    else
-        return v1->getOpenCount() < v2->getOpenCount();
-}
-static bool lastaccessLessThan(const TableItemDataPointer &v1, const TableItemDataPointer &v2)
-{
-    if(stRev)
-        return v2->getLastAccess() < v1->getLastAccess();
-    else
-        return v1->getLastAccess() < v2->getLastAccess();
-}
+//static bool stRev;
+//static bool openCountLessThan(const TableItemDataPointer &v1, const TableItemDataPointer &v2)
+//{
+//    if(stRev)
+//        return v2->getOpenCount() < v1->getOpenCount();
+//    else
+//        return v1->getOpenCount() < v2->getOpenCount();
+//}
+//static bool lastaccessLessThan(const TableItemDataPointer &v1, const TableItemDataPointer &v2)
+//{
+//    if(stRev)
+//        return v2->getLastAccess() < v1->getLastAccess();
+//    else
+//        return v1->getLastAccess() < v2->getLastAccess();
+//}
 
 //bool Document::sort(QList<TableItemDataPointer>& all, SORTCOLUMNMY sc, bool rev) const
 //{

@@ -54,6 +54,7 @@ class Sql : public QObject
     QSqlDatabase db_;
     QString dbid_;
     bool ok_=false;
+    QString docFile_;
     QStringList allColumns_;
     int GetMovieFileInfo(const QString& movieFile,
                          bool& exist,
@@ -78,7 +79,7 @@ class Sql : public QObject
             SORTCOLUMNMY sortcolumn,
             bool sortrev,
             const LimitArg& limit,
-            const QList<qint64>* tagids);
+            const QSet<qint64>* tagids);
     bool CreateDBInfoTable();
     int GetDBVersion();
 public:
@@ -140,7 +141,7 @@ public:
                 SORTCOLUMNMY sortcolumn = SORT_NONE,
                 bool sortrev = false,
                 const LimitArg& limit = LimitArg(),
-                const QList<qint64>* tagids = nullptr
+                const QSet<qint64>* tagids = nullptr
             );
 
     // bool IncrementOpenCount(const QString& movieFile);
@@ -175,8 +176,15 @@ public:
                      QString* error = nullptr);
 
 	bool RemoveAllMissingEntries(const QString& dir);
-    bool ApplyOpenCount(const QMap<qint64,int>& opencounts);
-    bool ApplyLastAccesses(const QMap<qint64,qint64>& lastaccesses);
+//    bool ApplyOpenCount(const QMap<qint64,int>& opencounts);
+//    bool ApplyLastAccesses(const QMap<qint64,qint64>& lastaccesses);
+
+    bool AttachDocument(const QString& docFile);
+    bool DetachDocument();
+
+    QString lastError() const {
+        return lastError_;
+    }
 };
 
 #endif // SQL_H

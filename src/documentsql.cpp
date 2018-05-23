@@ -23,9 +23,9 @@ static QString getDBConnection()
     ++i;
     return "DOC" + QString::number(i);
 }
-bool DocumentSql::CreateDBInfoTableDoc()
+bool DocumentSql::CreateDBInfoTableDoc(QSqlDatabase& db)
 {
-    QSqlQuery query(db_);
+    QSqlQuery query(db);
 
     // Create DbInfo, insert database id
     query.exec("CREATE TABLE DbInfoDoc( "
@@ -60,143 +60,159 @@ bool DocumentSql::CreateDBInfoTableDoc()
     }
     return true;
 }
-int DocumentSql::GetDBVersionDoc()
+int DocumentSql::GetDBVersionDoc(QSqlDatabase& db)
 {
-    QSqlQuery query(db_);
+    QSqlQuery query(db);
     SQCI(query,exec("SELECT version FROM DbInfoDoc WHERE id=1"));
     if(!query.next())
         return -1;
     return query.value("version").toInt();
 }
 DocumentSql::DocumentSql(const QString& file) :
-    db_(QSqlDatabase:: addDatabase("QSQLITE",getDBConnection())),
     ok_(false)
 {
-	qDebug() << db_.databaseName();
-
-    db_.setDatabaseName(file);
-    if (!db_.open() || !db_.isOpen() || !db_.isValid())
     {
-        lastError_ = db_.lastError().text();
-        return;
-    }
+        QSqlDatabase db(QSqlDatabase::addDatabase("QSQLITE",getDBConnection()));
 
-    if(!CreateDBInfoTableDoc())
-        return;
-    int version = GetDBVersionDoc();
 
-    db_.exec("CREATE TABLE Settings ( "
-               "id INTEGER NOT NULL PRIMARY KEY,"
-               "allselected INT NOT NULL DEFAULT '0',"
-               "allchecked INT NOT NULL DEFAULT '0',"
-               "lastrow INT NOT NULL DEFAULT '0',"
-               "lastcolumn INT NOT NULL DEFAULT '0'"
-               ")"
-               );
-    qDebug() << db_.lastError().text();
+        qDebug() << db.databaseName();
 
-    {
-        // Create record 1
-        QSqlQuery query = db_.exec("SELECT id FROM Settings WHERE id=1");
-        query.exec();
-        qDebug() << db_.lastError().text();
-        if(!query.next())
+        db.setDatabaseName(file);
+        if (!db.open() || !db.isOpen() || !db.isValid())
         {
-            db_.exec("INSERT INTO Settings (id) VALUES (1)");
-            qDebug() << db_.lastError().text();
+            lastError_ = db.lastError().text();
+            return;
+        }
+
+        if(!CreateDBInfoTableDoc(db))
+            return;
+        int version = GetDBVersionDoc(db);
+
+        QSqlQuery q(db);
+        q.exec("CREATE TABLE Settings ( "
+                   "id INTEGER NOT NULL PRIMARY KEY,"
+                   "allselected INT NOT NULL DEFAULT '0',"
+                   "allchecked INT NOT NULL DEFAULT '0',"
+                   "lastrow INT NOT NULL DEFAULT '0',"
+                   "lastcolumn INT NOT NULL DEFAULT '0'"
+                   ")"
+                   );
+        qDebug() << q.lastError().text();
+
+        {
+            // Create record 1
+            q.exec("SELECT id FROM Settings WHERE id=1");
+            q.exec();
+            qDebug() << q.lastError().text();
+            if(!q.next())
+            {
+                q.exec("INSERT INTO Settings (id) VALUES (1)");
+                qDebug() << q.lastError().text();
+            }
+        }
+
+        q.exec("SELECT name FROM sqlite_master WHERE type='table' AND name='Settings';");
+        q.next();
+        if("Settings" != q.value("name").toString())
+        {
+            lastError_ = tr("Table Settings could not be created.");
+            return;
+        }
+
+
+
+        q.exec("CREATE TABLE Directories ( "
+                   "id INTEGER NOT NULL PRIMARY KEY,"
+                   "directory TEXT,"
+                   "selected INT,"
+                   "checked INT)"
+                   );
+        qDebug() << q.lastError().text();
+
+        q.exec("SELECT name FROM sqlite_master WHERE type='table' AND name='Directories';");
+        q.next();
+        if("Directories" != q.value("name").toString())
+        {
+            lastError_ = tr("Table Directories could not be created.");
+            return;
+        }
+
+
+
+        q.exec("CREATE TABLE Access ( "
+                   "id INTEGER NOT NULL,"
+                   "opencount INT NOT NULL DEFAULT 0,"
+                   "lastaccess INT,"
+                   "dbid TEXT NOT NULL)"
+                   );
+        qDebug() << q.lastError().text();
+        q.exec("CREATE UNIQUE INDEX idx_Access_id_dbid ON Access(id,dbid)");
+        qDebug() << q.lastError().text();
+        q.exec("SELECT name FROM sqlite_master WHERE type='table' AND name='Access';");
+        q.next();
+        if("Access" != q.value("name").toString())
+        {
+            lastError_ = tr("Table Access could not be created.");
+            return;
+        }
+
+
+        q.exec("CREATE TABLE Tag ( "
+                 "tagid INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
+                 "tag,"
+                 "yomi,"
+                 "dbid TEXT NOT NULL)"
+                 );
+        qDebug() << q.lastError().text();
+        q.exec("CREATE UNIQUE INDEX idx_Tag_tagid_dbid ON Tag(tagid,dbid)");
+        qDebug() << q.lastError().text();
+        q.exec("SELECT name FROM sqlite_master WHERE type='table' AND name='Tag';");
+        q.next();
+        if("Tag" != q.value("name").toString())
+        {
+            lastError_ = tr("Table Tag could not be created.");
+            return;
+        }
+
+        q.exec("CREATE TABLE Tagged ( "
+                 "id INTEGER NOT NULL,"
+                 "tagid INTEGER NOT NULL,"
+                 "dbid TEXT NOT NULL)"
+                 );
+        qDebug() << q.lastError().text();
+        q.exec("CREATE UNIQUE INDEX idx_Tagged_id_tagid_dbid ON Tagged(id,tagid,dbid)");
+        qDebug() << q.lastError().text();
+        q.exec("SELECT name FROM sqlite_master WHERE type='table' AND name='Tagged';");
+        q.next();
+        if("Tagged" != q.value("name").toString())
+        {
+            lastError_ = tr("Table Tagged could not be created.");
+            return;
+        }
+
+        if(version != DBVERSIONDOC)
+        {
+            SQCN(q,prepare("UPDATE DbInfoDoc SET version=?"));
+            q.bindValue(0, DBVERSIONDOC);
+            SQCN(q,exec());
         }
     }
-
-	QSqlQuery query = db_.exec("SELECT name FROM sqlite_master WHERE type='table' AND name='Settings';");
-    query.next();
-    if("Settings" != query.value("name").toString())
+    if(!gpSQL->AttachDocument(file))
     {
-        lastError_ = tr("Table Settings could not be created.");
+        lastError_ = gpSQL->lastError();
         return;
     }
 
-
-
-	db_.exec("CREATE TABLE Directories ( "
-               "id INTEGER NOT NULL PRIMARY KEY,"
-               "directory TEXT,"
-               "selected INT,"
-               "checked INT)"
-               );
-    qDebug() << query.lastError().text();
-
-	query = db_.exec("SELECT name FROM sqlite_master WHERE type='table' AND name='Directories';");
-	query.next();
-    if("Directories" != query.value("name").toString())
-    {
-        lastError_ = tr("Table Directories could not be created.");
-        return;
-    }
-
-
-
-    db_.exec("CREATE TABLE Access ( "
-               "id INTEGER NOT NULL,"
-               "opencount INT NOT NULL DEFAULT 0,"
-               "lastaccess INT,"
-               "dbid TEXT NOT NULL)"
-               );
-    qDebug() << query.lastError().text();
-    db_.exec("CREATE UNIQUE INDEX idx_Access_id_dbid ON Access(id,dbid)");
-    qDebug() << db_.lastError().text();
-    query = db_.exec("SELECT name FROM sqlite_master WHERE type='table' AND name='Access';");
-    query.next();
-    if("Access" != query.value("name").toString())
-    {
-        lastError_ = tr("Table Access could not be created.");
-        return;
-    }
-
-
-    db_.exec("CREATE TABLE Tag ( "
-             "tagid INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
-             "tag,"
-             "yomi,"
-             "dbid TEXT NOT NULL)"
-             );
-    qDebug() << query.lastError().text();
-    db_.exec("CREATE UNIQUE INDEX idx_Tag_tagid_dbid ON Tag(tagid,dbid)");
-    qDebug() << db_.lastError().text();
-    query = db_.exec("SELECT name FROM sqlite_master WHERE type='table' AND name='Tag';");
-    query.next();
-    if("Tag" != query.value("name").toString())
-    {
-        lastError_ = tr("Table Tag could not be created.");
-        return;
-    }
-
-    db_.exec("CREATE TABLE Tagged ( "
-             "id INTEGER NOT NULL,"
-             "tagid INTEGER NOT NULL,"
-             "dbid TEXT NOT NULL)"
-             );
-    qDebug() << query.lastError().text();
-    db_.exec("CREATE UNIQUE INDEX idx_Tagged_id_tagid_dbid ON Tagged(id,tagid,dbid)");
-    qDebug() << query.lastError().text();
-    query = db_.exec("SELECT name FROM sqlite_master WHERE type='table' AND name='Tagged';");
-    query.next();
-    if("Tagged" != query.value("name").toString())
-    {
-        lastError_ = tr("Table Tagged could not be created.");
-        return;
-    }
-
-    if(version != DBVERSIONDOC)
-    {
-        SQCN(query,prepare("UPDATE DbInfoDoc SET version=?"));
-        query.bindValue(0, DBVERSIONDOC);
-        SQCN(query,exec());
-    }
     ok_ = true;
 }
+DocumentSql::~DocumentSql()
+{
+    gpSQL->DetachDocument();
+}
+#define MYSTATIC
 bool DocumentSql::isAllSelected() const
 {
-    static QSqlQuery query("SELECT allselected FROM Settings WHERE id=1",db_);
+    MYSTATIC QSqlQuery query("SELECT allselected FROM Settings WHERE id=1");
 
     SQC(query,exec());
     if(!query.next())
@@ -209,7 +225,7 @@ bool DocumentSql::isAllSelected() const
 }
 bool DocumentSql::setAllSelected(bool b)
 {
-    static QSqlQuery query("UPDATE Settings SET allselected=? WHERE id=1",db_);
+    MYSTATIC QSqlQuery query("UPDATE Settings SET allselected=? WHERE id=1");
 
 	query.bindValue(0, b ? 1 : 0);
 	SQC(query,exec());
@@ -218,7 +234,7 @@ bool DocumentSql::setAllSelected(bool b)
 
 bool DocumentSql::isAllChecked() const
 {
-    static QSqlQuery query("SELECT allchecked FROM Settings WHERE id=1",db_);
+    MYSTATIC QSqlQuery query("SELECT allchecked FROM Settings WHERE id=1");
     SQC(query,exec());
     if(!query.next())
         return false;
@@ -230,7 +246,7 @@ bool DocumentSql::isAllChecked() const
 }
 bool DocumentSql::setAllChecked(bool b)
 {
-    static QSqlQuery query("UPDATE Settings SET allchecked=? WHERE id=1",db_);
+    MYSTATIC QSqlQuery query("UPDATE Settings SET allchecked=? WHERE id=1");
 
 	query.bindValue(0, b ? 1 : 0);
 	SQC(query, exec());
@@ -240,7 +256,7 @@ bool DocumentSql::setAllChecked(bool b)
 
 int DocumentSql::dirCount() const
 {
-    static QSqlQuery query("SELECT count(*) FROM Directories",db_);
+    MYSTATIC QSqlQuery query("SELECT count(*) FROM Directories");
     SQC(query,exec());
     if(!query.next())
         return 0;
@@ -248,7 +264,7 @@ int DocumentSql::dirCount() const
 }
 QString DocumentSql::getDirText(int index) const
 {
-    static QSqlQuery query("SELECT directory FROM Directories WHERE id=?",db_);
+    MYSTATIC QSqlQuery query("SELECT directory FROM Directories WHERE id=?");
 
     query.bindValue(0, index);
     if(!query.exec())
@@ -259,7 +275,7 @@ QString DocumentSql::getDirText(int index) const
 }
 bool DocumentSql::setDirectory(int index, const QString& text, bool bSel, bool bCheck)
 {
-    static QSqlQuery query("INSERT OR REPLACE INTO Directories (id, directory, selected, checked) VALUES (?,?,?,?)",db_);
+    MYSTATIC QSqlQuery query("INSERT OR REPLACE INTO Directories (id, directory, selected, checked) VALUES (?,?,?,?)");
 
 	int i = 0;
 	query.bindValue(i++, index);
@@ -272,7 +288,7 @@ bool DocumentSql::setDirectory(int index, const QString& text, bool bSel, bool b
 
 bool DocumentSql::isDirSelected(int index) const
 {
-    static QSqlQuery query("SELECT selected FROM Directories WHERE id=?",db_);
+    MYSTATIC QSqlQuery query("SELECT selected FROM Directories WHERE id=?");
 
 	query.bindValue(0, index);
 	SQC(query, exec());
@@ -283,7 +299,7 @@ bool DocumentSql::isDirSelected(int index) const
 
 bool DocumentSql::isDirChecked(int index) const
 {
-    static QSqlQuery query("SELECT checked FROM Directories WHERE id=?",db_);
+    MYSTATIC QSqlQuery query("SELECT checked FROM Directories WHERE id=?");
 
 	query.bindValue(0, index);
 	SQC(query, exec());
@@ -294,7 +310,7 @@ bool DocumentSql::isDirChecked(int index) const
 
 bool DocumentSql::removeDirectoryOver(int index)
 {
-    static QSqlQuery query("DELETE FROM Directories WHERE id > ?",db_);
+    MYSTATIC QSqlQuery query("DELETE FROM Directories WHERE id > ?");
 
 	query.bindValue(0, index);
 	SQC(query, exec());
@@ -303,7 +319,7 @@ bool DocumentSql::removeDirectoryOver(int index)
 
 bool DocumentSql::SetLastPos(int row, int column)
 {
-    static QSqlQuery query("UPDATE Settings SET lastrow=?, lastcolumn=? WHERE id=1",db_);
+    MYSTATIC QSqlQuery query("UPDATE Settings SET lastrow=?, lastcolumn=? WHERE id=1");
 
     int i=0;
     query.bindValue(i++, row);
@@ -314,7 +330,7 @@ bool DocumentSql::SetLastPos(int row, int column)
 }
 bool DocumentSql::GetLastPos(int& row, int& column) const
 {
-    static QSqlQuery query("SELECT * FROM Settings WHERE id=1",db_);
+    MYSTATIC QSqlQuery query("SELECT * FROM Settings WHERE id=1");
     SQC(query,exec());
     if(!query.next())
         return false;
@@ -331,14 +347,14 @@ bool DocumentSql::GetLastPos(int& row, int& column) const
 
 bool DocumentSql::IncrementOpenCount(const qint64& id)
 {
-    static QString state =
+    MYSTATIC QString state =
             "REPLACE into Access (id,opencount,lastaccess,dbid) VALUES "
             "(?,"
             "COALESCE((SELECT opencount FROM Access WHERE id=?),0)+1,"
             "?,"
             "?)";
 
-    static QSqlQuery query(state,db_);
+    MYSTATIC QSqlQuery query(state);
 
     int i=0;
     query.bindValue(i++, id);
@@ -352,9 +368,9 @@ bool DocumentSql::IncrementOpenCount(const qint64& id)
     return true;
 }
 
-bool DocumentSql::setOpenCountAndLascAccess(const QList<TableItemDataPointer>& all)
+bool DocumentSql::setOpenCountAndLascAccess_obsolete(const QList<TableItemDataPointer>& all)
 {
-    static QSqlQuery query("SELECT id,opencount,lastaccess,dbid FROM Access WHERE dbid=?",db_);
+    MYSTATIC QSqlQuery query("SELECT id,opencount,lastaccess,dbid FROM Access WHERE dbid=?");
 
     query.bindValue(0, gpSQL->getDbID());
     SQC(query,exec());
@@ -384,7 +400,7 @@ bool DocumentSql::setOpenCountAndLascAccess(const QList<TableItemDataPointer>& a
 
 bool DocumentSql::GetAllTags(QMap<qint64, QString>& tags) const
 {
-    static QSqlQuery query("SELECT * FROM Tag WHERE dbid=? ORDER BY yomi",db_);
+    MYSTATIC QSqlQuery query("SELECT * FROM Tag WHERE dbid=? ORDER BY yomi");
 
     int i=0;
     query.bindValue(i++, gpSQL->getDbID());
@@ -398,7 +414,7 @@ bool DocumentSql::GetAllTags(QMap<qint64, QString>& tags) const
 }
 bool DocumentSql::IsTagExist(const QString& tag) const
 {
-    static QSqlQuery query("SELECT tagid FROM Tag WHERE tag=? AND dbid=?",db_);
+    MYSTATIC QSqlQuery query("SELECT tagid FROM Tag WHERE tag=? AND dbid=?");
 
     int i=0;
     query.bindValue(i++, tag);
@@ -408,7 +424,7 @@ bool DocumentSql::IsTagExist(const QString& tag) const
 }
 bool DocumentSql::Insert(const QString& tag, const QString& yomi) const
 {
-    static QSqlQuery query("REPLACE INTO Tag (tag,yomi,dbid) VALUES (?,?,?)",db_);
+    MYSTATIC QSqlQuery query("REPLACE INTO Tag (tag,yomi,dbid) VALUES (?,?,?)");
 
     int i=0;
     // query.bindValue(i++, id);
@@ -420,7 +436,7 @@ bool DocumentSql::Insert(const QString& tag, const QString& yomi) const
     return true;
 }
 
-bool DocumentSql::GetTaggedIDs(const QList<qint64>& tagids, QList<qint64>& taggedids) const
+bool DocumentSql::GetTaggedIDs(const QList<qint64>& tagids, QSet<qint64>& taggedids) const
 {
     if(tagids.isEmpty())
     {
@@ -435,7 +451,7 @@ bool DocumentSql::GetTaggedIDs(const QList<qint64>& tagids, QList<qint64>& tagge
             sql += " OR ";
     }
 
-    QSqlQuery query(db_);
+    QSqlQuery query;
     SQC(query,prepare(sql));
 
     for(int i=0; i < tagids.count(); ++i)
@@ -446,7 +462,7 @@ bool DocumentSql::GetTaggedIDs(const QList<qint64>& tagids, QList<qint64>& tagge
     SQC(query,exec());
     while(query.next())
     {
-        taggedids.append(query.value("id").toLongLong());
+        taggedids.insert(query.value("id").toLongLong());
     }
     return true;
 }
@@ -461,7 +477,7 @@ bool DocumentSql::SetTagged(const qint64& id, const qint64& tagid, const bool bS
 
 	if (bSet)
 	{
-        static QSqlQuery query("REPLACE INTO Tagged (id,tagid,dbid) VALUES (?,?,?)",db_);
+        MYSTATIC QSqlQuery query("REPLACE INTO Tagged (id,tagid,dbid) VALUES (?,?,?)");
 
 		int i = 0;
 		query.bindValue(i++, id);
@@ -472,7 +488,7 @@ bool DocumentSql::SetTagged(const qint64& id, const qint64& tagid, const bool bS
 	}
 	else
 	{
-        QSqlQuery query("DELETE FROM Tagged WHERE id=? AND tagid=? AND dbid=?",db_);
+        QSqlQuery query("DELETE FROM Tagged WHERE id=? AND tagid=? AND dbid=?");
 
 		int i = 0;
         query.bindValue(i++, id);
@@ -484,7 +500,7 @@ bool DocumentSql::SetTagged(const qint64& id, const qint64& tagid, const bool bS
 }
 bool DocumentSql::GetTag(const qint64& tagid, QString& tag, QString& yomi) const
 {
-    static QSqlQuery query("SELECT tag,yomi FROM Tag WHERE tagid=? AND dbid=?",db_);
+    MYSTATIC QSqlQuery query("SELECT tag,yomi FROM Tag WHERE tagid=? AND dbid=?");
     qDebug() << query.isValid();
     int i=0;
     query.bindValue(i++, tagid);
@@ -502,7 +518,7 @@ bool DocumentSql::GetTag(const qint64& tagid, QString& tag, QString& yomi) const
 }
 bool DocumentSql::ReplaceTag(const qint64& tagid, const QString& tag, const QString& yomi)
 {
-    static QSqlQuery query("UPDATE Tag SET tag=?,yomi=? WHERE tagid=? AND dbid=?",db_);
+    MYSTATIC QSqlQuery query("UPDATE Tag SET tag=?,yomi=? WHERE tagid=? AND dbid=?");
 
     int i=0;
     query.bindValue(i++,tag);
@@ -515,7 +531,7 @@ bool DocumentSql::ReplaceTag(const qint64& tagid, const QString& tag, const QStr
 }
 bool DocumentSql::DeleteTag(const qint64& tagid)
 {
-    static QSqlQuery query("DELETE FROM Tag WHERE tagid=? AND dbid=?",db_);
+    MYSTATIC QSqlQuery query("DELETE FROM Tag WHERE tagid=? AND dbid=?");
 
     int i=0;
     query.bindValue(i++,tagid);
@@ -526,10 +542,10 @@ bool DocumentSql::DeleteTag(const qint64& tagid)
 }
 bool DocumentSql::GetTagsFromID(const qint64& id, QSet<qint64>& tagids)
 {
-//    QSqlQuery query(db_);
+//    QSqlQuery query;
 //    SQC(query,prepare("SELECT tagid FROM Tagged WHERE id=? AND dbid=?"));
 
-    static QSqlQuery query("SELECT tagid FROM Tagged WHERE id=? AND dbid=?",db_);
+    MYSTATIC QSqlQuery query("SELECT tagid FROM Tagged WHERE id=? AND dbid=?");
 
     int i=0;
     query.bindValue(i++, id);
@@ -544,7 +560,7 @@ bool DocumentSql::GetTagsFromID(const qint64& id, QSet<qint64>& tagids)
 }
 bool DocumentSql::GetOpenCounts(QMap<qint64,int>& opencounts)
 {
-    static QSqlQuery query("SELECT id,opencount FROM Access", db_);
+    MYSTATIC QSqlQuery query("SELECT id,opencount FROM Access");
     while(query.next())
     {
         opencounts[query.value("id").toLongLong()]=query.value("opencount").toInt();
@@ -553,8 +569,8 @@ bool DocumentSql::GetOpenCounts(QMap<qint64,int>& opencounts)
 }
 bool DocumentSql::GetLastAccesses(QMap<qint64,qint64>& lastaccesses)
 {
-    static QSqlQuery query("SELECT id,lastaccess FROM Access", db_);
-//    static bool prepared=false;
+    MYSTATIC QSqlQuery query("SELECT id,lastaccess FROM Access");
+//    MYSTATIC bool prepared=false;
 //    if(!prepared)
 //    {
 //        SQC(query,prepare("SELECT id,lastaccess FROM Access"));

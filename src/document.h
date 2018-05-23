@@ -61,6 +61,7 @@ public:
     Document(){}
     ~Document() {
         delete s_;
+        delete docSql_;
     }
     bool Load(const QString& file, const bool bExists);
 
@@ -94,20 +95,19 @@ public:
     // int scrollPos() const ;
     bool getLastPos(int& row, int& column) const;
 
-    bool bOpenCountAndLastAccessClean_ = false;
+    // bool bOpenCountAndLastAccessClean_ = false;
     bool IncrementOpenCount(const qint64& id) {
-        bOpenCountAndLastAccessClean_ = false;
         return docSql_->IncrementOpenCount(id);
     }
-    bool IsOpenCountAndLastAccessClean() const {
-        return bOpenCountAndLastAccessClean_;
-    }
-    void SetOpenCountAndLastAccessClean() {
-        bOpenCountAndLastAccessClean_ = true;
-    }
-    bool setOpenCountAndLascAccess(const QList<TableItemDataPointer>& all)
+//    bool IsOpenCountAndLastAccessClean() const {
+//        return bOpenCountAndLastAccessClean_;
+//    }
+//    void SetOpenCountAndLastAccessClean() {
+//        bOpenCountAndLastAccessClean_ = true;
+//    }
+    bool setOpenCountAndLascAccess_obsolete(const QList<TableItemDataPointer>& all)
     {
-        return docSql_->setOpenCountAndLascAccess(all);
+        return docSql_->setOpenCountAndLascAccess_obsolete(all);
     }
     // bool sort(QList<TableItemDataPointer>& all, SORTCOLUMNMY sc, bool rev) const;
 
@@ -123,7 +123,7 @@ public:
     {
         return docSql_->Insert(tag,yomi);
     }
-    bool GetTaggedIDs(const QList<qint64>& tagids, QList<qint64>& taggedids) const
+    bool GetTaggedIDs(const QList<qint64>& tagids, QSet<qint64>& taggedids) const
     {
         return docSql_->GetTaggedIDs(tagids, taggedids);
     }

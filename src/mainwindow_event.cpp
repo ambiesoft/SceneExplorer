@@ -53,7 +53,7 @@ void MainWindow::showEvent( QShowEvent* event )
     // Alert(this, QString("ScrollIndex:%1-%2").arg(pDoc_->modeIndexRow()).arg(pDoc_->modeIndexColumn()));
     int row = 0;
     int column = 0;
-    if(pDoc_->getLastPos(row,column))
+    if(pDoc_ && pDoc_->getLastPos(row,column))
     {
         QModelIndex mi = proxyModel_->index(row,column);
         // Alert(this, QString("ScrollIndex:%1-%2").arg(mi.row()).arg(mi.column()));
@@ -65,30 +65,6 @@ void MainWindow::showEvent( QShowEvent* event )
         QApplication::processEvents();
         ui->tableView->scrollTo(mi);
     }
-//    int sv = 0;
-//    int tried=0;
-//    do
-//    {
-//        ui->tableView->scrollTo(mi);
-//        QApplication::processEvents();
-//        int newsv = ui->tableView->verticalScrollBar()->value();
-//        on_tableView_scrollChanged(newsv);
-//        newsv = ui->tableView->verticalScrollBar()->value();
-//        QApplication::processEvents();
-//        newsv = ui->tableView->verticalScrollBar()->value();
-//        ui->tableView->scrollTo(mi);
-//        QApplication::processEvents();
-//        newsv = ui->tableView->verticalScrollBar()->value();
-//        if(sv==newsv)
-//        {
-//            tried++;
-//            if(tried > 10)
-//                break;
-//        }
-
-//        sv = newsv;
-//    } while(true);
-//    ui->tableView->selectionModel()->select(mi, QItemSelectionModel::SelectCurrent);
 }
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
@@ -100,6 +76,9 @@ void MainWindow::resizeEvent(QResizeEvent *event)
 
 void MainWindow::StoreDocument()
 {
+    if(!pDoc_)
+        return;
+
     QModelIndexList sels = ui->tableView->selectionModel()->selectedIndexes();
     QModelIndex mi;
     if(!sels.isEmpty())

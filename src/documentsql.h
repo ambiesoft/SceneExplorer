@@ -9,15 +9,16 @@ class DocumentSql : public QObject
 {
     Q_OBJECT
 
-    QSqlDatabase db_;
+    // QSqlDatabase db_;
     bool ok_ = false;
     mutable QString lastError_;
 
-    int GetDBVersionDoc();
-    bool CreateDBInfoTableDoc();
+    int GetDBVersionDoc(QSqlDatabase& db);
+    bool CreateDBInfoTableDoc(QSqlDatabase& db);
 
 public:
     DocumentSql(const QString& file);
+    ~DocumentSql();
 
     bool isOK() const {
         return ok_;
@@ -48,12 +49,12 @@ public:
     bool GetLastPos(int& row, int& column) const;
 
     bool IncrementOpenCount(const qint64& id);
-    bool setOpenCountAndLascAccess(const QList<TableItemDataPointer>& all);
+    bool setOpenCountAndLascAccess_obsolete(const QList<TableItemDataPointer>& all);
 
     bool GetAllTags(QMap<qint64, QString>& tags) const;
     bool IsTagExist(const QString& tag) const;
     bool Insert(const QString& tag, const QString& yomi) const;
-    bool GetTaggedIDs(const QList<qint64>& tagids, QList<qint64>& taggedids) const;
+    bool GetTaggedIDs(const QList<qint64>& tagids, QSet<qint64>& taggedids) const;
     bool SetTagged(const qint64& id, const qint64& tagid, const bool bSet) const;
     bool GetTag(const qint64& tagid, QString& tag, QString& yomi) const;
     bool ReplaceTag(const qint64& tagid, const QString& tag, const QString& yomi);

@@ -161,8 +161,8 @@ Sql::Sql() : db_(QSqlDatabase::addDatabase("QSQLITE"))
     query.exec("CREATE UNIQUE INDEX idx_directoryname ON FileInfo(directory,name)");
     query.exec("CREATE INDEX idx_salient ON FileInfo(salient)");
     // query.exec("CREATE INDEX idx_lastaccess ON FileInfo(lastaccess)");
-    query.exec("ALTER TABLE FileInfo Add opencount_tmp INT");
-    query.exec("ALTER TABLE FileInfo Add lastaccess_tmp INT");
+//    query.exec("ALTER TABLE FileInfo Add opencount_tmp INT");
+//    query.exec("ALTER TABLE FileInfo Add lastaccess_tmp INT");
     qDebug() << query.lastError().text();
 
 #ifdef QT__DEBUG
@@ -701,7 +701,7 @@ bool Sql::GetAllSqlString(
         SORTCOLUMNMY sortcolumn,
         bool sortrev,
         const LimitArg& limit,
-        const QList<qint64>* tagids)
+        const QSet<qint64>* tagids)
 {
     QString sql = "SELECT ";
     for (int i = 0; i < selects.count(); ++i)
@@ -737,17 +737,17 @@ bool Sql::GetAllSqlString(
         sortby = "bitrate";
         break;
     case SORT_OPENCOUNT:
-        sortby = "opencount_tmp";
+        sortby = "opencount";
         break;
     case SORT_LASTACCESS:
-        sortby = "lastaccess_tmp";
+        sortby = "lastaccess";
         break;
     default:
         Q_ASSERT(false);
         break;
     }
 
-    sql += " FROM FileInfo";
+    sql += " FROM FileInfo LEFT JOIN docdb.Access ON FileInfo.id = docdb.Access.id ";
 
     QVector<QVariant> binds;
     if(dirs.isEmpty())
@@ -770,7 +770,7 @@ bool Sql::GetAllSqlString(
                 sql += " AND (";
                 for(int i=0 ; i < tagids->count(); ++i)
                 {
-                    sql += "id=?";
+                    sql += "FileInfo.id=?";
                     if( (i+1) != tagids->count())
                         sql += " or ";
                 }
@@ -783,6 +783,7 @@ bool Sql::GetAllSqlString(
         AppendSortArg(sql, sortby, sortrev);
         AppendLitmiArg(sql, limit);
 
+        qDebug() << sql;
         SQC(query, prepare(sql));
         int bindIndex=0;
         for(int i=0 ; i < binds.count(); ++i)
@@ -792,9 +793,9 @@ bool Sql::GetAllSqlString(
 
         if(tagids && !tagids->isEmpty())
         {
-            for(int i=0 ; i < tagids->count(); ++i)
+            for( const qint64& tagid : *tagids)
             {
-                query.bindValue(bindIndex++, (*tagids)[i]);
+                query.bindValue(bindIndex++, tagid);
             }
         }
     }
@@ -824,7 +825,7 @@ bool Sql::GetAllSqlString(
                 sql += " AND (";
                 for(int i=0 ; i < tagids->count(); ++i)
                 {
-                    sql += "id=?";
+                    sql += "FileInfo.id=?";
                     if( (i+1) != tagids->count())
                         sql += " or ";
                 }
@@ -848,9 +849,9 @@ bool Sql::GetAllSqlString(
 
         if(tagids && !tagids->isEmpty())
         {
-            for(int i=0 ; i < tagids->count(); ++i)
+            for( const qint64& tagid : *tagids)
             {
-                query.bindValue(bindIndex++, (*tagids)[i]);
+                query.bindValue(bindIndex++, tagid);
             }
         }
     }
@@ -883,7 +884,7 @@ bool Sql::GetAll(QList<TableItemDataPointer>& v,
                  SORTCOLUMNMY sortcolumn,
                  bool sortrev,
                  const LimitArg& limit,
-                 const QList<qint64>* tagids)
+                 const QSet<qint64>* tagids)
 {
     QSqlQuery query(db_);
     GetAllSqlString(query,
@@ -939,8 +940,8 @@ bool Sql::GetAll(QList<TableItemDataPointer>& v,
         int vwidth = query.value("vwidth").toInt();
         int vheight = query.value("vheight").toInt();
 
-        int opencount_tmp = query.value("opencount_tmp").toInt();
-        qint64 lastaccess_tmp = query.value("lastaccess_tmp").toLongLong();
+        int opencount = query.value("opencount").toInt();
+        qint64 lastaccess = query.value("lastaccess").toLongLong();
         TableItemDataPointer pID = TableItemData::Create(id,
                                                          thumbs,
                                                          directory,
@@ -958,8 +959,8 @@ bool Sql::GetAll(QList<TableItemDataPointer>& v,
                                                          vcodec,acodec,
                                                          vwidth,vheight,
 
-                                                         opencount_tmp,
-                                                         lastaccess_tmp);
+                                                         opencount,
+                                                         lastaccess);
         v.append(pID);
     }
     return true;
@@ -1149,45 +1150,71 @@ bool Sql::RemoveAllMissingEntries(const QString& dirc)
 
     return true;
 }
-bool Sql::ApplyOpenCount(const QMap<qint64,int>& opencounts)
+//bool Sql::ApplyOpenCount(const QMap<qint64,int>& opencounts)
+//{
+//    {
+//        static QSqlQuery query("UPDATE FileInfo SET opencount_tmp=0");
+
+//        // clear
+//        query.exec();
+//    }
+
+//    for(const qint64& id : opencounts.keys())
+//    {
+//        static QSqlQuery query("UPDATE FileInfo SET opencount_tmp=? WHERE id=?");
+
+//        int i=0;
+//        query.bindValue(i++, opencounts[id]);
+//        query.bindValue(i++, id);
+//        SQC(query,exec());
+//        Q_ASSERT(query.numRowsAffected()==1 || query.numRowsAffected()==0);
+//    }
+//    return true;
+//}
+//bool Sql::ApplyLastAccesses(const QMap<qint64,qint64>& lastaccesses)
+//{
+//    {
+//        static QSqlQuery query("UPDATE FileInfo SET lastaccess_tmp=0");
+
+//        // clear
+//        query.exec();
+//    }
+
+//    for(const qint64& id : lastaccesses.keys())
+//    {
+//        static QSqlQuery query("UPDATE FileInfo SET lastaccess_tmp=? WHERE id=?");
+
+//        int i=0;
+//        query.bindValue(i++, lastaccesses[id]);
+//        query.bindValue(i++, id);
+//        SQC(query,exec());
+//        Q_ASSERT(query.numRowsAffected()==1 || query.numRowsAffected()==0);
+//    }
+//    return true;
+//}
+
+
+bool Sql::AttachDocument(const QString& docFile)
 {
+    if(!docFile_.isEmpty())
     {
-        static QSqlQuery query("UPDATE FileInfo SET opencount_tmp=0");
-
-        // clear
-        query.exec();
+        if(!DetachDocument())
+            return false;
     }
+    Q_ASSERT(docFile_.isEmpty());
+    QSqlQuery query;
+    SQC(query,prepare("ATTACH ? AS docdb"));
 
-    for(const qint64& id : opencounts.keys())
-    {
-        static QSqlQuery query("UPDATE FileInfo SET opencount_tmp=? WHERE id=?");
-
-        int i=0;
-        query.bindValue(i++, opencounts[id]);
-        query.bindValue(i++, id);
-        SQC(query,exec());
-        Q_ASSERT(query.numRowsAffected()==1 || query.numRowsAffected()==0);
-    }
+    query.bindValue(0, docFile);
+    SQC(query,exec());
+    docFile_=docFile;
     return true;
 }
-bool Sql::ApplyLastAccesses(const QMap<qint64,qint64>& lastaccesses)
+bool Sql::DetachDocument()
 {
-    {
-        static QSqlQuery query("UPDATE FileInfo SET lastaccess_tmp=0");
+    QSqlQuery q;
 
-        // clear
-        query.exec();
-    }
-
-    for(const qint64& id : lastaccesses.keys())
-    {
-        static QSqlQuery query("UPDATE FileInfo SET lastaccess_tmp=? WHERE id=?");
-
-        int i=0;
-        query.bindValue(i++, lastaccesses[id]);
-        query.bindValue(i++, id);
-        SQC(query,exec());
-        Q_ASSERT(query.numRowsAffected()==1 || query.numRowsAffected()==0);
-    }
+    SQC(q,exec("DETACH docdb"));
+    docFile_ = QString();
     return true;
 }

@@ -84,7 +84,7 @@ private:
     //bool currentSortRev_ = false;
 
     // bool bShowMissing_ = false;
-    bool GetSelectedTagIDs(QList<qint64>& taggedids);
+    bool GetSelectedTagIDs(QSet<qint64>& taggedids);
     void GetSqlAllSetTable(const QStringList& dirs,
                            bool bOnlyMissing = false);
     QToolButton* tbShowNonExistant_ = nullptr;
@@ -496,6 +496,7 @@ private:
     QString GetDefaultDocumentPath();
 
     bool OpenDocument(const QString& file, const bool bExists);
+    bool CloseDocument();
     void InitDocument();
     void LoadTags();
 public slots:

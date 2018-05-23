@@ -57,7 +57,8 @@ void MainWindow::openVideo(const qint64& id, const QString& movieFile)
         Alert(this, QString(tr("failed to launch %1.")).arg(movieFile));
         return;
     }
-    pDoc_->IncrementOpenCount(id);
+    if(pDoc_)
+        pDoc_->IncrementOpenCount(id);
 	tableModel_->UpdateItem(movieFile);
 }
 void MainWindow::openVideoInFolder(const QString& movieFile)
@@ -660,9 +661,9 @@ void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
     QMenu menuAddTags(tr("Ta&g..."), this);
     QList< QSharedPointer<QAction> > actTags;
     QMap<qint64,QString> tags;
-    pDoc_->GetAllTags(tags);
+    pDoc_ && pDoc_->GetAllTags(tags);
 	QSet<qint64> tagsCurrent;
-	pDoc_->GetTagsFromID(getSelectedID(), tagsCurrent);
+    pDoc_ && pDoc_->GetTagsFromID(getSelectedID(), tagsCurrent);
     if(tags.isEmpty())
     {
         QSharedPointer<QAction> act(new QAction(tr("No tags")));
