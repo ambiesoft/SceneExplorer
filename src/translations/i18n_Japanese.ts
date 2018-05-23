@@ -843,6 +843,10 @@
         <source>Ta&amp;g...</source>
         <translation>タグ(&amp;G)...</translation>
     </message>
+    <message>
+        <source>No Document</source>
+        <translation>ドキュメントがありません</translation>
+    </message>
 </context>
 <context>
     <name>Option</name>

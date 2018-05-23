@@ -1,3 +1,6 @@
+2018/05/24 ver1.5
+Confirm linux build
+
 2018/05/23 ver1.4
 DBVersion
 Tag remove
