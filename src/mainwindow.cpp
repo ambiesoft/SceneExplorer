@@ -1134,7 +1134,7 @@ void MainWindow::on_context_copySelectedVideoPath()
 }
 void MainWindow::on_context_Rename()
 {
-    QString oldfull = getSelectedVideo();
+    QString oldfull = getSelectedVideo(false);
     QString olddir = normalizeDir(QFileInfo(oldfull).absolutePath());
     QString oldname = QFileInfo(oldfull).fileName();
 
@@ -1249,7 +1249,7 @@ void MainWindow::on_context_AddTags()
 
 void MainWindow::on_context_ExternalTools()
 {
-    QString movieFile = getSelectedVideo(true);
+    const QString movieFileNative = getSelectedVideo(true);
 
     QAction* act = (QAction*)QObject::sender();
     int i = act->data().toInt();
@@ -1269,11 +1269,11 @@ void MainWindow::on_context_ExternalTools()
         QString s = arg.mid(pos,matchedlen);// rx.cap(i++);
         if(s=="${filefullpath}")
         {
-            argparsed += movieFile;
+            argparsed += movieFileNative;
         }
         else if(s=="${directoryfullpath}")
         {
-            argparsed += QFileInfo(movieFile).dir().absolutePath();
+            argparsed += QFileInfo(movieFileNative).dir().absolutePath();
         }
         pos += matchedlen;
         prevpos = pos;
@@ -1305,12 +1305,7 @@ void MainWindow::on_context_ExternalTools()
 
     if(externalTools_[i].IsCountAsOpen())
     {
-        if(pDoc_)
-        {
-            QString movieFileCanon = getSelectedVideo(false);
-            pDoc_->IncrementOpenCount(getSelectedID());
-            tableModel_->UpdateItem(movieFileCanon);
-        }
+        updateOnOpened(getSelectedID(),movieFileNative);
     }
 }
 

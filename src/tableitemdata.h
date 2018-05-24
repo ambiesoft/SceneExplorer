@@ -226,9 +226,9 @@ public:
     QMap<QString,QVariant> getColumnValues() const;
 
     // int opencountTmp_ = 0;
-	void IncrementOpenCount() {
-        ++opencount_;
-	}
+//	void IncrementOpenCount() {
+//        ++opencount_;
+//	}
 };
 
 #endif // LISTITEMDATA_H

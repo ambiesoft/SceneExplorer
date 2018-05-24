@@ -96,8 +96,8 @@ public:
     bool getLastPos(int& row, int& column) const;
 
     // bool bOpenCountAndLastAccessClean_ = false;
-    bool IncrementOpenCount(const qint64& id) {
-        return docSql_->IncrementOpenCount(id);
+    bool IncrementOpenCountAndLastAccess(const qint64& id) {
+        return docSql_->IncrementOpenCountAndLastAccess(id);
     }
 //    bool IsOpenCountAndLastAccessClean() const {
 //        return bOpenCountAndLastAccessClean_;
@@ -147,13 +147,17 @@ public:
     {
         return docSql_->GetTagsFromID(id,tagids);
     }
-    bool GetOpenCounts(QMap<qint64,int>& opencounts)
+//    bool GetOpenCounts(QMap<qint64,int>& opencounts)
+//    {
+//        return docSql_->GetOpenCounts(opencounts);
+//    }
+//    bool GetLastAccesses(QMap<qint64,qint64>& lastaccesses)
+//    {
+//        return docSql_->GetLastAccesses(lastaccesses);
+//    }
+    bool GetOpenCountAndLastAccess(const qint64& id, int& opencount, qint64& lastaccess)
     {
-        return docSql_->GetOpenCounts(opencounts);
-    }
-    bool GetLastAccesses(QMap<qint64,qint64>& lastaccesses)
-    {
-        return docSql_->GetLastAccesses(lastaccesses);
+        return docSql_->GetOpenCountAndLastAccess(id,opencount,lastaccess);
     }
 };
 

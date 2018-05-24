@@ -265,21 +265,23 @@ QString TableModel::ExtractInfoText(TableItemDataPointer item, const QString& st
         result += str.mid(prevpos,pos-prevpos);
         int matchedlen = rx.matchedLength();
         QString s = str.mid(pos,matchedlen);// rx.cap(i++);
-        if(s=="${name}" && checkDup("name", mapExist))
+        if(false)
+        {}
+        else if(s=="${acodec}")
         {
-            result += item->getMovieFileName();
+            result += item->getAcodec();
         }
-        else if(s=="${id}")
+        else if(s=="${atime}")
         {
-            result += QString::number(item->getID());
+            result += filetime_human(item->getLastAccess());
         }
-        else if(s=="${size}")
+        else if(s=="${bitrate}")
         {
-            result += size_human(item->getSize());
+            result += bitrate_human(item->getBitrate());
         }
-        else if(s=="${wtime}")
+        else if(s=="${directory}")
         {
-            result += filetime_human(item->getWtime());
+            result += item->getMovieDirectory();
         }
         else if(s=="${duration}")
         {
@@ -289,29 +291,25 @@ QString TableModel::ExtractInfoText(TableItemDataPointer item, const QString& st
         {
             result += item->getFormat();
         }
-        else if(s=="${bitrate}")
+        else if(s=="${id}")
         {
-            result += bitrate_human(item->getBitrate());
+            result += QString::number(item->getID());
         }
-        else if(s=="${vcodec}")
+        else if(s=="${name}" && checkDup("name", mapExist))
         {
-            result += item->getVcodec();
+            result += item->getMovieFileName();
         }
-        else if(s=="${acodec}")
+        else if(s=="${opencount}")
         {
-            result += item->getAcodec();
+            result += opencount_human(item->getOpenCount());
         }
         else if(s=="${resolution}")
         {
             result += resolution_human(item->getVWidth(),item->getVHeight());
         }
-        else if(s=="${directory}")
+        else if(s=="${size}")
         {
-            result += item->getMovieDirectory();
-        }
-        else if(s=="${opencount}")
-        {
-            result += opencount_human(item->getOpenCount());
+            result += size_human(item->getSize());
         }
         else if(s=="${sortname}")
         {
@@ -324,6 +322,14 @@ QString TableModel::ExtractInfoText(TableItemDataPointer item, const QString& st
         else if(s=="${tags}")
         {
             result += mainWindow_->GetTags(item->getID());
+        }
+        else if(s=="${vcodec}")
+        {
+            result += item->getVcodec();
+        }
+        else if(s=="${wtime}")
+        {
+            result += filetime_human(item->getWtime());
         }
         else
         {
@@ -696,13 +702,18 @@ bool TableModel::RenameEntry(const QString& dbDir,
     return true;
 }
 
-void TableModel::UpdateItem(const QString& movieFile)
+void TableModel::UpdateOpenCountAndLastAccess(const QString& movieFile,
+                                                      const int opencount,
+                                                      const qint64& lastaccess)
 {
 	TableItemDataPointer pID = mapsFullpathToItem_[movieFile];
 
 	if (pID)
 	{
-		pID->IncrementOpenCount();
+        // pID->IncrementOpenCount();
+        pID->setOpenCount(opencount);
+        pID->setLastAccess(lastaccess);
+
 		int row = itemDatas_.indexOf(pID);
 		Q_ASSERT(row >= 0);
 		emit dataChanged(createIndex(row * 3, 0), createIndex((row * 3) + 2, 0));

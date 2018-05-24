@@ -50,6 +50,18 @@
 
 using namespace Consts;
 
+void MainWindow::updateOnOpened(const qint64& id, const QString& movieFile)
+{
+    if(pDoc_)
+    {
+        pDoc_->IncrementOpenCountAndLastAccess(id);
+        int opencount=0;
+        qint64 lastaccess=0;
+        pDoc_->GetOpenCountAndLastAccess(id,opencount,lastaccess);
+
+        tableModel_->UpdateOpenCountAndLastAccess(movieFile,opencount,lastaccess);
+    }
+}
 void MainWindow::openVideo(const qint64& id, const QString& movieFile)
 {
     if(!QDesktopServices::openUrl(QUrl::fromLocalFile(movieFile)))
@@ -57,9 +69,7 @@ void MainWindow::openVideo(const qint64& id, const QString& movieFile)
         Alert(this, QString(tr("failed to launch %1.")).arg(movieFile));
         return;
     }
-    if(pDoc_)
-        pDoc_->IncrementOpenCount(id);
-	tableModel_->UpdateItem(movieFile);
+    updateOnOpened(id,movieFile);
 }
 void MainWindow::openVideoInFolder(const QString& movieFile)
 {

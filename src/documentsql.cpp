@@ -371,7 +371,7 @@ bool DocumentSql::GetLastPos(int& row, int& column) const
     return true;
 }
 
-bool DocumentSql::IncrementOpenCount(const qint64& id)
+bool DocumentSql::IncrementOpenCountAndLastAccess(const qint64& id)
 {
     MYQMODIFIER QString state =
             "REPLACE into Access (id,opencount,lastaccess,dbid) VALUES "
@@ -470,21 +470,28 @@ bool DocumentSql::GetTaggedIDs(const QList<qint64>& tagids, QSet<qint64>& tagged
         taggedids.clear();
         return true;
     }
-    QString sql = "SELECT id FROM Tagged WHERE ";
+    QString sql = "SELECT id FROM Tagged WHERE 1==1 AND ";
     for(int i=0 ; i < tagids.count(); ++i)
     {
+        if(i==0)
+            sql += "(";
         sql += "tagid=? ";
         if((i+1)!=tagids.count())
             sql += " OR ";
+        else
+            sql += ") ";
     }
+    sql += " AND dbid=?";
 
     QSqlQuery query;
     SQC(query,prepare(sql));
 
+    int bindIndex=0;
     for(int i=0; i < tagids.count(); ++i)
     {
-        query.bindValue(i, tagids[i]);
+        query.bindValue(bindIndex++, tagids[i]);
     }
+    query.bindValue(bindIndex++,gpSQL->getDbID());
 
     SQC(query,exec());
     while(query.next())
@@ -569,9 +576,6 @@ bool DocumentSql::DeleteTag(const qint64& tagid)
 }
 bool DocumentSql::GetTagsFromID(const qint64& id, QSet<qint64>& tagids)
 {
-//    QSqlQuery query;
-//    SQC(query,prepare("SELECT tagid FROM Tagged WHERE id=? AND dbid=?"));
-
     MYQMODIFIER QSqlQuery query = myq("SELECT tagid FROM Tagged WHERE id=? AND dbid=?");
 
     int i=0;
@@ -585,28 +589,38 @@ bool DocumentSql::GetTagsFromID(const qint64& id, QSet<qint64>& tagids)
 
     return true;
 }
-bool DocumentSql::GetOpenCounts(QMap<qint64,int>& opencounts)
-{
-    MYQMODIFIER QSqlQuery query("SELECT id,opencount FROM Access");
-    while(query.next())
-    {
-        opencounts[query.value("id").toLongLong()]=query.value("opencount").toInt();
-    }
-    return true;
-}
-bool DocumentSql::GetLastAccesses(QMap<qint64,qint64>& lastaccesses)
-{
-    MYQMODIFIER QSqlQuery query("SELECT id,lastaccess FROM Access");
-//    MYQMODIFIER bool prepared=false;
-//    if(!prepared)
+//bool DocumentSql::GetOpenCounts(QMap<qint64,int>& opencounts)
+//{
+//    MYQMODIFIER QSqlQuery query = myq("SELECT id,opencount FROM Access WHERE dbid=?");
+//    query.bindValue(0,gpSQL->getDbID());
+//    SQC(query,exec());
+//    while(query.next())
 //    {
-//        SQC(query,prepare("SELECT id,lastaccess FROM Access"));
-//        prepared=true;
+//        opencounts[query.value("id").toLongLong()]=query.value("opencount").toInt();
 //    }
+//    return true;
+//}
+//bool DocumentSql::GetLastAccesses(QMap<qint64,qint64>& lastaccesses)
+//{
+//    MYQMODIFIER QSqlQuery query = myq("SELECT id,lastaccess FROM Access");
+//    SQC(query,exec());
+//    while(query.next())
+//    {
+//        lastaccesses[query.value("id").toLongLong()]=query.value("lastaccess").toLongLong();
+//    }
+//    return true;
+//}
+bool DocumentSql::GetOpenCountAndLastAccess(const qint64& id, int& opencount, qint64& lastaccess)
+{
+    MYQMODIFIER QSqlQuery query = myq("SELECT opencount,lastaccess FROM Access WHERE id=? AND dbid=?");
+    int i=0;
+    query.bindValue(i++,id);
+    query.bindValue(i++,gpSQL->getDbID());
     SQC(query,exec());
-    while(query.next())
-    {
-        lastaccesses[query.value("id").toLongLong()]=query.value("lastaccess").toLongLong();
-    }
+    if(!query.next())
+        return false;
+    opencount = query.value("opencount").toInt();
+    lastaccess = query.value("lastaccess").toLongLong();
+
     return true;
 }

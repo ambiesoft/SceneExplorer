@@ -109,7 +109,9 @@ public:
 	bool IsShowMissing() const {
 		return bShowMissing_;
 	}
-	void UpdateItem(const QString& movieFile);
+    void UpdateOpenCountAndLastAccess(const QString& movieFile,
+                                      const int opencount,
+                                      const qint64& lastaccess);
     void RemoveItem(const QString& movieFile);
     QModelIndex GetIndex(const QString& movieFile) const;
     QFont GetInfoFont() {

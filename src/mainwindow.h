@@ -481,7 +481,7 @@ private:
     };
     void insertLog(TaskKind kind, int id, const QString& text, bool bError=false);
     void insertLog(TaskKind kind, const QVector<int>& ids, const QStringList& texts, bool bError=false);
-
+    void updateOnOpened(const qint64& id, const QString& movieFile);
     void openVideo(const qint64& id, const QString& movieFile);
     void openVideoInFolder(const QString& movieFile);
     QString getSelectedVideo(bool bNativeFormat = true);
