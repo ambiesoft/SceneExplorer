@@ -79,13 +79,17 @@ private:
 	bool closed_ = false;
     bool directoryChanging_ = false;
     bool tagChanging_ = false;
-    QStringList currentDirs_;
+    QStringList currentDirs_ = {"dummy"};
+    bool currentIsTagValid_ = false;
+    QSet<qint64> currentTaggedIDs_ = {-1};
+
     //SORTCOLUMN currentSort_ = SORTCOLUMN::SORT_NONE;
     //bool currentSortRev_ = false;
 
     // bool bShowMissing_ = false;
     bool GetSelectedTagIDs(QSet<qint64>& taggedids);
     void GetSqlAllSetTable(const QStringList& dirs,
+                           QSet<qint64>* pTagged,
                            bool bOnlyMissing = false);
     QToolButton* tbShowNonExistant_ = nullptr;
 
@@ -348,6 +352,7 @@ private slots:
 
     void on_directoryWidget_itemChanged(QListWidgetItem *item);
 
+
     void on_directoryWidget_customContextMenuRequested(const QPoint &pos);
 
     void on_actionSort_by_resolution_triggered();
@@ -435,6 +440,8 @@ private slots:
     void on_listTag_itemSelectionChanged();
 
     void on_actionShow_All_Item_triggered();
+
+    void on_listTag_itemChanged(QListWidgetItem *item);
 
 private:
     QThreadPool* pPoolFFmpeg_ = nullptr;

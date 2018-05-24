@@ -1340,7 +1340,7 @@ void MainWindow::directoryChangedCommon(bool bForceRead)
 	if (!initialized_ || closed_)
 		return;
 
-    if (directoryChanging_ && !bForceRead)
+    if ((directoryChanging_ || tagChanging_) && !bForceRead)
 		return;
 
 	WaitCursor wc;
@@ -1355,7 +1355,7 @@ void MainWindow::directoryChangedCommon(bool bForceRead)
             if(item->isSelected())
             {
                 dirs = QStringList();
-				bForceRead = true;
+                // bForceRead = true;
                 break;
             }
         }
@@ -1383,21 +1383,26 @@ void MainWindow::directoryChangedCommon(bool bForceRead)
         }
     }
 
+    // Get Tag selected
+    QSet<qint64> taggedids;
+    bool isTagValid = GetSelectedTagIDs(taggedids);
+
     tbShowNonExistant_->setEnabled(!bOnlyMissing);
 
-    if(!bForceRead)
+    const bool isSameReq = (dirs == currentDirs_ && currentIsTagValid_==isTagValid && currentTaggedIDs_==taggedids);
+    if(!bForceRead && isSameReq)
     {
-        if (dirs == currentDirs_)
             return;
     }
-	if (limitManager_ && currentDirs_ != dirs)
+    if (limitManager_ && !isSameReq)
 	{
 		limitManager_->Reset();
 	}
     currentDirs_ = dirs;
+    currentIsTagValid_ = isTagValid;
+    currentTaggedIDs_ = taggedids;
 
-
-    GetSqlAllSetTable(dirs, bOnlyMissing);
+    GetSqlAllSetTable(dirs, isTagValid ? &taggedids : nullptr, bOnlyMissing);
 }
 
 bool MainWindow::GetSelectedTagIDs(QSet<qint64>& taggedids)
@@ -1433,12 +1438,10 @@ bool MainWindow::GetSelectedTagIDs(QSet<qint64>& taggedids)
     return true;
 }
 
-void MainWindow::GetSqlAllSetTable(const QStringList& dirs, bool bOnlyMissing)
+void MainWindow::GetSqlAllSetTable(const QStringList& dirs,
+                                   QSet<qint64>* pTagged,
+                                   bool bOnlyMissing)
 {
-    // Get Tag selected
-    QSet<qint64> tagids;
-    bool isTagValid = GetSelectedTagIDs(tagids);
-
     tableModel_->SetShowMissing(tbShowNonExistant_->isChecked() );
     QElapsedTimer timer;
     timer.start();
@@ -1500,7 +1503,7 @@ void MainWindow::GetSqlAllSetTable(const QStringList& dirs, bool bOnlyMissing)
                   sortManager_.GetCurrentRev(),
                   limitManager_ ?
                       LimitArg(limitManager_->GetCurrentIndex(), limitManager_->GetNumberOfRows()): LimitArg(),
-                  isTagValid ? &tagids : nullptr);
+                  pTagged);
 
 
     UpdateTitle(dirs, bOnlyMissing ? UpdateTitleType::ONLYMISSING : UpdateTitleType::DEFAULT);
@@ -2038,9 +2041,9 @@ void MainWindow::on_action_Add_new_tag_triggered()
 
 void MainWindow::on_listTag_itemSelectionChanged()
 {
-    if(tagChanging_)
-        return;
-    directoryChangedCommon(true);
+    if(limitManager_)
+        limitManager_->Reset();
+    directoryChangedCommon();
 }
 
 void MainWindow::on_actionShow_All_Item_triggered()
@@ -2182,4 +2185,11 @@ QString MainWindow::GetTags(const qint64& id)
         //    ret += ",";
     }
     return ret;
+}
+
+void MainWindow::on_listTag_itemChanged(QListWidgetItem *)
+{
+    if(limitManager_)
+        limitManager_->Reset();
+    directoryChangedCommon();
 }
