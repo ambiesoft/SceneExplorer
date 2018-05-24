@@ -273,6 +273,10 @@ MainWindow::MainWindow(QWidget *parent,
     if(vVal.isValid())
         lastSelectedScanDir_ = vVal.toString();
 
+    vVal = settings.value(KEY_LASTSELECTEDDOCUMENT);
+    if(vVal.isValid())
+        lastSelectedDocumentDir_ = vVal.toString();
+
     vVal = settings.value(KEY_TREESIZE);
     if(vVal.isValid())
         ui->directoryWidget->setMaximumSize(vVal.toSize());
@@ -593,13 +597,16 @@ void MainWindow::LoadTags()
     tagAll->setIcon(QIcon(":resource/images/mailbox.png"));
     ui->listTag->addItem(tagAll);
 
-    QMap<qint64, QString> tags;
+    QList<QPair<qint64, QString> > tags;
     if(pDoc_ && pDoc_->GetAllTags(tags))
     {
-        for(qint64& key : tags.keys())
+        // for(qint64& key : tags.keys())
+        for( const QPair<qint64,QString>& pair : tags)
         {
+            qint64 key = pair.first;
+            QString text = pair.second;
             TagItem* tagUser = new TagItem(ui->listTag, key, TagItem::TI_NORMAL);
-            tagUser->setText(tags[key]);
+            tagUser->setText(text);
             tagUser->setIcon(QIcon(":resource/images/tag.png"));
             tagUser->setFlags(tagUser->flags() | Qt::ItemIsUserCheckable); // set checkable flag
             tagUser->setCheckState(Qt::Unchecked); // AND initialize check state
@@ -912,7 +919,7 @@ void MainWindow::afterGetDir(int loopId, int id,
 
     bool needUpdate = false;
 
-    QString dir = QDir(dirc).canonicalPath() + '/';
+    QString dir = normalizeDir(QDir(dirc).absolutePath());
 
     QStringList filteredFiles;
 
@@ -1128,7 +1135,7 @@ void MainWindow::on_context_copySelectedVideoPath()
 void MainWindow::on_context_Rename()
 {
     QString oldfull = getSelectedVideo();
-    QString olddir = canonicalDir(QFileInfo(oldfull).canonicalPath());
+    QString olddir = normalizeDir(QFileInfo(oldfull).absolutePath());
     QString oldname = QFileInfo(oldfull).fileName();
 
     bool ok;
@@ -1194,7 +1201,7 @@ void MainWindow::on_context_removeFromDatabase()
 
     QString error;
     QString dir,name;
-    canonicalDirAndName(movieFile, dir, name);
+    nomalizeDirAndName(movieFile, dir, name);
     if(dir.isEmpty() || name.isEmpty())
     {
         Alert(this, tr("Directory or name is empty."));
@@ -1710,7 +1717,7 @@ void MainWindow::on_action_Add_Folder_triggered()
         return;
     lastSelectedAddFolderDir_ = dir;
 
-    AddUserEntryDirectory(DirectoryItem::DI_NORMAL, canonicalDir(dir), false, false);
+    AddUserEntryDirectory(DirectoryItem::DI_NORMAL, normalizeDir(dir), false, false);
 }
 
 void MainWindow::on_action_Extentions_triggered()
@@ -1778,6 +1785,8 @@ void MainWindow::on_actionExternal_Tools_triggered()
 void MainWindow::on_action_New_triggered()
 {
     QFileDialog dlg(this);
+    dlg.setWindowTitle(tr("Create New Document"));
+    dlg.setDirectory(lastSelectedDocumentDir_);
     dlg.setFileMode(QFileDialog::AnyFile);
     dlg.setAcceptMode(QFileDialog::AcceptMode::AcceptSave);
 
@@ -1790,6 +1799,8 @@ void MainWindow::on_action_New_triggered()
         return;
 
     QString newFile = dlg.selectedFiles()[0];
+    lastSelectedDocumentDir_ = QFileInfo(newFile).absolutePath();
+
     if(!OpenDocument(newFile, QFile(newFile).exists()))
         return;
 
@@ -1799,6 +1810,7 @@ void MainWindow::on_action_New_triggered()
 void MainWindow::on_action_Open_triggered()
 {
     QFileDialog dlg(this);
+    dlg.setDirectory(lastSelectedDocumentDir_);
     dlg.setFileMode(QFileDialog::ExistingFile);
 
     QStringList filters;
@@ -1809,7 +1821,9 @@ void MainWindow::on_action_Open_triggered()
     if(!dlg.exec())
         return;
 
-    OpenDocument(dlg.selectedFiles()[0], true);
+    QString file = dlg.selectedFiles()[0];
+    lastSelectedDocumentDir_ = QFileInfo(file).absolutePath();
+    OpenDocument(file, true);
 }
 
 void MainWindow::on_action_Save_triggered()

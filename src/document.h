@@ -111,7 +111,7 @@ public:
     }
     // bool sort(QList<TableItemDataPointer>& all, SORTCOLUMNMY sc, bool rev) const;
 
-    bool GetAllTags(QMap<qint64, QString>& tags) const
+    bool GetAllTags(QList<QPair<qint64, QString> >& tags) const
     {
         return docSql_->GetAllTags(tags);
     }

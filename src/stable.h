@@ -37,6 +37,7 @@
 #include <QFileDialog>
 #include <QFileIconProvider>
 #include <QFileInfo>
+#include <QHash>
 #include <QImage>
 #include <QJsonArray>
 #include <QJsonDocument>
@@ -46,6 +47,7 @@
 #include <QMap>
 #include <QMessageBox>
 #include <QObject>
+#include <QPair>
 #include <QPixmap>
 #include <QProcess>
 #include <QProcessEnvironment>

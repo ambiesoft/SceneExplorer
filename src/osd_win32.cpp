@@ -129,7 +129,7 @@ static QString getSpecialFolder(int id)
     QString dir = QString::fromUtf16((const ushort*)path);
 //    CoTaskMemFree(pOut);
 
-    dir = QDir(dir).canonicalPath();
+    dir = QDir(dir).absolutePath();
 
     QDir(dir).mkdir("Ambiesoft");
     dir = pathCombine(dir, "Ambiesoft");

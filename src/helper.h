@@ -29,8 +29,8 @@
 
 QString rstrip(const QString& str, QChar c);
 QString pathCombine(const QString& path1, const QString& path2);
-QString canonicalDir(const QString& dir);
-void canonicalDirAndName(const QString& full, QString&dir, QString& name);
+QString normalizeDir(const QString& dir);
+void nomalizeDirAndName(const QString& full, QString&dir, QString& name);
 void Info(QWidget* parent, QString message);
 void Alert(QWidget* parent, QString message);
 bool YesNo(QWidget* parent,

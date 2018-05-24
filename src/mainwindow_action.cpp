@@ -363,7 +363,7 @@ void MainWindow::AddUserEntryDirectory(
                 return;
             }
         }
-        text=canonicalDir(cdir);
+        text=normalizeDir(cdir);
     }
     else if(itemType==DirectoryItem::DI_ALL)
     {
@@ -660,7 +660,7 @@ void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
     // Tags tools ----->
     QMenu menuAddTags(tr("Ta&g..."), this);
     QList< QSharedPointer<QAction> > actTags;
-    QMap<qint64,QString> tags;
+    QList<QPair<qint64, QString> > tags;
     pDoc_ && pDoc_->GetAllTags(tags);
 	QSet<qint64> tagsCurrent;
     pDoc_ && pDoc_->GetTagsFromID(getSelectedID(), tagsCurrent);
@@ -673,9 +673,11 @@ void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
     }
     else
     {
-        for(const qint64& key : tags.keys())
+        for(const QPair<qint64,QString>& pair : tags)
         {
-            QSharedPointer<QAction> act(new QAction(tags[key]));
+            qint64 key = pair.first;
+            QString text = pair.second;
+            QSharedPointer<QAction> act(new QAction(text));
             connect(act.data(), SIGNAL(triggered()),
                     this, SLOT(on_context_AddTags()));
             menuAddTags.addAction(act.data());

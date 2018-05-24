@@ -82,7 +82,7 @@ void MainWindow::sayGoodby(int loopId,  int id,
     QFileInfo fi(movieFile);
 
     QString dir,name;
-    canonicalDirAndName(fi.canonicalFilePath(), dir, name);
+    nomalizeDirAndName(fi.absoluteFilePath(), dir, name);
     TableItemDataPointer pTID = TableItemData::Create(
                             0,
                             files,
@@ -101,9 +101,9 @@ void MainWindow::sayGoodby(int loopId,  int id,
                             0,
                             0
                 );
-    if(IsDirSelected(canonicalDir(fi.canonicalPath())))
+    if(IsDirSelected(normalizeDir(fi.absolutePath())))
     {
-        tableModel_->RemoveItem(fi.canonicalFilePath());
+        tableModel_->RemoveItem(fi.absoluteFilePath());
         tableModel_->AppendData(pTID);
     }
 

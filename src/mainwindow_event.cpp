@@ -107,6 +107,7 @@ void MainWindow::closeEvent(QCloseEvent *event) {
     }
     settings_.setValue(KEY_LASTSELECTEDADDFOLDERDIRECTORY, lastSelectedAddFolderDir_);
     settings_.setValue(KEY_LASTSELECTEDSCANDIRECTORY, lastSelectedScanDir_);
+    settings_.setValue(KEY_LASTSELECTEDDOCUMENT, lastSelectedDocumentDir_);
 
     QStringList findtexts;
     int combosavecount = qMin(cmbFind_->count(), MAX_COMBOFIND_SAVECOUNT);

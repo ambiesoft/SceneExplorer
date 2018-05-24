@@ -46,6 +46,7 @@ namespace Consts
 	
     const char KEY_LASTSELECTEDADDFOLDERDIRECTORY[] = "lastselectedaddfolderdir";
     const char KEY_LASTSELECTEDSCANDIRECTORY[] = "lastselectedscandir";
+    const char KEY_LASTSELECTEDDOCUMENT[] = "lastselecteddocumentdir";
 
     const char KEY_USE_CUSTOMDATABASEDIR[] = "usecustomdatabasedir";
     const char KEY_DATABASE_PATH[] = "databasepath";

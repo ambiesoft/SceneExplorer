@@ -748,7 +748,8 @@ bool Sql::GetAllSqlString(
         break;
     }
 
-    sql += " FROM FileInfo LEFT JOIN docdb.Access ON FileInfo.id = docdb.Access.id ";
+    Q_ASSERT(!docdb_.isEmpty() && docdb_ != "nodb");
+    sql += " FROM FileInfo LEFT JOIN " + docdb_ + ".Access ON FileInfo.id = " + docdb_ + ".Access.id ";
 
     QVector<QVariant> binds;
     if(dirs.isEmpty())
@@ -972,8 +973,8 @@ bool Sql::RenameEntry(const QString& oldDirc,
                       const QString& newDirc,
                       const QString& newFile)
 {
-    QString oldDir = canonicalDir(oldDirc);
-    QString newDir = canonicalDir(newDirc);
+    QString oldDir = normalizeDir(oldDirc);
+    QString newDir = normalizeDir(newDirc);
 
     Q_ASSERT(!QFileInfo(pathCombine(oldDir,oldFile)).exists());
     Q_ASSERT(QFileInfo(pathCombine(newDir,newFile)).exists());
@@ -1107,7 +1108,7 @@ bool Sql::RemoveAllMissingEntries(const QString& dirc)
     }
     else
     {
-        QString dir = canonicalDir(dirc);
+        QString dir = normalizeDir(dirc);
         SQC(query,prepare("SELECT directory,name FROM FileInfo WHERE directory LIKE ?"));
 
         query.bindValue(0, dir+"%");
@@ -1199,12 +1200,17 @@ bool Sql::AttachDocument(const QString& docFile)
 {
     if(!docFile_.isEmpty())
     {
-        if(!DetachDocument())
-            return false;
+        DetachDocument();
     }
     Q_ASSERT(docFile_.isEmpty());
+    Q_ASSERT(docdb_ == "nodb");
+
+    static int docdbid = 0;
+    ++docdbid;
+    docdb_ = "docdb" + QString::number(docdbid);
+
     QSqlQuery query;
-    SQC(query,prepare("ATTACH ? AS docdb"));
+    SQC(query,prepare("ATTACH ? AS " + docdb_));
 
     query.bindValue(0, docFile);
     SQC(query,exec());
@@ -1215,7 +1221,12 @@ bool Sql::DetachDocument()
 {
     QSqlQuery q;
 
-    SQC(q,exec("DETACH docdb"));
+    Q_ASSERT(!docdb_.isEmpty() && docdb_ != "nodb");
+    if(!q.exec("DETACH " + docdb_))
+    {
+        Q_ASSERT(false);
+    }
     docFile_ = QString();
+    docdb_ = "nodb";
     return true;
 }

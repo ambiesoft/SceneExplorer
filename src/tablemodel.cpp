@@ -726,7 +726,7 @@ void TableModel::RemoveItem(const QString& movieFile)
         Alert(parent_, tr("File is empty."));
         return;
     }
-    // QString movieFile = QFileInfo(movieFilec).canonicalFilePath();
+
     TableItemDataPointer pID = mapsFullpathToItem_[movieFile];
 
     if (pID)

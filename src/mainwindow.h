@@ -467,6 +467,7 @@ private:
 	FileMissingFilterProxyModel *proxyModel_;
     QString lastSelectedAddFolderDir_;
     QString lastSelectedScanDir_;
+    QString lastSelectedDocumentDir_;
 
     TaskModel* taskModel_;
 

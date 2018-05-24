@@ -30,6 +30,9 @@ class OptionDialog:public QDialog
 
 private:
     Ui::Option ui;
+    QString lastSelectedDir_;
+
+    void on_setFileCommon(QLineEdit* le);
 
 public:
     OptionDialog(QWidget* parent = nullptr);

@@ -126,26 +126,26 @@ void OptionDialog::on_tbDBDir_clicked()
     ui.lineDBDir->setText(dlg.selectedFiles()[0]);
 }
 
-void OptionDialog::on_tbffprobe_clicked()
+void OptionDialog::on_setFileCommon(QLineEdit* le)
 {
     QFileDialog dlg(this);
+    dlg.setDirectory(lastSelectedDir_);
     dlg.setFileMode(QFileDialog::ExistingFile);
 
     if(!dlg.exec())
         return;
+    lastSelectedDir_ = QFileInfo(dlg.selectedFiles()[0]).absoluteDir().absolutePath();
 
-    ui.lineffprobe->setText(dlg.selectedFiles()[0]);
+    le->setText(dlg.selectedFiles()[0]);
+}
+void OptionDialog::on_tbffprobe_clicked()
+{
+    on_setFileCommon(ui.lineffprobe);
 }
 
 void OptionDialog::on_tbffmpeg_clicked()
 {
-    QFileDialog dlg(this);
-    dlg.setFileMode(QFileDialog::ExistingFile);
-
-    if(!dlg.exec())
-        return;
-
-    ui.lineffmpeg->setText(dlg.selectedFiles()[0]);
+    on_setFileCommon(ui.lineffmpeg);
 }
 
 void OptionDialog::on_chkUseCustomDatabaseDirectory_stateChanged(int arg1)

@@ -62,16 +62,16 @@ QString pathCombine(const QString& path1, const QString& path2)
 
     return rstrip(path1, '/') + '/' + rstrip(path2, '/');
 }
-QString canonicalDir(const QString& dir)
+QString normalizeDir(const QString& dir)
 {
     if(!dir.endsWith('/'))
         return dir+'/';
     return rstrip(dir, '/') + '/';
 }
-void canonicalDirAndName(const QString& full, QString&dir, QString& name)
+void nomalizeDirAndName(const QString& full, QString&dir, QString& name)
 {
     QFileInfo fi(full);
-    dir = canonicalDir(fi.absolutePath());
+    dir = normalizeDir(fi.absolutePath());
     name = fi.fileName();
 }
 void Info(QWidget* parent, QString message)

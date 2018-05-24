@@ -66,7 +66,7 @@ void TaskGetDir::runStuff(const QString& dir)
 			}
         }
         emit afterGetDir(loopId_, id_,
-                         QDir(dir).canonicalPath(),
+                         QDir(dir).absolutePath(),
                          files,
                          sizes,
                          wtimes,

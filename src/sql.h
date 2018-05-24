@@ -55,6 +55,7 @@ class Sql : public QObject
     QString dbid_;
     bool ok_=false;
     QString docFile_;
+    QString docdb_ = "nodb";
     QStringList allColumns_;
     int GetMovieFileInfo(const QString& movieFile,
                          bool& exist,

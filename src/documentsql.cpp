@@ -424,7 +424,7 @@ bool DocumentSql::setOpenCountAndLascAccess_obsolete(const QList<TableItemDataPo
     return true;
 }
 
-bool DocumentSql::GetAllTags(QMap<qint64, QString>& tags) const
+bool DocumentSql::GetAllTags(QList<QPair<qint64, QString> >& tags) const
 {
     MYQMODIFIER QSqlQuery query("SELECT * FROM Tag WHERE dbid=? ORDER BY yomi");
 
@@ -433,7 +433,8 @@ bool DocumentSql::GetAllTags(QMap<qint64, QString>& tags) const
     SQC(query,exec());
     while(query.next())
     {
-        tags[query.value("tagid").toLongLong()] = query.value("tag").toString();
+        tags.append(QPair<qint64,QString>(query.value("tagid").toLongLong(),query.value("tag").toString()));
+        // tags[query.value("tagid").toLongLong()] = query.value("tag").toString();
         // ret.append(query.value("tag").toString());
     }
     return true;

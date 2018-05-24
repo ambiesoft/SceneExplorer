@@ -71,7 +71,7 @@ public:
     bool IncrementOpenCount(const qint64& id);
     bool setOpenCountAndLascAccess_obsolete(const QList<TableItemDataPointer>& all);
 
-    bool GetAllTags(QMap<qint64, QString>& tags) const;
+    bool GetAllTags(QList<QPair<qint64, QString> >& tags) const;
     bool IsTagExist(const QString& tag) const;
     bool Insert(const QString& tag, const QString& yomi) const;
     bool GetTaggedIDs(const QList<qint64>& tagids, QSet<qint64>& taggedids) const;
