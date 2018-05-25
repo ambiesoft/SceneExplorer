@@ -19,6 +19,7 @@
 #ifndef GLOBALS_H
 #define GLOBALS_H
 
+#include <QFont>
 
 extern volatile bool gPaused;
 extern volatile bool gStop;
