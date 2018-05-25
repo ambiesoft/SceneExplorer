@@ -64,9 +64,13 @@ QString pathCombine(const QString& path1, const QString& path2)
 }
 QString normalizeDir(const QString& dir)
 {
-    if(!dir.endsWith('/'))
-        return dir+'/';
-    return rstrip(dir, '/') + '/';
+	if (!dir.endsWith('/'))
+		return dir + '/';
+	return rstrip(dir, '/') + '/';
+}
+QString normalizeFile(const QString& file)
+{
+	return QFileInfo(file).absoluteFilePath();
 }
 void nomalizeDirAndName(const QString& full, QString&dir, QString& name)
 {

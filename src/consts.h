@@ -72,6 +72,9 @@ namespace Consts
     const char KEY_FONT_TABLEINFO[] = "fonttableinfo";
     const char KEY_FONT_TABLEDETAIL[] = "fonttabledetail";
     const char KEY_FONT_OUPUT[] = "fontoutput";
+    const char KEY_FONT_DIRECTORY[] = "fontdirectory";
+    const char KEY_FONT_TASK[] = "fonttask";
+    const char KEY_FONT_TAG[] = "fonttag";
 
 	const char KEY_EXTERNALTOOLS_LASTSELECTEDEXEDIR[] = "externaltoolslastselectedexedir";
 

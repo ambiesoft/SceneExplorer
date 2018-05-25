@@ -64,6 +64,8 @@ void MainWindow::updateOnOpened(const qint64& id, const QString& movieFile)
 }
 void MainWindow::openVideo(const qint64& id, const QString& movieFile)
 {
+    if(movieFile.isEmpty()) { Alert(this, tr("No Video Selected.")); return;}
+
     if(!QDesktopServices::openUrl(QUrl::fromLocalFile(movieFile)))
     {
         Alert(this, QString(tr("failed to launch %1.")).arg(movieFile));
@@ -73,6 +75,8 @@ void MainWindow::openVideo(const qint64& id, const QString& movieFile)
 }
 void MainWindow::openVideoInFolder(const QString& movieFile)
 {
+    if(movieFile.isEmpty()) { Alert(this, tr("No Video Selected.")); return;}
+
     QString openfile = movieFile;
     if(!QFileInfo(movieFile).exists())
     {
@@ -606,128 +610,135 @@ void MainWindow::on_actionSort_by_last_access_triggered()
 
 void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
 {
-    QMenu contextMenu(tr("Context menu"), this);
-
-    QAction actionOpen(tr("&Open"), this);
-    connect(&actionOpen, SIGNAL(triggered()),
-            this, SLOT(on_context_openSelectedVideo()));
-    contextMenu.addAction(&actionOpen);
-
-
-    QAction actionOpenFolder(tr("Open &Folder"), this);
-    connect(&actionOpenFolder, SIGNAL(triggered()),
-            this, SLOT(on_context_openSelectedVideoInFolder()));
-    contextMenu.addAction(&actionOpenFolder);
-
-    contextMenu.addSeparator();
-
-    QAction actionCopyPath(tr("&Copy Path"));
-    connect(&actionCopyPath, SIGNAL(triggered()),
-            this, SLOT(on_context_copySelectedVideoPath()));
-    contextMenu.addAction(&actionCopyPath);
-
-
-    // sub menu start --->
-    QMenu menuCopyOther(tr("C&opy others..."), this);
-
-    QAction actionCopyFilename(tr("&Filename"));
-    connect(&actionCopyFilename, SIGNAL(triggered()),
-            this, SLOT(on_context_copySelectedVideoFilename()));
-    menuCopyOther.addAction(&actionCopyFilename);
-
-    contextMenu.addMenu(&menuCopyOther);
-    // <--- sub menu end
-
-    contextMenu.addSeparator();
-
-    // externl tools ----->
-    QMenu menuExternalTools(tr("External &tools..."), this);
-    QList< QSharedPointer<QAction> > actExts;
-    if(externalTools_.isEmpty())
+    if(ui->tableView->selectionModel()->hasSelection())
     {
-        QSharedPointer<QAction> act(new QAction(tr("No exteral tools")));
-        act->setEnabled(false);
-        menuExternalTools.addAction(act.data());
-        actExts.append(act);
-    }
-    else
-    {
-        for(int i=0 ; i < externalTools_.count(); ++i)
+        QMenu contextMenu(tr("Context menu"), this);
+
+        QAction actionOpen(tr("&Open"), this);
+        connect(&actionOpen, SIGNAL(triggered()),
+                this, SLOT(on_context_openSelectedVideo()));
+        contextMenu.addAction(&actionOpen);
+
+
+        QAction actionOpenFolder(tr("Open &Folder"), this);
+        connect(&actionOpenFolder, SIGNAL(triggered()),
+                this, SLOT(on_context_openSelectedVideoInFolder()));
+        contextMenu.addAction(&actionOpenFolder);
+
+        contextMenu.addSeparator();
+
+        QAction actionCopyPath(tr("&Copy Path"));
+        connect(&actionCopyPath, SIGNAL(triggered()),
+                this, SLOT(on_context_copySelectedVideoPath()));
+        contextMenu.addAction(&actionCopyPath);
+
+
+        // sub menu start --->
+        QMenu menuCopyOther(tr("C&opy others..."), this);
+
+        QAction actionCopyFilename(tr("&Filename"));
+        connect(&actionCopyFilename, SIGNAL(triggered()),
+                this, SLOT(on_context_copySelectedVideoFilename()));
+        menuCopyOther.addAction(&actionCopyFilename);
+
+        contextMenu.addMenu(&menuCopyOther);
+        // <--- sub menu end
+
+        contextMenu.addSeparator();
+
+        // externl tools ----->
+        QMenu menuExternalTools(tr("External &tools..."), this);
+        QList< QSharedPointer<QAction> > actExts;
+        if(externalTools_.isEmpty())
         {
-            QSharedPointer<QAction> act(new QAction(externalTools_[i].GetName()));
-            connect(act.data(), SIGNAL(triggered()),
-                    this, SLOT(on_context_ExternalTools()));
+            QSharedPointer<QAction> act(new QAction(tr("No exteral tools")));
+            act->setEnabled(false);
             menuExternalTools.addAction(act.data());
-            act->setData(i);
             actExts.append(act);
         }
-    }
-    contextMenu.addMenu(&menuExternalTools);
-    // <---- external tools
+        else
+        {
+            for(int i=0 ; i < externalTools_.count(); ++i)
+            {
+                QSharedPointer<QAction> act(new QAction(externalTools_[i].GetName()));
+                connect(act.data(), SIGNAL(triggered()),
+                        this, SLOT(on_context_ExternalTools()));
+                menuExternalTools.addAction(act.data());
+                act->setData(i);
+                actExts.append(act);
+            }
+        }
+        contextMenu.addMenu(&menuExternalTools);
+        // <---- external tools
 
-    contextMenu.addSeparator();
+        contextMenu.addSeparator();
 
-    // Tags tools ----->
-    QMenu menuAddTags(tr("Ta&g..."), this);
-    QList< QSharedPointer<QAction> > actTags;
-    QList<QPair<qint64, QString> > tags;
-    pDoc_ && pDoc_->GetAllTags(tags);
-	QSet<qint64> tagsCurrent;
-    pDoc_ && pDoc_->GetTagsFromID(getSelectedID(), tagsCurrent);
-    if(tags.isEmpty())
-    {
-        QSharedPointer<QAction> act(new QAction(tr("No tags")));
-        act->setEnabled(false);
-        menuAddTags.addAction(act.data());
-        actTags.append(act);
+        // Tags tools ----->
+        QMenu menuAddTags(tr("Ta&g..."), this);
+        QList< QSharedPointer<QAction> > actTags;
+        QList<QPair<qint64, QString> > tags;
+        pDoc_ && pDoc_->GetAllTags(tags);
+        QSet<qint64> tagsCurrent;
+        pDoc_ && pDoc_->GetTagsFromID(getSelectedID(), tagsCurrent);
+        if(tags.isEmpty())
+        {
+            QSharedPointer<QAction> act(new QAction(tr("No tags")));
+            act->setEnabled(false);
+            menuAddTags.addAction(act.data());
+            actTags.append(act);
+        }
+        else
+        {
+            for(const QPair<qint64,QString>& pair : tags)
+            {
+                qint64 key = pair.first;
+                QString text = pair.second;
+                QSharedPointer<QAction> act(new QAction(text));
+                connect(act.data(), SIGNAL(triggered()),
+                        this, SLOT(on_context_AddTags()));
+                menuAddTags.addAction(act.data());
+                act->setData(key);
+                act->setCheckable(true);
+                if (tagsCurrent.contains(key))
+                    act->setChecked(true);
+                actTags.append(act);
+            }
+        }
+        contextMenu.addMenu(&menuAddTags);
+        // <---- Tags
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        contextMenu.addSeparator();
+
+        QAction actionRename(tr("Re&name"));
+        connect(&actionRename, SIGNAL(triggered()),
+                this, SLOT(on_context_Rename()));
+        contextMenu.addAction(&actionRename);
+        contextMenu.addSeparator();
+
+        QAction actionRemoveFromDB(tr("&Remove from database"));
+        connect(&actionRemoveFromDB, SIGNAL(triggered()),
+                this, SLOT(on_context_removeFromDatabase()));
+        contextMenu.addAction(&actionRemoveFromDB);
+
+        contextMenu.exec(ui->tableView->mapToGlobal(pos));
     }
     else
     {
-        for(const QPair<qint64,QString>& pair : tags)
-        {
-            qint64 key = pair.first;
-            QString text = pair.second;
-            QSharedPointer<QAction> act(new QAction(text));
-            connect(act.data(), SIGNAL(triggered()),
-                    this, SLOT(on_context_AddTags()));
-            menuAddTags.addAction(act.data());
-            act->setData(key);
-			act->setCheckable(true);
-			if (tagsCurrent.contains(key))
-				act->setChecked(true);
-            actTags.append(act);
-        }
+
     }
-    contextMenu.addMenu(&menuAddTags);
-    // <---- Tags
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    contextMenu.addSeparator();
-
-    QAction actionRename(tr("Re&name"));
-    connect(&actionRename, SIGNAL(triggered()),
-            this, SLOT(on_context_Rename()));
-    contextMenu.addAction(&actionRename);
-    contextMenu.addSeparator();
-
-    QAction actionRemoveFromDB(tr("&Remove from database"));
-    connect(&actionRemoveFromDB, SIGNAL(triggered()),
-            this, SLOT(on_context_removeFromDatabase()));
-    contextMenu.addAction(&actionRemoveFromDB);
-
-    contextMenu.exec(ui->tableView->mapToGlobal(pos));
 }
 
 void MainWindow::on_Rescan()
@@ -786,6 +797,21 @@ void MainWindow::on_directoryWidget_RemoveMissingItems()
     gpSQL->RemoveAllMissingEntries(dir);
 
     itemChangedCommon(true);
+}
+void MainWindow::on_directoryWidget_CheckAll()
+{
+    {
+        BlockedBool bt(&directoryChanging_, true, false);
+
+        for (int i = 0; i < ui->directoryWidget->count(); ++i)
+        {
+            DirectoryItem* item = (DirectoryItem*)ui->directoryWidget->item(i);
+            if(item->IsNormalItem())
+                item->setCheckState(Qt::Checked);
+        }
+    }
+
+    itemChangedCommon();
 }
 void MainWindow::on_directoryWidget_UncheckAll()
 {
@@ -882,6 +908,25 @@ void MainWindow::on_directoryWidget_customContextMenuRequested(const QPoint &pos
     {
         QMenu menu(this);
         menu.addAction(ui->action_Add_Folder);
+        menu.addSeparator();
+
+        QAction actCheckAll(tr("&Check All"));
+        connect(&actCheckAll, SIGNAL(triggered(bool)),
+            this, SLOT(on_directoryWidget_CheckAll()));
+        menu.addAction(&actCheckAll);
+
+        QAction actUncheckAll(tr("&Uncheck All"));
+        connect(&actUncheckAll, SIGNAL(triggered(bool)),
+            this, SLOT(on_directoryWidget_UncheckAll()));
+        menu.addAction(&actUncheckAll);
+
+        menu.addSeparator();
+
+        QAction actSortByName(tr("&Sort by name"));
+        connect(&actSortByName, SIGNAL(triggered(bool)),
+            this, SLOT(on_directoryWidget_SortByName()));
+        menu.addAction(&actSortByName);
+
         menu.exec(ui->directoryWidget->mapToGlobal(pos));
     }
     else
@@ -896,7 +941,12 @@ void MainWindow::on_directoryWidget_customContextMenuRequested(const QPoint &pos
 
         menu.addSeparator();
 
-        QAction actUncheckAll(tr("&Uncheck all"));
+        QAction actCheckAll(tr("&Check All"));
+        connect(&actCheckAll, SIGNAL(triggered(bool)),
+            this, SLOT(on_directoryWidget_CheckAll()));
+        menu.addAction(&actCheckAll);
+
+        QAction actUncheckAll(tr("&Uncheck All"));
         connect(&actUncheckAll, SIGNAL(triggered(bool)),
             this, SLOT(on_directoryWidget_UncheckAll()));
         menu.addAction(&actUncheckAll);
@@ -912,6 +962,8 @@ void MainWindow::on_directoryWidget_customContextMenuRequested(const QPoint &pos
         connect(&actMoveDown, SIGNAL(triggered(bool)),
             this, SLOT(on_directoryWidget_MoveDown()));
         menu.addAction(&actMoveDown);
+
+        menu.addSeparator();
 
         QAction actSortByName(tr("&Sort by name"));
         connect(&actSortByName, SIGNAL(triggered(bool)),

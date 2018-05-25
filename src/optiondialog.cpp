@@ -184,6 +184,7 @@ void OptionDialog::constructTitleTemplateMenu(QMenu& contextMenu,
                             bool isMain)
 {
     const char* alltargets[] = {
+        "atime",
         "name",
         "id",
         "size",
@@ -199,10 +200,22 @@ void OptionDialog::constructTitleTemplateMenu(QMenu& contextMenu,
         "tags",
     };
 
+    QStringList all;
     for(size_t i=0 ; i < sizeof(alltargets)/sizeof(alltargets[0]); ++i )
     {
-        QSharedPointer<QAction> act(new QAction(tr(alltargets[i])));
-        act->setData(QString("${") + alltargets[i] + "}");
+        if(all.contains(alltargets[i]))
+        {
+            Q_ASSERT(false);
+            continue;
+        }
+        all.append(alltargets[i]);
+    }
+    std::sort(all.begin(),all.end());
+
+    for(QString s : all)
+    {
+        QSharedPointer<QAction> act(new QAction(s));
+        act->setData(QString("${") + s + "}");
         connect(act.data(), SIGNAL(triggered()),
                 this, isMain ? SLOT(on_context_titleTemplateCommonMain()):SLOT(on_context_titleTemplateCommonSub()) );
         contextMenu.addAction(act.data());

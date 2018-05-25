@@ -30,6 +30,7 @@
 QString rstrip(const QString& str, QChar c);
 QString pathCombine(const QString& path1, const QString& path2);
 QString normalizeDir(const QString& dir);
+QString normalizeFile(const QString& file);
 void nomalizeDirAndName(const QString& full, QString&dir, QString& name);
 void Info(QWidget* parent, QString message);
 void Alert(QWidget* parent, QString message);

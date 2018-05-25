@@ -320,7 +320,7 @@ MainWindow::MainWindow(QWidget *parent,
     // font
     QFont font;
     vVal = settings_.value(KEY_FONT_TABLEINFO);
-    if(vVal.isValid() && font.fromString(vVal.toString()))
+    if(vVal.isValid() && !vVal.toString().isEmpty() && font.fromString(vVal.toString()))
     {
         tableModel_->SetInfoFont(font);
     }
@@ -330,7 +330,7 @@ MainWindow::MainWindow(QWidget *parent,
     }
 
     vVal = settings_.value(KEY_FONT_TABLEDETAIL);
-    if(vVal.isValid() && font.fromString(vVal.toString()))
+    if(vVal.isValid() && !vVal.toString().isEmpty() && font.fromString(vVal.toString()))
     {
         tableModel_->SetDetailFont(font);
     }
@@ -340,9 +340,24 @@ MainWindow::MainWindow(QWidget *parent,
     }
 
     vVal = settings_.value(KEY_FONT_OUPUT);
-    if(vVal.isValid() && font.fromString(vVal.toString()))
+    if(vVal.isValid() && !vVal.toString().isEmpty() && font.fromString(vVal.toString()))
     {
         ui->txtLog->setFont(font);
+    }
+    vVal = settings_.value(KEY_FONT_DIRECTORY);
+    if(vVal.isValid() && !vVal.toString().isEmpty() && font.fromString(vVal.toString()))
+    {
+        ui->directoryWidget->setFont(font);
+    }
+    vVal = settings_.value(KEY_FONT_TASK);
+    if(vVal.isValid() && !vVal.toString().isEmpty() && font.fromString(vVal.toString()))
+    {
+        ui->listTask->setFont(font);
+    }
+    vVal = settings_.value(KEY_FONT_TAG);
+    if(vVal.isValid() && !vVal.toString().isEmpty() && font.fromString(vVal.toString()))
+    {
+        ui->listTag->setFont(font);
     }
 
 
@@ -1106,7 +1121,6 @@ QString MainWindow::getSelectedVideo(bool bNativeFormat)
 {
     QItemSelectionModel *select = ui->tableView->selectionModel();
 
-    Q_ASSERT(select->hasSelection());
     if(!select->hasSelection())
         return QString();
     QVariant v = proxyModel_->data(select->selectedIndexes()[0], TableModel::MovieFileFull);
@@ -1119,12 +1133,10 @@ qint64 MainWindow::getSelectedID()
 {
     QItemSelectionModel *select = ui->tableView->selectionModel();
 
-    Q_ASSERT(select->hasSelection());
     if(!select->hasSelection())
-        return 0;
+        return -1;
+
     QVariant v = proxyModel_->data(select->selectedIndexes()[0], TableModel::ID);
-
-
     return v.toLongLong();
 }
 
@@ -1139,11 +1151,15 @@ void MainWindow::on_context_openSelectedVideoInFolder()
 
 void MainWindow::on_context_copySelectedVideoPath()
 {
-    QApplication::clipboard()->setText(getSelectedVideo());
+    QString movieFile = getSelectedVideo();
+    if(movieFile.isEmpty()) { Alert(this, tr("No Video Selected.")); return;}
+    QApplication::clipboard()->setText(movieFile);
 }
 void MainWindow::on_context_Rename()
 {
     QString oldfull = getSelectedVideo(false);
+    if(oldfull.isEmpty()) { Alert(this, tr("No Video Selected.")); return;}
+
     QString olddir = normalizeDir(QFileInfo(oldfull).absolutePath());
     QString oldname = QFileInfo(oldfull).fileName();
 
@@ -1183,11 +1199,7 @@ void MainWindow::on_context_Rename()
 void MainWindow::on_context_removeFromDatabase()
 {
     QString movieFile = getSelectedVideo(false);
-    if(movieFile.isEmpty())
-    {
-        Alert(this, tr("Movie file is empty."));
-        return;
-    }
+    if(movieFile.isEmpty()) { Alert(this, tr("No Video Selected.")); return;}
 
     static bool sbRemoveFromHardDisk;
 
@@ -1259,6 +1271,7 @@ void MainWindow::on_context_AddTags()
 void MainWindow::on_context_ExternalTools()
 {
     const QString movieFileNative = getSelectedVideo(true);
+    if(movieFileNative.isEmpty()) { Alert(this, tr("No Video Selected.")); return;}
 
     QAction* act = (QAction*)QObject::sender();
     int i = act->data().toInt();
@@ -1320,7 +1333,10 @@ void MainWindow::on_context_ExternalTools()
 
 void MainWindow::on_context_copySelectedVideoFilename()
 {
-    QFileInfo fi(getSelectedVideo());
+    QString movieFile = getSelectedVideo();
+    if(movieFile.isEmpty()) { Alert(this, tr("No Video Selected.")); return;}
+
+    QFileInfo fi(movieFile);
     QApplication::clipboard()->setText(fi.fileName());
 }
 
@@ -1735,48 +1751,56 @@ void MainWindow::on_action_Extentions_triggered()
 
 void MainWindow::on_action_Font_triggered()
 {
-//    OptionFontDialog dlg(this);
-//    if(QDialog::Accepted != dlg.exec())
-//        return;
-
-    bool ok;
-    QFont font = QFontDialog::getFont(
-                &ok,
-                tableModel_->GetInfoFont(),
-                this);
-    if (!ok)
-        return;
-
-    tableModel_->SetInfoFont(font);
-    settings_.setValue(KEY_FONT_TABLEINFO, font.toString());
+    setFontCommon2(KEY_FONT_TABLEINFO,
+                  [this]() -> QFont { return tableModel_->GetInfoFont();},
+                  [this](QFont& font) { tableModel_->SetInfoFont(font);});
 }
 
 void MainWindow::on_action_FontDetail_triggered()
 {
-    bool ok;
-    QFont font = QFontDialog::getFont(
-                &ok,
-                tableModel_->GetDetailFont(),
-                this);
-    if (!ok)
-        return;
+    setFontCommon2(KEY_FONT_TABLEDETAIL,
+                  [this]() -> QFont { return tableModel_->GetDetailFont();},
+                  [this](QFont& font) { tableModel_->SetDetailFont(font);});
 
-    tableModel_->SetDetailFont(font);
-    settings_.setValue(KEY_FONT_TABLEDETAIL, font.toString());
+}
+void MainWindow::setFontCommon1(const QString& savekey,
+                                QWidget* pWidget)
+{
+    setFontCommon2(savekey,
+                  [pWidget]() -> QFont { return pWidget->font();},
+                  [pWidget](QFont& font) { pWidget->setFont(font);});
+
 }
 
-void MainWindow::on_action_Output_triggered()
+void MainWindow::setFontCommon2(const QString& savekey,
+                               std::function<QFont (void)> getfunc,
+                               std::function<void(QFont&)> setfunc)
 {
     bool ok;
     QFont font = QFontDialog::getFont(
                 &ok,
-                ui->txtLog->font(),
+                getfunc(),
                 this);
     if (!ok)
+    {
+        if(!YesNo(this,
+              tr("Do you want to set back to default font?")))
+        {
+            return;
+        }
+        settings_.setValue(savekey, QString());
+        if(!YesNo(this,
+             tr("Application needs to restart for the changes to take effect. Do you want to restart application now?")))
+        {
+            return;
+        }
+        gReboot = true;
+        close();
         return;
+    }
 
-    ui->txtLog->setFont(font);
-    settings_.setValue(KEY_FONT_OUPUT, font.toString());
+    setfunc(font);
+    settings_.setValue(savekey, font.toString());
 }
 
 
@@ -2241,4 +2265,24 @@ void MainWindow::on_listTag_itemChanged(QListWidgetItem *)
     if(limitManager_)
         limitManager_->Reset();
     itemChangedCommon();
+}
+
+void MainWindow::on_action_Output_triggered()
+{
+    setFontCommon1(KEY_FONT_OUPUT, ui->txtLog);
+}
+
+void MainWindow::on_action_FontFolder_triggered()
+{
+    setFontCommon1(KEY_FONT_DIRECTORY,ui->directoryWidget);
+}
+
+void MainWindow::on_action_FontTask_triggered()
+{
+    setFontCommon1(KEY_FONT_TASK,ui->listTask);
+}
+
+void MainWindow::on_action_FontTag_triggered()
+{
+    setFontCommon1(KEY_FONT_TAG,ui->listTag);
 }

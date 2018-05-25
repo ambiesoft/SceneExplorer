@@ -322,6 +322,14 @@ protected:
 	
     void on_ShowMissingClicked_common(bool nNextCheck);
     void checkAllTagCommon(const bool bCheck);
+
+
+    void setFontCommon1(const QString& savekey,
+                        QWidget* pWidget);
+    void setFontCommon2(const QString& savekey,
+                        std::function<QFont (void)> getfunc,
+                        std::function<void(QFont&)> setfunc);
+
 private slots:
     void editTag();
     void deleteTag();
@@ -445,6 +453,12 @@ private slots:
 
     void on_listTag_itemChanged(QListWidgetItem *item);
 
+    void on_action_FontFolder_triggered();
+
+    void on_action_FontTask_triggered();
+
+    void on_action_FontTag_triggered();
+
 private:
     QThreadPool* pPoolFFmpeg_ = nullptr;
     QThreadPool* getPoolFFmpeg();
@@ -565,8 +579,9 @@ public slots:
 	void on_Rescan();
 	void on_directoryWidget_Remove();
 	void on_directoryWidget_RemoveMissingItems();
-	void on_directoryWidget_UncheckAll();
-	void on_directoryWidget_SortByName();
+    void on_directoryWidget_CheckAll();
+    void on_directoryWidget_UncheckAll();
+    void on_directoryWidget_SortByName();
 	void on_directoryWidget_MoveUp();
     void on_directoryWidget_MoveDown();
     void on_FindCombo_EnterPressed();

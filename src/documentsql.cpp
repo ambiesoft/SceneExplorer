@@ -596,6 +596,9 @@ bool DocumentSql::DeleteTag(const qint64& tagid)
 }
 bool DocumentSql::GetTagsFromID(const qint64& id, QSet<qint64>& tagids)
 {
+    if( id <= 0)
+        return true;
+
     MYQMODIFIER QSqlQuery query = myq("SELECT tagid FROM Tagged WHERE id=? AND dbid=?");
 
     int i=0;

@@ -706,7 +706,7 @@ void TableModel::UpdateOpenCountAndLastAccess(const QString& movieFile,
                                                       const int opencount,
                                                       const qint64& lastaccess)
 {
-	TableItemDataPointer pID = mapsFullpathToItem_[movieFile];
+	TableItemDataPointer pID = mapsFullpathToItem_[normalizeFile(movieFile)];
 
 	if (pID)
 	{
@@ -721,7 +721,7 @@ void TableModel::UpdateOpenCountAndLastAccess(const QString& movieFile,
 }
 QModelIndex TableModel::GetIndex(const QString& movieFile) const
 {
-    TableItemDataPointer pID = mapsFullpathToItem_[movieFile];
+    TableItemDataPointer pID = mapsFullpathToItem_[normalizeFile(movieFile)];
     if (pID)
     {
         int row = itemDatas_.indexOf(pID);
@@ -738,7 +738,7 @@ void TableModel::RemoveItem(const QString& movieFile)
         return;
     }
 
-    TableItemDataPointer pID = mapsFullpathToItem_[movieFile];
+    TableItemDataPointer pID = mapsFullpathToItem_[normalizeFile(movieFile)];
 
     if (pID)
     {

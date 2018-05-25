@@ -785,7 +785,7 @@
     </message>
     <message>
         <source>Tag &quot;{0}&quot; already exists. Do you want to overwrite?</source>
-        <translation>タグ &quot;{0}&quot; は既に存在します。上書きしますか？</translation>
+        <translation type="vanished">タグ &quot;{0}&quot; は既に存在します。上書きしますか？</translation>
     </message>
     <message>
         <source>Failed to insert or replace Tag.</source>
@@ -846,6 +846,42 @@
     <message>
         <source>No Document</source>
         <translation>ドキュメントがありません</translation>
+    </message>
+    <message>
+        <source>&amp;Main</source>
+        <translation>メイン(&amp;M)</translation>
+    </message>
+    <message>
+        <source>&amp;Folder...</source>
+        <translation>フォルダ(&amp;F)...</translation>
+    </message>
+    <message>
+        <source>&amp;Task...</source>
+        <translation>タスク(&amp;T)...</translation>
+    </message>
+    <message>
+        <source>Do you want to set back to default font?</source>
+        <translation>デフォルトフォントに戻しますか？</translation>
+    </message>
+    <message>
+        <source>Application needs to restart for the changes to take effect. Do you want to restart application now?</source>
+        <translation>設定を有効にするためにアプリケーションの再起動が必要です。今再起動しますか？</translation>
+    </message>
+    <message>
+        <source>Create New Document</source>
+        <translation>新規ドキュメント作成</translation>
+    </message>
+    <message>
+        <source>Tag &quot;{0}&quot; already exists.</source>
+        <translation>タグ &quot;{0}&quot; は既に存在します。</translation>
+    </message>
+    <message>
+        <source>&amp;Check All</source>
+        <translation>すべてチェック(&amp;C)</translation>
+    </message>
+    <message>
+        <source>&amp;Uncheck All</source>
+        <translation>すべてチェックしない(&amp;U)</translation>
     </message>
 </context>
 <context>
