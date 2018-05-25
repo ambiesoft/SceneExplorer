@@ -186,6 +186,10 @@ public:
     QString lastError() const {
         return lastError_;
     }
+    QString docdb() const {
+        Q_ASSERT(!docdb_.isEmpty() && docdb_ != "nodb");
+        return docdb_;
+    }
 };
 
 #endif // SQL_H

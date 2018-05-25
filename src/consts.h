@@ -75,6 +75,9 @@ namespace Consts
     const char KEY_FONT_DIRECTORY[] = "fontdirectory";
     const char KEY_FONT_TASK[] = "fonttask";
     const char KEY_FONT_TAG[] = "fonttag";
+    const char KEY_FONT_MENU[] = "fontmenu";
+    const char KEY_FONT_STATUSBAR[] = "fontstatusbar";
+    const char KEY_FONT_DOCKINGWINDOW[] = "fontdockingwindow";
 
 	const char KEY_EXTERNALTOOLS_LASTSELECTEDEXEDIR[] = "externaltoolslastselectedexedir";
 

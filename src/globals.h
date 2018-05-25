@@ -61,5 +61,5 @@ enum SORTCOLUMNMY{
 	COUNT_SORTCOLUMN,
 } ;
 
-
+extern QFont* gpMenuFont_;
 #endif // GLOBALS_H

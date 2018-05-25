@@ -21,7 +21,8 @@
 
 #include "helper.h"
 #include "blockedbool.h"
-
+#include "mycontextmenu.h"
+#include "mycontextmenu.h"
 
 #include "optionexternaltoolsdialog.h"
 #include "ui_optionexternaltoolsdialog.h"
@@ -334,7 +335,7 @@ void OptionExternalToolsDialog::on_tbArguments_clicked()
     QPoint pos = ui->tbArguments->pos();
     pos.setX(pos.x() + ui->tbArguments->width());
 
-    QMenu contextMenu(tr("Context menu"), this);
+    MyContextMenu contextMenu(tr("Context menu"), this);
     QList< QSharedPointer<QAction> > acts;
 
     constructTitleTemplateMenu(contextMenu, acts);

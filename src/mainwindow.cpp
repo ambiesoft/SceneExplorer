@@ -70,6 +70,8 @@
 #include "docinfodialog.h"
 #include "tagitem.h"
 #include "taginputdialog.h"
+#include "mycontextmenu.h"
+
 #include "mainwindow.h"
 
 using namespace Consts;
@@ -362,6 +364,24 @@ MainWindow::MainWindow(QWidget *parent,
     if(vVal.isValid() && !vVal.toString().isEmpty() && font.fromString(vVal.toString()))
     {
         ui->listTag->setFont(font);
+    }
+    vVal = settings_.value(KEY_FONT_STATUSBAR);
+    if(vVal.isValid() && !vVal.toString().isEmpty() && font.fromString(vVal.toString()))
+    {
+        ui->statusBar->setFont(font);
+    }
+    vVal = settings_.value(KEY_FONT_DOCKINGWINDOW);
+    if(vVal.isValid() && !vVal.toString().isEmpty() && font.fromString(vVal.toString()))
+    {
+        for(QWidget* pW : getAllDockingWindow())
+        {
+            pW->setFont(font);
+        }
+    }
+    vVal = settings_.value(KEY_FONT_MENU);
+    if(vVal.isValid() && !vVal.toString().isEmpty() && font.fromString(vVal.toString()))
+    {
+        setMenuFont(font);
     }
 
 
@@ -1773,7 +1793,6 @@ void MainWindow::setFontCommon1(const QString& savekey,
     setFontCommon2(savekey,
                   [pWidget]() -> QFont { return pWidget->font();},
                   [pWidget](QFont& font) { pWidget->setFont(font);});
-
 }
 
 void MainWindow::setFontCommon2(const QString& savekey,
@@ -2200,7 +2219,8 @@ void MainWindow::showTagContextMenu(const QPoint &pos)
         QPoint globalPos = ui->listTag->mapToGlobal(pos);
 
         // Create menu and insert some actions
-        QMenu myMenuFreeArea;
+        MyContextMenu myMenuFreeArea;
+
         myMenuFreeArea.addAction(ui->action_Add_new_tag);
         myMenuFreeArea.addSeparator();
         myMenuFreeArea.addAction(tr("&Check All"), this, SLOT(checkAllTag()));
@@ -2219,7 +2239,7 @@ void MainWindow::showTagContextMenu(const QPoint &pos)
         QPoint globalPos = ui->listTag->mapToGlobal(pos);
 
         // Create menu and insert some actions
-        QMenu myMenuItemArea;
+        MyContextMenu myMenuItemArea;
         myMenuItemArea.addAction(tr("&Edit"), this, SLOT(editTag()));
         myMenuItemArea.addAction(tr("&Delete"), this, SLOT(deleteTag()));
 
@@ -2289,4 +2309,52 @@ void MainWindow::on_action_FontTask_triggered()
 void MainWindow::on_action_FontTag_triggered()
 {
     setFontCommon1(KEY_FONT_TAG,ui->listTag);
+}
+
+void MainWindow::setMenuFont(QFont& font)
+{
+    if(!gpMenuFont_)
+        gpMenuFont_ = new QFont();
+    *gpMenuFont_=font;
+    ui->menuBar->setFont(font);
+    for(QMenu* pM : ui->menuBar->findChildren<QMenu*>())
+        pM->setFont(font);
+}
+void MainWindow::on_action_FontMenu_triggered()
+{
+    setFontCommon2(KEY_FONT_MENU,
+                   [this]()->QFont { return ui->menuBar->font(); },
+                   [this] (QFont& font)
+                    {
+                       setMenuFont(font);
+                    }
+    );
+}
+
+QList<QWidget*> MainWindow::getAllDockingWindow()
+{
+    return QList<QWidget*> {
+        ui->dockFolder,
+        ui->dockOutput,
+        ui->dockTag,
+        ui->dockTask
+    };
+}
+void MainWindow::on_action_FontDockingWindow_triggered()
+{
+    QList<QWidget*> allDock = getAllDockingWindow();
+
+    setFontCommon2(KEY_FONT_DOCKINGWINDOW,
+                  [allDock]() -> QFont { return allDock[0]->font();},
+                  [allDock](QFont& font)
+                    {
+                        for(QWidget* pW : allDock)
+                            pW->setFont(font);
+                    }
+    );
+}
+
+void MainWindow::on_action_FontStatusbar_triggered()
+{
+    setFontCommon1(KEY_FONT_STATUSBAR,ui->statusBar);
 }

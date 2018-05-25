@@ -44,6 +44,7 @@
 #include "blockedbool.h"
 #include "tagitem.h"
 
+#include "mycontextmenu.h"
 #include "ui_mainwindow.h"
 #include "mainwindow.h"
 
@@ -159,9 +160,18 @@ void MainWindow::on_menu_directory_triggered()
 
 void MainWindow::onMenuFolder_AboutToShow()
 {
-    ui->menu_Folder->clear();
-    ui->menu_Folder->addAction(ui->action_Add_Folder);
-    ui->menu_Folder->addSeparator();
+//    ui->menu_Folder->clear();
+//    ui->menu_Folder->addAction(ui->action_Add_Folder);
+//    ui->menu_Folder->addSeparator();
+
+    int startPos = 2;
+    QList<QAction*> actions = ui->menu_Folder->actions();
+    for(int i=startPos ; i < actions.count(); ++i)
+    {
+        QAction* pA = actions[i];
+        ui->menu_Folder->removeAction(pA);
+        delete pA;
+    }
 
     bool bAdded = false;
     for(int i=0 ; i < ui->directoryWidget->count(); ++i)
@@ -203,9 +213,14 @@ void MainWindow::on_menu_tag_triggered()
 }
 void MainWindow::onMenuTag_AboutToShow()
 {
-    ui->menu_Tag->clear();
-    ui->menu_Tag->addAction(ui->action_Add_new_tag);
-    ui->menu_Tag->addSeparator();
+    int startPos = 2;
+    QList<QAction*> actions = ui->menu_Tag->actions();
+    for(int i=startPos ; i < actions.count(); ++i)
+    {
+        QAction* pA = actions[i];
+        ui->menu_Tag->removeAction(pA);
+        delete pA;
+    }
 
     bool bAdded = false;
     for(int i=0; i < ui->listTag->count(); ++i)
@@ -698,7 +713,7 @@ void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
 {
     if(ui->tableView->selectionModel()->hasSelection())
     {
-        QMenu contextMenu(tr("Context menu"), this);
+        MyContextMenu contextMenu(tr("Context menu"), this);
 
         QAction actionOpen(tr("&Open"), this);
         connect(&actionOpen, SIGNAL(triggered()),
@@ -992,7 +1007,7 @@ void MainWindow::on_directoryWidget_customContextMenuRequested(const QPoint &pos
 
 	if(!item)
     {
-        QMenu menu(this);
+        MyContextMenu menu(this);
         menu.addAction(ui->action_Add_Folder);
         menu.addSeparator();
 
@@ -1017,7 +1032,7 @@ void MainWindow::on_directoryWidget_customContextMenuRequested(const QPoint &pos
     }
     else
     {
-        QMenu menu(this);
+        MyContextMenu menu(this);
 
         QAction actRescan(tr("&Rescan to create thumbnails"));
         actRescan.setEnabled(!item->IsMissingItem());

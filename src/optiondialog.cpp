@@ -22,6 +22,7 @@
 #include <QAction>
 #include <QSharedPointer>
 
+#include "mycontextmenu.h"
 #include "consts.h"
 #include "helper.h"
 #include "optiondialog.h"
@@ -228,7 +229,7 @@ void OptionDialog::on_tbInfoMain_clicked()
     QPoint pos = ui.tbInfoMain->pos();
     pos.setX(pos.x() + ui.tbInfoMain->width());
 
-    QMenu contextMenu(tr("Context menu"), this);
+    MyContextMenu contextMenu(tr("Context menu"), this);
     QList< QSharedPointer<QAction> > acts;
 
     constructTitleTemplateMenu(contextMenu, acts, true);
@@ -241,7 +242,7 @@ void OptionDialog::on_tbInfoSub_clicked()
     QPoint pos = ui.tbInfoSub->pos();
     pos.setX(pos.x() + ui.tbInfoSub->width());
 
-    QMenu contextMenu(tr("Context menu"), this);
+    MyContextMenu contextMenu(tr("Context menu"), this);
     QList< QSharedPointer<QAction> > acts;
 
     constructTitleTemplateMenu(contextMenu, acts, false);

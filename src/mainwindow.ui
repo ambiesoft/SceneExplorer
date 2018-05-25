@@ -69,7 +69,7 @@
      <x>0</x>
      <y>0</y>
      <width>1009</width>
-     <height>23</height>
+     <height>21</height>
     </rect>
    </property>
    <property name="font">
@@ -119,11 +119,20 @@
       <addaction name="action_Font"/>
       <addaction name="action_FontDetail"/>
      </widget>
+     <widget class="QMenu" name="menu_UI">
+      <property name="title">
+       <string>&amp;UI...</string>
+      </property>
+      <addaction name="action_FontMenu"/>
+      <addaction name="action_FontDockingWindow"/>
+      <addaction name="action_FontStatusbar"/>
+     </widget>
      <addaction name="menu_Main"/>
      <addaction name="action_Output"/>
      <addaction name="action_FontFolder"/>
      <addaction name="action_FontTask"/>
      <addaction name="action_FontTag"/>
+     <addaction name="menu_UI"/>
     </widget>
     <widget class="QMenu" name="menu_Language">
      <property name="title">
@@ -197,6 +206,7 @@
      <string>&amp;Tag</string>
     </property>
     <addaction name="action_Add_new_tag"/>
+    <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menu_Edit">
     <property name="title">
@@ -776,6 +786,21 @@
   <action name="action_FontTag">
    <property name="text">
     <string>Ta&amp;g...</string>
+   </property>
+  </action>
+  <action name="action_FontStatusbar">
+   <property name="text">
+    <string>&amp;Statusbar</string>
+   </property>
+  </action>
+  <action name="action_FontDockingWindow">
+   <property name="text">
+    <string>&amp;Docking Window</string>
+   </property>
+  </action>
+  <action name="action_FontMenu">
+   <property name="text">
+    <string>&amp;Menu</string>
    </property>
   </action>
  </widget>

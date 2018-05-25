@@ -269,6 +269,8 @@ private:
     // QTimer* taskMonitorTimer = nullptr;
 
 
+    void setMenuFont(QFont& font);
+
 protected:
     virtual void resizeEvent(QResizeEvent *event);
     void closeEvent(QCloseEvent *event);
@@ -329,6 +331,7 @@ protected:
     void setFontCommon2(const QString& savekey,
                         std::function<QFont (void)> getfunc,
                         std::function<void(QFont&)> setfunc);
+    QList<QWidget*> getAllDockingWindow();
 
 private slots:
     void editTag();
@@ -462,6 +465,12 @@ private slots:
     void on_action_FontTask_triggered();
 
     void on_action_FontTag_triggered();
+
+    void on_action_FontMenu_triggered();
+
+    void on_action_FontDockingWindow_triggered();
+
+    void on_action_FontStatusbar_triggered();
 
 private:
     QThreadPool* pPoolFFmpeg_ = nullptr;

@@ -61,7 +61,8 @@ SOURCES += \
     docinfodialog.cpp \
     documentsql.cpp \
     taginputdialog.cpp \
-    tagitem.cpp
+    tagitem.cpp \
+    mycontextmenu.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -101,7 +102,8 @@ HEADERS += \
     documentsql.h \
     taginputdialog.h \
     tagitem.h \
-    sqlcommon.h
+    sqlcommon.h \
+    mycontextmenu.h
 
 FORMS += \
         mainwindow.ui \
