@@ -785,7 +785,7 @@ void MainWindow::on_directoryWidget_RemoveMissingItems()
 	
     gpSQL->RemoveAllMissingEntries(dir);
 
-    directoryChangedCommon(true);
+    itemChangedCommon(true);
 }
 void MainWindow::on_directoryWidget_UncheckAll()
 {
@@ -800,7 +800,7 @@ void MainWindow::on_directoryWidget_UncheckAll()
         }
     }
 
-	directoryChangedCommon();
+    itemChangedCommon();
 }
 //static bool widgetsListItemLessThan(const QListWidgetItem* v1, const QListWidgetItem* v2)
 //{
@@ -961,7 +961,7 @@ void MainWindow::on_LimitFirst_triggered(bool checked)
 
     Q_ASSERT(limitManager_);
     limitManager_->SetIndexFirst();
-    directoryChangedCommon(true);
+    itemChangedCommon(true);
 }
 void MainWindow::on_LimitPrev_triggered(bool checked)
 {
@@ -970,7 +970,7 @@ void MainWindow::on_LimitPrev_triggered(bool checked)
     Q_ASSERT(limitManager_);
     if(limitManager_->Decrement())
     {
-        directoryChangedCommon(true);
+        itemChangedCommon(true);
     }
 }
 
@@ -981,7 +981,7 @@ void MainWindow::on_LimitNext_triggered(bool checked)
     Q_ASSERT(limitManager_);
     if(limitManager_->Increment())
     {
-        directoryChangedCommon(true);
+        itemChangedCommon(true);
     }
 }
 void MainWindow::on_LimitLast_triggered(bool checked)
@@ -990,7 +990,7 @@ void MainWindow::on_LimitLast_triggered(bool checked)
 
     Q_ASSERT(limitManager_);
     limitManager_->SetIndexLast();
-    directoryChangedCommon(true);
+    itemChangedCommon(true);
 }
 void MainWindow::onCmbLint_currentIndexChanged(int index)
 {
@@ -998,7 +998,7 @@ void MainWindow::onCmbLint_currentIndexChanged(int index)
     Q_UNUSED(index);
     if(limitManager_->IsBlocking())
         return;
-    directoryChangedCommon(true);
+    itemChangedCommon(true);
 }
 
 bool MainWindow::LimitManager::Decrement()

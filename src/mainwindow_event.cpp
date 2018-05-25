@@ -44,7 +44,7 @@ void MainWindow::showEvent( QShowEvent* event )
     ui->txtLog->setMaximumSize(10000,10000);
     ui->listTask->setMaximumSize(10000,10000);
 
-    directoryChangedCommon();
+    itemChangedCommon();
     tableSortParameterChanged(sortManager_.GetCurrentSort(), sortManager_.GetCurrentRev());  // tableModel_->GetSortColumn(), tableModel_->GetSortReverse());
 
 
@@ -84,6 +84,7 @@ void MainWindow::StoreDocument()
     if(!sels.isEmpty())
         mi = sels[0];
     pDoc_->Store(ui->directoryWidget,
+                 ui->listTag,
                  mi);
 }
 

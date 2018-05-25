@@ -121,7 +121,8 @@ DocumentSql::DocumentSql(const QString& file) :
                    ")"
                    );
         qDebug() << q.lastError().text();
-
+        q.exec("ALTER TABLE Settings ADD COLUMN alltagselected INT NOT NULL DEFAULT '0'");
+        qDebug() << q.lastError().text();
         {
             // Create record 1
             q.exec("SELECT id FROM Settings WHERE id=1");
@@ -189,6 +190,9 @@ DocumentSql::DocumentSql(const QString& file) :
         qDebug() << q.lastError().text();
         q.exec("CREATE UNIQUE INDEX idx_Tag_tagid_dbid ON Tag(tagid,dbid)");
         qDebug() << q.lastError().text();
+        q.exec("ALTER TABLE Tag ADD COLUMN selected INT NOT NULL DEFAULT '0'");
+        q.exec("ALTER TABLE Tag ADD COLUMN checked INT NOT NULL DEFAULT '0'");
+
         q.exec("SELECT name FROM sqlite_master WHERE type='table' AND name='Tag';");
         q.next();
         if("Tag" != q.value("name").toString())
@@ -233,29 +237,45 @@ DocumentSql::~DocumentSql()
     gpSQL->DetachDocument();
 }
 
-bool DocumentSql::isAllSelected() const
+bool DocumentSql::isAllSelectedCommon(const QString& col) const
 {
-    MYQMODIFIER QSqlQuery query("SELECT allselected FROM Settings WHERE id=1");
+    QSqlQuery query("SELECT " + col + " FROM Settings WHERE id=1");
 
     SQC(query,exec());
     if(!query.next())
         return false;
     bool ok;
-    bool ret = query.value("allselected").toInt(&ok) != 0;
+    bool ret = query.value(col).toInt(&ok) != 0;
     if(!ok)
         return false;
     return ret;
 }
-bool DocumentSql::setAllSelected(bool b)
+
+bool DocumentSql::isDirAllSelected() const
 {
-    MYQMODIFIER QSqlQuery query("UPDATE Settings SET allselected=? WHERE id=1");
-
-	query.bindValue(0, b ? 1 : 0);
-	SQC(query,exec());
-	return true;
+    return isAllSelectedCommon("allselected");
 }
+bool DocumentSql::isTagAllSelected() const
+{
+    return isAllSelectedCommon("alltagselected");
+}
+bool DocumentSql::setAllSelectedCommon(const QString& col, bool b)
+{
+    QSqlQuery query("UPDATE Settings SET " + col + "=? WHERE id=1");
 
-bool DocumentSql::isAllChecked() const
+    query.bindValue(0, b ? 1 : 0);
+    SQC(query,exec());
+    return true;
+}
+bool DocumentSql::setDirAllSelected(bool b)
+{
+    return setAllSelectedCommon("allselected",b);
+}
+bool DocumentSql::setTagAllSelected(bool b)
+{
+    return setAllSelectedCommon("alltagselected",b);
+}
+bool DocumentSql::isDirAllChecked() const
 {
     MYQMODIFIER QSqlQuery query("SELECT allchecked FROM Settings WHERE id=1");
     SQC(query,exec());
@@ -267,7 +287,7 @@ bool DocumentSql::isAllChecked() const
         return false;
     return ret;
 }
-bool DocumentSql::setAllChecked(bool b)
+bool DocumentSql::setDirAllChecked(bool b)
 {
     MYQMODIFIER QSqlQuery query("UPDATE Settings SET allchecked=? WHERE id=1");
 
@@ -622,5 +642,33 @@ bool DocumentSql::GetOpenCountAndLastAccess(const qint64& id, int& opencount, qi
     opencount = query.value("opencount").toInt();
     lastaccess = query.value("lastaccess").toLongLong();
 
+    return true;
+}
+bool DocumentSql::GetTagSelectedAndChecked(const qint64& tagid, bool& bSel, bool& bCheck)
+{
+    MYQMODIFIER QSqlQuery query = myq("SELECT selected,checked FROM Tag WHERE tagid=? AND dbid=?");
+    int i=0;
+    query.bindValue(i++,tagid);
+    query.bindValue(i++,gpSQL->getDbID());
+    SQC(query,exec());
+    if(!query.next())
+    {
+        Q_ASSERT(false);
+        return false;
+    }
+    bSel = query.value("selected").toInt() != 0;
+    bCheck = query.value("checked").toInt() != 0;
+    return true;
+}
+bool DocumentSql::SetTagSelectedAndChecked(const qint64& tagid, const bool bSel, const bool bCheck)
+{
+    MYQMODIFIER QSqlQuery query = myq("UPDATE Tag SET selected=?,checked=? WHERE tagid=? AND dbid=?");
+    int i=0;
+    query.bindValue(i++,bSel ? 1:0);
+    query.bindValue(i++, bCheck?1:0);
+    query.bindValue(i++,tagid);
+    query.bindValue(i++,gpSQL->getDbID());
+    SQC(query,exec());
+    Q_ASSERT(query.numRowsAffected()==1);
     return true;
 }

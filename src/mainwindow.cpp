@@ -592,24 +592,33 @@ void MainWindow::LoadTags()
 
     // Tags
     ui->listTag->clear();
+    if(!pDoc_)
+        return;
+
     TagItem* tagAll = new TagItem(ui->listTag, -1, TagItem::TI_ALL);
     tagAll->setText(tr("All"));
     tagAll->setIcon(QIcon(":resource/images/mailbox.png"));
+    tagAll->setSelected(pDoc_->IsTagAllSelected());
     ui->listTag->addItem(tagAll);
 
     QList<QPair<qint64, QString> > tags;
-    if(pDoc_ && pDoc_->GetAllTags(tags))
+    if(pDoc_->GetAllTags(tags))
     {
         // for(qint64& key : tags.keys())
         for( const QPair<qint64,QString>& pair : tags)
         {
-            qint64 key = pair.first;
+            qint64 tagid = pair.first;
             QString text = pair.second;
-            TagItem* tagUser = new TagItem(ui->listTag, key, TagItem::TI_NORMAL);
+            TagItem* tagUser = new TagItem(ui->listTag, tagid, TagItem::TI_NORMAL);
             tagUser->setText(text);
             tagUser->setIcon(QIcon(":resource/images/tag.png"));
-            tagUser->setFlags(tagUser->flags() | Qt::ItemIsUserCheckable); // set checkable flag
-            tagUser->setCheckState(Qt::Unchecked); // AND initialize check state
+            tagUser->setFlags(tagUser->flags() | Qt::ItemIsUserCheckable);
+            bool bSel,bCheck;
+            if(pDoc_->GetTagSelectedAndChecked(tagid,bSel,bCheck))
+            {
+                tagUser->setSelected(bSel);
+                tagUser->setCheckState(bCheck ? Qt::Checked : Qt::Unchecked);
+            }
             ui->listTag->addItem(tagUser);
         }
     }
@@ -624,8 +633,8 @@ void MainWindow::InitDocument()
     ui->directoryWidget->clear();
 
     AddUserEntryDirectory(DirectoryItem::DI_ALL, QString(),
-                          pDoc_->IsAllSelected(),
-                          pDoc_->IsAllChecked());
+                          pDoc_->IsDirAllSelected(),
+                          pDoc_->IsDirAllChecked());
     const int count = pDoc_==nullptr ? 0 : pDoc_->dirCount();
     for(int i=1 ; i <= count ; ++i)
     {
@@ -638,7 +647,7 @@ void MainWindow::InitDocument()
 
     LoadTags();
 
-    directoryChangedCommon(true);
+    itemChangedCommon(true);
 }
 //void MainWindow::setTableSpan()
 //{
@@ -999,7 +1008,7 @@ void MainWindow::afterGetDir(int loopId, int id,
 
 
     if(needUpdate)
-        directoryChangedCommon();
+        itemChangedCommon();
 }
 void MainWindow::finished_GetDir(int loopId, int id, const QString& dir)
 {
@@ -1332,10 +1341,10 @@ void MainWindow::on_directoryWidget_selectionChanged(const QItemSelection &selec
     Q_UNUSED(deselected);
     if(limitManager_)
         limitManager_->Reset();
-    directoryChangedCommon();
+    itemChangedCommon();
 }
 
-void MainWindow::directoryChangedCommon(bool bForceRead)
+void MainWindow::itemChangedCommon(bool bForceRead)
 {
 	if (!initialized_ || closed_)
 		return;
@@ -1604,7 +1613,7 @@ void MainWindow::on_directoryWidget_itemChanged(QListWidgetItem *item)
         limitManager_->Reset();
 
 
-    directoryChangedCommon();
+    itemChangedCommon();
 }
 
 void MainWindow::tableItemCountChanged()
@@ -1639,7 +1648,7 @@ void MainWindow::on_action_Find_triggered()
     if(limitManager_)
         limitManager_->Reset();
 
-    directoryChangedCommon(true);
+    itemChangedCommon(true);
 
     InsertUniqueTextToComboBox(*cmbFind_, cur);
     cmbFind_->setCurrentIndex(0);
@@ -1658,7 +1667,7 @@ void MainWindow::on_action_Clear_triggered()
         limitManager_->Reset();
 
     cmbFind_->setCurrentText(QString());
-    directoryChangedCommon(true);
+    itemChangedCommon(true);
 
     if(!selPath.isEmpty())
     {
@@ -2003,12 +2012,6 @@ void MainWindow::on_action_Help_triggered()
 
 void MainWindow::on_action_Add_new_tag_triggered()
 {
-//    qint64 id = getSelectedID();
-//    if(id <=0)
-//    {
-//        Alert(this,tr("No item selected"));
-//        return;
-//    }
     if(!pDoc_)
     {
         Alert(this,
@@ -2024,8 +2027,8 @@ void MainWindow::on_action_Add_new_tag_triggered()
     QString yomi=dlg.yomi();
     if(pDoc_->IsTagExist(tag))
     {
-        if(!YesNo(this,tr("Tag \"{0}\" already exists. Do you want to overwrite?").arg(tag)))
-            return;
+        Alert(this,tr("Tag \"{0}\" already exists.").arg(tag));
+        return;
     }
 
     if(!pDoc_->Insert(tag, yomi))
@@ -2043,7 +2046,7 @@ void MainWindow::on_listTag_itemSelectionChanged()
 {
     if(limitManager_)
         limitManager_->Reset();
-    directoryChangedCommon();
+    itemChangedCommon();
 }
 
 void MainWindow::on_actionShow_All_Item_triggered()
@@ -2069,7 +2072,7 @@ void MainWindow::on_actionShow_All_Item_triggered()
         Q_ASSERT(tall->IsAllItem());
         tall->setSelected(true);
     }
-    directoryChangedCommon(true);
+    itemChangedCommon(true);
 }
 
 void MainWindow::editTag()
@@ -2137,22 +2140,68 @@ void MainWindow::deleteTag()
      delete ui->listTag->takeItem(ui->listTag->row(ti));
 }
 
+void MainWindow::checkAllTagCommon(const bool bCheck)
+{
+    {
+        BlockedBool tb(&tagChanging_);
+        for(int i=0 ; i < ui->listTag->count();++i)
+        {
+            TagItem* ti = (TagItem*)ui->listTag->item(i);
+            if(ti->IsNormalItem())
+            {
+                ti->setCheckState(bCheck ? Qt::Checked : Qt::Unchecked);
+            }
+        }
+    }
+    itemChangedCommon();
+}
+void MainWindow::checkAllTag()
+{
+    checkAllTagCommon(true);
+}
+void MainWindow::uncheckAllTag()
+{
+    checkAllTagCommon(false);
+}
 void MainWindow::showTagContextMenu(const QPoint &pos)
 {
-    TagItem* ti =(TagItem*) ui->listTag->currentItem();
-    if(ti->IsAllItem())
+    TagItem* ti =(TagItem*) ui->listTag->itemAt(pos);
+    if(!ti)
+    {
+        // no item selected
+        QPoint globalPos = ui->listTag->mapToGlobal(pos);
+
+        // Create menu and insert some actions
+        QMenu myMenuFreeArea;
+        myMenuFreeArea.addAction(ui->action_Add_new_tag);
+        myMenuFreeArea.addSeparator();
+        myMenuFreeArea.addAction(tr("&Check All"), this, SLOT(checkAllTag()));
+        myMenuFreeArea.addAction(tr("&Uncheck All"), this, SLOT(uncheckAllTag()));
+
+        // Show context menu at handling position
+        myMenuFreeArea.exec(globalPos);
+    }
+    else if(ti->IsAllItem())
+    {
         return;
+    }
+    else if(ti->IsNormalItem())
+    {
+        // Handle global position
+        QPoint globalPos = ui->listTag->mapToGlobal(pos);
 
-    // Handle global position
-    QPoint globalPos = ui->listTag->mapToGlobal(pos);
+        // Create menu and insert some actions
+        QMenu myMenuItemArea;
+        myMenuItemArea.addAction(tr("&Edit"), this, SLOT(editTag()));
+        myMenuItemArea.addAction(tr("&Delete"), this, SLOT(deleteTag()));
 
-    // Create menu and insert some actions
-    QMenu myMenu;
-    myMenu.addAction(tr("&Edit"), this, SLOT(editTag()));
-    myMenu.addAction(tr("&Delete"), this, SLOT(deleteTag()));
-
-    // Show context menu at handling position
-    myMenu.exec(globalPos);
+        // Show context menu at handling position
+        myMenuItemArea.exec(globalPos);
+    }
+    else
+    {
+        Q_ASSERT(false);
+    }
 }
 QString MainWindow::GetTags(const qint64& id)
 {
@@ -2191,5 +2240,5 @@ void MainWindow::on_listTag_itemChanged(QListWidgetItem *)
 {
     if(limitManager_)
         limitManager_->Reset();
-    directoryChangedCommon();
+    itemChangedCommon();
 }

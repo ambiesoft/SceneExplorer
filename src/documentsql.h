@@ -46,12 +46,17 @@ public:
     QString getLastError() const {
         return lastError_;
     }
+    bool isAllSelectedCommon(const QString& col) const;
+    bool setAllSelectedCommon(const QString& col, bool b);
 
-    bool isAllSelected() const;
-	bool setAllSelected(bool b);
+    bool isDirAllSelected() const;
+    bool setDirAllSelected(bool b);
     
-	bool isAllChecked() const;
-	bool setAllChecked(bool b);
+    bool isDirAllChecked() const;
+    bool setDirAllChecked(bool b);
+
+    bool isTagAllSelected() const;
+    bool setTagAllSelected(bool b);
 
     int dirCount() const;
     QString getDirText(int i) const;
@@ -83,6 +88,8 @@ public:
 //    bool GetOpenCounts(QMap<qint64,int>& opencounts);
 //    bool GetLastAccesses(QMap<qint64,qint64>& lastaccesses);
     bool GetOpenCountAndLastAccess(const qint64& id, int& opencount, qint64& lastaccess);
+    bool GetTagSelectedAndChecked(const qint64& tagid, bool& bSel, bool& bCheck);
+    bool SetTagSelectedAndChecked(const qint64& tagid, const bool bSel, const bool bCheck);
 };
 
 #endif // DOCUMENTSQL_H

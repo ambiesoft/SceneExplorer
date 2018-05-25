@@ -321,10 +321,12 @@ protected:
 	QToolButton* tbLabelSort_ = nullptr;
 	
     void on_ShowMissingClicked_common(bool nNextCheck);
-
+    void checkAllTagCommon(const bool bCheck);
 private slots:
     void editTag();
     void deleteTag();
+    void checkAllTag();
+    void uncheckAllTag();
     void showTagContextMenu(const QPoint&);
     void on_action_Close_triggered();
     void on_action_About_triggered();
@@ -460,7 +462,7 @@ private:
             const QString& dir,
             bool sel,
             bool check);
-    void directoryChangedCommon(bool bForceRead=false);
+    void itemChangedCommon(bool bForceRead=false);
 
     void langChanged_common(const QString& lang);
 

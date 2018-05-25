@@ -69,13 +69,18 @@ public:
         return lastErr_;
     }
     void Store(QListWidget* pLW,
+               QListWidget* pListTag,
                const QModelIndex& index);
 
-    bool IsAllSelected() const {
-        return docSql_->isAllSelected();
+    bool IsDirAllSelected() const {
+        return docSql_->isDirAllSelected();
     }
-    bool IsAllChecked() const {
-        return docSql_->isAllChecked();
+    bool IsDirAllChecked() const {
+        return docSql_->isDirAllChecked();
+    }
+
+    bool IsTagAllSelected() const {
+        return docSql_->isTagAllSelected();
     }
 
     int dirCount() const;
@@ -143,7 +148,7 @@ public:
     {
         return docSql_->DeleteTag(tagid);
     }
-    bool GetTagsFromID(const qint64& id, QSet<qint64>& tagids)
+    bool GetTagsFromID(const qint64& id, QSet<qint64>& tagids) const
     {
         return docSql_->GetTagsFromID(id,tagids);
     }
@@ -155,9 +160,13 @@ public:
 //    {
 //        return docSql_->GetLastAccesses(lastaccesses);
 //    }
-    bool GetOpenCountAndLastAccess(const qint64& id, int& opencount, qint64& lastaccess)
+    bool GetOpenCountAndLastAccess(const qint64& id, int& opencount, qint64& lastaccess) const
     {
         return docSql_->GetOpenCountAndLastAccess(id,opencount,lastaccess);
+    }
+    bool GetTagSelectedAndChecked(const qint64& tagid, bool& bSel, bool& bCheck) const
+    {
+        return docSql_->GetTagSelectedAndChecked(tagid,bSel,bCheck);
     }
 };
 

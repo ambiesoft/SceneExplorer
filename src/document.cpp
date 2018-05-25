@@ -26,6 +26,7 @@
 #include "helper.h"
 #include "documentsql.h"
 #include "tableitemdata.h"
+#include "tagitem.h"
 #include "document.h"
 
 //const char KEY_KEY_USERENTRY_DIRECTORY_ALL_SELECTED[] = "entrydirectoryallselected";
@@ -166,6 +167,7 @@ bool Document::Load(const QString& file, const bool bMustExists)
 }
 
 void Document::Store(QListWidget* pLW,
+                     QListWidget* pListTag,
                      const QModelIndex& index)
 {
 	int normalCount = 0;
@@ -174,10 +176,8 @@ void Document::Store(QListWidget* pLW,
         DirectoryItem* item = (DirectoryItem*)pLW->item(i);
         if(item->IsAllItem())
         {
-			docSql_->setAllSelected(item->isSelected());
-			docSql_->setAllChecked(item->checkState() == Qt::Checked);
-            //s_->setValue(KEY_KEY_USERENTRY_DIRECTORY_ALL_SELECTED, item->isSelected());
-            //s_->setValue(KEY_KEY_USERENTRY_DIRECTORY_ALL_CHECKED, item->checkState()==Qt::Checked);
+            docSql_->setDirAllSelected(item->isSelected());
+            docSql_->setDirAllChecked(item->checkState() == Qt::Checked);
         }
         else if(item->IsNormalItem())
         {
@@ -190,6 +190,25 @@ void Document::Store(QListWidget* pLW,
         }
     }
 	docSql_->removeDirectoryOver(normalCount);
+
+    // save tag select state, each tag is saved when it's created or editted,
+    // here save only selection state
+    for(int i=0 ; i < pListTag->count(); ++i)
+    {
+        TagItem* ti = (TagItem*)pListTag->item(i);
+        if(ti->IsAllItem())
+        {
+            docSql_->setTagAllSelected(ti->isSelected());
+        }
+        else if(ti->IsNormalItem())
+        {
+            docSql_->SetTagSelectedAndChecked(ti->tagid(), ti->isSelected(),ti->IsChecked());
+        }
+        else
+        {
+            Q_ASSERT(false);
+        }
+    }
     docSql_->SetLastPos(index.row(),index.column());
 }
 
