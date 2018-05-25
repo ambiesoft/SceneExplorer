@@ -373,7 +373,7 @@
     </message>
     <message>
         <source>Movie file is empty.</source>
-        <translation>動画ファイルが空です。</translation>
+        <translation type="vanished">動画ファイルが空です。</translation>
     </message>
     <message>
         <source>placeHolder_ShowMissing</source>
@@ -577,7 +577,7 @@
     </message>
     <message>
         <source>&amp;Uncheck all</source>
-        <translation>すべてのチェックをはずす(&amp;U)</translation>
+        <translation type="vanished">すべてのチェックをはずす(&amp;U)</translation>
     </message>
     <message>
         <source>Move &amp;up</source>
@@ -882,6 +882,14 @@
     <message>
         <source>&amp;Uncheck All</source>
         <translation>すべてチェックしない(&amp;U)</translation>
+    </message>
+    <message>
+        <source>&lt;No Directories&gt;</source>
+        <translation>&lt;フォルダがありません&gt;</translation>
+    </message>
+    <message>
+        <source>&lt;No Tags&gt;</source>
+        <translation>&lt;タグがありません&gt;</translation>
     </message>
 </context>
 <context>

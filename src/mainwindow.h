@@ -342,6 +342,10 @@ private slots:
     void on_action_Options_triggered();
     void on_action_Pause_triggered();
     void on_action_Stop_triggered();
+    void on_menu_directory_triggered();
+    void on_menu_tag_triggered();
+    void onMenuTag_AboutToShow();
+    void onMenuFolder_AboutToShow();
     void onMenuTask_AboutToShow();
     void onMenuLanguage_AboutToShow();
     void onMenuDocking_windows_AboutToShow();

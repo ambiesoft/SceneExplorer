@@ -28,7 +28,6 @@ public:
     {
         TI_NORMAL,
         TI_ALL,
-        TI_MISSING,
     } ;
 private:
     qint64 tagid_;
@@ -51,9 +50,6 @@ public:
     }
     bool IsAllItem() const {
         return itemType_==TI_ALL;
-    }
-    bool IsMissingItem() const {
-        return itemType_==TI_MISSING;
     }
 
     bool IsChecked() const {

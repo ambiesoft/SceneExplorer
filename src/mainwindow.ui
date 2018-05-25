@@ -190,6 +190,7 @@
      <string>&amp;Folder</string>
     </property>
     <addaction name="action_Add_Folder"/>
+    <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menu_Tag">
     <property name="title">

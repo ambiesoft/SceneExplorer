@@ -42,6 +42,7 @@
 #include "sql.h"
 #include "helper.h"
 #include "blockedbool.h"
+#include "tagitem.h"
 
 #include "ui_mainwindow.h"
 #include "mainwindow.h"
@@ -144,7 +145,92 @@ void MainWindow::on_action_Options_triggered()
         }
     }
 }
+void MainWindow::on_menu_directory_triggered()
+{
+    QAction* action = (QAction*)sender();
+    if(!action)
+        return;
 
+    int index = action->data().toInt();
+    DirectoryItem* di = (DirectoryItem*) ui->directoryWidget->item(index);
+
+    di->setCheckState(di->IsChecked() ? Qt::Unchecked : Qt::Checked);
+}
+
+void MainWindow::onMenuFolder_AboutToShow()
+{
+    ui->menu_Folder->clear();
+    ui->menu_Folder->addAction(ui->action_Add_Folder);
+    ui->menu_Folder->addSeparator();
+
+    bool bAdded = false;
+    for(int i=0 ; i < ui->directoryWidget->count(); ++i)
+    {
+        DirectoryItem* di = (DirectoryItem*)ui->directoryWidget->item(i);
+        if(di->IsAllItem() || di->IsMissingItem())
+            continue;
+        bAdded = true;
+        QString dir = di->text();
+        QAction* action = new QAction(dir);
+        action->setCheckable(true);
+        action->setChecked(di->IsChecked());
+        action->setData(i);
+        QObject::connect(action, &QAction::triggered,
+                         this, &MainWindow::on_menu_directory_triggered);
+        ui->menu_Folder->addAction(action);
+    }
+
+    if(!bAdded)
+    {
+        QAction* actionNoDir = new QAction(tr("<No Directories>"));
+        actionNoDir->setEnabled(false);
+        ui->menu_Folder->addAction(actionNoDir);
+    }
+}
+
+void MainWindow::on_menu_tag_triggered()
+{
+    QAction* action = (QAction*)sender();
+    if(!action)
+        return;
+
+    int index = action->data().toInt();
+    TagItem* ti = (TagItem*) ui->listTag->item(index);
+
+    qDebug() << ti->IsChecked();
+    ti->setCheckState(ti->IsChecked() ? Qt::Unchecked : Qt::Checked);
+    qDebug() << ti->IsChecked();
+}
+void MainWindow::onMenuTag_AboutToShow()
+{
+    ui->menu_Tag->clear();
+    ui->menu_Tag->addAction(ui->action_Add_new_tag);
+    ui->menu_Tag->addSeparator();
+
+    bool bAdded = false;
+    for(int i=0; i < ui->listTag->count(); ++i)
+    {
+        TagItem* ti = (TagItem*)ui->listTag->item(i);
+        if(ti->IsAllItem())
+            continue;
+        bAdded=true;
+        QString text = ti->text();
+        QAction* action = new QAction(text);
+        action->setCheckable(true);
+        action->setChecked(ti->IsChecked());
+        action->setData(i);
+        QObject::connect(action, &QAction::triggered,
+                         this, &MainWindow::on_menu_tag_triggered);
+        ui->menu_Tag->addAction(action);
+    }
+
+    if(!bAdded)
+    {
+        QAction* actionNoDir = new QAction(tr("<No Tags>"));
+        actionNoDir->setEnabled(false);
+        ui->menu_Tag->addAction(actionNoDir);
+    }
+}
 void MainWindow::onMenuTask_AboutToShow()
 {
     qDebug() << "gPaused" << gPaused;

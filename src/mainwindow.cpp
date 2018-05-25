@@ -92,6 +92,10 @@ MainWindow::MainWindow(QWidget *parent,
 	// menu
     QObject::connect(ui->menu_Task, &QMenu::aboutToShow,
                      this, &MainWindow::onMenuTask_AboutToShow);
+    QObject::connect(ui->menu_Folder, &QMenu::aboutToShow,
+                     this, &MainWindow::onMenuFolder_AboutToShow);
+    QObject::connect(ui->menu_Tag, &QMenu::aboutToShow,
+                     this, &MainWindow::onMenuTag_AboutToShow);
     QObject::connect(ui->menu_Docking_windows, &QMenu::aboutToShow,
                      this, &MainWindow::onMenuDocking_windows_AboutToShow);
 //    QObject::connect(ui->menu_Favorites, &QMenu::aboutToShow,
