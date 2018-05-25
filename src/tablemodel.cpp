@@ -684,17 +684,24 @@ QString TableModel::GetSortColumnValue(SORTCOLUMNMY sc, TableItemDataPointer ite
 //    }
 //    return ret;
 //}
-bool TableModel::RenameEntry(const QString& dbDir,
-                 const QString& dbFile,
+bool TableModel::RenameEntry(const QString& oldDir,
+                 const QString& oldFile,
                  const QString& newdir,
                  const QString& newfile)
 {
-    TableItemDataPointer pID = mapsFullpathToItem_[pathCombine(dbDir,dbFile)];
+    QString oldfull = pathCombine(oldDir,oldFile);
+    TableItemDataPointer pID = mapsFullpathToItem_[oldfull];
 
     if(!pID)
         return false;
 
-    VERIFY(pID->Rename(dbDir,dbFile,newdir,newfile));
+    VERIFY(pID->Rename(oldDir,oldFile,newdir,newfile));
+
+    QString newfull = pathCombine(newdir,newfile);
+
+    // reset cache
+    mapsFullpathToItem_.remove(oldfull);
+    mapsFullpathToItem_.insert(newfull,pID);
 
     int row = itemDatas_.indexOf(pID);
     Q_ASSERT(row >= 0);

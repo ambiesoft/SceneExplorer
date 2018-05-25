@@ -1179,6 +1179,7 @@ void MainWindow::on_context_copySelectedVideoPath()
     if(movieFile.isEmpty()) { Alert(this, tr("No Video Selected.")); return;}
     QApplication::clipboard()->setText(movieFile);
 }
+#include "renamedialog.h"
 void MainWindow::on_context_Rename()
 {
     QString oldfull = getSelectedVideo(false);
@@ -1186,25 +1187,37 @@ void MainWindow::on_context_Rename()
 
     QString olddir = normalizeDir(QFileInfo(oldfull).absolutePath());
     QString oldname = QFileInfo(oldfull).fileName();
+    QString oldbasename = QFileInfo(oldfull).baseName();
+    QString oldext = QFileInfo(oldfull).suffix();
 
-    bool ok;
-    QString newname = QInputDialog::getText(this,
-                                         tr("Rename"),
-                                         tr("&New name:"),
-                                         QLineEdit::Normal,
-                                         oldname,
-                                         &ok,
-                                         GetDefaultDialogFlags());
-    if(!ok)
+    RenameDialog dlg(this);
+    dlg.setBasename(oldbasename);
+    dlg.setExt(oldext);
+//    QString newname = QInputDialog::getText(this,
+//                                         tr("Rename"),
+//                                         tr("&New name:"),
+//                                         QLineEdit::Normal,
+//                                         oldname,
+//                                         &ok,
+//                                         GetDefaultDialogFlags());
+//    if(!ok)
+//        return;
+    if(!dlg.exec())
         return;
-    if(newname.isEmpty())
+    QString newbasename = dlg.basename();
+    QString newext = dlg.ext();
+    if(newbasename.isEmpty() && newext.isEmpty())
+    {
+        Alert(this, tr("Name and extension is empty."));
         return;
+    }
 
-    if(newname==oldname)
+    if(newbasename==oldbasename && newext==oldext)
     {
         Alert(this,tr("New name is same as old name."));
         return;
     }
+    QString newname = newbasename + "." + newext;
 	QFile filefull(oldfull);
     if(!filefull.rename(pathCombine(olddir, newname)))
     {

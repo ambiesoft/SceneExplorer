@@ -357,7 +357,7 @@
     </message>
     <message>
         <source>&amp;New name:</source>
-        <translation>新しい名前(&amp;N):</translation>
+        <translation type="vanished">新しい名前(&amp;N):</translation>
     </message>
     <message>
         <source>New name is same as old name.</source>
@@ -641,7 +641,7 @@
     </message>
     <message>
         <source>Rename</source>
-        <translation>リネーム</translation>
+        <translation type="vanished">リネーム</translation>
     </message>
     <message>
         <source>&amp;Open</source>
@@ -890,6 +890,26 @@
     <message>
         <source>&lt;No Tags&gt;</source>
         <translation>&lt;タグがありません&gt;</translation>
+    </message>
+    <message>
+        <source>&amp;UI...</source>
+        <translation>&amp;UI...</translation>
+    </message>
+    <message>
+        <source>&amp;Statusbar</source>
+        <translation>ステータスバー(&amp;S)</translation>
+    </message>
+    <message>
+        <source>&amp;Docking Window</source>
+        <translation>ドッキングウィンドウ(&amp;D)</translation>
+    </message>
+    <message>
+        <source>&amp;Menu</source>
+        <translation>メニュー(&amp;M)</translation>
+    </message>
+    <message>
+        <source>Name and extension is empty.</source>
+        <translation>名前と拡張子が空白です。</translation>
     </message>
 </context>
 <context>
@@ -1236,6 +1256,25 @@
     <message>
         <source>&quot;%1&quot; is not accessible.</source>
         <translation>&quot;%1&quot; にアクセスできません。</translation>
+    </message>
+</context>
+<context>
+    <name>RenameDialog</name>
+    <message>
+        <source>Dialog</source>
+        <translation type="obsolete">ダイアログ</translation>
+    </message>
+    <message>
+        <source>&amp;Name:</source>
+        <translation>名前(&amp;N):</translation>
+    </message>
+    <message>
+        <source>&amp;Extension:</source>
+        <translation>拡張子(&amp;E):</translation>
+    </message>
+    <message>
+        <source>Rename</source>
+        <translation>リネーム</translation>
     </message>
 </context>
 <context>

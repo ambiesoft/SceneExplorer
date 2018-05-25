@@ -62,7 +62,8 @@ SOURCES += \
     documentsql.cpp \
     taginputdialog.cpp \
     tagitem.cpp \
-    mycontextmenu.cpp
+    mycontextmenu.cpp \
+    renamedialog.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -103,7 +104,8 @@ HEADERS += \
     taginputdialog.h \
     tagitem.h \
     sqlcommon.h \
-    mycontextmenu.h
+    mycontextmenu.h \
+    renamedialog.h
 
 FORMS += \
         mainwindow.ui \
@@ -113,7 +115,8 @@ FORMS += \
     optionextension.ui \
     aboutdialog.ui \
     docinfodialog.ui \
-    taginputdialog.ui
+    taginputdialog.ui \
+    renamedialog.ui
 
 RC_FILE = app.rc
 
