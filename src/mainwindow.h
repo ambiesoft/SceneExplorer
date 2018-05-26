@@ -333,6 +333,7 @@ protected:
                         std::function<void(QFont&)> setfunc);
     QList<QWidget*> getAllDockingWindow();
 
+
 private slots:
     void editTag();
     void deleteTag();
@@ -350,6 +351,7 @@ private slots:
     void onMenuTag_AboutToShow();
     void onMenuFolder_AboutToShow();
     void onMenuTask_AboutToShow();
+    void onMenuEdit_AboutToShow();
     void onMenuLanguage_AboutToShow();
     void onMenuDocking_windows_AboutToShow();
     // void onMenu_Favorites_AboutToShow();
@@ -471,6 +473,8 @@ private slots:
     void on_action_FontDockingWindow_triggered();
 
     void on_action_FontStatusbar_triggered();
+
+    void on_action_Refresh_triggered();
 
 private:
     QThreadPool* pPoolFFmpeg_ = nullptr;

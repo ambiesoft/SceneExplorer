@@ -20,5 +20,6 @@
         <file>translations/i18n_Japanese.qm</file>
         <file>resource/images/mailbox.png</file>
         <file>resource/images/tag.png</file>
+        <file>resource/images/refresh.png</file>
     </qresource>
 </RCC>

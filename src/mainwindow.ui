@@ -69,7 +69,7 @@
      <x>0</x>
      <y>0</y>
      <width>1009</width>
-     <height>21</height>
+     <height>23</height>
     </rect>
    </property>
    <property name="font">
@@ -171,6 +171,7 @@
      <addaction name="action_DockOutput"/>
     </widget>
     <addaction name="actionShow_All_Item"/>
+    <addaction name="action_Refresh"/>
     <addaction name="separator"/>
     <addaction name="actionSort_by_file_name"/>
     <addaction name="actionSort_by_file_size"/>
@@ -212,6 +213,8 @@
     <property name="title">
      <string>&amp;Edit</string>
     </property>
+    <addaction name="action_Copy"/>
+    <addaction name="action_Paste"/>
    </widget>
    <addaction name="menu_File"/>
    <addaction name="menu_Edit"/>
@@ -244,6 +247,7 @@
     <bool>false</bool>
    </attribute>
    <addaction name="actionShow_All_Item"/>
+   <addaction name="action_Refresh"/>
    <addaction name="placeHolder_Sort"/>
    <addaction name="separator"/>
    <addaction name="action_Top"/>
@@ -801,6 +805,25 @@
   <action name="action_FontMenu">
    <property name="text">
     <string>&amp;Menu</string>
+   </property>
+  </action>
+  <action name="action_Refresh">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/resource/images/refresh.png</normaloff>:/resource/images/refresh.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Refresh</string>
+   </property>
+  </action>
+  <action name="action_Copy">
+   <property name="text">
+    <string>&amp;Copy</string>
+   </property>
+  </action>
+  <action name="action_Paste">
+   <property name="text">
+    <string>&amp;Paste</string>
    </property>
   </action>
  </widget>

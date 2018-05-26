@@ -63,7 +63,8 @@ SOURCES += \
     taginputdialog.cpp \
     tagitem.cpp \
     mycontextmenu.cpp \
-    renamedialog.cpp
+    renamedialog.cpp \
+    mainwindow_ctor.cpp
 
 HEADERS += \
         mainwindow.h \

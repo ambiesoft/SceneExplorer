@@ -251,6 +251,11 @@ void MainWindow::onMenuTask_AboutToShow()
     qDebug() << "gPaused" << gPaused;
     ui->action_Pause->setChecked(gPaused);
 }
+void MainWindow::onMenuEdit_AboutToShow()
+{
+}
+
+
 void MainWindow::onMenuDocking_windows_AboutToShow()
 {
     ui->action_DockFolder->setChecked(!ui->dockFolder->isHidden());
