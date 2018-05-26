@@ -27,7 +27,7 @@
 #include <QComboBox>
 #include <QList>
 #include <QCommandLineParser>
-
+#include <QApplication>
 
 
 
@@ -440,4 +440,8 @@ QSqlQuery myq(const QString& sql)
         return q;
     }
     return q;
+}
+void setClipboardText(const QString& text)
+{
+    QApplication::clipboard()->setText(text);
 }

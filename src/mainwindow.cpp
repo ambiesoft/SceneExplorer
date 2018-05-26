@@ -44,7 +44,7 @@
 #include <QFontDialog>
 #include <QInputDialog>
 
-#include "ui_mainwindow.h"
+
 #include "taskgetdir.h"
 #include "taskffmpeg.h"
 #include "optionfontdialog.h"
@@ -72,6 +72,7 @@
 #include "taginputdialog.h"
 #include "mycontextmenu.h"
 
+#include "ui_mainwindow.h"
 #include "mainwindow.h"
 
 using namespace Consts;
@@ -2003,4 +2004,19 @@ void MainWindow::on_action_FontStatusbar_triggered()
 void MainWindow::on_action_Refresh_triggered()
 {
     itemChangedCommon(true);
+}
+
+void MainWindow::onMenuEdit_AboutToShow()
+{
+    OnUpdateEditCopy(ui->action_Copy);
+}
+
+void MainWindow::on_action_Paste_triggered()
+{
+
+}
+
+void MainWindow::on_action_Select_All_triggered()
+{
+
 }

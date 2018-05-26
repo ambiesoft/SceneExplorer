@@ -63,4 +63,5 @@ QString ExpandEnv(const QString& str);
 bool isUUID(const QString& s);
 QSqlQuery myq(const QString& sql);
 
+void setClipboardText(const QString& text);
 #endif // HELPER_H

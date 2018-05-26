@@ -22,6 +22,7 @@ ui_optionextension.h
 ui_aboutdialog.h
 ui_docinfodialog.h
 ui_taginputdialog.h
+ui_renamedialog.h
 
 /build-*
 *.user

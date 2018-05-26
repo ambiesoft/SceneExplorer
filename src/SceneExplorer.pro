@@ -64,7 +64,8 @@ SOURCES += \
     tagitem.cpp \
     mycontextmenu.cpp \
     renamedialog.cpp \
-    mainwindow_ctor.cpp
+    mainwindow_ctor.cpp \
+    mainwindow_oncopy.cpp
 
 HEADERS += \
         mainwindow.h \

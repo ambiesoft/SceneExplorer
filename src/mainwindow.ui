@@ -215,6 +215,8 @@
     </property>
     <addaction name="action_Copy"/>
     <addaction name="action_Paste"/>
+    <addaction name="separator"/>
+    <addaction name="action_Select_All"/>
    </widget>
    <addaction name="menu_File"/>
    <addaction name="menu_Edit"/>
@@ -402,7 +404,11 @@
       <number>0</number>
      </property>
      <item>
-      <widget class="QListView" name="listTask"/>
+      <widget class="QListView" name="listTask">
+       <property name="selectionMode">
+        <enum>QAbstractItemView::ExtendedSelection</enum>
+       </property>
+      </widget>
      </item>
     </layout>
    </widget>
@@ -824,6 +830,11 @@
   <action name="action_Paste">
    <property name="text">
     <string>&amp;Paste</string>
+   </property>
+  </action>
+  <action name="action_Select_All">
+   <property name="text">
+    <string>&amp;Select All</string>
    </property>
   </action>
  </widget>

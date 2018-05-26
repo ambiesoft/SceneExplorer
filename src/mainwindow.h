@@ -476,7 +476,27 @@ private slots:
 
     void on_action_Refresh_triggered();
 
+    void on_action_Copy_triggered();
+
+    void on_action_Paste_triggered();
+
+    void on_action_Select_All_triggered();
+
 private:
+    void OnCopyTable();
+    void OnCopyDirectory();
+    void OnCopyTask();
+    void OnCopyLog();
+    void OnCopyTag();
+
+    void OnUpdateEditCopy(QAction* pAction);
+
+    void OnUpdateCopyTable(QAction* pAction);
+    void OnUpdateCopyDirectory(QAction* pAction);
+    void OnUpdateCopyTask(QAction* pAction);
+    void OnUpdateCopyLog(QAction* pAction);
+    void OnUpdateCopyTag(QAction* pAction);
+
     QThreadPool* pPoolFFmpeg_ = nullptr;
     QThreadPool* getPoolFFmpeg();
 
