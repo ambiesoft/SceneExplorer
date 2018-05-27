@@ -300,18 +300,29 @@ void MainWindow::InitDocument()
 
     ui->directoryWidget->clear();
 
-    AddUserEntryDirectory(DirectoryItem::DI_ALL, QString(),
+    AddUserEntryDirectory(DirectoryItem::DI_ALL,
+                          -1,
+                          QString(),
                           pDoc_->IsDirAllSelected(),
                           pDoc_->IsDirAllChecked());
-    const int count = pDoc_==nullptr ? 0 : pDoc_->dirCount();
-    for(int i=1 ; i <= count ; ++i)
+//    const int count = pDoc_==nullptr ? 0 : pDoc_->dirCount();
+//    for(int i=1 ; i <= count ; ++i)
+//    {
+//        AddUserEntryDirectory(DirectoryItem::DI_NORMAL,
+//                              po
+//                              pDoc_->GetDEText(i),
+//                              pDoc_->IsDESelected(i),
+//                              pDoc_->IsDEChecked(i));
+//    }
+    QList<DirectoryItem*> dirs;
+    pDoc_->GetAllDirs(dirs);
+    for(DirectoryItem* di : dirs)
     {
-        AddUserEntryDirectory(DirectoryItem::DI_NORMAL,
-                              pDoc_->GetDEText(i),
-                              pDoc_->IsDESelected(i),
-                              pDoc_->IsDEChecked(i));
+        ui->directoryWidget->addItem(di);
     }
-    AddUserEntryDirectory(DirectoryItem::DI_MISSING, QString(), false, false);
+    AddUserEntryDirectory(DirectoryItem::DI_MISSING,
+                          -2,
+                          QString(), false, false);
 
     LoadTags();
 
@@ -1398,15 +1409,41 @@ void MainWindow::on_tableView_scrollChanged(int pos)
         // ui->tableView->resizeRowToContents(mi.row());
     }
 }
-
+bool MainWindow::HasDirectory(const QString& dir)
+{
+    QString dirNormlized = normalizeDir(dir);
+    for(int i=0 ; i < ui->directoryWidget->count();++i)
+    {
+        DirectoryItem* di = (DirectoryItem*)ui->directoryWidget->item(i);
+        if(di->text()==dirNormlized)
+            return true;
+    }
+    return false;
+}
 void MainWindow::on_action_Add_Folder_triggered()
 {
+    if(!pDoc_)
+        return;
+
     QString dir = QFileDialog::getExistingDirectory(this, tr("Open Directory"),lastSelectedAddFolderDir_);
     if(dir.isEmpty())
         return;
     lastSelectedAddFolderDir_ = dir;
 
-    AddUserEntryDirectory(DirectoryItem::DI_NORMAL, normalizeDir(dir), false, false);
+    if(HasDirectory(dir))
+    {
+        Alert(this, QString(tr("Directory '%1' already exists.")).arg(dir));
+        return;
+    }
+
+    DirectoryItem* newdi=nullptr;
+    if(!pDoc_->InsertDirectory(dir, newdi))
+    {
+        Alert(this,tr("Failed to insert directory into Database."));
+        return;
+    }
+
+    ui->directoryWidget->addItem(newdi);
 }
 
 void MainWindow::on_action_Extentions_triggered()

@@ -31,15 +31,17 @@ public:
         DI_MISSING,
     } ;
 private:
+    qint64 dirid_;
     DirectoryItemType itemType_;
+    QFileIconProvider fiProvider_;
 
 public:
     DirectoryItem(QListWidget* parent,
-                  DirectoryItemType itemType) :
-        QListWidgetItem(parent),
-        itemType_(itemType)
-    {
-
+                  const qint64& dirid,
+                  DirectoryItemType itemType,
+                  const QString& text);
+    qint64 dirid() const {
+        return dirid_;
     }
     bool IsNormalItem() const {
         return itemType_==DI_NORMAL;

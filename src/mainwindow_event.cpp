@@ -86,6 +86,8 @@ void MainWindow::StoreDocument()
     pDoc_->Store(ui->directoryWidget,
                  ui->listTag,
                  mi);
+
+
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {

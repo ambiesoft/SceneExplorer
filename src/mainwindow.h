@@ -51,6 +51,8 @@ namespace Ui {
 class MainWindow;
 }
 
+#define CHECK_DOCUMENT(doc) do { if(!doc) { Alert(this, tr("No Document")); return;}} while(false)
+
 class MainWindow : public QMainWindow, IMainWindow
 {
     Q_OBJECT
@@ -510,9 +512,11 @@ private:
 
     void AddUserEntryDirectory(
             DirectoryItem::DirectoryItemType itemType,
+            const qint64& dirid,
             const QString& dir,
             bool sel,
             bool check);
+    bool HasDirectory(const QString& dir);
     void itemChangedCommon(bool bForceRead=false);
 
     void langChanged_common(const QString& lang);
@@ -520,7 +524,7 @@ private:
     void StartScan(QListWidgetItem* item);
     void StartScan(const QString& dir);
 
-    QFileIconProvider fiProvider_;
+    // QFileIconProvider fiProvider_;
 
 
     TableModel* tableModel_;
@@ -560,6 +564,7 @@ private:
     bool CloseDocument();
     void InitDocument();
     void LoadTags();
+    void directoryWidgetMoveUpCommon(const bool bUp);
 public slots:
 //    void sayBorn(int id,
 //                   const QString& movieFile);

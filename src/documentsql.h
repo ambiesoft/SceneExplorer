@@ -24,7 +24,7 @@
 #include "tableitemdata.h"
 
 #define DBVERSIONDOC 1
-
+class DirectoryItem;
 class DocumentSql : public QObject
 {
     Q_OBJECT
@@ -60,7 +60,7 @@ public:
 
     int dirCount() const;
     QString getDirText(int i) const;
-	bool setDirectory(int index, const QString& text, bool bSel, bool bCheck);
+    bool setDirectory(int index, DirectoryItem* di);
 
     bool isDirSelected(int index) const;
 	// bool setDirSelected(int index, bool b);
@@ -90,6 +90,9 @@ public:
     bool GetOpenCountAndLastAccess(const qint64& id, int& opencount, qint64& lastaccess);
     bool GetTagSelectedAndChecked(const qint64& tagid, bool& bSel, bool& bCheck);
     bool SetTagSelectedAndChecked(const qint64& tagid, const bool bSel, const bool bCheck);
+    bool setDirNormalItemState(const DirectoryItem* item);
+    bool GetAllDirs(QList<DirectoryItem*>& dirs) const;
+    bool InsertDirectory(const QString& dir, DirectoryItem*& newdi);
 };
 
 #endif // DOCUMENTSQL_H

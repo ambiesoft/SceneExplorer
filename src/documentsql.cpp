@@ -27,6 +27,7 @@
 #include "tableitemdata.h"
 #include "helper.h"
 #include "sql.h"
+#include "directoryitem.h"
 
 #include "documentsql.h"
 
@@ -279,6 +280,18 @@ bool DocumentSql::setTagAllSelected(bool b)
 {
     return setAllSelectedCommon("alltagselected",b);
 }
+
+bool DocumentSql::setDirNormalItemState(const DirectoryItem* item)
+{
+    QSqlQuery query = myq("UPDATE " + docdb("Directories") + " SET selected=?, checked=? WHERE id=?");
+    int i=0;
+    query.bindValue(i++, item->isSelected());
+    query.bindValue(i++, item->IsChecked());
+    query.bindValue(i++, item->dirid());
+    SQC(query,exec());
+    qDebug() << query.numRowsAffected();
+    return true;
+}
 bool DocumentSql::isDirAllChecked() const
 {
     MYQMODIFIER QSqlQuery query("SELECT allchecked FROM " + docdb("Settings") + " WHERE id=1");
@@ -320,15 +333,15 @@ QString DocumentSql::getDirText(int index) const
         return QString();
     return query.value(0).toString();
 }
-bool DocumentSql::setDirectory(int index, const QString& text, bool bSel, bool bCheck)
+bool DocumentSql::setDirectory(int index, DirectoryItem* di)
 {
     MYQMODIFIER QSqlQuery query = myq("INSERT OR REPLACE INTO " + docdb("Directories") + " (id, directory, selected, checked) VALUES (?,?,?,?)");
 
 	int i = 0;
 	query.bindValue(i++, index);
-	query.bindValue(i++, text);
-	query.bindValue(i++, bSel?1:0);
-	query.bindValue(i++, bCheck?1:0);
+    query.bindValue(i++, di->text());
+    query.bindValue(i++, di->isSelected() ? 1 : 0);
+    query.bindValue(i++, di->IsChecked() ? 1 : 0);
 	SQC(query, exec());
 	return true;
 }
@@ -677,5 +690,44 @@ bool DocumentSql::SetTagSelectedAndChecked(const qint64& tagid, const bool bSel,
     query.bindValue(i++,gpSQL->getDbID());
     SQC(query,exec());
     Q_ASSERT(query.numRowsAffected()==1);
+    return true;
+}
+bool DocumentSql::GetAllDirs(QList<DirectoryItem*>& dirs) const
+{
+    MYQMODIFIER QSqlQuery query("SELECT * FROM " + docdb("Directories"));
+    SQC(query,exec());
+    while(query.next())
+    {
+        DirectoryItem* di = new DirectoryItem(
+                    nullptr,
+                    query.value("id").toLongLong(),
+                    DirectoryItem::DirectoryItemType::DI_NORMAL,
+                    query.value("directory").toString());
+        di->setSelected(query.value("selected").toInt() != 0);
+        di->setCheckState(query.value("checked").toInt() != 0 ? Qt::Checked : Qt::Unchecked);
+
+        dirs.append(di);
+    }
+    return true;
+}
+bool DocumentSql::InsertDirectory(const QString& dirOrig, DirectoryItem*& newdi)
+{
+    MYQMODIFIER QSqlQuery query = myq("INSERT INTO " + docdb("Directories") + " (directory) VALUES (?)");
+
+    QString dir = normalizeDir(dirOrig);
+
+    int i = 0;
+    query.bindValue(i++, dir);
+    SQC(query, exec());
+
+    bool ok=false;
+    qint64 dirid = query.lastInsertId().toLongLong(&ok);
+    Q_ASSERT(ok);
+    Q_ASSERT(dirid > 0);
+    newdi = new DirectoryItem(nullptr,
+                              dirid,
+                              DirectoryItem::DirectoryItemType::DI_NORMAL,
+                              dir);
+
     return true;
 }

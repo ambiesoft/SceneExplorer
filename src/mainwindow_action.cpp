@@ -459,6 +459,7 @@ void MainWindow::on_action_Pause_triggered()
 
 void MainWindow::AddUserEntryDirectory(
         DirectoryItem::DirectoryItemType itemType,
+        const qint64& dirid,
         const QString& cdir,
         bool sel,
         bool check)
@@ -497,8 +498,11 @@ void MainWindow::AddUserEntryDirectory(
         Q_ASSERT(false);
         return;
     }
-    DirectoryItem* newitem = new DirectoryItem(ui->directoryWidget, itemType);
-    newitem->setText(text);
+    DirectoryItem* newitem = new DirectoryItem(ui->directoryWidget,
+                                               dirid,
+                                               itemType,
+                                               text);
+
 	if(hasCheckbox)
 		newitem->setFlags(newitem->flags() | Qt::ItemIsUserCheckable);
 
@@ -506,15 +510,7 @@ void MainWindow::AddUserEntryDirectory(
 	if(hasCheckbox)
 		newitem->setCheckState(check ? Qt::Checked : Qt::Unchecked);
 
-    // set icon
-    if(itemType==DirectoryItem::DI_ALL)
-        newitem->setIcon(QIcon(":resource/images/mailbox.png"));
-    else if(itemType==DirectoryItem::DI_NORMAL)
-        newitem->setIcon(fiProvider_.icon(QFileIconProvider::Folder));
-    else if(itemType==DirectoryItem::DI_MISSING)
-        newitem->setIcon(QIcon(":resource/images/missing.png"));
-    else
-        Q_ASSERT(false);
+
 
     ui->directoryWidget->addItem(newitem);
 }
@@ -931,76 +927,59 @@ void MainWindow::on_directoryWidget_UncheckAll()
 
     itemChangedCommon();
 }
-//static bool widgetsListItemLessThan(const QListWidgetItem* v1, const QListWidgetItem* v2)
-//{
-//	return v1->text() < v2->text();
-//}
+
+
+
 void MainWindow::on_directoryWidget_SortByName()
 {
+    CHECK_DOCUMENT(pDoc_);
+
     Q_ASSERT(!directoryChanging_);
     BlockedBool bt(&directoryChanging_, true, false);
 	
     ui->directoryWidget->SortNormalItems();
 
+    pDoc_->SetReordered();
+}
+void MainWindow::directoryWidgetMoveUpCommon(const bool bUp)
+{
+    CHECK_DOCUMENT(pDoc_);
 
+    if (ui->directoryWidget->selectedItems().isEmpty())
+        return;
 
-	//directoryChanging_ = true;
-	//QList<QListWidgetItem*> allitems;
-	//for (int i = 0; i < ui->directoryWidget->count(); ++i)
-	//{
-	//	QListWidgetItem* item = ui->directoryWidget->takeItem(i);
-	//	allitems.append(allitems);
-	//}
-	//std::sort(allitems.begin(), allitems.end(), &widgetsListItemLessThan);
-	//for (int i = 0; i < allitems.count(); ++i)
-	//{
-	//	ui->directoryWidget->addItem(allitems[i]);
-	//}
+    Q_ASSERT(!directoryChanging_);
+    BlockedBool bt(&directoryChanging_, true, false);
 
-	//directoryChanging_ = false;
-	// directoryChangedCommon();
+    DirectoryItem* item = (DirectoryItem*)ui->directoryWidget->selectedItems()[0];
+    if (!item->IsNormalItem())
+        return;
+
+    int row = ui->directoryWidget->row(item);
+    if(bUp)
+    {
+       if (ui->directoryWidget->IsTopNormalItem(row))
+            return;
+    }
+    else
+    {
+        if (ui->directoryWidget->IsBottomNormalItem(row))
+            return;
+    }
+    item = (DirectoryItem*)ui->directoryWidget->takeItem(row);
+    ui->directoryWidget->insertItem(row + (bUp ? -1:1), item);
+    item->setSelected(true);
+    ui->directoryWidget->setFocus();
+
+    pDoc_->SetReordered();
 }
 void MainWindow::on_directoryWidget_MoveUp()
 {
-    if (ui->directoryWidget->selectedItems().isEmpty())
-        return;
-
-    Q_ASSERT(!directoryChanging_);
-    BlockedBool bt(&directoryChanging_, true, false);
-
-    DirectoryItem* item = (DirectoryItem*)ui->directoryWidget->selectedItems()[0];
-    if (!item->IsNormalItem())
-        return;
-
-    int row = ui->directoryWidget->row(item);
-    if (ui->directoryWidget->IsTopNormalItem(row))
-        return;
-
-    item = (DirectoryItem*)ui->directoryWidget->takeItem(row);
-    ui->directoryWidget->insertItem(row - 1, item);
-    item->setSelected(true);
-    ui->directoryWidget->setFocus();
+    directoryWidgetMoveUpCommon(true);
 }
 void MainWindow::on_directoryWidget_MoveDown()
 {
-    if (ui->directoryWidget->selectedItems().isEmpty())
-        return;
-
-    Q_ASSERT(!directoryChanging_);
-    BlockedBool bt(&directoryChanging_, true, false);
-
-    DirectoryItem* item = (DirectoryItem*)ui->directoryWidget->selectedItems()[0];
-    if (!item->IsNormalItem())
-        return;
-
-    int row = ui->directoryWidget->row(item);
-    if (ui->directoryWidget->IsBottomNormalItem(row))
-        return;
-
-    item = (DirectoryItem*)ui->directoryWidget->takeItem(row);
-    ui->directoryWidget->insertItem(row + 1, item);
-    item->setSelected(true);
-    ui->directoryWidget->setFocus();
+    directoryWidgetMoveUpCommon(false);
 }
 
 void MainWindow::on_directoryWidget_customContextMenuRequested(const QPoint &pos)

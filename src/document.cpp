@@ -170,7 +170,7 @@ void Document::Store(QListWidget* pLW,
                      QListWidget* pListTag,
                      const QModelIndex& index)
 {
-	int normalCount = 0;
+    int normalCount = 0;
     for(int i=0 ; i <pLW->count();++i)
     {
         DirectoryItem* item = (DirectoryItem*)pLW->item(i);
@@ -181,15 +181,27 @@ void Document::Store(QListWidget* pLW,
         }
         else if(item->IsNormalItem())
         {
-			normalCount++;
-			docSql_->setDirectory(normalCount, item->text(), item->isSelected(), item->checkState() == Qt::Checked);
+            if(bReordered_)
+            {
+                normalCount++;
+                docSql_->setDirectory(normalCount,item);
+            }
+            else
+            {
+                docSql_->setDirNormalItemState(item);
+            }
         }
         else if(item->IsMissingItem())
         {
             // nothing
         }
     }
-	docSql_->removeDirectoryOver(normalCount);
+    if(bReordered_)
+        docSql_->removeDirectoryOver(normalCount);
+
+    bReordered_ = false;
+
+
 
     // save tag select state, each tag is saved when it's created or editted,
     // here save only selection state

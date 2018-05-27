@@ -46,17 +46,10 @@ class Document : public QObject
     Q_OBJECT
 
     QSettings* s_ = nullptr;
-
-    // bool bAllSel_ = false;
-    // bool bAllChecked_ = false;
-
-    // QList<DE> delist_;
-
     QString lastErr_;
-
     QString file_;
-
     DocumentSql* docSql_ = nullptr;
+    bool bReordered_ = false;
 public:
     Document(){}
     ~Document() {
@@ -71,6 +64,7 @@ public:
     void Store(QListWidget* pLW,
                QListWidget* pListTag,
                const QModelIndex& index);
+
 
     bool IsDirAllSelected() const {
         return docSql_->isDirAllSelected();
@@ -167,6 +161,17 @@ public:
     bool GetTagSelectedAndChecked(const qint64& tagid, bool& bSel, bool& bCheck) const
     {
         return docSql_->GetTagSelectedAndChecked(tagid,bSel,bCheck);
+    }
+    bool GetAllDirs(QList<DirectoryItem*>& dirs) const
+    {
+        return docSql_->GetAllDirs(dirs);
+    }
+    bool InsertDirectory(const QString& dir, DirectoryItem*& newdi)
+    {
+        return docSql_->InsertDirectory(dir,newdi);
+    }
+    void SetReordered() {
+        bReordered_=true;
     }
 };
 
