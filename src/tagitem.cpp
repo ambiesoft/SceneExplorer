@@ -18,3 +18,11 @@
 
 #include "tagitem.h"
 
+QListWidget* TagItem::parent_;
+TagItem::TagItem(const qint64& tagid, TagItemType itemType) :
+    QListWidgetItem(parent_),
+    tagid_(tagid),
+    itemType_(itemType)
+{
+    Q_ASSERT(parent_);
+}

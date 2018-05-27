@@ -34,14 +34,8 @@ private:
     TagItemType itemType_;
 
 public:
-    TagItem(QListWidget* parent,
-                  const qint64& tagid, TagItemType itemType) :
-        QListWidgetItem(parent),
-        tagid_(tagid),
-        itemType_(itemType)
-    {
-
-    }
+    static QListWidget* parent_;
+    TagItem(const qint64& tagid, TagItemType itemType);
     qint64 tagid() const {
         return tagid_;
     }

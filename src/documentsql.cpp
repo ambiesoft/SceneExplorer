@@ -285,8 +285,8 @@ bool DocumentSql::setDirNormalItemState(const DirectoryItem* item)
 {
     QSqlQuery query = myq("UPDATE " + docdb("Directories") + " SET selected=?, checked=? WHERE id=?");
     int i=0;
-    query.bindValue(i++, item->isSelected());
-    query.bindValue(i++, item->IsChecked());
+    query.bindValue(i++, item->IsSelectedInt());
+    query.bindValue(i++, item->IsCheckedInt());
     query.bindValue(i++, item->dirid());
     SQC(query,exec());
     qDebug() << query.numRowsAffected();
@@ -354,7 +354,7 @@ bool DocumentSql::isDirSelected(int index) const
 	SQC(query, exec());
 	if (!query.next())
 		return false;
-	return query.value(0).toInt() != 0;
+    return query.value(0).toInt() != 0;
 }
 
 bool DocumentSql::isDirChecked(int index) const
@@ -699,7 +699,6 @@ bool DocumentSql::GetAllDirs(QList<DirectoryItem*>& dirs) const
     while(query.next())
     {
         DirectoryItem* di = new DirectoryItem(
-                    nullptr,
                     query.value("id").toLongLong(),
                     DirectoryItem::DirectoryItemType::DI_NORMAL,
                     query.value("directory").toString());
@@ -724,8 +723,7 @@ bool DocumentSql::InsertDirectory(const QString& dirOrig, DirectoryItem*& newdi)
     qint64 dirid = query.lastInsertId().toLongLong(&ok);
     Q_ASSERT(ok);
     Q_ASSERT(dirid > 0);
-    newdi = new DirectoryItem(nullptr,
-                              dirid,
+    newdi = new DirectoryItem(dirid,
                               DirectoryItem::DirectoryItemType::DI_NORMAL,
                               dir);
 

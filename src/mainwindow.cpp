@@ -263,7 +263,7 @@ void MainWindow::LoadTags()
     if(!pDoc_)
         return;
 
-    TagItem* tagAll = new TagItem(ui->listTag, -1, TagItem::TI_ALL);
+    TagItem* tagAll = new TagItem(-1, TagItem::TI_ALL);
     tagAll->setText(tr("All"));
     tagAll->setIcon(QIcon(":resource/images/mailbox.png"));
     tagAll->setSelected(pDoc_->IsTagAllSelected());
@@ -277,7 +277,7 @@ void MainWindow::LoadTags()
         {
             qint64 tagid = pair.first;
             QString text = pair.second;
-            TagItem* tagUser = new TagItem(ui->listTag, tagid, TagItem::TI_NORMAL);
+            TagItem* tagUser = new TagItem(tagid, TagItem::TI_NORMAL);
             tagUser->setText(text);
             tagUser->setIcon(QIcon(":resource/images/tag.png"));
             tagUser->setFlags(tagUser->flags() | Qt::ItemIsUserCheckable);
@@ -1788,15 +1788,18 @@ void MainWindow::on_actionShow_All_Item_triggered()
         cmbFind_->setCurrentText(QString());
 
         // directory, select all
+        ui->directoryWidget->clearSelection();
         DirectoryItem* dall = (DirectoryItem*)ui->directoryWidget->item(0);
         Q_ASSERT(dall->IsAllItem());
         dall->setSelected(true);
-
+        ui->directoryWidget->setCurrentItem(dall);
 
         // tag select all
+        ui->listTag->clearSelection();
         TagItem* tall = (TagItem*)ui->listTag->item(0);
         Q_ASSERT(tall->IsAllItem());
         tall->setSelected(true);
+        ui->listTag->setCurrentItem(tall);
     }
     itemChangedCommon(true);
 }

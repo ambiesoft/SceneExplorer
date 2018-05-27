@@ -498,8 +498,7 @@ void MainWindow::AddUserEntryDirectory(
         Q_ASSERT(false);
         return;
     }
-    DirectoryItem* newitem = new DirectoryItem(ui->directoryWidget,
-                                               dirid,
+    DirectoryItem* newitem = new DirectoryItem(dirid,
                                                itemType,
                                                text);
 

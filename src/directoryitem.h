@@ -36,8 +36,8 @@ private:
     QFileIconProvider fiProvider_;
 
 public:
-    DirectoryItem(QListWidget* parent,
-                  const qint64& dirid,
+    static QListWidget* parent_;
+    DirectoryItem(const qint64& dirid,
                   DirectoryItemType itemType,
                   const QString& text);
     qint64 dirid() const {
@@ -56,7 +56,14 @@ public:
     bool IsChecked() const {
         return checkState()==Qt::Checked;
     }
-	
+
+    int IsSelectedInt() const {
+        return isSelected() ? 1:0;
+    }
+    bool IsCheckedInt() const {
+        return IsChecked() ? 1:0;
+    }
+
 };
 
 #endif // DIRECTORYITEM_H

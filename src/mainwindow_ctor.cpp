@@ -20,6 +20,7 @@
 #include "taskmodel.h"
 #include "extension.h"
 #include "ffmpeg.h"
+#include "tagitem.h"
 
 #include "ui_mainwindow.h"
 #include "mainwindow.h"
@@ -36,6 +37,8 @@ MainWindow::MainWindow(QWidget *parent,
     ui->setupUi(this);
     initLangMenus();
     idManager_ = new IDManager(this);
+    DirectoryItem::parent_ = ui->directoryWidget;
+    TagItem::parent_ = ui->listTag;
 
     this->setWindowTitle(APPNAME_DISPLAY);
 

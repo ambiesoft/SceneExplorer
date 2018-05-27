@@ -19,14 +19,16 @@
 #include <QIcon>
 #include "directoryitem.h"
 
-DirectoryItem::DirectoryItem(QListWidget* parent,
-                             const qint64& dirid,
+QListWidget* DirectoryItem::parent_;
+
+DirectoryItem::DirectoryItem(const qint64& dirid,
                              DirectoryItemType itemType,
                              const QString& text) :
-    QListWidgetItem(parent),
+    QListWidgetItem(parent_),
     dirid_(dirid),
     itemType_(itemType)
 {
+    Q_ASSERT(parent_);
     setFlags(flags() | Qt::ItemIsUserCheckable);
     setText(text);
     if(itemType==DirectoryItem::DI_ALL)
