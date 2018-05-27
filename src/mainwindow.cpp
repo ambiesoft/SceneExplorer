@@ -816,14 +816,14 @@ void MainWindow::on_context_openSelectedVideoInFolder()
 void MainWindow::on_context_copySelectedVideoPath()
 {
     QString movieFile = getSelectedVideo();
-    if(movieFile.isEmpty()) { Alert(this, tr("No Video Selected.")); return;}
+    if(movieFile.isEmpty()) { Alert(this, TR_NOVIDEO_SELECTED()); return;}
     QApplication::clipboard()->setText(movieFile);
 }
 #include "renamedialog.h"
 void MainWindow::on_context_Rename()
 {
     QString oldfull = getSelectedVideo(false);
-    if(oldfull.isEmpty()) { Alert(this, tr("No Video Selected.")); return;}
+    if(oldfull.isEmpty()) { Alert(this, TR_NOVIDEO_SELECTED()); return;}
 
     QString olddir = normalizeDir(QFileInfo(oldfull).absolutePath());
     QString oldname = QFileInfo(oldfull).fileName();
@@ -876,7 +876,7 @@ void MainWindow::on_context_Rename()
 void MainWindow::on_context_removeFromDatabase()
 {
     QString movieFile = getSelectedVideo(false);
-    if(movieFile.isEmpty()) { Alert(this, tr("No Video Selected.")); return;}
+    if(movieFile.isEmpty()) { Alert(this, TR_NOVIDEO_SELECTED()); return;}
 
     static bool sbRemoveFromHardDisk;
 
@@ -935,7 +935,7 @@ void MainWindow::on_context_AddTags()
     if(id <= 0)
     {
         Alert(this,
-              tr("No Video Selected."));
+              TR_NOVIDEO_SELECTED());
         return;
     }
 
@@ -948,7 +948,7 @@ void MainWindow::on_context_AddTags()
 void MainWindow::on_context_ExternalTools()
 {
     const QString movieFileNative = getSelectedVideo(true);
-    if(movieFileNative.isEmpty()) { Alert(this, tr("No Video Selected.")); return;}
+    if(movieFileNative.isEmpty()) { Alert(this, TR_NOVIDEO_SELECTED()); return;}
 
     QAction* act = (QAction*)QObject::sender();
     int i = act->data().toInt();
@@ -1011,7 +1011,7 @@ void MainWindow::on_context_ExternalTools()
 void MainWindow::on_context_copySelectedVideoFilename()
 {
     QString movieFile = getSelectedVideo();
-    if(movieFile.isEmpty()) { Alert(this, tr("No Video Selected.")); return;}
+    if(movieFile.isEmpty()) { Alert(this, TR_NOVIDEO_SELECTED()); return;}
 
     QFileInfo fi(movieFile);
     QApplication::clipboard()->setText(fi.fileName());

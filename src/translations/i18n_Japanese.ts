@@ -189,7 +189,7 @@
     </message>
     <message>
         <source>&amp;Copy</source>
-        <translation type="vanished">コピー(&amp;C)</translation>
+        <translation>コピー(&amp;C)</translation>
     </message>
     <message>
         <source>&amp;About...</source>
@@ -801,7 +801,7 @@
     </message>
     <message>
         <source>No Video Selected.</source>
-        <translation>ビデオが選択されていません。</translation>
+        <translation type="vanished">ビデオが選択されていません。</translation>
     </message>
     <message>
         <source>Add Ta&amp;g...</source>
@@ -910,6 +910,50 @@
     <message>
         <source>Name and extension is empty.</source>
         <translation>名前と拡張子が空白です。</translation>
+    </message>
+    <message>
+        <source>&amp;Refresh</source>
+        <translation>リフレッシュ(&amp;R)</translation>
+    </message>
+    <message>
+        <source>&amp;Paste</source>
+        <translation>貼り付け(&amp;P)</translation>
+    </message>
+    <message>
+        <source>&amp;Select All</source>
+        <translation>すべて選択(&amp;S)</translation>
+    </message>
+    <message>
+        <source>Directory &apos;%1&apos; already exists.</source>
+        <translation>ディレクトリ &apos;%1&apos; はすでに存在します。</translation>
+    </message>
+    <message>
+        <source>Failed to insert directory into Database.</source>
+        <translation>ディレクトリをデータベースに挿入できませんでした。</translation>
+    </message>
+    <message>
+        <source>No Video Selected</source>
+        <translation>ビデオが選択されていません</translation>
+    </message>
+    <message>
+        <source>No Directory Selected</source>
+        <translation>ディレクトリが選択されていません</translation>
+    </message>
+    <message>
+        <source>All item could not be copied.</source>
+        <translation>「すべて」のアイテムはコピーできません。</translation>
+    </message>
+    <message>
+        <source>Missing item could not be copied.</source>
+        <translation>「存在しない」アイテムはコピーできません。</translation>
+    </message>
+    <message>
+        <source>Selected item is not a normal item.</source>
+        <translation>選択されたアイテムは通常のアイテムではありません。</translation>
+    </message>
+    <message>
+        <source>No Tag Selected</source>
+        <translation>タグが選択されていません</translation>
     </message>
 </context>
 <context>
@@ -1257,6 +1301,38 @@
         <source>&quot;%1&quot; is not accessible.</source>
         <translation>&quot;%1&quot; にアクセスできません。</translation>
     </message>
+    <message>
+        <source>Filename could not have control characters.</source>
+        <translation>ファイル名は制御コードをもてません。</translation>
+    </message>
+    <message>
+        <source>Filename could not have these characters.</source>
+        <translation>ファイル名はこれらの文字を持てません。</translation>
+    </message>
+    <message>
+        <source>Filename must not be device names.</source>
+        <translation>ファイル名はデバイス名であってはなりません。</translation>
+    </message>
+    <message>
+        <source>Filename should not end with period.</source>
+        <translation>ファイル名はピリオドで終わるべきではありません。</translation>
+    </message>
+    <message>
+        <source>Filename must not end with space character.</source>
+        <translation>ファイル名はスペース文字で終わってはなりません。</translation>
+    </message>
+    <message>
+        <source>Filename must not end with backslash character.</source>
+        <translation>ファイル名はバックスラッシュで終わってはなりません。</translation>
+    </message>
+    <message>
+        <source>Filename must not end with slash character.</source>
+        <translation>ファイル名はスラッシュで終わってはなりません。</translation>
+    </message>
+    <message>
+        <source>Filename is too long.</source>
+        <translation>ファイル名が長すぎます。</translation>
+    </message>
 </context>
 <context>
     <name>RenameDialog</name>
@@ -1275,6 +1351,14 @@
     <message>
         <source>Rename</source>
         <translation>リネーム</translation>
+    </message>
+    <message>
+        <source>Name is empty.</source>
+        <translation>名前が空です。</translation>
+    </message>
+    <message>
+        <source>Filename cound not have &apos;/&apos; or/and &apos;\&apos;</source>
+        <translation>ファイル名は &apos;/&apos; や &apos;\&apos; を持てません。</translation>
     </message>
 </context>
 <context>

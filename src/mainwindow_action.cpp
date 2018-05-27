@@ -66,7 +66,7 @@ void MainWindow::updateOnOpened(const qint64& id, const QString& movieFile)
 }
 void MainWindow::openVideo(const qint64& id, const QString& movieFile)
 {
-    if(movieFile.isEmpty()) { Alert(this, tr("No Video Selected.")); return;}
+    if(movieFile.isEmpty()) { Alert(this, TR_NOVIDEO_SELECTED()); return;}
 
     if(!QDesktopServices::openUrl(QUrl::fromLocalFile(movieFile)))
     {
@@ -77,7 +77,7 @@ void MainWindow::openVideo(const qint64& id, const QString& movieFile)
 }
 void MainWindow::openVideoInFolder(const QString& movieFile)
 {
-    if(movieFile.isEmpty()) { Alert(this, tr("No Video Selected.")); return;}
+    if(movieFile.isEmpty()) { Alert(this, TR_NOVIDEO_SELECTED()); return;}
 
     QString openfile = movieFile;
     if(!QFileInfo(movieFile).exists())

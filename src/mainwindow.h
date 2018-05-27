@@ -51,7 +51,7 @@ namespace Ui {
 class MainWindow;
 }
 
-#define CHECK_DOCUMENT(doc) do { if(!doc) { Alert(this, tr("No Document")); return;}} while(false)
+#define CHECK_DOCUMENT(doc) do { if(!doc) { Alert(this, TR_NO_DOCUMENT()); return;}} while(false)
 
 class MainWindow : public QMainWindow, IMainWindow
 {
@@ -63,6 +63,13 @@ class MainWindow : public QMainWindow, IMainWindow
     Document* pDoc_ = nullptr;
     QStringList recents_;
 
+    QString TR_NOVIDEO_SELECTED() { return tr("No Video Selected"); }
+    QString TR_NODIRECTORY_SELECTED() { return  tr("No Directory Selected");}
+    QString TR_ALLITEM_COULDNOTBE_COPIED() { return  tr("All item could not be copied.");}
+    QString TR_MISSINGITEM_COULDNOTBE_COPIED() { return  tr("Missing item could not be copied.");}
+    QString TR_SELECTEDITEM_NOT_NORMALITEM() { return  tr("Selected item is not a normal item.");}
+    QString TR_NOTAG_SELECTED() { return tr("No Tag Selected"); }
+    QString TR_NO_DOCUMENT() { return tr("No Document");}
 public:
     explicit MainWindow(QWidget *parent,
                         Settings& settings,

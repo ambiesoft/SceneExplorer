@@ -1,3 +1,7 @@
+2018/05/27 ver1.7
+Change rename dialog
+change save method for document
+
 2018/05/24 ver1.6
 No canonical path
 

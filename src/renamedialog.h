@@ -20,8 +20,15 @@ public:
 
     void setBasename(const QString& basename);
     void setExt(const QString& ext);
+
+    QString filename() const;
 protected:
     void showEvent(QShowEvent *) override;
+private slots:
+    virtual void done(int r);
+
+
+
 private:
     Ui::RenameDialog *ui;
 };

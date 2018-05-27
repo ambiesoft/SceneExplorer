@@ -64,4 +64,6 @@ bool isUUID(const QString& s);
 QSqlQuery myq(const QString& sql);
 
 void setClipboardText(const QString& text);
+bool isLegalFilePath(QString filename, QString* pError);
+QString GetIllegalFilenameCharacters();
 #endif // HELPER_H

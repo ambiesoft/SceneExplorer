@@ -26,19 +26,13 @@
 #include "tagitem.h"
 #include "helper.h"
 
-#define TR_NOVIDEO_SELECTED tr("No Video Selected")
-#define TR_NODIRECTORY_SELECTED tr("No Directory Selected")
-#define TR_ALLITEM_COULDNOTBE_COPIED tr("All item could not be copied.")
-#define TR_MISSINGITEM_COULDNOTBE_COPIED tr("Missing item could not be copied.")
-#define TR_SELECTEDITEM_NOT_NORMALITEM tr("Selected item is not a normal item.")
-#define TR_NOTAG_SELECTED tr("No Tag Selected")
 
 void MainWindow::OnCopyTable()
 {
     QString videoFile = getSelectedVideo(true);
     if(videoFile.isEmpty())
     {
-        Alert(this, TR_NOVIDEO_SELECTED);
+        Alert(this, TR_NOVIDEO_SELECTED());
         return;
     }
     setClipboardText(videoFile);
@@ -48,23 +42,23 @@ void MainWindow::OnCopyDirectory()
     QList<QListWidgetItem*> sels = ui->directoryWidget->selectedItems();
     if(sels.isEmpty())
     {
-        Alert(this, TR_NODIRECTORY_SELECTED);
+        Alert(this, TR_NODIRECTORY_SELECTED());
         return;
     }
     DirectoryItem* di = (DirectoryItem*)sels[0];
     if(di->IsAllItem())
     {
-        Alert(this, TR_ALLITEM_COULDNOTBE_COPIED);
+        Alert(this, TR_ALLITEM_COULDNOTBE_COPIED());
         return;
     }
     if(di->IsMissingItem())
     {
-        Alert(this, TR_MISSINGITEM_COULDNOTBE_COPIED);
+        Alert(this, TR_MISSINGITEM_COULDNOTBE_COPIED());
         return;
     }
     if(!di->IsNormalItem())
     {
-        Alert(this, TR_SELECTEDITEM_NOT_NORMALITEM);
+        Alert(this, TR_SELECTEDITEM_NOT_NORMALITEM());
         return;
     }
     setClipboardText(di->text());
@@ -88,18 +82,18 @@ void MainWindow::OnCopyTag()
     QList<QListWidgetItem*> sels = ui->listTag->selectedItems();
     if(sels.isEmpty())
     {
-        Alert(this, TR_NOTAG_SELECTED);
+        Alert(this, TR_NOTAG_SELECTED());
         return;
     }
     TagItem* ti = (TagItem*)sels[0];
     if(ti->IsAllItem())
     {
-        Alert(this, TR_ALLITEM_COULDNOTBE_COPIED);
+        Alert(this, TR_ALLITEM_COULDNOTBE_COPIED());
         return;
     }
     if(!ti->IsNormalItem())
     {
-        Alert(this, TR_SELECTEDITEM_NOT_NORMALITEM);
+        Alert(this, TR_SELECTEDITEM_NOT_NORMALITEM());
         return;
     }
 
