@@ -116,3 +116,30 @@ QString getInifile(bool& bExit)
     Q_UNUSED(bExit);
     return QString();
 }
+bool isLegalFilePath(QString filename, QString* pError)
+{
+    for( QChar& c : filename)
+    {
+        if(c=='/')
+        {
+            if(pError)
+            {
+                *pError = QObject::tr("Filename could not have '/'.");
+                return false;
+            }
+        }
+        if(c==0)
+        {
+            if(pError)
+            {
+                *pError = QObject::tr("Filename could not have Nul character.");
+                return false;
+            }
+        }
+    }
+    return true;
+}
+QString GetIllegalFilenameCharacters()
+{
+    return "/";
+}

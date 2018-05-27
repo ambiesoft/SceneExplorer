@@ -20,6 +20,7 @@
 #define DIRECTORYITEM_H
 
 #include <QListWidgetItem>
+#include <QFileIconProvider>
 
 class DirectoryItem : public QListWidgetItem
 {

@@ -28,7 +28,7 @@
 #include <QList>
 #include <QCommandLineParser>
 #include <QApplication>
-
+#include <QClipboard>
 
 
 #if defined(Q_OS_WIN)
@@ -441,6 +441,7 @@ QSqlQuery myq(const QString& sql)
     }
     return q;
 }
+
 void setClipboardText(const QString& text)
 {
     QApplication::clipboard()->setText(text);

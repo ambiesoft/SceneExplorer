@@ -21,7 +21,7 @@
 
 #include <QMainWindow>
 #include <QToolButton>
-#include <QFileIconProvider>
+// #include <QFileIconProvider>
 #include <QPushButton>
 
 #include "tablemodel.h"

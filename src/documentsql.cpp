@@ -239,6 +239,8 @@ DocumentSql::DocumentSql(const QString& file) :
 }
 DocumentSql::~DocumentSql()
 {
+    if(!ok_)
+        return;
     gpSQL->DetachDocument();
 }
 
