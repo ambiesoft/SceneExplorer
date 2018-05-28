@@ -35,6 +35,18 @@
         <source>&lt;Resource not found&gt;</source>
         <translation>&lt;リソースが見つかりません&gt;</translation>
     </message>
+    <message>
+        <source>Donate</source>
+        <translation>寄付</translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;Support our software by &lt;a href=&quot;http://ambiesoft.fam.cx/donate/&quot;&gt;donation&lt;/a&gt;.&lt;/p&gt;</source>
+        <translation type="vanished">Ambiesoftでは開発をサポートのための&lt;a href=&quot;http://ambiesoft.fam.cx/donate/&quot;&gt;寄付&lt;/a&gt;を募集しています。</translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;Support our software by making &lt;a href=&quot;http://ambiesoft.fam.cx/donate/&quot;&gt;donation&lt;/a&gt;.&lt;/p&gt;</source>
+        <translation type="unfinished">&lt;p&gt;Ambiesoftでは開発をサポートのための&lt;a href=&quot;http://ambiesoft.fam.cx/donate/&quot;&gt;寄付&lt;/a&gt;を募集しています。&lt;/p&gt;</translation>
+    </message>
 </context>
 <context>
     <name>DocinfoDialog</name>
@@ -1332,6 +1344,14 @@
     <message>
         <source>Filename is too long.</source>
         <translation>ファイル名が長すぎます。</translation>
+    </message>
+    <message>
+        <source>Filename could not have &apos;/&apos;.</source>
+        <translation>ファイル名は &apos;/&apos;を持てません。</translation>
+    </message>
+    <message>
+        <source>Filename could not have Nul character.</source>
+        <translation>ファイル名はNulキャラを持てません。</translation>
     </message>
 </context>
 <context>

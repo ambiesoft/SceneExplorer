@@ -2038,7 +2038,17 @@ void MainWindow::on_action_FontDockingWindow_triggered()
 
 void MainWindow::on_action_FontStatusbar_triggered()
 {
-    setFontCommon1(KEY_FONT_STATUSBAR,ui->statusBar);
+    setFontCommon2(KEY_FONT_STATUSBAR,
+                   [this]() -> QFont { return ui->statusBar->font();},
+                   [this](QFont& font)
+                    {
+                        ui->statusBar->setFont(font);
+                        foreach(QWidget* pW, getAllStatusBarWidgets())
+                        {
+                            pW->setFont(font);
+                        }
+                    }
+    );
 }
 
 void MainWindow::on_action_Refresh_triggered()
@@ -2060,3 +2070,16 @@ void MainWindow::on_action_Select_All_triggered()
 {
 
 }
+
+QList<QWidget*> MainWindow::getAllStatusBarWidgets()
+{
+    return QList<QWidget*>()
+            <<
+               slItemSort_ <<
+               slItemCount_ <<
+               slTask_ <<
+               slPaused_ ;
+
+}
+
+

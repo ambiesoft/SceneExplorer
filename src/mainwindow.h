@@ -95,7 +95,7 @@ private:
     //SORTCOLUMN currentSort_ = SORTCOLUMN::SORT_NONE;
     //bool currentSortRev_ = false;
 
-    // bool bShowMissing_ = false;
+    QList<QWidget*> getAllStatusBarWidgets();
     bool GetSelectedTagIDs(QSet<qint64>& taggedids);
     void GetSqlAllSetTable(const QStringList& dirs,
                            QSet<qint64>* pTagged,

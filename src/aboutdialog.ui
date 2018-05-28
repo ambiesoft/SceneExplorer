@@ -114,6 +114,16 @@
        </item>
       </layout>
      </widget>
+     <widget class="QWidget" name="tabDonate">
+      <attribute name="title">
+       <string>Donate</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="verticalLayout_5">
+       <item>
+        <widget class="QTextBrowser" name="tbDonate"/>
+       </item>
+      </layout>
+     </widget>
     </widget>
    </item>
    <item>

@@ -327,6 +327,10 @@ MainWindow::MainWindow(QWidget *parent,
     if(vVal.isValid() && !vVal.toString().isEmpty() && font.fromString(vVal.toString()))
     {
         ui->statusBar->setFont(font);
+        foreach(QWidget* pW, getAllStatusBarWidgets())
+        {
+            pW->setFont(font);
+        }
     }
     vVal = settings_.value(KEY_FONT_DOCKINGWINDOW);
     if(vVal.isValid() && !vVal.toString().isEmpty() && font.fromString(vVal.toString()))

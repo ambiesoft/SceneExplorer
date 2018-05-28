@@ -115,6 +115,9 @@ AboutDialog::AboutDialog(QWidget *parent) :
     qtText += "Qt: ";
     qtText += QT_VERSION_STR;
     ui->tbOtherVersion->setText(qtText);
+
+    ui->tbDonate->setOpenExternalLinks(true);
+    ui->tbDonate->setHtml(tr("<p>Support our software by making <a href=\"http://ambiesoft.fam.cx/donate/\">donation</a>.</p>"));
 }
 
 AboutDialog::~AboutDialog()
