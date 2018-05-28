@@ -125,7 +125,8 @@ FORMS += \
 
 RC_FILE = app.rc
 
-DISTFILES +=
+DISTFILES += \
+    ../History.txt
 
 PRECOMPILED_HEADER = stable.h
 
