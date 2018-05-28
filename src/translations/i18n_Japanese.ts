@@ -45,7 +45,7 @@
     </message>
     <message>
         <source>&lt;p&gt;Support our software by making &lt;a href=&quot;http://ambiesoft.fam.cx/donate/&quot;&gt;donation&lt;/a&gt;.&lt;/p&gt;</source>
-        <translation type="unfinished">&lt;p&gt;Ambiesoftでは開発をサポートのための&lt;a href=&quot;http://ambiesoft.fam.cx/donate/&quot;&gt;寄付&lt;/a&gt;を募集しています。&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;Ambiesoftでは開発をサポートのための&lt;a href=&quot;http://ambiesoft.fam.cx/donate/&quot;&gt;寄付&lt;/a&gt;を募集しています。&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
@@ -417,7 +417,7 @@
     </message>
     <message>
         <source>Start scan to create thumnails...</source>
-        <translation>スキャンしてサムネイルを作成する...</translation>
+        <translation type="vanished">スキャンしてサムネイルを作成する...</translation>
     </message>
     <message>
         <source>&amp;Focus find</source>
@@ -553,7 +553,7 @@
     </message>
     <message>
         <source>Context menu</source>
-        <translation>コンテキストメニュー</translation>
+        <translation type="vanished">コンテキストメニュー</translation>
     </message>
     <message>
         <source>C&amp;opy others...</source>
@@ -577,7 +577,7 @@
     </message>
     <message>
         <source>Are you sure you want to remove &quot;%1&quot; from the lists?</source>
-        <translation>リストから %1 を削除しますか？</translation>
+        <translation type="vanished">リストから %1 を削除しますか？</translation>
     </message>
     <message>
         <source>Are you sure you want to remove missing items from database?</source>
@@ -585,7 +585,7 @@
     </message>
     <message>
         <source>&amp;Rescan to create thumbnails</source>
-        <translation>スキャンしてサムネイルを作成(&amp;R)</translation>
+        <translation type="vanished">スキャンしてサムネイルを作成(&amp;R)</translation>
     </message>
     <message>
         <source>&amp;Uncheck all</source>
@@ -605,7 +605,7 @@
     </message>
     <message>
         <source>Re&amp;move this folder from database</source>
-        <translation>データベースからフォルダを削除(&amp;M)</translation>
+        <translation type="vanished">データベースからフォルダを削除(&amp;M)</translation>
     </message>
     <message>
         <source>Remove &amp;missing items from database</source>
@@ -657,7 +657,7 @@
     </message>
     <message>
         <source>&amp;Open</source>
-        <translation>開く(&amp;O)</translation>
+        <translation type="vanished">開く(&amp;O)</translation>
     </message>
     <message>
         <source>Open &amp;Folder</source>
@@ -665,7 +665,7 @@
     </message>
     <message>
         <source>&amp;Copy Path</source>
-        <translation>パスをコピー(&amp;C)</translation>
+        <translation type="vanished">パスをコピー(&amp;C)</translation>
     </message>
     <message>
         <source>&amp;Filename</source>
@@ -885,7 +885,7 @@
     </message>
     <message>
         <source>Tag &quot;{0}&quot; already exists.</source>
-        <translation>タグ &quot;{0}&quot; は既に存在します。</translation>
+        <translation type="vanished">タグ &quot;{0}&quot; は既に存在します。</translation>
     </message>
     <message>
         <source>&amp;Check All</source>
@@ -966,6 +966,70 @@
     <message>
         <source>No Tag Selected</source>
         <translation>タグが選択されていません</translation>
+    </message>
+    <message>
+        <source>&amp;Scan arbitrary directory...</source>
+        <translation>任意のディレクトリをスキャン(&amp;S)</translation>
+    </message>
+    <message>
+        <source>&amp;Open Video</source>
+        <translation>動画を開く(&amp;O)</translation>
+    </message>
+    <message>
+        <source>Scan &amp;All directories</source>
+        <translation>すべてのディレクトリをスキャン(&amp;A)</translation>
+    </message>
+    <message>
+        <source>Tag &quot;%1&quot; already exists.</source>
+        <translation>タグ &quot;%1&quot; はすでに存在します。</translation>
+    </message>
+    <message>
+        <source>Clipboard is empty.</source>
+        <translation>クリップボードが空です。</translation>
+    </message>
+    <message>
+        <source>Failed to insert tag into Database.</source>
+        <translation>データベースにタグを挿入できませんでした。</translation>
+    </message>
+    <message>
+        <source>No normal items selected.</source>
+        <translation>通常のアイテムが選択されていません。</translation>
+    </message>
+    <message>
+        <source>Invalid Signature</source>
+        <translation>無効な署名</translation>
+    </message>
+    <message>
+        <source>Directory entriy is empty.</source>
+        <translation>ディレクトリエントリが空です。</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to add follwing directories?</source>
+        <translation>以下のディレクトリを追加しますか？</translation>
+    </message>
+    <message>
+        <source>Tag entriy is empty.</source>
+        <translation>タグが空です。</translation>
+    </message>
+    <message>
+        <source>Unexpected error</source>
+        <translation>想定外のエラー</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to add follwing tags?</source>
+        <translation>以下のタグを追加しますか？</translation>
+    </message>
+    <message>
+        <source>Scan se&amp;lected directory</source>
+        <translation>選択中のディレクトリをスキャン(&amp;L)</translation>
+    </message>
+    <message>
+        <source>Re&amp;move this directory from list</source>
+        <translation>リストから外す(&amp;M)</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to remove &quot;%1&quot; from list?</source>
+        <translation>&quot;%1&quot; をリストから外しますか？</translation>
     </message>
 </context>
 <context>
@@ -1452,6 +1516,14 @@
     <message>
         <source>Tag</source>
         <translation>タグ</translation>
+    </message>
+    <message>
+        <source>Tag is empty.</source>
+        <translation>タグが空です。</translation>
+    </message>
+    <message>
+        <source>Tagname cound not have &apos;\t&apos; or/and &apos;\n&apos;</source>
+        <translation>タグの名前に \t や \n を指定できません。</translation>
     </message>
 </context>
 <context>

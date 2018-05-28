@@ -104,6 +104,9 @@ $ make
 ## サポート
 If you have troubles, post *Issue* on <https://github.com/ambiesoft/SceneExplorer/issues>.
 
+## 寄付
+Ambiesoftでは寄付を募集しています。詳しくは<http://ambiesoft.fam.cx/donate/>を御覧ください。
+
 ## コンタクト
 - 作者: Ambiesoft trueff
 - E-mail: <ambiesoft.trueff@gmail.com>

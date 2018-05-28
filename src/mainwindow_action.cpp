@@ -880,7 +880,7 @@ void MainWindow::on_directoryWidget_Remove()
 	DirectoryItem* item = (DirectoryItem*) ui->directoryWidget->selectedItems()[0];
 	if (!item->IsNormalItem())
 		return;
-	if (!YesNo(this,QString(tr("Are you sure you want to remove \"%1\" from the lists?")).arg(item->text())))
+    if (!YesNo(this,QString(tr("Are you sure you want to remove \"%1\" from list?")).arg(item->text())))
 		return;
     
     // pDoc_->DeleteDirectory(item);
@@ -1034,12 +1034,13 @@ void MainWindow::on_directoryWidget_customContextMenuRequested(const QPoint &pos
         menu.addSeparator();
 
 
-        QAction actRescan(tr("&Scan to create thumbnails"));
-        actRescan.setEnabled(!di->IsMissingItem());
-        connect(&actRescan, SIGNAL(triggered(bool)),
-            this, SLOT(on_Context_Scan()));
-        menu.addAction(&actRescan);
+//        QAction actRescan(tr("&Scan to create thumbnails"));
+//        actRescan.setEnabled(!di->IsMissingItem());
+//        connect(&actRescan, SIGNAL(triggered(bool)),
+//            this, SLOT(on_Context_Scan()));
+//        menu.addAction(&actRescan);
 
+        menu.addEnablingAction(ui->action_ScanSelectedDirectory);
         menu.addSeparator();
 
         QAction actCheckAll(tr("&Check All"));
@@ -1074,7 +1075,7 @@ void MainWindow::on_directoryWidget_customContextMenuRequested(const QPoint &pos
 
         menu.addSeparator();
 
-        QAction actRemove(tr("Re&move this folder from database"));
+        QAction actRemove(tr("Re&move this directory from list"));
         actRemove.setEnabled(di->IsNormalItem());
         connect(&actRemove, SIGNAL(triggered(bool)),
             this, SLOT(on_directoryWidget_Remove()));

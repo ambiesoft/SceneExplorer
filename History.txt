@@ -1,3 +1,7 @@
+2018/05/29 ver1.9
+i18n
+change to Qt5.11.0
+
 2018/05/29 ver1.8
 Fix edit mene and related context menu
 

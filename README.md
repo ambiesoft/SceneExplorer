@@ -105,6 +105,9 @@ $ make
 ## Support
 If you have troubles, post *Issue* on <https://github.com/ambiesoft/SceneExplorer/issues>.
 
+## Donate
+Support Ambiesoft by making donation. See <http://ambiesoft.fam.cx/donate/>.
+
 ## Contact
 - Author: Ambiesoft trueff
 - E-mail: <ambiesoft.trueff@gmail.com>

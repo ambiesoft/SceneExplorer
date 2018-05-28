@@ -56,11 +56,10 @@ if ERRORLEVEL 1 (
 )
 
 
-
-
-echo "Goint to close in 30 sec"
-ping 127.0.0.1 -n 30 > nul
-exit /b
+:success
+::echo "Goint to close in 30 sec"
+::ping 127.0.0.1 -n 30 > nul
+::exit /b
 
 :error
 pause
