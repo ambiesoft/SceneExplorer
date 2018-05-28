@@ -23,6 +23,11 @@ public:
         QMenu(text,parent) {
         init();
     }
+
+    void addEnablingAction(QAction* pA) {
+        pA->setEnabled(true);
+        addAction(pA);
+    }
 };
 
 #endif // MYCONTEXTMENU_H

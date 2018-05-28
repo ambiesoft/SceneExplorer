@@ -47,6 +47,7 @@ private slots:
 
     void on_lineYomi_textChanged(const QString &arg1);
 
+    virtual void done(int r);
 private:
     Ui::TagInputDialog *ui;
 };

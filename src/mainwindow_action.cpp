@@ -710,26 +710,14 @@ void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
 {
     if(ui->tableView->selectionModel()->hasSelection())
     {
-        MyContextMenu contextMenu(tr("Context menu"), this);
+        MyContextMenu contextMenu("TableView Context Menu", this);
 
-        QAction actionOpen(tr("&Open"), this);
-        connect(&actionOpen, SIGNAL(triggered()),
-                this, SLOT(on_context_openSelectedVideo()));
-        contextMenu.addAction(&actionOpen);
-
-
-        QAction actionOpenFolder(tr("Open &Folder"), this);
-        connect(&actionOpenFolder, SIGNAL(triggered()),
-                this, SLOT(on_context_openSelectedVideoInFolder()));
-        contextMenu.addAction(&actionOpenFolder);
+        contextMenu.addEnablingAction(ui->action_OpenVideo);
+        contextMenu.addEnablingAction(ui->action_OpenFolder);
 
         contextMenu.addSeparator();
 
-        QAction actionCopyPath(tr("&Copy Path"));
-        connect(&actionCopyPath, SIGNAL(triggered()),
-                this, SLOT(on_context_copySelectedVideoPath()));
-        contextMenu.addAction(&actionCopyPath);
-
+        contextMenu.addEnablingAction(ui->action_Copy);
 
         // sub menu start --->
         QMenu menuCopyOther(tr("C&opy others..."), this);
@@ -774,8 +762,8 @@ void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
         // Tags tools ----->
         QMenu menuAddTags(tr("Ta&g..."), this);
         QList< QSharedPointer<QAction> > actTags;
-        QList<QPair<qint64, QString> > tags;
-        pDoc_ && pDoc_->GetAllTags(tags);
+        QList<TagItem*> tags;
+        pDoc_ && pDoc_->GetAllTags(tags,false);
         QSet<qint64> tagsCurrent;
         pDoc_ && pDoc_->GetTagsFromID(getSelectedID(), tagsCurrent);
         if(tags.isEmpty())
@@ -787,17 +775,16 @@ void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
         }
         else
         {
-            for(const QPair<qint64,QString>& pair : tags)
+            for(TagItem* ti : tags)
             {
-                qint64 key = pair.first;
-                QString text = pair.second;
+                QString text = ti->text();
                 QSharedPointer<QAction> act(new QAction(text));
                 connect(act.data(), SIGNAL(triggered()),
                         this, SLOT(on_context_AddTags()));
                 menuAddTags.addAction(act.data());
-                act->setData(key);
+                act->setData(ti->tagid());
                 act->setCheckable(true);
-                if (tagsCurrent.contains(key))
+                if (tagsCurrent.contains(ti->tagid()))
                     act->setChecked(true);
                 actTags.append(act);
             }
@@ -987,7 +974,7 @@ void MainWindow::on_directoryWidget_customContextMenuRequested(const QPoint &pos
 
 	if(!item)
     {
-        MyContextMenu menu(this);
+        MyContextMenu menu("DirectoryWidget Context Menu",this);
         menu.addAction(ui->action_Add_Folder);
         menu.addSeparator();
 
@@ -1012,7 +999,11 @@ void MainWindow::on_directoryWidget_customContextMenuRequested(const QPoint &pos
     }
     else
     {
-        MyContextMenu menu(this);
+        MyContextMenu menu("DirectoryWidget Context Menu",this);
+        menu.addEnablingAction(ui->action_Copy);
+        menu.addEnablingAction(ui->action_OpenFolder);
+        menu.addSeparator();
+
 
         QAction actRescan(tr("&Rescan to create thumbnails"));
         actRescan.setEnabled(!item->IsMissingItem());

@@ -32,10 +32,14 @@ public:
 private:
     qint64 tagid_;
     TagItemType itemType_;
-
+    QString yomi_;
 public:
     static QListWidget* parent_;
-    TagItem(const qint64& tagid, TagItemType itemType);
+    TagItem(bool bHasParent,
+            const qint64& tagid,
+            TagItemType itemType,
+            const QString& text,
+            const QString& yomi);
     qint64 tagid() const {
         return tagid_;
     }
@@ -48,6 +52,10 @@ public:
 
     bool IsChecked() const {
         return checkState()==Qt::Checked;
+    }
+
+    QString yomi() const {
+        return yomi_;
     }
 };
 

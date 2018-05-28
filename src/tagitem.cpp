@@ -19,10 +19,26 @@
 #include "tagitem.h"
 
 QListWidget* TagItem::parent_;
-TagItem::TagItem(const qint64& tagid, TagItemType itemType) :
-    QListWidgetItem(parent_),
+TagItem::TagItem(bool bHasParent,
+                 const qint64& tagid,
+                 TagItemType itemType,
+                 const QString& text,
+                 const QString& yomi) :
+    QListWidgetItem(bHasParent ? parent_ : nullptr),
     tagid_(tagid),
-    itemType_(itemType)
+    itemType_(itemType),
+    yomi_(yomi)
 {
     Q_ASSERT(parent_);
+
+    if(itemType==TI_ALL)
+        setIcon(QIcon(":resource/images/mailbox.png"));
+    else if(itemType==TI_NORMAL)
+    {
+        setIcon(QIcon(":resource/images/tag.png"));
+        setFlags(flags() | Qt::ItemIsUserCheckable);
+    }
+    else
+        Q_ASSERT(false);
+    setText(text);
 }

@@ -72,3 +72,18 @@ void TagInputDialog::setYomi(const QString& txt)
 {
     ui->lineYomi->setText(txt);
 }
+void TagInputDialog::done(int r)
+{
+    QString tag = ui->lineTag->text();
+    if(tag.isEmpty())
+    {
+        Alert(this,tr("Tag is empty."));
+        return;
+    }
+    if(tag.contains("\t") || tag.contains("\n"))
+    {
+        Alert(this,tr("Tagname cound not have '\\t' or/and '\\n'"));
+        return;
+    }
+    QDialog::done(r);
+}

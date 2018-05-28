@@ -491,6 +491,12 @@ private slots:
 
     void on_action_Select_All_triggered();
 
+    void on_action_OpenVideo_triggered();
+
+    void on_action_OpenFolder_triggered();
+
+
+
 private:
     void OnCopyTable();
     void OnCopyDirectory();
@@ -505,6 +511,8 @@ private:
     void OnUpdateCopyTask(QAction* pAction);
     void OnUpdateCopyLog(QAction* pAction);
     void OnUpdateCopyTag(QAction* pAction);
+
+
 
     QThreadPool* pPoolFFmpeg_ = nullptr;
     QThreadPool* getPoolFFmpeg();
@@ -613,9 +621,9 @@ public slots:
                      const QStringList& filteredFiles);
 //    void finished_Filter(int loopId, int id);
 
-    void on_context_openSelectedVideo();
-    void on_context_openSelectedVideoInFolder();
-    void on_context_copySelectedVideoPath();
+
+
+
     void on_context_copySelectedVideoFilename();
     void on_context_removeFromDatabase();
     void on_context_Rename();

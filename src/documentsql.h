@@ -25,6 +25,8 @@
 
 #define DBVERSIONDOC 1
 class DirectoryItem;
+class TagItem;
+
 class DocumentSql : public QObject
 {
     Q_OBJECT
@@ -76,7 +78,7 @@ public:
     bool IncrementOpenCountAndLastAccess(const qint64& id);
     bool setOpenCountAndLascAccess_obsolete(const QList<TableItemDataPointer>& all);
 
-    bool GetAllTags(QList<QPair<qint64, QString> >& tags) const;
+    bool GetAllTags(QList<TagItem*>& tags,bool bHasParent) const;
     bool IsTagExist(const QString& tag) const;
     bool Insert(const QString& tag, const QString& yomi) const;
     bool GetTaggedIDs(const QList<qint64>& tagids, QSet<qint64>& taggedids) const;

@@ -85,25 +85,24 @@ void MainWindow::OnCopyTag()
         Alert(this, TR_NOTAG_SELECTED());
         return;
     }
-    TagItem* ti = (TagItem*)sels[0];
-    if(ti->IsAllItem())
-    {
-        Alert(this, TR_ALLITEM_COULDNOTBE_COPIED());
-        return;
-    }
-    if(!ti->IsNormalItem())
-    {
-        Alert(this, TR_SELECTEDITEM_NOT_NORMALITEM());
-        return;
-    }
 
-    QByteArray dirdata("aaa");
-    QMimeData mimeDir;
-    mimeDir.setData("text/SceneExplorerTag", dirdata);
+    QStringList all;
+    for(QListWidgetItem* qi : ui->listTag->selectedItems())
+    {
+        TagItem* ti = (TagItem*)qi;
+        if(ti->IsNormalItem())
+        {
+            all.append(ti->text() + "\t" + ti->yomi());
+        }
+    }
+//    QByteArray dirdata("aaa");
+//    QMimeData mimeDir;
+//    mimeDir.setData("text/SceneExplorerTag", dirdata);
 
-    QClipboard* clip = QApplication::clipboard();
-    clip->setText(ti->text());
-    clip->setMimeData(&mimeDir);
+//    QClipboard* clip = QApplication::clipboard();
+//    clip->setText(ti->text());
+//    clip->setMimeData(&mimeDir);
+    setClipboardText(all.join("\n"));
 }
 
 void MainWindow::on_action_Copy_triggered()
@@ -154,8 +153,19 @@ void MainWindow::OnUpdateCopyLog(QAction* pAction)
 }
 void MainWindow::OnUpdateCopyTag(QAction* pAction)
 {
-    pAction->setEnabled(!ui->listTag->selectedItems().isEmpty());
+    bool bEnabled = false;
+    for(int i=0; i < ui->listTag->count(); ++i)
+    {
+        TagItem* ti=(TagItem*)ui->listTag->item(i);
+        if(ti->IsNormalItem() && ti->isSelected())
+        {
+            bEnabled = true;
+            break;
+        }
+    }
+    pAction->setEnabled(bEnabled);
 }
+
 
 void MainWindow::OnUpdateEditCopy(QAction* pAction)
 {
@@ -184,5 +194,5 @@ void MainWindow::OnUpdateEditCopy(QAction* pAction)
         OnUpdateCopyTag(pAction);
         return;
     }
-
 }
+

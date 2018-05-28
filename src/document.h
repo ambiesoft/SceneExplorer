@@ -110,9 +110,9 @@ public:
     }
     // bool sort(QList<TableItemDataPointer>& all, SORTCOLUMNMY sc, bool rev) const;
 
-    bool GetAllTags(QList<QPair<qint64, QString> >& tags) const
+    bool GetAllTags(QList<TagItem*>& tags, bool bHasParent) const
     {
-        return docSql_->GetAllTags(tags);
+        return docSql_->GetAllTags(tags,bHasParent);
     }
     bool IsTagExist(const QString& tag) const
     {

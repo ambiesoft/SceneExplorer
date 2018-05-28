@@ -213,6 +213,9 @@
     <property name="title">
      <string>&amp;Edit</string>
     </property>
+    <addaction name="action_OpenVideo"/>
+    <addaction name="action_OpenFolder"/>
+    <addaction name="separator"/>
     <addaction name="action_Copy"/>
     <addaction name="action_Paste"/>
     <addaction name="separator"/>
@@ -842,6 +845,16 @@
   <action name="action_Select_All">
    <property name="text">
     <string>&amp;Select All</string>
+   </property>
+  </action>
+  <action name="action_OpenVideo">
+   <property name="text">
+    <string>&amp;Open Video</string>
+   </property>
+  </action>
+  <action name="action_OpenFolder">
+   <property name="text">
+    <string>Open &amp;Folder</string>
    </property>
   </action>
  </widget>

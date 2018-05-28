@@ -263,31 +263,29 @@ void MainWindow::LoadTags()
     if(!pDoc_)
         return;
 
-    TagItem* tagAll = new TagItem(-1, TagItem::TI_ALL);
-    tagAll->setText(tr("All"));
-    tagAll->setIcon(QIcon(":resource/images/mailbox.png"));
+    TagItem* tagAll = new TagItem(true,
+                                  -1,
+                                  TagItem::TI_ALL,
+                                  tr("All"),
+                                  QString());
     tagAll->setSelected(pDoc_->IsTagAllSelected());
     ui->listTag->addItem(tagAll);
 
-    QList<QPair<qint64, QString> > tags;
-    if(pDoc_->GetAllTags(tags))
+    // QList<QPair<qint64, QString> > tags;
+    QList<TagItem*> tags;
+    if(pDoc_->GetAllTags(tags,true))
     {
         // for(qint64& key : tags.keys())
-        for( const QPair<qint64,QString>& pair : tags)
+        // for( const QPair<qint64,QString>& pair : tags)
+        foreach(TagItem* ti, tags)
         {
-            qint64 tagid = pair.first;
-            QString text = pair.second;
-            TagItem* tagUser = new TagItem(tagid, TagItem::TI_NORMAL);
-            tagUser->setText(text);
-            tagUser->setIcon(QIcon(":resource/images/tag.png"));
-            tagUser->setFlags(tagUser->flags() | Qt::ItemIsUserCheckable);
             bool bSel,bCheck;
-            if(pDoc_->GetTagSelectedAndChecked(tagid,bSel,bCheck))
+            if(pDoc_->GetTagSelectedAndChecked(ti->tagid(),bSel,bCheck))
             {
-                tagUser->setSelected(bSel);
-                tagUser->setCheckState(bCheck ? Qt::Checked : Qt::Unchecked);
+                ti->setSelected(bSel);
+                ti->setCheckState(bCheck ? Qt::Checked : Qt::Unchecked);
             }
-            ui->listTag->addItem(tagUser);
+            ui->listTag->addItem(ti);
         }
     }
 }
@@ -804,21 +802,7 @@ qint64 MainWindow::getSelectedID()
     return v.toLongLong();
 }
 
-void MainWindow::on_context_openSelectedVideo()
-{
-    openVideo(getSelectedID(), getSelectedVideo());
-}
-void MainWindow::on_context_openSelectedVideoInFolder()
-{
-    openVideoInFolder(getSelectedVideo());
-}
 
-void MainWindow::on_context_copySelectedVideoPath()
-{
-    QString movieFile = getSelectedVideo();
-    if(movieFile.isEmpty()) { Alert(this, TR_NOVIDEO_SELECTED()); return;}
-    QApplication::clipboard()->setText(movieFile);
-}
 #include "renamedialog.h"
 void MainWindow::on_context_Rename()
 {
@@ -2058,7 +2042,22 @@ void MainWindow::on_action_Refresh_triggered()
 
 void MainWindow::onMenuEdit_AboutToShow()
 {
+    // open video menu
+    ui->action_OpenVideo->setEnabled(
+                ui->tableView->hasFocus() &&
+                ui->tableView->selectionModel()->hasSelection());
+
+    // open folder menu
+    bool bOpenFolder = false;
+    if(ui->tableView->hasFocus() && ui->tableView->selectionModel()->hasSelection())
+        bOpenFolder = true;
+    else if(ui->directoryWidget->hasFocus() && !ui->directoryWidget->selectedItems().isEmpty())
+        bOpenFolder = true;
+    ui->action_OpenFolder->setEnabled(bOpenFolder);
+
+    // copy
     OnUpdateEditCopy(ui->action_Copy);
+
 }
 
 void MainWindow::on_action_Paste_triggered()
@@ -2083,3 +2082,55 @@ QList<QWidget*> MainWindow::getAllStatusBarWidgets()
 }
 
 
+
+void MainWindow::on_action_OpenVideo_triggered()
+{
+    openVideo(getSelectedID(), getSelectedVideo());
+}
+
+
+void MainWindow::on_action_OpenFolder_triggered()
+{
+
+    if(ui->tableView->hasFocus() && ui->tableView->selectionModel()->hasSelection())
+    {
+        openVideoInFolder(getSelectedVideo());
+        return;
+    }
+    if(ui->directoryWidget->hasFocus() && !ui->directoryWidget->selectedItems().isEmpty())
+    {
+        for(QListWidgetItem* qi : ui->directoryWidget->selectedItems())
+        {
+            DirectoryItem* di = (DirectoryItem*)qi;
+            if(di->IsNormalItem())
+            {
+                QString dir = di->text();
+                if(!QDesktopServices::openUrl(QUrl::fromLocalFile(dir)))
+                {
+                    Alert(this, QString(tr("failed to launch %1.")).arg(dir));
+                }
+            }
+        }
+    }
+}
+
+//void MainWindow::on_action_CopyPath_triggered()
+//{
+//    if(ui->tableView->hasFocus() && ui->tableView->selectionModel()->hasSelection())
+//    {
+//        QString movieFile = getSelectedVideo();
+//        if(movieFile.isEmpty()) { Alert(this, TR_NOVIDEO_SELECTED()); return;}
+
+//        setClipboardText(movieFile);
+//        return;
+//    }
+//    if(ui->directoryWidget->hasFocus() && !ui->directoryWidget->selectedItems().isEmpty())
+//    {
+//        QStringList all;
+//        for(QListWidgetItem* di : ui->directoryWidget->selectedItems())
+//        {
+//            all << di->text();
+//        }
+//        setClipboardText(all.join("\n"));
+//    }
+//}
