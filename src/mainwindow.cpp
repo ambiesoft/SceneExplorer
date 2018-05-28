@@ -298,11 +298,18 @@ void MainWindow::InitDocument()
 
     ui->directoryWidget->clear();
 
-    AddUserEntryDirectory(DirectoryItem::DI_ALL,
-                          -1,
-                          QString(),
-                          pDoc_->IsDirAllSelected(),
-                          pDoc_->IsDirAllChecked());
+//    AddUserEntryDirectory(DirectoryItem::DI_ALL,
+//                          -1,
+//                          QString(),
+//                          pDoc_->IsDirAllSelected(),
+//                          pDoc_->IsDirAllChecked());
+    DirectoryItem* allitem = new DirectoryItem(-1,
+                                               DirectoryItem::DI_ALL,
+                                               tr("All"));
+    // allitem->setChecked(pDoc_->IsDirAllChecked());
+    allitem->setSelected(pDoc_->IsDirAllSelected());
+    ui->directoryWidget->addItem(allitem);
+
 //    const int count = pDoc_==nullptr ? 0 : pDoc_->dirCount();
 //    for(int i=1 ; i <= count ; ++i)
 //    {
@@ -318,9 +325,14 @@ void MainWindow::InitDocument()
     {
         ui->directoryWidget->addItem(di);
     }
-    AddUserEntryDirectory(DirectoryItem::DI_MISSING,
-                          -2,
-                          QString(), false, false);
+//    AddUserEntryDirectory(DirectoryItem::DI_MISSING,
+//                          -2,
+//                          QString(), false, false);
+
+    DirectoryItem* missitem = new DirectoryItem(-2,
+                                                DirectoryItem::DI_MISSING,
+                                                tr("Missing"));
+    ui->directoryWidget->addItem(missitem);
 
     LoadTags();
 
@@ -546,7 +558,7 @@ void MainWindow::insertLog(TaskKind kind, const QVector<int>& ids, const QString
                 ui->txtLog->verticalScrollBar()->maximum()); // Scrolls to the bottom
     }
 }
-void MainWindow::resizeDock(QDockWidget* dock, const QSize& size)
+void MainWindow::resizeDock_obsolete(QDockWidget* dock, const QSize& size)
 {
     // width
     switch(this->dockWidgetArea(dock))
@@ -1423,7 +1435,7 @@ void MainWindow::on_action_Add_Folder_triggered()
     DirectoryItem* newdi=nullptr;
     if(!pDoc_->InsertDirectory(dir, newdi))
     {
-        Alert(this,tr("Failed to insert directory into Database."));
+        Alert(this,TR_FAILED_TO_INSERT_DIRECTORY_INTO_DATABASE());
         return;
     }
 
@@ -1719,7 +1731,22 @@ void MainWindow::on_action_Help_triggered()
 
 }
 
+void MainWindow::CreateNewTag(const QString& tag, const QString& yomi)
+{
+    if(pDoc_->IsTagExist(tag))
+    {
+        Alert(this,tr("Tag \"%1\" already exists.").arg(tag));
+        return;
+    }
 
+    if(!pDoc_->Insert(tag, yomi))
+    {
+        Alert(this,tr("Failed to insert or replace Tag."));
+        return;
+    }
+
+    LoadTags();
+}
 void MainWindow::on_action_Add_new_tag_triggered()
 {
     if(!pDoc_)
@@ -1735,19 +1762,8 @@ void MainWindow::on_action_Add_new_tag_triggered()
 
     QString tag=dlg.tag();
     QString yomi=dlg.yomi();
-    if(pDoc_->IsTagExist(tag))
-    {
-        Alert(this,tr("Tag \"{0}\" already exists.").arg(tag));
-        return;
-    }
 
-    if(!pDoc_->Insert(tag, yomi))
-    {
-        Alert(this,tr("Failed to insert or replace Tag."));
-        return;
-    }
-
-    LoadTags();
+    CreateNewTag(tag,yomi);
 }
 
 
@@ -1882,18 +1898,16 @@ void MainWindow::showTagContextMenu(const QPoint &pos)
     if(!ti)
     {
         // no item selected
-        QPoint globalPos = ui->listTag->mapToGlobal(pos);
-
         // Create menu and insert some actions
         MyContextMenu myMenuFreeArea;
-
         myMenuFreeArea.addAction(ui->action_Add_new_tag);
+        myMenuFreeArea.addEnablingAction(ui->action_Paste);
         myMenuFreeArea.addSeparator();
         myMenuFreeArea.addAction(tr("&Check All"), this, SLOT(checkAllTag()));
         myMenuFreeArea.addAction(tr("&Uncheck All"), this, SLOT(uncheckAllTag()));
 
         // Show context menu at handling position
-        myMenuFreeArea.exec(globalPos);
+        myMenuFreeArea.exec(ui->listTag->mapToGlobal(pos));
     }
     else if(ti->IsAllItem())
     {
@@ -1901,16 +1915,13 @@ void MainWindow::showTagContextMenu(const QPoint &pos)
     }
     else if(ti->IsNormalItem())
     {
-        // Handle global position
-        QPoint globalPos = ui->listTag->mapToGlobal(pos);
-
         // Create menu and insert some actions
         MyContextMenu myMenuItemArea;
         myMenuItemArea.addAction(tr("&Edit"), this, SLOT(editTag()));
         myMenuItemArea.addAction(tr("&Delete"), this, SLOT(deleteTag()));
 
         // Show context menu at handling position
-        myMenuItemArea.exec(globalPos);
+        myMenuItemArea.exec(ui->listTag->mapToGlobal(pos));
     }
     else
     {
@@ -2040,35 +2051,8 @@ void MainWindow::on_action_Refresh_triggered()
     itemChangedCommon(true);
 }
 
-void MainWindow::onMenuEdit_AboutToShow()
-{
-    // open video menu
-    ui->action_OpenVideo->setEnabled(
-                ui->tableView->hasFocus() &&
-                ui->tableView->selectionModel()->hasSelection());
 
-    // open folder menu
-    bool bOpenFolder = false;
-    if(ui->tableView->hasFocus() && ui->tableView->selectionModel()->hasSelection())
-        bOpenFolder = true;
-    else if(ui->directoryWidget->hasFocus() && !ui->directoryWidget->selectedItems().isEmpty())
-        bOpenFolder = true;
-    ui->action_OpenFolder->setEnabled(bOpenFolder);
 
-    // copy
-    OnUpdateEditCopy(ui->action_Copy);
-
-}
-
-void MainWindow::on_action_Paste_triggered()
-{
-
-}
-
-void MainWindow::on_action_Select_All_triggered()
-{
-
-}
 
 QList<QWidget*> MainWindow::getAllStatusBarWidgets()
 {
@@ -2134,3 +2118,14 @@ void MainWindow::on_action_OpenFolder_triggered()
 //        setClipboardText(all.join("\n"));
 //    }
 //}
+
+void MainWindow::on_action_ScanAllDirectories_triggered()
+{
+    ScanSelectedDirectory(true);
+}
+
+
+void MainWindow::on_action_ScanSelectedDirectory_triggered()
+{
+    ScanSelectedDirectory();
+}

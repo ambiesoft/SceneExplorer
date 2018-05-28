@@ -55,6 +55,7 @@ QString GetSystemDefaultLang();
 void InsertUniqueTextToComboBox(QComboBox& combo, const QString& text);
 
 QString dq(const QString& s);
+QString undq(QString s);
 
 bool processCommandLine(QString* helpText=nullptr);
 
@@ -63,6 +64,7 @@ QString ExpandEnv(const QString& str);
 bool isUUID(const QString& s);
 QSqlQuery myq(const QString& sql);
 
+QString getClipboardText();
 void setClipboardText(const QString& text);
 bool isLegalFilePath(QString filename, QString* pError);
 QString GetIllegalFilenameCharacters();

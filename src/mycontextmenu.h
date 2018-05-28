@@ -24,8 +24,8 @@ public:
         init();
     }
 
-    void addEnablingAction(QAction* pA) {
-        pA->setEnabled(true);
+    void addEnablingAction(QAction* pA, bool bEnable = true) {
+        pA->setEnabled(bEnable);
         addAction(pA);
     }
 };

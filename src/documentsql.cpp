@@ -736,3 +736,13 @@ bool DocumentSql::InsertDirectory(const QString& dirOrig, DirectoryItem*& newdi)
 
     return true;
 }
+//bool DocumentSql::DeleteDirectory(DirectoryItem* di)
+//{
+//    MYQMODIFIER QSqlQuery query = myq("DELETE FROM " + docdb("Directories") + " WHERE id=? AND directory=? LIMIT 1");
+//    int i=0;
+//    query.bindValue(i++, di->getID());
+//    query.bindValue(i++, di->text());
+//    SQC(query, exec());
+//    Q_ASSERT(query.numRowsAffected()==1);
+//    return true;
+//}

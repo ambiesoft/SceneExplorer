@@ -308,7 +308,20 @@ QString dq(const QString& s)
 
     return "\"" + s + "\"";
 }
+QString undq(QString s)
+{
+    if(s.isEmpty())
+        return s;
+    if(s[0] != '"')
+        return s;
+    if(!s.endsWith('"'))
+        return s;
 
+    s = s.right(s.length()-1);
+    s = s.left(s.length()-1);
+
+    return s;
+}
 
 bool processCommandLine(QString* helpText)
 {
@@ -442,6 +455,10 @@ QSqlQuery myq(const QString& sql)
     return q;
 }
 
+QString getClipboardText()
+{
+    return QApplication::clipboard()->text();
+}
 void setClipboardText(const QString& text)
 {
     QApplication::clipboard()->setText(text);

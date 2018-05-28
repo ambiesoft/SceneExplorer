@@ -69,7 +69,7 @@ public:
     bool IsDirAllSelected() const {
         return docSql_->isDirAllSelected();
     }
-    bool IsDirAllChecked() const {
+    bool IsDirAllChecked_obsolete() const {
         return docSql_->isDirAllChecked();
     }
 
@@ -173,6 +173,11 @@ public:
     void SetReordered() {
         bReordered_=true;
     }
+    // set reorder to delete directory
+//    bool DeleteDirectory(DirectoryItem* di) {
+//        return docSql_->DeleteDirectory(di);
+//    }
+
 };
 
 #endif // DOCUMENT_H

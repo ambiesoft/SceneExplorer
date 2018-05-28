@@ -70,6 +70,9 @@ class MainWindow : public QMainWindow, IMainWindow
     QString TR_SELECTEDITEM_NOT_NORMALITEM() { return  tr("Selected item is not a normal item.");}
     QString TR_NOTAG_SELECTED() { return tr("No Tag Selected"); }
     QString TR_NO_DOCUMENT() { return tr("No Document");}
+    QString TR_CLIPBOARD_IS_EMPTY() { return tr("Clipboard is empty.");}
+    QString TR_FAILED_TO_INSERT_DIRECTORY_INTO_DATABASE() { return tr("Failed to insert directory into Database.");}
+    QString TR_FAILED_TO_INSERT_TAG_INTO_DATABASE() { return tr("Failed to insert tag into Database.");}
 public:
     explicit MainWindow(QWidget *parent,
                         Settings& settings,
@@ -94,7 +97,8 @@ private:
 
     //SORTCOLUMN currentSort_ = SORTCOLUMN::SORT_NONE;
     //bool currentSortRev_ = false;
-
+    void ScanSelectedDirectory(const bool bAll = false);
+    void CreateNewTag(const QString& tag, const QString& yomi);
     QList<QWidget*> getAllStatusBarWidgets();
     bool GetSelectedTagIDs(QSet<qint64>& taggedids);
     void GetSqlAllSetTable(const QStringList& dirs,
@@ -497,12 +501,19 @@ private slots:
 
 
 
+    void on_action_ScanAllDirectories_triggered();
+
+
+
+    void on_action_ScanSelectedDirectory_triggered();
+
 private:
     void OnCopyTable();
     void OnCopyDirectory();
     void OnCopyTask();
     void OnCopyLog();
     void OnCopyTag();
+
 
     void OnUpdateEditCopy(QAction* pAction);
 
@@ -512,6 +523,8 @@ private:
     void OnUpdateCopyLog(QAction* pAction);
     void OnUpdateCopyTag(QAction* pAction);
 
+    void OnPasteDirectory();
+    void OnPasteTag();
 
 
     QThreadPool* pPoolFFmpeg_ = nullptr;
@@ -525,7 +538,7 @@ private:
 
     void clearAllPool(bool bAppendLog=true);
 
-    void AddUserEntryDirectory(
+    void AddUserEntryDirectory_obsolete(
             DirectoryItem::DirectoryItemType itemType,
             const qint64& dirid,
             const QString& dir,
@@ -550,7 +563,7 @@ private:
 
     TaskModel* taskModel_;
 
-    void resizeDock(QDockWidget* dock, const QSize& size);
+    void resizeDock_obsolete(QDockWidget* dock, const QSize& size);
 
     enum TaskKind {
         GetDir,
@@ -633,7 +646,7 @@ public slots:
     void tableItemCountChanged();
     void tableSortParameterChanged(SORTCOLUMNMY sc, bool rev);
 
-	void on_Rescan();
+    void on_Context_Scan();
 	void on_directoryWidget_Remove();
 	void on_directoryWidget_RemoveMissingItems();
     void on_directoryWidget_CheckAll();

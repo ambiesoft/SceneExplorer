@@ -43,6 +43,7 @@ void MainWindow::showEvent( QShowEvent* event )
     ui->directoryWidget->setMaximumSize(10000,10000);
     ui->txtLog->setMaximumSize(10000,10000);
     ui->listTask->setMaximumSize(10000,10000);
+    ui->listTag->setMaximumSize(10000,10000);
 
     itemChangedCommon();
     tableSortParameterChanged(sortManager_.GetCurrentSort(), sortManager_.GetCurrentRev());  // tableModel_->GetSortColumn(), tableModel_->GetSortReverse());
@@ -68,9 +69,9 @@ void MainWindow::showEvent( QShowEvent* event )
 }
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
-    resizeDock(ui->dockFolder, ui->directoryWidget->size());
-    resizeDock(ui->dockOutput, ui->txtLog->size());
-    resizeDock(ui->dockTask, ui->listTask->size());
+//    resizeDock(ui->dockFolder, ui->directoryWidget->size());
+//    resizeDock(ui->dockOutput, ui->txtLog->size());
+//    resizeDock(ui->dockTask, ui->listTask->size());
     QMainWindow::resizeEvent(event);
 }
 

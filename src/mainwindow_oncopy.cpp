@@ -45,23 +45,24 @@ void MainWindow::OnCopyDirectory()
         Alert(this, TR_NODIRECTORY_SELECTED());
         return;
     }
-    DirectoryItem* di = (DirectoryItem*)sels[0];
-    if(di->IsAllItem())
+    QStringList all;
+    for(int i=0 ; i < sels.count(); ++i)
     {
-        Alert(this, TR_ALLITEM_COULDNOTBE_COPIED());
+        DirectoryItem* di = (DirectoryItem*)sels[i];
+        if(di->IsNormalItem())
+        {
+            all << di->text();
+        }
+    }
+    if(all.isEmpty())
+    {
+        Alert(this,tr("No normal items selected."));
         return;
     }
-    if(di->IsMissingItem())
-    {
-        Alert(this, TR_MISSINGITEM_COULDNOTBE_COPIED());
-        return;
-    }
-    if(!di->IsNormalItem())
-    {
-        Alert(this, TR_SELECTEDITEM_NOT_NORMALITEM());
-        return;
-    }
-    setClipboardText(di->text());
+    QString toSet = STR_DIRECTORY_ENTRY_SIGNATURE;
+    toSet += "\n";
+    toSet += all.join("\n");
+    setClipboardText(toSet);
 }
 void MainWindow::OnCopyTask()
 {
@@ -102,7 +103,11 @@ void MainWindow::OnCopyTag()
 //    QClipboard* clip = QApplication::clipboard();
 //    clip->setText(ti->text());
 //    clip->setMimeData(&mimeDir);
-    setClipboardText(all.join("\n"));
+
+    QString toSet = STR_TAG_ENTRY_SIGNATURE;
+    toSet += "\n";
+    toSet += all.join("\n");
+    setClipboardText(toSet);
 }
 
 void MainWindow::on_action_Copy_triggered()

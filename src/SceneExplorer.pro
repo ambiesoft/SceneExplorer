@@ -65,7 +65,10 @@ SOURCES += \
     mycontextmenu.cpp \
     renamedialog.cpp \
     mainwindow_ctor.cpp \
-    mainwindow_oncopy.cpp
+    mainwindow_oncopy.cpp \
+    mainwindow_onpaste.cpp \
+    mainwindow_onedit.cpp \
+    mainwindow_onselectall.cpp
 
 HEADERS += \
         mainwindow.h \

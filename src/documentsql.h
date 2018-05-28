@@ -70,7 +70,7 @@ public:
     bool isDirChecked(int index) const;
 	// bool setDirChecked(int index, bool b);
 
-	bool removeDirectoryOver(int index);
+    bool removeDirectoryOver(int index);
 
     bool SetLastPos(int row, int column);
     bool GetLastPos(int& row, int& column) const;
@@ -95,6 +95,7 @@ public:
     bool setDirNormalItemState(const DirectoryItem* item);
     bool GetAllDirs(QList<DirectoryItem*>& dirs) const;
     bool InsertDirectory(const QString& dir, DirectoryItem*& newdi);
+    // bool DeleteDirectory(DirectoryItem* di);
 };
 
 #endif // DOCUMENTSQL_H

@@ -57,7 +57,9 @@ public:
     bool IsChecked() const {
         return checkState()==Qt::Checked;
     }
-
+    void setChecked(bool bCheck) {
+        setCheckState(bCheck ? Qt::Checked : Qt::Unchecked);
+    }
     int IsSelectedInt() const {
         return isSelected() ? 1:0;
     }
