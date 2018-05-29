@@ -64,6 +64,10 @@ start "" %~dp0SceneExplorer.exe %~dp0MyApp.scexd
 
 See *Help -> About Documents* to confirm which files are read.
 
+## Uninstall
+1. Select **[Help] -> [About Document]** and find which directory is used. 
+2. Remove those files and directories. 
+
 
 ## Buid
 ### Windows
