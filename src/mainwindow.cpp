@@ -823,8 +823,8 @@ void MainWindow::on_context_Rename()
 
     QString olddir = normalizeDir(QFileInfo(oldfull).absolutePath());
     QString oldname = QFileInfo(oldfull).fileName();
-    QString oldbasename = QFileInfo(oldfull).baseName();
     QString oldext = QFileInfo(oldfull).suffix();
+    QString oldbasename = oldname.left(oldname.length()-oldext.length()-1);
 
     RenameDialog dlg(this);
     dlg.setBasename(oldbasename);
