@@ -2149,3 +2149,5 @@ void MainWindow::on_action_ScanSelectedDirectory_triggered()
 {
     ScanSelectedDirectory();
 }
+
+

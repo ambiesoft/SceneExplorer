@@ -508,6 +508,8 @@ private slots:
 
     void on_action_ScanSelectedDirectory_triggered();
 
+    void on_actionSort_by_full_name_triggered();
+
 private:
     void OnCopyTable();
     void OnCopyDirectory();

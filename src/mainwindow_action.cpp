@@ -207,9 +207,8 @@ void MainWindow::on_menu_tag_triggered()
     int index = action->data().toInt();
     TagItem* ti = (TagItem*) ui->listTag->item(index);
 
-    qDebug() << ti->IsChecked();
+
     ti->setCheckState(ti->IsChecked() ? Qt::Unchecked : Qt::Checked);
-    qDebug() << ti->IsChecked();
 }
 void MainWindow::onMenuTag_AboutToShow()
 {
@@ -675,6 +674,10 @@ void MainWindow::onSortCommon(SORTCOLUMNMY sortColumn)
 void MainWindow::on_actionSort_by_file_name_triggered()
 {
 	onSortCommon(SORT_FILENAME);
+}
+void MainWindow::on_actionSort_by_full_name_triggered()
+{
+    onSortCommon(SORT_FULLNAME);
 }
 void MainWindow::on_actionSort_by_file_size_triggered()
 {

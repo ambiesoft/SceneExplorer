@@ -683,14 +683,19 @@ void AppendLitmiArg(QString& sql, const LimitArg& limit)
 
     sql += QString(" LIMIT %1, %2").arg(limit.GetOffset()).arg(limit.GetCount());
 }
-void AppendSortArg(QString& sql, const QString& sortby, bool sortrev)
+void AppendSortArg(QString& sql, const QStringList& sortbys, bool sortrev)
 {
-    if (!sortby.isEmpty())
+    if(sortbys.isEmpty())
+        return;
+
+    sql += " ORDER BY ";
+    for(int i=0 ; i < sortbys.count(); ++i)
     {
-        sql += " ORDER BY `";
-        sql += sortby;
-        sql += "` ";
+        sql += sortbys[i];
+        sql += " ";
         sql += sortrev ? "ASC" : "DESC";
+        if((i+1) != sortbys.count())
+            sql += ",";
     }
 }
 
@@ -713,36 +718,40 @@ bool Sql::GetAllSqlString(
             sql.append(", ");
     }
 
-    QString sortby;
+    QStringList sortby;
     switch(sortcolumn)
     {
     case SORT_NONE:
         break;
     case SORT_FILENAME:
-        sortby = "name";
+        sortby << "name";
+        break;
+    case SORT_FULLNAME:
+        sortby << "directory" << "name";
         break;
     case SORT_SIZE:
-        sortby = "size";
+        sortby << "size";
         break;
     case SORT_WTIME:
-        sortby = "wtime";
+        sortby << "wtime";
         break;
     case SORT_RESOLUTION:
         sql += ", vwidth * vheight AS resolution ";
-        sortby = "resolution";
+        sortby << "resolution";
         break;
     case SORT_DURATION:
-        sortby = "duration";
+        sortby << "duration";
         break;
     case SORT_BITRATE:
-        sortby = "bitrate";
+        sortby << "bitrate";
         break;
     case SORT_OPENCOUNT:
-        sortby = "opencount";
+        sortby << "opencount";
         break;
     case SORT_LASTACCESS:
-        sortby = "lastaccess";
+        sortby << "lastaccess";
         break;
+
     default:
         Q_ASSERT(false);
         break;

@@ -52,6 +52,8 @@ class TableItemData
 
     int opencount_=0;
     qint64 lastaccess_ = 0;
+
+    bool displayed_=false;
     TableItemData(const qint64& id,
                   const QStringList& files,
                   const QString& movieDirectory,
@@ -229,6 +231,13 @@ public:
 //	void IncrementOpenCount() {
 //        ++opencount_;
 //	}
+
+    bool isDisplayed() const {
+        return displayed_;
+    }
+    void setDisplayed() {
+        displayed_=true;
+    }
 };
 
 #endif // LISTITEMDATA_H

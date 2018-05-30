@@ -51,6 +51,7 @@ enum ImageCacheType {
 enum SORTCOLUMNMY{
     SORT_NONE,
     SORT_FILENAME,
+    SORT_FULLNAME,
     SORT_SIZE,
     SORT_WTIME,
     SORT_RESOLUTION,
@@ -60,7 +61,7 @@ enum SORTCOLUMNMY{
     SORT_LASTACCESS,
 
 	COUNT_SORTCOLUMN,
-} ;
+};
 
 extern QFont* gpMenuFont_;
 

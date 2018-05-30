@@ -579,7 +579,7 @@ bool DocumentSql::SetTagged(const qint64& id, const qint64& tagid, const bool bS
 bool DocumentSql::GetTag(const qint64& tagid, QString& tag, QString& yomi) const
 {
     MYQMODIFIER QSqlQuery query = myq("SELECT tag,yomi FROM " + docdb("Tag") + " WHERE tagid=? AND dbid=?");
-    qDebug() << query.isValid();
+    
     int i=0;
     query.bindValue(i++, tagid);
     query.bindValue(i++,gpSQL->getDbID());

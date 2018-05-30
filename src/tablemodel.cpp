@@ -472,26 +472,26 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
         {
             case Qt::DecorationRole:
             {
-				qDebug() << "Image DecorationRoll: Index=" << index.row();
+                TableItemDataPointer itemData = itemDatas_[actualIndex];
+                if(!itemData->isDisplayed())
+                    qDebug() << "Image DecorationRoll First: Index=" << index.row();
+                itemData->setDisplayed();
 
                 parent_->setColumnWidth(index.row(), THUMB_WIDTH);
                 parent_->setRowHeight(index.row(), THUMB_HEIGHT);
 
                 QString imageFile = pathCombine(FILEPART_THUMBS,
-                                                itemDatas_[actualIndex]->getImageFiles()[getActualColumnIndex(index.column())]);
+                                                itemData->getImageFiles()[getActualColumnIndex(index.column())]);
                 if(imagecache_==ImageCacheType::IC_NEVER)
                 {
                     QImage image(imageFile);
-                    // const PixmapPointer pix = PixmapPointer(new QPixmap(QPixmap::fromImage(image)));
-                   return QPixmap::fromImage(image);
+                    return QPixmap::fromImage(image);
                 }
                 else
                 {
                     if(!mapPixmaps_.keys().contains(imageFile))
                     {
-                        // QString imageFile("C:\\Cygwin\\home\\fjUnc\\gitdev\\SceneExplorer\\build-SceneExplorer-Desktop_Qt_5_10_0_MSVC2013_64bit-Debug\\0b76916f-3fb8-49be-a7da-d110ed476952-2.png");
                         QImage image(imageFile);
-                        // const PixmapPointer pix = PixmapPointer(new QPixmap(QPixmap::fromImage(image)));
                         QVariant vpix(QPixmap::fromImage(image));
                         mapPixmaps_[imageFile]= vpix;
                     }
