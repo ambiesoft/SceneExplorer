@@ -101,6 +101,8 @@ namespace Consts
     const char KEY_FFPROBE_EXECUTABLE[] = "ffprobeexecutable";
     const char KEY_FFMPEG_EXECUTABLE[] = "ffmpegexecutable";
 
+    const char KEY_MESSAGEBOX_REMOVEFORMEXTERNALMEDIA[] = "mb_removefromexternalmedia";
+
 
     const char FILEPART_THUMBS[] = "thumbs";
 

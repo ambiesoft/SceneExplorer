@@ -530,7 +530,7 @@ bool MainWindow::IsDirSelected(const QString& dir) const
     if(ui->directoryWidget->IsAllItemSelectedOrChecked())
         return true;
 
-    foreach(const QString& d, currentDirs_)
+    foreach(const QString& d, lastQueriedDirs_)
     {
         if(IsSubDir(d, dir))
             return true;
@@ -670,7 +670,7 @@ void MainWindow::onSortCommon(SORTCOLUMNMY sortColumn)
 	sortManager_.onSort(sortColumn);
 	if (limitManager_)
 		limitManager_->Reset();
-    GetSqlAllSetTable(currentDirs_, currentIsTagValid_ ? &currentTaggedIDs_:nullptr);
+    GetSqlAllSetTable(lastQueriedDirs_, lastQueriedIsTagValid_ ? &lastQueriedTaggedIDs_:nullptr);
 }
 void MainWindow::on_actionSort_by_file_name_triggered()
 {
@@ -1102,7 +1102,7 @@ void MainWindow::on_ShowMissingClicked_common(bool bNextCheck)
 
     ui->actionShow_missing_files->setChecked(bNextCheck);
     tbShowNonExistant_->setChecked(bNextCheck);
-    GetSqlAllSetTable(currentDirs_, currentIsTagValid_ ? &currentTaggedIDs_:nullptr);
+    GetSqlAllSetTable(lastQueriedDirs_, lastQueriedIsTagValid_ ? &lastQueriedTaggedIDs_:nullptr);
 }
 void MainWindow::on_action_ShowMissingClicked()
 {

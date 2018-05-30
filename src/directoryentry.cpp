@@ -171,3 +171,14 @@ void DirectoryEntry::SortNormalItems()
     insertItem(0, itemAll);
     addItem(itemMissing);
 }
+QList<DirectoryItem*> DirectoryEntry::selectedOrCheckedItems()
+{
+    QList<DirectoryItem*> items;
+    for(int i=0 ; i < count(); ++i)
+    {
+        DirectoryItem* di = (DirectoryItem*)item(i);
+        if(di->isSelected() || di->IsChecked())
+            items.append(di);
+    }
+    return items;
+}

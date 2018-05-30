@@ -91,9 +91,10 @@ private:
 	bool closed_ = false;
     bool directoryChanging_ = false;
     bool tagChanging_ = false;
-    QStringList currentDirs_ = {"dummy"};
-    bool currentIsTagValid_ = false;
-    QSet<qint64> currentTaggedIDs_ = {-1};
+    bool lastQueriedOnlyMissing_ = false;
+    QStringList lastQueriedDirs_ = {"dummy"};
+    bool lastQueriedIsTagValid_ = false;
+    QSet<qint64> lastQueriedTaggedIDs_ = {-1};
 
     //SORTCOLUMN currentSort_ = SORTCOLUMN::SORT_NONE;
     //bool currentSortRev_ = false;

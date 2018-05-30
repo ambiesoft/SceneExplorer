@@ -47,6 +47,8 @@ public:
     bool IsBottomNormalItem(int row) const;
 
     void SortNormalItems();
+
+    QList<DirectoryItem*> selectedOrCheckedItems();
 };
 
 #endif // DIRECTORYENTRY_H

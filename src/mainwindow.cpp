@@ -874,24 +874,28 @@ void MainWindow::on_context_removeFromDatabase()
     QString movieFile = getSelectedVideo(false);
     if(movieFile.isEmpty()) { Alert(this, TR_NOVIDEO_SELECTED()); return;}
 
-    static bool sbRemoveFromHardDisk;
+    bool bRemoveFromHardDisk = settings_.valueBool(KEY_MESSAGEBOX_REMOVEFORMEXTERNALMEDIA);
 
     QMessageBox msgbox(this);
+
     QCheckBox cbRemoveFromMedia(tr("Also remove from external media"));
     cbRemoveFromMedia.setEnabled(QFile(movieFile).exists());
-    cbRemoveFromMedia.setChecked(sbRemoveFromHardDisk);
+    cbRemoveFromMedia.setChecked(bRemoveFromHardDisk);
+
     msgbox.setText(QString(tr("Do you want to remove \"%1\" from database?")).
                    arg(movieFile));
+
     msgbox.setIcon(QMessageBox::Icon::Question);
     msgbox.addButton(QMessageBox::Yes);
     msgbox.addButton(QMessageBox::No);
     msgbox.setDefaultButton(QMessageBox::No);
     msgbox.setCheckBox(&cbRemoveFromMedia);
 
-
     if(msgbox.exec() != QMessageBox::Yes)
         return;
-    sbRemoveFromHardDisk = cbRemoveFromMedia.checkState()==Qt::Checked;
+
+    bRemoveFromHardDisk = cbRemoveFromMedia.checkState()==Qt::Checked;
+    settings_.setValue(KEY_MESSAGEBOX_REMOVEFORMEXTERNALMEDIA, bRemoveFromHardDisk);
 
     QString error;
     QString dir,name;
@@ -910,7 +914,7 @@ void MainWindow::on_context_removeFromDatabase()
     }
     tableModel_->RemoveItem(movieFile);
 
-    if(sbRemoveFromHardDisk)
+    if(bRemoveFromHardDisk)
     {
         try
         {
@@ -1028,6 +1032,18 @@ void MainWindow::on_directoryWidget_selectionChanged(const QItemSelection &selec
 {
     Q_UNUSED(selected);
     Q_UNUSED(deselected);
+
+    if (!initialized_ || closed_)
+        return;
+
+    if(ui->directoryWidget->IsMissingItemSelectedOrChecked())
+    {
+        if(!YesNo(this,
+              tr("Showing all missing item will take some time. Do you want to continue?")))
+        {
+            return;
+        }
+    }
     if(limitManager_)
         limitManager_->Reset();
     itemChangedCommon();
@@ -1045,40 +1061,39 @@ void MainWindow::itemChangedCommon(bool bForceRead)
 
     QStringList dirs;
     bool bOnlyMissing = false;
-    for(int i=0 ; i < ui->directoryWidget->count(); ++i)
+    QList<DirectoryItem*> allSelectedOrChecked = ui->directoryWidget->selectedOrCheckedItems();
+    // Add also current item
+    // when blank area is clicked, all selection is gone
+    // if(allSelectedOrChecked.isEmpty())
     {
-        DirectoryItem* item = (DirectoryItem*)ui->directoryWidget->item(i);
+        DirectoryItem* currentDi =(DirectoryItem*)ui->directoryWidget->currentItem();
+        if(currentDi && !allSelectedOrChecked.contains(currentDi))
+        {
+            allSelectedOrChecked.append(currentDi);
+        }
+    }
+
+    foreach(DirectoryItem* item, allSelectedOrChecked)
+    {
         if(item->IsAllItem())
         {
-            if(item->isSelected())
-            {
-                dirs = QStringList();
-                // bForceRead = true;
-                break;
-            }
+            dirs = QStringList();
+            break;
         }
         else if(item->IsMissingItem())
         {
-            if(item->isSelected())
-            {
-                dirs = QStringList();
-                bOnlyMissing = true;
-                bForceRead = true;
-                break;
-            }
+            dirs = QStringList();
+            bOnlyMissing = true;
+            bForceRead = true;
+            break;
         }
-
-
-        if(item->checkState()==Qt::Checked)
+        else
         {
+            Q_ASSERT(item->IsNormalItem());
             dirs.append(item->text());
             continue;
         }
-        if(item->isSelected())
-        {
-            dirs.append(item->text());
-            continue;
-        }
+        Q_ASSERT(false);
     }
 
     // Get Tag selected
@@ -1087,7 +1102,11 @@ void MainWindow::itemChangedCommon(bool bForceRead)
 
     tbShowNonExistant_->setEnabled(!bOnlyMissing);
 
-    const bool isSameReq = (dirs == currentDirs_ && currentIsTagValid_==isTagValid && currentTaggedIDs_==taggedids);
+    const bool isSameReq =
+            lastQueriedOnlyMissing_ == bOnlyMissing &&
+            lastQueriedDirs_ == dirs  &&
+            lastQueriedIsTagValid_==isTagValid &&
+            lastQueriedTaggedIDs_==taggedids;
     if(!bForceRead && isSameReq)
     {
             return;
@@ -1096,9 +1115,10 @@ void MainWindow::itemChangedCommon(bool bForceRead)
 	{
 		limitManager_->Reset();
 	}
-    currentDirs_ = dirs;
-    currentIsTagValid_ = isTagValid;
-    currentTaggedIDs_ = taggedids;
+    lastQueriedOnlyMissing_ = bOnlyMissing;
+    lastQueriedDirs_ = dirs;
+    lastQueriedIsTagValid_ = isTagValid;
+    lastQueriedTaggedIDs_ = taggedids;
 
     GetSqlAllSetTable(dirs, isTagValid ? &taggedids : nullptr, bOnlyMissing);
 }
