@@ -1,3 +1,6 @@
+2018/06/01 ver1.11
+exclude other table from joined table
+
 2018/05/31 ver1.10
 set process priority
 
