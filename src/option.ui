@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>562</width>
-    <height>453</height>
+    <height>473</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -342,6 +342,7 @@
  <tabstops>
   <tabstop>spinBoxGetDir</tabstop>
   <tabstop>spinBoxThumb</tabstop>
+  <tabstop>cmbTaskPriority</tabstop>
   <tabstop>cmbThumbCount</tabstop>
   <tabstop>lineffprobe</tabstop>
   <tabstop>tbffprobe</tabstop>
@@ -371,7 +372,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>552</x>
-     <y>318</y>
+     <y>463</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -387,7 +388,7 @@
    <hints>
     <hint type="sourcelabel">
      <x>552</x>
-     <y>318</y>
+     <y>463</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>

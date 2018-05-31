@@ -201,14 +201,14 @@ QString MainWindow::GetDefaultDocumentPath()
     QString docdir = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
     if(docdir.isEmpty())
     {
-        Alert(this,QString(tr("Failed to get document directory.")));
+        Alert(this, tr("Failed to get document directory."));
         return QString();
     }
     docdir=pathCombine(docdir, APPNAME);
     QDir().mkpath(docdir);
     if(!QDir(docdir).exists())
     {
-        Alert(this,QString(tr("Failed to create directory. \"%1\"")).arg(docdir));
+        Alert(this, tr("Failed to create directory. \"%1\"").arg(docdir));
         return QString();
     }
 
@@ -642,7 +642,7 @@ void MainWindow::afterGetDir(int loopId, int id,
         {
             if(true) // gpSQL->hasThumb(dir, file))
             {
-                insertLog(TaskKind::GetDir, id, QString(tr("Already exists. \"%1\"")).
+                insertLog(TaskKind::GetDir, id, tr("Already exists. \"%1\"").
                           arg(fi.absoluteFilePath()));
                 continue;
             }
@@ -673,7 +673,7 @@ void MainWindow::afterGetDir(int loopId, int id,
                     // db size is same size with disk
                     // and salient is same ( conditonal queried from db )
                     // we assume file is moved
-                    insertLog(TaskKind::GetDir, id, QString(tr("Rename detected. \"%1\" -> \"%2\"")).
+                    insertLog(TaskKind::GetDir, id, tr("Rename detected. \"%1\" -> \"%2\"").
                               arg(dbFile).
                               arg(pathCombine(dir,file)));
                     if(gpSQL->RenameEntry(dirsDB[i], filesDB[i], dir, file))
@@ -712,7 +712,7 @@ void MainWindow::finished_GetDir(int loopId, int id, const QString& dir)
     idManager_->IncrementDone(IDKIND_GetDir);
     Q_ASSERT(idManager_->Get(IDKIND_GetDir) >= idManager_->GetDone(IDKIND_GetDir));
 
-    insertLog(TaskKind::GetDir, id, QString(tr("Scan directory finished. %1")).arg(dir));
+    insertLog(TaskKind::GetDir, id, tr("Scan directory finished. %1").arg(dir));
 
     checkTaskFinished();
 }
@@ -736,11 +736,11 @@ void MainWindow::afterFilter2(int loopId,int id,
 
     if(filteredFiles.isEmpty())
     {
-        insertLog(TaskKind::GetDir, id, QString(tr("No new files found in %1")).arg(dir));
+        insertLog(TaskKind::GetDir, id, tr("No new files found in %1").arg(dir));
     }
     else
     {
-        insertLog(TaskKind::GetDir, id, QString(tr("%1 new items found in %2")).
+        insertLog(TaskKind::GetDir, id, tr("%1 new items found in %2").
                   arg(QString::number(filteredFiles.count())).
                   arg(dir));
     }
@@ -891,7 +891,7 @@ void MainWindow::on_context_removeFromDatabase()
     cbRemoveFromMedia.setEnabled(QFile(movieFile).exists());
     cbRemoveFromMedia.setChecked(bRemoveFromHardDisk);
 
-    msgbox.setText(QString(tr("Do you want to remove \"%1\" from database?")).
+    msgbox.setText(tr("Do you want to remove \"%1\" from database?").
                    arg(movieFile));
 
     msgbox.setIcon(QMessageBox::Icon::Question);
@@ -917,7 +917,7 @@ void MainWindow::on_context_removeFromDatabase()
     if(!gpSQL->RemoveEntry(dir,name,&error))
     {
         Alert(this,
-              QString(tr("Failed to remove \"%1\".")).
+              tr("Failed to remove \"%1\".").
               arg(movieFile));
         return;
     }
@@ -1237,7 +1237,7 @@ void MainWindow::GetSqlAllSetTable(const QStringList& dirs,
 
     insertLog(TaskKind::App,
               0,
-              QString(tr("Quering Database takes %1 milliseconds.")).arg(timer.elapsed()));
+              tr("Querying Database takes %1 milliseconds.").arg(timer.elapsed()));
 
     // pDoc_->setOpenCountAndLascAccess_obsolete(all);
     // pDoc_->sort(all, sortManager_.GetCurrentSort(), sortManager_.GetCurrentRev());
@@ -1247,7 +1247,7 @@ void MainWindow::GetSqlAllSetTable(const QStringList& dirs,
 
     insertLog(TaskKind::App,
               0,
-              QString(tr("Resetting data takes %1 milliseconds.")).arg(timer.elapsed()));
+              tr("Resetting data takes %1 milliseconds.").arg(timer.elapsed()));
 
 
 	tableSortParameterChanged(sortManager_.GetCurrentSort(), sortManager_.GetCurrentRev());
@@ -1336,12 +1336,11 @@ void MainWindow::on_directoryWidget_itemChanged(QListWidgetItem *item)
 
 void MainWindow::tableItemCountChanged()
 {
-    // slItemCount_->setText(QString(tr("Items: %1")).arg(tableModel_->GetItemCount()));
-    slItemCount_->setText(QString(tr("Items: %1")).arg(proxyModel_->GetItemCount()));
+    slItemCount_->setText(tr("Items: %1").arg(proxyModel_->GetItemCount()));
 }
 void MainWindow::tableSortParameterChanged(SORTCOLUMNMY sc, bool rev)
 {
-    QString text = QString(tr("Sort: %1 %2")).
+    QString text = tr("Sort: %1 %2").
             arg(GetSortColumnName(sc)).
             arg(rev ? "-" : "+");
     slItemSort_->setText(text);
@@ -1450,14 +1449,15 @@ void MainWindow::on_action_Add_Folder_triggered()
     if(!pDoc_)
         return;
 
-    QString dir = QFileDialog::getExistingDirectory(this, tr("Open Directory"),lastSelectedAddFolderDir_);
+    QString dir = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
+                                                    lastSelectedAddFolderDir_);
     if(dir.isEmpty())
         return;
     lastSelectedAddFolderDir_ = dir;
 
     if(HasDirectory(dir))
     {
-        Alert(this, QString(tr("Directory '%1' already exists.")).arg(dir));
+        Alert(this, tr("Directory '%1' already exists.").arg(dir));
         return;
     }
 
@@ -1681,7 +1681,8 @@ void MainWindow::on_actionAbout_document_triggered()
 
 void MainWindow::on_actionStart_scan_to_create_thumnails_triggered()
 {
-    QString dir = QFileDialog::getExistingDirectory(this, tr("Select Directory"),lastSelectedScanDir_);
+    QString dir = QFileDialog::getExistingDirectory(this, tr("Select Directory"),
+                                                    lastSelectedScanDir_);
     if(dir.isEmpty())
         return;
     lastSelectedScanDir_ = dir;
@@ -1698,7 +1699,7 @@ void MainWindow::on_action_Empty_find_texts_triggered()
         Info(this, tr("There are no find texts."));
         return;
     }
-    if(!YesNo(this, QString(tr("Are you sure you want to empty %1 find texts?")).arg(count)))
+    if(!YesNo(this, tr("Are you sure you want to empty %1 find texts?").arg(count)))
         return;
     cmbFind_->clear();
 }
@@ -1754,7 +1755,7 @@ void MainWindow::on_action_Help_triggered()
 
     if(!QDesktopServices::openUrl(url))
     {
-        Alert(this, QString(tr("failed to launch %1.")).arg(url));
+        Alert(this, tr("failed to launch %1.").arg(url));
         return;
     }
 
@@ -2120,7 +2121,7 @@ void MainWindow::on_action_OpenFolder_triggered()
                 QString dir = di->text();
                 if(!QDesktopServices::openUrl(QUrl::fromLocalFile(dir)))
                 {
-                    Alert(this, QString(tr("failed to launch %1.")).arg(dir));
+                    Alert(this, tr("failed to launch %1.").arg(dir));
                 }
             }
         }
@@ -2184,3 +2185,4 @@ void MainWindow::SetTaskPriorityAsInt(int priority)
     }
     *taskPriority_ = (QThread::Priority) priority;
 }
+

@@ -457,7 +457,7 @@
     </message>
     <message>
         <source>Quering Database takes %1 milliseconds.</source>
-        <translation>データベースのクエリに %1 ミリ秒かかりました。</translation>
+        <translation type="vanished">データベースのクエリに %1 ミリ秒かかりました。</translation>
     </message>
     <message>
         <source>Resetting data takes %1 milliseconds.</source>
@@ -1031,6 +1031,30 @@
         <source>Are you sure you want to remove &quot;%1&quot; from list?</source>
         <translation>&quot;%1&quot; をリストから外しますか？</translation>
     </message>
+    <message>
+        <source>Sort by f&amp;ull name</source>
+        <translation>フルパスでソート(&amp;U)</translation>
+    </message>
+    <message>
+        <source>C&amp;lear</source>
+        <translation>クリア(&amp;L)</translation>
+    </message>
+    <message>
+        <source>Showing all missing item will take some time. Do you want to continue?</source>
+        <translation>すべての存在しないアイテムを表示するには時間がかかる可能性があります。続行しますか？</translation>
+    </message>
+    <message>
+        <source>Querying Database takes %1 milliseconds.</source>
+        <translation>データベースのクエリに %1 ミリ秒かかりました。</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to clear the Output log?</source>
+        <translation>出力ログをクリアしますか？</translation>
+    </message>
+    <message>
+        <source>Warning</source>
+        <translation>警告</translation>
+    </message>
 </context>
 <context>
     <name>Option</name>
@@ -1040,11 +1064,11 @@
     </message>
     <message>
         <source>Thread count of &amp;iterating direcotry:</source>
-        <translation>ディレクトリ列挙のスレッド数(&amp;I):</translation>
+        <translation type="vanished">ディレクトリ列挙のスレッド数(&amp;I):</translation>
     </message>
     <message>
         <source>Thread count of &amp;creating thumbnail:</source>
-        <translation>サムネイル作成のスレッド数(&amp;C):</translation>
+        <translation type="vanished">サムネイル作成のスレッド数(&amp;C):</translation>
     </message>
     <message>
         <source>&amp;Image cache:</source>
@@ -1126,6 +1150,18 @@
         <source>&gt;&gt;</source>
         <translation></translation>
     </message>
+    <message>
+        <source>Task count of &amp;iterating direcotry:</source>
+        <translation>ディレクトリ列挙のタスク数(&amp;I):</translation>
+    </message>
+    <message>
+        <source>Task count of &amp;creating thumbnail:</source>
+        <translation>サムネイル作成のスレッド数(&amp;C):</translation>
+    </message>
+    <message>
+        <source>Task Priority:</source>
+        <translation>タスクの優先度:</translation>
+    </message>
 </context>
 <context>
     <name>OptionDialog</name>
@@ -1136,6 +1172,34 @@
     <message>
         <source>Context menu</source>
         <translation>コンテキストメニュー</translation>
+    </message>
+    <message>
+        <source>Default</source>
+        <translation>デフォルト</translation>
+    </message>
+    <message>
+        <source>HighestPriority</source>
+        <translation>最も高い優先度</translation>
+    </message>
+    <message>
+        <source>HighPriority</source>
+        <translation>高い優先度</translation>
+    </message>
+    <message>
+        <source>NormalPriority</source>
+        <translation>通常の優先度</translation>
+    </message>
+    <message>
+        <source>LowPriority</source>
+        <translation>低い優先度</translation>
+    </message>
+    <message>
+        <source>LowestPriority</source>
+        <translation>最も低い優先度</translation>
+    </message>
+    <message>
+        <source>IdlePriority</source>
+        <translation>アイドル優先度</translation>
     </message>
 </context>
 <context>
@@ -1417,6 +1481,30 @@
         <source>Filename could not have Nul character.</source>
         <translation>ファイル名はNulキャラを持てません。</translation>
     </message>
+    <message>
+        <source>Fullname</source>
+        <translation>フルパス</translation>
+    </message>
+    <message>
+        <source>setpriority(%1) failed with %2.</source>
+        <translation>setpriority(%1) が %2 で失敗しました。</translation>
+    </message>
+    <message>
+        <source>ioprio_set(%1) failed with %2.</source>
+        <translation>ioprio_set(%1) が %2 で失敗しました。</translation>
+    </message>
+    <message>
+        <source>SetPriorityClass(%1) failed with %2</source>
+        <translation>SetPriorityClass(%1) が %2 で失敗しました。</translation>
+    </message>
+    <message>
+        <source>NtSetInformationProcess(%1,%2) failed with %3.</source>
+        <translation>NtSetInformationProcess(%1,%2) が %3 で失敗しました。</translation>
+    </message>
+    <message>
+        <source>Failed to OpenProcess(%1).</source>
+        <translation>OpenProcess(%1) に失敗しました。</translation>
+    </message>
 </context>
 <context>
     <name>RenameDialog</name>
@@ -1563,6 +1651,10 @@
     <message>
         <source>Failed to create thumbnail</source>
         <translation>サムネイルの作成に失敗しました</translation>
+    </message>
+    <message>
+        <source>Failed to set priority %1.</source>
+        <translation>優先度を %1 にするのに失敗しました。</translation>
     </message>
 </context>
 <context>

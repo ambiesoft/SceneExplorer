@@ -57,7 +57,7 @@ bool Document::Load(const QString& file, const bool bMustExists)
     const bool bExist = QFile(file).exists();
     if(bMustExists && !bExist)
     {
-        lastErr_ = QString(tr("\"%1\" does not exist.")).arg(file);
+        lastErr_ = tr("\"%1\" does not exist.").arg(file);
         return false;
     }
 
@@ -72,98 +72,6 @@ bool Document::Load(const QString& file, const bool bMustExists)
         return false;
     }
     return true;
-
-//    file_ = file;
-//    const bool bExist = QFile(file).exists();
-//    if(bMustExists && !bExist)
-//    {
-//        lastErr_ = QString(tr("\"%1\" does not exist.")).arg(file);
-//        return false;
-//    }
-//    if(QFile(file).size() > (10*1024*1024))
-//    {
-//        lastErr_ = tr("File size is too big.");
-//        return false;
-//    }
-
-//    qDebug() << "Start opening document " << file;
-
-//    if(bExist)
-//    {
-//        QFile theFile(file);
-//        theFile.open(QIODevice::ReadWrite);
-//        if(!theFile.isReadable())
-//        {
-//            lastErr_=QString(tr("\"%1\" is not readable.")).arg(file);
-//            return false;
-//        }
-//        if(!theFile.isWritable())
-//        {
-//            lastErr_=QString(tr("\"%1\" is not writable.")).arg(file);
-//            return false;
-//        }
-
-//        // check if this is a SceneExplorer Document
-//        std::string bare = theFile.readAll().toStdString();
-//        std::string::size_type pos = bare.find(getIdentity());
-//        if(pos == std::string::npos)
-//        {
-//            lastErr_=QString(tr("%1 is not a SceneExplorer document.")).arg(file);
-//            return false;
-//        }
-//    }
-
-//    if(s_)
-//        delete s_;
-//    s_ = new QSettings(file, QSettings::Format::IniFormat);
-
-//    QVariant vVal = s_->value(KEY_KEY_USERENTRY_DIRECTORY_ALL_SELECTED);
-//    if(vVal.isValid())
-//        bAllSel_=vVal.toBool();
-//    vVal = s_->value(KEY_KEY_USERENTRY_DIRECTORY_ALL_CHECKED);
-//    if(vVal.isValid())
-//        bAllChecked_=vVal.toBool();
-
-//    QVariant v = s_->value(KEY_USERENTRY_COUNT);
-//    int groupcount = 0;
-//    if(v.isValid())
-//    {
-//        groupcount = v.toInt();
-//    }
-
-//    try
-//    {
-//        for(int i=0 ; i < groupcount; ++i)
-//        {
-//            QString group = KEY_USERENTRY_GROUPPRIFIX + QString::number(i);
-
-//            s_->beginGroup(group);
-
-//            QVariant vValDir = s_->value(KEY_USERENTRY_DIRECTORY);
-//            QVariant vValSelected = s_->value(KEY_USERENTRY_SELECTED);
-//            QVariant vValChecked = s_->value(KEY_USERENTRY_CHECKED);
-//            if(vValDir.isValid() && !vValDir.toString().isEmpty())
-//            {
-//                QString dir = vValDir.toString();
-//                bool sel = vValSelected.toBool();
-//                bool chk = vValChecked.toBool();
-//                delist_.append(DE(dir,chk,sel));
-//            }
-//            s_->endGroup();
-//        }
-//        return true;
-//    }
-//    catch(QException&)
-//    {
-//        lastErr_ = tr("QException");
-//        return false;
-//    }
-//    catch(...)
-//    {
-//        lastErr_ = tr("... Exception");
-//        return false;
-//    }
-//    return false;
 }
 
 void Document::Store(QListWidget* pLW,

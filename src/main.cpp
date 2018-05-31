@@ -86,12 +86,12 @@ bool OpenDatabaseDirectory(const QString& dbDir)
 {
     if(!QDir(dbDir).exists())
     {
-        Alert(nullptr,QString(QObject::tr("\"%1\" is not directory.")).arg(dbDir));
+        Alert(nullptr,QObject::tr("\"%1\" is not directory.").arg(dbDir));
         return false;
     }
     if(!QDir::setCurrent(dbDir))
     {
-        Alert(nullptr, QString(QObject::tr("Failed to set \"%1\" as current directory.").arg(dbDir)));
+        Alert(nullptr, QObject::tr("Failed to set \"%1\" as current directory.").arg(dbDir));
         return false;
     }
 
@@ -101,7 +101,7 @@ bool OpenDatabaseDirectory(const QString& dbDir)
     QDir(".").mkdir(FILEPART_THUMBS);
     if(!QDir(FILEPART_THUMBS).exists())
     {
-        Alert(nullptr, QString(QObject::tr("Failed to mkdir \"%1\" or it is not a directory.")).
+        Alert(nullptr, QObject::tr("Failed to mkdir \"%1\" or it is not a directory.").
               arg(QFileInfo(FILEPART_THUMBS).absoluteFilePath()));
         return false;
     }
@@ -125,7 +125,7 @@ bool GetDatabaseDirectory(Settings& settings, QString& dbDirToSet, bool& bQuit)
         QDir().mkpath(dbDirToSet);
         if(!QDir(dbDirToSet).exists())
         {
-            Alert(nullptr,QString(QObject::tr("Failed to create directory \"%1\"")).
+            Alert(nullptr,QObject::tr("Failed to create directory \"%1\"").
                   arg(dbDirToSet));
         }
     }
@@ -191,7 +191,7 @@ int main2(int argc, char *argv[], QApplication& theApp)
     if(!settings->isAccessible())
     {
         Alert(nullptr,
-              QString(QObject::tr("\"%1\" is not accessible.")).arg(settings->fileName()));
+              QObject::tr("\"%1\" is not accessible.").arg(settings->fileName()));
         return 1;
     }
 
@@ -245,7 +245,7 @@ int main2(int argc, char *argv[], QApplication& theApp)
         bool bQuit = false;
         if(!GetDatabaseDirectory(*settings,dbdir,bQuit))
         {
-            Alert(nullptr, QString(QObject::tr("Failed to get default database directory.")));
+            Alert(nullptr, QObject::tr("Failed to get default database directory."));
             return PR_GETDIRECTORYFAILED;
         }
         if(bQuit)
@@ -253,7 +253,7 @@ int main2(int argc, char *argv[], QApplication& theApp)
     }
     if(!OpenDatabaseDirectory(dbdir))
     {
-        QString message = QString(QObject::tr("Failed to open database directory \"%1\".")).
+        QString message = QObject::tr("Failed to open database directory \"%1\".").
                 arg(dbdir);
         if(settings->valueBool(KEY_USE_CUSTOMDATABASEDIR))
         {
@@ -276,7 +276,7 @@ int main2(int argc, char *argv[], QApplication& theApp)
     if (!theSql.isOK())
     {
         QString errMessage =
-                QString(QObject::tr("Failed to open or create database. \"%1\"")).
+                QObject::tr("Failed to open or create database. \"%1\"").
                 arg(QFileInfo(Sql::getDBFileName()).absoluteFilePath());
         errMessage += "\n\n";
         errMessage += theSql.getLastError();
@@ -293,7 +293,7 @@ int main2(int argc, char *argv[], QApplication& theApp)
     MainWindow w(nullptr, *settings, gpCommandOption->doc());
     if(!w.IsInitialized())
     {
-        Alert(nullptr, QString(QObject::tr("Window initialization failed.")));
+        Alert(nullptr, QObject::tr("Window initialization failed."));
         return PR_WINDOWINITFAILED;
     }
     w.show();
@@ -355,7 +355,7 @@ int main(int argc, char *argv[])
 
         if(!QProcess::startDetached(thisapp, args))
         {
-            Alert(nullptr, QString(QObject::tr("Failed to launch \"%1\"")).
+            Alert(nullptr, QObject::tr("Failed to launch \"%1\"").
                   arg(thisapp));
             return PR_LAUNCHTHISAPPFAILED;
         }

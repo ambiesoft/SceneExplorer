@@ -32,6 +32,6 @@ QString getInifile(bool& bExit);
 bool isLegalFilePath(QString filename, QString* pError);
 QString GetIllegalFilenameCharacters();
 
-bool setProcessPriority(const qint64& pid, QThread::Priority priority, QString& error);
+bool setProcessPriority(const qint64& pid, QThread::Priority priority, QStringList& errors);
 
 #endif // OSD_H

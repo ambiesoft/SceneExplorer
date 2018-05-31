@@ -187,8 +187,11 @@ void OptionExternalToolsDialog::on_pbRemove_clicked()
     if(!current)
         return;
 
-    if(!YesNo(this, QString(tr("Are you sure you want to remove \"%1\"?")).arg(current->text())))
+    if(!YesNo(this,
+              tr("Are you sure you want to remove \"%1\"?").arg(current->text())))
+    {
         return;
+    }
 
     ui->listWidget->removeItemWidget(current);
     delete current;

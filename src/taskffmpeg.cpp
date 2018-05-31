@@ -71,9 +71,10 @@ void TaskFFmpeg::setPriority(QProcess& process)
     if(!priority_)
         return;
 
-    QString error;
-    if(!setProcessPriority(process.processId(), *priority_, error))
+    QStringList errors;
+    if(!setProcessPriority(process.processId(), *priority_, errors))
     {
+        QString error = errors.join(" ");
         emit warning_FFMpeg(loopId_,id_,
                             tr("Failed to set priority %1.").arg((int)(*priority_)) + " " + error);
     }

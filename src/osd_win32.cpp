@@ -366,7 +366,7 @@ struct NTFuncs
 		if (hDLL_)
 			FreeLibrary(hDLL_);
 	}
-	BOOL SetPriority(HANDLE hProcess, QThread::Priority priority)
+    BOOL SetPriority(HANDLE hProcess, QThread::Priority priority, QStringList& errors)
 	{
 		DWORD dwProcessPriority = -1;
 		switch (priority)
@@ -395,33 +395,50 @@ struct NTFuncs
 		}
         Q_ASSERT(dwProcessPriority != (DWORD)-1);
 		BOOL bFailed = FALSE;
-		bFailed |= !SetPriorityClass(hProcess, dwProcessPriority);
+        if(!SetPriorityClass(hProcess, dwProcessPriority))
+        {
+            DWORD dwLastError = GetLastError();
+            bFailed = TRUE;
+            errors << QObject::tr("SetPriorityClass(%1) failed with %2").arg(dwProcessPriority).arg(dwLastError);
+        }
 		if (priority == QThread::IdlePriority && fnNtSetInformationProcess)
 		{
 			ULONG memory = LowMemoryPriority;
-			bFailed |= !(0==fnNtSetInformationProcess(
+            NTSTATUS ntStatus = fnNtSetInformationProcess(
 				hProcess, 
 				ProcessInformationMemoryPriority,
 				&memory,
-				sizeof(memory)));
+                sizeof(memory));
+            if(ntStatus != 0)
+            {
+                bFailed = TRUE;
+                errors << QObject::tr("NtSetInformationProcess(%1,%2) failed with %3.").arg(ProcessInformationMemoryPriority).arg(memory).arg(ntStatus);
+            }
 
 			ULONG io = VeryLowIoPriority;
-			bFailed = !(0==fnNtSetInformationProcess(
+            ntStatus = fnNtSetInformationProcess(
 				hProcess,
 				ProcessInformationIoPriority,
 				&io,
-				sizeof(io)));
+                sizeof(io));
+            if(ntStatus != 0)
+            {
+                bFailed = TRUE;
+                errors << QObject::tr("NtSetInformationProcess(%1,%2) failed with %3.").arg(ProcessInformationIoPriority).arg(io).arg(ntStatus);
+            }
 		}
 		return !bFailed;
 	}
 } gNTFuncs;
-bool setProcessPriority(const qint64& pid, QThread::Priority priority)
+
+bool setProcessPriority(const qint64& pid, QThread::Priority priority, QStringList& errors)
 {
 	NativeHandle handle(OpenProcess(PROCESS_SET_INFORMATION, FALSE, (DWORD)pid));
 	if (!handle)
+    {
+        errors << QObject::tr("Failed to OpenProcess(%1).").arg(pid);
 		return false;
+    }
 
-	//return SetPriorityClass(handle, IDLE_PRIORITY_CLASS);
-	// return SetPriorityClass(handle, PROCESS_MODE_BACKGROUND_BEGIN);
-	return gNTFuncs.SetPriority(handle, priority);
+    return gNTFuncs.SetPriority(handle, priority, errors);
 }

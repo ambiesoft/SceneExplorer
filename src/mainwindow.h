@@ -518,6 +518,8 @@ private slots:
 
     void on_actionSort_by_full_name_triggered();
 
+    void on_action_ClearContent_triggered();
+
 private:
     void OnCopyTable();
     void OnCopyDirectory();

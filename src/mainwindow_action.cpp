@@ -71,7 +71,7 @@ void MainWindow::openVideo(const qint64& id, const QString& movieFile)
 
     if(!QDesktopServices::openUrl(QUrl::fromLocalFile(movieFile)))
     {
-        Alert(this, QString(tr("failed to launch %1.")).arg(movieFile));
+        Alert(this, tr("failed to launch %1.").arg(movieFile));
         return;
     }
     updateOnOpened(id,movieFile);
@@ -402,47 +402,6 @@ void MainWindow::onMenu_RecentDocuments_AboutToShow()
     ui->menu_Recent_documets->addAction(qaClearRecent);
 }
 
-//void MainWindow::on_action_Add_current_check_states_triggered()
-//{
-//    bool ok;
-//    QString name = QInputDialog::getText(this,
-//                                         APPNAME_DISPLAY,
-//                                         tr("Name:"),
-//                                         QLineEdit::Normal,
-//                                         QString(),
-//                                         &ok,
-//                                         (Qt::WindowTitleHint | Qt::WindowCloseButtonHint | Qt::WindowFlags()) & ~Qt::WindowContextHelpButtonHint);
-//    if(!ok)
-//        return;
-//    if(name.isEmpty())
-//        return;
-
-//    if(settings_.IsNameExists(name))
-//    {
-//        if(!YesNo(this,
-//              QString(tr("\"%1\" already exists. Do you want to overwirte it?")).
-//              arg(name)))
-//        {
-//            return;
-//        }
-//    }
-
-//    QStringList dirs;
-//    foreach(DirectoryItem* item, ui->directoryWidget->GetCheckedItems())
-//    {
-//        dirs.append(item->text());
-//    }
-//    if(dirs.isEmpty())
-//    {
-//        if(!YesNo(this,
-//              tr("No checkboxes is checked. Do you want to continue?")))
-//        {
-//            return;
-//        }
-//    }
-//    settings_.AddToFavorites(name, dirs);
-//}
-
 void MainWindow::on_action_Pause_triggered()
 {
     gPaused = !gPaused;
@@ -552,14 +511,14 @@ void MainWindow::StartScan(const QString& dir)
     if(!checkFFprobe(errString) || !checkFFmpeg(errString))
     {
         insertLog(TaskKind::App, 0,
-                  QString(tr("Failed to launch ffprobe or ffmpeg. (%1)") + " " + tr("Check the option setting.")).
+                  tr("Failed to launch ffprobe or ffmpeg. (%1)") + " " + tr("Check the option setting.").
                   arg(errString));
         return;
     }
 
     if(!QDir(dir).exists())
     {
-        insertLog(TaskKind::App, 0, QString(tr("Directoy not found. (%1) ")).
+        insertLog(TaskKind::App, 0, tr("Directoy not found. (%1) ").
                   arg(dir));
         return;
     }
@@ -576,7 +535,8 @@ void MainWindow::StartScan(const QString& dir)
     getPoolGetDir()->start(pTaskGetDir);
 
     onTaskStarted();
-    insertLog(TaskKind::GetDir, idManager_->Get(IDKIND_GetDir), QString(tr("Task registered. %1")).arg(dir));
+    insertLog(TaskKind::GetDir, idManager_->Get(IDKIND_GetDir),
+              tr("Task registered. %1").arg(dir));
 }
 
 void MainWindow::onTaskStarted()
@@ -890,7 +850,8 @@ void MainWindow::on_directoryWidget_Remove()
 	DirectoryItem* item = (DirectoryItem*) ui->directoryWidget->selectedItems()[0];
 	if (!item->IsNormalItem())
 		return;
-    if (!YesNo(this,QString(tr("Are you sure you want to remove \"%1\" from list?")).arg(item->text())))
+    if (!YesNo(this,
+               tr("Are you sure you want to remove \"%1\" from list?").arg(item->text())))
 		return;
     
     // pDoc_->DeleteDirectory(item);

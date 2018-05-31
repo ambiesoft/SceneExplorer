@@ -181,7 +181,7 @@ enum {
 #define IOPRIO_PRIO_VALUE(class, data)	(((class) << IOPRIO_CLASS_SHIFT) | data)
 
 
-bool setProcessPriority(const qint64& pid, QThread::Priority priority, QString& error)
+bool setProcessPriority(const qint64& pid, QThread::Priority priority, QString--->>>>LIST& error)
 {
    int prio = -1;
    switch(priority)

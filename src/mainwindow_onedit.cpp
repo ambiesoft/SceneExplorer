@@ -16,6 +16,8 @@
 //You should have received a copy of the GNU General Public License
 //along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+#include "helper.h"
+
 #include "ui_mainwindow.h"
 #include "mainwindow.h"
 
@@ -56,6 +58,17 @@ void MainWindow::onMenuEdit_AboutToShow()
     }
     ui->action_Select_All->setEnabled(bSelectAllEnable);
 
-
+    // clear
+    ui->action_ClearContent->setEnabled(ui->txtLog->hasFocus());
 }
 
+void MainWindow::on_action_ClearContent_triggered()
+{
+    if(ui->txtLog->hasFocus())
+    {
+        if(!YesNo(this,tr("Are you sure you want to clear the Output log?")))
+            return;
+
+        ui->txtLog->clear();
+    }
+}

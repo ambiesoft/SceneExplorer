@@ -69,7 +69,7 @@
      <x>0</x>
      <y>0</y>
      <width>1009</width>
-     <height>21</height>
+     <height>23</height>
     </rect>
    </property>
    <property name="font">
@@ -224,6 +224,8 @@
     <addaction name="action_Paste"/>
     <addaction name="separator"/>
     <addaction name="action_Select_All"/>
+    <addaction name="separator"/>
+    <addaction name="action_ClearContent"/>
    </widget>
    <addaction name="menu_File"/>
    <addaction name="menu_Edit"/>
@@ -874,6 +876,11 @@
   <action name="actionSort_by_full_name">
    <property name="text">
     <string>Sort by f&amp;ull name</string>
+   </property>
+  </action>
+  <action name="action_ClearContent">
+   <property name="text">
+    <string>C&amp;lear</string>
    </property>
   </action>
  </widget>
