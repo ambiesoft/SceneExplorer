@@ -763,7 +763,8 @@ bool Sql::GetAllSqlString(
     QVector<QVariant> binds;
     if(dirs.isEmpty())
     {
-        sql += " WHERE 1=1 ";
+        // check dbid is same or NULL(joined)
+        sql += " WHERE (" + docdb_ + ".Access.dbid='" + gpSQL->getDbID() + "' OR " + docdb_ +".Access.dbid IS NULL) ";
         if(!find.isEmpty())
         {
             sql += " AND name LIKE ?";
@@ -812,7 +813,9 @@ bool Sql::GetAllSqlString(
     }
     else
     {
-        sql += " WHERE (";
+        // check dbid is same or NULL(joined)
+        sql += " WHERE (" + docdb_ + ".Access.dbid='" + gpSQL->getDbID() + "' OR " + docdb_ +".Access.dbid IS NULL) AND (";
+        // sql += " WHERE (";
 
         for(int i=0 ; i < dirs.count(); ++i)
         {

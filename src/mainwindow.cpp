@@ -1042,7 +1042,7 @@ void MainWindow::on_directoryWidget_selectionChanged(const QItemSelection &selec
     Q_UNUSED(selected);
     Q_UNUSED(deselected);
 
-    if (!initialized_ || closed_)
+    if (!initialized_ || closed_ || directoryChanging_)
         return;
 
     if(ui->directoryWidget->IsMissingItemSelectedOrChecked())
