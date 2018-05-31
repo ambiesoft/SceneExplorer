@@ -65,6 +65,20 @@ TaskFFmpeg::~TaskFFmpeg()
 	delete priority_;
     emit sayDead(loopId_,id_);
 }
+
+void TaskFFmpeg::setPriority(QProcess& process)
+{
+    if(!priority_)
+        return;
+
+    QString error;
+    if(!setProcessPriority(process.processId(), *priority_, error))
+    {
+        emit warning_FFMpeg(loopId_,id_,
+                            tr("Failed to set priority %1.").arg((int)(*priority_)) + " " + error);
+    }
+}
+
 bool TaskFFmpeg::getProbe(const QString& file,
               double& outDuration,
               QString& outFormat,
@@ -98,14 +112,7 @@ bool TaskFFmpeg::getProbe(const QString& file,
         return false;
     }
 
-    if(priority_)
-    {
-        if(!setProcessPriority(process.processId(), *priority_))
-        {
-            emit warning_FFMpeg(loopId_,id_,
-                                tr("Failed to set priority %1").arg((int)(*priority_)));
-        }
-    }
+    setPriority(process);
 
     if(!process.waitForFinished(waitMax_))
     {
@@ -318,20 +325,13 @@ bool TaskFFmpeg::run3(QString& errorReason)
         process.setArguments(qsl);
 		process.start(QProcess::ReadOnly);
 
-		if(priority_)
-        {
-            if(!setProcessPriority(process.processId(), *priority_))
-            {
-                emit warning_FFMpeg(loopId_,id_,
-                                    tr("Failed to set priority %1").arg((int)(*priority_)));
-            }
-        }
-
         if (!process.waitForStarted(waitMax_))
 		{
             errorReason = process.errorString();
 			return false;
 		}
+
+        setPriority(process);
 
         if (!process.waitForFinished(waitMax_))
 		{

@@ -21,6 +21,8 @@
 
 #include <QObject>
 #include <QRunnable>
+#include <QThread>
+#include <QProcess>
 
 class TaskFFmpeg : public QObject, public QRunnable
 // class TaskFFMpeg : public QRunnable
@@ -65,6 +67,7 @@ private:
     void run2();
     bool run3(QString& errorReason);
 
+    void setPriority(QProcess& process);
 public:
     TaskFFmpeg(const QString& ffprobe,
                const QString& ffmpeg,

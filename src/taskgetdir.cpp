@@ -30,6 +30,28 @@ void TaskGetDir::RegisterMetaType()
 {
     qRegisterMetaType< QList<qint64> >( "QList<qint64>" );
 }
+
+TaskGetDir::TaskGetDir(int loopId,
+           int id,
+           const QString& dir,
+           QThread::Priority* priority):
+    loopId_(loopId),
+    id_(id),
+    dir_(dir)
+{
+    Q_ASSERT(!dir.isEmpty());
+    if(priority)
+    {
+        priority_ = new QThread::Priority;
+        *priority_ = *priority;
+    }
+}
+
+TaskGetDir::~TaskGetDir()
+{
+    delete priority_;
+}
+
 void TaskGetDir::run()
 {
     if(priority_)

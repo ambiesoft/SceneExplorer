@@ -21,6 +21,8 @@
 
 #include <QObject>
 #include <QRunnable>
+#include <QThread>
+
 
 class TaskGetDir : public QObject, public QRunnable
 {
@@ -39,21 +41,9 @@ public:
     TaskGetDir(int loopId,
                int id,
                const QString& dir,
-               QThread::Priority* priority):
-        loopId_(loopId),
-        id_(id),
-        dir_(dir)
-        {
-            Q_ASSERT(!dir.isEmpty());
-            if(priority)
-            {
-                priority_ = new QThread::Priority;
-                *priority_ = *priority;
-            }
-        }
-    virtual ~TaskGetDir() {
-        delete priority_;
-    }
+               QThread::Priority* priority);
+    virtual ~TaskGetDir();
+
     void run() override;
 
 signals:

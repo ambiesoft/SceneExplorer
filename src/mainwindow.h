@@ -23,6 +23,7 @@
 #include <QToolButton>
 // #include <QFileIconProvider>
 #include <QPushButton>
+#include <QThread>
 
 #include "tablemodel.h"
 #include "directoryentry.h"
@@ -44,6 +45,7 @@ class TaskModel;
 class TaskFFmpeg;
 class QLabel;
 class QItemSelection;
+
 
 typedef QSharedPointer<ExternalToolItem> ExternalToolItemPointer;
 
@@ -75,27 +77,10 @@ class MainWindow : public QMainWindow, IMainWindow
     QStringList recents_;
 
     QScopedPointer<QThread::Priority> taskPriority_;
-    QThread::Priority* GetTaskPriority() {
-        return taskPriority_ ? taskPriority_.get() : nullptr;
-    }
-    int GetTaskPriorityAsInt() {
-        if(!taskPriority_)
-            return -1;
-        return (int)(*taskPriority_);
-    }
-    void SetTaskPriorityAsInt(int priority) {
-        if(priority==-1)
-        {
-            if(taskPriority_)
-                taskPriority_.reset();
-            return;
-        }
+    QThread::Priority* GetTaskPriority();
+    int GetTaskPriorityAsInt();
+    void SetTaskPriorityAsInt(int priority);
 
-        if(!taskPriority_) {
-            taskPriority_.reset(new QThread::Priority);
-        }
-        *taskPriority_ = (QThread::Priority) priority;
-    }
 public:
     explicit MainWindow(QWidget *parent,
                         Settings& settings,

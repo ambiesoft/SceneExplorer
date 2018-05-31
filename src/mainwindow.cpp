@@ -25,6 +25,7 @@
 #include <QObject>
 #include <QProcess>
 #include <QScrollBar>
+#include <QScopedPointer>
 #include <QSizePolicy>
 #include <QStandardItemModel>
 #include <QThread>
@@ -773,6 +774,8 @@ void MainWindow::afterFilter2(int loopId,int id,
                          this, &MainWindow::sayDead);
         QObject::connect(pTask, &TaskFFmpeg::finished_FFMpeg,
                          this, &MainWindow::finished_FFMpeg);
+        QObject::connect(pTask, &TaskFFmpeg::warning_FFMpeg,
+                         this, &MainWindow::warning_FFMpeg);
 
         tasks.append(TaskListData::Create(pTask->GetId(),pTask->GetMovieFile()));
         getPoolFFmpeg()->start(pTask);
@@ -2157,3 +2160,27 @@ void MainWindow::on_action_ScanSelectedDirectory_triggered()
 }
 
 
+QThread::Priority* MainWindow::GetTaskPriority()
+{
+    return taskPriority_ ? taskPriority_.data() : nullptr;
+}
+int MainWindow::GetTaskPriorityAsInt()
+{
+    if(!taskPriority_)
+        return -1;
+    return (int)(*taskPriority_);
+}
+void MainWindow::SetTaskPriorityAsInt(int priority)
+{
+    if(priority==-1)
+    {
+        if(taskPriority_)
+            taskPriority_.reset();
+        return;
+    }
+
+    if(!taskPriority_) {
+        taskPriority_.reset(new QThread::Priority);
+    }
+    *taskPriority_ = (QThread::Priority) priority;
+}

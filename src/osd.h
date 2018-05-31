@@ -19,6 +19,8 @@
 #ifndef OSD_H
 #define OSD_H
 
+#include <QThread>
+
 bool showInGraphicalShell(QWidget *parent, const QString &pathIn);
 void MoveToTrashImpl( QString file );
 
@@ -30,6 +32,6 @@ QString getInifile(bool& bExit);
 bool isLegalFilePath(QString filename, QString* pError);
 QString GetIllegalFilenameCharacters();
 
-bool setProcessPriority(const qint64& pid, QThread::Priority priority);
+bool setProcessPriority(const qint64& pid, QThread::Priority priority, QString& error);
 
 #endif // OSD_H

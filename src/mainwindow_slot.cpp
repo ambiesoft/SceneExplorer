@@ -160,9 +160,8 @@ void MainWindow::warning_FFMpeg(int loopId, int id,
     if(loopId != gLoopId)
         return;
 
-    Q_UNUSED(id);
     insertLog(TaskKind::FFMpeg,
               id,
-              tr("Warning:") + warning,
+              tr("Warning") + ": " + warning,
               true);
 }
