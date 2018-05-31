@@ -1,3 +1,6 @@
+2018/05/31 ver1.10
+set process priority
+
 2018/05/29 ver1.9
 i18n
 change to Qt5.11.0
