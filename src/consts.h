@@ -58,6 +58,7 @@ namespace Consts
     const char KEY_MAX_GETDIR_THREADCOUNT[] = "maxgetdirthreadcount";
     const char KEY_MAX_THUMBNAIL_THREADCOUNT[] = "maxthumbnailthreadcount";
     const char KEY_THUMBNAIL_COUNT[] = "thumbcount";
+    const char KEY_TASK_PRIORITY[] = "taskpriority";
 
     const char KEY_TITLE_TEXT_TEMPLATE[] = "titletexttemplate";
     const char KEY_INFO_TEXT_TEMPLATE[] = "infotexttemplate";

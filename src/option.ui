@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>562</width>
-    <height>405</height>
+    <height>453</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <item row="0" column="0">
     <widget class="QLabel" name="labelGetDir">
      <property name="text">
-      <string>Thread count of &amp;iterating direcotry:</string>
+      <string>Task count of &amp;iterating direcotry:</string>
      </property>
      <property name="buddy">
       <cstring>spinBoxGetDir</cstring>
@@ -30,7 +30,7 @@
    <item row="3" column="0">
     <widget class="QLabel" name="labelThumb">
      <property name="text">
-      <string>Thread count of &amp;creating thumbnail:</string>
+      <string>Task count of &amp;creating thumbnail:</string>
      </property>
      <property name="buddy">
       <cstring>spinBoxThumb</cstring>
@@ -326,6 +326,16 @@
       </widget>
      </item>
     </layout>
+   </item>
+   <item row="4" column="0">
+    <widget class="QLabel" name="labelTaskPriority">
+     <property name="text">
+      <string>Task Priority:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="1">
+    <widget class="QComboBox" name="cmbTaskPriority"/>
    </item>
   </layout>
  </widget>

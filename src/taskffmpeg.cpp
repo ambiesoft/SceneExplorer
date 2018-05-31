@@ -28,6 +28,9 @@
 #include "globals.h"
 #include "consts.h"
 #include "ffmpeg.h"
+#include "helper.h"
+#include "osd.h"
+
 #include "taskffmpeg.h"
 
 using namespace Consts;
@@ -38,7 +41,8 @@ TaskFFmpeg::TaskFFmpeg(const QString& ffprobe,
                        const QString& ffmpeg,
                        int loopId,
                        int id,
-                       const QString& file)
+                       const QString& file, 
+	QThread::Priority* priority)
 {
     loopId_ = loopId;
     id_=id;
@@ -49,10 +53,16 @@ TaskFFmpeg::TaskFFmpeg(const QString& ffprobe,
     movieFile_=file;
 
     progress_ = Uninitialized;
+	if (priority)
+	{
+		priority_ = new QThread::Priority;
+		*priority_ = *priority;
+	}
     // emit sayBorn(id,file);
 }
 TaskFFmpeg::~TaskFFmpeg()
 {
+	delete priority_;
     emit sayDead(loopId_,id_);
 }
 bool TaskFFmpeg::getProbe(const QString& file,
@@ -87,6 +97,16 @@ bool TaskFFmpeg::getProbe(const QString& file,
         errorReason = process.errorString();
         return false;
     }
+
+    if(priority_)
+    {
+        if(!setProcessPriority(process.processId(), *priority_))
+        {
+            emit warning_FFMpeg(loopId_,id_,
+                                tr("Failed to set priority %1").arg((int)(*priority_)));
+        }
+    }
+
     if(!process.waitForFinished(waitMax_))
     {
         errorReason = process.errorString();
@@ -214,6 +234,9 @@ bool TaskFFmpeg::getProbe(const QString& file,
 }
 void TaskFFmpeg::run()
 {
+	if (priority_)
+        QThread::currentThread()->setPriority(*priority_);
+
     run2();
     emit finished_FFMpeg(loopId_,id_);
 }
@@ -234,6 +257,7 @@ void TaskFFmpeg::run2()
         emit sayNo(loopId_,id_, movieFile_, errorReason);
     progress_ = Finished;
 }
+
 bool TaskFFmpeg::run3(QString& errorReason)
 {
     double duration;
@@ -252,7 +276,7 @@ bool TaskFFmpeg::run3(QString& errorReason)
     {
         return false;
     }
-
+	
     QString strWidthHeight;
     strWidthHeight.append(QString::number(THUMB_WIDTH));
     strWidthHeight.append("x");
@@ -292,7 +316,16 @@ bool TaskFFmpeg::run3(QString& errorReason)
         QProcess process;
         process.setProgram(ffmpeg_);
         process.setArguments(qsl);
-        process.start(QProcess::ReadOnly);
+		process.start(QProcess::ReadOnly);
+
+		if(priority_)
+        {
+            if(!setProcessPriority(process.processId(), *priority_))
+            {
+                emit warning_FFMpeg(loopId_,id_,
+                                    tr("Failed to set priority %1").arg((int)(*priority_)));
+            }
+        }
 
         if (!process.waitForStarted(waitMax_))
 		{

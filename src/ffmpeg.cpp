@@ -21,6 +21,8 @@
 
 #include "consts.h"
 #include "helper.h"
+#include "osd.h"
+
 #include "ffmpeg.h"
 
 using namespace Consts;

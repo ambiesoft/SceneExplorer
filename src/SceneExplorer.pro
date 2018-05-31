@@ -110,7 +110,8 @@ HEADERS += \
     tagitem.h \
     sqlcommon.h \
     mycontextmenu.h \
-    renamedialog.h
+    renamedialog.h \
+    osd.h
 
 FORMS += \
         mainwindow.ui \

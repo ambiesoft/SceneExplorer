@@ -32,6 +32,8 @@ void TaskGetDir::RegisterMetaType()
 }
 void TaskGetDir::run()
 {
+    if(priority_)
+        QThread::currentThread()->setPriority(*priority_);
     runStuff(dir_);
     emit finished_GetDir(loopId_, id_, dir_);
 }

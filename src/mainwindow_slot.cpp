@@ -154,3 +154,15 @@ void MainWindow::finished_FFMpeg(int loopId, int id)
         insertLog(TaskKind::App, 0, tr("======== All Tasks finished ========"));
     }
 }
+void MainWindow::warning_FFMpeg(int loopId, int id,
+                    const QString& warning)
+{
+    if(loopId != gLoopId)
+        return;
+
+    Q_UNUSED(id);
+    insertLog(TaskKind::FFMpeg,
+              id,
+              tr("Warning:") + warning,
+              true);
+}

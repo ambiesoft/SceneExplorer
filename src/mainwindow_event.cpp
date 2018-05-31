@@ -129,6 +129,8 @@ void MainWindow::closeEvent(QCloseEvent *event) {
     settings_.setValue(KEY_MAX_GETDIR_THREADCOUNT, optionThreadcountGetDir_);
     settings_.setValue(KEY_MAX_THUMBNAIL_THREADCOUNT, optionThreadcountThumbnail_);
     settings_.setValue(KEY_THUMBNAIL_COUNT, optionThumbCount_);
+    settings_.setValue(KEY_TASK_PRIORITY, GetTaskPriorityAsInt());
+
 
     settings_.setValue(KEY_TITLE_TEXT_TEMPLATE, tableModel_->GetTitleTextTemplate());
     settings_.setValue(KEY_INFO_TEXT_TEMPLATE, tableModel_->GetInfoTextTemplate());

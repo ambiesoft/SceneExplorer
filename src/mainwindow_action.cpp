@@ -41,6 +41,7 @@
 #include "settings.h"
 #include "sql.h"
 #include "helper.h"
+#include "osd.h"
 #include "blockedbool.h"
 #include "tagitem.h"
 
@@ -104,6 +105,7 @@ void MainWindow::on_action_Options_triggered()
     dlg.maxgd_ = optionThreadcountGetDir_;
     dlg.maxff_ = optionThreadcountThumbnail_;
     dlg.thumbCount_ = optionThumbCount_;
+    dlg.taskPriority_ = GetTaskPriorityAsInt();
     dlg.mainText_ = tableModel_->GetTitleTextTemplate();
     dlg.subText_ = tableModel_->GetInfoTextTemplate();
     dlg.imagecache_ = tableModel_->GetImageCache();
@@ -121,6 +123,7 @@ void MainWindow::on_action_Options_triggered()
     optionThreadcountGetDir_ = dlg.maxgd_;
     optionThreadcountThumbnail_ = dlg.maxff_;
     optionThumbCount_ = dlg.thumbCount_;
+    SetTaskPriorityAsInt(dlg.taskPriority_);
     tableModel_->SetColumnCountImage(dlg.thumbCount_);
     tableModel_->SetTitleTextTemplate(dlg.mainText_);
     tableModel_->SetInfoTextTemplate(dlg.subText_);
@@ -560,7 +563,11 @@ void MainWindow::StartScan(const QString& dir)
                   arg(dir));
         return;
     }
-    TaskGetDir* pTaskGetDir = new TaskGetDir(gLoopId, idManager_->Increment(IDKIND_GetDir), dir);
+    TaskGetDir* pTaskGetDir = new TaskGetDir(
+                gLoopId,
+                idManager_->Increment(IDKIND_GetDir),
+                dir,
+                GetTaskPriority());
     pTaskGetDir->setAutoDelete(true);
     QObject::connect(pTaskGetDir, &TaskGetDir::afterGetDir,
                      this, &MainWindow::afterGetDir);

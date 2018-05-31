@@ -42,6 +42,7 @@ public:
     int maxgd_;
     int maxff_;
     int thumbCount_;
+    int taskPriority_= -1;
     bool useCustomDBDir_;
     QString dbdir_;
     bool limitItems_;

@@ -57,12 +57,6 @@ class MainWindow : public QMainWindow, IMainWindow
 {
     Q_OBJECT
 
-    Ui::MainWindow *ui;
-    // setting keys
-    Settings& settings_;
-    Document* pDoc_ = nullptr;
-    QStringList recents_;
-
     QString TR_NOVIDEO_SELECTED() { return tr("No Video Selected"); }
     QString TR_NODIRECTORY_SELECTED() { return  tr("No Directory Selected");}
     QString TR_ALLITEM_COULDNOTBE_COPIED() { return  tr("All item could not be copied.");}
@@ -73,6 +67,35 @@ class MainWindow : public QMainWindow, IMainWindow
     QString TR_CLIPBOARD_IS_EMPTY() { return tr("Clipboard is empty.");}
     QString TR_FAILED_TO_INSERT_DIRECTORY_INTO_DATABASE() { return tr("Failed to insert directory into Database.");}
     QString TR_FAILED_TO_INSERT_TAG_INTO_DATABASE() { return tr("Failed to insert tag into Database.");}
+
+    Ui::MainWindow *ui;
+    // setting keys
+    Settings& settings_;
+    Document* pDoc_ = nullptr;
+    QStringList recents_;
+
+    QScopedPointer<QThread::Priority> taskPriority_;
+    QThread::Priority* GetTaskPriority() {
+        return taskPriority_ ? taskPriority_.get() : nullptr;
+    }
+    int GetTaskPriorityAsInt() {
+        if(!taskPriority_)
+            return -1;
+        return (int)(*taskPriority_);
+    }
+    void SetTaskPriorityAsInt(int priority) {
+        if(priority==-1)
+        {
+            if(taskPriority_)
+                taskPriority_.reset();
+            return;
+        }
+
+        if(!taskPriority_) {
+            taskPriority_.reset(new QThread::Priority);
+        }
+        *taskPriority_ = (QThread::Priority) priority;
+    }
 public:
     explicit MainWindow(QWidget *parent,
                         Settings& settings,
@@ -617,6 +640,8 @@ public slots:
                    int vWidth,int vHeight);
     void sayDead(int loopId, int id);
     void finished_FFMpeg(int loopId, int id);
+    void warning_FFMpeg(int loopId, int id,
+                        const QString& warning);
 
     void afterGetDir(int loopId, int id,
                      const QString& dir,

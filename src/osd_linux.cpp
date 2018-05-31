@@ -25,6 +25,8 @@
 
 #include "errorinfoexception.h"
 
+#include "osd.h"
+
 // https://stackoverflow.com/a/3546503
 bool showInGraphicalShell(QWidget *parent, const QString &pathIn)
 {

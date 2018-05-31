@@ -63,6 +63,7 @@
 #include "ffmpeg.h"
 #include "globals.h"
 #include "helper.h"
+#include "osd.h"
 #include "blockedbool.h"
 #include "extension.h"
 #include "sql.h"
@@ -480,7 +481,10 @@ void MainWindow::insertLog(TaskKind kind, int id, const QString& text, bool bErr
 
     insertLog(kind, ids, l, bError);
 }
-void MainWindow::insertLog(TaskKind kind, const QVector<int>& ids, const QStringList& texts, bool bError)
+void MainWindow::insertLog(TaskKind kind,
+                           const QVector<int>& ids,
+                           const QStringList& texts,
+                           bool bError)
 {
     Q_UNUSED(bError);
     if(ids.isEmpty())
@@ -705,7 +709,7 @@ void MainWindow::finished_GetDir(int loopId, int id, const QString& dir)
         return;
 
     idManager_->IncrementDone(IDKIND_GetDir);
-    Q_ASSERT(id >= idManager_->GetDone(IDKIND_GetDir));
+    Q_ASSERT(idManager_->Get(IDKIND_GetDir) >= idManager_->GetDone(IDKIND_GetDir));
 
     insertLog(TaskKind::GetDir, id, QString(tr("Scan directory finished. %1")).arg(dir));
 
@@ -746,6 +750,7 @@ void MainWindow::afterFilter2(int loopId,int id,
     QVector<TaskListDataPointer> tasks;
     QVector<int> logids;
     QStringList logtexts;
+
     for(int i=0 ; i < filteredFiles.length(); ++i)
     {
         QString file = pathCombine(dir, filteredFiles[i]);
@@ -753,7 +758,8 @@ void MainWindow::afterFilter2(int loopId,int id,
                                            FFMpeg::GetFFmpeg(settings_),
                                            gLoopId,
                                            idManager_->Increment(IDKIND_FFmpeg),
-                                           file);
+                                           file,
+                                           GetTaskPriority());
         pTask->setAutoDelete(true);
 //        QObject::connect(pTask, &TaskFFMpeg::sayBorn,
 //                         this, &MainWindow::sayBorn);

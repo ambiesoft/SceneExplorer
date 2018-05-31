@@ -29,6 +29,7 @@ class TaskFFmpeg : public QObject, public QRunnable
 
     static int waitMax_;
 
+	QThread::Priority* priority_ = nullptr;
 
 public:
     enum Progress
@@ -69,7 +70,8 @@ public:
                const QString& ffmpeg,
                int loopId,
                int id,
-               const QString& file);
+               const QString& file,
+			QThread::Priority* priority	);
     virtual ~TaskFFmpeg();
     void run() override ;
     int GetId() const
@@ -103,6 +105,8 @@ signals:
                    int vWidth,int vHeight);
     void sayDead(int loopId, int id);
     void finished_FFMpeg(int loopId, int id);
+    void warning_FFMpeg(int loopId, int id,
+                        const QString& warning);
 
 };
 

@@ -41,12 +41,10 @@ QString createSalient(const QString& file, const qint64& size);
 QString getUUIDFromThumbfile(const QString& file);
 Qt::WindowFlags GetDefaultDialogFlags();
 
-// OSD
-bool showInGraphicalShell(QWidget *parent, const QString &pathIn);
-void MoveToTrashImpl( QString file );
-QString GetDefaultFFprobe();
-QString GetDefaultFFmpeg();
-QString getInifile(bool& bExit);
+
+
+
+
 
 
 QString GetSortColumnName(SORTCOLUMNMY sc);
@@ -66,6 +64,9 @@ QSqlQuery myq(const QString& sql);
 
 QString getClipboardText();
 void setClipboardText(const QString& text);
-bool isLegalFilePath(QString filename, QString* pError);
-QString GetIllegalFilenameCharacters();
+
+
+
+
+
 #endif // HELPER_H

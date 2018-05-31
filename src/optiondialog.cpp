@@ -36,6 +36,14 @@ OptionDialog::OptionDialog(QWidget* parent)
     ui.cmbThumbCount->addItem("3");
     ui.cmbThumbCount->addItem("5");
 
+    ui.cmbTaskPriority->addItem(tr("Default"), -1);
+    ui.cmbTaskPriority->addItem(tr("HighestPriority"), 5);
+    ui.cmbTaskPriority->addItem(tr("HighPriority"), 4);
+    ui.cmbTaskPriority->addItem(tr("NormalPriority"), 3);
+    ui.cmbTaskPriority->addItem(tr("LowPriority"), 2);
+    ui.cmbTaskPriority->addItem(tr("LowestPriority"), 1);
+    ui.cmbTaskPriority->addItem(tr("IdlePriority"), 0);
+
     setWindowTitle(tr("option"));
 }
 
@@ -49,6 +57,17 @@ void OptionDialog::showEvent(QShowEvent *ev)
         ui.cmbThumbCount->setCurrentIndex(1);
     else
         ui.cmbThumbCount->setCurrentIndex(0);
+
+
+    ui.cmbTaskPriority->setCurrentIndex(0);
+    for(int i=0 ; i < ui.cmbTaskPriority->count(); ++i)
+    {
+        if(taskPriority_==ui.cmbTaskPriority->itemData(i).toInt())
+        {
+            ui.cmbTaskPriority->setCurrentIndex(i);
+            break;
+        }
+    }
 
     ui.lineInfoMain->setText(mainText_);
     ui.lineInfoSub->setText(subText_);
@@ -90,6 +109,7 @@ void OptionDialog::on_buttonBox_accepted()
     maxff_ = ui.spinBoxThumb->value();
 
     thumbCount_ = ui.cmbThumbCount->currentIndex()==0 ? 3 : 5;
+    taskPriority_ = ui.cmbTaskPriority->currentData().toInt();
 
     mainText_ = ui.lineInfoMain->text();
     subText_ = ui.lineInfoSub->text();

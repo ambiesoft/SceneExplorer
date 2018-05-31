@@ -30,17 +30,30 @@ private:
     int id_;
 
     QString dir_;
-
+    QThread::Priority* priority_ = nullptr;
     void runStuff(const QString& dir);
 
 public:
     static void RegisterMetaType();
 
-    TaskGetDir(int loopId, int id, const QString& dir):
+    TaskGetDir(int loopId,
+               int id,
+               const QString& dir,
+               QThread::Priority* priority):
         loopId_(loopId),
         id_(id),
-        dir_(dir){}
-
+        dir_(dir)
+        {
+            Q_ASSERT(!dir.isEmpty());
+            if(priority)
+            {
+                priority_ = new QThread::Priority;
+                *priority_ = *priority;
+            }
+        }
+    virtual ~TaskGetDir() {
+        delete priority_;
+    }
     void run() override;
 
 signals:

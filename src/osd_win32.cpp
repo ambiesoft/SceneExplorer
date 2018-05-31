@@ -16,6 +16,7 @@
 //You should have received a copy of the GNU General Public License
 //along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+// #define _WIN32_WINNT 0x0501 // XP and above
 #include <Windows.h>
 #include <Shlobj.h>
 
@@ -26,10 +27,12 @@
 //#include <QFileInfo>
 //#include <QDesktopServices>
 #include <QWidget>
+#include <QThread>
 
 #include "../../profile/cpp/Profile/include/ambiesoft.profile.h"
 #include "errorinfoexception.h"
 #include "helper.h"
+#include "osd.h"
 
 // https://stackoverflow.com/a/3546503
 bool showInGraphicalShell(QWidget *parent, const QString &pathIn)
@@ -310,4 +313,115 @@ bool isLegalFilePath(QString filename, QString* pError)
 QString GetIllegalFilenameCharacters()
 {
     return "<>:\"|?*";
+}
+
+struct NativeHandle
+{
+	HANDLE h_;
+	NativeHandle(HANDLE h) : h_(h)
+	{}
+	~NativeHandle()
+	{
+		if(h_)
+			CloseHandle(h_);
+	}
+	operator bool() const {
+		return h_ != NULL;
+	}
+    operator HANDLE() const {
+		return h_;
+	}
+};
+
+// http://blog.misterfoo.com/2010/07/process-priority-utility.html
+// these values determined by poking around in the debugger - use at your own risk!
+const DWORD ProcessInformationMemoryPriority = 0x27;
+const DWORD ProcessInformationIoPriority = 0x21;
+const DWORD DefaultMemoryPriority = 5;
+const DWORD LowMemoryPriority = 3;
+const DWORD DefaultIoPriority = 2;
+const DWORD LowIoPriority = 1;
+const DWORD VeryLowIoPriority = 0;
+typedef NTSTATUS(NTAPI *FNNtSetInformationProcess)(
+	HANDLE process,
+	ULONG infoClass,
+	void* data,
+	ULONG dataSize);
+struct NTFuncs
+{
+	FNNtSetInformationProcess fnNtSetInformationProcess = NULL;
+	HMODULE hDLL_ = NULL;
+	NTFuncs()
+	{
+		hDLL_ = LoadLibrary(L"ntdll.dll");
+		if (hDLL_)
+		{
+			fnNtSetInformationProcess = (FNNtSetInformationProcess)GetProcAddress(
+				hDLL_,
+				"NtSetInformationProcess");
+		}
+	}
+	~NTFuncs()
+	{
+		if (hDLL_)
+			FreeLibrary(hDLL_);
+	}
+	BOOL SetPriority(HANDLE hProcess, QThread::Priority priority)
+	{
+		DWORD dwProcessPriority = -1;
+		switch (priority)
+		{
+		case QThread::HighestPriority:
+			dwProcessPriority = HIGH_PRIORITY_CLASS;
+			break;
+		case QThread::HighPriority:
+			dwProcessPriority = ABOVE_NORMAL_PRIORITY_CLASS;
+			break;
+		case QThread::NormalPriority:
+			dwProcessPriority = NORMAL_PRIORITY_CLASS;
+			break;
+		case QThread::LowPriority:
+			dwProcessPriority = BELOW_NORMAL_PRIORITY_CLASS;
+			break;
+		case QThread::LowestPriority:
+			dwProcessPriority = IDLE_PRIORITY_CLASS;
+			break;
+		case QThread::IdlePriority:
+			dwProcessPriority = IDLE_PRIORITY_CLASS;
+			break;
+		default:
+			Q_ASSERT(false);
+			break;
+		}
+        Q_ASSERT(dwProcessPriority != (DWORD)-1);
+		BOOL bFailed = FALSE;
+		bFailed |= !SetPriorityClass(hProcess, dwProcessPriority);
+		if (priority == QThread::IdlePriority && fnNtSetInformationProcess)
+		{
+			ULONG memory = LowMemoryPriority;
+			bFailed |= !(0==fnNtSetInformationProcess(
+				hProcess, 
+				ProcessInformationMemoryPriority,
+				&memory,
+				sizeof(memory)));
+
+			ULONG io = VeryLowIoPriority;
+			bFailed = !(0==fnNtSetInformationProcess(
+				hProcess,
+				ProcessInformationIoPriority,
+				&io,
+				sizeof(io)));
+		}
+		return !bFailed;
+	}
+} gNTFuncs;
+bool setProcessPriority(const qint64& pid, QThread::Priority priority)
+{
+	NativeHandle handle(OpenProcess(PROCESS_SET_INFORMATION, FALSE, (DWORD)pid));
+	if (!handle)
+		return false;
+
+	//return SetPriorityClass(handle, IDLE_PRIORITY_CLASS);
+	// return SetPriorityClass(handle, PROCESS_MODE_BACKGROUND_BEGIN);
+	return gNTFuncs.SetPriority(handle, priority);
 }

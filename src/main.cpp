@@ -34,7 +34,7 @@
 #include "consts.h"
 #include "globals.h"
 #include "sql.h"
-
+#include "osd.h"
 #include "runguard.h"
 #include "taskgetdir.h"
 #include "helper.h"
