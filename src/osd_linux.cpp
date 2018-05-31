@@ -181,7 +181,7 @@ enum {
 #define IOPRIO_PRIO_VALUE(class, data)	(((class) << IOPRIO_CLASS_SHIFT) | data)
 
 
-bool setProcessPriority(const qint64& pid, QThread::Priority priority, QString--->>>>LIST& error)
+bool setProcessPriority(const qint64& pid, QThread::Priority priority, QStringList& errors)
 {
    int prio = -1;
    switch(priority)
@@ -213,7 +213,7 @@ bool setProcessPriority(const qint64& pid, QThread::Priority priority, QString--
    int err = setpriority(PRIO_PROCESS, pid, prio);
    if(err != 0)
    {
-       error += QObject::tr("setpriority(%1) failed with %2.").arg(prio).arg(err);
+       errors << QObject::tr("setpriority(%1) failed with %2.").arg(prio).arg(err);
        failed = true;
    }
 
@@ -225,7 +225,7 @@ bool setProcessPriority(const qint64& pid, QThread::Priority priority, QString--
        if(err != 0)
        {
            failed = true;
-           error += QObject::tr("ioprio_set(%1) failed with %2.").arg(ioprio).arg(err);
+           errors << QObject::tr("ioprio_set(%1) failed with %2.").arg(ioprio).arg(err);
        }
    }
    return !failed;
