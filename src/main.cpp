@@ -49,19 +49,40 @@ using namespace Consts;
 #ifdef QT_DEBUG
 static void testSQL()
 {
-    QStringList files;
-    files << "00c75732-e92b-4e3c-90a1-914bd137797f-1.png";
-    files << "00c75732-e92b-4e3c-90a1-914bd137797f-2.png";
-    files << "00c75732-e92b-4e3c-90a1-914bd137797f-3.png";
-    files << "00c75732-e92b-4e3c-90a1-914bd137797f-4.png";
-    files << "00c75732-e92b-4e3c-90a1-914bd137797f-5.png";
+
+    QString dir = normalizeDir(GetAppDir());
+    QString file = "moviefile.mp3";
+    QString file2 =  "file2.mp4";
+
+    // first clean all items of
+    QFile(pathCombine(dir,file)).remove();
+    QFile(pathCombine(dir,file2)).remove();
+
+    Q_ASSERT(gpSQL->RemoveAllMissingEntries(dir));
+
+    // prepare actual file for not causing assert.
+    qDebug() << "Test file is " << pathCombine(dir,file);
+    {
+        QFile f(pathCombine(dir,file));
+        Q_ASSERT(f.open(QFile::WriteOnly));
+        f.write("data");
+    }
+
+
+    QStringList thumbfiles;
+    thumbfiles << "00c75732-e92b-4e3c-90a1-914bd137797f-1.png";
+    thumbfiles << "00c75732-e92b-4e3c-90a1-914bd137797f-2.png";
+    thumbfiles << "00c75732-e92b-4e3c-90a1-914bd137797f-3.png";
+    thumbfiles << "00c75732-e92b-4e3c-90a1-914bd137797f-4.png";
+    thumbfiles << "00c75732-e92b-4e3c-90a1-914bd137797f-5.png";
 
     static int la=QTime::currentTime().second();
     static int oc=100;
+
     TableItemDataPointer tid = TableItemData::Create(0,
-                                                     files,
-                                                     "X:/aaa/bbb/",
-                                                     "moviefile.mp3",
+                                                     thumbfiles,
+                                                     dir,
+                                                     file,
                                                      33333,
                                                      22344,
                                                      33333,
@@ -76,8 +97,28 @@ static void testSQL()
                                                      480,
                                                      oc++,
                                                      ++la);
+    // insert same tid and check same id
     gpSQL->AppendData(tid);
-    // tid->setID(lastid);
+    qint64 id1 = tid->getID();
+    qDebug() << "InsertedID=" << id1;
+
+    gpSQL->AppendData(tid);
+    qint64 id2 = tid->getID();
+    qDebug() << "InsertedID=" << id2;
+
+    Q_ASSERT(id1==id2);
+
+
+    // check rename does not change id
+    QFile(pathCombine(dir,file)).rename(pathCombine(dir,file2));
+    Q_ASSERT(gpSQL->RenameEntry(dir, file, dir,file2));
+    qint64 id3;
+    Q_ASSERT(gpSQL->GetID(dir, file, id3));
+    Q_ASSERT(id3==-1);
+    Q_ASSERT(gpSQL->GetID(dir,file2,id3));
+    Q_ASSERT(id1==id3);
+
+
 }
 #endif
 

@@ -190,6 +190,10 @@ public:
         Q_ASSERT(!docdb_.isEmpty() && docdb_ != "nodb");
         return docdb_;
     }
+
+    bool GetID(const QString& dir,
+               const QString& file,
+               qint64& id);
 };
 
 #endif // SQL_H

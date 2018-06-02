@@ -60,7 +60,7 @@ bool processCommandLine(QString* helpText=nullptr);
 QString ExpandEnv(const QString& str);
 
 bool isUUID(const QString& s);
-QSqlQuery myq(const QString& sql);
+QSqlQuery myPrepare(const QString& sql);
 
 QString getClipboardText();
 void setClipboardText(const QString& text);

@@ -612,7 +612,7 @@ bool Sql::RemoveEntryThumb(const QString& dir,
         Q_ASSERT(false);
         return false;
     }
-    QSqlQuery query = myq("SELECT thumbid FROM FileInfo WHERE "
+    QSqlQuery query = myPrepare("SELECT thumbid FROM FileInfo WHERE "
                    "directory=? and name=?");
 
     int i=0;
@@ -1002,7 +1002,7 @@ bool Sql::RenameEntry(const QString& oldDirc,
 
     if(!QFile(pathCombine(oldDir, oldFile)).exists())
     {
-        MYQMODIFIER QSqlQuery query = myq("update FileInfo "
+        MYQMODIFIER QSqlQuery query = myPrepare("update FileInfo "
                         "set directory=?,name=? "
                         "where directory=? and name=?");
 
@@ -1031,7 +1031,7 @@ bool Sql::RenameEntries(const QString& dir,
         Q_ASSERT(!QFile(pathCombine(dir, oldfile)).exists());
         if(!QFile(pathCombine(dir, oldfile)).exists())
         {
-            MYQMODIFIER QSqlQuery query = myq("update FileInfo "
+            MYQMODIFIER QSqlQuery query = myPrepare("update FileInfo "
                             "set name=? "
                             "where directory=? and name=?");
             int i=0;
@@ -1083,7 +1083,7 @@ bool Sql::hasEntry(const QString& dir,
                    const qint64& wtime,
                    const QString& sa)
 {
-    MYQMODIFIER QSqlQuery query = myq("select name from FileInfo where "
+    MYQMODIFIER QSqlQuery query = myPrepare("select name from FileInfo where "
                            "directory=? and name=? and size=? and wtime=? and salient=?");
 
     int i=0;
@@ -1096,6 +1096,26 @@ bool Sql::hasEntry(const QString& dir,
     SQC(query,exec());
     return query.next();
 }
+bool Sql::GetID(const QString& dir,
+           const QString& file,
+           qint64& id)
+{
+    MYQMODIFIER QSqlQuery query = myPrepare("SELECT id FROM FileInfo WHERE directory=? AND name=?");
+    int i=0;
+    query.bindValue(i++,dir);
+    query.bindValue(i++,file);
+
+    SQC(query,exec());
+    if(!query.next())
+    {
+        id=-1;
+        return true;
+    }
+
+    id = query.value("id").toLongLong();
+    return true;
+}
+
 bool Sql::RemoveEntry(const QString& dir,
                       const QString& file,
                       QString* error)

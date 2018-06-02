@@ -511,8 +511,9 @@ void MainWindow::StartScan(const QString& dir)
     if(!checkFFprobe(errString) || !checkFFmpeg(errString))
     {
         insertLog(TaskKind::App, 0,
-                  tr("Failed to launch ffprobe or ffmpeg. (%1)") + " " + tr("Check the option setting.").
-                  arg(errString));
+                  tr("Failed to launch ffprobe or ffmpeg. (%1)").arg(errString) +
+                  " " +
+                  tr("Check the option setting."));
         return;
     }
 

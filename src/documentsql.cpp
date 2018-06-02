@@ -285,7 +285,7 @@ bool DocumentSql::setTagAllSelected(bool b)
 
 bool DocumentSql::setDirNormalItemState(const DirectoryItem* item)
 {
-    QSqlQuery query = myq("UPDATE " + docdb("Directories") + " SET selected=?, checked=? WHERE id=?");
+    QSqlQuery query = myPrepare("UPDATE " + docdb("Directories") + " SET selected=?, checked=? WHERE id=?");
     int i=0;
     query.bindValue(i++, item->IsSelectedInt());
     query.bindValue(i++, item->IsCheckedInt());
@@ -337,7 +337,7 @@ QString DocumentSql::getDirText(int index) const
 }
 bool DocumentSql::setDirectory(int index, DirectoryItem* di)
 {
-    MYQMODIFIER QSqlQuery query = myq("INSERT OR REPLACE INTO " + docdb("Directories") + " (id, directory, selected, checked) VALUES (?,?,?,?)");
+    MYQMODIFIER QSqlQuery query = myPrepare("INSERT OR REPLACE INTO " + docdb("Directories") + " (id, directory, selected, checked) VALUES (?,?,?,?)");
 
 	int i = 0;
 	query.bindValue(i++, index);
@@ -419,7 +419,7 @@ bool DocumentSql::IncrementOpenCountAndLastAccess(const qint64& id)
             "?,"
             "?)";
 
-    MYQMODIFIER QSqlQuery query = myq(state);
+    MYQMODIFIER QSqlQuery query = myPrepare(state);
 
     int i=0;
     query.bindValue(i++, id);
@@ -485,7 +485,7 @@ bool DocumentSql::GetAllTags(QList<TagItem*>& tags,bool bHasParent) const
 }
 bool DocumentSql::IsTagExist(const QString& tag) const
 {
-    MYQMODIFIER QSqlQuery query = myq("SELECT tagid FROM " + docdb("Tag") + " WHERE tag=? AND dbid=?");
+    MYQMODIFIER QSqlQuery query = myPrepare("SELECT tagid FROM " + docdb("Tag") + " WHERE tag=? AND dbid=?");
 
     int i=0;
     query.bindValue(i++, tag);
@@ -495,7 +495,7 @@ bool DocumentSql::IsTagExist(const QString& tag) const
 }
 bool DocumentSql::Insert(const QString& tag, const QString& yomi) const
 {
-    MYQMODIFIER QSqlQuery query = myq("REPLACE INTO " + docdb("Tag") + " (tag,yomi,dbid) VALUES (?,?,?)");
+    MYQMODIFIER QSqlQuery query = myPrepare("REPLACE INTO " + docdb("Tag") + " (tag,yomi,dbid) VALUES (?,?,?)");
 
     int i=0;
     // query.bindValue(i++, id);
@@ -555,7 +555,7 @@ bool DocumentSql::SetTagged(const qint64& id, const qint64& tagid, const bool bS
 
 	if (bSet)
 	{
-        MYQMODIFIER QSqlQuery query = myq("REPLACE INTO " + docdb("Tagged") + " (id,tagid,dbid) VALUES (?,?,?)");
+        MYQMODIFIER QSqlQuery query = myPrepare("REPLACE INTO " + docdb("Tagged") + " (id,tagid,dbid) VALUES (?,?,?)");
 
 		int i = 0;
 		query.bindValue(i++, id);
@@ -566,7 +566,7 @@ bool DocumentSql::SetTagged(const qint64& id, const qint64& tagid, const bool bS
 	}
 	else
 	{
-        QSqlQuery query = myq("DELETE FROM " + docdb("Tagged") + " WHERE id=? AND tagid=? AND dbid=?");
+        QSqlQuery query = myPrepare("DELETE FROM " + docdb("Tagged") + " WHERE id=? AND tagid=? AND dbid=?");
 
 		int i = 0;
         query.bindValue(i++, id);
@@ -578,7 +578,7 @@ bool DocumentSql::SetTagged(const qint64& id, const qint64& tagid, const bool bS
 }
 bool DocumentSql::GetTag(const qint64& tagid, QString& tag, QString& yomi) const
 {
-    MYQMODIFIER QSqlQuery query = myq("SELECT tag,yomi FROM " + docdb("Tag") + " WHERE tagid=? AND dbid=?");
+    MYQMODIFIER QSqlQuery query = myPrepare("SELECT tag,yomi FROM " + docdb("Tag") + " WHERE tagid=? AND dbid=?");
     
     int i=0;
     query.bindValue(i++, tagid);
@@ -596,7 +596,7 @@ bool DocumentSql::GetTag(const qint64& tagid, QString& tag, QString& yomi) const
 }
 bool DocumentSql::ReplaceTag(const qint64& tagid, const QString& tag, const QString& yomi)
 {
-    MYQMODIFIER QSqlQuery query = myq("UPDATE " + docdb("Tag") + " SET tag=?,yomi=? WHERE tagid=? AND dbid=?");
+    MYQMODIFIER QSqlQuery query = myPrepare("UPDATE " + docdb("Tag") + " SET tag=?,yomi=? WHERE tagid=? AND dbid=?");
 
     int i=0;
     query.bindValue(i++,tag);
@@ -609,7 +609,7 @@ bool DocumentSql::ReplaceTag(const qint64& tagid, const QString& tag, const QStr
 }
 bool DocumentSql::DeleteTag(const qint64& tagid)
 {
-    MYQMODIFIER QSqlQuery query = myq("DELETE FROM " + docdb("Tag") + " WHERE tagid=? AND dbid=?");
+    MYQMODIFIER QSqlQuery query = myPrepare("DELETE FROM " + docdb("Tag") + " WHERE tagid=? AND dbid=?");
 
     int i=0;
     query.bindValue(i++,tagid);
@@ -623,7 +623,7 @@ bool DocumentSql::GetTagsFromID(const qint64& id, QSet<qint64>& tagids)
     if( id <= 0)
         return true;
 
-    MYQMODIFIER QSqlQuery query = myq("SELECT tagid FROM " + docdb("Tagged") + " WHERE id=? AND dbid=?");
+    MYQMODIFIER QSqlQuery query = myPrepare("SELECT tagid FROM " + docdb("Tagged") + " WHERE id=? AND dbid=?");
 
     int i=0;
     query.bindValue(i++, id);
@@ -659,7 +659,7 @@ bool DocumentSql::GetTagsFromID(const qint64& id, QSet<qint64>& tagids)
 //}
 bool DocumentSql::GetOpenCountAndLastAccess(const qint64& id, int& opencount, qint64& lastaccess)
 {
-    MYQMODIFIER QSqlQuery query = myq("SELECT opencount,lastaccess FROM " + docdb("Access") + " WHERE id=? AND dbid=?");
+    MYQMODIFIER QSqlQuery query = myPrepare("SELECT opencount,lastaccess FROM " + docdb("Access") + " WHERE id=? AND dbid=?");
     int i=0;
     query.bindValue(i++,id);
     query.bindValue(i++,gpSQL->getDbID());
@@ -673,7 +673,7 @@ bool DocumentSql::GetOpenCountAndLastAccess(const qint64& id, int& opencount, qi
 }
 bool DocumentSql::GetTagSelectedAndChecked(const qint64& tagid, bool& bSel, bool& bCheck)
 {
-    MYQMODIFIER QSqlQuery query = myq("SELECT selected,checked FROM " + docdb("Tag") + " WHERE tagid=? AND dbid=?");
+    MYQMODIFIER QSqlQuery query = myPrepare("SELECT selected,checked FROM " + docdb("Tag") + " WHERE tagid=? AND dbid=?");
     int i=0;
     query.bindValue(i++,tagid);
     query.bindValue(i++,gpSQL->getDbID());
@@ -689,7 +689,7 @@ bool DocumentSql::GetTagSelectedAndChecked(const qint64& tagid, bool& bSel, bool
 }
 bool DocumentSql::SetTagSelectedAndChecked(const qint64& tagid, const bool bSel, const bool bCheck)
 {
-    MYQMODIFIER QSqlQuery query = myq("UPDATE " + docdb("Tag") + " SET selected=?,checked=? WHERE tagid=? AND dbid=?");
+    MYQMODIFIER QSqlQuery query = myPrepare("UPDATE " + docdb("Tag") + " SET selected=?,checked=? WHERE tagid=? AND dbid=?");
     int i=0;
     query.bindValue(i++,bSel ? 1:0);
     query.bindValue(i++, bCheck?1:0);
@@ -718,7 +718,7 @@ bool DocumentSql::GetAllDirs(QList<DirectoryItem*>& dirs) const
 }
 bool DocumentSql::InsertDirectory(const QString& dirOrig, DirectoryItem*& newdi)
 {
-    MYQMODIFIER QSqlQuery query = myq("INSERT INTO " + docdb("Directories") + " (directory) VALUES (?)");
+    MYQMODIFIER QSqlQuery query = myPrepare("INSERT INTO " + docdb("Directories") + " (directory) VALUES (?)");
 
     QString dir = normalizeDir(dirOrig);
 

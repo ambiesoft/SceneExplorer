@@ -445,12 +445,13 @@ bool isUUID(const QString& s)
 }
 
 // In linux, constructor with sql string cause sigxxx, so this is temporal fix
-QSqlQuery myq(const QString& sql)
+QSqlQuery myPrepare(const QString& sql)
 {
     QSqlQuery q;
     if(!q.prepare(sql))
     {
         Q_ASSERT(false);
+        qDebug() << q.lastError();
         return q;
     }
     return q;
