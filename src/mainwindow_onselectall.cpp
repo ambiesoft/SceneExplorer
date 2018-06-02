@@ -22,7 +22,7 @@
 #include "ui_mainwindow.h"
 #include "mainwindow.h"
 
-void MainWindow::on_action_Select_All_triggered()
+void MainWindow::on_action_SelectAll_triggered()
 {
     if(ui->directoryWidget->hasFocus())
     {

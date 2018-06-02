@@ -1355,10 +1355,6 @@ bool MainWindow::IsInitialized() const
     return initialized_;
 }
 
-void MainWindow::on_action_Focus_find_triggered()
-{
-    cmbFind_->setFocus();
-}
 void MainWindow::on_action_Find_triggered()
 {
     QString cur = cmbFind_->currentText();
@@ -1447,32 +1443,6 @@ bool MainWindow::HasDirectory(const QString& dir)
     }
     return false;
 }
-void MainWindow::on_action_Add_Folder_triggered()
-{
-    if(!pDoc_)
-        return;
-
-    QString dir = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
-                                                    lastSelectedAddFolderDir_);
-    if(dir.isEmpty())
-        return;
-    lastSelectedAddFolderDir_ = dir;
-
-    if(HasDirectory(dir))
-    {
-        Alert(this, tr("Directory '%1' already exists.").arg(dir));
-        return;
-    }
-
-    DirectoryItem* newdi=nullptr;
-    if(!pDoc_->InsertDirectory(dir, newdi))
-    {
-        Alert(this,TR_FAILED_TO_INSERT_DIRECTORY_INTO_DATABASE());
-        return;
-    }
-
-    ui->directoryWidget->addItem(newdi);
-}
 
 void MainWindow::on_action_Extentions_triggered()
 {
@@ -1534,14 +1504,6 @@ void MainWindow::setFontCommon2(const QString& savekey,
 }
 
 
-void MainWindow::on_actionExternal_Tools_triggered()
-{
-    OptionExternalToolsDialog dlg(settings_, this);
-    dlg.items_ = externalTools_;
-    if(QDialog::Accepted != dlg.exec())
-        return;
-    externalTools_ = dlg.items_;
-}
 
 void MainWindow::on_action_New_triggered()
 {
@@ -1635,75 +1597,15 @@ bool MainWindow::checkFFmpeg(QString& errString) const
     return checkExeCommon(FFMpeg::GetFFmpeg(settings_), errString);
 }
 
-void MainWindow::on_actionAbout_document_triggered()
-{
-    QString title = APPNAME_DISPLAY;
-//    QString text;
-
-//    text.append(tr("Executable"));
-//    text.append(": ");
-//    text.append(QCoreApplication::applicationFilePath());
-
-//    text.append("\n\n");
-
-//    text.append(tr("Document"));
-//    text.append(": ");
-//    text.append(pDoc_ ? pDoc_->GetFullName(): tr("<No document>"));
-
-//    text.append("\n\n");
-
-//    text.append(tr("Ini file"));
-//    text.append(": ");
-//    text.append(settings_.fileName());
-
-//    text.append("\n\n");
-
-//    text.append(tr("Database directory"));
-//    text.append(": ");
-//    text.append(QDir(".").absolutePath());
-
-
-//    QMessageBox msgbox(this);
-//    msgbox.setIcon(QMessageBox::Information);
-//    msgbox.setText(text);
-//    msgbox.setWindowTitle(title);
-//    msgbox.exec();
-
-    DocinfoDialog dlg(this,
-                      QCoreApplication::applicationFilePath(),
-                      pDoc_ ? pDoc_->GetFullName(): tr("<No document>"),
-                      settings_.fileName(),
-                      QDir(".").absolutePath());
-
-    if(QDialog::Accepted != dlg.exec())
-        return;
-
-}
 
 
 
 
 
-void MainWindow::on_action_Empty_find_texts_triggered()
-{
-    int count = cmbFind_->count();
-    if(count==0)
-    {
-        Info(this, tr("There are no find texts."));
-        return;
-    }
-    if(!YesNo(this, tr("Are you sure you want to empty %1 find texts?").arg(count)))
-        return;
-    cmbFind_->clear();
-}
 
 
 
 
-void MainWindow::on_actionShow_missing_files_triggered()
-{
-    on_ShowMissingClicked_common(ui->actionShow_missing_files->isChecked());
-}
 
 
 
@@ -1714,17 +1616,9 @@ void MainWindow::initLangMenus()
         return;
 
     ui->menu_Language->setTitle(tr("Language") + " (" + ("Language") + ")");
-    ui->action_System_default->setText(tr("System default") + " (" + ("System default") + ")");
+    ui->action_SystemDefault->setText(tr("System default") + " (" + ("System default") + ")");
     ui->action_English->setText(tr("English") + " (" + ("English") + ")");
     ui->action_Japanese->setText(tr("Japanese") + " (" + ("Japanese") + ")");
-}
-
-void MainWindow::on_action_Command_Line_triggered()
-{
-    QString helpText;
-    processCommandLine(&helpText);
-
-    Info(this,helpText);
 }
 
 void MainWindow::on_action_Help_triggered()
@@ -1770,25 +1664,6 @@ void MainWindow::CreateNewTag(const QString& tag, const QString& yomi)
 
     LoadTags();
 }
-void MainWindow::on_action_Add_new_tag_triggered()
-{
-    if(!pDoc_)
-    {
-        Alert(this,
-              tr("No Document"));
-        return;
-    }
-
-    TagInputDialog dlg(this);
-    if(!dlg.exec())
-        return;
-
-    QString tag=dlg.tag();
-    QString yomi=dlg.yomi();
-
-    CreateNewTag(tag,yomi);
-}
-
 
 
 void MainWindow::on_listTag_itemSelectionChanged()
@@ -1798,34 +1673,6 @@ void MainWindow::on_listTag_itemSelectionChanged()
     itemChangedCommon();
 }
 
-void MainWindow::on_actionShow_All_Item_triggered()
-{
-    {
-        BlockedBool dc(&directoryChanging_);
-        BlockedBool tc(&tagChanging_);
-
-        if(limitManager_)
-            limitManager_->Reset();
-
-        // clear find
-        cmbFind_->setCurrentText(QString());
-
-        // directory, select all
-        ui->directoryWidget->clearSelection();
-        DirectoryItem* dall = (DirectoryItem*)ui->directoryWidget->item(0);
-        Q_ASSERT(dall->IsAllItem());
-        dall->setSelected(true);
-        ui->directoryWidget->setCurrentItem(dall);
-
-        // tag select all
-        ui->listTag->clearSelection();
-        TagItem* tall = (TagItem*)ui->listTag->item(0);
-        Q_ASSERT(tall->IsAllItem());
-        tall->setSelected(true);
-        ui->listTag->setCurrentItem(tall);
-    }
-    itemChangedCommon(true);
-}
 
 void MainWindow::editTag()
 {
@@ -1923,7 +1770,7 @@ void MainWindow::showTagContextMenu(const QPoint &pos)
         // no item selected
         // Create menu and insert some actions
         MyContextMenu myMenuFreeArea;
-        myMenuFreeArea.addAction(ui->action_Add_new_tag);
+        myMenuFreeArea.addAction(ui->action_AddNewTag);
         myMenuFreeArea.addAction(ui->action_Paste);
 		ui->action_Paste->setEnabled(IsClipboardTagDataAvalable());
         myMenuFreeArea.addSeparator();
@@ -2202,7 +2049,7 @@ void MainWindow::on_directoryWidget_itemDoubleClicked(QListWidgetItem *item)
     if(!di->IsAllItem())
         return;
 
-    on_actionShow_All_Item_triggered();
+    on_action_ShowAllItem_triggered();
 }
 
 void MainWindow::on_listTag_itemDoubleClicked(QListWidgetItem *item)
@@ -2214,7 +2061,195 @@ void MainWindow::on_listTag_itemDoubleClicked(QListWidgetItem *item)
     if(!ti->IsAllItem())
         return;
 
-    on_actionShow_All_Item_triggered();
+    on_action_ShowAllItem_triggered();
+}
 
+
+void MainWindow::on_action_FocusItemTable_triggered()
+{
+    ui->tableView->setFocus();
+}
+
+
+
+
+
+void MainWindow::on_action_ShowAllItem_triggered()
+{
+    {
+        BlockedBool dc(&directoryChanging_);
+        BlockedBool tc(&tagChanging_);
+
+        if(limitManager_)
+            limitManager_->Reset();
+
+        // clear find
+        cmbFind_->setCurrentText(QString());
+
+        // directory, select all
+        ui->directoryWidget->clearSelection();
+        DirectoryItem* dall = (DirectoryItem*)ui->directoryWidget->item(0);
+        Q_ASSERT(dall->IsAllItem());
+        dall->setSelected(true);
+        ui->directoryWidget->setCurrentItem(dall);
+
+        // tag select all
+        ui->listTag->clearSelection();
+        TagItem* tall = (TagItem*)ui->listTag->item(0);
+        Q_ASSERT(tall->IsAllItem());
+        tall->setSelected(true);
+        ui->listTag->setCurrentItem(tall);
+    }
+    itemChangedCommon(true);
+}
+
+
+
+
+void MainWindow::on_action_ShowMissingFiles_triggered()
+{
+    on_ShowMissingClicked_common(ui->action_ShowMissingFiles->isChecked());
+}
+
+void MainWindow::on_action_EmptyFindTexts_triggered()
+{
+    int count = cmbFind_->count();
+    if(count==0)
+    {
+        Info(this, tr("There are no find texts."));
+        return;
+    }
+    if(!YesNo(this, tr("Are you sure you want to empty %1 find texts?").arg(count)))
+        return;
+    cmbFind_->clear();
+}
+
+void MainWindow::on_action_FocusFind_triggered()
+{
+    cmbFind_->setFocus();
+}
+
+
+void MainWindow::on_action_FocusDirectoryPane_triggered()
+{
+    ui->directoryWidget->setFocus();
+}
+
+
+void MainWindow::on_action_FocusTagPane_triggered()
+{
+    ui->listTag->setFocus();
+}
+
+
+void MainWindow::on_action_AddFolder_triggered()
+{
+    if(!pDoc_)
+        return;
+
+    QString dir = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
+                                                    lastSelectedAddFolderDir_);
+    if(dir.isEmpty())
+        return;
+    lastSelectedAddFolderDir_ = dir;
+
+    if(HasDirectory(dir))
+    {
+        Alert(this, tr("Directory '%1' already exists.").arg(dir));
+        return;
+    }
+
+    DirectoryItem* newdi=nullptr;
+    if(!pDoc_->InsertDirectory(dir, newdi))
+    {
+        Alert(this,TR_FAILED_TO_INSERT_DIRECTORY_INTO_DATABASE());
+        return;
+    }
+
+    ui->directoryWidget->addItem(newdi);
+}
+
+
+void MainWindow::on_action_AddNewTag_triggered()
+{
+    if(!pDoc_)
+    {
+        Alert(this,
+              tr("No Document"));
+        return;
+    }
+
+    TagInputDialog dlg(this);
+    if(!dlg.exec())
+        return;
+
+    QString tag=dlg.tag();
+    QString yomi=dlg.yomi();
+
+    CreateNewTag(tag,yomi);
+}
+
+void MainWindow::on_action_ExternalTools_triggered()
+{
+    OptionExternalToolsDialog dlg(settings_, this);
+    dlg.items_ = externalTools_;
+    if(QDialog::Accepted != dlg.exec())
+        return;
+    externalTools_ = dlg.items_;
+}
+
+
+void MainWindow::on_action_AboutDocument_triggered()
+{
+    QString title = APPNAME_DISPLAY;
+//    QString text;
+
+//    text.append(tr("Executable"));
+//    text.append(": ");
+//    text.append(QCoreApplication::applicationFilePath());
+
+//    text.append("\n\n");
+
+//    text.append(tr("Document"));
+//    text.append(": ");
+//    text.append(pDoc_ ? pDoc_->GetFullName(): tr("<No document>"));
+
+//    text.append("\n\n");
+
+//    text.append(tr("Ini file"));
+//    text.append(": ");
+//    text.append(settings_.fileName());
+
+//    text.append("\n\n");
+
+//    text.append(tr("Database directory"));
+//    text.append(": ");
+//    text.append(QDir(".").absolutePath());
+
+
+//    QMessageBox msgbox(this);
+//    msgbox.setIcon(QMessageBox::Information);
+//    msgbox.setText(text);
+//    msgbox.setWindowTitle(title);
+//    msgbox.exec();
+
+    DocinfoDialog dlg(this,
+                      QCoreApplication::applicationFilePath(),
+                      pDoc_ ? pDoc_->GetFullName(): tr("<No document>"),
+                      settings_.fileName(),
+                      QDir(".").absolutePath());
+
+    if(QDialog::Accepted != dlg.exec())
+        return;
+
+}
+
+
+void MainWindow::on_action_CommandLine_triggered()
+{
+    QString helpText;
+    processCommandLine(&helpText);
+
+    Info(this,helpText);
 }
 

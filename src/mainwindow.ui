@@ -101,8 +101,8 @@
     </property>
     <addaction name="action_Help"/>
     <addaction name="action_About"/>
-    <addaction name="actionAbout_document"/>
-    <addaction name="action_Command_Line"/>
+    <addaction name="action_AboutDocument"/>
+    <addaction name="action_CommandLine"/>
    </widget>
    <widget class="QMenu" name="menu_Option">
     <property name="title">
@@ -138,14 +138,14 @@
      <property name="title">
       <string>&amp;Language</string>
      </property>
-     <addaction name="action_System_default"/>
+     <addaction name="action_SystemDefault"/>
      <addaction name="separator"/>
      <addaction name="action_English"/>
      <addaction name="action_Japanese"/>
     </widget>
     <addaction name="action_Options"/>
     <addaction name="action_Extentions"/>
-    <addaction name="actionExternal_Tools"/>
+    <addaction name="action_ExternalTools"/>
     <addaction name="menu_Font"/>
     <addaction name="menu_Language"/>
    </widget>
@@ -173,7 +173,16 @@
      <addaction name="action_DockTask"/>
      <addaction name="action_DockOutput"/>
     </widget>
-    <addaction name="actionShow_All_Item"/>
+    <widget class="QMenu" name="menu_Focus">
+     <property name="title">
+      <string>&amp;Focus</string>
+     </property>
+     <addaction name="action_FocusFind"/>
+     <addaction name="action_FocusItemTable"/>
+     <addaction name="action_FocusDirectoryPane"/>
+     <addaction name="action_FocusTagPane"/>
+    </widget>
+    <addaction name="action_ShowAllItem"/>
     <addaction name="action_Refresh"/>
     <addaction name="separator"/>
     <addaction name="actionSort_by_file_name"/>
@@ -186,31 +195,31 @@
     <addaction name="actionSort_by_open_count"/>
     <addaction name="actionSort_by_last_access"/>
     <addaction name="separator"/>
-    <addaction name="actionShow_missing_files"/>
+    <addaction name="action_ShowMissingFiles"/>
     <addaction name="separator"/>
     <addaction name="action_Top"/>
     <addaction name="action_Bottom"/>
     <addaction name="separator"/>
     <addaction name="menu_Docking_windows"/>
     <addaction name="separator"/>
-    <addaction name="action_Focus_find"/>
     <addaction name="action_Find"/>
     <addaction name="action_Clear"/>
-    <addaction name="action_Empty_find_texts"/>
+    <addaction name="action_EmptyFindTexts"/>
     <addaction name="separator"/>
+    <addaction name="menu_Focus"/>
    </widget>
    <widget class="QMenu" name="menu_Folder">
     <property name="title">
      <string>&amp;Folder</string>
     </property>
-    <addaction name="action_Add_Folder"/>
+    <addaction name="action_AddFolder"/>
     <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menu_Tag">
     <property name="title">
      <string>&amp;Tag</string>
     </property>
-    <addaction name="action_Add_new_tag"/>
+    <addaction name="action_AddNewTag"/>
     <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menu_Edit">
@@ -223,7 +232,7 @@
     <addaction name="action_Copy"/>
     <addaction name="action_Paste"/>
     <addaction name="separator"/>
-    <addaction name="action_Select_All"/>
+    <addaction name="action_SelectAll"/>
     <addaction name="separator"/>
     <addaction name="action_ClearContent"/>
    </widget>
@@ -257,7 +266,7 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="actionShow_All_Item"/>
+   <addaction name="action_ShowAllItem"/>
    <addaction name="action_Refresh"/>
    <addaction name="placeHolder_Sort"/>
    <addaction name="separator"/>
@@ -468,13 +477,16 @@
    <property name="text">
     <string>&amp;About...</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+F1</string>
+   </property>
   </action>
-  <action name="action_Add_Folder">
+  <action name="action_AddFolder">
    <property name="text">
     <string>&amp;Add Folder...</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Shift+F</string>
+    <string>Ctrl+Shift+D</string>
    </property>
   </action>
   <action name="action_Options">
@@ -547,7 +559,7 @@
     <string>Sort by file name</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Shift+N</string>
+    <string>Ctrl+K, N</string>
    </property>
   </action>
   <action name="actionSort_by_file_size">
@@ -565,7 +577,7 @@
     <string>Sort by file size</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Shift+S</string>
+    <string>Ctrl+K, S</string>
    </property>
   </action>
   <action name="actionSort_by_wtime">
@@ -580,7 +592,7 @@
     <string>Sort by wtime</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Shift+W</string>
+    <string>Ctrl+K, W</string>
    </property>
   </action>
   <action name="action_Top">
@@ -594,9 +606,6 @@
    <property name="toolTip">
     <string>Top</string>
    </property>
-   <property name="shortcut">
-    <string>Ctrl+PgDown</string>
-   </property>
   </action>
   <action name="action_Bottom">
    <property name="icon">
@@ -609,8 +618,8 @@
    <property name="toolTip">
     <string>Bottom</string>
    </property>
-   <property name="shortcut">
-    <string>Ctrl+PgUp</string>
+   <property name="shortcutVisibleInContextMenu">
+    <bool>true</bool>
    </property>
   </action>
   <action name="actionSort_by_resolution">
@@ -624,7 +633,7 @@
     <string>Sort by resolution</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Shift+R</string>
+    <string>Ctrl+K, R</string>
    </property>
   </action>
   <action name="actionSort_by_duration">
@@ -638,7 +647,7 @@
     <string>Sort by duration</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Shift+D</string>
+    <string>Ctrl+K, D</string>
    </property>
   </action>
   <action name="actionSort_by_bitrate">
@@ -649,7 +658,7 @@
     <string>Sort by &amp;bitrate</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Shift+B</string>
+    <string>Ctrl+K, B</string>
    </property>
   </action>
   <action name="placeHolder_ShowMissing">
@@ -674,7 +683,7 @@
     <string>Sort by open count</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Shift+O</string>
+    <string>Ctrl+K, O</string>
    </property>
   </action>
   <action name="action_Extentions">
@@ -697,7 +706,7 @@
     <string>&amp;Output..</string>
    </property>
   </action>
-  <action name="actionExternal_Tools">
+  <action name="action_ExternalTools">
    <property name="text">
     <string>External &amp;Tools...</string>
    </property>
@@ -720,9 +729,12 @@
     <string>dummy</string>
    </property>
   </action>
-  <action name="actionAbout_document">
+  <action name="action_AboutDocument">
    <property name="text">
     <string>About &amp;document...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+F1</string>
    </property>
   </action>
   <action name="action_New">
@@ -740,9 +752,12 @@
     <string>&amp;Scan arbitrary directory...</string>
    </property>
   </action>
-  <action name="action_Focus_find">
+  <action name="action_FocusFind">
    <property name="text">
     <string>&amp;Focus find</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+F</string>
    </property>
   </action>
   <action name="action_Find">
@@ -769,7 +784,7 @@
     <string>Clear</string>
    </property>
   </action>
-  <action name="action_Empty_find_texts">
+  <action name="action_EmptyFindTexts">
    <property name="text">
     <string>&amp;Empty find texts...</string>
    </property>
@@ -794,10 +809,10 @@
     <string>Sort by last access</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Shift+A</string>
+    <string>Ctrl+K, A</string>
    </property>
   </action>
-  <action name="actionShow_missing_files">
+  <action name="action_ShowMissingFiles">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -809,7 +824,7 @@
     <string>Show &amp;missing files</string>
    </property>
   </action>
-  <action name="action_System_default">
+  <action name="action_SystemDefault">
    <property name="checkable">
     <bool>true</bool>
    </property>
@@ -833,7 +848,7 @@
     <string>&amp;Japanese</string>
    </property>
   </action>
-  <action name="action_Command_Line">
+  <action name="action_CommandLine">
    <property name="text">
     <string>&amp;Command Line...</string>
    </property>
@@ -846,12 +861,12 @@
     <string>F1</string>
    </property>
   </action>
-  <action name="action_Add_new_tag">
+  <action name="action_AddNewTag">
    <property name="text">
     <string>&amp;Add New Tag...</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+T</string>
+    <string>Ctrl+Shift+T</string>
    </property>
   </action>
   <action name="action_DockTag">
@@ -862,13 +877,16 @@
     <string>Ta&amp;g</string>
    </property>
   </action>
-  <action name="actionShow_All_Item">
+  <action name="action_ShowAllItem">
    <property name="icon">
     <iconset resource="resource.qrc">
      <normaloff>:/resource/images/mailbox.png</normaloff>:/resource/images/mailbox.png</iconset>
    </property>
    <property name="text">
     <string>Show &amp;All Item</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+F5</string>
    </property>
   </action>
   <action name="action_FontFolder">
@@ -932,7 +950,7 @@
     <string>Ctrl+V</string>
    </property>
   </action>
-  <action name="action_Select_All">
+  <action name="action_SelectAll">
    <property name="text">
     <string>&amp;Select All</string>
    </property>
@@ -945,7 +963,7 @@
     <string>&amp;Open Video</string>
    </property>
    <property name="shortcut">
-    <string>Return</string>
+    <string>Ctrl+Return</string>
    </property>
   </action>
   <action name="action_OpenFolder">
@@ -953,7 +971,7 @@
     <string>Open &amp;Folder</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Return</string>
+    <string>Ctrl+Shift+Return</string>
    </property>
   </action>
   <action name="action_ScanAllDirectories">
@@ -974,12 +992,36 @@
     <string>Sort by f&amp;ull name</string>
    </property>
    <property name="shortcut">
-    <string>Ctrl+Shift+P</string>
+    <string>Ctrl+K, P</string>
    </property>
   </action>
   <action name="action_ClearContent">
    <property name="text">
     <string>C&amp;lear</string>
+   </property>
+  </action>
+  <action name="action_FocusItemTable">
+   <property name="text">
+    <string>Focus &amp;Item Table</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+M</string>
+   </property>
+  </action>
+  <action name="action_FocusDirectoryPane">
+   <property name="text">
+    <string>Focus &amp;Directory Pane</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+D</string>
+   </property>
+  </action>
+  <action name="action_FocusTagPane">
+   <property name="text">
+    <string>Focus &amp;Tag Pane</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+T</string>
    </property>
   </action>
  </widget>

@@ -274,7 +274,7 @@ MainWindow::MainWindow(QWidget *parent,
     bool bShowMissing = (!vVal.isValid() || vVal.toBool());
     if(bShowMissing)
     {
-        ui->actionShow_missing_files->setChecked(true);
+        ui->action_ShowMissingFiles->setChecked(true);
         tbShowNonExistant_->setChecked(true);
     }
 

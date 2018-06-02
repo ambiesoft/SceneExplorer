@@ -416,7 +416,7 @@ private slots:
     // void onTaskTimerTick();
     void on_actionSort_by_open_count_triggered();
 
-    void on_action_Add_Folder_triggered();
+
 
     void on_action_Extentions_triggered();
 
@@ -426,7 +426,7 @@ private slots:
 
     void on_action_Output_triggered();
 
-    void on_actionExternal_Tools_triggered();
+
 
     void on_action_Open_triggered();
 
@@ -434,7 +434,7 @@ private slots:
 
     void on_actionSave_as_triggered();
 
-    void on_actionAbout_document_triggered();
+
 
     void on_action_New_triggered();
 
@@ -446,16 +446,16 @@ private slots:
     void onCmbLint_currentIndexChanged(int index);
 
 
-    void on_action_Focus_find_triggered();
 
-    void on_action_Empty_find_texts_triggered();
+
+
 
     void on_actionSort_by_last_access_triggered();
 
 
 
 
-    void on_actionShow_missing_files_triggered();
+
 
     void on_action_DockFolder_triggered();
 
@@ -469,19 +469,19 @@ private slots:
 
     void on_action_Japanese_triggered();
 
-    void on_action_System_default_triggered();
 
-    void on_action_Command_Line_triggered();
+
+
 
     void on_action_Help_triggered();
 
-    void on_action_Add_new_tag_triggered();
+
 
     void on_action_DockTag_triggered();
 
     void on_listTag_itemSelectionChanged();
 
-    void on_actionShow_All_Item_triggered();
+
 
     void on_listTag_itemChanged(QListWidgetItem *item);
 
@@ -503,7 +503,7 @@ private slots:
 
     void on_action_Paste_triggered();
 
-    void on_action_Select_All_triggered();
+
 
     void on_action_OpenVideo_triggered();
 
@@ -528,6 +528,39 @@ private slots:
     void on_listTag_itemDoubleClicked(QListWidgetItem *item);
 
 
+
+    void on_action_FocusItemTable_triggered();
+
+
+
+
+
+
+    void on_action_ShowAllItem_triggered();
+
+    void on_action_SelectAll_triggered();
+
+    void on_action_ShowMissingFiles_triggered();
+
+    void on_action_EmptyFindTexts_triggered();
+
+    void on_action_FocusFind_triggered();
+
+    void on_action_FocusDirectoryPane_triggered();
+
+    void on_action_FocusTagPane_triggered();
+
+    void on_action_AddFolder_triggered();
+
+    void on_action_AddNewTag_triggered();
+
+    void on_action_ExternalTools_triggered();
+
+    void on_action_SystemDefault_triggered();
+
+    void on_action_AboutDocument_triggered();
+
+    void on_action_CommandLine_triggered();
 
 private:
     void OnCopyTable();

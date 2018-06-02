@@ -116,7 +116,7 @@ void MainWindow::onMenuEdit_AboutToShow()
         else if(ui->listTask->hasFocus())
             bSelectAllEnable=true;
     }
-    ui->action_Select_All->setEnabled(bSelectAllEnable);
+    ui->action_SelectAll->setEnabled(bSelectAllEnable);
 
     // clear
     ui->action_ClearContent->setEnabled(ui->txtLog->hasFocus());

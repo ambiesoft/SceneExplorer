@@ -748,7 +748,7 @@ void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
             }
         }
 		menuExternalTools.addSeparator();
-		menuExternalTools.addAction(ui->actionExternal_Tools);
+        menuExternalTools.addAction(ui->action_ExternalTools);
 
         contextMenu.addMenu(&menuExternalTools);
         // <---- external tools
@@ -786,7 +786,7 @@ void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
             }
         }
 		menuAddTags.addSeparator();
-		menuAddTags.addAction(ui->action_Add_new_tag);
+        menuAddTags.addAction(ui->action_AddNewTag);
         contextMenu.addMenu(&menuAddTags);
         // <---- Tags
 
@@ -1002,7 +1002,7 @@ void MainWindow::on_directoryWidget_customContextMenuRequested(const QPoint &pos
     if(!di)
     {
         MyContextMenu menu("DirectoryWidget Context Menu",this);
-        menu.addEnablingAction(ui->action_Add_Folder);
+        menu.addEnablingAction(ui->action_AddFolder);
         menu.addEnablingAction(ui->action_Paste);
         menu.addSeparator();
 
@@ -1099,7 +1099,19 @@ void MainWindow::on_ShowMissingClicked_common(bool bNextCheck)
         return;
     BlockedBool bb(&sIn);
 
-    ui->actionShow_missing_files->setChecked(bNextCheck);
+    if(!bNextCheck)
+    {
+        if(!YesNo(
+            this,
+            tr("Excluding an item which has missig files will take some time for querying. Do you wan to continue?")))
+        {
+            ui->action_ShowMissingFiles->setChecked(!bNextCheck);
+            tbShowNonExistant_->setChecked(!bNextCheck);
+
+            return;
+        }
+    }
+    ui->action_ShowMissingFiles->setChecked(bNextCheck);
     tbShowNonExistant_->setChecked(bNextCheck);
     GetSqlAllSetTable(lastQueriedDirs_, lastQueriedIsTagValid_ ? &lastQueriedTaggedIDs_:nullptr);
 }
@@ -1206,7 +1218,7 @@ void MainWindow::onMenuLanguage_AboutToShow()
     QString lang = settings_.valueString(KEY_LANGUAGE);
     if(lang.isEmpty())
     {
-        ui->action_System_default->setChecked(true);
+        ui->action_SystemDefault->setChecked(true);
     }
     else if(lang=="English")
     {
@@ -1221,16 +1233,14 @@ void MainWindow::onMenuLanguage_AboutToShow()
         Q_ASSERT(false);
     }
 }
-void MainWindow::on_action_System_default_triggered()
+void MainWindow::on_action_SystemDefault_triggered()
 {
     langChanged_common(QString());
 }
-
 void MainWindow::on_action_English_triggered()
 {
     langChanged_common("English");
 }
-
 void MainWindow::on_action_Japanese_triggered()
 {
     langChanged_common("Japanese");
