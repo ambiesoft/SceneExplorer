@@ -48,6 +48,8 @@ MainWindow::MainWindow(QWidget *parent,
 
 
     // menu
+    QObject::connect(ui->menu_View, &QMenu::aboutToShow,
+                     this, &MainWindow::onMenuView_AboutToShow);
     QObject::connect(ui->menu_Edit, &QMenu::aboutToShow,
                      this, &MainWindow::onMenuEdit_AboutToShow);
     QObject::connect(ui->menu_Task, &QMenu::aboutToShow,
@@ -64,6 +66,19 @@ MainWindow::MainWindow(QWidget *parent,
                      this, &MainWindow::onMenu_RecentDocuments_AboutToShow);
     connect(ui->menu_Language, &QMenu::aboutToShow,
             this, &MainWindow::onMenuLanguage_AboutToShow);
+
+
+    // sortManager <-> action
+    sortManager_.setAction(SORT_FILENAME,ui->actionSort_by_file_name);
+    sortManager_.setAction(SORT_FULLNAME,ui->actionSort_by_full_name);
+    sortManager_.setAction(SORT_SIZE,ui->actionSort_by_file_size);
+    sortManager_.setAction(SORT_WTIME,ui->actionSort_by_wtime);
+    sortManager_.setAction(SORT_RESOLUTION,ui->actionSort_by_resolution);
+    sortManager_.setAction(SORT_DURATION,ui->actionSort_by_duration);
+    sortManager_.setAction(SORT_BITRATE,ui->actionSort_by_bitrate);
+    sortManager_.setAction(SORT_OPENCOUNT,ui->actionSort_by_open_count);
+    sortManager_.setAction(SORT_LASTACCESS,ui->actionSort_by_last_access);
+
 
 
 

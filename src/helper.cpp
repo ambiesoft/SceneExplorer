@@ -464,3 +464,15 @@ void setClipboardText(const QString& text)
 {
     QApplication::clipboard()->setText(text);
 }
+bool IsClipboardTagDataAvalable()
+{
+	QString clipText = getClipboardText();
+	QStringList lines = clipText.split('\n');
+	if (lines.isEmpty())
+		return false;
+
+	if (lines[0].startsWith(STR_TAG_ENTRY_SIGNATURE))
+		return true;
+
+	return false;
+}

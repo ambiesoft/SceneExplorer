@@ -585,6 +585,12 @@ void MainWindow::on_action_About_triggered()
 //    msgbox.exec();
 }
 
+void MainWindow::SortManager::setAction(SORTCOLUMNMY sc,
+                                            QAction* pAction)
+{
+    Q_ASSERT(acs_[sc]==nullptr);
+    acs_[sc] = pAction;
+}
 void MainWindow::SortManager::setToolButton(SORTCOLUMNMY sc,
                                             QToolButton* tb,
                                             const QIcon& iconNormal,
@@ -609,23 +615,40 @@ void MainWindow::SortManager::onSort(SORTCOLUMNMY sc)
 }
 void MainWindow::SortManager::UpdateButtonText()
 {
-	for (size_t i = 0; i < (sizeof(tbs_) / sizeof(tbs_[0])); ++i)
-	{
-		if (!tbs_[i])
-			continue;
+    Q_STATIC_ASSERT(COUNT_SORTCOLUMN == (sizeof(tbs_) / sizeof(tbs_[0])));
+    Q_STATIC_ASSERT(COUNT_SORTCOLUMN == (sizeof(acs_) / sizeof(acs_[0])));
 
-		if (sort_ == i)
-		{
-            tbs_[i]->setText(GetSortColumnName((SORTCOLUMNMY)i) + (ascending_[i] ? " ASC" : " DESC"));
-			tbs_[i]->setChecked(true);
+    Q_STATIC_ASSERT(SORT_NONE==0);
+
+    for (size_t i = SORT_NONE+1; i < COUNT_SORTCOLUMN; ++i)
+	{
+        Q_ASSERT(acs_[i]);
+        acs_[i]->setChecked(sort_ == i);
+
+        if(tbs_[i])
+        {
+            acs_[i]->setIcon(ascending_[i] ? iconsAscend_[i] : iconsDescend_[i]);
+
+            QString text = GetSortColumnName((SORTCOLUMNMY)i);
+            if(sort_ == i)
+                text += (ascending_[i] ? " ASC" : " DESC");
+            tbs_[i]->setText( text );
+            tbs_[i]->setChecked(sort_ == i);
             tbs_[i]->setIcon(ascending_[i] ? iconsAscend_[i] : iconsDescend_[i]);
-		}
-		else
-		{
-            tbs_[i]->setText(GetSortColumnName((SORTCOLUMNMY)i));
-			tbs_[i]->setChecked(false);
-            tbs_[i]->setIcon(ascending_[i] ? iconsAscend_[i] : iconsDescend_[i]);
-		}
+        }
+//        else
+//        {
+//            acs_[i]->setChecked(false);
+
+//            if(tbs_[i])
+//            {
+//                acs_[i]->setIcon(ascending_[i] ? iconsAscend_[i] : iconsDescend_[i]);
+
+//                tbs_[i]->setText(GetSortColumnName((SORTCOLUMNMY)i));
+//                tbs_[i]->setChecked(false);
+//                tbs_[i]->setIcon(ascending_[i] ? iconsAscend_[i] : iconsDescend_[i]);
+//            }
+//        }
 	}
 }
 
@@ -724,6 +747,9 @@ void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
                 actExts.append(act);
             }
         }
+		menuExternalTools.addSeparator();
+		menuExternalTools.addAction(ui->actionExternal_Tools);
+
         contextMenu.addMenu(&menuExternalTools);
         // <---- external tools
 
@@ -759,6 +785,8 @@ void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
                 actTags.append(act);
             }
         }
+		menuAddTags.addSeparator();
+		menuAddTags.addAction(ui->action_Add_new_tag);
         contextMenu.addMenu(&menuAddTags);
         // <---- Tags
 

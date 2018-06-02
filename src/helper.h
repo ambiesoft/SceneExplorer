@@ -65,7 +65,7 @@ QSqlQuery myq(const QString& sql);
 QString getClipboardText();
 void setClipboardText(const QString& text);
 
-
+bool IsClipboardTagDataAvalable();
 
 
 

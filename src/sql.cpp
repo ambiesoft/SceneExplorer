@@ -761,7 +761,7 @@ bool Sql::GetAllSqlString(
     sql += " FROM FileInfo LEFT JOIN " + docdb_ + ".Access ON FileInfo.id = " + docdb_ + ".Access.id ";
 
     QVector<QVariant> binds;
-    if(dirs.isEmpty())
+    if(false)
     {
         // check dbid is same or NULL(joined)
         sql += " WHERE (" + docdb_ + ".Access.dbid='" + gpSQL->getDbID() + "' OR " + docdb_ +".Access.dbid IS NULL) ";
@@ -814,19 +814,28 @@ bool Sql::GetAllSqlString(
     else
     {
         // check dbid is same or NULL(joined)
-        sql += " WHERE (" + docdb_ + ".Access.dbid='" + gpSQL->getDbID() + "' OR " + docdb_ +".Access.dbid IS NULL) AND (";
-        // sql += " WHERE (";
+        // sql += " WHERE (" + docdb_ + ".Access.dbid='" + gpSQL->getDbID() + "' OR " + docdb_ +".Access.dbid IS NULL) AND (";
+        sql += QString(" WHERE (%1.Access.dbid='%2' OR %3.Access.dbid IS NULL) AND (").
+                arg(docdb_).arg(gpSQL->getDbID()).arg(docdb_);
 
-        for(int i=0 ; i < dirs.count(); ++i)
+        const int dircount = dirs.count();
+        if(dircount != 0)
         {
-            sql += "directory like ?";
-            if((i+1)!=dirs.count())
-                sql += " or ";
+            for(int i=0 ; i < dircount; ++i)
+            {
+                sql += "directory LIKE ?";
+                if((i+1)!=dircount)
+                    sql += " or ";
+            }
+        }
+        else
+        {
+            sql += "1==1";
         }
         sql += ") ";
 
         if(!find.isEmpty())
-            sql += " and name like ?";
+            sql += " and name LIKE ?";
 
         if(tagids)
         {

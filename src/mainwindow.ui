@@ -154,7 +154,7 @@
      <string>&amp;Task</string>
     </property>
     <addaction name="action_ScanAllDirectories"/>
-    <addaction name="actionStart_scan_to_create_thumnails"/>
+    <addaction name="action_ScanArbitraryDirectory"/>
     <addaction name="action_ScanSelectedDirectory"/>
     <addaction name="separator"/>
     <addaction name="action_Pause"/>
@@ -473,6 +473,9 @@
    <property name="text">
     <string>&amp;Add Folder...</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+F</string>
+   </property>
   </action>
   <action name="action_Options">
    <property name="icon">
@@ -485,6 +488,9 @@
    <property name="toolTip">
     <string>General Options</string>
    </property>
+   <property name="shortcut">
+    <string>F8</string>
+   </property>
   </action>
   <action name="action_Pause">
    <property name="checkable">
@@ -492,6 +498,9 @@
    </property>
    <property name="text">
     <string>&amp;Pause</string>
+   </property>
+   <property name="shortcut">
+    <string>Esc</string>
    </property>
   </action>
   <action name="action_Stop">
@@ -524,6 +533,9 @@
    </property>
   </action>
   <action name="actionSort_by_file_name">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="resource.qrc">
      <normaloff>:/resource/images/sort-by-alphabet.png</normaloff>:/resource/images/sort-by-alphabet.png</iconset>
@@ -534,8 +546,14 @@
    <property name="toolTip">
     <string>Sort by file name</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+N</string>
+   </property>
   </action>
   <action name="actionSort_by_file_size">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="resource.qrc">
      <normaloff>:/resource/images/sort-by-size.png</normaloff>:/resource/images/sort-by-size.png</iconset>
@@ -546,14 +564,23 @@
    <property name="toolTip">
     <string>Sort by file size</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+S</string>
+   </property>
   </action>
   <action name="actionSort_by_wtime">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="resource.qrc">
      <normaloff>:/resource/images/sort-wtime-rev.png</normaloff>:/resource/images/sort-wtime-rev.png</iconset>
    </property>
    <property name="text">
     <string>Sort by wtime</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+W</string>
    </property>
   </action>
   <action name="action_Top">
@@ -567,6 +594,9 @@
    <property name="toolTip">
     <string>Top</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+PgDown</string>
+   </property>
   </action>
   <action name="action_Bottom">
    <property name="icon">
@@ -579,26 +609,47 @@
    <property name="toolTip">
     <string>Bottom</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+PgUp</string>
+   </property>
   </action>
   <action name="actionSort_by_resolution">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>Sort by &amp;resolution</string>
    </property>
    <property name="toolTip">
     <string>Sort by resolution</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+R</string>
+   </property>
   </action>
   <action name="actionSort_by_duration">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>Sort by &amp;duration</string>
    </property>
    <property name="toolTip">
     <string>Sort by duration</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+D</string>
+   </property>
   </action>
   <action name="actionSort_by_bitrate">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>Sort by &amp;bitrate</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+B</string>
    </property>
   </action>
   <action name="placeHolder_ShowMissing">
@@ -612,12 +663,18 @@
    </property>
   </action>
   <action name="actionSort_by_open_count">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="resource.qrc">
      <normaloff>:/resource/images/sort-opencount-rev.png</normaloff>:/resource/images/sort-opencount-rev.png</iconset>
    </property>
    <property name="text">
     <string>Sort by open count</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+O</string>
    </property>
   </action>
   <action name="action_Extentions">
@@ -654,6 +711,9 @@
    <property name="text">
     <string>&amp;Save</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
   </action>
   <action name="actiondummy">
    <property name="text">
@@ -675,7 +735,7 @@
     <string>placeHolder_Limit</string>
    </property>
   </action>
-  <action name="actionStart_scan_to_create_thumnails">
+  <action name="action_ScanArbitraryDirectory">
    <property name="text">
     <string>&amp;Scan arbitrary directory...</string>
    </property>
@@ -720,6 +780,9 @@
    </property>
   </action>
   <action name="actionSort_by_last_access">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="icon">
     <iconset resource="resource.qrc">
      <normaloff>:/resource/images/sort-lastaccess.png</normaloff>:/resource/images/sort-lastaccess.png</iconset>
@@ -729,6 +792,9 @@
    </property>
    <property name="toolTip">
     <string>Sort by last access</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+A</string>
    </property>
   </action>
   <action name="actionShow_missing_files">
@@ -776,10 +842,16 @@
    <property name="text">
     <string>&amp;Help...</string>
    </property>
+   <property name="shortcut">
+    <string>F1</string>
+   </property>
   </action>
   <action name="action_Add_new_tag">
    <property name="text">
     <string>&amp;Add New Tag...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+T</string>
    </property>
   </action>
   <action name="action_DockTag">
@@ -837,30 +909,51 @@
    <property name="text">
     <string>&amp;Refresh</string>
    </property>
+   <property name="shortcut">
+    <string>F5</string>
+   </property>
+   <property name="shortcutVisibleInContextMenu">
+    <bool>true</bool>
+   </property>
   </action>
   <action name="action_Copy">
    <property name="text">
     <string>&amp;Copy</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+C</string>
    </property>
   </action>
   <action name="action_Paste">
    <property name="text">
     <string>&amp;Paste</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+V</string>
+   </property>
   </action>
   <action name="action_Select_All">
    <property name="text">
     <string>&amp;Select All</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+A</string>
    </property>
   </action>
   <action name="action_OpenVideo">
    <property name="text">
     <string>&amp;Open Video</string>
    </property>
+   <property name="shortcut">
+    <string>Return</string>
+   </property>
   </action>
   <action name="action_OpenFolder">
    <property name="text">
     <string>Open &amp;Folder</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Return</string>
    </property>
   </action>
   <action name="action_ScanAllDirectories">
@@ -874,8 +967,14 @@
    </property>
   </action>
   <action name="actionSort_by_full_name">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>Sort by f&amp;ull name</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+P</string>
    </property>
   </action>
   <action name="action_ClearContent">

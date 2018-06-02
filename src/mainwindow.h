@@ -106,10 +106,11 @@ private:
 
     //SORTCOLUMN currentSort_ = SORTCOLUMN::SORT_NONE;
     //bool currentSortRev_ = false;
+    QList<QAction*> getAllSortAction();
     void ScanSelectedDirectory(const bool bAll = false);
     void CreateNewTag(const QString& tag, const QString& yomi);
     QList<QWidget*> getAllStatusBarWidgets();
-    bool GetSelectedTagIDs(QSet<qint64>& taggedids);
+    bool GetSelectedAndCurrentTagIDs(QSet<qint64>& taggedids);
     void GetSqlAllSetTable(const QStringList& dirs,
                            QSet<qint64>* pTagged,
                            bool bOnlyMissing = false);
@@ -305,6 +306,7 @@ protected:
         bool ascending_[COUNT_SORTCOLUMN];
         QIcon iconsAscend_[COUNT_SORTCOLUMN];
         QIcon iconsDescend_[COUNT_SORTCOLUMN];
+        QAction* acs_[COUNT_SORTCOLUMN];
 		QToolButton* tbs_[COUNT_SORTCOLUMN];
 	public:
 		SortManager();
@@ -316,14 +318,12 @@ protected:
 		bool GetCurrentRev() const {
             return ascending_[sort_];
 		}
+        void setAction(SORTCOLUMNMY sc,
+                           QAction* pAction);
         void setToolButton(SORTCOLUMNMY sc,
                            QToolButton* tb,
                            const QIcon& iconNormal,
                            const QIcon& iconRev);
-//        void setToolButton(SORTCOLUMN sc,
-//                           QToolButton* tb) {
-//            setToolButton(sc,tb,QIcon(),QIcon());
-//        }
 
 		void InitCurrentSort(SORTCOLUMNMY sc, bool b) {
 			sort_ = sc;
@@ -373,6 +373,7 @@ private slots:
     void onMenuTag_AboutToShow();
     void onMenuFolder_AboutToShow();
     void onMenuTask_AboutToShow();
+    void onMenuView_AboutToShow();
     void onMenuEdit_AboutToShow();
     void onMenuLanguage_AboutToShow();
     void onMenuDocking_windows_AboutToShow();
@@ -443,7 +444,7 @@ private slots:
     void on_LimitNext_triggered(bool checked=false);
     void on_LimitLast_triggered(bool checked=false);
     void onCmbLint_currentIndexChanged(int index);
-    void on_actionStart_scan_to_create_thumnails_triggered();
+
 
     void on_action_Focus_find_triggered();
 
@@ -519,6 +520,14 @@ private slots:
     void on_actionSort_by_full_name_triggered();
 
     void on_action_ClearContent_triggered();
+
+    void on_action_ScanArbitraryDirectory_triggered();
+
+    void on_directoryWidget_itemDoubleClicked(QListWidgetItem *item);
+
+    void on_listTag_itemDoubleClicked(QListWidgetItem *item);
+
+
 
 private:
     void OnCopyTable();

@@ -85,6 +85,7 @@ MainWindow::SortManager::SortManager()
     for (size_t i = 0; i < (sizeof(ascending_)/sizeof(ascending_[0])); ++i)
 	{
         ascending_[i] = false;
+        acs_[i] = nullptr;
 		tbs_[i] = nullptr;
 	}
 
@@ -1107,7 +1108,7 @@ void MainWindow::itemChangedCommon(bool bForceRead)
 
     // Get Tag selected
     QSet<qint64> taggedids;
-    bool isTagValid = GetSelectedTagIDs(taggedids);
+    bool isTagValid = GetSelectedAndCurrentTagIDs(taggedids);
 
     tbShowNonExistant_->setEnabled(!bOnlyMissing);
 
@@ -1132,15 +1133,17 @@ void MainWindow::itemChangedCommon(bool bForceRead)
     GetSqlAllSetTable(dirs, isTagValid ? &taggedids : nullptr, bOnlyMissing);
 }
 
-bool MainWindow::GetSelectedTagIDs(QSet<qint64>& taggedids)
+bool MainWindow::GetSelectedAndCurrentTagIDs(QSet<qint64>& taggedids)
 {
     QList<qint64> tagids;
+	TagItem* tiCurrent = (TagItem*)ui->listTag->currentItem();
+	
     for(int i=0 ; i < ui->listTag->count(); ++i)
     {
         TagItem* ti = (TagItem*)ui->listTag->item(i);
         if(ti->IsAllItem())
         {
-            if(ti->isSelected())
+            if(ti->isSelected() || ti==tiCurrent)
             {
                 taggedids.clear();
                 return false;
@@ -1149,7 +1152,7 @@ bool MainWindow::GetSelectedTagIDs(QSet<qint64>& taggedids)
         else
         {
             Q_ASSERT(!ti->IsAllItem());
-            if(ti->isSelected() || ti->IsChecked())
+            if(ti->isSelected() || ti->IsChecked() || ti==tiCurrent)
             {
                 tagids.append(ti->tagid());
             }
@@ -1679,16 +1682,6 @@ void MainWindow::on_actionAbout_document_triggered()
 
 
 
-void MainWindow::on_actionStart_scan_to_create_thumnails_triggered()
-{
-    QString dir = QFileDialog::getExistingDirectory(this, tr("Select Directory"),
-                                                    lastSelectedScanDir_);
-    if(dir.isEmpty())
-        return;
-    lastSelectedScanDir_ = dir;
-
-    StartScan(dir);
-}
 
 
 void MainWindow::on_action_Empty_find_texts_triggered()
@@ -1931,7 +1924,8 @@ void MainWindow::showTagContextMenu(const QPoint &pos)
         // Create menu and insert some actions
         MyContextMenu myMenuFreeArea;
         myMenuFreeArea.addAction(ui->action_Add_new_tag);
-        myMenuFreeArea.addEnablingAction(ui->action_Paste);
+        myMenuFreeArea.addAction(ui->action_Paste);
+		ui->action_Paste->setEnabled(IsClipboardTagDataAvalable());
         myMenuFreeArea.addSeparator();
         myMenuFreeArea.addAction(tr("&Check All"), this, SLOT(checkAllTag()));
         myMenuFreeArea.addAction(tr("&Uncheck All"), this, SLOT(uncheckAllTag()));
@@ -2184,5 +2178,43 @@ void MainWindow::SetTaskPriorityAsInt(int priority)
         taskPriority_.reset(new QThread::Priority);
     }
     *taskPriority_ = (QThread::Priority) priority;
+}
+
+
+
+void MainWindow::on_action_ScanArbitraryDirectory_triggered()
+{
+    QString dir = QFileDialog::getExistingDirectory(this, tr("Select Directory"),
+                                                    lastSelectedScanDir_);
+    if(dir.isEmpty())
+        return;
+    lastSelectedScanDir_ = dir;
+
+    StartScan(dir);
+}
+
+void MainWindow::on_directoryWidget_itemDoubleClicked(QListWidgetItem *item)
+{
+    DirectoryItem* di = (DirectoryItem*)item;
+    if(!di)
+        return;
+
+    if(!di->IsAllItem())
+        return;
+
+    on_actionShow_All_Item_triggered();
+}
+
+void MainWindow::on_listTag_itemDoubleClicked(QListWidgetItem *item)
+{
+    TagItem* ti = (TagItem*)item;
+    if(!ti)
+        return;
+
+    if(!ti->IsAllItem())
+        return;
+
+    on_actionShow_All_Item_triggered();
+
 }
 

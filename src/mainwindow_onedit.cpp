@@ -21,6 +21,66 @@
 #include "ui_mainwindow.h"
 #include "mainwindow.h"
 
+QList<QAction*> MainWindow::getAllSortAction()
+{
+    QList<QAction*> rets;
+    rets << ui->actionSort_by_file_name;
+    rets << ui->actionSort_by_full_name;
+    rets << ui->actionSort_by_file_size;
+    rets << ui->actionSort_by_wtime;
+    rets << ui->actionSort_by_resolution;
+    rets << ui->actionSort_by_duration;
+    rets << ui->actionSort_by_bitrate;
+    rets << ui->actionSort_by_open_count;
+    rets << ui->actionSort_by_last_access;
+
+    return rets;
+}
+void MainWindow::onMenuView_AboutToShow()
+{
+    // these are done in sortManager
+
+
+//    for(QAction* pSortAction : getAllSortAction())
+//    {
+//        pSortAction->setChecked(false);
+//    }
+
+//    switch(sortManager_.GetCurrentSort())
+//    {
+//    case SORT_NONE:
+//        break;
+//    case SORT_FILENAME:
+//        ui->actionSort_by_file_name->setChecked(true);
+//        break;
+//    case SORT_FULLNAME:
+//        ui->actionSort_by_full_name->setChecked(true);
+//        break;
+//    case SORT_SIZE:
+//        ui->actionSort_by_file_size->setChecked(true);
+//        break;
+//    case SORT_WTIME:
+//        ui->actionSort_by_wtime->setChecked(true);
+//        break;
+//    case SORT_RESOLUTION:
+//        ui->actionSort_by_resolution->setChecked(true);
+//        break;
+//    case SORT_DURATION:
+//        ui->actionSort_by_duration->setChecked(true);
+//        break;
+//    case SORT_BITRATE:
+//        ui->actionSort_by_bitrate->setChecked(true);
+//        break;
+//    case SORT_OPENCOUNT:
+//        ui->actionSort_by_open_count->setChecked(true);
+//        break;
+//    case SORT_LASTACCESS:
+//        ui->actionSort_by_last_access->setChecked(true);
+//        break;
+//    default:
+//        Q_ASSERT(false);
+//    }
+}
 void MainWindow::onMenuEdit_AboutToShow()
 {
     // open video menu
