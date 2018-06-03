@@ -477,3 +477,7 @@ bool IsClipboardTagDataAvalable()
 
 	return false;
 }
+QString GetThumbExt()
+{
+    return "jpg";
+}

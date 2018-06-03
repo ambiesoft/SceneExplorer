@@ -538,7 +538,8 @@ QStringList GetThumbFilesFromThumbID(const QString& thumbID)
         QString t=thumbID;
         t+="-";
         t+=QString::number(i);
-        t+=".png";
+        t+=".";
+        t+=GetThumbExt();
 
         t = pathCombine("thumbs", t);
         ret.append(t);
@@ -588,7 +589,8 @@ int Sql::hasThumb(const QString& movieFile)
             QString t=thumbid;
             t+="-";
             t+=QString::number(i);
-            t+=".png";
+            t+=".";
+            t+=GetThumbExt();
 
             t = pathCombine("thumbs", t);
             if(!QFile(t).exists())
@@ -758,7 +760,8 @@ bool Sql::GetAllSqlString(
     }
 
     Q_ASSERT(!docdb_.isEmpty() && docdb_ != "nodb");
-    sql += " FROM FileInfo LEFT JOIN " + docdb_ + ".Access ON FileInfo.id = " + docdb_ + ".Access.id ";
+    sql += " FROM FileInfo LEFT JOIN " + docdb_ + ".Access ON FileInfo.id = " + docdb_ + ".Access.id " +
+            "AND " + docdb_ + ".Access.dbid='" + gpSQL->getDbID() + "'";
 
     QVector<QVariant> binds;
     if(false)
@@ -815,8 +818,9 @@ bool Sql::GetAllSqlString(
     {
         // check dbid is same or NULL(joined)
         // sql += " WHERE (" + docdb_ + ".Access.dbid='" + gpSQL->getDbID() + "' OR " + docdb_ +".Access.dbid IS NULL) AND (";
-        sql += QString(" WHERE (%1.Access.dbid='%2' OR %3.Access.dbid IS NULL) AND (").
-                arg(docdb_).arg(gpSQL->getDbID()).arg(docdb_);
+//        sql += QString(" WHERE (%1.Access.dbid='%2' OR %3.Access.dbid IS NULL) AND (").
+//                arg(docdb_).arg(gpSQL->getDbID()).arg(docdb_);
+        sql += " WHERE (";
 
         const int dircount = dirs.count();
         if(dircount != 0)
@@ -946,7 +950,8 @@ bool Sql::GetAll(QList<TableItemDataPointer>& v,
             QString t=thumbid;
             t+="-";
             t+=QString::number(i);
-            t+=".png";
+            t+=".";
+            t+=GetThumbExt();
             thumbs.append(t);
         }
 

@@ -415,7 +415,7 @@ bool DocumentSql::IncrementOpenCountAndLastAccess(const qint64& id)
     MYQMODIFIER QString state =
             "REPLACE into " + docdb("Access") + " (id,opencount,lastaccess,dbid) VALUES "
             "(?,"
-            "COALESCE((SELECT opencount FROM Access WHERE id=?),0)+1,"
+            "COALESCE((SELECT opencount FROM " + docdb("Access") + " WHERE id=? AND dbid=?),0)+1,"
             "?,"
             "?)";
 
@@ -424,6 +424,7 @@ bool DocumentSql::IncrementOpenCountAndLastAccess(const qint64& id)
     int i=0;
     query.bindValue(i++, id);
     query.bindValue(i++, id);
+    query.bindValue(i++, gpSQL->getDbID());
     query.bindValue(i++, QDateTime::currentSecsSinceEpoch());
     query.bindValue(i++, gpSQL->getDbID());
 

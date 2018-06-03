@@ -299,7 +299,8 @@ bool TaskFFmpeg::run3(QString& errorReason)
         QString filename=thumbfile;
         filename.append("-");
         filename.append(QString::number(i));
-        filename.append(".png");
+        filename.append(".");
+        filename.append(GetThumbExt());
 
         QString actualFile = QString(FILEPART_THUMBS) + QDir::separator() + filename;
 

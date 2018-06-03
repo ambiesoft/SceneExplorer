@@ -66,7 +66,7 @@ QString getClipboardText();
 void setClipboardText(const QString& text);
 
 bool IsClipboardTagDataAvalable();
-
+QString GetThumbExt();
 
 
 #endif // HELPER_H
