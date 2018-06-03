@@ -285,6 +285,7 @@ MainWindow::MainWindow(QWidget *parent,
     optionThumbCount_ = settings_.valueInt(KEY_THUMBNAIL_COUNT, 3);
     if(optionThumbCount_ != 3 && optionThumbCount_ != 5)
         optionThumbCount_ = 3;
+    optionThumbFormat_ = settings_.valueString(KEY_THUMBNAIL_FORMAT, "jpg");
     SetTaskPriorityAsInt(settings_.valueInt(KEY_TASK_PRIORITY, -1));
     tableModel_->SetColumnCountImage(optionThumbCount_);
     tableModel_->SetTitleTextTemplate(settings_.valueString(KEY_TITLE_TEXT_TEMPLATE, DEFAULT_ITEM_MAIN_TEXT));

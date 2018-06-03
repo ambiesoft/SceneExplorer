@@ -36,6 +36,9 @@ OptionDialog::OptionDialog(QWidget* parent)
     ui.cmbThumbCount->addItem("3");
     ui.cmbThumbCount->addItem("5");
 
+    ui.cmbThumbImageFormat->addItem("jpg");
+    ui.cmbThumbImageFormat->addItem("png");
+
     ui.cmbTaskPriority->addItem(tr("Default"), -1);
     ui.cmbTaskPriority->addItem(tr("HighestPriority"), 5);
     ui.cmbTaskPriority->addItem(tr("HighPriority"), 4);
@@ -58,6 +61,15 @@ void OptionDialog::showEvent(QShowEvent *ev)
     else
         ui.cmbThumbCount->setCurrentIndex(0);
 
+
+    Q_ASSERT(ui.cmbThumbImageFormat->count()==2);
+    if(thumbFormat_=="jpg")
+        ui.cmbThumbImageFormat->setCurrentIndex(0);
+    else if(thumbFormat_=="png")
+        ui.cmbThumbImageFormat->setCurrentIndex(1);
+    else
+        ui.cmbThumbImageFormat->setCurrentIndex(0);
+    ui.cmbThumbImageFormat->setEditText(thumbFormat_);
 
     ui.cmbTaskPriority->setCurrentIndex(0);
     for(int i=0 ; i < ui.cmbTaskPriority->count(); ++i)
@@ -109,6 +121,8 @@ void OptionDialog::on_buttonBox_accepted()
     maxff_ = ui.spinBoxThumb->value();
 
     thumbCount_ = ui.cmbThumbCount->currentIndex()==0 ? 3 : 5;
+    thumbFormat_ = ui.cmbThumbImageFormat->lineEdit()->text();
+    //thumbFormat_ = ui.cmbThumbImageFormat->currentIndex()==0 ?"jpg":"png";
     taskPriority_ = ui.cmbTaskPriority->currentData().toInt();
 
     mainText_ = ui.lineInfoMain->text();
@@ -268,4 +282,26 @@ void OptionDialog::on_tbInfoSub_clicked()
     constructTitleTemplateMenu(contextMenu, acts, false);
 
     contextMenu.exec(mapToGlobal(pos));
+}
+void OptionDialog::done(int r)
+{
+    if (r != DialogCode::Rejected)
+    {
+        QString tf = ui.cmbThumbImageFormat->lineEdit()->text();
+        if(tf.isEmpty())
+        {
+            Alert(this,
+                  tr("Thumbnail Image format must be specified."));
+            ui.cmbThumbImageFormat->setFocus();
+            return;
+        }
+        if(!isLegalFileExt(tf))
+        {
+            Alert(this,
+                  tr("Thumbnail Image format is illegal."));
+            ui.cmbThumbImageFormat->setFocus();
+            return;
+        }
+    }
+    QDialog::done(r);
 }

@@ -33,9 +33,11 @@
 #include "tableitemdata.h"
 #include "helper.h"
 #include "globals.h"
+#include "consts.h"
 #include "sql.h"
 #include "sqlcommon.h"
 
+using namespace Consts;
 
 static void showFatal(const QString& error)
 {
@@ -163,7 +165,8 @@ Sql::Sql() : db_(QSqlDatabase::addDatabase("QSQLITE"))
     query.exec("CREATE INDEX idx_salient ON FileInfo(salient)");
     // query.exec("CREATE INDEX idx_lastaccess ON FileInfo(lastaccess)");
 //    query.exec("ALTER TABLE FileInfo Add opencount_tmp INT");
-//    query.exec("ALTER TABLE FileInfo Add lastaccess_tmp INT");
+    //    query.exec("ALTER TABLE FileInfo Add lastaccess_tmp INT");
+    query.exec("ALTER TABLE FileInfo Add thumbext");
     qDebug() << query.lastError().text();
 
 #ifdef QT__DEBUG
@@ -189,6 +192,24 @@ Sql::Sql() : db_(QSqlDatabase::addDatabase("QSQLITE"))
 
     if(version != DBVERSION)
     {
+        if(version > DBVERSION)
+        {
+            lastError_ = tr("Database version(=%1) is higher than this client(=%2). Please update SceneExplorer.").
+                    arg(version).arg(DBVERSION);
+            return;
+        }
+        if(version <= 0)
+        {
+
+        }
+        if(version <= 1)
+        {
+            if(!UpdateDatabase1_2())
+            {
+                return;
+            }
+        }
+
         SQCN(query,prepare("UPDATE DbInfo SET version=?"));
         query.bindValue(0, DBVERSION);
         SQCN(query,exec());
@@ -382,8 +403,8 @@ QSqlQuery* Sql::getInsertQuery(TableItemDataPointer tid)
 }
 qint64 Sql::AppendData(TableItemDataPointer tid)
 {
-    Q_ASSERT(tid->getImageFiles().count()==5);
-    if(tid->getImageFiles().isEmpty())
+    Q_ASSERT(tid->getThumbnailFiles().count()==5);
+    if(tid->getThumbnailFiles().isEmpty())
         return THUMBFILE_NOT_FOUND;
 
     QSqlQuery* pQInsert = getInsertQuery(tid);
@@ -402,7 +423,7 @@ QSqlQuery* Sql::getGetInfoQuery()
         return pQGetInfo_;
     pQGetInfo_=new QSqlQuery(db_);
 
-    if(!pQGetInfo_->prepare("select * from FileInfo where "
+    if(!pQGetInfo_->prepare("SELECT * FROM FileInfo WHERE "
                             "size=? and directory=? and name=? and salient=? and ctime=? and wtime=?"))
     {
         qDebug() << pQGetInfo_->lastError();
@@ -527,25 +548,77 @@ int Sql::GetAllEntry(const QString& dir,
     return 0;
 }
 
-QStringList GetThumbFilesFromThumbID(const QString& thumbID)
+QString GetLatestExt(const QString& path1, const QString& path2)
+{
+    QString path = path1+path2;
+    QDirIterator it(FILEPART_THUMBS,
+                    QStringList() << (path+"*"),
+                    QDir::Files);
+
+    QMap<qint64, QString> allthumbs;
+    while (it.hasNext()) {
+        QString file = it.next();
+        QFileInfo f(file);
+        if(!f.exists())
+            continue;
+        qint64 la = f.lastModified().toMSecsSinceEpoch();
+        allthumbs.insert(la,file);
+    }
+
+    if(allthumbs.isEmpty())
+        return QString();
+
+    qint64 curMax=0;
+    for(auto itThumb = allthumbs.cbegin(); itThumb != allthumbs.cend(); ++itThumb)
+    {
+        if(itThumb.key() > curMax)
+            curMax = itThumb.key();
+    }
+    QString target = allthumbs[curMax];
+    QFileInfo f(target);
+    QString filename = f.fileName();
+    QString ext = filename.right(filename.length() - UUID_LENGTH - path2.length() - 1);
+
+    return ext;
+}
+QStringList GetAllThumbFilesFromThumbID(const QString& thumbID)
 {
     if(!isUUID(thumbID))
         return QStringList();
 
-    QStringList ret;
-    for(int i=1 ; i <= 5 ; ++i)
+    QStringList rets;
+    QDirIterator it(FILEPART_THUMBS,
+                    QStringList() << (thumbID+"*"),
+                    QDir::Files);
+    while(it.hasNext())
     {
-        QString t=thumbID;
-        t+="-";
-        t+=QString::number(i);
-        t+=".";
-        t+=GetThumbExt();
-
-        t = pathCombine("thumbs", t);
-        ret.append(t);
+        rets << it.next();
     }
-    return ret;
+    return rets;
 }
+//QStringList GetLatestThumbFilesFromThumbID_notused(const QString& thumbID)
+//{
+//    if(!isUUID(thumbID))
+//        return QStringList();
+
+//    QString ext = GetLatestExt(thumbID, "-" + QString::number(1));
+//    if(ext.isEmpty())
+//        return QStringList();
+
+//    QStringList ret;
+//    for(int i=1 ; i <= 5 ; ++i)
+//    {
+//        QString t=thumbID;
+//        t+="-";
+//        t+=QString::number(i);
+//        t+=".";
+//        t+=GetThumbExt();
+
+//        t = pathCombine("thumbs", t);
+//        ret.append(t);
+//    }
+//    return ret;
+//}
 int Sql::hasThumb(const QString& movieFile)
 {
     bool exist;
@@ -583,6 +656,7 @@ int Sql::hasThumb(const QString& movieFile)
     while (pGetInfo->next())
     {
         QString thumbid = pGetInfo->value("thumbid").toString();
+        QString thumbext = pGetInfo->value("thumbext").toString();
         QStringList thumbs;
         for(int i=1 ; i <= 5 ; ++i)
         {
@@ -590,7 +664,8 @@ int Sql::hasThumb(const QString& movieFile)
             t+="-";
             t+=QString::number(i);
             t+=".";
-            t+=GetThumbExt();
+            Q_ASSERT(isLegalFileExt(thumbext));
+            t+=thumbext;
 
             t = pathCombine("thumbs", t);
             if(!QFile(t).exists())
@@ -605,9 +680,9 @@ int Sql::hasThumb(const QString& movieFile)
     }
     return THUMB_NOT_EXIST;
 }
-bool Sql::RemoveEntryThumb(const QString& dir,
+bool Sql::DeleteEntryThumbFiles(const QString& dir,
                            const QString& name,
-                           QString& removedThumbID)
+                           QString* removedThumbID)
 {
     if(dir.isEmpty() || name.isEmpty())
     {
@@ -626,19 +701,22 @@ bool Sql::RemoveEntryThumb(const QString& dir,
     if(!query.next())
         return false;
 
-    removedThumbID = query.value("thumbid").toString();
-    if(!isUUID(removedThumbID))
+    QString thumbID = query.value("thumbid").toString();
+    if(!isUUID(thumbID))
     {
         Q_ASSERT(false);
         return false;
     }
-    QStringList thumbfiles = GetThumbFilesFromThumbID(removedThumbID);
-    Q_ASSERT(thumbfiles.count()==5);
+    QStringList thumbfiles = GetAllThumbFilesFromThumbID(thumbID);
+    // Q_ASSERT(thumbfiles.count()==5);
     for(const QString& f : thumbfiles)
     {
         QFile(f).remove();
         Q_ASSERT(!QFile(f).exists());
     }
+
+    if(removedThumbID)
+        *removedThumbID = thumbID;
     return true;
 }
 
@@ -764,57 +842,6 @@ bool Sql::GetAllSqlString(
             "AND " + docdb_ + ".Access.dbid='" + gpSQL->getDbID() + "'";
 
     QVector<QVariant> binds;
-    if(false)
-    {
-        // check dbid is same or NULL(joined)
-        sql += " WHERE (" + docdb_ + ".Access.dbid='" + gpSQL->getDbID() + "' OR " + docdb_ +".Access.dbid IS NULL) ";
-        if(!find.isEmpty())
-        {
-            sql += " AND name LIKE ?";
-            binds.append("%"+find+"%");
-        }
-
-        if(tagids)
-        {
-            if(tagids->isEmpty())
-            {
-                sql += " AND 1=0 ";
-            }
-            else
-            {
-                sql += " AND (";
-                for(int i=0 ; i < tagids->count(); ++i)
-                {
-                    sql += "FileInfo.id=?";
-                    if( (i+1) != tagids->count())
-                        sql += " or ";
-                }
-                sql += ")";
-            }
-        }
-        sql += " AND 1=1";
-
-
-        AppendSortArg(sql, sortby, sortrev);
-        AppendLitmiArg(sql, limit);
-
-        qDebug() << sql;
-        SQC(query, prepare(sql));
-        int bindIndex=0;
-        for(int i=0 ; i < binds.count(); ++i)
-        {
-            query.bindValue(bindIndex++, binds[i]);
-        }
-
-        if(tagids && !tagids->isEmpty())
-        {
-            for( const qint64& tagid : *tagids)
-            {
-                query.bindValue(bindIndex++, tagid);
-            }
-        }
-    }
-    else
     {
         // check dbid is same or NULL(joined)
         // sql += " WHERE (" + docdb_ + ".Access.dbid='" + gpSQL->getDbID() + "' OR " + docdb_ +".Access.dbid IS NULL) AND (";
@@ -943,7 +970,12 @@ bool Sql::GetAll(QList<TableItemDataPointer>& v,
                 continue;
         }
 
+        QString thumbext = query.value("thumbext").toString();
         QString thumbid = query.value("thumbid").toString();
+//        if(thumbext.isEmpty() && !thumbid.isEmpty())
+//        {
+//            VERIFY(UpdateThumbExtFromFile(id,thumbid, thumbext));
+//        }
         QStringList thumbs;
         for(int i=1 ; i <= 5 ; ++i)
         {
@@ -951,7 +983,7 @@ bool Sql::GetAll(QList<TableItemDataPointer>& v,
             t+="-";
             t+=QString::number(i);
             t+=".";
-            t+=GetThumbExt();
+            t+=thumbext;
             thumbs.append(t);
         }
 
@@ -970,6 +1002,8 @@ bool Sql::GetAll(QList<TableItemDataPointer>& v,
 
         int opencount = query.value("opencount").toInt();
         qint64 lastaccess = query.value("lastaccess").toLongLong();
+
+
         TableItemDataPointer pID = TableItemData::Create(id,
                                                          thumbs,
                                                          directory,
@@ -989,11 +1023,27 @@ bool Sql::GetAll(QList<TableItemDataPointer>& v,
 
                                                          opencount,
                                                          lastaccess);
+
+
         v.append(pID);
     }
     return true;
 }
+bool Sql::UpdateThumbExtFromFile_obsolete(const qint64& id,const QString& thumbid, QString& ext)
+{
+    QString testExt = GetLatestExt(thumbid, "-1");
+    if(testExt.isEmpty())
+        return false;
 
+    ext = testExt;
+    MYQMODIFIER QSqlQuery query = myPrepare("UPDATE FileInfo SET thumbext=? WHERE id=?");
+    int i=0;
+    query.bindValue(i++,ext);
+    query.bindValue(i++,id);
+    SQC(query,exec());
+    Q_ASSERT(query.numRowsAffected()==1);
+    return true;
+}
 bool Sql::RenameEntry(const QString& oldDirc,
                       const QString& oldFile,
                       const QString& newDirc,
@@ -1182,8 +1232,7 @@ bool Sql::RemoveAllMissingEntries(const QString& dirc)
 
     for (QSet<QPair<QString, QString> >::iterator it = dels.begin(); it != dels.end(); ++it)
     {
-        QString removed;
-        VERIFY(RemoveEntryThumb(it->first, it->second, removed));
+        VERIFY(DeleteEntryThumbFiles(it->first, it->second, nullptr));
     }
 
     SQC(query, prepare("DELETE FROM FileInfo WHERE directory=? AND name=?"));
@@ -1274,5 +1323,36 @@ bool Sql::DetachDocument()
     }
     docFile_ = QString();
     docdb_ = "nodb";
+    return true;
+}
+bool Sql::UpdateDatabase1_2()
+{
+    QSet<QString> thumbids;
+    {
+        MYQMODIFIER QSqlQuery query;
+        SQC(query,exec("SELECT thumbid FROM FileInfo WHERE thumbext IS NULL"));
+
+        while(query.next())
+        {
+            QString thumbid = query.value("thumbid").toString();
+            if(isUUID(thumbid))
+                thumbids.insert(thumbid);
+        }
+    }
+
+    MYQMODIFIER QSqlQuery query = myPrepare("UPDATE FileInfo SET thumbext=? WHERE thumbid=?");
+    for(const QString& thumbid : thumbids)
+    {
+        QString ext = GetLatestExt(thumbid, "-1");
+        if(ext.isEmpty())
+            continue;
+
+        int i=0;
+        query.bindValue(i++,ext);
+        query.bindValue(i++,thumbid);
+        SQC(query,exec());
+        Q_ASSERT(query.numRowsAffected()==1);
+    }
+
     return true;
 }

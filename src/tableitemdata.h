@@ -31,7 +31,7 @@ class TableItemData
 #ifdef QT_DEBUG
 	static int dinstcount_;
 #endif
-    QStringList files_;
+    QStringList thumbFiles_;
     QString movieDirectory_;
     QString movieFilename_;
 
@@ -75,6 +75,7 @@ class TableItemData
                   int opencount,
                   const qint64& lastaccess);
 
+
 public:
 	static TableItemDataPointer Create(
             const qint64& id,
@@ -104,27 +105,30 @@ public:
             return nullptr;
         }
         return TableItemDataPointer(new TableItemData(
-            id,
-			files,
-			movieDirectory,
-			movieFileName,
+                                        id,
+                                        files,
+                                        movieDirectory,
+                                        movieFileName,
 
-			size,
-			ctime,
-			wtime,
+                                        size,
+                                        ctime,
+                                        wtime,
 
-			thumbwidth,
-			thumbheight,
-			duration,
-			format,
-            bitrate,
-			vcodec,
-			acodec,
+                                        thumbwidth,
+                                        thumbheight,
+                                        duration,
+                                        format,
+                                        bitrate,
+                                        vcodec,
+                                        acodec,
 
-            vWidth, vHeight,
+                                        vWidth, vHeight,
 
-            opencount,
-            lastaccess));
+                                        opencount,
+                                        lastaccess));
+
+
+
 	}
 	~TableItemData()
 	{
@@ -148,8 +152,8 @@ public:
         Q_ASSERT(id_==0 || id_==id);
         id_=id;
     }
-    QStringList getImageFiles() const {
-        return files_;
+    QStringList getThumbnailFiles() const {
+        return thumbFiles_;
     }
     int getWidth() const {
         return width_;
@@ -203,6 +207,15 @@ public:
     }
     void setLastAccess(const qint64& v) {
         lastaccess_ = v;
+    }
+
+    QString thumbExt_;
+    QString getThumbExt() const {
+        Q_ASSERT(!thumbExt_.isEmpty());
+        return thumbExt_;
+    }
+    void setThumbExt(const QString& ext) {
+        thumbExt_=ext;
     }
     int getResolutionMultiplied() const {
         return vWidth_*vHeight_;

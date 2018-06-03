@@ -59,14 +59,16 @@ bool processCommandLine(QString* helpText=nullptr);
 
 QString ExpandEnv(const QString& str);
 
-bool isUUID(const QString& s);
+
 QSqlQuery myPrepare(const QString& sql);
 
 QString getClipboardText();
 void setClipboardText(const QString& text);
 
 bool IsClipboardTagDataAvalable();
-QString GetThumbExt();
 
+bool isLegalFileExt(QString ext);
+bool isThumbFileName(QString file);
+bool isUUID(const QString& s);
 
 #endif // HELPER_H

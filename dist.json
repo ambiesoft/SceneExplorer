@@ -86,13 +86,14 @@
         "ffmpeg\\presets\\libvpx-720p50_60.ffpreset",
         "ja-JP\\Ambiesoft.FolderConfig.resources.dll",
         "platforms\\qwindows.dll",
-        "sqldrivers\\qsqlite.dll"
+        "sqldrivers\\qsqlite.dll",
+        "imageformats\\qjpeg.dll"
     ],
 
 
 
 
-    "TotalFileCount": 84,
+    "TotalFileCount": 85,
     "archivedir": "C:\\Linkout",
     "remotedir": "http://ambiesoft.fam.cx/ffdav/uploads/SceneExplorer/",
     "remotesha1": "http://ambiesoft.fam.cx/ffdav/uploads/getSha1.php?file=SceneExplorer/{}",

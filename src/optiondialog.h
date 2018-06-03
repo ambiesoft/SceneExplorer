@@ -42,6 +42,7 @@ public:
     int maxgd_;
     int maxff_;
     int thumbCount_;
+    QString thumbFormat_;
     int taskPriority_= -1;
     bool useCustomDBDir_;
     QString dbdir_;
@@ -70,6 +71,8 @@ private slots:
 
     void on_context_titleTemplateCommonMain();
     void on_context_titleTemplateCommonSub();
+private slots:
+    virtual void done(int r);
 };
 
 #endif // OPTIONDIALOG_H

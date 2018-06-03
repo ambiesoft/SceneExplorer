@@ -267,7 +267,7 @@ private:
     int optionThreadcountGetDir_ = 1;
     int optionThreadcountThumbnail_ = 2;
     int optionThumbCount_ = 3; // default is 3
-
+    QString optionThumbFormat_ = "jpg";
     bool initShown=false;
 	bool IsClosed() const {
 		return closed_;
@@ -634,6 +634,7 @@ private:
     QString getSelectedVideo(bool bNativeFormat = true);
     qint64 getSelectedID();
 
+    bool IsAllTagSelected() const;
     bool IsDirSelected(const QString& dir) const;
 
     bool checkExeCommon(const QString& exe, QString& errString) const;
@@ -666,7 +667,8 @@ public slots:
                    int bitrate,
                    const QString& vcodec,
                    const QString& acodec,
-                   int vWidth,int vHeight);
+                   int vWidth,int vHeight,
+                   const QString& thumbext);
     void sayDead(int loopId, int id);
     void finished_FFMpeg(int loopId, int id);
     void warning_FFMpeg(int loopId, int id,

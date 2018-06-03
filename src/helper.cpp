@@ -38,6 +38,7 @@
 
 #include "commandoption.h"
 #include "consts.h"
+#include "osd.h"
 #include "helper.h"
 
 
@@ -435,14 +436,6 @@ QString ExpandEnv(const QString& str)
     return result;
 }
 
-bool isUUID(const QString& s)
-{
-    if(s.isEmpty())
-        return false;
-    if(s.length()!=36)
-        return false;
-    return true;
-}
 
 // In linux, constructor with sql string cause sigxxx, so this is temporal fix
 QSqlQuery myPrepare(const QString& sql)
@@ -450,8 +443,8 @@ QSqlQuery myPrepare(const QString& sql)
     QSqlQuery q;
     if(!q.prepare(sql))
     {
-        Q_ASSERT(false);
         qDebug() << q.lastError();
+        Q_ASSERT(false);
         return q;
     }
     return q;
@@ -477,7 +470,88 @@ bool IsClipboardTagDataAvalable()
 
 	return false;
 }
-QString GetThumbExt()
+
+bool isLegalFileExt(QString ext)
 {
-    return "jpg";
+    if(ext.isEmpty())
+        return false;
+
+    if(ext[0]=='.')
+    {
+        ext = ext.right(ext.length()-1);
+        return isLegalFileExt(ext);
+    }
+
+    if(ext.contains('/') || ext.contains('\\'))
+        return false;
+
+    return isLegalFilePath(ext, nullptr);
+}
+bool isThumbFileName(QString file)
+{
+    if(file.isEmpty())
+        return false;
+
+    file = QFileInfo(file).fileName();
+    // 58c4d22e-8b8b-4773-9fac-80a69a8fa880-5.jpg
+    if(file.length() <= UUID_LENGTH)
+        return false;
+
+    static QRegExp rx(
+                "^"
+                "[a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9]"
+                "-"
+                "[a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9]"
+                "-"
+                "[a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9]"
+                "-"
+                "[a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9]"
+                "-"
+                "[a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9]"
+                "-"
+                "[a-zA-Z0-9]"
+                "\\."
+                "[a-zA-Z0-9]+");
+
+
+    return rx.exactMatch(file);
+//    QString lastPart = file.right(file.length()-UUID_LENGTH);
+//    // like "-5.j", at least 1 letter extention
+//    if(lastPart.length() < 4)
+//        return false;
+
+
+//    if(
+//            lastPart[1] != '1' &&
+//            lastPart[1] != '2' &&
+//            lastPart[1] != '3' &&
+//            lastPart[1] != '4' &&
+//            lastPart[1] != '5'
+//      )
+//    {
+//        return false;
+//    }
+//    if(lastPart[2] != '.')
+//        return false;
+
+//    return true;
+}
+bool isUUID(const QString& s)
+{
+    if(s.isEmpty())
+        return false;
+
+    static QRegExp rx(
+                "^"
+                "[a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9]"
+                "-"
+                "[a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9]"
+                "-"
+                "[a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9]"
+                "-"
+                "[a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9]"
+                "-"
+                "[a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9]"
+                "$");
+    return rx.exactMatch(s);
 }

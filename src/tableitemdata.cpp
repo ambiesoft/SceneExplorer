@@ -53,7 +53,7 @@ TableItemData::TableItemData(const qint64& id,
 	++dinstcount_;
 #endif
     id_=id;
-    files_ = files;
+    thumbFiles_ = files;
     movieDirectory_=movieDirectory;
     movieFilename_=movieFileName;
 
@@ -105,7 +105,7 @@ QMap<QString,QVariant> TableItemData::getColumnValues() const
     ret["directory"]=getMovieDirectory();
     ret["name"]=getMovieFileName();
     ret["salient"] = createSalient(getMovieFileFull(), getSize());
-    ret["thumbid"] = getUUIDFromThumbfile(getImageFiles()[0]);
+    ret["thumbid"] = getUUIDFromThumbfile(getThumbnailFiles()[0]);
     ret["duration"]=getDuration();
     ret["format"]=getFormat();
     ret["bitrate"]=getBitrate();
@@ -113,7 +113,8 @@ QMap<QString,QVariant> TableItemData::getColumnValues() const
     ret["acodec"]=getAcodec();
     ret["vwidth"]=getVWidth();
     ret["vheight"]=getVHeight();
-	ret["opencount"] = getOpenCount();
-	ret["lastaccess"] = getLastAccess();
+//	ret["opencount"] = getOpenCount();
+//	ret["lastaccess"] = getLastAccess();
+    ret["thumbext"] = getThumbExt();
     return ret;
 }

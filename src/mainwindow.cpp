@@ -48,7 +48,7 @@
 
 #include "taskgetdir.h"
 #include "taskffmpeg.h"
-#include "optionfontdialog.h"
+// #include "optionfontdialog.h"
 #include "tablemodel.h"
 #include "foldermodel.h"
 #include "taskmodel.h"
@@ -755,13 +755,15 @@ void MainWindow::afterFilter2(int loopId,int id,
 
     for(int i=0 ; i < filteredFiles.length(); ++i)
     {
+        Q_ASSERT(isLegalFileExt(optionThumbFormat_));
         QString file = pathCombine(dir, filteredFiles[i]);
         TaskFFmpeg* pTask = new TaskFFmpeg(FFMpeg::GetFFprobe(settings_),
                                            FFMpeg::GetFFmpeg(settings_),
                                            gLoopId,
                                            idManager_->Increment(IDKIND_FFmpeg),
                                            file,
-                                           GetTaskPriority());
+                                           GetTaskPriority(),
+                                           optionThumbFormat_);
         pTask->setAutoDelete(true);
 //        QObject::connect(pTask, &TaskFFMpeg::sayBorn,
 //                         this, &MainWindow::sayBorn);
@@ -915,6 +917,7 @@ void MainWindow::on_context_removeFromDatabase()
         Alert(this, tr("Directory or name is empty."));
         return;
     }
+    gpSQL->DeleteEntryThumbFiles(dir,name,nullptr);
     if(!gpSQL->RemoveEntry(dir,name,&error))
     {
         Alert(this,

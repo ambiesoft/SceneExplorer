@@ -58,6 +58,8 @@ namespace Consts
     const char KEY_MAX_GETDIR_THREADCOUNT[] = "maxgetdirthreadcount";
     const char KEY_MAX_THUMBNAIL_THREADCOUNT[] = "maxthumbnailthreadcount";
     const char KEY_THUMBNAIL_COUNT[] = "thumbcount";
+    const char KEY_THUMBNAIL_FORMAT[] = "thumbformat";
+
     const char KEY_TASK_PRIORITY[] = "taskpriority";
 
     const char KEY_TITLE_TEXT_TEMPLATE[] = "titletexttemplate";
@@ -110,8 +112,8 @@ namespace Consts
     const int THUMB_WIDTH=240;
     const int THUMB_HEIGHT=180;
 
-    const int UUID_LENGTH=37;
-    const int THUMB_FILENAME_LENGTH=42;
+    const int UUID_LENGTH=36;
+    // const int THUMB_FILENAME_LENGTH=42;
 
     const char DEFAULT_ITEM_MAIN_TEXT[] = "${name}";
     const char DEFAULT_ITEM_SUB_TEXT[] = "${size}";

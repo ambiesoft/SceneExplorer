@@ -25,7 +25,7 @@
 #include "globals.h"
 
 #define DBFILENAME "./db.sqlite3"
-#define DBVERSION 1
+#define DBVERSION 2
 
 class LimitArg
 {
@@ -83,6 +83,7 @@ class Sql : public QObject
             const QSet<qint64>* tagids);
     bool CreateDBInfoTable();
     int GetDBVersion();
+    bool UpdateDatabase1_2();
 public:
     enum SQL_ERROR {
         NO_ERROR,
@@ -131,9 +132,9 @@ public:
                         const QStringList& movieFiles,
                         QStringList& results);
     int hasThumb(const QString& movieFile) ;
-    bool RemoveEntryThumb(const QString& dir,
+    bool DeleteEntryThumbFiles(const QString& dir,
                           const QString& name,
-                          QString& removedThumbID);
+                          QString* removedThumbID);
 	qlonglong GetAllCount(const QStringList& dirs);
 	bool GetAll(QList<TableItemDataPointer>& v,
                 const QStringList& dirs = QStringList(),
@@ -156,6 +157,7 @@ public:
     bool RenameEntries(const QString& dir,
                        const QStringList& renameOlds,
                        const QStringList& renameNews);
+    bool UpdateThumbExtFromFile_obsolete(const qint64& id,const QString& thumbid, QString& ext);
     bool RenameEntry(const QString& dbDir,
                      const QString& dbFile,
                      const QString& newdir,

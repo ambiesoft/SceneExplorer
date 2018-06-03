@@ -49,7 +49,6 @@ SOURCES += \
     errorinfoexception.cpp \
     blockedbool.cpp \
     extension.cpp \
-    optionfontdialog.cpp \
     optionexternaltoolsdialog.cpp \
     externaltoolitem.cpp \
     optionextension.cpp \
@@ -94,7 +93,6 @@ HEADERS += \
     errorinfoexception.h \
     blockedbool.h \
     extension.h \
-    optionfontdialog.h \
     optionexternaltoolsdialog.h \
     externaltoolitem.h \
     optionextension.h \
@@ -116,7 +114,6 @@ HEADERS += \
 FORMS += \
         mainwindow.ui \
     option.ui \
-    optionfontdialog.ui \
     optionexternaltoolsdialog.ui \
     optionextension.ui \
     aboutdialog.ui \

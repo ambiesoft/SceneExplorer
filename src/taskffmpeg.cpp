@@ -42,7 +42,8 @@ TaskFFmpeg::TaskFFmpeg(const QString& ffprobe,
                        int loopId,
                        int id,
                        const QString& file, 
-	QThread::Priority* priority)
+                       QThread::Priority* priority,
+                       const QString& thumbext)
 {
     loopId_ = loopId;
     id_=id;
@@ -58,6 +59,8 @@ TaskFFmpeg::TaskFFmpeg(const QString& ffprobe,
 		priority_ = new QThread::Priority;
 		*priority_ = *priority;
 	}
+
+    thumbext_ = thumbext;
     // emit sayBorn(id,file);
 }
 TaskFFmpeg::~TaskFFmpeg()
@@ -300,7 +303,8 @@ bool TaskFFmpeg::run3(QString& errorReason)
         filename.append("-");
         filename.append(QString::number(i));
         filename.append(".");
-        filename.append(GetThumbExt());
+        Q_ASSERT(isLegalFileExt(thumbext_));
+        filename.append(thumbext_);
 
         QString actualFile = QString(FILEPART_THUMBS) + QDir::separator() + filename;
 
@@ -382,7 +386,8 @@ bool TaskFFmpeg::run3(QString& errorReason)
                    format,
                    bitrate,
                    vcodec,acodec,
-                   vWidth,vHeight
-                   );
+                   vWidth,vHeight,
+                   thumbext_);
+
     return true;
 }

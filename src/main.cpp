@@ -49,6 +49,18 @@ using namespace Consts;
 #ifdef QT_DEBUG
 static void testSQL()
 {
+    Q_ASSERT(isThumbFileName("58c4d22e-8b8b-4773-9fac-80a69a8fa880-5.jpg"));
+    Q_ASSERT(isThumbFileName("58c4d22e-AAAA-4773-9fac-80a69a8fa880-5.jpg"));
+    Q_ASSERT(!isThumbFileName("58c4d22e8b8b47739fac80a69a8fa8805.jpg"));
+    Q_ASSERT(!isThumbFileName("58c4d22e-8b8b-4773-9fac-80a69a8fa880-5"));
+    Q_ASSERT(!isThumbFileName("5b8b-4773-9fac-80a69a8fa880-5"));
+
+    Q_ASSERT(!isThumbFileName(""));
+    Q_ASSERT(!isThumbFileName("a58c4d22e-8b8b-4773-9fac-80a69a8fa880-5.jpg"));
+    Q_ASSERT(isThumbFileName("thumb/58c4d22e-8b8b-4773-9fac-80a69a8fa880-5.jpg"));
+    Q_ASSERT(isThumbFileName("thumb\\58c4d22e-8b8b-4773-9fac-80a69a8fa880-5.jpg"));
+    Q_ASSERT(isThumbFileName("/thumb/58c4d22e-8b8b-4773-9fac-80a69a8fa880-5.jpg"));
+    Q_ASSERT(isThumbFileName("T:\\thumb\\58c4d22e-8b8b-4773-9fac-80a69a8fa880-5.jpg"));
 
     QString dir = normalizeDir(GetAppDir());
     QString file = "moviefile.mp3";
@@ -97,6 +109,8 @@ static void testSQL()
                                                      480,
                                                      oc++,
                                                      ++la);
+    tid->setThumbExt("jpg");
+
     // insert same tid and check same id
     gpSQL->AppendData(tid);
     qint64 id1 = tid->getID();

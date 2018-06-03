@@ -61,13 +61,15 @@ void MainWindow::sayGoodby(int loopId,  int id,
                            int bitrate,
                            const QString& vcodec,
                            const QString& acodec,
-                           int vWidth,int vHeight)
+                           int vWidth,int vHeight,
+
+                           const QString& thumbext)
 {
 	if (loopId != gLoopId)
 	{
         for(const QString& thumbfile:files)
         {
-            if(thumbfile.count() == THUMB_FILENAME_LENGTH)
+            if(isThumbFileName(thumbfile))
             {
                 QFile fi(pathCombine(FILEPART_THUMBS, thumbfile));
                 if(fi.exists())
@@ -99,8 +101,9 @@ void MainWindow::sayGoodby(int loopId,  int id,
                             vWidth,vHeight,
 
                             0,
-                            0
-                );
+                            0);
+    pTID->setThumbExt(thumbext);
+
     if(IsDirSelected(normalizeDir(fi.absolutePath())))
     {
         tableModel_->RemoveItem(fi.absoluteFilePath());
@@ -108,7 +111,7 @@ void MainWindow::sayGoodby(int loopId,  int id,
     }
 
     QString removedThumbID;
-    if(gpSQL->RemoveEntryThumb(dir,name, removedThumbID))
+    if(gpSQL->DeleteEntryThumbFiles(dir,name, &removedThumbID))
     {
         insertLog(TaskKind::SQL, id, QString(tr("Thumbnail %1 has been removed from database").
                                              arg(removedThumbID)));

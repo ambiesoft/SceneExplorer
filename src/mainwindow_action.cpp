@@ -105,6 +105,7 @@ void MainWindow::on_action_Options_triggered()
     dlg.maxgd_ = optionThreadcountGetDir_;
     dlg.maxff_ = optionThreadcountThumbnail_;
     dlg.thumbCount_ = optionThumbCount_;
+    dlg.thumbFormat_ = optionThumbFormat_;
     dlg.taskPriority_ = GetTaskPriorityAsInt();
     dlg.mainText_ = tableModel_->GetTitleTextTemplate();
     dlg.subText_ = tableModel_->GetInfoTextTemplate();
@@ -123,6 +124,7 @@ void MainWindow::on_action_Options_triggered()
     optionThreadcountGetDir_ = dlg.maxgd_;
     optionThreadcountThumbnail_ = dlg.maxff_;
     optionThumbCount_ = dlg.thumbCount_;
+    optionThumbFormat_ = dlg.thumbFormat_;
     SetTaskPriorityAsInt(dlg.taskPriority_);
     tableModel_->SetColumnCountImage(dlg.thumbCount_);
     tableModel_->SetTitleTextTemplate(dlg.mainText_);
@@ -486,8 +488,18 @@ bool IsSubDir(const QString& parent, const QString& child)
 
     return false;
 }
+bool MainWindow::IsAllTagSelected() const
+{
+    TagItem* ti = (TagItem*)ui->listTag->item(0);
+    Q_ASSERT(ti->IsAllItem());
+
+    return ui->listTag->currentItem()==ti || ti->isSelected();
+}
 bool MainWindow::IsDirSelected(const QString& dir) const
 {
+    if(!IsAllTagSelected())
+        return false;
+
     if(ui->directoryWidget->IsAllItemSelectedOrChecked())
         return true;
 

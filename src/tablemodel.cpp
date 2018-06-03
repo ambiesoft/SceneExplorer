@@ -481,7 +481,7 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
                 parent_->setRowHeight(index.row(), THUMB_HEIGHT);
 
                 QString imageFile = pathCombine(FILEPART_THUMBS,
-                                                itemData->getImageFiles()[getActualColumnIndex(index.column())]);
+                                                itemData->getThumbnailFiles()[getActualColumnIndex(index.column())]);
                 if(imagecache_==ImageCacheType::IC_NEVER)
                 {
                     QImage image(imageFile);

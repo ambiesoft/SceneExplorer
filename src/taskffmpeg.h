@@ -51,7 +51,7 @@ private:
     // QMutex mutex_;
     // int fileIndex_=0;
     Progress progress_;
-
+    QString thumbext_;
     bool getProbe(const QString& file,
                   double& outDuration,
                   QString& outFormat,
@@ -74,7 +74,8 @@ public:
                int loopId,
                int id,
                const QString& file,
-			QThread::Priority* priority	);
+               QThread::Priority* priority,
+               const QString& thumbext);
     virtual ~TaskFFmpeg();
     void run() override ;
     int GetId() const
@@ -105,7 +106,8 @@ signals:
                    int bitrate,
                    const QString& vcodec,
                    const QString& acodec,
-                   int vWidth,int vHeight);
+                   int vWidth,int vHeight,
+                   const QString& thumbext);
     void sayDead(int loopId, int id);
     void finished_FFMpeg(int loopId, int id);
     void warning_FFMpeg(int loopId, int id,
