@@ -103,6 +103,8 @@
     <addaction name="action_About"/>
     <addaction name="action_AboutDocument"/>
     <addaction name="action_CommandLine"/>
+    <addaction name="separator"/>
+    <addaction name="action_AboutQt"/>
    </widget>
    <widget class="QMenu" name="menu_Option">
     <property name="title">
@@ -1022,6 +1024,11 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+T</string>
+   </property>
+  </action>
+  <action name="action_AboutQt">
+   <property name="text">
+    <string>About &amp;Qt</string>
    </property>
   </action>
  </widget>

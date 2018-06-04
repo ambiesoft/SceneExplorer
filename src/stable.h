@@ -98,6 +98,7 @@
 #include <QString>
 #include <QStringList>
 #include <QStyledItemDelegate>
+#include <QStyleFactory>
 #include <QSystemSemaphore>
 #include <QTableView>
 #include <QTextBlock>

@@ -562,6 +562,8 @@ private slots:
 
     void on_action_CommandLine_triggered();
 
+    void on_action_AboutQt_triggered();
+
 private:
     void OnCopyTable();
     void OnCopyDirectory();

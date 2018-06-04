@@ -285,7 +285,9 @@ int main2(int argc, char *argv[], QApplication& theApp)
         Info(nullptr, QObject::tr("Another instance is already running."));
         return 0;
     }
-    
+
+    qDebug () << "CurrentStyle: " << QApplication::style();
+
     // style:  "windows", "windowsvista", "fusion", or "macintosh".
     QApplication::setStyle("fusion");
 

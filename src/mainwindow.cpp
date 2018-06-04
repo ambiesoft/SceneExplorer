@@ -2225,3 +2225,8 @@ void MainWindow::on_action_CommandLine_triggered()
     Info(this,helpText);
 }
 
+
+void MainWindow::on_action_AboutQt_triggered()
+{
+    QMessageBox::aboutQt(this);
+}
