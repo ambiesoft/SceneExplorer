@@ -29,6 +29,7 @@
 #include <QSet>
 #include <QMessageBox>
 #include <QUuid>
+#include <QDirIterator>
 
 #include "tableitemdata.h"
 #include "helper.h"

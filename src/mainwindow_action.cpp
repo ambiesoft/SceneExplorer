@@ -25,6 +25,7 @@
 #include <QListWidget>
 #include <QInputDialog>
 #include <QColor>
+#include <QStyleFactory>
 
 #include "consts.h"
 #include "globals.h"

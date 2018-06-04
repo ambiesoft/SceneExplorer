@@ -16,7 +16,10 @@
 //You should have received a copy of the GNU General Public License
 //along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+#ifndef _GNU_SOURCE
 #define _GNU_SOURCE         /* See feature_test_macros(7) */
+#endif
+
 #include <unistd.h>
 #include <sys/syscall.h>   /* For SYS_xxx definitions */
 

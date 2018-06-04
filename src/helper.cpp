@@ -29,7 +29,8 @@
 #include <QCommandLineParser>
 #include <QApplication>
 #include <QClipboard>
-
+#include <QDebug>
+#include <QSqlError>
 
 #if defined(Q_OS_WIN)
 #else

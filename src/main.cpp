@@ -57,10 +57,13 @@ static void testSQL()
 
     Q_ASSERT(!isThumbFileName(""));
     Q_ASSERT(!isThumbFileName("a58c4d22e-8b8b-4773-9fac-80a69a8fa880-5.jpg"));
-    Q_ASSERT(isThumbFileName("thumb/58c4d22e-8b8b-4773-9fac-80a69a8fa880-5.jpg"));
+#ifdef Q_WS_WIN
     Q_ASSERT(isThumbFileName("thumb\\58c4d22e-8b8b-4773-9fac-80a69a8fa880-5.jpg"));
-    Q_ASSERT(isThumbFileName("/thumb/58c4d22e-8b8b-4773-9fac-80a69a8fa880-5.jpg"));
     Q_ASSERT(isThumbFileName("T:\\thumb\\58c4d22e-8b8b-4773-9fac-80a69a8fa880-5.jpg"));
+#endif
+    Q_ASSERT(isThumbFileName("/thumb/58c4d22e-8b8b-4773-9fac-80a69a8fa880-5.jpg"));
+    Q_ASSERT(isThumbFileName("thumb/58c4d22e-8b8b-4773-9fac-80a69a8fa880-5.jpg"));
+
 
     QString dir = normalizeDir(GetAppDir());
     QString file = "moviefile.mp3";
