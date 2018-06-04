@@ -1,3 +1,7 @@
+2018/06/04 ver1.12
+Database updated
+jpg extension
+
 2018/06/01 ver1.11
 exclude other table from joined table
 

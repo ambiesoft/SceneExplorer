@@ -93,7 +93,7 @@
 
 
 
-    "TotalFileCount": 85,
+    "TotalFileCount": "exact",
     "archivedir": "C:\\Linkout",
     "remotedir": "http://ambiesoft.fam.cx/ffdav/uploads/SceneExplorer/",
     "remotesha1": "http://ambiesoft.fam.cx/ffdav/uploads/getSha1.php?file=SceneExplorer/{}",
