@@ -74,6 +74,7 @@ See *Help -> About Documents* to confirm which files are read.
 Get the source and build tools by running following command.
 ```
 git clone https://github.com/ambiesoft/distSolution
+git clone https://github.com/ambiesoft/profile.git
 git clone https://github.com/ambiesoft/SceneExplorer
 ```
 

@@ -75,6 +75,7 @@ start "" %~dp0SceneExplorer.exe %~dp0MyApp.scexd
 以下のコマンドでソースとビルドツールを取得します。
 ```
 git clone https://github.com/ambiesoft/distSolution
+git clone https://github.com/ambiesoft/profile.git
 git clone https://github.com/ambiesoft/SceneExplorer
 ```
 
