@@ -142,13 +142,7 @@ void MainWindow::on_action_Options_triggered()
 
     if( (prevUseCustomDBDir != dlg.useCustomDBDir_) || (prevDbdir != dlg.dbdir_) )
     {
-        if(YesNo(this,
-              tr("Application needs to restart to effect the change. Do you want to restart application now?")))
-        {
-            gReboot = true;
-            this->close();
-            return;
-        }
+        askRebootClose();
     }
 }
 void MainWindow::onUserDirectoryTriggered()
@@ -1202,6 +1196,38 @@ void MainWindow::langChanged_common(const QString& lang)
         gReboot = true;
         this->close();
         return;
+    }
+}
+
+void MainWindow::OnMenuStyle()
+{
+    QAction* pA = (QAction*)QObject::sender();
+    QString style = pA->text();
+
+    settings_.setValue(KEY_STYLE, style);
+    askRebootClose();
+}
+void MainWindow::onMenuStyle_AboutToShow()
+{
+    QList<QAction*> actions = ui->menu_Style->actions();
+    for(int i=0 ; i < actions.count(); ++i)
+    {
+        QAction* pA = actions[i];
+        ui->menu_Folder->removeAction(pA);
+        delete pA;
+    }
+    QString currentStyle = QApplication::style()->objectName();
+    for(const QString& style : QStyleFactory::keys())
+    {
+        QAction* pA = new QAction(style);
+        if(style.compare(currentStyle, Qt::CaseInsensitive)==0)
+        {
+            pA->setCheckable(true);
+            pA->setChecked(true);
+        }
+        connect(pA, &QAction::triggered,
+                this, &MainWindow::OnMenuStyle);
+        ui->menu_Style->addAction(pA);
     }
 }
 void MainWindow::onMenuLanguage_AboutToShow()

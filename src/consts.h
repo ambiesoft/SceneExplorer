@@ -28,6 +28,7 @@ namespace Consts
     const char APPVERSION[] = "1.12";
 
 
+    const char KEY_STYLE[] = "style";
     const char KEY_LANGUAGE[] = "language";
 
 

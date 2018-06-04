@@ -1057,131 +1057,143 @@
     </message>
     <message>
         <source>&amp;Focus</source>
-        <translation type="unfinished"></translation>
+        <translation>フォーカス(&amp;F)</translation>
     </message>
     <message>
         <source>Ctrl+F1</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Ctrl+Shift+D</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>F8</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Esc</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Ctrl+K, N</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Ctrl+K, S</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Ctrl+K, W</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Ctrl+K, R</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Ctrl+K, D</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Ctrl+K, B</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Ctrl+K, O</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Ctrl+S</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Ctrl+Shift+F1</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Ctrl+F</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Ctrl+K, A</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>F1</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Ctrl+Shift+T</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Shift+F5</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>F5</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Ctrl+C</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Ctrl+V</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Ctrl+A</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Ctrl+Return</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Ctrl+Shift+Return</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Ctrl+K, P</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <source>Focus Item &amp;Table</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Ctrl+M</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Focus &amp;Directory Pane</source>
-        <translation type="unfinished"></translation>
+        <translation>ディレクトリをフォーカス(&amp;D)</translation>
     </message>
     <message>
         <source>Ctrl+D</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
     </message>
     <message>
         <source>Focus &amp;Tag Pane</source>
-        <translation type="unfinished"></translation>
+        <translation>タグをフォーカス(&amp;T)</translation>
     </message>
     <message>
         <source>Ctrl+T</source>
-        <translation type="unfinished"></translation>
+        <translation></translation>
+    </message>
+    <message>
+        <source>S&amp;tyle</source>
+        <translation>スタイル(&amp;T)</translation>
+    </message>
+    <message>
+        <source>Focus &amp;Item Table</source>
+        <translation>アイテムをフォーカス(&amp;I)</translation>
+    </message>
+    <message>
+        <source>Excluding an item which has missig files will take some time for querying. Do you wan to continue?</source>
+        <translation>ファイルが存在しないアイテムを除外するとクエリに時間がかかることがあります。続行しますか？</translation>
+    </message>
+    <message>
+        <source>About &amp;Qt...</source>
+        <translation>&amp;Qt について...</translation>
     </message>
 </context>
 <context>
@@ -1290,6 +1302,10 @@
         <source>Task Priority:</source>
         <translation>タスクの優先度:</translation>
     </message>
+    <message>
+        <source>Thumbnail Image format:</source>
+        <translation>サムネイル画像フォーマット:</translation>
+    </message>
 </context>
 <context>
     <name>OptionDialog</name>
@@ -1328,6 +1344,14 @@
     <message>
         <source>IdlePriority</source>
         <translation>アイドル優先度</translation>
+    </message>
+    <message>
+        <source>Thumbnail Image format must be specified.</source>
+        <translation>サムネイル画像フォーマットが指定されていません。</translation>
+    </message>
+    <message>
+        <source>Thumbnail Image format is illegal.</source>
+        <translation>サムネイル画像フォーマットが不正です。</translation>
     </message>
 </context>
 <context>
@@ -1451,12 +1475,8 @@
 <context>
     <name>OptionFontDialog</name>
     <message>
-        <source>Dialog</source>
-        <translation></translation>
-    </message>
-    <message>
         <source>&amp;Infomation Table:</source>
-        <translation>情報テーブル(&amp;I):</translation>
+        <translation type="vanished">情報テーブル(&amp;I):</translation>
     </message>
 </context>
 <context>
@@ -1633,6 +1653,10 @@
         <source>Failed to OpenProcess(%1).</source>
         <translation>OpenProcess(%1) に失敗しました。</translation>
     </message>
+    <message>
+        <source>Failed to set style</source>
+        <translation>スタイルの設定に失敗しました</translation>
+    </message>
 </context>
 <context>
     <name>RenameDialog</name>
@@ -1706,6 +1730,10 @@
     <message>
         <source>dbid is not null but incorrect. Do you want to override it with new id?</source>
         <translation>dbidはnullではありませんが不正です。上書きしますか？</translation>
+    </message>
+    <message>
+        <source>Database version(=%1) is higher than this client(=%2). Please update SceneExplorer.</source>
+        <translation>データベースのバージョン(=%1)がクライアントのバージョン(=%2)よりも高いです。SceneExplorerを更新してください。</translation>
     </message>
 </context>
 <context>

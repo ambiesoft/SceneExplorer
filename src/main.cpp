@@ -286,10 +286,17 @@ int main2(int argc, char *argv[], QApplication& theApp)
         return 0;
     }
 
-    qDebug () << "CurrentStyle: " << QApplication::style();
+    qDebug () << "CurrentStyle: " << QApplication::style()->objectName();
 
     // style:  "windows", "windowsvista", "fusion", or "macintosh".
-    QApplication::setStyle("fusion");
+    QString style = settings->valueString(KEY_STYLE);
+    if(!style.isEmpty())
+    {
+        if(!QApplication::setStyle(style))
+        {
+            Alert(nullptr, QObject::tr("Failed to set style") + ": " + style);
+        }
+    }
 
 
     TaskGetDir::RegisterMetaType();

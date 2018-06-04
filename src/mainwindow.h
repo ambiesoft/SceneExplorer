@@ -106,6 +106,7 @@ private:
 
     //SORTCOLUMN currentSort_ = SORTCOLUMN::SORT_NONE;
     //bool currentSortRev_ = false;
+    void askRebootClose();
     QList<QAction*> getAllSortAction();
     void ScanSelectedDirectory(const bool bAll = false);
     void CreateNewTag(const QString& tag, const QString& yomi);
@@ -362,6 +363,7 @@ private slots:
     void checkAllTag();
     void uncheckAllTag();
     void showTagContextMenu(const QPoint&);
+    void OnMenuStyle();
     void on_action_Close_triggered();
     void on_action_About_triggered();
     void on_tableView_doubleClicked(const QModelIndex &index);
@@ -375,6 +377,7 @@ private slots:
     void onMenuTask_AboutToShow();
     void onMenuView_AboutToShow();
     void onMenuEdit_AboutToShow();
+    void onMenuStyle_AboutToShow();
     void onMenuLanguage_AboutToShow();
     void onMenuDocking_windows_AboutToShow();
     // void onMenu_Favorites_AboutToShow();

@@ -145,10 +145,16 @@
      <addaction name="action_English"/>
      <addaction name="action_Japanese"/>
     </widget>
+    <widget class="QMenu" name="menu_Style">
+     <property name="title">
+      <string>S&amp;tyle</string>
+     </property>
+    </widget>
     <addaction name="action_Options"/>
     <addaction name="action_Extentions"/>
     <addaction name="action_ExternalTools"/>
     <addaction name="menu_Font"/>
+    <addaction name="menu_Style"/>
     <addaction name="menu_Language"/>
    </widget>
    <widget class="QMenu" name="menu_Task">
@@ -1028,7 +1034,12 @@
   </action>
   <action name="action_AboutQt">
    <property name="text">
-    <string>About &amp;Qt</string>
+    <string>About &amp;Qt...</string>
+   </property>
+  </action>
+  <action name="actiondummy_2">
+   <property name="text">
+    <string>dummy</string>
    </property>
   </action>
  </widget>

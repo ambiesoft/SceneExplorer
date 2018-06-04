@@ -48,25 +48,24 @@ MainWindow::MainWindow(QWidget *parent,
 
 
     // menu
-    QObject::connect(ui->menu_View, &QMenu::aboutToShow,
-                     this, &MainWindow::onMenuView_AboutToShow);
-    QObject::connect(ui->menu_Edit, &QMenu::aboutToShow,
-                     this, &MainWindow::onMenuEdit_AboutToShow);
-    QObject::connect(ui->menu_Task, &QMenu::aboutToShow,
-                     this, &MainWindow::onMenuTask_AboutToShow);
-    QObject::connect(ui->menu_Folder, &QMenu::aboutToShow,
-                     this, &MainWindow::onMenuFolder_AboutToShow);
-    QObject::connect(ui->menu_Tag, &QMenu::aboutToShow,
-                     this, &MainWindow::onMenuTag_AboutToShow);
-    QObject::connect(ui->menu_Docking_windows, &QMenu::aboutToShow,
-                     this, &MainWindow::onMenuDocking_windows_AboutToShow);
-//    QObject::connect(ui->menu_Favorites, &QMenu::aboutToShow,
-//                     this, &MainWindow::onMenu_Favorites_AboutToShow);
-    QObject::connect(ui->menu_Recent_documets, &QMenu::aboutToShow,
-                     this, &MainWindow::onMenu_RecentDocuments_AboutToShow);
+    connect(ui->menu_View, &QMenu::aboutToShow,
+            this, &MainWindow::onMenuView_AboutToShow);
+    connect(ui->menu_Edit, &QMenu::aboutToShow,
+            this, &MainWindow::onMenuEdit_AboutToShow);
+    connect(ui->menu_Task, &QMenu::aboutToShow,
+            this, &MainWindow::onMenuTask_AboutToShow);
+    connect(ui->menu_Folder, &QMenu::aboutToShow,
+            this, &MainWindow::onMenuFolder_AboutToShow);
+    connect(ui->menu_Tag, &QMenu::aboutToShow,
+            this, &MainWindow::onMenuTag_AboutToShow);
+    connect(ui->menu_Docking_windows, &QMenu::aboutToShow,
+            this, &MainWindow::onMenuDocking_windows_AboutToShow);
+    connect(ui->menu_Recent_documets, &QMenu::aboutToShow,
+            this, &MainWindow::onMenu_RecentDocuments_AboutToShow);
     connect(ui->menu_Language, &QMenu::aboutToShow,
             this, &MainWindow::onMenuLanguage_AboutToShow);
-
+    connect(ui->menu_Style, &QMenu::aboutToShow,
+            this, &MainWindow::onMenuStyle_AboutToShow);
 
     // sortManager <-> action
     sortManager_.setAction(SORT_FILENAME,ui->actionSort_by_file_name);

@@ -1449,6 +1449,16 @@ void MainWindow::setFontCommon1(const QString& savekey,
                   [pWidget](QFont& font) { pWidget->setFont(font);});
 }
 
+void MainWindow::askRebootClose()
+{
+    if(!YesNo(this,
+         tr("Application needs to restart for the changes to take effect. Do you want to restart application now?")))
+    {
+        return;
+    }
+    gReboot = true;
+    close();
+}
 void MainWindow::setFontCommon2(const QString& savekey,
                                std::function<QFont (void)> getfunc,
                                std::function<void(QFont&)> setfunc)
@@ -1466,13 +1476,7 @@ void MainWindow::setFontCommon2(const QString& savekey,
             return;
         }
         settings_.setValue(savekey, QString());
-        if(!YesNo(this,
-             tr("Application needs to restart for the changes to take effect. Do you want to restart application now?")))
-        {
-            return;
-        }
-        gReboot = true;
-        close();
+        askRebootClose();
         return;
     }
 
