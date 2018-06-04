@@ -49,7 +49,7 @@ void MainWindow::showEvent( QShowEvent* event )
     tableSortParameterChanged(sortManager_.GetCurrentSort(), sortManager_.GetCurrentRev());  // tableModel_->GetSortColumn(), tableModel_->GetSortReverse());
 
 
-    on_tableView_scrollChanged(-1);
+    OnTableViewScrollChanged(-1);
 
     // Alert(this, QString("ScrollIndex:%1-%2").arg(pDoc_->modeIndexRow()).arg(pDoc_->modeIndexColumn()));
     int row = 0;

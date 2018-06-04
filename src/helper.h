@@ -68,7 +68,7 @@ void setClipboardText(const QString& text);
 bool IsClipboardTagDataAvalable();
 
 bool isLegalFileExt(QString ext);
-bool isThumbFileName(QString file);
+bool isThumbFileName(const QString& file);
 bool isUUID(const QString& s);
 
 #endif // HELPER_H

@@ -487,71 +487,43 @@ bool isLegalFileExt(QString ext)
 
     return isLegalFilePath(ext, nullptr);
 }
-bool isThumbFileName(QString file)
+bool isThumbFileName(const QString& file)
 {
-    if(file.isEmpty())
-        return false;
-
-    file = QFileInfo(file).fileName();
-    // 58c4d22e-8b8b-4773-9fac-80a69a8fa880-5.jpg
-    if(file.length() <= UUID_LENGTH)
-        return false;
-
+    // ex) 58c4d22e-8b8b-4773-9fac-80a69a8fa880-5.jpg
     static QRegExp rx(
                 "^"
-                "[a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9]"
+                "[a-fA-F0-9]{8}"
                 "-"
-                "[a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9]"
+                "[a-fA-F0-9]{4}"
                 "-"
-                "[a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9]"
+                "[a-fA-F0-9]{4}"
                 "-"
-                "[a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9]"
+                "[a-fA-F0-9]{4}"
                 "-"
-                "[a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9]"
+                "[a-fA-F0-9]{12}"
                 "-"
-                "[a-zA-Z0-9]"
+                "[0-9]+"
                 "\\."
                 "[a-zA-Z0-9]+");
 
-
-    return rx.exactMatch(file);
-//    QString lastPart = file.right(file.length()-UUID_LENGTH);
-//    // like "-5.j", at least 1 letter extention
-//    if(lastPart.length() < 4)
-//        return false;
-
-
-//    if(
-//            lastPart[1] != '1' &&
-//            lastPart[1] != '2' &&
-//            lastPart[1] != '3' &&
-//            lastPart[1] != '4' &&
-//            lastPart[1] != '5'
-//      )
-//    {
-//        return false;
-//    }
-//    if(lastPart[2] != '.')
-//        return false;
-
-//    return true;
+    Q_ASSERT(rx.isValid());
+    return rx.exactMatch(QFileInfo(file).fileName());
 }
 bool isUUID(const QString& s)
 {
-    if(s.isEmpty())
-        return false;
-
+    // ex) B4149711-6824-4606-B601-AC89C1BEC092
     static QRegExp rx(
                 "^"
-                "[a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9]"
+                "[a-fA-F0-9]{8}"
                 "-"
-                "[a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9]"
+                "[a-fA-F0-9]{4}"
                 "-"
-                "[a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9]"
+                "[a-fA-F0-9]{4}"
                 "-"
-                "[a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9]"
+                "[a-fA-F0-9]{4}"
                 "-"
-                "[a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9][a-zA-Z0-9]"
+                "[a-fA-F0-9]{12}"
                 "$");
+    Q_ASSERT(rx.isValid());
     return rx.exactMatch(s);
 }

@@ -67,7 +67,8 @@ SOURCES += \
     mainwindow_oncopy.cpp \
     mainwindow_onpaste.cpp \
     mainwindow_onedit.cpp \
-    mainwindow_onselectall.cpp
+    mainwindow_onselectall.cpp \
+    mainwindow_working.cpp
 
 HEADERS += \
         mainwindow.h \

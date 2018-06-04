@@ -368,8 +368,8 @@ private slots:
     void on_action_Options_triggered();
     void on_action_Pause_triggered();
     void on_action_Stop_triggered();
-    void on_menu_directory_triggered();
-    void on_menu_tag_triggered();
+    void onUserDirectoryTriggered();
+    void OnUserTagTriggered();
     void onMenuTag_AboutToShow();
     void onMenuFolder_AboutToShow();
     void onMenuTask_AboutToShow();
@@ -386,13 +386,13 @@ private slots:
 
     void on_tableView_customContextMenuRequested(const QPoint &pos);
 
-    void on_directoryWidget_selectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
+    void OnDirectorySelectionChanged(const QItemSelection &selected, const QItemSelection &deselected);
 
     void on_action_Top_triggered();
 
     void on_action_Bottom_triggered();
 
-    void on_directoryWidget_itemChanged(QListWidgetItem *item);
+    void OndirectoryItemChanged(QListWidgetItem *item);
 
 
     void on_directoryWidget_customContextMenuRequested(const QPoint &pos);
@@ -402,7 +402,7 @@ private slots:
     void on_actionSort_by_duration_triggered();
 
     void on_actionSort_by_bitrate_triggered();
-    void on_action_ShowMissingClicked();
+    void OnShowMissingClicked();
     void on_action_Find_triggered();
 
     void on_action_Clear_triggered();
@@ -410,8 +410,8 @@ private slots:
 //    void on_action_Add_current_check_states_triggered();
 //    void on_FavoriteFolder_triggered(bool checked=false);
 
-    void on_RecentDocuments_triggered(bool checked=false);
-    void on_ClearRecentItems_triggered(bool checked=false);
+    void OnRecentDocumentsTriggered(bool checked=false);
+    void OnClearRecentItemsTriggered(bool checked=false);
 
     // void onTaskTimerTick();
     void on_actionSort_by_open_count_triggered();
@@ -432,18 +432,18 @@ private slots:
 
     void on_action_Save_triggered();
 
-    void on_actionSave_as_triggered();
+
 
 
 
     void on_action_New_triggered();
 
 
-    void on_LimitFirst_triggered(bool checked=false);
-    void on_LimitPrev_triggered(bool checked=false);
-    void on_LimitNext_triggered(bool checked=false);
-    void on_LimitLast_triggered(bool checked=false);
-    void onCmbLint_currentIndexChanged(int index);
+    void OnLimitFirstTriggered(bool checked=false);
+    void OnLimitPrevTriggered(bool checked=false);
+    void OnLimitNextTriggered(bool checked=false);
+    void OnLimitLastTriggered(bool checked=false);
+    void OnCmbLimitCurrentIndexChanged(int index);
 
 
 
@@ -696,26 +696,26 @@ public slots:
 
 
 
-    void on_context_copySelectedVideoFilename();
-    void on_context_removeFromDatabase();
-    void on_context_Rename();
-    void on_context_ExternalTools();
-    void on_context_AddTags();
+    void OnContextCopySelectedVideoFilename();
+    void OnContextRemoveFromDatabase();
+    void OnContextRename();
+    void OnContextExternalTools();
+    void OnContextAddTags();
 
     void tableItemCountChanged();
     void tableSortParameterChanged(SORTCOLUMNMY sc, bool rev);
 
-    void on_Context_Scan();
-	void on_directoryWidget_Remove();
-	void on_directoryWidget_RemoveMissingItems();
-    void on_directoryWidget_CheckAll();
-    void on_directoryWidget_UncheckAll();
-    void on_directoryWidget_SortByName();
-	void on_directoryWidget_MoveUp();
-    void on_directoryWidget_MoveDown();
-    void on_FindCombo_EnterPressed();
 
-    void on_tableView_scrollChanged(int pos);
+    void OnDirectoryRemove();
+    void OnDirectoryRemoveMissingItems();
+    void OnDirectoryCheckAll();
+    void OnDirectoryUncheckAll();
+    void OnDirectorySortByName();
+    void OnDirectoryMoveUp();
+    void OnDirectoryMoveDown();
+    void OnFindComboEnterPressed();
+
+    void OnTableViewScrollChanged(int pos);
 };
 
 #endif // MAINWINDOW_H

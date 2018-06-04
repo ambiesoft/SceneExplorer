@@ -104,13 +104,13 @@ void MainWindow::CreateLimitManager()
         else
         {
             actionLimitFirst_ = new QAction("<<",ui->mainToolBar);
-            QObject::connect(actionLimitFirst_, &QAction::triggered,
-                             this, &MainWindow::on_LimitFirst_triggered);
+            connect(actionLimitFirst_, &QAction::triggered,
+                    this, &MainWindow::OnLimitFirstTriggered);
             ui->mainToolBar->insertAction(ui->actionplaceHolder_Limit, actionLimitFirst_);
 
             actionLimitPrev_ = new QAction("<",ui->mainToolBar);
-            QObject::connect(actionLimitPrev_, &QAction::triggered,
-                             this, &MainWindow::on_LimitPrev_triggered);
+            connect(actionLimitPrev_, &QAction::triggered,
+                    this, &MainWindow::OnLimitPrevTriggered);
             ui->mainToolBar->insertAction(ui->actionplaceHolder_Limit, actionLimitPrev_);
 
             if(!cmbLimit_)
@@ -120,8 +120,8 @@ void MainWindow::CreateLimitManager()
                 cmbLimit_->lineEdit()->setReadOnly(true);
                 cmbLimit_->lineEdit()->setAlignment(Qt::AlignCenter);
 
-                QObject::connect(cmbLimit_, SIGNAL(currentIndexChanged(int)),
-                                 this, SLOT(onCmbLint_currentIndexChanged(int)));
+                connect(cmbLimit_, SIGNAL(currentIndexChanged(int)),
+                        this, SLOT(OnCmbLimitCurrentIndexChanged(int)));
 
                 ui->mainToolBar->insertWidget(ui->actionplaceHolder_Limit, cmbLimit_);
             }
@@ -131,13 +131,13 @@ void MainWindow::CreateLimitManager()
             }
 
             actionLimitNext_ = new QAction(">",ui->mainToolBar);
-            QObject::connect(actionLimitNext_, &QAction::triggered,
-                             this, &MainWindow::on_LimitNext_triggered);
+            connect(actionLimitNext_, &QAction::triggered,
+                    this, &MainWindow::OnLimitNextTriggered);
             ui->mainToolBar->insertAction(ui->actionplaceHolder_Limit, actionLimitNext_);
 
             actionLimitLast_ = new QAction(">>",ui->mainToolBar);
-            QObject::connect(actionLimitLast_, &QAction::triggered,
-                             this, &MainWindow::on_LimitLast_triggered);
+            connect(actionLimitLast_, &QAction::triggered,
+                    this, &MainWindow::OnLimitLastTriggered);
 
 
             ui->mainToolBar->insertAction(ui->actionplaceHolder_Limit, actionLimitLast_);
@@ -153,15 +153,15 @@ void MainWindow::CreateLimitManager()
         if(limitManager_)
         {
             Q_ASSERT(actionLimitFirst_);
-            QObject::disconnect(actionLimitFirst_, &QAction::triggered,
-                             this, &MainWindow::on_LimitFirst_triggered);
+            disconnect(actionLimitFirst_, &QAction::triggered,
+                       this, &MainWindow::OnLimitFirstTriggered);
             ui->mainToolBar->removeAction(actionLimitFirst_);
             delete actionLimitFirst_;
             actionLimitFirst_ = nullptr;
 
             Q_ASSERT(actionLimitPrev_);
-            QObject::disconnect(actionLimitPrev_, &QAction::triggered,
-                             this, &MainWindow::on_LimitPrev_triggered);
+            disconnect(actionLimitPrev_, &QAction::triggered,
+                       this, &MainWindow::OnLimitPrevTriggered);
             ui->mainToolBar->removeAction(actionLimitPrev_);
             delete actionLimitPrev_;
             actionLimitPrev_ = nullptr;
@@ -171,15 +171,15 @@ void MainWindow::CreateLimitManager()
             cmbLimit_ = nullptr;
 
             Q_ASSERT(actionLimitNext_);
-            QObject::disconnect(actionLimitNext_, &QAction::triggered,
-                             this, &MainWindow::on_LimitNext_triggered);
+            disconnect(actionLimitNext_, &QAction::triggered,
+                       this, &MainWindow::OnLimitNextTriggered);
             ui->mainToolBar->removeAction(actionLimitNext_);
             delete actionLimitNext_;
             actionLimitNext_ = nullptr;
 
             Q_ASSERT(actionLimitLast_);
-            QObject::disconnect(actionLimitLast_, &QAction::triggered,
-                             this, &MainWindow::on_LimitLast_triggered);
+            disconnect(actionLimitLast_, &QAction::triggered,
+                       this, &MainWindow::OnLimitLastTriggered);
             ui->mainToolBar->removeAction(actionLimitLast_);
             delete actionLimitLast_;
             actionLimitLast_ = nullptr;
@@ -828,7 +828,7 @@ qint64 MainWindow::getSelectedID()
 
 
 #include "renamedialog.h"
-void MainWindow::on_context_Rename()
+void MainWindow::OnContextRename()
 {
     QString oldfull = getSelectedVideo(false);
     if(oldfull.isEmpty()) { Alert(this, TR_NOVIDEO_SELECTED()); return;}
@@ -881,7 +881,7 @@ void MainWindow::on_context_Rename()
     tableModel_->RenameEntry(olddir, oldname, olddir, newname);
 }
 
-void MainWindow::on_context_removeFromDatabase()
+void MainWindow::OnContextRemoveFromDatabase()
 {
     QString movieFile = getSelectedVideo(false);
     if(movieFile.isEmpty()) { Alert(this, TR_NOVIDEO_SELECTED()); return;}
@@ -940,7 +940,7 @@ void MainWindow::on_context_removeFromDatabase()
     }
 }
 
-void MainWindow::on_context_AddTags()
+void MainWindow::OnContextAddTags()
 {
     if(!pDoc_)
         return;
@@ -958,7 +958,7 @@ void MainWindow::on_context_AddTags()
     pDoc_->SetTagged(id, tagid, act->isChecked());
 }
 
-void MainWindow::on_context_ExternalTools()
+void MainWindow::OnContextExternalTools()
 {
     const QString movieFileNative = getSelectedVideo(true);
     if(movieFileNative.isEmpty()) { Alert(this, TR_NOVIDEO_SELECTED()); return;}
@@ -1021,7 +1021,7 @@ void MainWindow::on_context_ExternalTools()
     }
 }
 
-void MainWindow::on_context_copySelectedVideoFilename()
+void MainWindow::OnContextCopySelectedVideoFilename()
 {
     QString movieFile = getSelectedVideo();
     if(movieFile.isEmpty()) { Alert(this, TR_NOVIDEO_SELECTED()); return;}
@@ -1041,7 +1041,7 @@ void MainWindow::IDManager::updateStatus()
 }
 
 
-void MainWindow::on_directoryWidget_selectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
+void MainWindow::OnDirectorySelectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
 {
     Q_UNUSED(selected);
     Q_UNUSED(deselected);
@@ -1329,7 +1329,7 @@ void MainWindow::on_action_Bottom_triggered()
 }
 
 
-void MainWindow::on_directoryWidget_itemChanged(QListWidgetItem *item)
+void MainWindow::OndirectoryItemChanged(QListWidgetItem *item)
 {
     Q_UNUSED(item);
 
@@ -1402,39 +1402,13 @@ void MainWindow::on_action_Clear_triggered()
     }
 }
 
-void MainWindow::on_FindCombo_EnterPressed()
+void MainWindow::OnFindComboEnterPressed()
 {
     on_action_Find_triggered();
 }
 
 
-void MainWindow::on_tableView_scrollChanged(int pos)
-{
-    QModelIndex indexTop = ui->tableView->indexAt(ui->tableView->rect().topLeft());
-    QModelIndex indexBottom = ui->tableView->indexAt(ui->tableView->rect().bottomLeft());
-    int rowCountPerScreen = indexBottom.row()-indexTop.row()+1;
 
-    int top = qMax(0, indexTop.row()-rowCountPerScreen);
-    int topEnd = pos < 0 ? indexBottom.row() : indexTop.row();
-    for(int i=top ; i <= topEnd; ++i)
-    {
-        QModelIndex mi = proxyModel_->index(i,0);
-        proxyModel_->data(mi, Qt::DecorationRole);
-        proxyModel_->data(mi, Qt::DisplayRole);
-        // ui->tableView->resizeRowToContents(mi.row());
-    }
-
-
-    int rowBottom = indexBottom.row();
-    int maxBottom = rowBottom + rowCountPerScreen; // upto next page
-    for(int i=rowBottom; i < maxBottom; ++i)
-    {
-        QModelIndex mi = proxyModel_->index(i,0);
-        proxyModel_->data(mi, Qt::DecorationRole);
-        proxyModel_->data(mi, Qt::DisplayRole);
-        // ui->tableView->resizeRowToContents(mi.row());
-    }
-}
 bool MainWindow::HasDirectory(const QString& dir)
 {
     QString dirNormlized = normalizeDir(dir);
@@ -1555,11 +1529,6 @@ void MainWindow::on_action_Open_triggered()
 void MainWindow::on_action_Save_triggered()
 {
     StoreDocument();
-}
-
-void MainWindow::on_actionSave_as_triggered()
-{
-
 }
 
 

@@ -86,8 +86,8 @@ MainWindow::MainWindow(QWidget *parent,
     ui->tableView->setSelectionBehavior( QAbstractItemView::SelectItems );
     ui->tableView->setSelectionMode( QAbstractItemView::SingleSelection );
 
-    QObject::connect(ui->tableView->verticalScrollBar(), &QScrollBar::valueChanged,
-                     this, &MainWindow::on_tableView_scrollChanged);
+    connect(ui->tableView->verticalScrollBar(), &QScrollBar::valueChanged,
+            this, &MainWindow::OnTableViewScrollChanged);
 
 
     tableModel_=new TableModel(ui->tableView, this);
@@ -110,10 +110,10 @@ MainWindow::MainWindow(QWidget *parent,
 
     // folder
     QItemSelectionModel* treeSelectionModel = ui->directoryWidget->selectionModel();
-    QObject::connect(treeSelectionModel, &QItemSelectionModel::selectionChanged,
-                     this, &MainWindow::on_directoryWidget_selectionChanged);
-    QObject::connect(ui->directoryWidget, &DirectoryEntry::itemChanged,
-                     this, &MainWindow::on_directoryWidget_itemChanged);
+    connect(treeSelectionModel, &QItemSelectionModel::selectionChanged,
+            this, &MainWindow::OnDirectorySelectionChanged);
+    connect(ui->directoryWidget, &DirectoryEntry::itemChanged,
+            this, &MainWindow::OndirectoryItemChanged);
 
     // Tag
     ui->listTag->setContextMenuPolicy(Qt::CustomContextMenu);
@@ -190,8 +190,8 @@ MainWindow::MainWindow(QWidget *parent,
     //pixmap = style()->standardPixmap(QStyle::SP_MediaPlay);
 
     tbShowNonExistant_->setCheckable(true);
-    QObject::connect(tbShowNonExistant_, SIGNAL(toggled(bool)),
-                     this, SLOT(on_action_ShowMissingClicked()));
+    connect(tbShowNonExistant_, SIGNAL(toggled(bool)),
+            this, SLOT(OnShowMissingClicked()));
 
 
 
@@ -205,8 +205,8 @@ MainWindow::MainWindow(QWidget *parent,
     QStringList findtexts = settings_.valueStringList(KEY_COMBO_FINDTEXTS);
     cmbFind_->addItems(findtexts);
     cmbFind_->setEditText("");
-    QObject::connect(cmbFind_, &FindComboBox::on_EnterPressed,
-                     this, &MainWindow::on_FindCombo_EnterPressed);
+    connect(cmbFind_, &FindComboBox::on_EnterPressed,
+            this, &MainWindow::OnFindComboEnterPressed);
 
 
     ui->mainToolBar->insertWidget(ui->placeHolder_ShowMissing, tbShowNonExistant_);

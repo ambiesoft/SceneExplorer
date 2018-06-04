@@ -151,7 +151,7 @@ void MainWindow::on_action_Options_triggered()
         }
     }
 }
-void MainWindow::on_menu_directory_triggered()
+void MainWindow::onUserDirectoryTriggered()
 {
     QAction* action = (QAction*)sender();
     if(!action)
@@ -190,8 +190,8 @@ void MainWindow::onMenuFolder_AboutToShow()
         action->setCheckable(true);
         action->setChecked(di->IsChecked());
         action->setData(i);
-        QObject::connect(action, &QAction::triggered,
-                         this, &MainWindow::on_menu_directory_triggered);
+        connect(action, &QAction::triggered,
+                this, &MainWindow::onUserDirectoryTriggered);
         ui->menu_Folder->addAction(action);
     }
 
@@ -203,7 +203,7 @@ void MainWindow::onMenuFolder_AboutToShow()
     }
 }
 
-void MainWindow::on_menu_tag_triggered()
+void MainWindow::OnUserTagTriggered()
 {
     QAction* action = (QAction*)sender();
     if(!action)
@@ -238,8 +238,8 @@ void MainWindow::onMenuTag_AboutToShow()
         action->setCheckable(true);
         action->setChecked(ti->IsChecked());
         action->setData(i);
-        QObject::connect(action, &QAction::triggered,
-                         this, &MainWindow::on_menu_tag_triggered);
+        connect(action, &QAction::triggered,
+                this, &MainWindow::OnUserTagTriggered);
         ui->menu_Tag->addAction(action);
     }
 
@@ -341,7 +341,7 @@ void MainWindow::on_action_DockTag_triggered()
 //    }
 //}
 
-void MainWindow::on_RecentDocuments_triggered(bool checked)
+void MainWindow::OnRecentDocumentsTriggered(bool checked)
 {
     Q_UNUSED(checked);
     QAction* qa = (QAction*)QObject::sender();
@@ -350,7 +350,7 @@ void MainWindow::on_RecentDocuments_triggered(bool checked)
     QString file = qa->text();
     OpenDocument(file, true);
 }
-void MainWindow::on_ClearRecentItems_triggered(bool checked)
+void MainWindow::OnClearRecentItemsTriggered(bool checked)
 {
     Q_UNUSED(checked);
     recents_.clear();
@@ -367,7 +367,7 @@ void MainWindow::onMenu_RecentDocuments_AboutToShow()
         QAction *qa = ui->menu_Recent_documets->actions()[0];
         ui->menu_Recent_documets->removeAction(qa);
         QObject::disconnect(qa, &QAction::triggered,
-                            this, &MainWindow::on_RecentDocuments_triggered);
+                            this, &MainWindow::OnRecentDocumentsTriggered);
         delete qa;
     }
 
@@ -389,7 +389,7 @@ void MainWindow::onMenu_RecentDocuments_AboutToShow()
             qa->setChecked(true);
         }
         QObject::connect(qa, &QAction::triggered,
-                         this, &MainWindow::on_RecentDocuments_triggered);
+                         this, &MainWindow::OnRecentDocumentsTriggered);
         ui->menu_Recent_documets->addAction(qa);
     }
 
@@ -400,7 +400,7 @@ void MainWindow::onMenu_RecentDocuments_AboutToShow()
     QAction* qaClearRecent = new QAction(this);
     qaClearRecent->setText(tr("&Clear Recent items"));
     connect(qaClearRecent, &QAction::triggered,
-            this, &MainWindow::on_ClearRecentItems_triggered);
+            this, &MainWindow::OnClearRecentItemsTriggered);
     ui->menu_Recent_documets->addAction(qaClearRecent);
 }
 
@@ -730,7 +730,7 @@ void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
 
         QAction actionCopyFilename(tr("&Filename"));
         connect(&actionCopyFilename, SIGNAL(triggered()),
-                this, SLOT(on_context_copySelectedVideoFilename()));
+                this, SLOT(OnContextCopySelectedVideoFilename()));
         menuCopyOther.addAction(&actionCopyFilename);
 
         contextMenu.addMenu(&menuCopyOther);
@@ -754,7 +754,7 @@ void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
             {
                 QSharedPointer<QAction> act(new QAction(externalTools_[i].GetName()));
                 connect(act.data(), SIGNAL(triggered()),
-                        this, SLOT(on_context_ExternalTools()));
+                        this, SLOT(OnContextExternalTools()));
                 menuExternalTools.addAction(act.data());
                 act->setData(i);
                 actExts.append(act);
@@ -789,7 +789,7 @@ void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
                 QString text = ti->text();
                 QSharedPointer<QAction> act(new QAction(text));
                 connect(act.data(), SIGNAL(triggered()),
-                        this, SLOT(on_context_AddTags()));
+                        this, SLOT(OnContextAddTags()));
                 menuAddTags.addAction(act.data());
                 act->setData(ti->tagid());
                 act->setCheckable(true);
@@ -820,13 +820,13 @@ void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
 
         QAction actionRename(tr("Re&name"));
         connect(&actionRename, SIGNAL(triggered()),
-                this, SLOT(on_context_Rename()));
+                this, SLOT(OnContextRename()));
         contextMenu.addAction(&actionRename);
         contextMenu.addSeparator();
 
         QAction actionRemoveFromDB(tr("&Remove from database"));
         connect(&actionRemoveFromDB, SIGNAL(triggered()),
-                this, SLOT(on_context_removeFromDatabase()));
+                this, SLOT(OnContextRemoveFromDatabase()));
         contextMenu.addAction(&actionRemoveFromDB);
 
         contextMenu.exec(ui->tableView->mapToGlobal(pos));
@@ -838,10 +838,6 @@ void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
 }
 
 
-void MainWindow::on_Context_Scan()
-{
-    ScanSelectedDirectory();
-}
 void MainWindow::ScanSelectedDirectory(const bool bAll)
 {
     QList<DirectoryItem*> toScan;
@@ -881,7 +877,7 @@ void MainWindow::ScanSelectedDirectory(const bool bAll)
         StartScan(di);
     }
 }
-void MainWindow::on_directoryWidget_Remove()
+void MainWindow::OnDirectoryRemove()
 {
     CHECK_DOCUMENT(pDoc_);
 
@@ -902,7 +898,7 @@ void MainWindow::on_directoryWidget_Remove()
 
     pDoc_->SetReordered();
 }
-void MainWindow::on_directoryWidget_RemoveMissingItems()
+void MainWindow::OnDirectoryRemoveMissingItems()
 {
     if(ui->directoryWidget->selectedItems().isEmpty())
         return;
@@ -923,7 +919,7 @@ void MainWindow::on_directoryWidget_RemoveMissingItems()
 
     itemChangedCommon(true);
 }
-void MainWindow::on_directoryWidget_CheckAll()
+void MainWindow::OnDirectoryCheckAll()
 {
     {
         BlockedBool bt(&directoryChanging_, true, false);
@@ -938,7 +934,7 @@ void MainWindow::on_directoryWidget_CheckAll()
 
     itemChangedCommon();
 }
-void MainWindow::on_directoryWidget_UncheckAll()
+void MainWindow::OnDirectoryUncheckAll()
 {
     {
         BlockedBool bt(&directoryChanging_, true, false);
@@ -956,7 +952,7 @@ void MainWindow::on_directoryWidget_UncheckAll()
 
 
 
-void MainWindow::on_directoryWidget_SortByName()
+void MainWindow::OnDirectorySortByName()
 {
     CHECK_DOCUMENT(pDoc_);
 
@@ -999,11 +995,11 @@ void MainWindow::directoryWidgetMoveUpCommon(const bool bUp)
 
     pDoc_->SetReordered();
 }
-void MainWindow::on_directoryWidget_MoveUp()
+void MainWindow::OnDirectoryMoveUp()
 {
     directoryWidgetMoveUpCommon(true);
 }
-void MainWindow::on_directoryWidget_MoveDown()
+void MainWindow::OnDirectoryMoveDown()
 {
     directoryWidgetMoveUpCommon(false);
 }
@@ -1021,19 +1017,19 @@ void MainWindow::on_directoryWidget_customContextMenuRequested(const QPoint &pos
 
         QAction actCheckAll(tr("&Check All"));
         connect(&actCheckAll, SIGNAL(triggered(bool)),
-            this, SLOT(on_directoryWidget_CheckAll()));
+            this, SLOT(OnDirectoryCheckAll()));
         menu.addAction(&actCheckAll);
 
         QAction actUncheckAll(tr("&Uncheck All"));
         connect(&actUncheckAll, SIGNAL(triggered(bool)),
-            this, SLOT(on_directoryWidget_UncheckAll()));
+            this, SLOT(OnDirectoryUncheckAll()));
         menu.addAction(&actUncheckAll);
 
         menu.addSeparator();
 
         QAction actSortByName(tr("&Sort by name"));
         connect(&actSortByName, SIGNAL(triggered(bool)),
-            this, SLOT(on_directoryWidget_SortByName()));
+            this, SLOT(OnDirectorySortByName()));
         menu.addAction(&actSortByName);
 
         menu.exec(ui->directoryWidget->mapToGlobal(pos));
@@ -1046,42 +1042,36 @@ void MainWindow::on_directoryWidget_customContextMenuRequested(const QPoint &pos
         menu.addSeparator();
 
 
-//        QAction actRescan(tr("&Scan to create thumbnails"));
-//        actRescan.setEnabled(!di->IsMissingItem());
-//        connect(&actRescan, SIGNAL(triggered(bool)),
-//            this, SLOT(on_Context_Scan()));
-//        menu.addAction(&actRescan);
-
         menu.addEnablingAction(ui->action_ScanSelectedDirectory);
         menu.addSeparator();
 
         QAction actCheckAll(tr("&Check All"));
         connect(&actCheckAll, SIGNAL(triggered(bool)),
-            this, SLOT(on_directoryWidget_CheckAll()));
+            this, SLOT(OnDirectoryCheckAll()));
         menu.addAction(&actCheckAll);
 
         QAction actUncheckAll(tr("&Uncheck All"));
         connect(&actUncheckAll, SIGNAL(triggered(bool)),
-            this, SLOT(on_directoryWidget_UncheckAll()));
+            this, SLOT(OnDirectoryUncheckAll()));
         menu.addAction(&actUncheckAll);
 
         menu.addSeparator();
 
         QAction actMoveUp(tr("Move &up"));
         connect(&actMoveUp, SIGNAL(triggered(bool)),
-            this, SLOT(on_directoryWidget_MoveUp()));
+            this, SLOT(OnDirectoryMoveUp()));
         menu.addAction(&actMoveUp);
 
         QAction actMoveDown(tr("Move &down"));
         connect(&actMoveDown, SIGNAL(triggered(bool)),
-            this, SLOT(on_directoryWidget_MoveDown()));
+            this, SLOT(OnDirectoryMoveDown()));
         menu.addAction(&actMoveDown);
 
         menu.addSeparator();
 
         QAction actSortByName(tr("&Sort by name"));
         connect(&actSortByName, SIGNAL(triggered(bool)),
-            this, SLOT(on_directoryWidget_SortByName()));
+            this, SLOT(OnDirectorySortByName()));
         menu.addAction(&actSortByName);
 
 
@@ -1090,12 +1080,12 @@ void MainWindow::on_directoryWidget_customContextMenuRequested(const QPoint &pos
         QAction actRemove(tr("Re&move this directory from list"));
         actRemove.setEnabled(di->IsNormalItem());
         connect(&actRemove, SIGNAL(triggered(bool)),
-            this, SLOT(on_directoryWidget_Remove()));
+            this, SLOT(OnDirectoryRemove()));
         menu.addAction(&actRemove);
 
         QAction actRemoveMissingItems(tr("R&emove missing items from database"));
         connect(&actRemoveMissingItems, SIGNAL(triggered(bool)),
-            this, SLOT(on_directoryWidget_RemoveMissingItems()));
+            this, SLOT(OnDirectoryRemoveMissingItems()));
         menu.addAction(&actRemoveMissingItems);
 
         menu.exec(ui->directoryWidget->mapToGlobal(pos));
@@ -1128,12 +1118,12 @@ void MainWindow::on_ShowMissingClicked_common(bool bNextCheck)
     tbShowNonExistant_->setChecked(bNextCheck);
     GetSqlAllSetTable(lastQueriedDirs_, lastQueriedIsTagValid_ ? &lastQueriedTaggedIDs_:nullptr);
 }
-void MainWindow::on_action_ShowMissingClicked()
+void MainWindow::OnShowMissingClicked()
 {
     on_ShowMissingClicked_common(tbShowNonExistant_->isChecked());
 }
 
-void MainWindow::on_LimitFirst_triggered(bool checked)
+void MainWindow::OnLimitFirstTriggered(bool checked)
 {
     Q_UNUSED(checked);
 
@@ -1141,7 +1131,7 @@ void MainWindow::on_LimitFirst_triggered(bool checked)
     limitManager_->SetIndexFirst();
     itemChangedCommon(true);
 }
-void MainWindow::on_LimitPrev_triggered(bool checked)
+void MainWindow::OnLimitPrevTriggered(bool checked)
 {
     Q_UNUSED(checked);
 
@@ -1152,7 +1142,7 @@ void MainWindow::on_LimitPrev_triggered(bool checked)
     }
 }
 
-void MainWindow::on_LimitNext_triggered(bool checked)
+void MainWindow::OnLimitNextTriggered(bool checked)
 {
     Q_UNUSED(checked);
 
@@ -1162,7 +1152,7 @@ void MainWindow::on_LimitNext_triggered(bool checked)
         itemChangedCommon(true);
     }
 }
-void MainWindow::on_LimitLast_triggered(bool checked)
+void MainWindow::OnLimitLastTriggered(bool checked)
 {
     Q_UNUSED(checked);
 
@@ -1170,7 +1160,7 @@ void MainWindow::on_LimitLast_triggered(bool checked)
     limitManager_->SetIndexLast();
     itemChangedCommon(true);
 }
-void MainWindow::onCmbLint_currentIndexChanged(int index)
+void MainWindow::OnCmbLimitCurrentIndexChanged(int index)
 {
     // qDebug() << index;
     Q_UNUSED(index);
