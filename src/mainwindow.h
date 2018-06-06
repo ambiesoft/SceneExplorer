@@ -39,7 +39,6 @@ class QThreadPool;
 class QLabel;
 class ListModel;
 class TableItemData;
-class FolderModel;
 class Settings;
 class TaskModel;
 class TaskFFmpeg;
@@ -373,7 +372,7 @@ private slots:
     void onUserDirectoryTriggered();
     void OnUserTagTriggered();
     void onMenuTag_AboutToShow();
-    void onMenuFolder_AboutToShow();
+    void onMenuDirectory_AboutToShow();
     void onMenuTask_AboutToShow();
     void onMenuView_AboutToShow();
     void onMenuEdit_AboutToShow();
@@ -409,9 +408,6 @@ private slots:
     void on_action_Find_triggered();
 
     void on_action_Clear_triggered();
-
-//    void on_action_Add_current_check_states_triggered();
-//    void on_FavoriteFolder_triggered(bool checked=false);
 
     void OnRecentDocumentsTriggered(bool checked=false);
     void OnClearRecentItemsTriggered(bool checked=false);
@@ -460,7 +456,7 @@ private slots:
 
 
 
-    void on_action_DockFolder_triggered();
+    void on_action_DockDirectory_triggered();
 
     void on_action_DockTask_triggered();
 
@@ -488,7 +484,7 @@ private slots:
 
     void on_listTag_itemChanged(QListWidgetItem *item);
 
-    void on_action_FontFolder_triggered();
+    void on_action_FontDirectory_triggered();
 
     void on_action_FontTask_triggered();
 
@@ -510,7 +506,7 @@ private slots:
 
     void on_action_OpenVideo_triggered();
 
-    void on_action_OpenFolder_triggered();
+    void on_action_OpenDirectory_triggered();
 
 
 
@@ -553,7 +549,7 @@ private slots:
 
     void on_action_FocusTagPane_triggered();
 
-    void on_action_AddFolder_triggered();
+
 
     void on_action_AddNewTag_triggered();
 
@@ -566,6 +562,8 @@ private slots:
     void on_action_CommandLine_triggered();
 
     void on_action_AboutQt_triggered();
+
+    void on_action_AddDirectory_triggered();
 
 private:
     void OnCopyTable();
@@ -617,7 +615,7 @@ private:
 
     TableModel* tableModel_;
 	FileMissingFilterProxyModel *proxyModel_;
-    QString lastSelectedAddFolderDir_;
+    QString lastSelectedAddDir_;
     QString lastSelectedScanDir_;
     QString lastSelectedDocumentDir_;
 
@@ -635,7 +633,7 @@ private:
     void insertLog(TaskKind kind, const QVector<int>& ids, const QStringList& texts, bool bError=false);
     void updateOnOpened(const qint64& id, const QString& movieFile);
     void openVideo(const qint64& id, const QString& movieFile);
-    void openVideoInFolder(const QString& movieFile);
+    void openVideoDirectory(const QString& movieFile);
     QString getSelectedVideo(bool bNativeFormat = true);
     qint64 getSelectedID();
 

@@ -50,7 +50,6 @@
 #include "taskffmpeg.h"
 // #include "optionfontdialog.h"
 #include "tablemodel.h"
-#include "foldermodel.h"
 #include "taskmodel.h"
 #include "tableitemdata.h"
 #include "settings.h"
@@ -1820,7 +1819,7 @@ void MainWindow::on_action_Output_triggered()
     setFontCommon1(KEY_FONT_OUPUT, ui->txtLog);
 }
 
-void MainWindow::on_action_FontFolder_triggered()
+void MainWindow::on_action_FontDirectory_triggered()
 {
     setFontCommon1(KEY_FONT_DIRECTORY,ui->directoryWidget);
 }
@@ -1858,7 +1857,7 @@ void MainWindow::on_action_FontMenu_triggered()
 QList<QWidget*> MainWindow::getAllDockingWindow()
 {
     return QList<QWidget*> {
-        ui->dockFolder,
+        ui->dockDirectory,
         ui->dockOutput,
         ui->dockTag,
         ui->dockTask
@@ -1920,12 +1919,11 @@ void MainWindow::on_action_OpenVideo_triggered()
 }
 
 
-void MainWindow::on_action_OpenFolder_triggered()
+void MainWindow::on_action_OpenDirectory_triggered()
 {
-
     if(ui->tableView->hasFocus() && ui->tableView->selectionModel()->hasSelection())
     {
-        openVideoInFolder(getSelectedVideo());
+        openVideoDirectory(getSelectedVideo());
         return;
     }
     if(ui->directoryWidget->hasFocus() && !ui->directoryWidget->selectedItems().isEmpty())
@@ -2118,16 +2116,16 @@ void MainWindow::on_action_FocusTagPane_triggered()
 }
 
 
-void MainWindow::on_action_AddFolder_triggered()
+void MainWindow::on_action_AddDirectory_triggered()
 {
     if(!pDoc_)
         return;
 
     QString dir = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
-                                                    lastSelectedAddFolderDir_);
+                                                    lastSelectedAddDir_);
     if(dir.isEmpty())
         return;
-    lastSelectedAddFolderDir_ = dir;
+    lastSelectedAddDir_ = dir;
 
     if(HasDirectory(dir))
     {
@@ -2234,3 +2232,4 @@ void MainWindow::on_action_AboutQt_triggered()
 {
     QMessageBox::aboutQt(this);
 }
+

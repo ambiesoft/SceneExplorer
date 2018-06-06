@@ -54,8 +54,8 @@ MainWindow::MainWindow(QWidget *parent,
             this, &MainWindow::onMenuEdit_AboutToShow);
     connect(ui->menu_Task, &QMenu::aboutToShow,
             this, &MainWindow::onMenuTask_AboutToShow);
-    connect(ui->menu_Folder, &QMenu::aboutToShow,
-            this, &MainWindow::onMenuFolder_AboutToShow);
+    connect(ui->menu_Directory, &QMenu::aboutToShow,
+            this, &MainWindow::onMenuDirectory_AboutToShow);
     connect(ui->menu_Tag, &QMenu::aboutToShow,
             this, &MainWindow::onMenuTag_AboutToShow);
     connect(ui->menu_Docking_windows, &QMenu::aboutToShow,
@@ -107,7 +107,7 @@ MainWindow::MainWindow(QWidget *parent,
     // ui->tableView->setItemDelegate(new ImageSizeDelegate(ui->tableView));
 
 
-    // folder
+    // directory
     QItemSelectionModel* treeSelectionModel = ui->directoryWidget->selectionModel();
     connect(treeSelectionModel, &QItemSelectionModel::selectionChanged,
             this, &MainWindow::OnDirectorySelectionChanged);
@@ -243,9 +243,9 @@ MainWindow::MainWindow(QWidget *parent,
     if(vVal.isValid())
         resize(vVal.toSize());
 
-    vVal = settings.value(KEY_LASTSELECTEDADDFOLDERDIRECTORY);
+    vVal = settings.value(KEY_LASTSELECTEDADDDIRECTORY);
     if(vVal.isValid())
-        lastSelectedAddFolderDir_ = vVal.toString();
+        lastSelectedAddDir_ = vVal.toString();
 
     vVal = settings.value(KEY_LASTSELECTEDSCANDIRECTORY);
     if(vVal.isValid())

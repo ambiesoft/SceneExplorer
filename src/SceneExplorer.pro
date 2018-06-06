@@ -41,7 +41,6 @@ SOURCES += \
     mainwindow_action.cpp \
     mainwindow_event.cpp \
     helper.cpp \
-    foldermodel.cpp \
     directoryentry.cpp \
     directoryitem.cpp \
     findcombobox.cpp \
@@ -85,7 +84,6 @@ HEADERS += \
     tasklistdata.h \
     tableitemdata.h \
     helper.h \
-    foldermodel.h \
     stable.h \
     directoryentry.h \
     directoryitem.h \

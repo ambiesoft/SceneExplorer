@@ -69,9 +69,6 @@ void MainWindow::showEvent( QShowEvent* event )
 }
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
-//    resizeDock(ui->dockFolder, ui->directoryWidget->size());
-//    resizeDock(ui->dockOutput, ui->txtLog->size());
-//    resizeDock(ui->dockTask, ui->listTask->size());
     QMainWindow::resizeEvent(event);
 }
 
@@ -109,7 +106,7 @@ void MainWindow::closeEvent(QCloseEvent *event) {
         settings_.setValue(KEY_TXTLOGSIZE, ui->txtLog->size());
         settings_.setValue(KEY_LISTTASKSIZE, ui->listTask->size());
     }
-    settings_.setValue(KEY_LASTSELECTEDADDFOLDERDIRECTORY, lastSelectedAddFolderDir_);
+    settings_.setValue(KEY_LASTSELECTEDADDDIRECTORY, lastSelectedAddDir_);
     settings_.setValue(KEY_LASTSELECTEDSCANDIRECTORY, lastSelectedScanDir_);
     settings_.setValue(KEY_LASTSELECTEDDOCUMENT, lastSelectedDocumentDir_);
 

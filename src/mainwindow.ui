@@ -131,7 +131,7 @@
      </widget>
      <addaction name="menu_Main"/>
      <addaction name="action_Output"/>
-     <addaction name="action_FontFolder"/>
+     <addaction name="action_FontDirectory"/>
      <addaction name="action_FontTask"/>
      <addaction name="action_FontTag"/>
      <addaction name="menu_UI"/>
@@ -176,7 +176,7 @@
      <property name="title">
       <string>&amp;Docking windows</string>
      </property>
-     <addaction name="action_DockFolder"/>
+     <addaction name="action_DockDirectory"/>
      <addaction name="action_DockTag"/>
      <addaction name="action_DockTask"/>
      <addaction name="action_DockOutput"/>
@@ -216,11 +216,11 @@
     <addaction name="separator"/>
     <addaction name="menu_Focus"/>
    </widget>
-   <widget class="QMenu" name="menu_Folder">
+   <widget class="QMenu" name="menu_Directory">
     <property name="title">
-     <string>&amp;Folder</string>
+     <string>&amp;Directory</string>
     </property>
-    <addaction name="action_AddFolder"/>
+    <addaction name="action_AddDirectory"/>
     <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menu_Tag">
@@ -235,7 +235,7 @@
      <string>&amp;Edit</string>
     </property>
     <addaction name="action_OpenVideo"/>
-    <addaction name="action_OpenFolder"/>
+    <addaction name="action_OpenDirectory"/>
     <addaction name="separator"/>
     <addaction name="action_Copy"/>
     <addaction name="action_Paste"/>
@@ -248,7 +248,7 @@
    <addaction name="menu_Edit"/>
    <addaction name="menu_View"/>
    <addaction name="menu_Task"/>
-   <addaction name="menu_Folder"/>
+   <addaction name="menu_Directory"/>
    <addaction name="menu_Tag"/>
    <addaction name="menu_Option"/>
    <addaction name="menu_Help"/>
@@ -343,7 +343,7 @@
     </layout>
    </widget>
   </widget>
-  <widget class="QDockWidget" name="dockFolder">
+  <widget class="QDockWidget" name="dockDirectory">
    <property name="sizePolicy">
     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
      <horstretch>0</horstretch>
@@ -362,7 +362,7 @@
     <set>Qt::AllDockWidgetAreas</set>
    </property>
    <property name="windowTitle">
-    <string>Folder</string>
+    <string>Directory</string>
    </property>
    <attribute name="dockWidgetArea">
     <number>2</number>
@@ -489,9 +489,9 @@
     <string>Ctrl+F1</string>
    </property>
   </action>
-  <action name="action_AddFolder">
+  <action name="action_AddDirectory">
    <property name="text">
-    <string>&amp;Add Folder...</string>
+    <string>&amp;Add Directory...</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+D</string>
@@ -528,12 +528,12 @@
     <string>&amp;Stop</string>
    </property>
   </action>
-  <action name="action_DockFolder">
+  <action name="action_DockDirectory">
    <property name="checkable">
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>&amp;Folder</string>
+    <string>&amp;Directory</string>
    </property>
   </action>
   <action name="action_DockTask">
@@ -897,9 +897,9 @@
     <string>Shift+F5</string>
    </property>
   </action>
-  <action name="action_FontFolder">
+  <action name="action_FontDirectory">
    <property name="text">
-    <string>&amp;Folder...</string>
+    <string>&amp;Directory...</string>
    </property>
   </action>
   <action name="action_FontTask">
@@ -974,9 +974,9 @@
     <string>Ctrl+Return</string>
    </property>
   </action>
-  <action name="action_OpenFolder">
+  <action name="action_OpenDirectory">
    <property name="text">
-    <string>Open &amp;Folder</string>
+    <string>Open &amp;Directory</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+Shift+Return</string>

@@ -88,13 +88,13 @@ void MainWindow::onMenuEdit_AboutToShow()
                 ui->tableView->hasFocus() &&
                 ui->tableView->selectionModel()->hasSelection());
 
-    // open folder menu
-    bool bOpenFolder = false;
+    // open directory menu
+    bool bOpenDirectory = false;
     if(ui->tableView->hasFocus() && ui->tableView->selectionModel()->hasSelection())
-        bOpenFolder = true;
+        bOpenDirectory = true;
     else if(ui->directoryWidget->hasFocus() && !ui->directoryWidget->selectedItems().isEmpty())
-        bOpenFolder = true;
-    ui->action_OpenFolder->setEnabled(bOpenFolder);
+        bOpenDirectory = true;
+    ui->action_OpenDirectory->setEnabled(bOpenDirectory);
 
     // copy
     OnUpdateEditCopy(ui->action_Copy);

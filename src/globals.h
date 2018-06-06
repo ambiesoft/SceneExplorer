@@ -43,7 +43,7 @@ extern CommandOption* gpCommandOption;
 
 enum ImageCacheType {
     IC_NEVER,
-    IC_PERFOLDER,
+    IC_PERDIRECTORY,
     IC_ALWAYS,
 };
 

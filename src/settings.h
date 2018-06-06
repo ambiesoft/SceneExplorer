@@ -26,11 +26,6 @@
 
 class Settings
 {
-public:
-	static const char* KEY_FAVORITE_COUNT;
-	static const char* KEY_FAVORITE_NAME;
-	static const char* KEY_FAVORITE_FOLDERS;
-	static const char* GROUPPREFIX_FAVORITE;
 private:
     QSettings s_;
 

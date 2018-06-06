@@ -77,7 +77,7 @@ void MainWindow::openVideo(const qint64& id, const QString& movieFile)
     }
     updateOnOpened(id,movieFile);
 }
-void MainWindow::openVideoInFolder(const QString& movieFile)
+void MainWindow::openVideoDirectory(const QString& movieFile)
 {
     if(movieFile.isEmpty()) { Alert(this, TR_NOVIDEO_SELECTED()); return;}
 
@@ -87,7 +87,7 @@ void MainWindow::openVideoInFolder(const QString& movieFile)
         openfile = QFileInfo(movieFile).absoluteDir().absolutePath();
     }
     if(!showInGraphicalShell(this, openfile))
-        Alert(this, tr("Failed to open folder."));
+        Alert(this, tr("Failed to open directory."));
 }
 void MainWindow::on_tableView_doubleClicked(const QModelIndex &index)
 {
@@ -158,18 +158,14 @@ void MainWindow::onUserDirectoryTriggered()
     di->setCheckState(di->IsChecked() ? Qt::Unchecked : Qt::Checked);
 }
 
-void MainWindow::onMenuFolder_AboutToShow()
+void MainWindow::onMenuDirectory_AboutToShow()
 {
-//    ui->menu_Folder->clear();
-//    ui->menu_Folder->addAction(ui->action_Add_Folder);
-//    ui->menu_Folder->addSeparator();
-
     int startPos = 2;
-    QList<QAction*> actions = ui->menu_Folder->actions();
+    QList<QAction*> actions = ui->menu_Directory->actions();
     for(int i=startPos ; i < actions.count(); ++i)
     {
         QAction* pA = actions[i];
-        ui->menu_Folder->removeAction(pA);
+        ui->menu_Directory->removeAction(pA);
         delete pA;
     }
 
@@ -187,14 +183,14 @@ void MainWindow::onMenuFolder_AboutToShow()
         action->setData(i);
         connect(action, &QAction::triggered,
                 this, &MainWindow::onUserDirectoryTriggered);
-        ui->menu_Folder->addAction(action);
+        ui->menu_Directory->addAction(action);
     }
 
     if(!bAdded)
     {
         QAction* actionNoDir = new QAction(tr("<No Directories>"));
         actionNoDir->setEnabled(false);
-        ui->menu_Folder->addAction(actionNoDir);
+        ui->menu_Directory->addAction(actionNoDir);
     }
 }
 
@@ -254,17 +250,17 @@ void MainWindow::onMenuTask_AboutToShow()
 
 void MainWindow::onMenuDocking_windows_AboutToShow()
 {
-    ui->action_DockFolder->setChecked(!ui->dockFolder->isHidden());
+    ui->action_DockDirectory->setChecked(!ui->dockDirectory->isHidden());
     ui->action_DockTask->setChecked(!ui->dockTask->isHidden());
     ui->action_DockOutput->setChecked(!ui->dockOutput->isHidden());
     ui->action_DockTag->setChecked(!ui->dockTag->isHidden());
 }
-void MainWindow::on_action_DockFolder_triggered()
+void MainWindow::on_action_DockDirectory_triggered()
 {
-    if(ui->dockFolder->isHidden())
-        ui->dockFolder->show();
+    if(ui->dockDirectory->isHidden())
+        ui->dockDirectory->show();
     else
-        ui->dockFolder->hide();
+        ui->dockDirectory->hide();
 }
 
 void MainWindow::on_action_DockTask_triggered()
@@ -289,52 +285,6 @@ void MainWindow::on_action_DockTag_triggered()
     else
         ui->dockTag->hide();
 }
-//void MainWindow::on_FavoriteFolder_triggered(bool checked)
-//{
-//    Q_UNUSED(checked);
-//    QAction* qa = (QAction*)QObject::sender();
-//    Q_ASSERT(qa);
-//    QStringList dirs = settings_.GetFavorite(qa->text());
-//    ui->directoryWidget->SetCheck(dirs, true);
-//    directoryChangedCommon(true);
-//}
-
-//void MainWindow::onMenu_Favorites_AboutToShow()
-//{
-//    int sepIndex = 2;
-//    // TODO
-//    QMenu* menu = ui->menu_Favorites;
-//    foreach (QAction *action, menu->actions()) {
-//         if (action->isSeparator()) {
-//             qDebug("this action is a separator");
-//         } else if (action->menu()) {
-//             qDebug("action: %s", qUtf8Printable(action->text()));
-//             qDebug(">>> this action is associated with a submenu, iterating it recursively...");
-//             // enumerateMenu(action->menu());
-//             qDebug("<<< finished iterating the submenu");
-//         } else {
-//             qDebug("action: %s", qUtf8Printable(action->text()));
-//         }
-//     }
-
-//    while(ui->menu_Favorites->actions().count() > sepIndex)
-//    {
-//        QAction *qa = ui->menu_Favorites->actions()[sepIndex];
-//        ui->menu_Favorites->removeAction(qa);
-//        QObject::disconnect(qa, &QAction::triggered,
-//                            this, &MainWindow::on_FavoriteFolder_triggered);
-//        delete qa;
-//    }
-//    QStringList favs = settings_.GetFavorites();
-//    for(int i=0; i < favs.count(); ++i)
-//    {
-//        QAction* qa = new QAction(this);
-//        qa->setText(favs[i]);
-//        QObject::connect(qa, &QAction::triggered,
-//                         this, &MainWindow::on_FavoriteFolder_triggered);
-//        ui->menu_Favorites->addAction(qa);
-//    }
-//}
 
 void MainWindow::OnRecentDocumentsTriggered(bool checked)
 {
@@ -714,7 +664,7 @@ void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
         MyContextMenu contextMenu("TableView Context Menu", this);
 
         contextMenu.addEnablingAction(ui->action_OpenVideo);
-        contextMenu.addEnablingAction(ui->action_OpenFolder);
+        contextMenu.addEnablingAction(ui->action_OpenDirectory);
 
         contextMenu.addSeparator();
 
@@ -1006,7 +956,7 @@ void MainWindow::on_directoryWidget_customContextMenuRequested(const QPoint &pos
     if(!di)
     {
         MyContextMenu menu("DirectoryWidget Context Menu",this);
-        menu.addEnablingAction(ui->action_AddFolder);
+        menu.addEnablingAction(ui->action_AddDirectory);
         menu.addEnablingAction(ui->action_Paste);
         menu.addSeparator();
 
@@ -1033,7 +983,7 @@ void MainWindow::on_directoryWidget_customContextMenuRequested(const QPoint &pos
     {
         MyContextMenu menu("DirectoryWidget Context Menu",this);
         menu.addEnablingAction(ui->action_Copy, di->IsNormalItem());
-        menu.addEnablingAction(ui->action_OpenFolder, di->IsNormalItem());
+        menu.addEnablingAction(ui->action_OpenDirectory, di->IsNormalItem());
         menu.addSeparator();
 
 
@@ -1214,7 +1164,7 @@ void MainWindow::onMenuStyle_AboutToShow()
     for(int i=0 ; i < actions.count(); ++i)
     {
         QAction* pA = actions[i];
-        ui->menu_Folder->removeAction(pA);
+        ui->menu_Directory->removeAction(pA);
         delete pA;
     }
     QString currentStyle = QApplication::style()->objectName();

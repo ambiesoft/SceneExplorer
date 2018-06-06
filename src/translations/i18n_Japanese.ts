@@ -177,7 +177,7 @@
     </message>
     <message>
         <source>&amp;Folder</source>
-        <translation>フォルダ(&amp;F)</translation>
+        <translation type="vanished">フォルダ(&amp;F)</translation>
     </message>
     <message>
         <source>ToolBar</source>
@@ -189,7 +189,7 @@
     </message>
     <message>
         <source>Folder</source>
-        <translation>フォルダ</translation>
+        <translation type="vanished">フォルダ</translation>
     </message>
     <message>
         <source>Task Thumbnail</source>
@@ -209,7 +209,7 @@
     </message>
     <message>
         <source>&amp;Add Folder...</source>
-        <translation>フォルダを追加(&amp;A)...</translation>
+        <translation type="vanished">フォルダを追加(&amp;A)...</translation>
     </message>
     <message>
         <source>&amp;General Otions...</source>
@@ -529,7 +529,7 @@
     </message>
     <message>
         <source>Failed to open folder.</source>
-        <translation>フォルダをオープンできませんでした。</translation>
+        <translation type="vanished">フォルダをオープンできませんでした。</translation>
     </message>
     <message>
         <source>Application needs to restart to effect the change. Do you want to restart application now?</source>
@@ -661,7 +661,7 @@
     </message>
     <message>
         <source>Open &amp;Folder</source>
-        <translation>フォルダを開く(&amp;F)</translation>
+        <translation type="vanished">フォルダを開く(&amp;F)</translation>
     </message>
     <message>
         <source>&amp;Copy Path</source>
@@ -865,7 +865,7 @@
     </message>
     <message>
         <source>&amp;Folder...</source>
-        <translation>フォルダ(&amp;F)...</translation>
+        <translation type="vanished">フォルダ(&amp;F)...</translation>
     </message>
     <message>
         <source>&amp;Task...</source>
@@ -1195,6 +1195,30 @@
         <source>About &amp;Qt...</source>
         <translation>&amp;Qt について...</translation>
     </message>
+    <message>
+        <source>&amp;Directory</source>
+        <translation>ディレクトリ(&amp;D)</translation>
+    </message>
+    <message>
+        <source>Directory</source>
+        <translation>ディレクトリ</translation>
+    </message>
+    <message>
+        <source>&amp;Add Directory...</source>
+        <translation>ディレクトリを追加(&amp;A)...</translation>
+    </message>
+    <message>
+        <source>&amp;Directory...</source>
+        <translation>ディレクトリ(&amp;D)...</translation>
+    </message>
+    <message>
+        <source>Open &amp;Directory</source>
+        <translation>ディレクトリを開く(&amp;D)</translation>
+    </message>
+    <message>
+        <source>Failed to open directory.</source>
+        <translation>ディレクトリのオープンに失敗しました。</translation>
+    </message>
 </context>
 <context>
     <name>Option</name>
@@ -1220,11 +1244,11 @@
     </message>
     <message>
         <source>&amp;Per folder selections</source>
-        <translation>フォルダごと(&amp;)</translation>
+        <translation type="vanished">フォルダごと(&amp;)</translation>
     </message>
     <message>
         <source>&amp;Always</source>
-        <translation>常に(&amp;A)</translation>
+        <translation type="vanished">常に(&amp;A)</translation>
     </message>
     <message>
         <source>&amp;Database directory:</source>
@@ -1305,6 +1329,14 @@
     <message>
         <source>Thumbnail Image format:</source>
         <translation>サムネイル画像フォーマット:</translation>
+    </message>
+    <message>
+        <source>&amp;Directory</source>
+        <translation>ディレクトリ(&amp;D)</translation>
+    </message>
+    <message>
+        <source>&amp;All</source>
+        <translation>すべて(&amp;A)</translation>
     </message>
 </context>
 <context>

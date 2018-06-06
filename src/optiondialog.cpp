@@ -89,11 +89,11 @@ void OptionDialog::showEvent(QShowEvent *ev)
     case IC_NEVER:
         ui.rbICNever->setChecked(true);
         break;
-    case IC_PERFOLDER:
-        ui.rbICPerfolder->setChecked(true);
+    case IC_PERDIRECTORY:
+        ui.rbICPerDirectory->setChecked(true);
         break;
     case IC_ALWAYS:
-        ui.rbICAlways->setChecked(true);
+        ui.rbICAll->setChecked(true);
         break;
     default:
         Q_ASSERT(false);
@@ -130,9 +130,9 @@ void OptionDialog::on_buttonBox_accepted()
 
     if(ui.rbICNever->isChecked())
         imagecache_=IC_NEVER;
-    else if(ui.rbICPerfolder->isChecked())
-        imagecache_=IC_PERFOLDER;
-    else if(ui.rbICAlways->isChecked())
+    else if(ui.rbICPerDirectory->isChecked())
+        imagecache_=IC_PERDIRECTORY;
+    else if(ui.rbICAll->isChecked())
         imagecache_=IC_ALWAYS;
     else
         Q_ASSERT(false);

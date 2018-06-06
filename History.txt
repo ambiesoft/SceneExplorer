@@ -1,3 +1,6 @@
+2018/06/06 ver1.14
+Rename folder to directory
+
 2018/06/05 ver1.13
 Styles are selectable
 Shows Qt about

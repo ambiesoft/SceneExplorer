@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>562</width>
-    <height>481</height>
+    <height>499</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -81,16 +81,16 @@
     </widget>
    </item>
    <item row="14" column="1">
-    <widget class="QRadioButton" name="rbICPerfolder">
+    <widget class="QRadioButton" name="rbICPerDirectory">
      <property name="text">
-      <string>&amp;Per folder selections</string>
+      <string>&amp;Directory</string>
      </property>
     </widget>
    </item>
    <item row="15" column="1">
-    <widget class="QRadioButton" name="rbICAlways">
+    <widget class="QRadioButton" name="rbICAll">
      <property name="text">
-      <string>&amp;Always</string>
+      <string>&amp;All</string>
      </property>
     </widget>
    </item>
@@ -374,8 +374,8 @@
   <tabstop>lineInfoSub</tabstop>
   <tabstop>tbInfoSub</tabstop>
   <tabstop>rbICNever</tabstop>
-  <tabstop>rbICPerfolder</tabstop>
-  <tabstop>rbICAlways</tabstop>
+  <tabstop>rbICPerDirectory</tabstop>
+  <tabstop>rbICAll</tabstop>
   <tabstop>chkLimitItems</tabstop>
   <tabstop>spinNumberOfRows</tabstop>
   <tabstop>chkOpenLastDocument</tabstop>
