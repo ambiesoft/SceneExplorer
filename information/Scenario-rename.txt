@@ -1,7 +1,0 @@
-1, Data inserted
-2-1 File renamed in the same dir.
-2-1-1
-
-2-2 File moved to somewhere.
-2-3 File removed.
-2-4 File copied.

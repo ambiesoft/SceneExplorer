@@ -1,7 +1,0 @@
-1, User Do It
-2, Create TaskGetDir
-3, TaskGetDir emit afterGetDir for each Directory
-4, in afterGetdir, getallentries for a dir from SQL
-5, run TaskFilter passing entries
-6, taskfilter filters infiles and emit afterfilter
-7, afterfilter must perform salient check from SQL, for filter-passed files
