@@ -422,17 +422,7 @@ void MainWindow::AddUserEntryDirectory_obsolete(
     ui->directoryWidget->addItem(newitem);
 }
 
-bool IsSubDir(const QString& parent, const QString& child)
-{
-    QDir childDir(child);
-    do
-    {
-        if(QDir(parent)==childDir)
-            return true;
-    } while(childDir.cdUp());
 
-    return false;
-}
 bool MainWindow::IsAllTagSelected() const
 {
     TagItem* ti = (TagItem*)ui->listTag->item(0);

@@ -71,4 +71,11 @@ bool isLegalFileExt(QString ext);
 bool isThumbFileName(const QString& file);
 bool isUUID(const QString& s);
 
+std::wstring qToStdWString(const QString &str);
+QString stdWToQString(const std::wstring &str);
+
+bool IsSubDir(const QString& parent, const QString& child);
+
+
+
 #endif // HELPER_H
