@@ -886,11 +886,12 @@ void MainWindow::OnContextRemoveFromDatabase()
     if(movieFile.isEmpty()) { Alert(this, TR_NOVIDEO_SELECTED()); return;}
 
     bool bRemoveFromHardDisk = settings_.valueBool(KEY_MESSAGEBOX_REMOVEFORMEXTERNALMEDIA);
+    const bool isTargetFileExists = QFile(movieFile).exists();
 
     QMessageBox msgbox(this);
 
     QCheckBox cbRemoveFromMedia(tr("Also remove from external media"));
-    cbRemoveFromMedia.setEnabled(QFile(movieFile).exists());
+    cbRemoveFromMedia.setEnabled(isTargetFileExists);
     cbRemoveFromMedia.setChecked(bRemoveFromHardDisk);
 
     msgbox.setText(tr("Do you want to remove \"%1\" from database?").
@@ -926,7 +927,7 @@ void MainWindow::OnContextRemoveFromDatabase()
     }
     tableModel_->RemoveItem(movieFile);
 
-    if(bRemoveFromHardDisk)
+    if(bRemoveFromHardDisk && isTargetFileExists)
     {
         try
         {
