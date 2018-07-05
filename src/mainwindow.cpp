@@ -255,7 +255,7 @@ bool MainWindow::CloseDocument()
     return true;
 }
 
-void MainWindow::LoadTags()
+bool MainWindow::LoadTags()
 {
     Q_ASSERT(!tagChanging_);
     BlockedBool blockUpdate(&tagChanging_);
@@ -263,7 +263,7 @@ void MainWindow::LoadTags()
     // Tags
     ui->listTag->clear();
     if(!pDoc_)
-        return;
+        return false;
 
     TagItem* tagAll = new TagItem(true,
                                   -1,
@@ -290,6 +290,7 @@ void MainWindow::LoadTags()
             ui->listTag->addItem(ti);
         }
     }
+    return true;
 }
 void MainWindow::InitDocument()
 {
@@ -1624,21 +1625,27 @@ void MainWindow::on_action_Help_triggered()
 
 }
 
-void MainWindow::CreateNewTag(const QString& tag, const QString& yomi)
+bool MainWindow::CreateNewTag(const QString& tag,
+                              const QString& yomi,
+                              qint64* insertedTag)
 {
     if(pDoc_->IsTagExist(tag))
     {
         Alert(this,tr("Tag \"%1\" already exists.").arg(tag));
-        return;
+        return false;
     }
 
-    if(!pDoc_->Insert(tag, yomi))
+    qint64 dummy;
+    if(!insertedTag)
+        insertedTag = &dummy;
+
+    if(!pDoc_->Insert(tag, yomi, *insertedTag))
     {
         Alert(this,tr("Failed to insert or replace Tag."));
-        return;
+        return false;
     }
 
-    LoadTags();
+    return LoadTags();
 }
 
 
@@ -2149,8 +2156,7 @@ void MainWindow::on_action_AddNewTag_triggered()
 {
     if(!pDoc_)
     {
-        Alert(this,
-              tr("No Document"));
+        Alert(this, tr("No Document"));
         return;
     }
 
@@ -2161,7 +2167,18 @@ void MainWindow::on_action_AddNewTag_triggered()
     QString tag=dlg.tag();
     QString yomi=dlg.yomi();
 
-    CreateNewTag(tag,yomi);
+    qint64 insertedTag = -1;
+    if(!CreateNewTag(tag,yomi,&insertedTag))
+        return;
+    Q_ASSERT(insertedTag >= 0);
+
+    if(tableContextMenuActivaing_)
+    {
+        // comming from context menu
+        qint64 id = getSelectedID();
+        if(id >= 0)
+            pDoc_->SetTagged(id, insertedTag, true);
+    }
 }
 
 void MainWindow::on_action_ExternalTools_triggered()

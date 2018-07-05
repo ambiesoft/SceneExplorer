@@ -118,9 +118,9 @@ public:
     {
         return docSql_->IsTagExist(tag);
     }
-    bool Insert(const QString& tag, const QString& yomi) const
+    bool Insert(const QString& tag, const QString& yomi, qint64& insertedTag) const
     {
-        return docSql_->Insert(tag,yomi);
+        return docSql_->Insert(tag,yomi,insertedTag);
     }
     bool GetTaggedIDs(const QList<qint64>& tagids, QSet<qint64>& taggedids) const
     {

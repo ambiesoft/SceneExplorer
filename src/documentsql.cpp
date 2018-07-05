@@ -494,17 +494,18 @@ bool DocumentSql::IsTagExist(const QString& tag) const
     SQC(query,exec());
     return query.next();
 }
-bool DocumentSql::Insert(const QString& tag, const QString& yomi) const
+bool DocumentSql::Insert(const QString& tag, const QString& yomi, qint64& insertedTag) const
 {
     MYQMODIFIER QSqlQuery query = myPrepare("REPLACE INTO " + docdb("Tag") + " (tag,yomi,dbid) VALUES (?,?,?)");
 
+    insertedTag = -1;
     int i=0;
     // query.bindValue(i++, id);
     query.bindValue(i++,tag);
     query.bindValue(i++,yomi);
     query.bindValue(i++,gpSQL->getDbID());
     SQC(query,exec());
-
+    insertedTag = query.lastInsertId().toLongLong();
     return true;
 }
 

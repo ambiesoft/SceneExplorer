@@ -80,7 +80,7 @@ public:
 
     bool GetAllTags(QList<TagItem*>& tags,bool bHasParent) const;
     bool IsTagExist(const QString& tag) const;
-    bool Insert(const QString& tag, const QString& yomi) const;
+    bool Insert(const QString& tag, const QString& yomi, qint64& insertedTag) const;
     bool GetTaggedIDs(const QList<qint64>& tagids, QSet<qint64>& taggedids) const;
     bool SetTagged(const qint64& id, const qint64& tagid, const bool bSet) const;
     bool GetTag(const qint64& tagid, QString& tag, QString& yomi) const;

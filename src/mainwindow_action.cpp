@@ -651,6 +651,8 @@ void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
 {
     if(ui->tableView->selectionModel()->hasSelection())
     {
+        BlockedBool bb(&tableContextMenuActivaing_);
+
         MyContextMenu contextMenu("TableView Context Menu", this);
 
         contextMenu.addEnablingAction(ui->action_OpenVideo);

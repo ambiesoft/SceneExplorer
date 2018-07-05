@@ -75,6 +75,8 @@ class MainWindow : public QMainWindow, IMainWindow
     Document* pDoc_ = nullptr;
     QStringList recents_;
 
+    bool tableContextMenuActivaing_ = false;
+
     QScopedPointer<QThread::Priority> taskPriority_;
     QThread::Priority* GetTaskPriority();
     int GetTaskPriorityAsInt();
@@ -108,7 +110,9 @@ private:
     void askRebootClose();
     QList<QAction*> getAllSortAction();
     void ScanSelectedDirectory(const bool bAll = false);
-    void CreateNewTag(const QString& tag, const QString& yomi);
+    bool CreateNewTag(const QString& tag,
+                      const QString& yomi,
+                      qint64* insertedTag=nullptr);
     QList<QWidget*> getAllStatusBarWidgets();
     bool GetSelectedAndCurrentTagIDs(QSet<qint64>& taggedids);
     void GetSqlAllSetTable(const QStringList& dirs,
@@ -650,7 +654,7 @@ private:
     bool OpenDocument(const QString& file, const bool bExists);
     bool CloseDocument();
     void InitDocument();
-    void LoadTags();
+    bool LoadTags();
     void directoryWidgetMoveUpCommon(const bool bUp);
 public slots:
 //    void sayBorn(int id,
