@@ -108,7 +108,8 @@ HEADERS += \
     sqlcommon.h \
     mycontextmenu.h \
     renamedialog.h \
-    osd.h
+    osd.h \
+    ../../profile/cpp/Profile/include/ambiesoft.profile.h
 
 FORMS += \
         mainwindow.ui \
