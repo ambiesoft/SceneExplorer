@@ -109,7 +109,8 @@ HEADERS += \
     mycontextmenu.h \
     renamedialog.h \
     osd.h \
-    ../../profile/cpp/Profile/include/ambiesoft.profile.h
+	../../profile/cpp/Profile/include/ambiesoft.profile.h \
+	../../lsMisc/SetPrority.h
 
 FORMS += \
         mainwindow.ui \
@@ -132,11 +133,8 @@ message($$QMAKESPEC)
 
 win32 {
    SOURCES += \
-            osd_win32.cpp
-
-
-
-
+			osd_win32.cpp \
+			../../lsMisc/SetPrority_win.cpp
 
 #    win32-g++ {
 #        LIBS += -lOle32
@@ -147,7 +145,8 @@ win32 {
 }
 linux-g++ {
     SOURCES += \
-            osd_linux.cpp
+			osd_linux.cpp \
+			../../lsMisc/SetPrority_linux.cpp
 }
 
 

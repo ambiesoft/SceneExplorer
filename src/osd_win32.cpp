@@ -315,130 +315,49 @@ QString GetIllegalFilenameCharacters()
     return "<>:\"|?*";
 }
 
-struct NativeHandle
-{
-	HANDLE h_;
-	NativeHandle(HANDLE h) : h_(h)
-	{}
-	~NativeHandle()
-	{
-		if(h_)
-			CloseHandle(h_);
-	}
-	operator bool() const {
-		return h_ != NULL;
-	}
-    operator HANDLE() const {
-		return h_;
-	}
-};
 
-// http://blog.misterfoo.com/2010/07/process-priority-utility.html
-// these values determined by poking around in the debugger - use at your own risk!
-const DWORD ProcessInformationMemoryPriority = 0x27;
-const DWORD ProcessInformationIoPriority = 0x21;
-const DWORD DefaultMemoryPriority = 5;
-const DWORD LowMemoryPriority = 3;
-const DWORD DefaultIoPriority = 2;
-const DWORD LowIoPriority = 1;
-const DWORD VeryLowIoPriority = 0;
-typedef NTSTATUS(NTAPI *FNNtSetInformationProcess)(
-	HANDLE process,
-	ULONG infoClass,
-	void* data,
-	ULONG dataSize);
-struct NTFuncs
-{
-	FNNtSetInformationProcess fnNtSetInformationProcess = NULL;
-	HMODULE hDLL_ = NULL;
-	NTFuncs()
-	{
-		hDLL_ = LoadLibrary(L"ntdll.dll");
-		if (hDLL_)
-		{
-			fnNtSetInformationProcess = (FNNtSetInformationProcess)GetProcAddress(
-				hDLL_,
-				"NtSetInformationProcess");
-		}
-	}
-	~NTFuncs()
-	{
-		if (hDLL_)
-			FreeLibrary(hDLL_);
-	}
-    BOOL SetPriority(HANDLE hProcess, QThread::Priority priority, QStringList& errors)
-	{
-		DWORD dwProcessPriority = -1;
-		switch (priority)
-		{
-		case QThread::HighestPriority:
-			dwProcessPriority = HIGH_PRIORITY_CLASS;
-			break;
-		case QThread::HighPriority:
-			dwProcessPriority = ABOVE_NORMAL_PRIORITY_CLASS;
-			break;
-		case QThread::NormalPriority:
-			dwProcessPriority = NORMAL_PRIORITY_CLASS;
-			break;
-		case QThread::LowPriority:
-			dwProcessPriority = BELOW_NORMAL_PRIORITY_CLASS;
-			break;
-		case QThread::LowestPriority:
-			dwProcessPriority = IDLE_PRIORITY_CLASS;
-			break;
-		case QThread::IdlePriority:
-			dwProcessPriority = IDLE_PRIORITY_CLASS;
-			break;
-		default:
-			Q_ASSERT(false);
-			break;
-		}
-        Q_ASSERT(dwProcessPriority != (DWORD)-1);
-		BOOL bFailed = FALSE;
-        if(!SetPriorityClass(hProcess, dwProcessPriority))
-        {
-            DWORD dwLastError = GetLastError();
-            bFailed = TRUE;
-            errors << QObject::tr("SetPriorityClass(%1) failed with %2").arg(dwProcessPriority).arg(dwLastError);
-        }
-		if (priority == QThread::IdlePriority && fnNtSetInformationProcess)
-		{
-			ULONG memory = LowMemoryPriority;
-            NTSTATUS ntStatus = fnNtSetInformationProcess(
-				hProcess, 
-				ProcessInformationMemoryPriority,
-				&memory,
-                sizeof(memory));
-            if(ntStatus != 0)
-            {
-                bFailed = TRUE;
-                errors << QObject::tr("NtSetInformationProcess(%1,%2) failed with %3.").arg(ProcessInformationMemoryPriority).arg(memory).arg(ntStatus);
-            }
 
-			ULONG io = VeryLowIoPriority;
-            ntStatus = fnNtSetInformationProcess(
-				hProcess,
-				ProcessInformationIoPriority,
-				&io,
-                sizeof(io));
-            if(ntStatus != 0)
-            {
-                bFailed = TRUE;
-                errors << QObject::tr("NtSetInformationProcess(%1,%2) failed with %3.").arg(ProcessInformationIoPriority).arg(io).arg(ntStatus);
-            }
-		}
-		return !bFailed;
-	}
-} gNTFuncs;
 
+#include "../../lsMisc/SetPrority.h"
 bool setProcessPriority(const qint64& pid, QThread::Priority priority, QStringList& errors)
 {
-	NativeHandle handle(OpenProcess(PROCESS_SET_INFORMATION, FALSE, (DWORD)pid));
-	if (!handle)
+    Ambiesoft::CPUPRIORITY cpuPriority = Ambiesoft::CPU_NONE;
+    Ambiesoft::IOPRIORITY ioPriority = Ambiesoft::IO_NONE;
+
+    switch (priority)
     {
-        errors << QObject::tr("Failed to OpenProcess(%1).").arg(pid);
-		return false;
+    case QThread::HighestPriority:
+        cpuPriority = Ambiesoft::CPU_HIGH;
+        ioPriority = Ambiesoft::IO_HIGH;
+        break;
+    case QThread::HighPriority:
+        cpuPriority = Ambiesoft::CPU_ABOVENORMAL;
+        ioPriority = Ambiesoft::IO_ABOVENORMAL;
+        break;
+    case QThread::NormalPriority:
+        cpuPriority = Ambiesoft::CPU_NORMAL;
+        ioPriority = Ambiesoft::IO_NORMAL;
+        break;
+    case QThread::LowPriority:
+        cpuPriority = Ambiesoft::CPU_BELOWNORMAL;
+        ioPriority = Ambiesoft::IO_BELOWNORMAL;
+        break;
+    case QThread::LowestPriority:
+    case QThread::IdlePriority:
+        cpuPriority = Ambiesoft::CPU_IDLE;
+        ioPriority = Ambiesoft::IO_IDLE;
+        break;
+    default:
+        Q_ASSERT(false);
+        return false;
     }
 
-    return gNTFuncs.SetPriority(handle, priority, errors);
+    std::string errorstd;
+    bool ret = Ambiesoft::SetProirity(pid,
+                                      cpuPriority,
+                                      ioPriority,
+                                      errorstd);
+
+    errors << errorstd.c_str();
+    return ret;
 }
