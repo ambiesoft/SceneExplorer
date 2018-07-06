@@ -156,80 +156,50 @@ QString GetIllegalFilenameCharacters()
     return "/";
 }
 
-static inline int ioprio_set(int which, int who, int ioprio)
-{
-    return syscall(SYS_ioprio_set, which, who, ioprio);
-}
 
 
-
-enum {
-    IOPRIO_CLASS_NONE,
-    IOPRIO_CLASS_RT,
-    IOPRIO_CLASS_BE,
-    IOPRIO_CLASS_IDLE,
-};
-
-enum {
-    IOPRIO_WHO_PROCESS = 1,
-    IOPRIO_WHO_PGRP,
-    IOPRIO_WHO_USER,
-};
-
-#define IOPRIO_CLASS_SHIFT	(13)
-#define IOPRIO_PRIO_MASK	((1UL << IOPRIO_CLASS_SHIFT) - 1)
-
-#define IOPRIO_PRIO_CLASS(mask)	((mask) >> IOPRIO_CLASS_SHIFT)
-#define IOPRIO_PRIO_DATA(mask)	((mask) & IOPRIO_PRIO_MASK)
-#define IOPRIO_PRIO_VALUE(class, data)	(((class) << IOPRIO_CLASS_SHIFT) | data)
-
+#include "../../lsMisc/SetPrority.h"
 
 bool setProcessPriority(const qint64& pid, QThread::Priority priority, QStringList& errors)
 {
-   int prio = -1;
+   Ambiesoft::CPUPRIORITY cpuPriority = Ambiesoft::CPU_NONE;
+   Ambiesoft::IOPRIORITY ioPriority = Ambiesoft::IO_NONE;
+
    switch(priority)
    {
    case QThread::HighestPriority:
-       prio = -19;
+       cpuPriority = Ambiesoft::CPU_HIGH;
+       ioPriority = Ambiesoft::IO_HIGH;
        break;
    case QThread::HighPriority:
-       prio = -5;
+       cpuPriority = Ambiesoft::CPU_ABOVENORMAL;
+       ioPriority = Ambiesoft::IO_ABOVENORMAL;
        break;
    case QThread::NormalPriority:
-       prio=0;
+       cpuPriority = Ambiesoft::CPU_NORMAL;
+       ioPriority = Ambiesoft::IO_NORMAL;
        break;
    case QThread::LowPriority:
-       prio=5;
+       cpuPriority = Ambiesoft::CPU_BELOWNORMAL;
+       ioPriority = Ambiesoft::IO_BELOWNORMAL;
        break;
    case QThread::LowestPriority:
-       prio=19;
-       break;
    case QThread::IdlePriority:
-       prio=19;
+       cpuPriority = Ambiesoft::CPU_IDLE;
+       ioPriority = Ambiesoft::IO_IDLE;
        break;
    default:
        Q_ASSERT(false);
        return false;
    }
 
-   bool failed = false;
-   int err = setpriority(PRIO_PROCESS, pid, prio);
-   if(err != 0)
-   {
-       errors << QObject::tr("setpriority(%1) failed with %2.").arg(prio).arg(err);
-       failed = true;
-   }
+   std::string errorstd;
+   bool ret = Ambiesoft::SetProirity((void*)pid,
+                                     cpuPriority,
+                                     ioPriority,
+                                     errorstd);
+   if(!ret && !errorstd.empty())
+       errors << errorstd.c_str();
 
-   if(priority==QThread::IdlePriority)
-   {
-       // 7 is from https://github.com/karelzak/util-linux/blob/master/schedutils/ionice.c
-       int ioprio = IOPRIO_PRIO_VALUE(IOPRIO_CLASS_IDLE,7);
-       err = ioprio_set(IOPRIO_WHO_PROCESS, pid, ioprio);
-       if(err != 0)
-       {
-           failed = true;
-           errors << QObject::tr("ioprio_set(%1) failed with %2.").arg(ioprio).arg(err);
-       }
-   }
-   return !failed;
+   return ret;
 }
