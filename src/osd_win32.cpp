@@ -353,7 +353,7 @@ bool setProcessPriority(const qint64& pid, QThread::Priority priority, QStringLi
     }
 
     std::string errorstd;
-    bool ret = Ambiesoft::SetProirity(pid,
+    bool ret = Ambiesoft::SetProirity((void*)pid,
                                       cpuPriority,
                                       ioPriority,
                                       errorstd);

@@ -1,3 +1,6 @@
+2018/07/06 ver1.16
+Refine around SetPriority
+
 2018/07/06 ver1.15
 Newly inserted tag will be tagged when it's created from table context menu.
 

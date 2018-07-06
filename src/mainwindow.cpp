@@ -412,7 +412,9 @@ void MainWindow::clearAllPool(bool bAppendLog)
     BlockedBool btStop(&gStop, true, false);
     BlockedBool btPaused(&gPaused, false, gPaused);
 
-    do {
+    // Wait All tasks in pools
+    for(;;)
+    {
         if(pPoolFFmpeg_)
             pPoolFFmpeg_->clear();
         if(pPoolGetDir_)
@@ -420,20 +422,17 @@ void MainWindow::clearAllPool(bool bAppendLog)
         if(pPoolFFmpeg_)
             pPoolFFmpeg_->clear();
 
-        if(pPoolGetDir_ && pPoolGetDir_->activeThreadCount() != 0)
+        if( (pPoolGetDir_ && pPoolGetDir_->activeThreadCount() != 0) ||
+                (pPoolFFmpeg_ && pPoolFFmpeg_->activeThreadCount() != 0) )
+        {
+            // wait 1 sec
+            QThread::sleep(1);
             continue;
-        if(pPoolFFmpeg_ && pPoolFFmpeg_->activeThreadCount() != 0)
-            continue;
+        }
 
         break;
-    } while(true);
+    }
 
-//    while( !( (idGetDir_ == idGetDirDone_) &&
-//           (idFilter_ == idFilterDone_) &&
-//           (idFFMpeg_ == idFFMpegDone_) ) )
-//    {
-//        QApplication::processEvents();
-//    }
     ++gLoopId;
     idManager_->Clear();
 
@@ -447,8 +446,6 @@ void MainWindow::clearAllPool(bool bAppendLog)
 
     if(bAppendLog)
         insertLog(TaskKind::App, 0, tr("======== All tasks Cleared ========"));
-
-
 }
 
 
