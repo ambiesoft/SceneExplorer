@@ -908,6 +908,16 @@ void MainWindow::OnContextRemoveFromDatabase()
     if(msgbox.exec() != QMessageBox::Yes)
         return;
 
+    if(!bRemoveFromHardDisk && cbRemoveFromMedia.checkState()==Qt::Checked)
+    {
+        // Newly checked to remove from disk, ask again
+        if(!YesNo(this,
+              QString(tr("The file \"%1\" will be removed. Are you sure to continue?")).arg(movieFile)))
+        {
+            return;
+        }
+    }
+
     bRemoveFromHardDisk = cbRemoveFromMedia.checkState()==Qt::Checked;
     settings_.setValue(KEY_MESSAGEBOX_REMOVEFORMEXTERNALMEDIA, bRemoveFromHardDisk);
 
@@ -920,7 +930,7 @@ void MainWindow::OnContextRemoveFromDatabase()
         return;
     }
     gpSQL->DeleteEntryThumbFiles(dir,name,nullptr);
-    ddd
+
     if(!gpSQL->RemoveEntry(dir,name,&error))
     {
         Alert(this,

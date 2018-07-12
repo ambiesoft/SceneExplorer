@@ -1219,6 +1219,10 @@
         <source>Failed to open directory.</source>
         <translation>ディレクトリのオープンに失敗しました。</translation>
     </message>
+    <message>
+        <source>The file &quot;%1&quot; will be removed. Are you sure to continue?</source>
+        <translation>ファイル &quot;%1&quot; は削除されます。続行しますか？</translation>
+    </message>
 </context>
 <context>
     <name>Option</name>
@@ -1667,23 +1671,23 @@
     </message>
     <message>
         <source>setpriority(%1) failed with %2.</source>
-        <translation>setpriority(%1) が %2 で失敗しました。</translation>
+        <translation type="vanished">setpriority(%1) が %2 で失敗しました。</translation>
     </message>
     <message>
         <source>ioprio_set(%1) failed with %2.</source>
-        <translation>ioprio_set(%1) が %2 で失敗しました。</translation>
+        <translation type="vanished">ioprio_set(%1) が %2 で失敗しました。</translation>
     </message>
     <message>
         <source>SetPriorityClass(%1) failed with %2</source>
-        <translation>SetPriorityClass(%1) が %2 で失敗しました。</translation>
+        <translation type="vanished">SetPriorityClass(%1) が %2 で失敗しました。</translation>
     </message>
     <message>
         <source>NtSetInformationProcess(%1,%2) failed with %3.</source>
-        <translation>NtSetInformationProcess(%1,%2) が %3 で失敗しました。</translation>
+        <translation type="vanished">NtSetInformationProcess(%1,%2) が %3 で失敗しました。</translation>
     </message>
     <message>
         <source>Failed to OpenProcess(%1).</source>
-        <translation>OpenProcess(%1) に失敗しました。</translation>
+        <translation type="vanished">OpenProcess(%1) に失敗しました。</translation>
     </message>
     <message>
         <source>Failed to set style</source>

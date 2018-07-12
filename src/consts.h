@@ -25,7 +25,7 @@ namespace Consts
     const char APPDOMAIN[] = "ambiesoft.fam.cx";
     const char APPNAME[] = "SceneExplorer";
     const char APPNAME_DISPLAY[] = "Scene Explorer";
-    const char APPVERSION[] = "1.16";
+    const char APPVERSION[] = "1.17";
 
 
     const char KEY_STYLE[] = "style";
