@@ -193,13 +193,15 @@ bool setProcessPriority(const qint64& pid, QThread::Priority priority, QStringLi
        return false;
    }
 
-   std::string errorstd;
-   bool ret = Ambiesoft::SetProirity((void*)pid,
-                                     cpuPriority,
-                                     ioPriority,
-                                     errorstd);
-   if(!ret && !errorstd.empty())
-       errors << errorstd.c_str();
 
-   return ret;
+   int err = Ambiesoft::SetProirity(pid,
+                                    cpuPriority,
+                                    ioPriority,
+                                    Ambiesoft::MEMORY_NONE);
+
+
+   if(err != 0)
+       errors << "Error(" + QString::number(err) + ")";
+
+   return err==0;
 }

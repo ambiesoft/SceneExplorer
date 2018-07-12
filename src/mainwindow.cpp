@@ -920,6 +920,7 @@ void MainWindow::OnContextRemoveFromDatabase()
         return;
     }
     gpSQL->DeleteEntryThumbFiles(dir,name,nullptr);
+    ddd
     if(!gpSQL->RemoveEntry(dir,name,&error))
     {
         Alert(this,
