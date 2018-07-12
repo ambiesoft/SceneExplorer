@@ -116,6 +116,8 @@
 #include <QVector>
 #include <QWidget>
 
+#include <memory>
+#include <string>
 
 #endif // __cplusplus
 

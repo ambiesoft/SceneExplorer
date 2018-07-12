@@ -403,7 +403,8 @@ bool processCommandLine(QString* helpText)
         }
     }
 
-    gpCommandOption = new CommandOption(dbdir,doc);
+	Q_ASSERT(!gpCommandOption.get());
+	gpCommandOption.reset(new CommandOption(dbdir, doc));
 
     return true;
 }

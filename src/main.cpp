@@ -16,6 +16,7 @@
 //You should have received a copy of the GNU General Public License
 //along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+// Visual Leak Detector
 // #include <vld.h>
 
 #include <QApplication>
@@ -236,7 +237,7 @@ enum PROGRAM_RETURN {
     PR_LAUNCHTHISAPPFAILED,
 };
 
-CommandOption* gpCommandOption;
+std::unique_ptr<CommandOption> gpCommandOption;
 
 int main2(int argc, char *argv[], QApplication& theApp)
 {

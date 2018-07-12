@@ -28,4 +28,4 @@ volatile int gLoopId;
 
 volatile bool gReboot;
 
-QFont* gpMenuFont_ = nullptr;
+std::unique_ptr<QFont> gpMenuFont_;

@@ -177,7 +177,7 @@ private:
             return blocking_;
         }
     };
-    LimitManager* limitManager_ = nullptr;
+	std::unique_ptr<LimitManager> limitManager_;
 
     class IDManager
     {
@@ -263,7 +263,8 @@ private:
             }
             return false;
         }
-    }* idManager_ = nullptr;
+	};
+	std::unique_ptr<IDManager> idManager_;
     friend class IDManager;
 
     void checkTaskFinished();

@@ -39,7 +39,7 @@ MainWindow::MainWindow(QWidget *parent,
 {
     ui->setupUi(this);
     initLangMenus();
-    idManager_ = new IDManager(this);
+	idManager_.reset(new IDManager(this));
     DirectoryItem::parent_ = ui->directoryWidget;
     TagItem::parent_ = ui->listTag;
 

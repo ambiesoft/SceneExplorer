@@ -28,7 +28,7 @@ extern Sql* gpSQL;
 extern volatile int gLoopId;
 extern volatile bool gReboot;
 class CommandOption;
-extern CommandOption* gpCommandOption;
+extern std::unique_ptr<CommandOption> gpCommandOption;
 #if !defined(VERIFY)
 # if !defined(QT_NO_DEBUG)
 #  define VERIFY Q_ASSERT
@@ -63,7 +63,7 @@ enum SORTCOLUMNMY{
 	COUNT_SORTCOLUMN,
 };
 
-extern QFont* gpMenuFont_;
+extern std::unique_ptr<QFont> gpMenuFont_;
 
 #define STR_DIRECTORY_ENTRY_SIGNATURE "# SceneExplorer Directory Entries 2AA6B5CF-C02C-4E1C-B996-CE89F37BEB90"
 #define STR_TAG_ENTRY_SIGNATURE "# SceneExplorer Tag Entries D462D547-C22A-4D03-B0FC-87513E0EC9EF"

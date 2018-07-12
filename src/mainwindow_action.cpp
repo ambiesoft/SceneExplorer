@@ -177,7 +177,7 @@ void MainWindow::onMenuDirectory_AboutToShow()
             continue;
         bAdded = true;
         QString dir = di->text();
-        QAction* action = new QAction(dir);
+        QAction* action = new QAction(dir, this);
         action->setCheckable(true);
         action->setChecked(di->IsChecked());
         action->setData(i);
@@ -225,8 +225,12 @@ void MainWindow::onMenuTag_AboutToShow()
             continue;
         bAdded=true;
         QString text = ti->text();
-        QAction* action = new QAction(text);
-        action->setCheckable(true);
+		
+		// passing this makes |action| delete when |this| is deleting
+		// Deleting |action| manually cause stop above action, I believe.
+        QAction* action = new QAction(text, this);
+        
+		action->setCheckable(true);
         action->setChecked(ti->IsChecked());
         action->setData(i);
         connect(action, &QAction::triggered,
@@ -709,7 +713,7 @@ void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
         QMenu menuAddTags(tr("Ta&g..."), this);
         QList< QSharedPointer<QAction> > actTags;
         QList<TagItem*> tags;
-        pDoc_ && pDoc_->GetAllTags(tags,false);
+        pDoc_ && pDoc_->GetAllTags(tags, false);
         QSet<qint64> tagsCurrent;
         pDoc_ && pDoc_->GetTagsFromID(getSelectedID(), tagsCurrent);
         if(tags.isEmpty())
@@ -733,6 +737,7 @@ void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
                 if (tagsCurrent.contains(ti->tagid()))
                     act->setChecked(true);
                 actTags.append(act);
+				delete ti;
             }
         }
 		menuAddTags.addSeparator();
@@ -1162,7 +1167,7 @@ void MainWindow::onMenuStyle_AboutToShow()
     QString currentStyle = QApplication::style()->objectName();
     for(const QString& style : QStyleFactory::keys())
     {
-        QAction* pA = new QAction(style);
+        QAction* pA = new QAction(style, this);
         if(style.compare(currentStyle, Qt::CaseInsensitive)==0)
         {
             pA->setCheckable(true);

@@ -144,7 +144,9 @@ void MainWindow::CreateLimitManager()
             sepLimit_ = ui->mainToolBar->insertSeparator(ui->actionplaceHolder_Limit);
 
             int numofrows = settings_.valueInt(KEY_LIMIT_NUMBEROFROWS, 1000);
-            limitManager_ = new LimitManager(numofrows, cmbLimit_);
+
+			Q_ASSERT(!limitManager_);
+            limitManager_.reset(new LimitManager(numofrows, cmbLimit_));
         }
     }
     else
@@ -187,8 +189,9 @@ void MainWindow::CreateLimitManager()
             delete sepLimit_;
             sepLimit_ = nullptr;
 
-            delete limitManager_;
-            limitManager_ = nullptr;
+			// This is converted to std::unique_ptr
+            //delete limitManager_;
+            //limitManager_ = nullptr;
         }
     }
     ui->actionplaceHolder_Limit->setVisible(false);
@@ -275,7 +278,7 @@ bool MainWindow::LoadTags()
 
     // QList<QPair<qint64, QString> > tags;
     QList<TagItem*> tags;
-    if(pDoc_->GetAllTags(tags,true))
+    if(pDoc_->GetAllTags(tags, true))
     {
         // for(qint64& key : tags.keys())
         // for( const QPair<qint64,QString>& pair : tags)
@@ -287,7 +290,8 @@ bool MainWindow::LoadTags()
                 ti->setSelected(bSel);
                 ti->setCheckState(bCheck ? Qt::Checked : Qt::Unchecked);
             }
-            ui->listTag->addItem(ti);
+			
+			ui->listTag->addItem(ti);
         }
     }
     return true;
@@ -1841,8 +1845,8 @@ void MainWindow::on_action_FontTag_triggered()
 
 void MainWindow::setMenuFont(QFont& font)
 {
-    if(!gpMenuFont_)
-        gpMenuFont_ = new QFont();
+	if (!gpMenuFont_)
+		gpMenuFont_.reset(new QFont());
     *gpMenuFont_=font;
     ui->menuBar->setFont(font);
     for(QMenu* pM : ui->menuBar->findChildren<QMenu*>())
