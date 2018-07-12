@@ -21,7 +21,7 @@
 
 #include "consts.h"
 #include "globals.h"
-#include "waitcursor.h"
+#include "waitcursorq.h"
 #include "settings.h"
 #include "sql.h"
 #include "extension.h"

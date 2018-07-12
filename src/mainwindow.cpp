@@ -53,7 +53,7 @@
 #include "taskmodel.h"
 #include "tableitemdata.h"
 #include "settings.h"
-#include "waitcursor.h"
+#include "waitcursorq.h"
 // #include "taskfilter.h"
 #include "errorinfoexception.h"
 

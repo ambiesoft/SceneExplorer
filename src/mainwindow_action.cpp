@@ -29,7 +29,7 @@
 
 #include "consts.h"
 #include "globals.h"
-#include "waitcursor.h"
+#include "waitcursorq.h"
 #include "ffmpeg.h"
 #include "taskmodel.h"
 #include "tableitemdata.h"

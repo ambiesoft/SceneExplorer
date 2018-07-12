@@ -30,7 +30,6 @@ SOURCES += \
     settings.cpp \
     taskffmpeg.cpp \
     taskgetdir.cpp \
-    waitcursor.cpp \
     optiondialog.cpp \
     globals.cpp \
     sql.cpp \
@@ -67,7 +66,8 @@ SOURCES += \
     mainwindow_onpaste.cpp \
     mainwindow_onedit.cpp \
     mainwindow_onselectall.cpp \
-    mainwindow_working.cpp
+    mainwindow_working.cpp \
+    waitcursorq.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -76,7 +76,6 @@ HEADERS += \
     consts.h \
     taskffmpeg.h \
     taskgetdir.h \
-    waitcursor.h \
     optiondialog.h \
     globals.h \
     sql.h \
@@ -110,7 +109,9 @@ HEADERS += \
     renamedialog.h \
     osd.h \
 	../../profile/cpp/Profile/include/ambiesoft.profile.h \
-	../../lsMisc/SetPrority.h
+	../../lsMisc/SetPrority.h \
+    stdafx.h \
+    waitcursorq.h
 
 FORMS += \
         mainwindow.ui \
@@ -132,7 +133,8 @@ PRECOMPILED_HEADER = stable.h
 message($$QMAKESPEC)
 
 win32 {
-   SOURCES += \
+   HEADERS += ../../lsMisc/GetLastErrorString.h
+   SOURCES += ../../lsMisc/GetLastErrorString.cpp \
 			osd_win32.cpp \
 			../../lsMisc/SetPrority_win.cpp
 

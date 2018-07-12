@@ -29,6 +29,7 @@
 #include <QWidget>
 #include <QThread>
 
+#include "../../lsMisc/GetLastErrorString.h"
 #include "../../profile/cpp/Profile/include/ambiesoft.profile.h"
 #include "errorinfoexception.h"
 #include "helper.h"
@@ -322,42 +323,51 @@ QString GetIllegalFilenameCharacters()
 bool setProcessPriority(const qint64& pid, QThread::Priority priority, QStringList& errors)
 {
     Ambiesoft::CPUPRIORITY cpuPriority = Ambiesoft::CPU_NONE;
-    Ambiesoft::IOPRIORITY ioPriority = Ambiesoft::IO_NONE;
+	Ambiesoft::IOPRIORITY ioPriority = Ambiesoft::IO_NONE;
+	Ambiesoft::MEMORYPRIORITY memPriority = Ambiesoft::MEMORY_NONE;
 
     switch (priority)
     {
     case QThread::HighestPriority:
         cpuPriority = Ambiesoft::CPU_HIGH;
         ioPriority = Ambiesoft::IO_HIGH;
+        memPriority = Ambiesoft::MEMORY_HIGH;
         break;
     case QThread::HighPriority:
         cpuPriority = Ambiesoft::CPU_ABOVENORMAL;
         ioPriority = Ambiesoft::IO_ABOVENORMAL;
+		memPriority = Ambiesoft::MEMORY_ABOVENORMAL;
         break;
     case QThread::NormalPriority:
         cpuPriority = Ambiesoft::CPU_NORMAL;
         ioPriority = Ambiesoft::IO_NORMAL;
+		memPriority = Ambiesoft::MEMORY_NORMAL;
         break;
     case QThread::LowPriority:
         cpuPriority = Ambiesoft::CPU_BELOWNORMAL;
         ioPriority = Ambiesoft::IO_BELOWNORMAL;
+		memPriority = Ambiesoft::MEMORY_BELOWNORMAL;
         break;
     case QThread::LowestPriority:
     case QThread::IdlePriority:
         cpuPriority = Ambiesoft::CPU_IDLE;
         ioPriority = Ambiesoft::IO_IDLE;
+		memPriority = Ambiesoft::MEMORY_IDLE;
         break;
     default:
         Q_ASSERT(false);
         return false;
     }
 
-    std::string errorstd;
-    bool ret = Ambiesoft::SetProirity((void*)pid,
-                                      cpuPriority,
-                                      ioPriority,
-                                      errorstd);
+	int ret = Ambiesoft::SetProirity(pid,
+		cpuPriority,
+		ioPriority,
+		memPriority);
 
-    errors << errorstd.c_str();
-    return ret;
+	if (ret != 0)
+	{
+        std::wstring lastError = Ambiesoft::GetLastErrorString(static_cast<DWORD>(ret));
+        errors << QString::fromStdWString(lastError);
+	}
+    return ret==0;
 }
