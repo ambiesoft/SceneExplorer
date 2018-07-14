@@ -23,23 +23,19 @@
 class BlockedBool
 {
     volatile bool* target_;
-    bool d_;
+    bool exitValue_;
 public:
-    BlockedBool(volatile bool* target, bool c, volatile bool d) :
+    BlockedBool(volatile bool* target, bool initialValue, volatile bool exitValue) :
         target_(target),
-        d_(d)
+        exitValue_(exitValue)
     {
-        *target_ = c;
+        *target_ = initialValue;
     }
     BlockedBool(volatile bool* target) :
-        target_(target),
-        d_(false)
-    {
-        *target_ = true;
-    }
+        BlockedBool(target, true, false){}
     ~BlockedBool()
     {
-        *target_ = d_;
+        *target_ = exitValue_;
     }
 };
 

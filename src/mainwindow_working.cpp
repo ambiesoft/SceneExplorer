@@ -19,6 +19,54 @@
 #include "ui_mainwindow.h"
 #include "mainwindow.h"
 
+void MainWindow::showEvent( QShowEvent* event )
+{
+    QMainWindow::showEvent( event );
+
+    if(initShown_)
+        return;
+
+
+
+    BlockedBool bbInit(&initShown_, false, true);
+
+
+    ui->directoryWidget->setMaximumSize(10000,10000);
+    ui->txtLog->setMaximumSize(10000,10000);
+    ui->listTask->setMaximumSize(10000,10000);
+    ui->listTag->setMaximumSize(10000,10000);
+
+    itemChangedCommon();
+    tableSortParameterChanged(sortManager_.GetCurrentSort(), sortManager_.GetCurrentRev());  // tableModel_->GetSortColumn(), tableModel_->GetSortReverse());
+
+
+    OnTableViewScrollChanged(-1);
+
+    // Alert(this, QString("ScrollIndex:%1-%2").arg(pDoc_->modeIndexRow()).arg(pDoc_->modeIndexColumn()));
+    int row = 0;
+    int column = 0;
+    if(pDoc_ && pDoc_->getLastPos(row,column))
+    {
+        QModelIndex mi = proxyModel_->index(row,column);
+        // Alert(this, QString("ScrollIndex:%1-%2").arg(mi.row()).arg(mi.column()));
+
+
+		// ui->tableView->selectionModel()->select(mi,	QItemSelectionModel::ClearAndSelect);
+		ui->tableView->selectionModel()->setCurrentIndex(mi, QItemSelectionModel::ClearAndSelect);
+		
+		proxyModel_->ensureIndex(mi);
+        QApplication::processEvents();
+        ui->tableView->scrollTo(mi);
+
+        OnTableViewScrollChanged(-1);
+
+
+        proxyModel_->ensureIndex(mi);
+        QApplication::processEvents();
+        ui->tableView->scrollTo(mi);
+    }
+}
+
 void MainWindow::OnTableViewScrollChanged(int pos)
 {
     QModelIndex indexTop = ui->tableView->indexAt(ui->tableView->rect().topLeft());

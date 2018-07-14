@@ -32,41 +32,7 @@
 
 using namespace Consts;
 
-void MainWindow::showEvent( QShowEvent* event )
-{
-    QMainWindow::showEvent( event );
 
-    if(initShown)
-        return;
-    initShown=true;
-
-    ui->directoryWidget->setMaximumSize(10000,10000);
-    ui->txtLog->setMaximumSize(10000,10000);
-    ui->listTask->setMaximumSize(10000,10000);
-    ui->listTag->setMaximumSize(10000,10000);
-
-    itemChangedCommon();
-    tableSortParameterChanged(sortManager_.GetCurrentSort(), sortManager_.GetCurrentRev());  // tableModel_->GetSortColumn(), tableModel_->GetSortReverse());
-
-
-    OnTableViewScrollChanged(-1);
-
-    // Alert(this, QString("ScrollIndex:%1-%2").arg(pDoc_->modeIndexRow()).arg(pDoc_->modeIndexColumn()));
-    int row = 0;
-    int column = 0;
-    if(pDoc_ && pDoc_->getLastPos(row,column))
-    {
-        QModelIndex mi = proxyModel_->index(row,column);
-        // Alert(this, QString("ScrollIndex:%1-%2").arg(mi.row()).arg(mi.column()));
-
-
-        ui->tableView->selectionModel()->select(mi,
-                                                QItemSelectionModel::ClearAndSelect);
-        proxyModel_->ensureIndex(mi);
-        QApplication::processEvents();
-        ui->tableView->scrollTo(mi);
-    }
-}
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
     QMainWindow::resizeEvent(event);

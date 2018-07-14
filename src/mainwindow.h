@@ -273,7 +273,7 @@ private:
     int optionThreadcountThumbnail_ = 2;
     int optionThumbCount_ = 3; // default is 3
     QString optionThumbFormat_ = "jpg";
-    bool initShown=false;
+    bool initShown_=false;
 	bool IsClosed() const {
 		return closed_;
 	}
