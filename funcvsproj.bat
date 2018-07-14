@@ -49,6 +49,12 @@ if [%SOURCEDIR%] == [] (
   goto :end
 )
 
+set QTBIN=%QTROOT%\%VSQTVER%\%VSQTTOOL%\bin
+if not exist %QTBIN%\ (
+  echo %QTBINT% not found or not a directory
+  goto :end
+)
+set PATH=%QTBIN%;%PATH%
 
 
 
@@ -62,6 +68,10 @@ if not exist %PRO% (
   goto :end
 )
 
+if exist %SOLUTION% (
+  echo "%SOLUTION% already exists, start launching it...
+  goto :launchsln
+)
 
 %DEL% %SOLUTION%
 if exist %SOLUTION% (
@@ -93,13 +103,14 @@ if not exist %VCVARSBAT% (
   goto :end
 )
 
-set QTBIN=%QTROOT%\%VSQTVER%\%VSQTTOOL%\bin
-set QMAKE=%QTBIN%\qmake.exe
 
+
+set QMAKE=%QTBIN%\qmake.exe
 if not exist %QMAKE% (
   echo %QMAKE% not found.
   goto :end
 )
+
 
 call %VCVARSBAT% %VCVARSBATARG%
 cd %~dp0
@@ -108,10 +119,12 @@ call %QMAKE% -tp vc %PRO%
 cd %~dp0
 
 echo "==== Creating Visual Studio project successful ===="
-
-set PATH=%QTBIN%;%PATH%
 echo launching %DEVENV% %VCXPROJ%
 start "" %DEVENV% %VCXPROJ%
+exit /b
+
+:launchsln
+start "" %DEVENV% %SOLUTION%
 exit /b
 
 
