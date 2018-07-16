@@ -31,9 +31,14 @@
 
 #include "../../lsMisc/GetLastErrorString.h"
 #include "../../profile/cpp/Profile/include/ambiesoft.profile.h"
+#include "../../lsMisc/stdosd/SetPrority.h"
+
 #include "errorinfoexception.h"
 #include "helper.h"
 #include "osd.h"
+
+using namespace Ambiesoft::stdosd::Process;
+using namespace Ambiesoft;
 
 // https://stackoverflow.com/a/3546503
 bool showInGraphicalShell(QWidget *parent, const QString &pathIn)
@@ -148,7 +153,7 @@ QString getInifile(bool& bExit)
     QFileInfo trfi(QCoreApplication::applicationFilePath());
     std::string folini = pathCombine(trfi.absolutePath(), "folder.ini").toStdString();
     int intval = -1;
-    Ambiesoft::Profile::GetInt("Main", "PathType", -1, intval, folini);
+    Profile::GetInt("Main", "PathType", -1, intval, folini);
 
     QString dir;
     switch (intval)
@@ -169,7 +174,7 @@ QString getInifile(bool& bExit)
     case 3:
     {
         std::string t;
-        Ambiesoft::Profile::GetString("Main", "folder", "", t, folini);
+        Profile::GetString("Main", "folder", "", t, folini);
         dir = t.c_str();
         if(dir.isEmpty())
         {
@@ -319,54 +324,54 @@ QString GetIllegalFilenameCharacters()
 
 
 
-#include "../../lsMisc/SetPrority.h"
+
 bool setProcessPriority(const qint64& pid, QThread::Priority priority, QStringList& errors)
 {
-    Ambiesoft::CPUPRIORITY cpuPriority = Ambiesoft::CPU_NONE;
-	Ambiesoft::IOPRIORITY ioPriority = Ambiesoft::IO_NONE;
-	Ambiesoft::MEMORYPRIORITY memPriority = Ambiesoft::MEMORY_NONE;
+    CPUPRIORITY cpuPriority = CPU_NONE;
+    IOPRIORITY ioPriority = IO_NONE;
+    MEMORYPRIORITY memPriority = MEMORY_NONE;
 
     switch (priority)
     {
     case QThread::HighestPriority:
-        cpuPriority = Ambiesoft::CPU_HIGH;
-        ioPriority = Ambiesoft::IO_HIGH;
-        memPriority = Ambiesoft::MEMORY_HIGH;
+        cpuPriority = CPU_HIGH;
+        ioPriority = IO_HIGH;
+        memPriority = MEMORY_HIGH;
         break;
     case QThread::HighPriority:
-        cpuPriority = Ambiesoft::CPU_ABOVENORMAL;
-        ioPriority = Ambiesoft::IO_ABOVENORMAL;
-		memPriority = Ambiesoft::MEMORY_ABOVENORMAL;
+        cpuPriority = CPU_ABOVENORMAL;
+        ioPriority = IO_ABOVENORMAL;
+        memPriority = MEMORY_ABOVENORMAL;
         break;
     case QThread::NormalPriority:
-        cpuPriority = Ambiesoft::CPU_NORMAL;
-        ioPriority = Ambiesoft::IO_NORMAL;
-		memPriority = Ambiesoft::MEMORY_NORMAL;
+        cpuPriority = CPU_NORMAL;
+        ioPriority = IO_NORMAL;
+        memPriority = MEMORY_NORMAL;
         break;
     case QThread::LowPriority:
-        cpuPriority = Ambiesoft::CPU_BELOWNORMAL;
-        ioPriority = Ambiesoft::IO_BELOWNORMAL;
-		memPriority = Ambiesoft::MEMORY_BELOWNORMAL;
+        cpuPriority = CPU_BELOWNORMAL;
+        ioPriority = IO_BELOWNORMAL;
+        memPriority = MEMORY_BELOWNORMAL;
         break;
     case QThread::LowestPriority:
     case QThread::IdlePriority:
-        cpuPriority = Ambiesoft::CPU_IDLE;
-        ioPriority = Ambiesoft::IO_IDLE;
-		memPriority = Ambiesoft::MEMORY_IDLE;
+        cpuPriority = CPU_IDLE;
+        ioPriority = IO_IDLE;
+        memPriority = MEMORY_IDLE;
         break;
     default:
         Q_ASSERT(false);
         return false;
     }
 
-	int ret = Ambiesoft::SetProirity(pid,
+    int ret = SetProirity(pid,
 		cpuPriority,
 		ioPriority,
 		memPriority);
 
 	if (ret != 0)
 	{
-        std::wstring lastError = Ambiesoft::GetLastErrorString(static_cast<DWORD>(ret));
+        std::wstring lastError = GetLastErrorString(static_cast<DWORD>(ret));
         errors << QString::fromStdWString(lastError);
 	}
     return ret==0;

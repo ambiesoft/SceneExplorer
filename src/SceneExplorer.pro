@@ -109,7 +109,7 @@ HEADERS += \
     renamedialog.h \
     osd.h \
 	../../profile/cpp/Profile/include/ambiesoft.profile.h \
-	../../lsMisc/SetPrority.h \
+	../../lsMisc/stdosd/SetPrority.h \
     stdafx.h \
     waitcursorq.h
 
@@ -136,7 +136,7 @@ win32 {
    HEADERS += ../../lsMisc/GetLastErrorString.h
    SOURCES += ../../lsMisc/GetLastErrorString.cpp \
 			osd_win32.cpp \
-			../../lsMisc/SetPrority_win.cpp
+			../../lsMisc/stdosd/SetPrority_win.cpp
 
 #    win32-g++ {
 #        LIBS += -lOle32
@@ -148,7 +148,7 @@ win32 {
 linux-g++ {
     SOURCES += \
 			osd_linux.cpp \
-			../../lsMisc/SetPrority_linux.cpp
+			../../lsMisc/stdosd/SetPrority_linux.cpp
 }
 
 
