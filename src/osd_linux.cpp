@@ -33,9 +33,13 @@
 #include <QDir>
 #include <QDateTime>
 
-#include "errorinfoexception.h"
+#include "../../lsMisc/stdosd/SetPrority.h"
 
+#include "errorinfoexception.h"
 #include "osd.h"
+
+using namespace Ambiesoft::stdosd::Process;
+
 
 // https://stackoverflow.com/a/3546503
 bool showInGraphicalShell(QWidget *parent, const QString &pathIn)
@@ -158,35 +162,35 @@ QString GetIllegalFilenameCharacters()
 
 
 
-#include "../../lsMisc/SetPrority.h"
+
 
 bool setProcessPriority(const qint64& pid, QThread::Priority priority, QStringList& errors)
 {
-   Ambiesoft::CPUPRIORITY cpuPriority = Ambiesoft::CPU_NONE;
-   Ambiesoft::IOPRIORITY ioPriority = Ambiesoft::IO_NONE;
+   CPUPRIORITY cpuPriority = CPU_NONE;
+   IOPRIORITY ioPriority = IO_NONE;
 
    switch(priority)
    {
    case QThread::HighestPriority:
-       cpuPriority = Ambiesoft::CPU_HIGH;
-       ioPriority = Ambiesoft::IO_HIGH;
+       cpuPriority = CPU_HIGH;
+       ioPriority = IO_HIGH;
        break;
    case QThread::HighPriority:
-       cpuPriority = Ambiesoft::CPU_ABOVENORMAL;
-       ioPriority = Ambiesoft::IO_ABOVENORMAL;
+       cpuPriority = CPU_ABOVENORMAL;
+       ioPriority = IO_ABOVENORMAL;
        break;
    case QThread::NormalPriority:
-       cpuPriority = Ambiesoft::CPU_NORMAL;
-       ioPriority = Ambiesoft::IO_NORMAL;
+       cpuPriority = CPU_NORMAL;
+       ioPriority = IO_NORMAL;
        break;
    case QThread::LowPriority:
-       cpuPriority = Ambiesoft::CPU_BELOWNORMAL;
-       ioPriority = Ambiesoft::IO_BELOWNORMAL;
+       cpuPriority = CPU_BELOWNORMAL;
+       ioPriority = IO_BELOWNORMAL;
        break;
    case QThread::LowestPriority:
    case QThread::IdlePriority:
-       cpuPriority = Ambiesoft::CPU_IDLE;
-       ioPriority = Ambiesoft::IO_IDLE;
+       cpuPriority = CPU_IDLE;
+       ioPriority = IO_IDLE;
        break;
    default:
        Q_ASSERT(false);
@@ -194,10 +198,10 @@ bool setProcessPriority(const qint64& pid, QThread::Priority priority, QStringLi
    }
 
 
-   int err = Ambiesoft::SetProirity(pid,
-                                    cpuPriority,
-                                    ioPriority,
-                                    Ambiesoft::MEMORY_NONE);
+   int err = SetProirity(pid,
+                        cpuPriority,
+                        ioPriority,
+                        MEMORY_NONE);
 
 
    if(err != 0)
