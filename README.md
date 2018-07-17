@@ -73,9 +73,10 @@ See *Help -> About Documents* to confirm which files are read.
 ### Windows
 Get the source and build tools by running following command.
 ```
-git clone https://github.com/ambiesoft/distSolution
+git clone https://github.com/ambiesoft/distSolution.git
 git clone https://github.com/ambiesoft/profile.git
-git clone https://github.com/ambiesoft/SceneExplorer
+git clone https://github.com/ambiesoft/lsMisc.git
+git clone https://github.com/ambiesoft/SceneExplorer.git
 ```
 
 Copy and rename *prepare.bat.sample* (in directory *SceneExplorer*) to *prepare.bat* and edit it to set correct Environment values like as follows.
@@ -96,7 +97,9 @@ Run *build.bat*. This will build SceneExplorer into *C:\Linkout\SceneExplorer*.
 ### Linux
 Get the source and build tools by running following command.
 ```
-git clone https://github.com/ambiesoft/SceneExplorer
+git clone https://github.com/ambiesoft/profile.git
+git clone https://github.com/ambiesoft/lsMisc.git
+git clone https://github.com/ambiesoft/SceneExplorer.git
 ```
 
 Build SceneExplorer as follows.

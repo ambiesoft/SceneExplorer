@@ -74,9 +74,10 @@ start "" %~dp0SceneExplorer.exe %~dp0MyApp.scexd
 ### Windows
 以下のコマンドでソースとビルドツールを取得します。
 ```
-git clone https://github.com/ambiesoft/distSolution
+git clone https://github.com/ambiesoft/distSolution.git
 git clone https://github.com/ambiesoft/profile.git
-git clone https://github.com/ambiesoft/SceneExplorer
+git clone https://github.com/ambiesoft/lsMisc.git
+git clone https://github.com/ambiesoft/SceneExplorer.git
 ```
 
 *prepare.bat.sample* をコピーしてからリネームして、*prepare.bat*に変えます。その後このファイルを編集して自分の環境に合わせます。例として以下のようになります。
@@ -97,7 +98,9 @@ build.batを実行します。*C:\Linkout\SceneExplorer* にビルドされま�
 ### Linux
 以下のコマンドでソースとビルドツールを取得します。
 ```
-git clone https://github.com/ambiesoft/SceneExplorer
+git clone https://github.com/ambiesoft/profile.git
+git clone https://github.com/ambiesoft/lsMisc.git
+git clone https://github.com/ambiesoft/SceneExplorer.git
 ```
 
 以下のコマンドでビルドします。
