@@ -104,6 +104,7 @@ git clone https://github.com/ambiesoft/SceneExplorer.git
 
 Build SceneExplorer as follows.
 ```
+$ cd SceneExplorer
 $ mkdir build
 $ cd build
 $ qmake ../src/SceneExplorer.pro
