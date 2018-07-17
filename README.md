@@ -79,7 +79,7 @@ git clone https://github.com/ambiesoft/lsMisc.git
 git clone https://github.com/ambiesoft/SceneExplorer.git
 ```
 
-Copy and rename *prepare.bat.sample* (in directory *SceneExplorer*) to *prepare.bat* and edit it to set correct Environment values like as follows.
+Copy *prepare.bat.sample* (in directory *SceneExplorer*) and rename it to *prepare.bat* and edit it to set correct Environment values like as follows.
 ```
 set PYTHONEXE=C:\local\python3.5\python.exe
 set QTROOT=C:\local\Qt
@@ -102,7 +102,7 @@ git clone https://github.com/ambiesoft/lsMisc.git
 git clone https://github.com/ambiesoft/SceneExplorer.git
 ```
 
-Build SceneExplorer as follows.
+Build SceneExplorer with following commands.
 ```
 $ cd SceneExplorer
 $ mkdir build
@@ -111,6 +111,10 @@ $ qmake ../src/SceneExplorer.pro
 $ make
 ```
 
+Run
+```
+
+```
 
 
 
