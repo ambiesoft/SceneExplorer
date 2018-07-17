@@ -105,6 +105,7 @@ git clone https://github.com/ambiesoft/SceneExplorer.git
 
 以下のコマンドでビルドします。
 ```
+$ cd SceneExplorer
 $ mkdir build
 $ cd build
 $ qmake ../src/SceneExplorer.pro
