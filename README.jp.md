@@ -112,6 +112,11 @@ $ qmake ../src/SceneExplorer.pro
 $ make
 ```
 
+実行
+```
+./SceneExplorer
+```
+
 
 ## サポート
 If you have troubles, post *Issue* on <https://github.com/ambiesoft/SceneExplorer/issues>.
