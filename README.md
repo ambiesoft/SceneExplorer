@@ -113,7 +113,7 @@ $ make
 
 Run
 ```
-
+./SceneExplorer
 ```
 
 
