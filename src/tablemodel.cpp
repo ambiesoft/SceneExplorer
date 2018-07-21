@@ -68,7 +68,8 @@ void TableModel:: AppendData(TableItemDataPointer pItemData, const bool enableUp
     parent_->setSpan(newRowInfo,0,1,columnCountImage_);
 	
 	// parent_->resizeRowsToContents();
-    
+
+
 	if(!initColumnWidth_)
     {
         initColumnWidth_=true;
@@ -78,9 +79,10 @@ void TableModel:: AppendData(TableItemDataPointer pItemData, const bool enableUp
         }
     }
 
-    // parent_->setRowHeight(newRowImage, THUMB_HEIGHT);
 
     emit itemCountChanged();
+
+    parent_->setRowHeight(newRowImage, THUMB_HEIGHT);
 }
 void TableModel::ResetData(const QList<TableItemDataPointer>& all)
 {
