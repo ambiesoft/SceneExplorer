@@ -29,6 +29,8 @@
 #include <QRegExp>
 #include <QDebug>
 
+#include "../../lsMisc/stdQt/stdQt.h"
+
 #include "consts.h"
 #include "helper.h"
 #include "globals.h"

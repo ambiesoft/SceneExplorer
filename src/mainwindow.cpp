@@ -45,6 +45,7 @@
 #include <QFontDialog>
 #include <QInputDialog>
 
+#include "../../lsMisc/stdQt/stdQt.h"
 
 #include "taskgetdir.h"
 #include "taskffmpeg.h"

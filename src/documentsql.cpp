@@ -23,6 +23,8 @@
 #include <QDebug>
 #include <QDateTime>
 
+#include "../../lsMisc/stdQt/stdQt.h"
+
 #include "sqlcommon.h"
 #include "tableitemdata.h"
 #include "helper.h"

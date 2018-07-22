@@ -31,6 +31,8 @@
 #include <QUuid>
 #include <QDirIterator>
 
+#include "../../lsMisc/stdQt/stdQt.h"
+
 #include "tableitemdata.h"
 #include "helper.h"
 #include "globals.h"

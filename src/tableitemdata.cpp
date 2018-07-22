@@ -22,6 +22,8 @@
 #include <QMap>
 #include <QVariant>
 
+#include "../../lsMisc/stdQt/stdQt.h"
+
 #include "helper.h"
 #include "tableitemdata.h"
 

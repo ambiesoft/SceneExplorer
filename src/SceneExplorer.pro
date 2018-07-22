@@ -67,7 +67,8 @@ SOURCES += \
     mainwindow_onedit.cpp \
     mainwindow_onselectall.cpp \
     mainwindow_working.cpp \
-    waitcursorq.cpp
+    waitcursorq.cpp \
+    ../../lsMisc/stdQt/stdQt.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -111,7 +112,8 @@ HEADERS += \
 	../../profile/cpp/Profile/include/ambiesoft.profile.h \
 	../../lsMisc/stdosd/SetPrority.h \
     stdafx.h \
-    waitcursorq.h
+    waitcursorq.h \
+    ../../lsMisc/stdQt/stdQt.h
 
 FORMS += \
         mainwindow.ui \

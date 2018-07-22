@@ -27,6 +27,8 @@
 #include <QColor>
 #include <QStyleFactory>
 
+#include "../../lsMisc/stdQt/stdQt.h"
+
 #include "consts.h"
 #include "globals.h"
 #include "waitcursorq.h"

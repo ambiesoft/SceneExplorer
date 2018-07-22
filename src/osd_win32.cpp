@@ -29,6 +29,8 @@
 #include <QWidget>
 #include <QThread>
 
+#include "../../lsMisc/stdQt/stdQt.h"
+
 #include "../../lsMisc/GetLastErrorString.h"
 #include "../../profile/cpp/Profile/include/ambiesoft.profile.h"
 #include "../../lsMisc/stdosd/SetPrority.h"

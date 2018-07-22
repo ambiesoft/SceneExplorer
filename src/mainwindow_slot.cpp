@@ -19,6 +19,8 @@
 #include <QFileInfo>
 #include <QDateTime>
 
+#include "../../lsMisc/stdQt/stdQt.h"
+
 #include "taskmodel.h"
 #include "tableitemdata.h"
 
