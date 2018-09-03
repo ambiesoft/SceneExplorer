@@ -34,6 +34,8 @@
 #include <QLibraryInfo>
 #include <QCommandLineParser>
 
+#include "../../lsMisc/stdQt/stdQt.h"
+
 #include "consts.h"
 #include "globals.h"
 #include "sql.h"
