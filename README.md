@@ -16,7 +16,7 @@ This software is freeware. See LICENSE.
 Windows7 or above and Linux, maybe MacOS too.
 
 ## Install
-Installation is not required, extract an arhive file.
+Installation is not required, extract an archive file.
 
 
 ## FFmpeg and FFprobe
@@ -36,17 +36,17 @@ You can add a folder from **[Folder]->[Add Folder]**.
 From the folder pane, choose a folder to view its thumbnails. Clicking **[All]** shows all thumbnails and **[Missing]** shows thumbnails which original video files are missing.
 
 ### Adding Tags
-Tags provide a useful way to group related videos together and tell what a video is about. Tags also make it easier to find your content. Tags are similar to, but more specific than, directories. The use of tags is completely optional.
+Tags provide a useful way to group related videos together and tell what a video is about. Tags also make it easier to find your content. Tags are similar to but more specific than, directories. The use of tags is completely optional.
 
 You can create a new tag from **[Tag]->[Add New Tag...]** and it will be shown on Tag pane. If you select Tag,  tagged videoes will be shown.
 
 ## Files and Directories
 There are 3 types of path SceneExplorer uses.
 ### Database directory
-The image files of thumbnails are stored under DatabaseDirectory/thumbs/ and its information is stored in database DatabaseDirectory/db.sqlite3. DatabaseDirectory can be configured by Preference Option or by commandline option "-d". Default location is *C:\Users\<Username>\AppData\Local\Ambiesoft\SceneExplorer*.
+The image files of thumbnails are stored under DatabaseDirectory/thumbs/ and its information is stored in database DatabaseDirectory/db.sqlite3. DatabaseDirectory can be configured by Preference Option or by command-line option "-d". Default location is *C:\Users\<Username>\AppData\Local\Ambiesoft\SceneExplorer*.
 
 ### Preference file
-This saves Application configurations modified by a user through Option Dialogs. You can change the location by using FolderConfig.exe". Default location is *C:\Users\<Username>\AppData\Roaming\Ambiesoft\SceneExplorer\SceneExplorer.ini*.
+This file stores app configurations modified by a user through Option Dialogs. You can change the location by using FolderConfig.exe". Default location is *C:\Users\<Username>\AppData\Roaming\Ambiesoft\SceneExplorer\SceneExplorer.ini*.
 
 ### Document file
 This file holds Folders which user assigns. If you supply filename in command-line, the file will open. Default location is *C:\Users\<Username>\Documents\SceneExplorer\default.scexd*.
@@ -69,9 +69,9 @@ See *Help -> About Documents* to confirm which files are read.
 2. Remove those files and directories. 
 
 
-## Buid
+## Build
 ### Windows
-Get the source and build tools by running following command.
+Get the source and build tools by running the following command.
 ```
 git clone https://github.com/ambiesoft/distSolution.git
 git clone https://github.com/ambiesoft/profile.git
@@ -79,7 +79,7 @@ git clone https://github.com/ambiesoft/lsMisc.git
 git clone https://github.com/ambiesoft/SceneExplorer.git
 ```
 
-Copy *prepare.bat.sample* (in directory *SceneExplorer*) and rename it to *prepare.bat* and edit it to set correct Environment values like as follows.
+Copy *prepare.bat.sample* (in the directory *SceneExplorer*) and rename it to *prepare.bat* and edit it to set correct Environment values like as follows.
 ```
 set PYTHONEXE=C:\local\python3.5\python.exe
 set QTROOT=C:\local\Qt
@@ -95,7 +95,7 @@ set DISTDIR=C:\Linkout\SceneExplorer
 Run *build.bat*. This will build SceneExplorer into *C:\Linkout\SceneExplorer*.
 
 ### Linux
-Get the source and build tools by running following command.
+Get the source and build tools by running the following command.
 ```
 git clone https://github.com/ambiesoft/profile.git
 git clone https://github.com/ambiesoft/lsMisc.git
@@ -123,7 +123,7 @@ Run
 If you have troubles, post *Issue* on <https://github.com/ambiesoft/SceneExplorer/issues>.
 
 ## Donate
-Support Ambiesoft by making donation. See <http://ambiesoft.fam.cx/donate/>.
+Support Ambiesoft by making a donation. See <http://ambiesoft.fam.cx/donate/>.
 
 ## Contact
 - Author: Ambiesoft trueff
