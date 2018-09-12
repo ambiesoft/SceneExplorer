@@ -497,7 +497,7 @@ void MainWindow::onTaskStarted()
 {
     // statusBar()->palette().setColor(QPalette::Background, QColor("palegreen"));
 
-    statusBar()->setStyleSheet("background-color : red; color : white;");
+    statusBar()->setStyleSheet("background-color : brown; color : white;");
 }
 void MainWindow::onTaskEnded()
 {
