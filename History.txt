@@ -1,3 +1,6 @@
+2018/09/13 ver1.18
+Status bar becomes brown when task is running
+
 2018/07/13 ver1.17
 Fix some leaks
 

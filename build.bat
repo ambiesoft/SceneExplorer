@@ -49,7 +49,7 @@ if not exist %QTROOT%\%QTVERSION%\%QTVERSIONTOOLS%\ (
 %FFCEXE% /t12 "%FFMPEGSOURCEDIR%" /to:%DISTDIR%\
 set QTPROJECTFILE=%SOURCEDIR%\%PRONAME%.pro
 @echo on
-%PYTHONEXE% ../distSolution/distqt.py %QTPROJECTFILE% -qtroot %QTROOT% -qtversion %QTVERSION% -qtversiontools %QTVERSIONTOOLS% -distfile dist.json -make %MAKE%
+%PYTHONEXE% ../distSolution/distqt.py %QTPROJECTFILE% -distdir "%DISTDIR%" -qtroot %QTROOT% -qtversion %QTVERSION% -qtversiontools %QTVERSIONTOOLS% -distfile dist.json -make %MAKE%
 @echo off
 if ERRORLEVEL 1 (
   goto :error

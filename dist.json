@@ -1,7 +1,12 @@
 {
     "name": "SceneExplorer",
-
-
+	"builtexes": [
+		"release/SceneExplorer.exe"
+	],
+	"copyplugins": [
+		"sqldrivers/qsqlite.dll",
+		"imageformats/qjpeg.dll"
+	],
     "ShouldBeFiles": [
         "Ambiesoft.FolderConfig.dll",
         "Ambiesoft.FolderConfigHelper.dll",
