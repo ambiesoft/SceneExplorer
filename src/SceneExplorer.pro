@@ -43,7 +43,6 @@ SOURCES += \
     directoryentry.cpp \
     directoryitem.cpp \
     findcombobox.cpp \
-    runguard.cpp \
     errorinfoexception.cpp \
     blockedbool.cpp \
     extension.cpp \
@@ -68,7 +67,8 @@ SOURCES += \
     mainwindow_onselectall.cpp \
     mainwindow_working.cpp \
     waitcursorq.cpp \
-    ../../lsMisc/stdQt/stdQt.cpp
+    ../../lsMisc/stdQt/stdQt.cpp \
+    ../../lsMisc/stdQt/runguard.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -88,7 +88,6 @@ HEADERS += \
     directoryentry.h \
     directoryitem.h \
     findcombobox.h \
-    runguard.h \
     errorinfoexception.h \
     blockedbool.h \
     extension.h \
@@ -113,7 +112,8 @@ HEADERS += \
 	../../lsMisc/stdosd/SetPrority.h \
     stdafx.h \
     waitcursorq.h \
-    ../../lsMisc/stdQt/stdQt.h
+    ../../lsMisc/stdQt/stdQt.h \
+    ../../lsMisc/stdQt/runguard.h
 
 FORMS += \
         mainwindow.ui \

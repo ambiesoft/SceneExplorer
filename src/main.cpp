@@ -35,12 +35,12 @@
 #include <QCommandLineParser>
 
 #include "../../lsMisc/stdQt/stdQt.h"
+#include "../../lsMisc/stdQt/runguard.h"
 
 #include "consts.h"
 #include "globals.h"
 #include "sql.h"
 #include "osd.h"
-#include "runguard.h"
 #include "taskgetdir.h"
 #include "helper.h"
 #include "tableitemdata.h"
