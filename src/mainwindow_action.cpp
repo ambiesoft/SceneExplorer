@@ -816,6 +816,22 @@ void MainWindow::ScanSelectedDirectory(const bool bAll)
         }
     }
 
+//    {
+//		wstring left, right, common;
+//		vector<wstring> vFolders;
+//		m_clParse.getFoldersAsVector(vFolders);
+//		if (!checkDupPaths(vFolders, left, right, common))
+//		{
+//			wstring message;
+//			message += I18N(L"These two folder contains same folder. Do you want to continue?");
+//			message += L"\r\n\r\n";
+//			message += left;
+//			message += L"\r\n";
+//			message += right;
+//			if (IDYES != AfxMessageBox(message.c_str(), MB_ICONQUESTION | MB_YESNO))
+//				return FALSE;
+//		}
+//    }
     foreach(DirectoryItem* di, toScan)
     {
         StartScan(di);
