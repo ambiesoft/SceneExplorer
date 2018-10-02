@@ -28,6 +28,7 @@
 #include <QDateTime>
 #include <QRegExp>
 #include <QDebug>
+#include <QTimerEvent>
 
 #include "../../lsMisc/stdQt/stdQt.h"
 
@@ -43,6 +44,7 @@ using namespace Consts;
 TableModel::TableModel(QTableView *parent, IMainWindow* mainWindow)
     :QAbstractTableModel(parent), parent_(parent), mainWindow_(mainWindow)
 {
+
 }
 void TableModel:: AppendData(TableItemDataPointer pItemData, const bool enableUpdate)
 {
@@ -107,8 +109,8 @@ void TableModel::ResetData(const QList<TableItemDataPointer>& all)
 //    endInsertRows();
     //Sort_obsolete(GetSortColumn(), GetSortReverse());
     endResetModel();
-
     emit itemCountChanged();
+    StartImageTimer();
 }
 
 int TableModel::rowCount(const QModelIndex & /*parent*/) const
@@ -118,6 +120,7 @@ int TableModel::rowCount(const QModelIndex & /*parent*/) const
 
 void TableModel::ClearData()
 {
+    suspendImageIndexes_.clear();
     itemDatas_.clear();
     mapsFullpathToItem_.clear();
     if(imagecache_ != ImageCacheType::IC_ALWAYS)
@@ -403,7 +406,7 @@ QSize TableModel::calculateSize(const QModelIndex& index, const QString& str) co
 }
 QVariant TableModel::data(const QModelIndex &index, int role) const
 {
-    int actualIndex = index.row()/RowCountPerEntry;
+    const int actualIndex = index.row()/RowCountPerEntry;
     int mod = index.row() % RowCountPerEntry;
     bool isFilename = mod==0;
     bool isImage = mod==1;
@@ -417,7 +420,6 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
     {
         return itemDatas_[actualIndex]->getID();
     }
-
 
     if(isFilename)
     {
@@ -476,6 +478,7 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
         {
             case Qt::DecorationRole:
             {
+
                 TableItemDataPointer itemData = itemDatas_[actualIndex];
                 if(!itemData->isDisplayed())
                     qDebug() << "Image DecorationRoll First: Index=" << index.row();
@@ -486,21 +489,22 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
 
                 QString imageFile = pathCombine(FILEPART_THUMBS,
                                                 itemData->getThumbnailFiles()[getActualColumnIndex(index.column())]);
+
                 if(imagecache_==ImageCacheType::IC_NEVER)
                 {
                     QImage image(imageFile);
                     return QPixmap::fromImage(image);
                 }
-                else
+
+                if(mapPixmaps_.keys().contains(imageFile))
                 {
-                    if(!mapPixmaps_.keys().contains(imageFile))
-                    {
-                        QImage image(imageFile);
-                        QVariant vpix(QPixmap::fromImage(image));
-                        mapPixmaps_[imageFile]= vpix;
-                    }
                     return mapPixmaps_[imageFile];
                 }
+                suspendImageIndexes_.push(index);
+
+                TableModel* pThis = const_cast<TableModel*>(this);
+                pThis->StartImageTimer();
+                return QVariant();
             }
             break;
         }
@@ -764,10 +768,50 @@ void TableModel::RemoveItem(const QString& movieFile)
         endResetModel();
     }
 }
-//void TableModel::SetShowMissing(bool bToggle)
-//{
-//    if(bShowMissing_==bToggle)
-//        return;
-//
-//    bShowMissing_ = bToggle;
-//}
+
+void TableModel::timerEvent(QTimerEvent *event)
+{
+    if(event->timerId() != timerID_)
+        return;
+
+    if(suspendImageIndexes_.empty())
+    {
+        KillImageTimer();
+        return;
+    }
+
+    QModelIndex index = suspendImageIndexes_.pop();
+    qDebug() << QString("TableModel timer row=%1, col=%2, count=%3").arg(index.row()).arg(index.column()).
+                arg(suspendImageIndexes_.count());
+
+    const int actualIndex = index.row()/RowCountPerEntry;
+
+    TableItemDataPointer itemData = itemDatas_[actualIndex];
+
+    QString imageFile = pathCombine(FILEPART_THUMBS,
+                                    itemData->getThumbnailFiles()[getActualColumnIndex(index.column())]);
+
+    {
+        if(!mapPixmaps_.keys().contains(imageFile))
+        {
+            QImage image(imageFile);
+            QVariant vpix(QPixmap::fromImage(image));
+            mapPixmaps_[imageFile]= vpix;
+        }
+        // return mapPixmaps_[imageFile];
+    }
+    emit dataChanged(index,index);
+}
+void TableModel::StartImageTimer()
+{
+    if(timerID_ != 0)
+        return;
+    timerID_ = startTimer(100);
+    qDebug() << QString("Timer %1 started").arg(timerID_);
+}
+void TableModel::KillImageTimer()
+{
+    qDebug() << QString("Timer %1 killed").arg(timerID_);
+    killTimer(timerID_);
+    timerID_=0;
+}

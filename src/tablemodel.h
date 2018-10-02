@@ -23,6 +23,7 @@
 #include <QSortFilterProxyModel>
 #include <QWidget>
 #include <QFile>
+#include <QStack>
 
 #include "globals.h"
 #include "tableitemdata.h"
@@ -42,6 +43,12 @@ class TableModel : public QAbstractTableModel
     QFont fontInfo_;
     QFont fontDetail_;
 
+    mutable QStack<QModelIndex> suspendImageIndexes_;
+    mutable int timerID_=0;
+    void StartImageTimer() ;
+    void KillImageTimer();
+protected:
+    void timerEvent(QTimerEvent *event) override;
 
 public:
 

@@ -115,6 +115,8 @@
 #include <QVariant>
 #include <QVector>
 #include <QWidget>
+#include <QTimerEvent>
+#include <QStack>
 
 #include <memory>
 #include <string>
