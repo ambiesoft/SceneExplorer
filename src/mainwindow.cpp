@@ -73,6 +73,7 @@
 #include "tagitem.h"
 #include "taginputdialog.h"
 #include "mycontextmenu.h"
+#include "tagidsinfo.h"
 
 #include "ui_mainwindow.h"
 #include "mainwindow.h"
@@ -295,6 +296,20 @@ bool MainWindow::LoadTags()
 			
 			ui->listTag->addItem(ti);
         }
+    }
+
+    TagItem* tagNoTag = new TagItem(true,
+                                    -2,
+                                    TagItem::TI_NOTAG,
+                                    tr("No Tags"),
+                                    QString());
+    tagNoTag->setSelected(pDoc_->IsTagNotagsSelected());
+    ui->listTag->addItem(tagNoTag);
+
+    // select all if nothing is selected
+    if(ui->listTag->selectedItems().empty())
+    {
+        tagAll->setSelected(true);
     }
     return true;
 }
@@ -1125,19 +1140,21 @@ void MainWindow::itemChangedCommon(bool bForceRead)
     }
 
     // Get Tag selected
-    QSet<qint64> taggedids;
-    bool isTagValid = GetSelectedAndCurrentTagIDs(taggedids);
+    // QSet<qint64> taggedids;
+    TagidsInfo tagInfos(TagidsInfo::TAGIDS_INFO_TYPE::TAGIDSINFO_USERSELECTED);
+    GetSelectedAndCurrentTagIDs(tagInfos);
 
     tbShowNonExistant_->setEnabled(!bOnlyMissing);
 
     const bool isSameReq =
             lastQueriedOnlyMissing_ == bOnlyMissing &&
             lastQueriedDirs_ == dirs  &&
-            lastQueriedIsTagValid_==isTagValid &&
-            lastQueriedTaggedIDs_==taggedids;
+//            lastQueriedIsAllTag_==isAllTag &&
+//            lastQueriedTaggedIDs_==taggedids;
+            lastQueriedTaggedIds_==tagInfos;
     if(!bForceRead && isSameReq)
     {
-            return;
+        return;
     }
     if (limitManager_ && !isSameReq)
 	{
@@ -1145,13 +1162,13 @@ void MainWindow::itemChangedCommon(bool bForceRead)
 	}
     lastQueriedOnlyMissing_ = bOnlyMissing;
     lastQueriedDirs_ = dirs;
-    lastQueriedIsTagValid_ = isTagValid;
-    lastQueriedTaggedIDs_ = taggedids;
-
-    GetSqlAllSetTable(dirs, isTagValid ? &taggedids : nullptr, bOnlyMissing);
+//    lastQueriedIsAllTag_ = isAllTag;
+//    lastQueriedTaggedIDs_ = taggedids;
+    lastQueriedTaggedIds_ = tagInfos;
+    GetSqlAllSetTable(dirs, tagInfos, bOnlyMissing);
 }
 
-bool MainWindow::GetSelectedAndCurrentTagIDs(QSet<qint64>& taggedids)
+void MainWindow::GetSelectedAndCurrentTagIDs(TagidsInfo& tagInfos)
 {
     QList<qint64> tagids;
 	TagItem* tiCurrent = (TagItem*)ui->listTag->currentItem();
@@ -1163,11 +1180,19 @@ bool MainWindow::GetSelectedAndCurrentTagIDs(QSet<qint64>& taggedids)
         {
             if(ti->isSelected() || ti==tiCurrent)
             {
-                taggedids.clear();
-                return false;
+                tagInfos.setAll();
+                return;
             }
         }
-        else
+        else if(ti->IsNotagItem())
+        {
+            if(ti->isSelected() || ti==tiCurrent)
+            {
+                tagInfos.setNotags();
+                break;
+            }
+        }
+        else if(ti->IsNormalItem())
         {
             Q_ASSERT(!ti->IsAllItem());
             if(ti->isSelected() || ti->IsChecked() || ti==tiCurrent)
@@ -1175,19 +1200,42 @@ bool MainWindow::GetSelectedAndCurrentTagIDs(QSet<qint64>& taggedids)
                 tagids.append(ti->tagid());
             }
         }
+        else
+        {
+            Q_ASSERT(false);
+        }
     }
 
+    if(tagInfos.isNotags())
+    {
+        QList<qint64> allids;
+        for(int i=0 ; i < ui->listTag->count(); ++i)
+        {
+            TagItem* ti = (TagItem*)ui->listTag->item(i);
+            if(ti->IsNormalItem())
+            {
+                allids.append(ti->tagid());
+            }
+        }
+        QSet<qint64> allfileids;;
+        pDoc_ && pDoc_->GetTaggedIDs(allids, allfileids);
+        tagInfos.setFileIds(allfileids);
+        return;
+    }
     if(tagids.isEmpty())
     {
         // nothing is selected
-        return false;
+        tagInfos.setAll();
+        return ;
     }
+    QSet<qint64> taggedids;
     pDoc_ && pDoc_->GetTaggedIDs(tagids, taggedids);
-    return true;
+    tagInfos.setFileIds(taggedids);
+    return;
 }
 
 void MainWindow::GetSqlAllSetTable(const QStringList& dirs,
-                                   QSet<qint64>* pTagged,
+                                   const TagidsInfo& tagInfos,
                                    bool bOnlyMissing)
 {
     tableModel_->SetShowMissing(tbShowNonExistant_->isChecked() );
@@ -1251,7 +1299,7 @@ void MainWindow::GetSqlAllSetTable(const QStringList& dirs,
                   sortManager_.GetCurrentRev(),
                   limitManager_ ?
                       LimitArg(limitManager_->GetCurrentIndex(), limitManager_->GetNumberOfRows()): LimitArg(),
-                  pTagged);
+                  tagInfos);
 
 
     UpdateTitle(dirs, bOnlyMissing ? UpdateTitleType::ONLYMISSING : UpdateTitleType::DEFAULT);
@@ -1790,6 +1838,10 @@ void MainWindow::showTagContextMenu(const QPoint &pos)
 
         // Show context menu at handling position
         myMenuItemArea.exec(ui->listTag->mapToGlobal(pos));
+    }
+    else if(ti->IsNotagItem())
+    {
+        return;
     }
     else
     {

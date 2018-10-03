@@ -69,7 +69,7 @@ SOURCES += \
     waitcursorq.cpp \
     ../../lsMisc/stdQt/stdQt.cpp \
     ../../lsMisc/stdQt/runguard.cpp \
-    mytableview.cpp
+    tagidsinfo.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -115,7 +115,7 @@ HEADERS += \
     waitcursorq.h \
     ../../lsMisc/stdQt/stdQt.h \
     ../../lsMisc/stdQt/runguard.h \
-    mytableview.h
+    tagidsinfo.h
 
 FORMS += \
         mainwindow.ui \

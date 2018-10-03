@@ -790,7 +790,7 @@ bool Sql::GetAllSqlString(
         SORTCOLUMNMY sortcolumn,
         bool sortrev,
         const LimitArg& limit,
-        const QSet<qint64>* tagids)
+        const TagidsInfo& tagInfos)
 {
     QString sql = "SELECT ";
     for (int i = 0; i < selects.count(); ++i)
@@ -871,19 +871,32 @@ bool Sql::GetAllSqlString(
         if(!find.isEmpty())
             sql += " and name LIKE ?";
 
-        if(tagids)
+        if(tagInfos.isAll())
+        {}
+        else if(tagInfos.isNotags())
         {
-            if(tagids->isEmpty())
+            sql += " AND (";
+            for(int i=0 ; i < tagInfos.fileIdCount(); ++i)
+            {
+                sql += "FileInfo.id!=?";
+                if( (i+1) != tagInfos.fileIdCount())
+                    sql += " AND ";
+            }
+            sql += ")";
+        }
+        else
+        {
+            if(tagInfos.isFileIdEmpty())
             {
                 sql += " AND 0=1 ";
             }
             else
             {
                 sql += " AND (";
-                for(int i=0 ; i < tagids->count(); ++i)
+                for(int i=0 ; i < tagInfos.fileIdCount(); ++i)
                 {
                     sql += "FileInfo.id=?";
-                    if( (i+1) != tagids->count())
+                    if( (i+1) != tagInfos.fileIdCount())
                         sql += " or ";
                 }
                 sql += ")";
@@ -904,9 +917,19 @@ bool Sql::GetAllSqlString(
         if(!find.isEmpty())
             query.bindValue(bindIndex++, "%"+find+"%");
 
-        if(tagids && !tagids->isEmpty())
+        // if(tagids && !tagids->isEmpty())
+        if(tagInfos.isAll())
+        {}
+        else if(tagInfos.isNotags())
         {
-            for( const qint64& tagid : *tagids)
+            for( const qint64& tagid : tagInfos.fileIds())
+            {
+                query.bindValue(bindIndex++, tagid);
+            }
+        }
+        else
+        {
+            for( const qint64& tagid : tagInfos.fileIds())
             {
                 query.bindValue(bindIndex++, tagid);
             }
@@ -926,7 +949,7 @@ qlonglong Sql::GetAllCount(const QStringList& dirs)
                 SORT_NONE,
                 false,
                 LimitArg(),
-                nullptr);
+                TagidsInfo());
     SQC(query, exec());
     while (query.next())
     {
@@ -941,7 +964,7 @@ bool Sql::GetAll(QList<TableItemDataPointer>& v,
                  SORTCOLUMNMY sortcolumn,
                  bool sortrev,
                  const LimitArg& limit,
-                 const QSet<qint64>* tagids)
+                 const TagidsInfo& tagInfos)
 {
     QSqlQuery query(db_);
     GetAllSqlString(query,
@@ -951,7 +974,7 @@ bool Sql::GetAll(QList<TableItemDataPointer>& v,
                     sortcolumn,
                     sortrev,
                     limit,
-                    tagids);
+                    tagInfos);
 
     SQC(query,exec());
 

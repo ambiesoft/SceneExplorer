@@ -28,6 +28,7 @@ public:
     {
         TI_NORMAL,
         TI_ALL,
+        TI_NOTAG,
     } ;
 private:
     qint64 tagid_;
@@ -43,11 +44,14 @@ public:
     qint64 tagid() const {
         return tagid_;
     }
+    bool IsAllItem() const {
+        return itemType_==TI_ALL;
+    }
     bool IsNormalItem() const {
         return itemType_==TI_NORMAL;
     }
-    bool IsAllItem() const {
-        return itemType_==TI_ALL;
+    bool IsNotagItem() const {
+        return itemType_==TI_NOTAG;
     }
 
     bool IsChecked() const {

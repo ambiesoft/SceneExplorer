@@ -1223,6 +1223,10 @@
         <source>The file &quot;%1&quot; will be removed. Are you sure to continue?</source>
         <translation>ファイル &quot;%1&quot; は削除されます。続行しますか？</translation>
     </message>
+    <message>
+        <source>No Tags</source>
+        <translation>タグなし</translation>
+    </message>
 </context>
 <context>
     <name>Option</name>

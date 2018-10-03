@@ -21,5 +21,6 @@
         <file>resource/images/mailbox.png</file>
         <file>resource/images/tag.png</file>
         <file>resource/images/refresh.png</file>
+        <file>resource/images/notags.png</file>
     </qresource>
 </RCC>

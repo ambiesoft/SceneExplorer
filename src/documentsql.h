@@ -60,6 +60,9 @@ public:
     bool isTagAllSelected() const;
     bool setTagAllSelected(bool b);
 
+    bool isTagNotagsSelected() const;
+    bool setTagNotagsSelected(bool b);
+
     int dirCount() const;
     QString getDirText(int i) const;
     bool setDirectory(int index, DirectoryItem* di);

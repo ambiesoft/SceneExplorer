@@ -130,6 +130,8 @@ DocumentSql::DocumentSql(const QString& file) :
         qDebug() << q.lastError().text();
         q.exec("ALTER TABLE Settings ADD COLUMN alltagselected INT NOT NULL DEFAULT '0'");
         qDebug() << q.lastError().text();
+        q.exec("ALTER TABLE Settings ADD COLUMN notagstagselected INT NOT NULL DEFAULT '0'");
+        qDebug() << q.lastError().text();
         {
             // Create record 1
             q.exec("SELECT id FROM Settings WHERE id=1");
@@ -268,6 +270,11 @@ bool DocumentSql::isTagAllSelected() const
 {
     return isAllSelectedCommon("alltagselected");
 }
+bool DocumentSql::isTagNotagsSelected() const
+{
+    return isAllSelectedCommon("notagstagselected");
+}
+
 bool DocumentSql::setAllSelectedCommon(const QString& col, bool b)
 {
     QSqlQuery query("UPDATE " + docdb("Settings") + " SET " + col + "=? WHERE id=1");
@@ -284,6 +291,12 @@ bool DocumentSql::setTagAllSelected(bool b)
 {
     return setAllSelectedCommon("alltagselected",b);
 }
+bool DocumentSql::setTagNotagsSelected(bool b)
+{
+    return setAllSelectedCommon("notagstagselected",b);
+}
+
+
 
 bool DocumentSql::setDirNormalItemState(const DirectoryItem* item)
 {

@@ -56,6 +56,8 @@ void MainWindow::on_action_SelectAll_triggered()
                     ti->setSelected(false);
                 else if(ti->IsNormalItem())
                     ti->setSelected(true);
+                else if(ti->IsNotagItem())
+                    ti->setSelected(false);
                 else
                     Q_ASSERT(false);
             }

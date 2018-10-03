@@ -33,6 +33,7 @@
 #include "externaltoolitem.h"
 #include "document.h"
 #include "blockedbool.h"
+#include "tagidsinfo.h"
 #include "imainwindow.h"
 
 class QThreadPool;
@@ -102,8 +103,9 @@ private:
     bool tagChanging_ = false;
     bool lastQueriedOnlyMissing_ = false;
     QStringList lastQueriedDirs_ = {"dummy"};
-    bool lastQueriedIsTagValid_ = false;
-    QSet<qint64> lastQueriedTaggedIDs_ = {-1};
+//    bool lastQueriedIsAllTag_ = false;
+//    QSet<qint64> lastQueriedTaggedIDs_ = {-1};
+    TagidsInfo lastQueriedTaggedIds_;
 
     //SORTCOLUMN currentSort_ = SORTCOLUMN::SORT_NONE;
     //bool currentSortRev_ = false;
@@ -114,9 +116,9 @@ private:
                       const QString& yomi,
                       qint64* insertedTag=nullptr);
     QList<QWidget*> getAllStatusBarWidgets();
-    bool GetSelectedAndCurrentTagIDs(QSet<qint64>& taggedids);
+    void GetSelectedAndCurrentTagIDs(TagidsInfo& tagInfos);
     void GetSqlAllSetTable(const QStringList& dirs,
-                           QSet<qint64>* pTagged,
+                           const TagidsInfo& tagInfos,
                            bool bOnlyMissing = false);
     QToolButton* tbShowNonExistant_ = nullptr;
 

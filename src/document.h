@@ -76,6 +76,9 @@ public:
     bool IsTagAllSelected() const {
         return docSql_->isTagAllSelected();
     }
+    bool IsTagNotagsSelected() const {
+        return docSql_->isTagNotagsSelected();
+    }
 
     int dirCount() const;
     QString GetDEText(int index) const {

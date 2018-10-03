@@ -615,7 +615,7 @@ void MainWindow::onSortCommon(SORTCOLUMNMY sortColumn)
 	sortManager_.onSort(sortColumn);
 	if (limitManager_)
 		limitManager_->Reset();
-    GetSqlAllSetTable(lastQueriedDirs_, lastQueriedIsTagValid_ ? &lastQueriedTaggedIDs_:nullptr);
+    GetSqlAllSetTable(lastQueriedDirs_, lastQueriedTaggedIds_);
 }
 void MainWindow::on_actionSort_by_file_name_triggered()
 {
@@ -1078,7 +1078,7 @@ void MainWindow::on_ShowMissingClicked_common(bool bNextCheck)
     }
     ui->action_ShowMissingFiles->setChecked(bNextCheck);
     tbShowNonExistant_->setChecked(bNextCheck);
-    GetSqlAllSetTable(lastQueriedDirs_, lastQueriedIsTagValid_ ? &lastQueriedTaggedIDs_:nullptr);
+    GetSqlAllSetTable(lastQueriedDirs_, lastQueriedTaggedIds_);
 }
 void MainWindow::OnShowMissingClicked()
 {

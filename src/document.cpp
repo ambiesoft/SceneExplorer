@@ -124,6 +124,10 @@ void Document::Store(QListWidget* pLW,
         {
             docSql_->SetTagSelectedAndChecked(ti->tagid(), ti->isSelected(),ti->IsChecked());
         }
+        else if(ti->IsNotagItem())
+        {
+            docSql_->setTagNotagsSelected(ti->isSelected());
+        }
         else
         {
             Q_ASSERT(false);

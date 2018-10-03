@@ -37,7 +37,7 @@
      <number>0</number>
     </property>
     <item>
-     <widget class="MyTableView" name="tableView">
+     <widget class="QTableView" name="tableView">
       <property name="contextMenuPolicy">
        <enum>Qt::CustomContextMenu</enum>
       </property>
@@ -75,7 +75,7 @@
      <x>0</x>
      <y>0</y>
      <width>1009</width>
-     <height>23</height>
+     <height>21</height>
     </rect>
    </property>
    <property name="font">
@@ -1055,11 +1055,6 @@
    <class>DirectoryEntry</class>
    <extends>QListWidget</extends>
    <header>directoryentry.h</header>
-  </customwidget>
-  <customwidget>
-   <class>MyTableView</class>
-   <extends>QTableView</extends>
-   <header>mytableview.h</header>
   </customwidget>
  </customwidgets>
  <resources>

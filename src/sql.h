@@ -23,6 +23,7 @@
 
 #include "tableitemdata.h"
 #include "globals.h"
+#include "tagidsinfo.h"
 
 #define DBFILENAME "./db.sqlite3"
 #define DBVERSION 2
@@ -80,7 +81,7 @@ class Sql : public QObject
             SORTCOLUMNMY sortcolumn,
             bool sortrev,
             const LimitArg& limit,
-            const QSet<qint64>* tagids);
+            const TagidsInfo& tagInfos);
     bool CreateDBInfoTable();
     int GetDBVersion();
     bool UpdateDatabase1_2();
@@ -143,7 +144,7 @@ public:
                 SORTCOLUMNMY sortcolumn = SORT_NONE,
                 bool sortrev = false,
                 const LimitArg& limit = LimitArg(),
-                const QSet<qint64>* tagids = nullptr
+                const TagidsInfo& tagInfos = TagidsInfo()
             );
 
     // bool IncrementOpenCount(const QString& movieFile);

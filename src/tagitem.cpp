@@ -38,6 +38,11 @@ TagItem::TagItem(bool bHasParent,
         setIcon(QIcon(":resource/images/tag.png"));
         setFlags(flags() | Qt::ItemIsUserCheckable);
     }
+    else if(itemType==TI_NOTAG)
+    {
+        setIcon(QIcon(":resource/images/notags.png"));
+        setFlags(flags() | Qt::ItemIsUserCheckable);
+    }
     else
         Q_ASSERT(false);
     setText(text);
