@@ -1,4 +1,7 @@
-2018/10/05 ver1.19.5
+2018/10/04 ver1.19.6
+Fix: Selecting "No Tags" tag when no tags exists, SQL failed.
+
+2018/10/04 ver1.19.5
 Add Notags item
 
 2018/10/03 ver1.19.4

@@ -875,14 +875,13 @@ bool Sql::GetAllSqlString(
         {}
         else if(tagInfos.isNotags())
         {
-            sql += " AND (";
+            sql += " AND (1==1 AND ";
             for(int i=0 ; i < tagInfos.fileIdCount(); ++i)
             {
                 sql += "FileInfo.id!=?";
-                if( (i+1) != tagInfos.fileIdCount())
-                    sql += " AND ";
+                sql += " AND ";
             }
-            sql += ")";
+            sql += "1==1)";
         }
         else
         {
