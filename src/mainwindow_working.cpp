@@ -40,7 +40,7 @@ void MainWindow::showEvent( QShowEvent* event )
     tableSortParameterChanged(sortManager_.GetCurrentSort(), sortManager_.GetCurrentRev());  // tableModel_->GetSortColumn(), tableModel_->GetSortReverse());
 
 
-    // OnTableViewScrollChanged(-1);
+    OnTableViewScrollChanged(-1);
 
     // Alert(this, QString("ScrollIndex:%1-%2").arg(pDoc_->modeIndexRow()).arg(pDoc_->modeIndexColumn()));
     int row = 0;
@@ -58,7 +58,7 @@ void MainWindow::showEvent( QShowEvent* event )
         QApplication::processEvents();
         ui->tableView->scrollTo(mi);
 
-        // OnTableViewScrollChanged(-1);
+        OnTableViewScrollChanged(-1);
 
 
         proxyModel_->ensureIndex(mi);
@@ -67,7 +67,7 @@ void MainWindow::showEvent( QShowEvent* event )
     }
 }
 
-void MainWindow::OnTableViewScrollChanged_obsolete(int pos)
+void MainWindow::OnTableViewScrollChanged(int pos)
 {
     QModelIndex indexTop = ui->tableView->indexAt(ui->tableView->rect().topLeft());
     QModelIndex indexBottom = ui->tableView->indexAt(ui->tableView->rect().bottomLeft());

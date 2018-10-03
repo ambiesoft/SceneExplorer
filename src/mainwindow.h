@@ -723,7 +723,7 @@ public slots:
     void OnDirectoryMoveDown();
     void OnFindComboEnterPressed();
 
-    void OnTableViewScrollChanged_obsolete(int pos);
+    void OnTableViewScrollChanged(int pos);
 };
 
 #endif // MAINWINDOW_H

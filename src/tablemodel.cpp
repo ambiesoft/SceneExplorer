@@ -485,6 +485,7 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
                 itemData->setDisplayed();
 
                 parent_->setColumnWidth(index.row(), THUMB_WIDTH);
+                // qDebug() << "DecorationRole previous rowheight = " << parent_->rowHeight(index.row());
                 parent_->setRowHeight(index.row(), THUMB_HEIGHT);
 
                 QString imageFile = pathCombine(FILEPART_THUMBS,

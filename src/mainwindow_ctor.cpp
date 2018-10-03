@@ -85,8 +85,8 @@ MainWindow::MainWindow(QWidget *parent,
     ui->tableView->setSelectionBehavior( QAbstractItemView::SelectItems );
     ui->tableView->setSelectionMode( QAbstractItemView::SingleSelection );
 
-//    connect(ui->tableView->verticalScrollBar(), &QScrollBar::valueChanged,
-//            this, &MainWindow::OnTableViewScrollChanged);
+    connect(ui->tableView->verticalScrollBar(), &QScrollBar::valueChanged,
+            this, &MainWindow::OnTableViewScrollChanged);
 
 
     tableModel_=new TableModel(ui->tableView, this);

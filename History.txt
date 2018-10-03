@@ -1,3 +1,6 @@
+2018/10/03 ver1.19.2
+Fix degrade scroll
+
 2018/10/02 ver1.19.1
 Images on the table will be drawed later, this speeds up user responce.
 
