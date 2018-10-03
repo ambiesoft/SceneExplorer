@@ -27,9 +27,9 @@ class DirectoryItem : public QListWidgetItem
 public:
     enum DirectoryItemType
     {
-        DI_NORMAL,
-        DI_ALL,
-        DI_MISSING,
+        DI_NORMAL_MY,
+        DI_ALL_MY,
+        DI_MISSING_MY,
     } ;
 private:
     qint64 dirid_;
@@ -45,13 +45,13 @@ public:
         return dirid_;
     }
     bool IsNormalItem() const {
-        return itemType_==DI_NORMAL;
+        return itemType_==DI_NORMAL_MY;
     }
     bool IsAllItem() const {
-        return itemType_==DI_ALL;
+        return itemType_==DI_ALL_MY;
     }
     bool IsMissingItem() const {
-        return itemType_==DI_MISSING;
+        return itemType_==DI_MISSING_MY;
     }
 
     bool IsChecked() const {

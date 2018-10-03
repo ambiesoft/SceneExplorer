@@ -69,6 +69,9 @@ void MainWindow::showEvent( QShowEvent* event )
 
 void MainWindow::OnTableViewScrollChanged(int pos)
 {
+    if(tableModel_->GetImageCache()!=ImageCacheType::IC_NEVER)
+        return;
+
     QModelIndex indexTop = ui->tableView->indexAt(ui->tableView->rect().topLeft());
     QModelIndex indexBottom = ui->tableView->indexAt(ui->tableView->rect().bottomLeft());
     int rowCountPerScreen = indexBottom.row()-indexTop.row()+1;

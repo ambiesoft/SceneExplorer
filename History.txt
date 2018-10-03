@@ -1,3 +1,7 @@
+2018/10/03 ver1.19.3
+Fix: crash when refresh button is pressed after limit manager is cleared.
+Add: Prevent image loading while dragging the scroll-bar.
+
 2018/10/03 ver1.19.2
 Fix degrade scroll
 

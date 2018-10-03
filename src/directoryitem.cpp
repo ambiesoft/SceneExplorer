@@ -31,19 +31,19 @@ DirectoryItem::DirectoryItem(const qint64& dirid,
     Q_ASSERT(parent_);
 
     setText(text);
-    if(itemType==DirectoryItem::DI_ALL)
+    if(itemType==DirectoryItem::DI_ALL_MY)
     {
         setFlags(flags() & ~Qt::ItemIsUserCheckable);
         setIcon(QIcon(":resource/images/mailbox.png"));
     }
-    else if(itemType==DirectoryItem::DI_NORMAL)
+    else if(itemType==DirectoryItem::DI_NORMAL_MY)
     {
         Q_ASSERT(dirid > 0);
         setFlags(flags() | Qt::ItemIsUserCheckable);
         setChecked(false);
         setIcon(fiProvider_.icon(QFileIconProvider::Folder));
     }
-    else if(itemType==DirectoryItem::DI_MISSING)
+    else if(itemType==DirectoryItem::DI_MISSING_MY)
     {
         setFlags(flags() & ~Qt::ItemIsUserCheckable);
         setIcon(QIcon(":resource/images/missing.png"));

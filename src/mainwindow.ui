@@ -37,9 +37,15 @@
      <number>0</number>
     </property>
     <item>
-     <widget class="QTableView" name="tableView">
+     <widget class="MyTableView" name="tableView">
       <property name="contextMenuPolicy">
        <enum>Qt::CustomContextMenu</enum>
+      </property>
+      <property name="verticalScrollMode">
+       <enum>QAbstractItemView::ScrollPerPixel</enum>
+      </property>
+      <property name="horizontalScrollMode">
+       <enum>QAbstractItemView::ScrollPerPixel</enum>
       </property>
       <property name="showGrid">
        <bool>false</bool>
@@ -1049,6 +1055,11 @@
    <class>DirectoryEntry</class>
    <extends>QListWidget</extends>
    <header>directoryentry.h</header>
+  </customwidget>
+  <customwidget>
+   <class>MyTableView</class>
+   <extends>QTableView</extends>
+   <header>mytableview.h</header>
   </customwidget>
  </customwidgets>
  <resources>

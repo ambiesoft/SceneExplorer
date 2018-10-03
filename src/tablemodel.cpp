@@ -501,7 +501,8 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
                 {
                     return mapPixmaps_[imageFile];
                 }
-                suspendImageIndexes_.push(index);
+                if(!suspendImageIndexes_.contains(index))
+                    suspendImageIndexes_.push(index);
 
                 TableModel* pThis = const_cast<TableModel*>(this);
                 pThis->StartImageTimer();
@@ -769,7 +770,7 @@ void TableModel::RemoveItem(const QString& movieFile)
         endResetModel();
     }
 }
-
+#include <QApplication>
 void TableModel::timerEvent(QTimerEvent *event)
 {
     if(event->timerId() != timerID_)
@@ -780,6 +781,9 @@ void TableModel::timerEvent(QTimerEvent *event)
         KillImageTimer();
         return;
     }
+
+    if((QApplication::mouseButtons() & Qt::MouseButton::LeftButton) != 0)
+        return;
 
     QModelIndex index = suspendImageIndexes_.pop();
     qDebug() << QString("TableModel timer row=%1, col=%2, count=%3").arg(index.row()).arg(index.column()).

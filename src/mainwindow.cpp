@@ -191,6 +191,7 @@ void MainWindow::CreateLimitManager()
             sepLimit_ = nullptr;
 
 			// This is converted to std::unique_ptr
+            limitManager_.reset();
             //delete limitManager_;
             //limitManager_ = nullptr;
         }
@@ -312,7 +313,7 @@ void MainWindow::InitDocument()
 //                          pDoc_->IsDirAllSelected(),
 //                          pDoc_->IsDirAllChecked());
     DirectoryItem* allitem = new DirectoryItem(-1,
-                                               DirectoryItem::DI_ALL,
+                                               DirectoryItem::DI_ALL_MY,
                                                tr("All"));
     // allitem->setChecked(pDoc_->IsDirAllChecked());
     allitem->setSelected(pDoc_->IsDirAllSelected());
@@ -338,7 +339,7 @@ void MainWindow::InitDocument()
 //                          QString(), false, false);
 
     DirectoryItem* missitem = new DirectoryItem(-2,
-                                                DirectoryItem::DI_MISSING,
+                                                DirectoryItem::DI_MISSING_MY,
                                                 tr("Missing"));
     ui->directoryWidget->addItem(missitem);
 

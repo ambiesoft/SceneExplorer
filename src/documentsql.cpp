@@ -711,7 +711,7 @@ bool DocumentSql::GetAllDirs(QList<DirectoryItem*>& dirs) const
     {
         DirectoryItem* di = new DirectoryItem(
                     query.value("id").toLongLong(),
-                    DirectoryItem::DirectoryItemType::DI_NORMAL,
+                    DirectoryItem::DirectoryItemType::DI_NORMAL_MY,
                     query.value("directory").toString());
         di->setSelected(query.value("selected").toInt() != 0);
         di->setCheckState(query.value("checked").toInt() != 0 ? Qt::Checked : Qt::Unchecked);
@@ -735,7 +735,7 @@ bool DocumentSql::InsertDirectory(const QString& dirOrig, DirectoryItem*& newdi)
     Q_ASSERT(ok);
     Q_ASSERT(dirid > 0);
     newdi = new DirectoryItem(dirid,
-                              DirectoryItem::DirectoryItemType::DI_NORMAL,
+                              DirectoryItem::DirectoryItemType::DI_NORMAL_MY,
                               dir);
 
     return true;

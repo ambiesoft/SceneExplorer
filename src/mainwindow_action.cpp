@@ -40,6 +40,7 @@
 
 #include "taskgetdir.h"
 #include "directoryentry.h"
+#include "directoryitem.h"
 
 #include "settings.h"
 #include "sql.h"
@@ -380,7 +381,8 @@ void MainWindow::AddUserEntryDirectory_obsolete(
 {
     QString text;
 	bool hasCheckbox = true;
-    if(itemType==DirectoryItem::DI_NORMAL)
+
+    if(itemType==DirectoryItem::DI_NORMAL_MY)
     {
         QDir di(cdir);
 
@@ -397,12 +399,12 @@ void MainWindow::AddUserEntryDirectory_obsolete(
         }
         text=normalizeDir(cdir);
     }
-    else if(itemType==DirectoryItem::DI_ALL)
+    else if(itemType==DirectoryItem::DI_ALL_MY)
     {
         text=tr("All");
 		hasCheckbox = false;
     }
-    else if(itemType==DirectoryItem::DI_MISSING)
+    else if(itemType==DirectoryItem::DI_MISSING_MY)
     {
         text=tr("Missing");
 		hasCheckbox = false;
