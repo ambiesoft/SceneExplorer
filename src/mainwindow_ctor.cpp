@@ -421,13 +421,15 @@ MainWindow::MainWindow(QWidget *parent,
     }
 
 
-    if(!restoreGeometry(settings.value(KEY_GEOMETRY).toByteArray()))
+    restoreGeometry(settings.value(KEY_GEOMETRY).toByteArray());
+
+    if(!restoreState(settings.value(KEY_WINDOWSTATE).toByteArray()))
     {
         // this must be called to make docking windows sizable properly
-        settings_.setValue(KEY_GEOMETRY, saveGeometry());
+        settings_.setValue(KEY_WINDOWSTATE, saveState());
+        restoreState(settings.value(KEY_WINDOWSTATE).toByteArray());
     }
 
-    restoreState(settings.value(KEY_WINDOWSTATE).toByteArray());
     UpdateTitle(QStringList(), UpdateTitleType::INIT);
     initialized_ = true;
 }

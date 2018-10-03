@@ -1,3 +1,7 @@
+2018/10/03 ver1.19.4
+Fix: Size of the docking-windows got back to the original position when
+no save data exists(e.g fisrt launch).
+
 2018/10/03 ver1.19.3
 Fix: crash when refresh button is pressed after limit manager is cleared.
 Add: Prevent image loading while dragging the scroll-bar.
