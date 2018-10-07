@@ -501,8 +501,10 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
                 {
                     return mapPixmaps_[imageFile];
                 }
-                if(!suspendImageIndexes_.contains(index))
-                    suspendImageIndexes_.push(index);
+                if(suspendImageIndexes_.contains(index))
+                    suspendImageIndexes_.removeOne(index);
+
+                suspendImageIndexes_.push(index);
 
                 TableModel* pThis = const_cast<TableModel*>(this);
                 pThis->StartImageTimer();
