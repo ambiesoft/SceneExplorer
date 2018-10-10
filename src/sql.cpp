@@ -47,7 +47,7 @@ static void showFatal(const QString& error)
     Alert(nullptr, error);
 }
 
-#define SQC_BASE(Q,siki,RET) do { if(!( Q.siki )) { showFatal(lastError_=(Q).lastError().text()); Q_ASSERT(false); RET;}} while(false)
+#define SQC_BASE(Q,siki,RET) do { if(!( Q.siki )) { showFatal(lastError_=(Q).lastError().text() + "\n" + (Q).lastQuery()); Q_ASSERT(false); RET;}} while(false)
 #define SQC(Q,siki) SQC_BASE(Q,siki,return false)
 #define SQCN(Q,siki) SQC_BASE(Q,siki,return)
 #define SQCI(Q,siki) SQC_BASE(Q,siki,return -1)
