@@ -17,7 +17,7 @@
 //along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 // ImageModel.cpp
-
+#include <QApplication>
 #include <QImage>
 #include <QPixmap>
 #include <QFileInfo>
@@ -772,7 +772,7 @@ void TableModel::RemoveItem(const QString& movieFile)
         endResetModel();
     }
 }
-#include <QApplication>
+
 void TableModel::timerEvent(QTimerEvent *event)
 {
     if(event->timerId() != timerID_)
@@ -782,6 +782,31 @@ void TableModel::timerEvent(QTimerEvent *event)
     {
         KillImageTimer();
         return;
+    }
+
+    static QList<qint64> lastTenTick;
+    lastTenTick.append(imageElapsedTimer_.elapsed());
+    if(lastTenTick.count() >= 10)
+    {
+        qint64 sum = 0;
+        for(int i=1 ; i < 10; ++i)
+            sum += (lastTenTick[i] - lastTenTick[i-1] - imageInterval_);
+
+        sum /= 9;
+        // Q_ASSERT(sum >= 0);
+
+        if(sum < 10)
+        {
+            imageInterval_ = std::max(10, imageInterval_ - 10);
+        }
+        else
+        {
+            imageInterval_ += 10;
+        }
+        qDebug() << "Image Timer Interval" << imageInterval_;
+        lastTenTick.clear();
+        imageElapsedTimer_.invalidate();
+        imageElapsedTimer_.start();
     }
 
     if((QApplication::mouseButtons() & Qt::MouseButton::LeftButton) != 0)
@@ -813,7 +838,9 @@ void TableModel::StartImageTimer()
 {
     if(timerID_ != 0)
         return;
-    timerID_ = startTimer(100);
+    Q_ASSERT(0 < imageInterval_);
+    timerID_ = startTimer(imageInterval_);
+    imageElapsedTimer_.start();
     qDebug() << QString("Timer %1 started").arg(timerID_);
 }
 void TableModel::KillImageTimer()

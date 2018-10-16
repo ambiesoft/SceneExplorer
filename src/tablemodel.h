@@ -24,6 +24,7 @@
 #include <QWidget>
 #include <QFile>
 #include <QStack>
+#include <QElapsedTimer>
 
 #include "globals.h"
 #include "tableitemdata.h"
@@ -45,6 +46,9 @@ class TableModel : public QAbstractTableModel
 
     mutable QStack<QModelIndex> suspendImageIndexes_;
     mutable int timerID_=0;
+    mutable QElapsedTimer imageElapsedTimer_;
+    mutable int imageInterval_ = 100;
+
     void StartImageTimer() ;
     void KillImageTimer();
 protected:
