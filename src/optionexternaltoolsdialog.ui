@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>448</width>
-    <height>434</height>
+    <height>443</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -181,7 +181,20 @@
      </property>
     </widget>
    </item>
-   <item row="17" column="1">
+   <item row="11" column="1">
+    <spacer name="verticalSpacer">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>20</width>
+       <height>40</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="16" column="1">
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -215,8 +228,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>320</x>
-     <y>453</y>
+     <x>413</x>
+     <y>446</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -231,8 +244,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>388</x>
-     <y>453</y>
+     <x>481</x>
+     <y>446</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>
