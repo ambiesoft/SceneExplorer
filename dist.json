@@ -8,6 +8,9 @@
 		"imageformats/qjpeg.dll"
 	],
     "ShouldBeFiles": [
+		"Ambiesoft.AmbLibcpp.dll",
+		"Ambiesoft.Profile.pdb",
+		"Ambiesoft.AmbLibcpp.pdb",
         "Ambiesoft.FolderConfig.dll",
         "Ambiesoft.FolderConfigHelper.dll",
         "Ambiesoft.FolderConfigHelper.pdb",
