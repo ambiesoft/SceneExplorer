@@ -258,34 +258,75 @@ int main2(int argc, char *argv[], QApplication& theApp)
         return 1;
     }
 
-    QTranslator qtTranslator;
-    QString qti18nFile = "qt_" + QLocale::system().name();
-    qtTranslator.load(qti18nFile,
-                      QLibraryInfo::location(QLibraryInfo::TranslationsPath));
-    theApp.installTranslator(&qtTranslator);
+    const QString lang = settings->valueString(KEY_LANGUAGE);
 
+    QTranslator qtTranslator;
+    do {
+        QString qti18nFile = "qt_";
+        if(lang.isEmpty())
+        {
+            qti18nFile += QLocale::system().name();
+            break;
+        }
+        else if(lang=="English")
+        {
+            qti18nFile += "en_US";
+            break;
+        }
+        else if(lang=="Japanese")
+        {
+            qti18nFile += "ja_JP";
+        }
+        else
+        {
+            Q_ASSERT(false);
+            break;
+        }
+        qDebug() << "Qt language" << qti18nFile;
+        if(qtTranslator.load(qti18nFile,
+                          QLibraryInfo::location(QLibraryInfo::TranslationsPath)))
+        {
+            theApp.installTranslator(&qtTranslator);
+        }
+        else
+        {
+            Alert(nullptr, QObject::tr("Failed to set Qt language to '%1'.").arg(lang));
+        }
+    } while(false);
 
     QTranslator myappTranslator;
     QString i18nFile = ":/translations/i18n_";
-    QString lang = settings->valueString(KEY_LANGUAGE);
-    if(lang.isEmpty())
-    {
-        // default
-        i18nFile += GetSystemDefaultLang();
-    }
-    else if(lang=="English")
-    {
-        i18nFile.clear();
-    }
-    else
-    {
-        i18nFile += lang;
-    }
-    //	QFileInfo trfi(QCoreApplication::applicationFilePath());
-    //	QString trdir = pathCombine(trfi.absolutePath(), "translations");
-    myappTranslator.load(i18nFile);//, trdir);
-    theApp.installTranslator(&myappTranslator);
 
+    do {
+        if(lang.isEmpty())
+        {
+            // default
+            i18nFile += GetSystemDefaultLang();
+            break;
+        }
+        else if(lang=="English")
+        {
+            i18nFile.clear();
+            break;
+        }
+        else if(lang=="Japanese")
+        {
+            i18nFile += lang;
+        }
+        else
+        {
+            Q_ASSERT(false);
+            break;
+        }
+        if(myappTranslator.load(i18nFile)) //, trdir);
+        {
+            theApp.installTranslator(&myappTranslator);
+        }
+        else
+        {
+            Alert(nullptr, QObject::tr("Failed to set language to '%1'.").arg(lang));
+        }
+    } while(false);
 
     RunGuard guard("SceneExplorer");
     if (!guard.tryToRun())

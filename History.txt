@@ -1,3 +1,6 @@
+2018/10/29 ver1.19.8
+Fix: Qt now also has same language.
+
 2018/10/07 ver1.19.7
 Fix: Images did not show instantly when upward scroll is performed (if use caches).
 

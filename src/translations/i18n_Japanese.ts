@@ -1697,6 +1697,14 @@
         <source>Failed to set style</source>
         <translation>スタイルの設定に失敗しました</translation>
     </message>
+    <message>
+        <source>Failed to set Qt language to &apos;%1&apos;.</source>
+        <translation>Qt言語を&apos;%1&apos;に設定できませんでした。</translation>
+    </message>
+    <message>
+        <source>Failed to set language to &apos;%1&apos;.</source>
+        <translation>言語を&apos;%1&apos;に設定できませんでした。</translation>
+    </message>
 </context>
 <context>
     <name>RenameDialog</name>
