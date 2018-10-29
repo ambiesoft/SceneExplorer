@@ -265,8 +265,12 @@ int main2(int argc, char *argv[], QApplication& theApp)
         QString qti18nFile = "qt_";
         if(lang.isEmpty())
         {
+            // default
+            QString syslang = GetSystemDefaultLang();
+            if(syslang=="English")
+                break;
+
             qti18nFile += QLocale::system().name();
-            break;
         }
         else if(lang=="English")
         {
@@ -301,8 +305,10 @@ int main2(int argc, char *argv[], QApplication& theApp)
         if(lang.isEmpty())
         {
             // default
-            i18nFile += GetSystemDefaultLang();
-            break;
+            QString syslang = GetSystemDefaultLang();
+            if(syslang=="English")
+                break;
+            i18nFile += syslang;
         }
         else if(lang=="English")
         {
