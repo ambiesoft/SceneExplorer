@@ -1,3 +1,6 @@
+2018/10/30 ver1.19.10
+Fix: When default lang is Japanese, display was english.
+
 2018/10/29 ver1.19.9
 Fix: Qt japanese translation files copied
 
