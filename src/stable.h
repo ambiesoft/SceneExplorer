@@ -93,6 +93,7 @@
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
+#include <QStack>
 #include <QStandardItemModel>
 #include <QStandardPaths>
 #include <QString>
@@ -106,6 +107,7 @@
 #include <QThreadPool>
 #include <QTime>
 #include <QTimer>
+#include <QTimerEvent>
 #include <QToolButton>
 #include <QTranslator>
 #include <QtSql/QSqlDatabase>
@@ -115,8 +117,6 @@
 #include <QVariant>
 #include <QVector>
 #include <QWidget>
-#include <QTimerEvent>
-#include <QStack>
 
 #include <memory>
 #include <string>
@@ -124,3 +124,4 @@
 #endif // __cplusplus
 
 #endif // STABLE_H
+
