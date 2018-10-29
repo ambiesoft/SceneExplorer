@@ -1,3 +1,6 @@
+2018/10/29 ver1.19.9
+Fix: Qt japanese translation files copied
+
 2018/10/29 ver1.19.8
 Fix: Qt now also has same language.
 

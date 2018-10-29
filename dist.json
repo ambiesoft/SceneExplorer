@@ -7,6 +7,15 @@
 		"sqldrivers/qsqlite.dll",
 		"imageformats/qjpeg.dll"
 	],
+	"copytranslations":[
+		"qtquick1_ja.qm",
+		"qtscript_ja.qm",
+		"qtxmlpatterns_ja.qm",
+		"qt_ja.qm",
+		"qtbase_ja.qm",
+		"qtmultimedia_ja.qm"
+	],
+	
     "ShouldBeFiles": [
 		"Ambiesoft.AmbLibcpp.dll",
 		"Ambiesoft.Profile.pdb",
@@ -95,7 +104,13 @@
         "ja-JP\\Ambiesoft.FolderConfig.resources.dll",
         "platforms\\qwindows.dll",
         "sqldrivers\\qsqlite.dll",
-        "imageformats\\qjpeg.dll"
+        "imageformats\\qjpeg.dll",
+		"translations\\qtbase_ja.qm",
+		"translations\\qtxmlpatterns_ja.qm",
+		"translations\\qtscript_ja.qm",
+		"translations\\qtmultimedia_ja.qm",
+		"translations\\qt_ja.qm",
+		"translations\\qtquick1_ja.qm"
     ],
 
 
