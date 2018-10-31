@@ -856,47 +856,46 @@ void MainWindow::OnContextRename()
     QString oldext = QFileInfo(oldfull).suffix();
     QString oldbasename = oldname.left(oldname.length()-oldext.length()-1);
 
-    RenameDialog dlg(this);
-    dlg.setBasename(oldbasename);
-    dlg.setExt(oldext);
-//    QString newname = QInputDialog::getText(this,
-//                                         tr("Rename"),
-//                                         tr("&New name:"),
-//                                         QLineEdit::Normal,
-//                                         oldname,
-//                                         &ok,
-//                                         GetDefaultDialogFlags());
-//    if(!ok)
-//        return;
-    if(!dlg.exec())
-        return;
-    QString newbasename = dlg.basename();
-    QString newext = dlg.ext();
-    if(newbasename.isEmpty() && newext.isEmpty())
-    {
-        Alert(this, tr("Name and extension is empty."));
-        return;
-    }
+    QString targetname;
+    QString newbasename;
+    QString newext;
+    for(;;) {
+        RenameDialog dlg(this);
+        dlg.setBasename(newbasename.isEmpty() ? oldbasename : newbasename);
+        dlg.setExt(newext.isEmpty() ? oldext : newext);
+        if(!dlg.exec())
+            return;
+        newbasename = dlg.basename();
+        newext = dlg.ext();
+        if(newbasename.isEmpty() && newext.isEmpty())
+        {
+            Alert(this, tr("Name and extension is empty."));
+            continue;
+        }
 
-    if(newbasename==oldbasename && newext==oldext)
-    {
-        Alert(this,tr("New name is same as old name."));
-        return;
-    }
-    QString newname = newbasename + "." + newext;
-	QFile filefull(oldfull);
-    if(!filefull.rename(pathCombine(olddir, newname)))
-    {
-		Alert(this,
-			QString(tr("Failed to rename file. (%1)")).arg(filefull.errorString()));
-        return;
-    }
-    if(!gpSQL->RenameEntry(olddir, oldname, olddir,newname))
+        if(newbasename==oldbasename && newext==oldext)
+        {
+            // Alert(this,tr("New name is same as old name."));
+            return;
+        }
+        targetname = newbasename + "." + newext;
+        QFile filefull(oldfull);
+        if(!filefull.rename(pathCombine(olddir, targetname)))
+        {
+            Alert(this,
+                QString(tr("Failed to rename file. (%1)")).arg(filefull.errorString()));
+            continue;
+        }
+
+        break;
+    };
+
+    if(!gpSQL->RenameEntry(olddir, oldname, olddir,targetname))
     {
         Alert(this, tr("Failed to rename in database."));
         return;
     }
-    tableModel_->RenameEntry(olddir, oldname, olddir, newname);
+    tableModel_->RenameEntry(olddir, oldname, olddir, targetname);
 }
 
 void MainWindow::OnContextRemoveFromDatabase()
