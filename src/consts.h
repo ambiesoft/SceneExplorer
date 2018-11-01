@@ -25,7 +25,7 @@ namespace Consts
     const char APPDOMAIN[] = "ambiesoft.fam.cx";
     const char APPNAME[] = "SceneExplorer";
     const char APPNAME_DISPLAY[] = "Scene Explorer";
-    const char APPVERSION[] = "1.19.10";
+    const char APPVERSION[] = "1.19.11";
 
 
     const char KEY_STYLE[] = "style";
@@ -60,6 +60,7 @@ namespace Consts
     const char KEY_MAX_THUMBNAIL_THREADCOUNT[] = "maxthumbnailthreadcount";
     const char KEY_THUMBNAIL_COUNT[] = "thumbcount";
     const char KEY_THUMBNAIL_FORMAT[] = "thumbformat";
+    const char KEY_THUMBNAIL_SCROLLMODE[] = "thumbscrollmode";
 
     const char KEY_TASK_PRIORITY[] = "taskpriority";
 

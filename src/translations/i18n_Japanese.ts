@@ -373,7 +373,7 @@
     </message>
     <message>
         <source>New name is same as old name.</source>
-        <translation>新しい名前は古い名前と同じです。</translation>
+        <translation type="vanished">新しい名前は古い名前と同じです。</translation>
     </message>
     <message>
         <source>Failed to rename file. (%1)</source>
@@ -1227,6 +1227,10 @@
         <source>No Tags</source>
         <translation>タグなし</translation>
     </message>
+    <message>
+        <source>Unknow scroll mode &apos;%1&apos;</source>
+        <translation>認識できないスクロールモード &apos;%1&apos;</translation>
+    </message>
 </context>
 <context>
     <name>Option</name>
@@ -1346,6 +1350,10 @@
         <source>&amp;All</source>
         <translation>すべて(&amp;A)</translation>
     </message>
+    <message>
+        <source>Thumbnail Scroll Mode:</source>
+        <translation>サムネイルスクロール:</translation>
+    </message>
 </context>
 <context>
     <name>OptionDialog</name>
@@ -1392,6 +1400,14 @@
     <message>
         <source>Thumbnail Image format is illegal.</source>
         <translation>サムネイル画像フォーマットが不正です。</translation>
+    </message>
+    <message>
+        <source>item</source>
+        <translation>アイテム</translation>
+    </message>
+    <message>
+        <source>pixel</source>
+        <translation>ピクセル</translation>
     </message>
 </context>
 <context>

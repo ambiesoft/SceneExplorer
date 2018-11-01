@@ -110,6 +110,7 @@ void MainWindow::on_action_Options_triggered()
     dlg.maxff_ = optionThreadcountThumbnail_;
     dlg.thumbCount_ = optionThumbCount_;
     dlg.thumbFormat_ = optionThumbFormat_;
+    dlg.scrollMode_ = ui->tableView->horizontalScrollMode()==QAbstractItemView::ScrollMode::ScrollPerItem ? "item" : "pixel";
     dlg.taskPriority_ = GetTaskPriorityAsInt();
     dlg.mainText_ = tableModel_->GetTitleTextTemplate();
     dlg.subText_ = tableModel_->GetInfoTextTemplate();
@@ -129,6 +130,21 @@ void MainWindow::on_action_Options_triggered()
     optionThreadcountThumbnail_ = dlg.maxff_;
     optionThumbCount_ = dlg.thumbCount_;
     optionThumbFormat_ = dlg.thumbFormat_;
+    if(dlg.scrollMode_=="item")
+    {
+        ui->tableView->setHorizontalScrollMode(QAbstractItemView::ScrollMode::ScrollPerItem);
+        ui->tableView->setVerticalScrollMode(QAbstractItemView::ScrollMode::ScrollPerItem);
+    }
+    else if(dlg.scrollMode_=="pixel")
+    {
+        ui->tableView->setHorizontalScrollMode(QAbstractItemView::ScrollMode::ScrollPerPixel);
+        ui->tableView->setVerticalScrollMode(QAbstractItemView::ScrollMode::ScrollPerPixel);
+    }
+    else
+    {
+        Q_ASSERT(false);
+        Alert(this, tr("Unknow scroll mode '%1'").arg(dlg.scrollMode_));
+    }
     SetTaskPriorityAsInt(dlg.taskPriority_);
     tableModel_->SetColumnCountImage(dlg.thumbCount_);
     tableModel_->SetTitleTextTemplate(dlg.mainText_);

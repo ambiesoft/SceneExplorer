@@ -43,6 +43,8 @@ public:
     int maxff_;
     int thumbCount_;
     QString thumbFormat_;
+    QString scrollMode_;
+
     int taskPriority_= -1;
     bool useCustomDBDir_;
     QString dbdir_;

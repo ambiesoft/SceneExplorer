@@ -24,6 +24,7 @@
 #include "extension.h"
 #include "ffmpeg.h"
 #include "tagitem.h"
+#include "helper.h"
 
 #include "ui_mainwindow.h"
 #include "mainwindow.h"
@@ -285,6 +286,23 @@ MainWindow::MainWindow(QWidget *parent,
     if(optionThumbCount_ != 3 && optionThumbCount_ != 5)
         optionThumbCount_ = 3;
     optionThumbFormat_ = settings_.valueString(KEY_THUMBNAIL_FORMAT, "jpg");
+    QString scrollMode = settings_.valueString(KEY_THUMBNAIL_SCROLLMODE, "item");
+    if(scrollMode.isEmpty() || scrollMode=="item")
+    {
+        ui->tableView->setHorizontalScrollMode(QAbstractItemView::ScrollMode::ScrollPerItem);
+        ui->tableView->setVerticalScrollMode(QAbstractItemView::ScrollMode::ScrollPerItem);
+    }
+    else if(scrollMode=="pixel")
+    {
+        ui->tableView->setHorizontalScrollMode(QAbstractItemView::ScrollMode::ScrollPerPixel);
+        ui->tableView->setVerticalScrollMode(QAbstractItemView::ScrollMode::ScrollPerPixel);
+    }
+    else
+    {
+        Q_ASSERT(false);
+        Alert(this, tr("Unknow scroll mode '%1'").arg(scrollMode));
+    }
+
     SetTaskPriorityAsInt(settings_.valueInt(KEY_TASK_PRIORITY, -1));
     tableModel_->SetColumnCountImage(optionThumbCount_);
     tableModel_->SetTitleTextTemplate(settings_.valueString(KEY_TITLE_TEXT_TEMPLATE, DEFAULT_ITEM_MAIN_TEXT));

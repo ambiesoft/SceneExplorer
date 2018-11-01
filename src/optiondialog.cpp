@@ -39,6 +39,9 @@ OptionDialog::OptionDialog(QWidget* parent)
     ui.cmbThumbImageFormat->addItem("jpg");
     ui.cmbThumbImageFormat->addItem("png");
 
+    ui.cmbScrollMode->addItem(tr("item"));
+    ui.cmbScrollMode->addItem(tr("pixel"));
+
     ui.cmbTaskPriority->addItem(tr("Default"), -1);
     ui.cmbTaskPriority->addItem(tr("HighestPriority"), 5);
     ui.cmbTaskPriority->addItem(tr("HighPriority"), 4);
@@ -70,6 +73,15 @@ void OptionDialog::showEvent(QShowEvent *ev)
     else
         ui.cmbThumbImageFormat->setCurrentIndex(0);
     ui.cmbThumbImageFormat->setEditText(thumbFormat_);
+
+
+    Q_ASSERT(ui.cmbScrollMode->count()==2);
+    if(scrollMode_=="item")
+        ui.cmbScrollMode->setCurrentIndex(0);
+    else if(scrollMode_=="pixel")
+        ui.cmbScrollMode->setCurrentIndex(1);
+    else
+        ui.cmbScrollMode->setCurrentIndex(0);
 
     ui.cmbTaskPriority->setCurrentIndex(0);
     for(int i=0 ; i < ui.cmbTaskPriority->count(); ++i)
@@ -122,7 +134,8 @@ void OptionDialog::on_buttonBox_accepted()
 
     thumbCount_ = ui.cmbThumbCount->currentIndex()==0 ? 3 : 5;
     thumbFormat_ = ui.cmbThumbImageFormat->lineEdit()->text();
-    //thumbFormat_ = ui.cmbThumbImageFormat->currentIndex()==0 ?"jpg":"png";
+    scrollMode_ = ui.cmbScrollMode->currentIndex()==0 ? "item":"pixel";
+
     taskPriority_ = ui.cmbTaskPriority->currentData().toInt();
 
     mainText_ = ui.lineInfoMain->text();

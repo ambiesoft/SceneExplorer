@@ -93,6 +93,7 @@ void MainWindow::closeEvent(QCloseEvent *event) {
     settings_.setValue(KEY_MAX_THUMBNAIL_THREADCOUNT, optionThreadcountThumbnail_);
     settings_.setValue(KEY_THUMBNAIL_COUNT, optionThumbCount_);
     settings_.setValue(KEY_THUMBNAIL_FORMAT, optionThumbFormat_);
+    settings_.setValue(KEY_THUMBNAIL_SCROLLMODE, ui->tableView->horizontalScrollMode()==QAbstractItemView::ScrollMode::ScrollPerItem ? "item":"pixel");
     settings_.setValue(KEY_TASK_PRIORITY, GetTaskPriorityAsInt());
 
 

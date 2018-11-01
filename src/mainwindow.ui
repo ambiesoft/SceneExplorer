@@ -41,12 +41,6 @@
       <property name="contextMenuPolicy">
        <enum>Qt::CustomContextMenu</enum>
       </property>
-      <property name="verticalScrollMode">
-       <enum>QAbstractItemView::ScrollPerPixel</enum>
-      </property>
-      <property name="horizontalScrollMode">
-       <enum>QAbstractItemView::ScrollPerPixel</enum>
-      </property>
       <property name="showGrid">
        <bool>false</bool>
       </property>
@@ -75,7 +69,7 @@
      <x>0</x>
      <y>0</y>
      <width>1009</width>
-     <height>21</height>
+     <height>23</height>
     </rect>
    </property>
    <property name="font">

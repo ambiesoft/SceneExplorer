@@ -1,3 +1,6 @@
+2018/11/02 ver1.19.11
+Add: User can select scroll mode.
+
 2018/10/30 ver1.19.10
 Fix: When default lang is Japanese, display was english.
 
