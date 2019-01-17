@@ -209,3 +209,14 @@ bool setProcessPriority(const qint64& pid, QThread::Priority priority, QStringLi
 
    return err==0;
 }
+
+tttbool myRename(const QString& oldfull, const QString& newfull, QString& error)
+{
+    QFile filefull(oldfull);
+    if(!filefull.rename(newfull))
+    {
+        error = filefull.errorString();
+        return false;
+    }
+    return true;
+}

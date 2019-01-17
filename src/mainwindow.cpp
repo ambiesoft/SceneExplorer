@@ -888,10 +888,18 @@ void MainWindow::OnContextRename()
 //            continue;
 //        }
 
-        if(!QFile::rename(oldfull,pathCombine(olddir, targetname)))
+//        if(!QFile::rename(oldfull,pathCombine(olddir, targetname)))
+//        {
+//            Alert(this,
+//                QString(tr("Failed to rename file. (%1)")).arg(oldfull));
+//            continue;
+//        }
+
+        QString renameError;
+        if(!myRename(oldfull,pathCombine(olddir, targetname), renameError))
         {
             Alert(this,
-                QString(tr("Failed to rename file. (%1)")).arg(oldfull));
+                QString(tr("Failed to rename file. (%1)")).arg(renameError));
             continue;
         }
         break;

@@ -34,4 +34,6 @@ QString GetIllegalFilenameCharacters();
 
 bool setProcessPriority(const qint64& pid, QThread::Priority priority, QStringList& errors);
 
+bool myRename(const QString& oldfull, const QString& newfull, QString& error);
+
 #endif // OSD_H

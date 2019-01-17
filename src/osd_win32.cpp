@@ -378,3 +378,14 @@ bool setProcessPriority(const qint64& pid, QThread::Priority priority, QStringLi
 	}
     return ret==0;
 }
+
+
+bool myRename(const QString& oldfull, const QString& newfull, QString& error)
+{
+    if(!MoveFileW(oldfull.toStdWString().c_str(), newfull.toStdWString().c_str()))
+    {
+        error = QString::fromStdWString(GetLastErrorStringW(GetLastError()));
+        return false;
+    }
+    return true;
+}
