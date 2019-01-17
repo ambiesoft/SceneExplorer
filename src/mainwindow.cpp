@@ -879,14 +879,21 @@ void MainWindow::OnContextRename()
             return;
         }
         targetname = newbasename + "." + newext;
-        QFile filefull(oldfull);
-        if(!filefull.rename(pathCombine(olddir, targetname)))
+
+//        QFile filefull(oldfull);
+//        if(!filefull.rename(pathCombine(olddir, targetname)))
+//        {
+//            Alert(this,
+//                QString(tr("Failed to rename file. (%1)")).arg(filefull.errorString()));
+//            continue;
+//        }
+
+        if(!QFile::rename(oldfull,pathCombine(olddir, targetname)))
         {
             Alert(this,
-                QString(tr("Failed to rename file. (%1)")).arg(filefull.errorString()));
+                QString(tr("Failed to rename file. (%1)")).arg(oldfull));
             continue;
         }
-
         break;
     };
 

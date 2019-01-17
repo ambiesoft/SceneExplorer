@@ -1,3 +1,6 @@
+2019/01/17 1.19.12
+Fix: When renaming was failed, new file was created.
+
 2018/11/02 ver1.19.11
 Add: User can select scroll mode.
 
