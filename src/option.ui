@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>562</width>
-    <height>499</height>
+    <height>533</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -297,9 +297,6 @@
      </item>
      <item>
       <widget class="QToolButton" name="tbInfoMain">
-       <property name="toolTip">
-        <string>Reset to default</string>
-       </property>
        <property name="text">
         <string>&gt;&gt;</string>
        </property>
@@ -317,9 +314,6 @@
      </item>
      <item>
       <widget class="QToolButton" name="tbInfoSub">
-       <property name="toolTip">
-        <string>Reset to default</string>
-       </property>
        <property name="text">
         <string>&gt;&gt;</string>
        </property>

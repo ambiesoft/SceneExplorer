@@ -1,3 +1,6 @@
+2019/02/08 1.19.15
+Fix: Translate supplement menu of Option dialog's [Item title] and [Item information]
+
 2019/02/06 1.19.14
 Fix: 'Constraint error' when renaming if new entry already exists.
 

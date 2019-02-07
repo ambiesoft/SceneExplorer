@@ -1320,7 +1320,7 @@
     </message>
     <message>
         <source>Reset to default</source>
-        <translation>デフォルトに設定</translation>
+        <translation type="vanished">デフォルトに設定</translation>
     </message>
     <message>
         <source>&gt;&gt;</source>
@@ -1408,6 +1408,62 @@
     <message>
         <source>pixel</source>
         <translation>ピクセル</translation>
+    </message>
+    <message>
+        <source>ID</source>
+        <translation>ID</translation>
+    </message>
+    <message>
+        <source>Filename</source>
+        <translation>ファイル名</translation>
+    </message>
+    <message>
+        <source>Directory</source>
+        <translation>ディレクトリ</translation>
+    </message>
+    <message>
+        <source>Size</source>
+        <translation>サイズ</translation>
+    </message>
+    <message>
+        <source>Last Access</source>
+        <translation>最終アクセス</translation>
+    </message>
+    <message>
+        <source>Last Modified</source>
+        <translation>修正時刻</translation>
+    </message>
+    <message>
+        <source>Duration</source>
+        <translation>プレイ時間</translation>
+    </message>
+    <message>
+        <source>Format</source>
+        <translation>フォーマット</translation>
+    </message>
+    <message>
+        <source>Bitrate</source>
+        <translation>ビットレート</translation>
+    </message>
+    <message>
+        <source>Audio codec</source>
+        <translation>音声コーディック</translation>
+    </message>
+    <message>
+        <source>Video codec</source>
+        <translation>映像コーディック</translation>
+    </message>
+    <message>
+        <source>Resolution</source>
+        <translation>解像度</translation>
+    </message>
+    <message>
+        <source>Open count</source>
+        <translation>オープンカウント</translation>
+    </message>
+    <message>
+        <source>Tags</source>
+        <translation>タグ</translation>
     </message>
 </context>
 <context>

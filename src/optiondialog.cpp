@@ -214,14 +214,14 @@ void OptionDialog::on_chkLimitItems_stateChanged(int arg1)
 }
 void OptionDialog::on_context_titleTemplateCommonMain()
 {
-    QAction* act = (QAction*)QObject::sender();
+    QAction* act = static_cast<QAction*>(QObject::sender());
     QString target = act->data().toString();
 
     ui.lineInfoMain->insert(target);
 }
 void OptionDialog::on_context_titleTemplateCommonSub()
 {
-    QAction* act = (QAction*)QObject::sender();
+    QAction* act = static_cast<QAction*>(QObject::sender());
     QString target = act->data().toString();
 
     ui.lineInfoSub->insert(target);
@@ -231,39 +231,46 @@ void OptionDialog::constructTitleTemplateMenu(QMenu& contextMenu,
                             QList< QSharedPointer<QAction> >& acts,
                             bool isMain)
 {
-    const char* alltargets[] = {
-        "atime",
-        "name",
-        "id",
-        "size",
-        "wtime",
-        "duration",
-        "format",
-        "bitrate",
-        "vcodec",
-        "acodec",
-        "resolution",
-        "directory",
-        "opencount",
-        "tags",
-    };
-
-    QStringList all;
-    for(size_t i=0 ; i < sizeof(alltargets)/sizeof(alltargets[0]); ++i )
+    static const auto alltargets = []()
     {
-        if(all.contains(alltargets[i]))
-        {
-            Q_ASSERT(false);
-            continue;
-        }
-        all.append(alltargets[i]);
-    }
-    std::sort(all.begin(),all.end());
+        QList<QPair<QString,QString>> alltargets;
+        alltargets.append(QPair<QString,QString>("id" ,tr("ID")));
+        alltargets.append(QPair<QString,QString>("name" ,tr("Filename")));
+        alltargets.append(QPair<QString,QString>("directory", tr("Directory")));
 
-    for(QString s : all)
+        alltargets.append(QPair<QString,QString>("size" ,tr("Size")));
+        alltargets.append(QPair<QString,QString>("atime" ,tr("Last Access")));
+        alltargets.append(QPair<QString,QString>("wtime" ,tr("Last Modified")));
+
+        alltargets.append(QPair<QString,QString>("duration" ,tr("Duration")));
+        alltargets.append(QPair<QString,QString>("format" ,tr("Format")));
+        alltargets.append(QPair<QString,QString>("bitrate" ,tr("Bitrate")));
+        alltargets.append(QPair<QString,QString>("acodec" ,tr("Audio codec")));
+        alltargets.append(QPair<QString,QString>("vcodec" ,tr("Video codec")));
+        alltargets.append(QPair<QString,QString>("resolution" ,tr("Resolution")));
+
+        alltargets.append(QPair<QString,QString>("opencount" ,tr("Open count")));
+        alltargets.append(QPair<QString,QString>("tags" ,tr("Tags")));
+
+        return alltargets;
+    }();
+
+//    QStringList all;
+//    for(size_t i=0 ; i < sizeof(alltargets)/sizeof(alltargets[0]); ++i )
+//    {
+//        if(all.contains(alltargets[i]))
+//        {
+//            Q_ASSERT(false);
+//            continue;
+//        }
+//        all.append(alltargets[i]);
+//    }
+//    std::sort(all.begin(),all.end());
+
+    for(auto&& pair : alltargets)
     {
-        QSharedPointer<QAction> act(new QAction(s));
-        act->setData(QString("${") + s + "}");
+        QSharedPointer<QAction> act(new QAction(pair.second));
+        act->setData(QString("${") + pair.first + "}");
         connect(act.data(), SIGNAL(triggered()),
                 this, isMain ? SLOT(on_context_titleTemplateCommonMain()):SLOT(on_context_titleTemplateCommonSub()) );
         contextMenu.addAction(act.data());
