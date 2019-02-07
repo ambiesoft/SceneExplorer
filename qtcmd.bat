@@ -1,4 +1,9 @@
 @echo off
+
+if not exist %~dp0prepare.bat (
+  echo prepare.bat not exist. Copy prepare.bat.sample and edit it.
+  goto :err
+)
 call %~dp0prepare.bat
 
 set TEST=%QTROOT%\%QTVERSION%\%QTVERSIONTOOLS%\bin
