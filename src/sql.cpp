@@ -1069,6 +1069,28 @@ bool Sql::UpdateThumbExtFromFile_obsolete(const qint64& id,const QString& thumbi
     Q_ASSERT(query.numRowsAffected()==1);
     return true;
 }
+
+bool Sql::IsEntryExists(const QString& newDir, const QString& newFile)
+{
+    // check if new entry already exists.
+    MYQMODIFIER QSqlQuery query = myPrepare("SELECT id FROM FileInfo WHERE "
+                                "directory=? and name=?");
+
+    int i=0;
+    query.bindValue(i++, newDir);
+    query.bindValue(i++, newFile);
+
+    SQC(query, exec());
+
+    if(query.next())
+    {
+        // entry already exists
+        return true;
+    }
+
+    return false;
+}
+
 bool Sql::RenameEntry(const QString& oldDirc,
                       const QString& oldFile,
                       const QString& newDirc,
@@ -1082,6 +1104,14 @@ bool Sql::RenameEntry(const QString& oldDirc,
 
     if(!QFile(pathCombine(oldDir, oldFile)).exists())
     {
+
+        if(IsEntryExists(newDir,newFile))
+        {
+            // new entry already exists in db
+            // remove old entry
+            return RemoveEntry(oldDir, oldFile);
+        }
+
         MYQMODIFIER QSqlQuery query = myPrepare("update FileInfo "
                         "set directory=?,name=? "
                         "where directory=? and name=?");
