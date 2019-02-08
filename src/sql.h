@@ -105,9 +105,9 @@ public:
     QString getDbID() const {
         return dbid_;
     }
-	static QString getDBFileName() {
-		return DBFILENAME;
-	}
+    static QString getDBFileName() {
+        return DBFILENAME;
+    }
     QString getLastError() const {
         return lastError_;
     }
@@ -134,10 +134,10 @@ public:
                         QStringList& results);
     int hasThumb(const QString& movieFile) ;
     bool DeleteEntryThumbFiles(const QString& dir,
-                          const QString& name,
-                          QString* removedThumbID);
-	qlonglong GetAllCount(const QStringList& dirs);
-	bool GetAll(QList<TableItemDataPointer>& v,
+                               const QString& name,
+                               QString* removedThumbID);
+    qlonglong GetAllCount(const QStringList& dirs);
+    bool GetAll(QList<TableItemDataPointer>& v,
                 const QStringList& dirs = QStringList(),
                 const QString& find = QString(),
                 bool bOnlyMissing = false,
@@ -180,9 +180,9 @@ public:
                      const QString& file,
                      QString* error = nullptr);
 
-	bool RemoveAllMissingEntries(const QString& dir);
-//    bool ApplyOpenCount(const QMap<qint64,int>& opencounts);
-//    bool ApplyLastAccesses(const QMap<qint64,qint64>& lastaccesses);
+    bool RemoveAllMissingEntries(const QString& dir);
+    //    bool ApplyOpenCount(const QMap<qint64,int>& opencounts);
+    //    bool ApplyLastAccesses(const QMap<qint64,qint64>& lastaccesses);
 
     bool AttachDocument(const QString& docFile);
     bool DetachDocument();

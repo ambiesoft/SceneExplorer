@@ -4,7 +4,7 @@
 
 
 CommandOption::CommandOption(const QString& dbdir,
-              const QString& doc)
+                             const QString& doc)
 {
     if(!dbdir.isEmpty())
     {

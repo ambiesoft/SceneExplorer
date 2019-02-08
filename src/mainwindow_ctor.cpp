@@ -40,7 +40,7 @@ MainWindow::MainWindow(QWidget *parent,
 {
     ui->setupUi(this);
     initLangMenus();
-	idManager_.reset(new IDManager(this));
+    idManager_.reset(new IDManager(this));
     DirectoryItem::parent_ = ui->directoryWidget;
     TagItem::parent_ = ui->listTag;
 
@@ -137,7 +137,7 @@ MainWindow::MainWindow(QWidget *parent,
                                QIcon(":/resource/images/sort-by-alphabet.png"),
                                QIcon(":/resource/images/sort-by-alphabet-rev.png"));
     connect(tbNameSort_, SIGNAL(clicked()),
-        this, SLOT(on_actionSort_by_file_name_triggered()));
+            this, SLOT(on_actionSort_by_file_name_triggered()));
     ui->mainToolBar->insertWidget(ui->placeHolder_Sort, tbNameSort_);
 
     tbSizeSort_ = new QToolButton(ui->mainToolBar);  // intensional leak
@@ -147,7 +147,7 @@ MainWindow::MainWindow(QWidget *parent,
                                QIcon(":/resource/images/sort-by-size.png"),
                                QIcon(":/resource/images/sort-by-size-rev.png"));
     connect(tbSizeSort_, SIGNAL(clicked()),
-        this, SLOT(on_actionSort_by_file_size_triggered()));
+            this, SLOT(on_actionSort_by_file_size_triggered()));
     ui->mainToolBar->insertWidget(ui->placeHolder_Sort, tbSizeSort_);
 
     tbWtime_ = new QToolButton(ui->mainToolBar);  // intensional leak
@@ -157,7 +157,7 @@ MainWindow::MainWindow(QWidget *parent,
                                QIcon(":/resource/images/sort-wtime.png"),
                                QIcon(":/resource/images/sort-wtime-rev.png"));
     connect(tbWtime_, SIGNAL(clicked()),
-        this, SLOT(on_actionSort_by_wtime_triggered()));
+            this, SLOT(on_actionSort_by_wtime_triggered()));
     ui->mainToolBar->insertWidget(ui->placeHolder_Sort, tbWtime_);
 
     tbOpenCount_ = new QToolButton(ui->mainToolBar);  // intensional leak
@@ -167,7 +167,7 @@ MainWindow::MainWindow(QWidget *parent,
                                QIcon(":/resource/images/sort-opencount.png"),
                                QIcon(":/resource/images/sort-opencount-rev.png"));
     connect(tbOpenCount_, SIGNAL(clicked()),
-        this, SLOT(on_actionSort_by_open_count_triggered()));
+            this, SLOT(on_actionSort_by_open_count_triggered()));
     ui->mainToolBar->insertWidget(ui->placeHolder_Sort, tbOpenCount_);
 
     tbLastAccess_ = new QToolButton(ui->mainToolBar);  // intensional leak
@@ -177,7 +177,7 @@ MainWindow::MainWindow(QWidget *parent,
                                QIcon(":/resource/images/sort-lastaccess.png"),
                                QIcon(":/resource/images/sort-lastaccess-rev.png"));
     connect(tbLastAccess_, SIGNAL(clicked()),
-        this, SLOT(on_actionSort_by_last_access_triggered()));
+            this, SLOT(on_actionSort_by_last_access_triggered()));
     ui->mainToolBar->insertWidget(ui->placeHolder_Sort, tbLastAccess_);
 
     ui->mainToolBar->removeAction(ui->placeHolder_Sort);
@@ -195,8 +195,8 @@ MainWindow::MainWindow(QWidget *parent,
 
 
 
-//    QToolButton* myTooButton = new QToolButton(ui->mainToolBar);
-//    ui->mainToolBar->addWidget(myTooButton);
+    //    QToolButton* myTooButton = new QToolButton(ui->mainToolBar);
+    //    ui->mainToolBar->addWidget(myTooButton);
 
     cmbFind_ = new FindComboBox(ui->mainToolBar);
     cmbFind_->setMinimumWidth(100);
@@ -394,7 +394,7 @@ MainWindow::MainWindow(QWidget *parent,
 
     // sort
     sortManager_.InitCurrentSort((SORTCOLUMNMY)settings.valueInt(KEY_SORT, (int)SORT_NONE),
-        settings_.valueBool(KEY_SORTREV, false));
+                                 settings_.valueBool(KEY_SORTREV, false));
 
 
     // recents

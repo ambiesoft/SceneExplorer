@@ -21,49 +21,49 @@
 
 DirectoryItem* DirectoryEntry::getShowAllItem()
 {
-	for (int i = 0; i < count(); ++i)
-	{
-		DirectoryItem* item = (DirectoryItem*)this->item(i);
-		if (item->IsAllItem())
-			return item;
-	}
-	Q_ASSERT(false);
-	return nullptr;
+    for (int i = 0; i < count(); ++i)
+    {
+        DirectoryItem* item = (DirectoryItem*)this->item(i);
+        if (item->IsAllItem())
+            return item;
+    }
+    Q_ASSERT(false);
+    return nullptr;
 }
 
 DirectoryItem* DirectoryEntry::takeShowAllItem()
 {
-	for (int i = 0; i < count(); ++i)
-	{
-		DirectoryItem* item = (DirectoryItem*)this->item(i);
-		if (item->IsAllItem())
-		{
-			this->takeItem(i);
-			return item;
-		}
-	}
-	Q_ASSERT(false);
-	return nullptr;
+    for (int i = 0; i < count(); ++i)
+    {
+        DirectoryItem* item = (DirectoryItem*)this->item(i);
+        if (item->IsAllItem())
+        {
+            this->takeItem(i);
+            return item;
+        }
+    }
+    Q_ASSERT(false);
+    return nullptr;
 }
 DirectoryItem* DirectoryEntry::takeMissingItem()
 {
-	for (int i = 0; i < count(); ++i)
-	{
-		DirectoryItem* item = (DirectoryItem*)this->item(i);
-		if (item->IsMissingItem())
-		{
-			this->takeItem(i);
-			return item;
-		}
-	}
-	return nullptr;
+    for (int i = 0; i < count(); ++i)
+    {
+        DirectoryItem* item = (DirectoryItem*)this->item(i);
+        if (item->IsMissingItem())
+        {
+            this->takeItem(i);
+            return item;
+        }
+    }
+    return nullptr;
 }
 void DirectoryEntry::addItem(DirectoryItem* item)
 {
-	DirectoryItem* missingItem = takeMissingItem();
-	QListWidget::addItem(item);
-	if(missingItem)
-		QListWidget::addItem(missingItem);
+    DirectoryItem* missingItem = takeMissingItem();
+    QListWidget::addItem(item);
+    if(missingItem)
+        QListWidget::addItem(missingItem);
 }
 QList<DirectoryItem*> DirectoryEntry::GetCheckedItems()
 {
@@ -80,16 +80,16 @@ QList<DirectoryItem*> DirectoryEntry::GetCheckedItems()
 }
 QList<DirectoryItem*> DirectoryEntry::GetAllNormalItems()
 {
-	QList<DirectoryItem*> ret;
-	for (int i = 0; i < count(); ++i)
-	{
-		DirectoryItem* item = (DirectoryItem*)this->item(i);
-		if (item->IsNormalItem())
-		{
-			ret.append(item);
-		}
-	}
-	return ret;
+    QList<DirectoryItem*> ret;
+    for (int i = 0; i < count(); ++i)
+    {
+        DirectoryItem* item = (DirectoryItem*)this->item(i);
+        if (item->IsNormalItem())
+        {
+            ret.append(item);
+        }
+    }
+    return ret;
 }
 void DirectoryEntry::SetCheck(const QStringList& dirs, bool bRemoveSelection)
 {
@@ -103,7 +103,7 @@ void DirectoryEntry::SetCheck(const QStringList& dirs, bool bRemoveSelection)
         if (item->IsNormalItem())
         {
             item->setCheckState(dirs.contains(item->text()) ?
-                                 Qt::Checked : Qt::Unchecked);
+                                    Qt::Checked : Qt::Unchecked);
         }
     }
 }

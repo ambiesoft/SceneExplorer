@@ -36,8 +36,8 @@ RenameDialog::~RenameDialog()
 }
 void RenameDialog::showEvent(QShowEvent *)
 {
-//    ui->lineName->setCursorPosition(0);
-//    ui->lineName->setSelection(0, ui->lineName->text().length());
+    //    ui->lineName->setCursorPosition(0);
+    //    ui->lineName->setSelection(0, ui->lineName->text().length());
     ui->lineName->selectAll();
 }
 QString RenameDialog::basename() const
@@ -65,25 +65,25 @@ QString RenameDialog::filename() const
 }
 void RenameDialog::done(int r)
 {
-	if (r != DialogCode::Rejected)
-	{
-		QString name = filename();
-		if (name.isEmpty())
-		{
-			Alert(this, tr("Name is empty."));
-			return;
-		}
-		if (name.contains("/") || name.contains("\\"))
-		{
-			Alert(this, tr("Filename cound not have '/' or/and '\\'"));
-			return;
-		}
-		QString error;
-		if (!isLegalFilePath(name, &error))
-		{
-			Alert(this, error);
-			return;
-		}
-	}
+    if (r != DialogCode::Rejected)
+    {
+        QString name = filename();
+        if (name.isEmpty())
+        {
+            Alert(this, tr("Name is empty."));
+            return;
+        }
+        if (name.contains("/") || name.contains("\\"))
+        {
+            Alert(this, tr("Filename cound not have '/' or/and '\\'"));
+            return;
+        }
+        QString error;
+        if (!isLegalFilePath(name, &error))
+        {
+            Alert(this, error);
+            return;
+        }
+    }
     QDialog::done(r);
 }

@@ -29,7 +29,7 @@ typedef QSharedPointer<TableItemData> TableItemDataPointer;
 class TableItemData
 {
 #ifdef QT_DEBUG
-	static int dinstcount_;
+    static int dinstcount_;
 #endif
     QStringList thumbFiles_;
     QString movieDirectory_;
@@ -77,7 +77,7 @@ class TableItemData
 
 
 public:
-	static TableItemDataPointer Create(
+    static TableItemDataPointer Create(
             const qint64& id,
             const QStringList& files,
             const QString& movieDirectory,
@@ -97,7 +97,7 @@ public:
             int vWidth, int vHeight,
             int opencount,
             const qint64& lastaccess)
-	{
+    {
         Q_ASSERT(!movieDirectory.isEmpty());
         Q_ASSERT(!movieFileName.isEmpty());
         if(movieDirectory.isEmpty() || movieFileName.isEmpty())
@@ -129,18 +129,18 @@ public:
 
 
 
-	}
-	~TableItemData()
-	{
+    }
+    ~TableItemData()
+    {
 #ifdef QT_DEBUG
-		--dinstcount_;
+        --dinstcount_;
 #endif
-	}
+    }
 #ifdef QT_DEBUG
-	static bool isAllClear()
-	{
-		return dinstcount_ == 0;
-	}
+    static bool isAllClear()
+    {
+        return dinstcount_ == 0;
+    }
 #endif
     qint64 getID() const {
         return id_;
@@ -241,9 +241,9 @@ public:
     QMap<QString,QVariant> getColumnValues() const;
 
     // int opencountTmp_ = 0;
-//	void IncrementOpenCount() {
-//        ++opencount_;
-//	}
+    //	void IncrementOpenCount() {
+    //        ++opencount_;
+    //	}
 
     bool isDisplayed() const {
         return displayed_;

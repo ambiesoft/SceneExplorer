@@ -47,37 +47,37 @@ bool showInGraphicalShell(QWidget *parent, const QString &pathIn)
 {
     Q_UNUSED(parent);
 
-	QString explorer;
-	QString path = QProcessEnvironment::systemEnvironment().value("PATH");
-	QStringList paths = path.split(';');
-	for (int i = 0; i < paths.length(); ++i)
-	{
-		QString s = pathCombine(paths[i], "explorer.exe");
+    QString explorer;
+    QString path = QProcessEnvironment::systemEnvironment().value("PATH");
+    QStringList paths = path.split(';');
+    for (int i = 0; i < paths.length(); ++i)
+    {
+        QString s = pathCombine(paths[i], "explorer.exe");
 
-		if (QFile(s).exists())
-		{
-			explorer = s;
-			break;
-		}
-	}
-	if (explorer.isEmpty()) {
+        if (QFile(s).exists())
+        {
+            explorer = s;
+            break;
+        }
+    }
+    if (explorer.isEmpty()) {
         return false;
-	}
-	QString param;
-	if (!QFileInfo(pathIn).isDir())
-	{
-		QStringList args;
-		args << "/select,";
-		args << QDir::toNativeSeparators(pathIn);
-		args << ",/n";
-		QProcess::startDetached(explorer, args);
-	}
-	else
-	{
-		QStringList args;
-		args << QDir::toNativeSeparators(pathIn);
-		QProcess::startDetached(explorer, args);
-	}
+    }
+    QString param;
+    if (!QFileInfo(pathIn).isDir())
+    {
+        QStringList args;
+        args << "/select,";
+        args << QDir::toNativeSeparators(pathIn);
+        args << ",/n";
+        QProcess::startDetached(explorer, args);
+    }
+    else
+    {
+        QStringList args;
+        args << QDir::toNativeSeparators(pathIn);
+        QProcess::startDetached(explorer, args);
+    }
 
     return true;
 }
@@ -130,15 +130,15 @@ static QString getSpecialFolder(int id)
     }
 
 
-//    PWSTR pOut=NULL;
-//    if(S_OK != SHGetKnownFolderPath(id,0,NULL,&pOut))
-//    {
-//        Alert(nullptr, QObject::tr("Failed to get Roaming folder. Default folder will be used."));
-//        return QString();
-//    }
+    //    PWSTR pOut=NULL;
+    //    if(S_OK != SHGetKnownFolderPath(id,0,NULL,&pOut))
+    //    {
+    //        Alert(nullptr, QObject::tr("Failed to get Roaming folder. Default folder will be used."));
+    //        return QString();
+    //    }
 
     QString dir = QString::fromUtf16((const ushort*)path);
-//    CoTaskMemFree(pOut);
+    //    CoTaskMemFree(pOut);
 
     dir = QDir(dir).absolutePath();
 
@@ -203,7 +203,7 @@ QString getInifile(bool& bExit)
             }
         }
     }
-    break;
+        break;
     } // switch
 
     if (dir.isEmpty())
@@ -223,13 +223,13 @@ bool isLegalFilePath(QString filename, QString* pError)
     foreach (const QChar& c, filename)
     {
         // Check for control characters
-         if (c.toLatin1() > 0 && c.toLatin1() < 32)
-         {
-             if(pError)
-             {
-                 *pError = QObject::tr("Filename could not have control characters.");
-             }
-             return false;
+        if (c.toLatin1() > 0 && c.toLatin1() < 32)
+        {
+            if(pError)
+            {
+                *pError = QObject::tr("Filename could not have control characters.");
+            }
+            return false;
         }
         // Check for illegal characters
         if (illegal.contains(c))
@@ -311,9 +311,9 @@ bool isLegalFilePath(QString filename, QString* pError)
         return false;
     }
 
-//    // Exclude raw device names
-//    if (filename.left(4)=="\\\\.\\")
-//        return false;
+    //    // Exclude raw device names
+    //    if (filename.left(4)=="\\\\.\\")
+    //        return false;
 
 
     return true;
@@ -367,15 +367,15 @@ bool setProcessPriority(const qint64& pid, QThread::Priority priority, QStringLi
     }
 
     int ret = SetProirity(pid,
-		cpuPriority,
-		ioPriority,
-		memPriority);
+                          cpuPriority,
+                          ioPriority,
+                          memPriority);
 
-	if (ret != 0)
-	{
+    if (ret != 0)
+    {
         std::wstring lastError = GetLastErrorString(static_cast<DWORD>(ret));
         errors << QString::fromStdWString(lastError);
-	}
+    }
     return ret==0;
 }
 

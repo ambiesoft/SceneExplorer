@@ -120,13 +120,13 @@ DocumentSql::DocumentSql(const QString& file) :
 
         QSqlQuery q(db);
         q.exec("CREATE TABLE Settings ( "
-                   "id INTEGER NOT NULL PRIMARY KEY,"
-                   "allselected INT NOT NULL DEFAULT '0',"
-                   "allchecked INT NOT NULL DEFAULT '0',"
-                   "lastrow INT NOT NULL DEFAULT '0',"
-                   "lastcolumn INT NOT NULL DEFAULT '0'"
-                   ")"
-                   );
+               "id INTEGER NOT NULL PRIMARY KEY,"
+               "allselected INT NOT NULL DEFAULT '0',"
+               "allchecked INT NOT NULL DEFAULT '0',"
+               "lastrow INT NOT NULL DEFAULT '0',"
+               "lastcolumn INT NOT NULL DEFAULT '0'"
+               ")"
+               );
         qDebug() << q.lastError().text();
         q.exec("ALTER TABLE Settings ADD COLUMN alltagselected INT NOT NULL DEFAULT '0'");
         qDebug() << q.lastError().text();
@@ -155,11 +155,11 @@ DocumentSql::DocumentSql(const QString& file) :
 
 
         q.exec("CREATE TABLE Directories ( "
-                   "id INTEGER NOT NULL PRIMARY KEY,"
-                   "directory TEXT,"
-                   "selected INT,"
-                   "checked INT)"
-                   );
+               "id INTEGER NOT NULL PRIMARY KEY,"
+               "directory TEXT,"
+               "selected INT,"
+               "checked INT)"
+               );
         qDebug() << q.lastError().text();
 
         q.exec("SELECT name FROM sqlite_master WHERE type='table' AND name='Directories';");
@@ -173,11 +173,11 @@ DocumentSql::DocumentSql(const QString& file) :
 
 
         q.exec("CREATE TABLE Access ( "
-                   "id INTEGER NOT NULL,"
-                   "opencount INT NOT NULL DEFAULT 0,"
-                   "lastaccess INT,"
-                   "dbid TEXT NOT NULL)"
-                   );
+               "id INTEGER NOT NULL,"
+               "opencount INT NOT NULL DEFAULT 0,"
+               "lastaccess INT,"
+               "dbid TEXT NOT NULL)"
+               );
         qDebug() << q.lastError().text();
         q.exec("CREATE UNIQUE INDEX idx_Access_id_dbid ON Access(id,dbid)");
         qDebug() << q.lastError().text();
@@ -191,11 +191,11 @@ DocumentSql::DocumentSql(const QString& file) :
 
 
         q.exec("CREATE TABLE Tag ( "
-                 "tagid INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
-                 "tag,"
-                 "yomi,"
-                 "dbid TEXT NOT NULL)"
-                 );
+               "tagid INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
+               "tag,"
+               "yomi,"
+               "dbid TEXT NOT NULL)"
+               );
         qDebug() << q.lastError().text();
         q.exec("CREATE UNIQUE INDEX idx_Tag_tagid_dbid ON Tag(tagid,dbid)");
         qDebug() << q.lastError().text();
@@ -211,10 +211,10 @@ DocumentSql::DocumentSql(const QString& file) :
         }
 
         q.exec("CREATE TABLE Tagged ( "
-                 "id INTEGER NOT NULL,"
-                 "tagid INTEGER NOT NULL,"
-                 "dbid TEXT NOT NULL)"
-                 );
+               "id INTEGER NOT NULL,"
+               "tagid INTEGER NOT NULL,"
+               "dbid TEXT NOT NULL)"
+               );
         qDebug() << q.lastError().text();
         q.exec("CREATE UNIQUE INDEX idx_Tagged_id_tagid_dbid ON Tagged(id,tagid,dbid)");
         qDebug() << q.lastError().text();
@@ -325,9 +325,9 @@ bool DocumentSql::setDirAllChecked(bool b)
 {
     MYQMODIFIER QSqlQuery query("UPDATE " + docdb("Settings") + " SET allchecked=? WHERE id=1");
 
-	query.bindValue(0, b ? 1 : 0);
-	SQC(query, exec());
-	return true;
+    query.bindValue(0, b ? 1 : 0);
+    SQC(query, exec());
+    return true;
 }
 
 
@@ -354,23 +354,23 @@ bool DocumentSql::setDirectory(int index, DirectoryItem* di)
 {
     MYQMODIFIER QSqlQuery query = myPrepare("INSERT OR REPLACE INTO " + docdb("Directories") + " (id, directory, selected, checked) VALUES (?,?,?,?)");
 
-	int i = 0;
-	query.bindValue(i++, index);
+    int i = 0;
+    query.bindValue(i++, index);
     query.bindValue(i++, di->text());
     query.bindValue(i++, di->isSelected() ? 1 : 0);
     query.bindValue(i++, di->IsChecked() ? 1 : 0);
-	SQC(query, exec());
-	return true;
+    SQC(query, exec());
+    return true;
 }
 
 bool DocumentSql::isDirSelected(int index) const
 {
     MYQMODIFIER QSqlQuery query("SELECT selected FROM " + docdb("Directories") + " WHERE id=?");
 
-	query.bindValue(0, index);
-	SQC(query, exec());
-	if (!query.next())
-		return false;
+    query.bindValue(0, index);
+    SQC(query, exec());
+    if (!query.next())
+        return false;
     return query.value(0).toInt() != 0;
 }
 
@@ -378,10 +378,10 @@ bool DocumentSql::isDirChecked(int index) const
 {
     MYQMODIFIER QSqlQuery query("SELECT checked FROM " + docdb("Directories") + " WHERE id=?");
 
-	query.bindValue(0, index);
-	SQC(query, exec());
-	if(!query.next())
-		return false;
+    query.bindValue(0, index);
+    SQC(query, exec());
+    if(!query.next())
+        return false;
     return query.value(0).toInt() != 0;
 }
 
@@ -389,9 +389,9 @@ bool DocumentSql::removeDirectoryOver(int index)
 {
     MYQMODIFIER QSqlQuery query("DELETE FROM " + docdb("Directories") + " WHERE id > ?");
 
-	query.bindValue(0, index);
-	SQC(query, exec());
-	return true;
+    query.bindValue(0, index);
+    SQC(query, exec());
+    return true;
 }
 
 bool DocumentSql::SetLastPos(int row, int column)
@@ -429,10 +429,10 @@ bool DocumentSql::IncrementOpenCountAndLastAccess(const qint64& id)
 {
     MYQMODIFIER QString state =
             "REPLACE into " + docdb("Access") + " (id,opencount,lastaccess,dbid) VALUES "
-            "(?,"
-            "COALESCE((SELECT opencount FROM " + docdb("Access") + " WHERE id=? AND dbid=?),0)+1,"
-            "?,"
-            "?)";
+                                                "(?,"
+                                                "COALESCE((SELECT opencount FROM " + docdb("Access") + " WHERE id=? AND dbid=?),0)+1,"
+                                                                                                       "?,"
+                                                                                                       "?)";
 
     MYQMODIFIER QSqlQuery query = myPrepare(state);
 
@@ -570,27 +570,27 @@ bool DocumentSql::SetTagged(const qint64& id, const qint64& tagid, const bool bS
     }
 
 
-	if (bSet)
-	{
+    if (bSet)
+    {
         MYQMODIFIER QSqlQuery query = myPrepare("REPLACE INTO " + docdb("Tagged") + " (id,tagid,dbid) VALUES (?,?,?)");
 
-		int i = 0;
-		query.bindValue(i++, id);
-		query.bindValue(i++, tagid);
-		query.bindValue(i++, gpSQL->getDbID());
+        int i = 0;
+        query.bindValue(i++, id);
+        query.bindValue(i++, tagid);
+        query.bindValue(i++, gpSQL->getDbID());
 
-		SQC(query, exec());
-	}
-	else
-	{
+        SQC(query, exec());
+    }
+    else
+    {
         QSqlQuery query = myPrepare("DELETE FROM " + docdb("Tagged") + " WHERE id=? AND tagid=? AND dbid=?");
 
-		int i = 0;
+        int i = 0;
         query.bindValue(i++, id);
-		query.bindValue(i++, tagid);
-		query.bindValue(i++, gpSQL->getDbID());
-		SQC(query, exec());
-	}
+        query.bindValue(i++, tagid);
+        query.bindValue(i++, gpSQL->getDbID());
+        SQC(query, exec());
+    }
     return true;
 }
 bool DocumentSql::GetTag(const qint64& tagid, QString& tag, QString& yomi) const

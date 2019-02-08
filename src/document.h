@@ -101,12 +101,12 @@ public:
     bool IncrementOpenCountAndLastAccess(const qint64& id) {
         return docSql_->IncrementOpenCountAndLastAccess(id);
     }
-//    bool IsOpenCountAndLastAccessClean() const {
-//        return bOpenCountAndLastAccessClean_;
-//    }
-//    void SetOpenCountAndLastAccessClean() {
-//        bOpenCountAndLastAccessClean_ = true;
-//    }
+    //    bool IsOpenCountAndLastAccessClean() const {
+    //        return bOpenCountAndLastAccessClean_;
+    //    }
+    //    void SetOpenCountAndLastAccessClean() {
+    //        bOpenCountAndLastAccessClean_ = true;
+    //    }
     bool setOpenCountAndLascAccess_obsolete(const QList<TableItemDataPointer>& all)
     {
         return docSql_->setOpenCountAndLascAccess_obsolete(all);
@@ -149,14 +149,14 @@ public:
     {
         return docSql_->GetTagsFromID(id,tagids);
     }
-//    bool GetOpenCounts(QMap<qint64,int>& opencounts)
-//    {
-//        return docSql_->GetOpenCounts(opencounts);
-//    }
-//    bool GetLastAccesses(QMap<qint64,qint64>& lastaccesses)
-//    {
-//        return docSql_->GetLastAccesses(lastaccesses);
-//    }
+    //    bool GetOpenCounts(QMap<qint64,int>& opencounts)
+    //    {
+    //        return docSql_->GetOpenCounts(opencounts);
+    //    }
+    //    bool GetLastAccesses(QMap<qint64,qint64>& lastaccesses)
+    //    {
+    //        return docSql_->GetLastAccesses(lastaccesses);
+    //    }
     bool GetOpenCountAndLastAccess(const qint64& id, int& opencount, qint64& lastaccess) const
     {
         return docSql_->GetOpenCountAndLastAccess(id,opencount,lastaccess);
@@ -177,9 +177,9 @@ public:
         bReordered_=true;
     }
     // set reorder to delete directory
-//    bool DeleteDirectory(DirectoryItem* di) {
-//        return docSql_->DeleteDirectory(di);
-//    }
+    //    bool DeleteDirectory(DirectoryItem* di) {
+    //        return docSql_->DeleteDirectory(di);
+    //    }
 
 };
 

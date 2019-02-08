@@ -57,9 +57,9 @@ public:
     bool IsChecked() const {
         return checkState()==Qt::Checked;
     }
-	
 
-	
+
+
     QString yomi() const {
         return yomi_;
     }

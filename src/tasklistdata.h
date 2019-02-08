@@ -33,7 +33,7 @@ class TaskListData
 
 private:
 #ifdef QT_DEBUG
-	static int dinstcount_;
+    static int dinstcount_;
 #endif
     int id_;
     QString movieFile_;
@@ -43,22 +43,22 @@ private:
     TaskListData(int id, const QString& movieFile):id_(id), movieFile_(movieFile)
     {
 #ifdef QT_DEBUG
-		++dinstcount_;
+        ++dinstcount_;
 #endif
-	}
+    }
 public:
     static TaskListDataPointer Create(int id, const QString& movieFile);
-	~TaskListData()
-	{
+    ~TaskListData()
+    {
 #ifdef QT_DEBUG
-		--dinstcount_;
+        --dinstcount_;
 #endif
-	}
+    }
 #ifdef QT_DEBUG
-	static bool isAllClear()
-	{
-		return dinstcount_ == 0;
-	}
+    static bool isAllClear()
+    {
+        return dinstcount_ == 0;
+    }
 #endif
 
     int GetId() const

@@ -32,9 +32,9 @@ void TaskGetDir::RegisterMetaType()
 }
 
 TaskGetDir::TaskGetDir(int loopId,
-           int id,
-           const QString& dir,
-           QThread::Priority* priority):
+                       int id,
+                       const QString& dir,
+                       QThread::Priority* priority):
     loopId_(loopId),
     id_(id),
     dir_(dir)
@@ -73,7 +73,7 @@ void TaskGetDir::runStuff(const QString& dir)
     {
         QStringList files;
         QList<qint64> sizes,wtimes;
-		QStringList salients;
+        QStringList salients;
         QDirIterator itFile(dir, QDir::NoDotAndDotDot|QDir::Files); // ,QDirIterator::Subdirectories);
         while(itFile.hasNext())
         {
@@ -82,12 +82,12 @@ void TaskGetDir::runStuff(const QString& dir)
             itFile.next();
             Q_ASSERT(itFile.fileInfo().isFile());
             if (Extension::IsMovieExtension(itFile.fileName()))
-			{
-				files.append(itFile.fileName());
+            {
+                files.append(itFile.fileName());
                 sizes.append(itFile.fileInfo().size());
                 wtimes.append(itFile.fileInfo().lastModified().toSecsSinceEpoch());
-				salients.append(createSalient(itFile.filePath(), QFile(itFile.filePath()).size()));
-			}
+                salients.append(createSalient(itFile.filePath(), QFile(itFile.filePath()).size()));
+            }
         }
         emit afterGetDir(loopId_, id_,
                          QDir(dir).absolutePath(),

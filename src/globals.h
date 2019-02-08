@@ -36,8 +36,8 @@ extern std::unique_ptr<CommandOption> gpCommandOption;
 # else
 #  define VERIFY(expr)  \
     do                    \
-    {                     \
-        (void) (expr);    \
+{                     \
+    (void) (expr);    \
     } while (0)
 # endif
 #endif
@@ -61,7 +61,7 @@ enum SORTCOLUMNMY{
     SORT_OPENCOUNT,
     SORT_LASTACCESS,
 
-	COUNT_SORTCOLUMN,
+    COUNT_SORTCOLUMN,
 };
 
 extern std::unique_ptr<QFont> gpMenuFont_;

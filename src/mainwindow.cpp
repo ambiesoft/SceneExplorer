@@ -82,16 +82,16 @@ using namespace Consts;
 
 MainWindow::SortManager::SortManager()
 {
-	sort_ = SORT_NONE;
+    sort_ = SORT_NONE;
     for (size_t i = 0; i < (sizeof(ascending_)/sizeof(ascending_[0])); ++i)
-	{
+    {
         ascending_[i] = false;
         acs_[i] = nullptr;
-		tbs_[i] = nullptr;
-	}
+        tbs_[i] = nullptr;
+    }
 
-	ascending_[SORT_FILENAME] = true;
-	ascending_[SORT_SIZE] = true;
+    ascending_[SORT_FILENAME] = true;
+    ascending_[SORT_SIZE] = true;
 }
 
 void MainWindow::CreateLimitManager()
@@ -147,7 +147,7 @@ void MainWindow::CreateLimitManager()
 
             int numofrows = settings_.valueInt(KEY_LIMIT_NUMBEROFROWS, 1000);
 
-			Q_ASSERT(!limitManager_);
+            Q_ASSERT(!limitManager_);
             limitManager_.reset(new LimitManager(numofrows, cmbLimit_));
         }
     }
@@ -191,7 +191,7 @@ void MainWindow::CreateLimitManager()
             delete sepLimit_;
             sepLimit_ = nullptr;
 
-			// This is converted to std::unique_ptr
+            // This is converted to std::unique_ptr
             limitManager_.reset();
             //delete limitManager_;
             //limitManager_ = nullptr;
@@ -293,8 +293,8 @@ bool MainWindow::LoadTags()
                 ti->setSelected(bSel);
                 ti->setCheckState(bCheck ? Qt::Checked : Qt::Unchecked);
             }
-			
-			ui->listTag->addItem(ti);
+
+            ui->listTag->addItem(ti);
         }
     }
 
@@ -322,11 +322,11 @@ void MainWindow::InitDocument()
 
     ui->directoryWidget->clear();
 
-//    AddUserEntryDirectory(DirectoryItem::DI_ALL,
-//                          -1,
-//                          QString(),
-//                          pDoc_->IsDirAllSelected(),
-//                          pDoc_->IsDirAllChecked());
+    //    AddUserEntryDirectory(DirectoryItem::DI_ALL,
+    //                          -1,
+    //                          QString(),
+    //                          pDoc_->IsDirAllSelected(),
+    //                          pDoc_->IsDirAllChecked());
     DirectoryItem* allitem = new DirectoryItem(-1,
                                                DirectoryItem::DI_ALL_MY,
                                                tr("All"));
@@ -334,24 +334,24 @@ void MainWindow::InitDocument()
     allitem->setSelected(pDoc_->IsDirAllSelected());
     ui->directoryWidget->addItem(allitem);
 
-//    const int count = pDoc_==nullptr ? 0 : pDoc_->dirCount();
-//    for(int i=1 ; i <= count ; ++i)
-//    {
-//        AddUserEntryDirectory(DirectoryItem::DI_NORMAL,
-//                              po
-//                              pDoc_->GetDEText(i),
-//                              pDoc_->IsDESelected(i),
-//                              pDoc_->IsDEChecked(i));
-//    }
+    //    const int count = pDoc_==nullptr ? 0 : pDoc_->dirCount();
+    //    for(int i=1 ; i <= count ; ++i)
+    //    {
+    //        AddUserEntryDirectory(DirectoryItem::DI_NORMAL,
+    //                              po
+    //                              pDoc_->GetDEText(i),
+    //                              pDoc_->IsDESelected(i),
+    //                              pDoc_->IsDEChecked(i));
+    //    }
     QList<DirectoryItem*> dirs;
     pDoc_->GetAllDirs(dirs);
     for(DirectoryItem* di : dirs)
     {
         ui->directoryWidget->addItem(di);
     }
-//    AddUserEntryDirectory(DirectoryItem::DI_MISSING,
-//                          -2,
-//                          QString(), false, false);
+    //    AddUserEntryDirectory(DirectoryItem::DI_MISSING,
+    //                          -2,
+    //                          QString(), false, false);
 
     DirectoryItem* missitem = new DirectoryItem(-2,
                                                 DirectoryItem::DI_MISSING_MY,
@@ -463,7 +463,7 @@ void MainWindow::clearAllPool(bool bAppendLog)
     delete pPoolFFmpeg_;
     pPoolFFmpeg_ = nullptr;
 
-	taskModel_->ClearAllTasks();
+    taskModel_->ClearAllTasks();
 
     if(bAppendLog)
         insertLog(TaskKind::App, 0, tr("======== All tasks Cleared ========"));
@@ -473,7 +473,7 @@ void MainWindow::clearAllPool(bool bAppendLog)
 
 MainWindow::~MainWindow()
 {
-	closed_ = true;
+    closed_ = true;
 
     delete pDoc_;
     pDoc_ = nullptr;
@@ -483,8 +483,8 @@ MainWindow::~MainWindow()
     delete ui;
 
 #ifdef QT_DEBUG
-	Q_ASSERT(TaskListData::isAllClear());
-	Q_ASSERT(TableItemData::isAllClear());
+    Q_ASSERT(TaskListData::isAllClear());
+    Q_ASSERT(TableItemData::isAllClear());
 #endif
 
 }
@@ -526,40 +526,40 @@ void MainWindow::insertLog(TaskKind kind,
         QString head;
         switch(kind)
         {
-            case TaskKind::GetDir:
-            {
-                head.append(tr("Iterate"));
-                head.append(QString::number(id));
-            }
+        case TaskKind::GetDir:
+        {
+            head.append(tr("Iterate"));
+            head.append(QString::number(id));
+        }
             break;
-            case TaskKind::FFMpeg:
-            {
-                head.append(tr("Thumbnail"));
-                head.append(QString::number(id));
-            }
+        case TaskKind::FFMpeg:
+        {
+            head.append(tr("Thumbnail"));
+            head.append(QString::number(id));
+        }
             break;
-            case TaskKind::SQL:
-            {
-                head.append(tr("Database"));
-				head.append(QString::number(id));
-            }
-            break;
-
-            case TaskKind::App:
-            {
-				head.append(tr("Application"));
-            }
+        case TaskKind::SQL:
+        {
+            head.append(tr("Database"));
+            head.append(QString::number(id));
+        }
             break;
 
-//            case TaskKind::Filter:
-//            {
-//                head.append(tr("Filter"));
-//            }
-//            break;
+        case TaskKind::App:
+        {
+            head.append(tr("Application"));
+        }
+            break;
 
-//            default:
-//                Q_ASSERT(false);
-//                return;
+            //            case TaskKind::Filter:
+            //            {
+            //                head.append(tr("Filter"));
+            //            }
+            //            break;
+
+            //            default:
+            //                Q_ASSERT(false);
+            //                return;
         }
 
         head.append("> ");
@@ -579,7 +579,7 @@ void MainWindow::insertLog(TaskKind kind,
     if(scrollMax==scrollCur)
     {
         ui->txtLog->verticalScrollBar()->setValue(
-                ui->txtLog->verticalScrollBar()->maximum()); // Scrolls to the bottom
+                    ui->txtLog->verticalScrollBar()->maximum()); // Scrolls to the bottom
     }
 }
 void MainWindow::resizeDock_obsolete(QDockWidget* dock, const QSize& size)
@@ -587,31 +587,31 @@ void MainWindow::resizeDock_obsolete(QDockWidget* dock, const QSize& size)
     // width
     switch(this->dockWidgetArea(dock))
     {
-        case Qt::DockWidgetArea::LeftDockWidgetArea:
-        case Qt::DockWidgetArea::RightDockWidgetArea:
-        {
-            QList<int> sizes;
-            QList<QDockWidget*> docks;
+    case Qt::DockWidgetArea::LeftDockWidgetArea:
+    case Qt::DockWidgetArea::RightDockWidgetArea:
+    {
+        QList<int> sizes;
+        QList<QDockWidget*> docks;
 
-            docks.append(dock);
-            sizes.append(size.height());
+        docks.append(dock);
+        sizes.append(size.height());
 
-            resizeDocks(docks,sizes,Qt::Orientation::Vertical);
-        }
+        resizeDocks(docks,sizes,Qt::Orientation::Vertical);
+    }
         break;
 
-        case Qt::DockWidgetArea::TopDockWidgetArea:
-        case Qt::DockWidgetArea::BottomDockWidgetArea:
+    case Qt::DockWidgetArea::TopDockWidgetArea:
+    case Qt::DockWidgetArea::BottomDockWidgetArea:
         // height
-        {
+    {
         QList<QDockWidget*> docks;
-            QList<int> sizes;
+        QList<int> sizes;
 
-            docks.append(dock);
-            sizes.append(size.width());
+        docks.append(dock);
+        sizes.append(size.width());
 
-            resizeDocks(docks,sizes,Qt::Orientation::Horizontal);
-        }
+        resizeDocks(docks,sizes,Qt::Orientation::Horizontal);
+    }
         break;
 
     default:
@@ -648,8 +648,8 @@ void MainWindow::afterGetDir(int loopId, int id,
     // check file is in DB
     for(int ifs = 0 ; ifs < filesIn.count();++ifs)
     {
-		const QString& file = filesIn[ifs];
-		const QString& sa = salients[ifs];
+        const QString& file = filesIn[ifs];
+        const QString& sa = salients[ifs];
         const qint64 size = sizes[ifs];
         const qint64 wtime = wtimes[ifs];
 
@@ -714,10 +714,10 @@ void MainWindow::afterGetDir(int loopId, int id,
     }
     // now file must be thumbnailed
     afterFilter2(loopId,
-                id,
-                dir,
-                filteredFiles
-                );
+                 id,
+                 dir,
+                 filteredFiles
+                 );
 
 
     if(needUpdate)
@@ -736,8 +736,8 @@ void MainWindow::finished_GetDir(int loopId, int id, const QString& dir)
     checkTaskFinished();
 }
 void MainWindow::afterFilter2(int loopId,int id,
-                             const QString& dir,
-                             const QStringList& filteredFiles)
+                              const QString& dir,
+                              const QStringList& filteredFiles)
 {
     if(loopId != gLoopId)
         return;
@@ -746,12 +746,12 @@ void MainWindow::afterFilter2(int loopId,int id,
 
 
 
-//    QStringList filteredFiles;
-//    int ret = gpSQL->filterWithEntry(dir, filesIn, filteredFiles);
-//    if(ret != 0)
-//    {
-//        insertLog(TaskKind::SQL, 0, Sql::getErrorStrig(ret), true);
-//    }
+    //    QStringList filteredFiles;
+    //    int ret = gpSQL->filterWithEntry(dir, filesIn, filteredFiles);
+    //    if(ret != 0)
+    //    {
+    //        insertLog(TaskKind::SQL, 0, Sql::getErrorStrig(ret), true);
+    //    }
 
     if(filteredFiles.isEmpty())
     {
@@ -783,8 +783,8 @@ void MainWindow::afterFilter2(int loopId,int id,
                                            GetTaskPriority(),
                                            optionThumbFormat_);
         pTask->setAutoDelete(true);
-//        QObject::connect(pTask, &TaskFFMpeg::sayBorn,
-//                         this, &MainWindow::sayBorn);
+        //        QObject::connect(pTask, &TaskFFMpeg::sayBorn,
+        //                         this, &MainWindow::sayBorn);
         QObject::connect(pTask, &TaskFFmpeg::sayHello,
                          this, &MainWindow::sayHello);
         QObject::connect(pTask, &TaskFFmpeg::sayNo,
@@ -880,26 +880,26 @@ void MainWindow::OnContextRename()
         }
         targetname = newbasename + "." + newext;
 
-//        QFile filefull(oldfull);
-//        if(!filefull.rename(pathCombine(olddir, targetname)))
-//        {
-//            Alert(this,
-//                QString(tr("Failed to rename file. (%1)")).arg(filefull.errorString()));
-//            continue;
-//        }
+        //        QFile filefull(oldfull);
+        //        if(!filefull.rename(pathCombine(olddir, targetname)))
+        //        {
+        //            Alert(this,
+        //                QString(tr("Failed to rename file. (%1)")).arg(filefull.errorString()));
+        //            continue;
+        //        }
 
-//        if(!QFile::rename(oldfull,pathCombine(olddir, targetname)))
-//        {
-//            Alert(this,
-//                QString(tr("Failed to rename file. (%1)")).arg(oldfull));
-//            continue;
-//        }
+        //        if(!QFile::rename(oldfull,pathCombine(olddir, targetname)))
+        //        {
+        //            Alert(this,
+        //                QString(tr("Failed to rename file. (%1)")).arg(oldfull));
+        //            continue;
+        //        }
 
         QString renameError;
         if(!myRename(oldfull,pathCombine(olddir, targetname), renameError))
         {
             Alert(this,
-                QString(tr("Failed to rename file. (%1)")).arg(renameError));
+                  QString(tr("Failed to rename file. (%1)")).arg(renameError));
             continue;
         }
         break;
@@ -943,7 +943,7 @@ void MainWindow::OnContextRemoveFromDatabase()
     {
         // Newly checked to remove from disk, ask again
         if(!YesNo(this,
-              QString(tr("The file \"%1\" will be removed. Are you sure to continue?")).arg(movieFile)))
+                  QString(tr("The file \"%1\" will be removed. Are you sure to continue?")).arg(movieFile)))
         {
             return;
         }
@@ -1039,8 +1039,8 @@ void MainWindow::OnContextExternalTools()
 
 
 
-//    QStringList argconst;
-//    arg << movieFile;
+    //    QStringList argconst;
+    //    arg << movieFile;
 
     QString command;
     command += dq(exe);
@@ -1096,7 +1096,7 @@ void MainWindow::OnDirectorySelectionChanged(const QItemSelection &selected, con
     if(ui->directoryWidget->IsMissingItemSelectedOrChecked())
     {
         if(!YesNo(this,
-              tr("Showing all missing item will take some time. Do you want to continue?")))
+                  tr("Showing all missing item will take some time. Do you want to continue?")))
         {
             return;
         }
@@ -1108,13 +1108,13 @@ void MainWindow::OnDirectorySelectionChanged(const QItemSelection &selected, con
 
 void MainWindow::itemChangedCommon(bool bForceRead)
 {
-	if (!initialized_ || closed_)
-		return;
+    if (!initialized_ || closed_)
+        return;
 
     if ((directoryChanging_ || tagChanging_) && !bForceRead)
-		return;
+        return;
 
-	WaitCursor wc;
+    WaitCursor wc;
 
     QStringList dirs;
     bool bOnlyMissing = false;
@@ -1163,21 +1163,21 @@ void MainWindow::itemChangedCommon(bool bForceRead)
     const bool isSameReq =
             lastQueriedOnlyMissing_ == bOnlyMissing &&
             lastQueriedDirs_ == dirs  &&
-//            lastQueriedIsAllTag_==isAllTag &&
-//            lastQueriedTaggedIDs_==taggedids;
+            //            lastQueriedIsAllTag_==isAllTag &&
+            //            lastQueriedTaggedIDs_==taggedids;
             lastQueriedTaggedIds_==tagInfos;
     if(!bForceRead && isSameReq)
     {
         return;
     }
     if (limitManager_ && !isSameReq)
-	{
-		limitManager_->Reset();
-	}
+    {
+        limitManager_->Reset();
+    }
     lastQueriedOnlyMissing_ = bOnlyMissing;
     lastQueriedDirs_ = dirs;
-//    lastQueriedIsAllTag_ = isAllTag;
-//    lastQueriedTaggedIDs_ = taggedids;
+    //    lastQueriedIsAllTag_ = isAllTag;
+    //    lastQueriedTaggedIDs_ = taggedids;
     lastQueriedTaggedIds_ = tagInfos;
     GetSqlAllSetTable(dirs, tagInfos, bOnlyMissing);
 }
@@ -1186,7 +1186,7 @@ void MainWindow::GetSelectedAndCurrentTagIDs(TagidsInfo& tagInfos)
 {
     QList<qint64> tagids;
     TagItem* tiCurrent = static_cast<TagItem*>(ui->listTag->currentItem());
-	
+
     for(int i=0 ; i < ui->listTag->count(); ++i)
     {
         TagItem* ti = static_cast<TagItem*>(ui->listTag->item(i));
@@ -1256,54 +1256,54 @@ void MainWindow::GetSqlAllSetTable(const QStringList& dirs,
     QElapsedTimer timer;
     timer.start();
 
-	if (limitManager_ && limitManager_->IsNotCounted())
-	{
-		qlonglong count = gpSQL->GetAllCount(dirs);
-		limitManager_->SetAllCount(count);
+    if (limitManager_ && limitManager_->IsNotCounted())
+    {
+        qlonglong count = gpSQL->GetAllCount(dirs);
+        limitManager_->SetAllCount(count);
 
         size_t cmbcount = static_cast<size_t>(count / limitManager_->GetNumberOfRows());
-		if ((count % limitManager_->GetNumberOfRows()) != 0)
-			cmbcount++;
+        if ((count % limitManager_->GetNumberOfRows()) != 0)
+            cmbcount++;
 
         BlockedBool blc(limitManager_->GetBlockPointer());
         cmbLimit_->clear();
-		for (size_t i = 0; i < cmbcount; ++i)
-		{
+        for (size_t i = 0; i < cmbcount; ++i)
+        {
             cmbLimit_->addItem(QString("%1").arg(i+1));
             cmbLimit_->setItemData(static_cast<int>(i), Qt::AlignCenter, Qt::TextAlignmentRole);
-		}
-	}
+        }
+    }
 
     // these 2 columns exists in doc, so copy them into main DB.
-//    switch(sortManager_.GetCurrentSort())
-//    {
-//        case SORTCOLUMNMY::SORT_OPENCOUNT:
-//        {
-//            if(!pDoc_->IsOpenCountAndLastAccessClean())
-//            {
-//                QMap<qint64,int> opencounts;
-//                pDoc_->GetOpenCounts(opencounts);
-//                gpSQL->ApplyOpenCount(opencounts);
-//                pDoc_->SetOpenCountAndLastAccessClean();
-//            }
-//        }
-//        break;
+    //    switch(sortManager_.GetCurrentSort())
+    //    {
+    //        case SORTCOLUMNMY::SORT_OPENCOUNT:
+    //        {
+    //            if(!pDoc_->IsOpenCountAndLastAccessClean())
+    //            {
+    //                QMap<qint64,int> opencounts;
+    //                pDoc_->GetOpenCounts(opencounts);
+    //                gpSQL->ApplyOpenCount(opencounts);
+    //                pDoc_->SetOpenCountAndLastAccessClean();
+    //            }
+    //        }
+    //        break;
 
-//        case SORTCOLUMNMY::SORT_LASTACCESS:
-//        {
-//            if(!pDoc_->IsOpenCountAndLastAccessClean())
-//            {
-//                QMap<qint64,qint64> lastaccesses;
-//                pDoc_->GetLastAccesses(lastaccesses);
-//                gpSQL->ApplyLastAccesses(lastaccesses);
-//                pDoc_->SetOpenCountAndLastAccessClean();
-//            }
-//        }
-//        break;
+    //        case SORTCOLUMNMY::SORT_LASTACCESS:
+    //        {
+    //            if(!pDoc_->IsOpenCountAndLastAccessClean())
+    //            {
+    //                QMap<qint64,qint64> lastaccesses;
+    //                pDoc_->GetLastAccesses(lastaccesses);
+    //                gpSQL->ApplyLastAccesses(lastaccesses);
+    //                pDoc_->SetOpenCountAndLastAccessClean();
+    //            }
+    //        }
+    //        break;
 
-//    default:
-//        break;
-//    }
+    //    default:
+    //        break;
+    //    }
     QList<TableItemDataPointer> all;
     gpSQL->GetAll(all,
                   dirs,
@@ -1333,7 +1333,7 @@ void MainWindow::GetSqlAllSetTable(const QStringList& dirs,
               tr("Resetting data takes %1 milliseconds.").arg(timer.elapsed()));
 
 
-	tableSortParameterChanged(sortManager_.GetCurrentSort(), sortManager_.GetCurrentRev());
+    tableSortParameterChanged(sortManager_.GetCurrentSort(), sortManager_.GetCurrentRev());
 }
 
 void MainWindow::UpdateTitle(const QStringList& dirs, UpdateTitleType utt)
@@ -1358,8 +1358,8 @@ void MainWindow::UpdateTitle(const QStringList& dirs, UpdateTitleType utt)
         break;
     case UpdateTitleType::INIT:
         break;
-//    default:
-//        Q_ASSERT(false);
+        //    default:
+        //        Q_ASSERT(false);
     }
 
     QString title;
@@ -1390,15 +1390,15 @@ void MainWindow::UpdateTitle(const QStringList& dirs, UpdateTitleType utt)
 }
 void MainWindow::on_action_Top_triggered()
 {
-	WaitCursor wc;
+    WaitCursor wc;
     ui->tableView->scrollToTop();
 }
 
 void MainWindow::on_action_Bottom_triggered()
 {
-	WaitCursor wc;
+    WaitCursor wc;
     proxyModel_->ensureBottom();
-	QApplication::processEvents();
+    QApplication::processEvents();
     ui->tableView->scrollToBottom();
 
     QApplication::processEvents();
@@ -1507,29 +1507,29 @@ void MainWindow::on_action_Extentions_triggered()
 void MainWindow::on_action_Font_triggered()
 {
     setFontCommon2(KEY_FONT_TABLEINFO,
-                  [this]() -> QFont { return tableModel_->GetInfoFont();},
-                  [this](QFont& font) { tableModel_->SetInfoFont(font);});
+                   [this]() -> QFont { return tableModel_->GetInfoFont();},
+                   [this](QFont& font) { tableModel_->SetInfoFont(font);});
 }
 
 void MainWindow::on_action_FontDetail_triggered()
 {
     setFontCommon2(KEY_FONT_TABLEDETAIL,
-                  [this]() -> QFont { return tableModel_->GetDetailFont();},
-                  [this](QFont& font) { tableModel_->SetDetailFont(font);});
+                   [this]() -> QFont { return tableModel_->GetDetailFont();},
+                   [this](QFont& font) { tableModel_->SetDetailFont(font);});
 
 }
 void MainWindow::setFontCommon1(const QString& savekey,
                                 QWidget* pWidget)
 {
     setFontCommon2(savekey,
-                  [pWidget]() -> QFont { return pWidget->font();},
-                  [pWidget](QFont& font) { pWidget->setFont(font);});
+                   [pWidget]() -> QFont { return pWidget->font();},
+                   [pWidget](QFont& font) { pWidget->setFont(font);});
 }
 
 void MainWindow::askRebootClose()
 {
     if(!YesNo(this,
-         tr("Application needs to restart for the changes to take effect. Do you want to restart application now?")))
+              tr("Application needs to restart for the changes to take effect. Do you want to restart application now?")))
     {
         return;
     }
@@ -1537,8 +1537,8 @@ void MainWindow::askRebootClose()
     close();
 }
 void MainWindow::setFontCommon2(const QString& savekey,
-                               std::function<QFont (void)> getfunc,
-                               std::function<void(QFont&)> setfunc)
+                                std::function<QFont (void)> getfunc,
+                                std::function<void(QFont&)> setfunc)
 {
     bool ok;
     QFont font = QFontDialog::getFont(
@@ -1548,7 +1548,7 @@ void MainWindow::setFontCommon2(const QString& savekey,
     if (!ok)
     {
         if(!YesNo(this,
-              tr("Do you want to set back to default font?")))
+                  tr("Do you want to set back to default font?")))
         {
             return;
         }
@@ -1772,30 +1772,30 @@ void MainWindow::editTag()
 void MainWindow::deleteTag()
 {
     TagItem* ti =static_cast<TagItem*>( ui->listTag->currentItem());
-     if(ti->IsAllItem())
-         return;
+    if(ti->IsAllItem())
+        return;
 
-     if(!pDoc_)
-     {
-         Alert(this,
-               tr("No Document"));
-         return;
-     }
+    if(!pDoc_)
+    {
+        Alert(this,
+              tr("No Document"));
+        return;
+    }
 
-     if(!YesNo(this,
-           tr("Are you sure you want to delete Tag \"%1\"").arg(ti->text())))
-     {
-         return;
-     }
+    if(!YesNo(this,
+              tr("Are you sure you want to delete Tag \"%1\"").arg(ti->text())))
+    {
+        return;
+    }
 
-     if(!pDoc_->DeleteTag(ti->tagid()))
-     {
-         Alert(this,
-               tr("Failed to delete tag."));
-         return;
-     }
+    if(!pDoc_->DeleteTag(ti->tagid()))
+    {
+        Alert(this,
+              tr("Failed to delete tag."));
+        return;
+    }
 
-     delete ui->listTag->takeItem(ui->listTag->row(ti));
+    delete ui->listTag->takeItem(ui->listTag->row(ti));
 }
 
 void MainWindow::checkAllTagCommon(const bool bCheck)
@@ -1831,7 +1831,7 @@ void MainWindow::showTagContextMenu(const QPoint &pos)
         MyContextMenu myMenuFreeArea;
         myMenuFreeArea.addAction(ui->action_AddNewTag);
         myMenuFreeArea.addAction(ui->action_Paste);
-		ui->action_Paste->setEnabled(IsClipboardTagDataAvalable());
+        ui->action_Paste->setEnabled(IsClipboardTagDataAvalable());
         myMenuFreeArea.addSeparator();
         myMenuFreeArea.addAction(tr("&Check All"), this, SLOT(checkAllTag()));
         myMenuFreeArea.addAction(tr("&Uncheck All"), this, SLOT(uncheckAllTag()));
@@ -1867,7 +1867,7 @@ QString MainWindow::GetTags(const qint64& id)
     if(!pDoc_)
         return QString();
 
-	QSet<qint64> tagids;
+    QSet<qint64> tagids;
     if(!pDoc_->GetTagsFromID(id, tagids))
     {
         Alert(this,
@@ -1886,8 +1886,8 @@ QString MainWindow::GetTags(const qint64& id)
                   tr("Failed to GetTag."));
             return QString();
         }
-		if (!ret.isEmpty())
-			ret += ",";
+        if (!ret.isEmpty())
+            ret += ",";
         ret += tag;
         //if((i+1) != tagids.count())
         //    ret += ",";
@@ -1924,8 +1924,8 @@ void MainWindow::on_action_FontTag_triggered()
 
 void MainWindow::setMenuFont(QFont& font)
 {
-	if (!gpMenuFont_)
-		gpMenuFont_.reset(new QFont());
+    if (!gpMenuFont_)
+        gpMenuFont_.reset(new QFont());
     *gpMenuFont_=font;
     ui->menuBar->setFont(font);
     for(QMenu* pM : ui->menuBar->findChildren<QMenu*>())
@@ -1936,9 +1936,9 @@ void MainWindow::on_action_FontMenu_triggered()
     setFontCommon2(KEY_FONT_MENU,
                    [this]()->QFont { return ui->menuBar->font(); },
                    [this] (QFont& font)
-                    {
-                       setMenuFont(font);
-                    }
+    {
+        setMenuFont(font);
+    }
     );
 }
 
@@ -1946,9 +1946,9 @@ QList<QWidget*> MainWindow::getAllDockingWindow()
 {
     return QList<QWidget*> {
         ui->dockDirectory,
-        ui->dockOutput,
-        ui->dockTag,
-        ui->dockTask
+                ui->dockOutput,
+                ui->dockTag,
+                ui->dockTask
     };
 }
 void MainWindow::on_action_FontDockingWindow_triggered()
@@ -1956,12 +1956,12 @@ void MainWindow::on_action_FontDockingWindow_triggered()
     QList<QWidget*> allDock = getAllDockingWindow();
 
     setFontCommon2(KEY_FONT_DOCKINGWINDOW,
-                  [allDock]() -> QFont { return allDock[0]->font();},
-                  [allDock](QFont& font)
-                    {
-                        for(QWidget* pW : allDock)
-                            pW->setFont(font);
-                    }
+                   [allDock]() -> QFont { return allDock[0]->font();},
+                   [allDock](QFont& font)
+    {
+        for(QWidget* pW : allDock)
+            pW->setFont(font);
+    }
     );
 }
 
@@ -1970,13 +1970,13 @@ void MainWindow::on_action_FontStatusbar_triggered()
     setFontCommon2(KEY_FONT_STATUSBAR,
                    [this]() -> QFont { return ui->statusBar->font();},
                    [this](QFont& font)
-                    {
-                        ui->statusBar->setFont(font);
-                        foreach(QWidget* pW, getAllStatusBarWidgets())
-                        {
-                            pW->setFont(font);
-                        }
-                    }
+    {
+        ui->statusBar->setFont(font);
+        foreach(QWidget* pW, getAllStatusBarWidgets())
+        {
+            pW->setFont(font);
+        }
+    }
     );
 }
 
@@ -2274,36 +2274,36 @@ void MainWindow::on_action_ExternalTools_triggered()
 void MainWindow::on_action_AboutDocument_triggered()
 {
     QString title = APPNAME_DISPLAY;
-//    QString text;
+    //    QString text;
 
-//    text.append(tr("Executable"));
-//    text.append(": ");
-//    text.append(QCoreApplication::applicationFilePath());
+    //    text.append(tr("Executable"));
+    //    text.append(": ");
+    //    text.append(QCoreApplication::applicationFilePath());
 
-//    text.append("\n\n");
+    //    text.append("\n\n");
 
-//    text.append(tr("Document"));
-//    text.append(": ");
-//    text.append(pDoc_ ? pDoc_->GetFullName(): tr("<No document>"));
+    //    text.append(tr("Document"));
+    //    text.append(": ");
+    //    text.append(pDoc_ ? pDoc_->GetFullName(): tr("<No document>"));
 
-//    text.append("\n\n");
+    //    text.append("\n\n");
 
-//    text.append(tr("Ini file"));
-//    text.append(": ");
-//    text.append(settings_.fileName());
+    //    text.append(tr("Ini file"));
+    //    text.append(": ");
+    //    text.append(settings_.fileName());
 
-//    text.append("\n\n");
+    //    text.append("\n\n");
 
-//    text.append(tr("Database directory"));
-//    text.append(": ");
-//    text.append(QDir(".").absolutePath());
+    //    text.append(tr("Database directory"));
+    //    text.append(": ");
+    //    text.append(QDir(".").absolutePath());
 
 
-//    QMessageBox msgbox(this);
-//    msgbox.setIcon(QMessageBox::Information);
-//    msgbox.setText(text);
-//    msgbox.setWindowTitle(title);
-//    msgbox.exec();
+    //    QMessageBox msgbox(this);
+    //    msgbox.setIcon(QMessageBox::Information);
+    //    msgbox.setText(text);
+    //    msgbox.setWindowTitle(title);
+    //    msgbox.exec();
 
     DocinfoDialog dlg(this,
                       QCoreApplication::applicationFilePath(),

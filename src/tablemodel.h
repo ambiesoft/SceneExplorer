@@ -64,7 +64,7 @@ private:
     mutable QMap<QString, QVariant> mapPixmaps_;
     ImageCacheType imagecache_;
 
-	bool bShowMissing_ = false;
+    bool bShowMissing_ = false;
 
     QTableView* parent_;
     IMainWindow* mainWindow_;
@@ -99,11 +99,11 @@ public:
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     Qt::ItemFlags flags(const QModelIndex & index) const override ;
 
-//    void Sort_obsolete(SORTCOLUMN column);
-//    void Sort_obsolete(SORTCOLUMN column, bool rev);
-//    bool RenameEntries(const QString& dir,
-//                       const QStringList& renameOlds,
-//                       const QStringList& renameNews);
+    //    void Sort_obsolete(SORTCOLUMN column);
+    //    void Sort_obsolete(SORTCOLUMN column, bool rev);
+    //    bool RenameEntries(const QString& dir,
+    //                       const QStringList& renameOlds,
+    //                       const QStringList& renameNews);
     bool RenameEntry(const QString& dbDir,
                      const QString& dbFile,
                      const QString& newdir,
@@ -113,13 +113,13 @@ public:
         return itemDatas_.count();
     }
 
-	void SetShowMissing(bool bToggle)
-	{
-		bShowMissing_ = bToggle;
-	}
-	bool IsShowMissing() const {
-		return bShowMissing_;
-	}
+    void SetShowMissing(bool bToggle)
+    {
+        bShowMissing_ = bToggle;
+    }
+    bool IsShowMissing() const {
+        return bShowMissing_;
+    }
     void UpdateOpenCountAndLastAccess(const QString& movieFile,
                                       const int opencount,
                                       const qint64& lastaccess);
@@ -186,33 +186,33 @@ class FileMissingFilterProxyModel : public QSortFilterProxyModel
 {
 
 public:
-	FileMissingFilterProxyModel(QWidget*parent) : QSortFilterProxyModel(parent){}
+    FileMissingFilterProxyModel(QWidget*parent) : QSortFilterProxyModel(parent){}
 
-	bool filterAcceptsRow(
-		int sourceRow,
-		const QModelIndex &sourceParent) const
-	{
-		if (((TableModel*) sourceModel())->IsShowMissing())
-			return true;
+    bool filterAcceptsRow(
+            int sourceRow,
+            const QModelIndex &sourceParent) const
+    {
+        if (((TableModel*) sourceModel())->IsShowMissing())
+            return true;
 
-		QModelIndex index = sourceModel()->index(sourceRow, 0, sourceParent);
+        QModelIndex index = sourceModel()->index(sourceRow, 0, sourceParent);
         QVariant v = sourceModel()->data(index, TableModel::MovieFileFull);
-		QString s = v.toString();
-		return QFile(s).exists();
-	}
+        QString s = v.toString();
+        return QFile(s).exists();
+    }
     void ensureBottom()
     {
         int allcount = rowCount();
         int startI = allcount-(3*10);
-		if (startI < 0)
-			return;
+        if (startI < 0)
+            return;
         for(int i=startI; i < allcount; ++i)
         {
-			sourceModel()->data(sourceModel()->index(i,0),Qt::DecorationRole);
-			sourceModel()->data(sourceModel()->index(i,1),Qt::DecorationRole);
-			sourceModel()->data(sourceModel()->index(i,2),Qt::DecorationRole);
-			sourceModel()->data(sourceModel()->index(i,3),Qt::DecorationRole);
-			sourceModel()->data(sourceModel()->index(i,4),Qt::DecorationRole);
+            sourceModel()->data(sourceModel()->index(i,0),Qt::DecorationRole);
+            sourceModel()->data(sourceModel()->index(i,1),Qt::DecorationRole);
+            sourceModel()->data(sourceModel()->index(i,2),Qt::DecorationRole);
+            sourceModel()->data(sourceModel()->index(i,3),Qt::DecorationRole);
+            sourceModel()->data(sourceModel()->index(i,4),Qt::DecorationRole);
         }
     }
     void ensureIndex(const QModelIndex& mi)
@@ -237,14 +237,14 @@ public:
     int GetItemCount() const {
         return rowCount()/3;
     }
-//    QString pathInfo(const QModelIndex& mi) const {
-//        int amari = mi.row() % 3;
-//        QModelIndex newI = createIndex(mi.row()-amari, mi.column());
-//        QVariant v=data(newI);
-//        if(!v.isValid())
-//            return QString;
-//        return v.toString();
-//    }
+    //    QString pathInfo(const QModelIndex& mi) const {
+    //        int amari = mi.row() % 3;
+    //        QModelIndex newI = createIndex(mi.row()-amari, mi.column());
+    //        QVariant v=data(newI);
+    //        if(!v.isValid())
+    //            return QString;
+    //        return v.toString();
+    //    }
     QModelIndex findIndex(const QString& selPath) const {
         QModelIndex sourceIndex = ((TableModel*) sourceModel())->GetIndex(selPath);
         return index(sourceIndex.row(),sourceIndex.column());

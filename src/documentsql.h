@@ -68,10 +68,10 @@ public:
     bool setDirectory(int index, DirectoryItem* di);
 
     bool isDirSelected(int index) const;
-	// bool setDirSelected(int index, bool b);
+    // bool setDirSelected(int index, bool b);
 
     bool isDirChecked(int index) const;
-	// bool setDirChecked(int index, bool b);
+    // bool setDirChecked(int index, bool b);
 
     bool removeDirectoryOver(int index);
 
@@ -90,8 +90,8 @@ public:
     bool ReplaceTag(const qint64& tagid, const QString& tag, const QString& yomi);
     bool DeleteTag(const qint64& tagid);
     bool GetTagsFromID(const qint64& id, QSet<qint64>& tagids);
-//    bool GetOpenCounts(QMap<qint64,int>& opencounts);
-//    bool GetLastAccesses(QMap<qint64,qint64>& lastaccesses);
+    //    bool GetOpenCounts(QMap<qint64,int>& opencounts);
+    //    bool GetLastAccesses(QMap<qint64,qint64>& lastaccesses);
     bool GetOpenCountAndLastAccess(const qint64& id, int& opencount, qint64& lastaccess);
     bool GetTagSelectedAndChecked(const qint64& tagid, bool& bSel, bool& bCheck);
     bool SetTagSelectedAndChecked(const qint64& tagid, const bool bSel, const bool bCheck);

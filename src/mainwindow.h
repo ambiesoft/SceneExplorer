@@ -97,14 +97,14 @@ private:
         // IDKIND_Filter,
         IDKIND_FFmpeg,
     };
-	bool initialized_ = false;
-	bool closed_ = false;
+    bool initialized_ = false;
+    bool closed_ = false;
     bool directoryChanging_ = false;
     bool tagChanging_ = false;
     bool lastQueriedOnlyMissing_ = false;
     QStringList lastQueriedDirs_ = {"dummy"};
-//    bool lastQueriedIsAllTag_ = false;
-//    QSet<qint64> lastQueriedTaggedIDs_ = {-1};
+    //    bool lastQueriedIsAllTag_ = false;
+    //    QSet<qint64> lastQueriedTaggedIDs_ = {-1};
     TagidsInfo lastQueriedTaggedIds_;
 
     //SORTCOLUMN currentSort_ = SORTCOLUMN::SORT_NONE;
@@ -133,7 +133,7 @@ private:
     {
         // int curIndex_ = 0;
         int numOfRows_;
-		qlonglong allCount_ = -1;
+        qlonglong allCount_ = -1;
         QComboBox* cmb_;
         bool blocking_ = false;
     public:
@@ -141,7 +141,7 @@ private:
         void Reset() {
             BlockedBool bb(&blocking_);
             cmb_->setCurrentIndex(0);
-			allCount_ = -1;
+            allCount_ = -1;
         }
         bool Decrement();
         bool Increment();
@@ -155,15 +155,15 @@ private:
         void SetNumberOfRows(int i) {
             numOfRows_ = i;
         }
-		bool IsNotCounted() const {
-			return allCount_ == -1;
-		}
-		qlonglong GetAllCount() const {
-			return allCount_;
-		}
-		void SetAllCount(qlonglong& l) {
-			allCount_ = l;
-		}
+        bool IsNotCounted() const {
+            return allCount_ == -1;
+        }
+        qlonglong GetAllCount() const {
+            return allCount_;
+        }
+        void SetAllCount(qlonglong& l) {
+            allCount_ = l;
+        }
         void SetIndexFirst() {
             BlockedBool bb(&blocking_);
             cmb_->setCurrentIndex(0);
@@ -179,7 +179,7 @@ private:
             return blocking_;
         }
     };
-	std::unique_ptr<LimitManager> limitManager_;
+    std::unique_ptr<LimitManager> limitManager_;
 
     class IDManager
     {
@@ -202,7 +202,7 @@ private:
             switch(idkind)
             {
             case GetDir: return idGetDir_;
-            // case Filter: return idFilter_;
+                // case Filter: return idFilter_;
             case FFMpeg: return idFFMpeg_;
             }
             Q_ASSERT(false);
@@ -213,7 +213,7 @@ private:
             switch(idkind)
             {
             case GetDir: return idGetDirDone_;
-            // case Filter: return idFilterDone_;
+                // case Filter: return idFilterDone_;
             case FFMpeg: return idFFMpegDone_;
             }
             Q_ASSERT(false);
@@ -225,10 +225,10 @@ private:
             switch(idkind)
             {
             case GetDir: ret = ++idGetDir_;break;
-            // case Filter: ret = ++idFilter_;break;
+                // case Filter: ret = ++idFilter_;break;
             case FFMpeg: ret = ++idFFMpeg_;break;
             default:
-            Q_ASSERT(false);
+                Q_ASSERT(false);
             }
             updateStatus();
             return ret;
@@ -239,10 +239,10 @@ private:
             switch(idkind)
             {
             case GetDir: ret = ++idGetDirDone_;break;
-            // case Filter: ret = ++idFilterDone_;break;
+                // case Filter: ret = ++idFilterDone_;break;
             case FFMpeg: ret = ++idFFMpegDone_;break;
             default:
-            Q_ASSERT(false);
+                Q_ASSERT(false);
             }
             updateStatus();
             return ret;
@@ -259,14 +259,14 @@ private:
             if(
                     Get(IDKIND_FFmpeg)==GetDone(IDKIND_FFmpeg) &&
                     Get(IDKIND_GetDir)==GetDone(IDKIND_GetDir)
-              )
+                    )
             {
                 return true;
             }
             return false;
         }
-	};
-	std::unique_ptr<IDManager> idManager_;
+    };
+    std::unique_ptr<IDManager> idManager_;
     friend class IDManager;
 
     void checkTaskFinished();
@@ -278,9 +278,9 @@ private:
 
 
     bool initShown_=false;
-	bool IsClosed() const {
-		return closed_;
-	}
+    bool IsClosed() const {
+        return closed_;
+    }
 
     QLabel *slPaused_ = nullptr;
     QLabel *slTask_ = nullptr;
@@ -309,39 +309,39 @@ protected:
     void showEvent( QShowEvent* event );
 
     void initLangMenus();
-	class SortManager
-	{
-		SORTCOLUMNMY sort_;
+    class SortManager
+    {
+        SORTCOLUMNMY sort_;
         bool ascending_[COUNT_SORTCOLUMN];
         QIcon iconsAscend_[COUNT_SORTCOLUMN];
         QIcon iconsDescend_[COUNT_SORTCOLUMN];
         QAction* acs_[COUNT_SORTCOLUMN];
-		QToolButton* tbs_[COUNT_SORTCOLUMN];
-	public:
-		SortManager();
-		void onSort(SORTCOLUMNMY sc);
-		void UpdateButtonText();
-		SORTCOLUMNMY GetCurrentSort() const {
-			return sort_;
-		}
-		bool GetCurrentRev() const {
+        QToolButton* tbs_[COUNT_SORTCOLUMN];
+    public:
+        SortManager();
+        void onSort(SORTCOLUMNMY sc);
+        void UpdateButtonText();
+        SORTCOLUMNMY GetCurrentSort() const {
+            return sort_;
+        }
+        bool GetCurrentRev() const {
             return ascending_[sort_];
-		}
+        }
         void setAction(SORTCOLUMNMY sc,
-                           QAction* pAction);
+                       QAction* pAction);
         void setToolButton(SORTCOLUMNMY sc,
                            QToolButton* tb,
                            const QIcon& iconNormal,
                            const QIcon& iconRev);
 
-		void InitCurrentSort(SORTCOLUMNMY sc, bool b) {
-			sort_ = sc;
+        void InitCurrentSort(SORTCOLUMNMY sc, bool b) {
+            sort_ = sc;
             ascending_[sort_] = b;
-			UpdateButtonText();
-		}
-	} sortManager_;
-	void onSortCommon(SORTCOLUMNMY sortColumn);
-	QToolButton* tbNameSort_ = nullptr;
+            UpdateButtonText();
+        }
+    } sortManager_;
+    void onSortCommon(SORTCOLUMNMY sortColumn);
+    QToolButton* tbNameSort_ = nullptr;
     QToolButton* tbSizeSort_ = nullptr;
     QToolButton* tbWtime_ = nullptr;
     QToolButton* tbOpenCount_ = nullptr;
@@ -351,8 +351,8 @@ protected:
         return sortManager_.GetCurrentSort();
     }
     virtual QString GetTags(const qint64& id);
-	QToolButton* tbLabelSort_ = nullptr;
-	
+    QToolButton* tbLabelSort_ = nullptr;
+
     void on_ShowMissingClicked_common(bool nNextCheck);
     void checkAllTagCommon(const bool bCheck);
 
@@ -600,8 +600,8 @@ private:
     QThreadPool* pPoolGetDir_ = nullptr;
     QThreadPool* getPoolGetDir();
 
-//    QThreadPool* pPoolFilter_ = nullptr;
-//    QThreadPool* getPoolFilter();
+    //    QThreadPool* pPoolFilter_ = nullptr;
+    //    QThreadPool* getPoolFilter();
 
     void clearAllPool(bool bAppendLog=true);
 
@@ -623,7 +623,7 @@ private:
 
 
     TableModel* tableModel_;
-	FileMissingFilterProxyModel *proxyModel_;
+    FileMissingFilterProxyModel *proxyModel_;
     QString lastSelectedAddDir_;
     QString lastSelectedScanDir_;
     QString lastSelectedDocumentDir_;
@@ -662,13 +662,13 @@ private:
     bool LoadTags();
     void directoryWidgetMoveUpCommon(const bool bUp);
 public slots:
-//    void sayBorn(int id,
-//                   const QString& movieFile);
+    //    void sayBorn(int id,
+    //                   const QString& movieFile);
     void sayHello(int loopId, int id,
-                   const QString& movieFile);
+                  const QString& movieFile);
     void sayNo(int loopId, int id,
-                   const QString& movieFile,
-                   const QString& errorReason);
+               const QString& movieFile,
+               const QString& errorReason);
     void sayGoodby(int loopId, int id,
                    const QStringList& files,
                    const QString& movieFile,
@@ -695,15 +695,15 @@ public slots:
 
                      const QStringList& salients);
     void finished_GetDir(int loopId, int id ,const QString& dir);
-//    void afterFilter(int loopId, int id,
-//                     const QString& dir,
-//                     const QStringList& filteredFiles,
-//                     const QStringList& renameOlds,
-//                     const QStringList& renameNews);
+    //    void afterFilter(int loopId, int id,
+    //                     const QString& dir,
+    //                     const QStringList& filteredFiles,
+    //                     const QStringList& renameOlds,
+    //                     const QStringList& renameNews);
     void afterFilter2(int loopId, int id,
-                     const QString& dir,
-                     const QStringList& filteredFiles);
-//    void finished_Filter(int loopId, int id);
+                      const QString& dir,
+                      const QStringList& filteredFiles);
+    //    void finished_Filter(int loopId, int id);
 
 
 

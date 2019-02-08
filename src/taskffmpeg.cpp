@@ -41,7 +41,7 @@ TaskFFmpeg::TaskFFmpeg(const QString& ffprobe,
                        const QString& ffmpeg,
                        int loopId,
                        int id,
-                       const QString& file, 
+                       const QString& file,
                        QThread::Priority* priority,
                        const QString& thumbext)
 {
@@ -54,18 +54,18 @@ TaskFFmpeg::TaskFFmpeg(const QString& ffprobe,
     movieFile_=file;
 
     progress_ = Uninitialized;
-	if (priority)
-	{
-		priority_ = new QThread::Priority;
-		*priority_ = *priority;
-	}
+    if (priority)
+    {
+        priority_ = new QThread::Priority;
+        *priority_ = *priority;
+    }
 
     thumbext_ = thumbext;
     // emit sayBorn(id,file);
 }
 TaskFFmpeg::~TaskFFmpeg()
 {
-	delete priority_;
+    delete priority_;
     emit sayDead(loopId_,id_);
 }
 
@@ -84,17 +84,17 @@ void TaskFFmpeg::setPriority(QProcess& process)
 }
 
 bool TaskFFmpeg::getProbe(const QString& file,
-              double& outDuration,
-              QString& outFormat,
-              int& outBitrate,
+                          double& outDuration,
+                          QString& outFormat,
+                          int& outBitrate,
 
-              QString& outVideoCodec,
-              QString& outAudioCodec,
+                          QString& outVideoCodec,
+                          QString& outAudioCodec,
 
-              int& outVWidth,
-              int& outVHeight,
+                          int& outVWidth,
+                          int& outVHeight,
 
-              QString& errorReason)
+                          QString& errorReason)
 {
     QProcess process;
     process.setProgram(ffprobe_);
@@ -221,31 +221,31 @@ bool TaskFFmpeg::getProbe(const QString& file,
         return false;
     }
 
-//    if(!jTag.isObject())
-//    {
-//        errorReason = tr("No Tags found");
-//        return false;
-//    }
-//    QJsonValue jNoF = jTag.toObject()["NUMBER_OF_FRAMES"];
-//    if(!jNoF.isString())
-//    {
-//        errorReason = tr("No NUMBER_OF_FRAMES");
-//        return false;
-//    }
-//    QString strNof = jNoF.toString();
-//    bool ok = false;
-//    double nof = strNof.toDouble(&ok);
-//    if(!ok)
-//    {
-//        errorReason=tr("Number of rames not double");
-//        return false;
-//    }
+    //    if(!jTag.isObject())
+    //    {
+    //        errorReason = tr("No Tags found");
+    //        return false;
+    //    }
+    //    QJsonValue jNoF = jTag.toObject()["NUMBER_OF_FRAMES"];
+    //    if(!jNoF.isString())
+    //    {
+    //        errorReason = tr("No NUMBER_OF_FRAMES");
+    //        return false;
+    //    }
+    //    QString strNof = jNoF.toString();
+    //    bool ok = false;
+    //    double nof = strNof.toDouble(&ok);
+    //    if(!ok)
+    //    {
+    //        errorReason=tr("Number of rames not double");
+    //        return false;
+    //    }
 
     return true;
 }
 void TaskFFmpeg::run()
 {
-	if (priority_)
+    if (priority_)
         QThread::currentThread()->setPriority(*priority_);
 
     run2();
@@ -287,7 +287,7 @@ bool TaskFFmpeg::run3(QString& errorReason)
     {
         return false;
     }
-	
+
     QString strWidthHeight;
     strWidthHeight.append(QString::number(THUMB_WIDTH));
     strWidthHeight.append("x");
@@ -329,49 +329,49 @@ bool TaskFFmpeg::run3(QString& errorReason)
         QProcess process;
         process.setProgram(ffmpeg_);
         process.setArguments(qsl);
-		process.start(QProcess::ReadOnly);
+        process.start(QProcess::ReadOnly);
 
         if (!process.waitForStarted(waitMax_))
-		{
+        {
             errorReason = process.errorString();
-			return false;
-		}
+            return false;
+        }
 
         setPriority(process);
 
         if (!process.waitForFinished(waitMax_))
-		{
+        {
             errorReason = process.errorString();
-			return false;
-		}
+            return false;
+        }
 
         if (process.exitCode() != 0)
-		{
-			errorReason = tr("ffmpeg.exitCode() != 0");
-			errorReason += "\n\n";
+        {
+            errorReason = tr("ffmpeg.exitCode() != 0");
+            errorReason += "\n\n";
             QByteArray baErr=process.readAllStandardError();
-			errorReason += baErr.data();
-			return false;
-		}
+            errorReason += baErr.data();
+            return false;
+        }
 
-//        QByteArray baOut = ffmpeg.readAllStandardOutput();
-//        qDebug()<<baOut.data();
+        //        QByteArray baOut = ffmpeg.readAllStandardOutput();
+        //        qDebug()<<baOut.data();
 
 
         if(i==1)
         {
-			if (!QFile(actualFile).exists())
-			{
-				errorReason = tr("Failed to create thumbnail");
+            if (!QFile(actualFile).exists())
+            {
+                errorReason = tr("Failed to create thumbnail");
                 QByteArray baErr = process.readAllStandardError();
-				QString strErr = baErr.data();
-				if (!strErr.isEmpty())
-				{
-					errorReason += "\n\n";
-					errorReason += strErr;
-				}
-				return false;
-			}
+                QString strErr = baErr.data();
+                if (!strErr.isEmpty())
+                {
+                    errorReason += "\n\n";
+                    errorReason += strErr;
+                }
+                return false;
+            }
         }
         emitFiles.append(filename);
     }

@@ -52,7 +52,7 @@ TableItemData::TableItemData(const qint64& id,
                              const qint64& lastaccess)
 {
 #ifdef QT_DEBUG
-	++dinstcount_;
+    ++dinstcount_;
 #endif
     id_=id;
     thumbFiles_ = files;
@@ -115,8 +115,8 @@ QMap<QString,QVariant> TableItemData::getColumnValues() const
     ret["acodec"]=getAcodec();
     ret["vwidth"]=getVWidth();
     ret["vheight"]=getVHeight();
-//	ret["opencount"] = getOpenCount();
-//	ret["lastaccess"] = getLastAccess();
+    //	ret["opencount"] = getOpenCount();
+    //	ret["lastaccess"] = getLastAccess();
     ret["thumbext"] = getThumbExt();
     return ret;
 }

@@ -244,12 +244,12 @@ void MainWindow::onMenuTag_AboutToShow()
             continue;
         bAdded=true;
         QString text = ti->text();
-		
-		// passing this makes |action| delete when |this| is deleting
-		// Deleting |action| manually cause stop above action, I believe.
+
+        // passing this makes |action| delete when |this| is deleting
+        // Deleting |action| manually cause stop above action, I believe.
         QAction* action = new QAction(text, this);
         
-		action->setCheckable(true);
+        action->setCheckable(true);
         action->setChecked(ti->IsChecked());
         action->setData(i);
         connect(action, &QAction::triggered,
@@ -396,7 +396,7 @@ void MainWindow::AddUserEntryDirectory_obsolete(
         bool check)
 {
     QString text;
-	bool hasCheckbox = true;
+    bool hasCheckbox = true;
 
     if(itemType==DirectoryItem::DI_NORMAL_MY)
     {
@@ -418,12 +418,12 @@ void MainWindow::AddUserEntryDirectory_obsolete(
     else if(itemType==DirectoryItem::DI_ALL_MY)
     {
         text=tr("All");
-		hasCheckbox = false;
+        hasCheckbox = false;
     }
     else if(itemType==DirectoryItem::DI_MISSING_MY)
     {
         text=tr("Missing");
-		hasCheckbox = false;
+        hasCheckbox = false;
     }
     else
     {
@@ -434,12 +434,12 @@ void MainWindow::AddUserEntryDirectory_obsolete(
                                                itemType,
                                                text);
 
-	if(hasCheckbox)
-		newitem->setFlags(newitem->flags() | Qt::ItemIsUserCheckable);
+    if(hasCheckbox)
+        newitem->setFlags(newitem->flags() | Qt::ItemIsUserCheckable);
 
     newitem->setSelected(sel);
-	if(hasCheckbox)
-		newitem->setCheckState(check ? Qt::Checked : Qt::Unchecked);
+    if(hasCheckbox)
+        newitem->setCheckState(check ? Qt::Checked : Qt::Unchecked);
 
 
 
@@ -541,24 +541,24 @@ void MainWindow::on_action_About_triggered()
     AboutDialog dlg(this);
     dlg.exec();
 
-//    QString title = APPNAME_DISPLAY;
-//    QString text = APPNAME;
-//    text.append(" ");
-//    text.append("ver ");
-//    text.append(VERSION);
-//    text.append("\n");
-//    text.append("\n");
-//    text.append("copyright 2018 ");
-//    text.append(ORGANIZATION);
-//    QMessageBox msgbox(this);
-//    msgbox.setIcon(QMessageBox::Information);
-//    msgbox.setText(text);
-//    msgbox.setWindowTitle(title);
-//    msgbox.exec();
+    //    QString title = APPNAME_DISPLAY;
+    //    QString text = APPNAME;
+    //    text.append(" ");
+    //    text.append("ver ");
+    //    text.append(VERSION);
+    //    text.append("\n");
+    //    text.append("\n");
+    //    text.append("copyright 2018 ");
+    //    text.append(ORGANIZATION);
+    //    QMessageBox msgbox(this);
+    //    msgbox.setIcon(QMessageBox::Information);
+    //    msgbox.setText(text);
+    //    msgbox.setWindowTitle(title);
+    //    msgbox.exec();
 }
 
 void MainWindow::SortManager::setAction(SORTCOLUMNMY sc,
-                                            QAction* pAction)
+                                        QAction* pAction)
 {
     Q_ASSERT(acs_[sc]==nullptr);
     acs_[sc] = pAction;
@@ -568,22 +568,22 @@ void MainWindow::SortManager::setToolButton(SORTCOLUMNMY sc,
                                             const QIcon& iconNormal,
                                             const QIcon& iconRev)
 {
-	Q_ASSERT(tbs_[sc] == nullptr);
+    Q_ASSERT(tbs_[sc] == nullptr);
     Q_ASSERT(!iconNormal.isNull());
     Q_ASSERT(!iconRev.isNull());
 
     tbs_[sc] = tb;
     iconsAscend_[sc] = iconNormal;
     iconsDescend_[sc]=iconRev;
-	tb->setText(GetSortColumnName(sc));
+    tb->setText(GetSortColumnName(sc));
 }
 
 void MainWindow::SortManager::onSort(SORTCOLUMNMY sc)
 {
     if(sort_==sc)
         ascending_[sc] = !ascending_[sc];
-	sort_ = sc;
-	UpdateButtonText();
+    sort_ = sc;
+    UpdateButtonText();
 }
 void MainWindow::SortManager::UpdateButtonText()
 {
@@ -593,7 +593,7 @@ void MainWindow::SortManager::UpdateButtonText()
     Q_STATIC_ASSERT(SORT_NONE==0);
 
     for (size_t i = SORT_NONE+1; i < COUNT_SORTCOLUMN; ++i)
-	{
+    {
         Q_ASSERT(acs_[i]);
         acs_[i]->setChecked(sort_ == i);
 
@@ -608,34 +608,34 @@ void MainWindow::SortManager::UpdateButtonText()
             tbs_[i]->setChecked(sort_ == i);
             tbs_[i]->setIcon(ascending_[i] ? iconsAscend_[i] : iconsDescend_[i]);
         }
-//        else
-//        {
-//            acs_[i]->setChecked(false);
+        //        else
+        //        {
+        //            acs_[i]->setChecked(false);
 
-//            if(tbs_[i])
-//            {
-//                acs_[i]->setIcon(ascending_[i] ? iconsAscend_[i] : iconsDescend_[i]);
+        //            if(tbs_[i])
+        //            {
+        //                acs_[i]->setIcon(ascending_[i] ? iconsAscend_[i] : iconsDescend_[i]);
 
-//                tbs_[i]->setText(GetSortColumnName((SORTCOLUMNMY)i));
-//                tbs_[i]->setChecked(false);
-//                tbs_[i]->setIcon(ascending_[i] ? iconsAscend_[i] : iconsDescend_[i]);
-//            }
-//        }
-	}
+        //                tbs_[i]->setText(GetSortColumnName((SORTCOLUMNMY)i));
+        //                tbs_[i]->setChecked(false);
+        //                tbs_[i]->setIcon(ascending_[i] ? iconsAscend_[i] : iconsDescend_[i]);
+        //            }
+        //        }
+    }
 }
 
 
 void MainWindow::onSortCommon(SORTCOLUMNMY sortColumn)
 {
-	WaitCursor wc;
-	sortManager_.onSort(sortColumn);
-	if (limitManager_)
-		limitManager_->Reset();
+    WaitCursor wc;
+    sortManager_.onSort(sortColumn);
+    if (limitManager_)
+        limitManager_->Reset();
     GetSqlAllSetTable(lastQueriedDirs_, lastQueriedTaggedIds_);
 }
 void MainWindow::on_actionSort_by_file_name_triggered()
 {
-	onSortCommon(SORT_FILENAME);
+    onSortCommon(SORT_FILENAME);
 }
 void MainWindow::on_actionSort_by_full_name_triggered()
 {
@@ -643,28 +643,28 @@ void MainWindow::on_actionSort_by_full_name_triggered()
 }
 void MainWindow::on_actionSort_by_file_size_triggered()
 {
-	onSortCommon(SORT_SIZE);
+    onSortCommon(SORT_SIZE);
 }
 void MainWindow::on_actionSort_by_wtime_triggered()
 {
-	onSortCommon(SORT_WTIME);
+    onSortCommon(SORT_WTIME);
 }
 void MainWindow::on_actionSort_by_resolution_triggered()
 {
-	onSortCommon(SORT_RESOLUTION);
+    onSortCommon(SORT_RESOLUTION);
 }
 void MainWindow::on_actionSort_by_duration_triggered()
 {
-	onSortCommon(SORT_DURATION);
+    onSortCommon(SORT_DURATION);
 }
 void MainWindow::on_actionSort_by_bitrate_triggered()
 {
-	onSortCommon(SORT_BITRATE);
+    onSortCommon(SORT_BITRATE);
 }
 
 void MainWindow::on_actionSort_by_open_count_triggered()
 {
-	onSortCommon(SORT_OPENCOUNT);
+    onSortCommon(SORT_OPENCOUNT);
 }
 void MainWindow::on_actionSort_by_last_access_triggered()
 {
@@ -721,7 +721,7 @@ void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
                 actExts.append(act);
             }
         }
-		menuExternalTools.addSeparator();
+        menuExternalTools.addSeparator();
         menuExternalTools.addAction(ui->action_ExternalTools);
 
         contextMenu.addMenu(&menuExternalTools);
@@ -757,10 +757,10 @@ void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
                 if (tagsCurrent.contains(ti->tagid()))
                     act->setChecked(true);
                 actTags.append(act);
-				delete ti;
+                delete ti;
             }
         }
-		menuAddTags.addSeparator();
+        menuAddTags.addSeparator();
         menuAddTags.addAction(ui->action_AddNewTag);
         contextMenu.addMenu(&menuAddTags);
         // <---- Tags
@@ -834,22 +834,22 @@ void MainWindow::ScanSelectedDirectory(const bool bAll)
         }
     }
 
-//    {
-//		wstring left, right, common;
-//		vector<wstring> vFolders;
-//		m_clParse.getFoldersAsVector(vFolders);
-//		if (!checkDupPaths(vFolders, left, right, common))
-//		{
-//			wstring message;
-//			message += I18N(L"These two folder contains same folder. Do you want to continue?");
-//			message += L"\r\n\r\n";
-//			message += left;
-//			message += L"\r\n";
-//			message += right;
-//			if (IDYES != AfxMessageBox(message.c_str(), MB_ICONQUESTION | MB_YESNO))
-//				return FALSE;
-//		}
-//    }
+    //    {
+    //		wstring left, right, common;
+    //		vector<wstring> vFolders;
+    //		m_clParse.getFoldersAsVector(vFolders);
+    //		if (!checkDupPaths(vFolders, left, right, common))
+    //		{
+    //			wstring message;
+    //			message += I18N(L"These two folder contains same folder. Do you want to continue?");
+    //			message += L"\r\n\r\n";
+    //			message += left;
+    //			message += L"\r\n";
+    //			message += right;
+    //			if (IDYES != AfxMessageBox(message.c_str(), MB_ICONQUESTION | MB_YESNO))
+    //				return FALSE;
+    //		}
+    //    }
     foreach(DirectoryItem* di, toScan)
     {
         StartScan(di);
@@ -862,17 +862,17 @@ void MainWindow::OnDirectoryRemove()
     if(ui->directoryWidget->selectedItems().isEmpty())
         return;
 
-	DirectoryItem* item = (DirectoryItem*) ui->directoryWidget->selectedItems()[0];
-	if (!item->IsNormalItem())
-		return;
+    DirectoryItem* item = (DirectoryItem*) ui->directoryWidget->selectedItems()[0];
+    if (!item->IsNormalItem())
+        return;
     if (!YesNo(this,
                tr("Are you sure you want to remove \"%1\" from list?").arg(item->text())))
-		return;
+        return;
     
     // pDoc_->DeleteDirectory(item);
 
     BlockedBool bt(&directoryChanging_);
-	delete ui->directoryWidget->takeItem(ui->directoryWidget->row(item));
+    delete ui->directoryWidget->takeItem(ui->directoryWidget->row(item));
 
     pDoc_->SetReordered();
 }
@@ -881,18 +881,18 @@ void MainWindow::OnDirectoryRemoveMissingItems()
     if(ui->directoryWidget->selectedItems().isEmpty())
         return;
 
-	DirectoryItem* item = (DirectoryItem*) ui->directoryWidget->selectedItems()[0];
+    DirectoryItem* item = (DirectoryItem*) ui->directoryWidget->selectedItems()[0];
 
-	if (!YesNo(this,
-		tr("Are you sure you want to remove missing items from database?")))
-	{
-		return;
-	}
+    if (!YesNo(this,
+               tr("Are you sure you want to remove missing items from database?")))
+    {
+        return;
+    }
     
-	QString dir;
-	if(item->IsNormalItem())
-		dir = item->text();
-	
+    QString dir;
+    if(item->IsNormalItem())
+        dir = item->text();
+
     gpSQL->RemoveAllMissingEntries(dir);
 
     itemChangedCommon(true);
@@ -936,7 +936,7 @@ void MainWindow::OnDirectorySortByName()
 
     Q_ASSERT(!directoryChanging_);
     BlockedBool bt(&directoryChanging_, true, false);
-	
+
     ui->directoryWidget->SortNormalItems();
 
     pDoc_->SetReordered();
@@ -958,7 +958,7 @@ void MainWindow::directoryWidgetMoveUpCommon(const bool bUp)
     int row = ui->directoryWidget->row(item);
     if(bUp)
     {
-       if (ui->directoryWidget->IsTopNormalItem(row))
+        if (ui->directoryWidget->IsTopNormalItem(row))
             return;
     }
     else
@@ -995,19 +995,19 @@ void MainWindow::on_directoryWidget_customContextMenuRequested(const QPoint &pos
 
         QAction actCheckAll(tr("&Check All"));
         connect(&actCheckAll, SIGNAL(triggered(bool)),
-            this, SLOT(OnDirectoryCheckAll()));
+                this, SLOT(OnDirectoryCheckAll()));
         menu.addAction(&actCheckAll);
 
         QAction actUncheckAll(tr("&Uncheck All"));
         connect(&actUncheckAll, SIGNAL(triggered(bool)),
-            this, SLOT(OnDirectoryUncheckAll()));
+                this, SLOT(OnDirectoryUncheckAll()));
         menu.addAction(&actUncheckAll);
 
         menu.addSeparator();
 
         QAction actSortByName(tr("&Sort by name"));
         connect(&actSortByName, SIGNAL(triggered(bool)),
-            this, SLOT(OnDirectorySortByName()));
+                this, SLOT(OnDirectorySortByName()));
         menu.addAction(&actSortByName);
 
         menu.exec(ui->directoryWidget->mapToGlobal(pos));
@@ -1025,31 +1025,31 @@ void MainWindow::on_directoryWidget_customContextMenuRequested(const QPoint &pos
 
         QAction actCheckAll(tr("&Check All"));
         connect(&actCheckAll, SIGNAL(triggered(bool)),
-            this, SLOT(OnDirectoryCheckAll()));
+                this, SLOT(OnDirectoryCheckAll()));
         menu.addAction(&actCheckAll);
 
         QAction actUncheckAll(tr("&Uncheck All"));
         connect(&actUncheckAll, SIGNAL(triggered(bool)),
-            this, SLOT(OnDirectoryUncheckAll()));
+                this, SLOT(OnDirectoryUncheckAll()));
         menu.addAction(&actUncheckAll);
 
         menu.addSeparator();
 
         QAction actMoveUp(tr("Move &up"));
         connect(&actMoveUp, SIGNAL(triggered(bool)),
-            this, SLOT(OnDirectoryMoveUp()));
+                this, SLOT(OnDirectoryMoveUp()));
         menu.addAction(&actMoveUp);
 
         QAction actMoveDown(tr("Move &down"));
         connect(&actMoveDown, SIGNAL(triggered(bool)),
-            this, SLOT(OnDirectoryMoveDown()));
+                this, SLOT(OnDirectoryMoveDown()));
         menu.addAction(&actMoveDown);
 
         menu.addSeparator();
 
         QAction actSortByName(tr("&Sort by name"));
         connect(&actSortByName, SIGNAL(triggered(bool)),
-            this, SLOT(OnDirectorySortByName()));
+                this, SLOT(OnDirectorySortByName()));
         menu.addAction(&actSortByName);
 
 
@@ -1058,12 +1058,12 @@ void MainWindow::on_directoryWidget_customContextMenuRequested(const QPoint &pos
         QAction actRemove(tr("Re&move this directory from list"));
         actRemove.setEnabled(di->IsNormalItem());
         connect(&actRemove, SIGNAL(triggered(bool)),
-            this, SLOT(OnDirectoryRemove()));
+                this, SLOT(OnDirectoryRemove()));
         menu.addAction(&actRemove);
 
         QAction actRemoveMissingItems(tr("R&emove missing items from database"));
         connect(&actRemoveMissingItems, SIGNAL(triggered(bool)),
-            this, SLOT(OnDirectoryRemoveMissingItems()));
+                this, SLOT(OnDirectoryRemoveMissingItems()));
         menu.addAction(&actRemoveMissingItems);
 
         menu.exec(ui->directoryWidget->mapToGlobal(pos));
@@ -1083,8 +1083,8 @@ void MainWindow::on_ShowMissingClicked_common(bool bNextCheck)
     if(!bNextCheck)
     {
         if(!YesNo(
-            this,
-            tr("Excluding an item which has missig files will take some time for querying. Do you wan to continue?")))
+                    this,
+                    tr("Excluding an item which has missig files will take some time for querying. Do you wan to continue?")))
         {
             ui->action_ShowMissingFiles->setChecked(!bNextCheck);
             tbShowNonExistant_->setChecked(!bNextCheck);
@@ -1175,7 +1175,7 @@ void MainWindow::langChanged_common(const QString& lang)
         return;
     settings_.setValue(KEY_LANGUAGE, lang);
     if(YesNo(this,
-          tr("Application needs to restart to effect the change. Do you want to restart application now?")))
+             tr("Application needs to restart to effect the change. Do you want to restart application now?")))
     {
         gReboot = true;
         this->close();

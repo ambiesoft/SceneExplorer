@@ -81,8 +81,8 @@ class OptionExternalToolsDialog : public QDialog
 
     bool HasItemWithName(const QString& name);
     void UpdateData();
-	Settings& settings_;
-	QString lastSelectedExeDir_;
+    Settings& settings_;
+    QString lastSelectedExeDir_;
 public:
     explicit OptionExternalToolsDialog(Settings& settings, QWidget *parent = 0);
     ~OptionExternalToolsDialog();

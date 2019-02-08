@@ -228,8 +228,8 @@ void OptionDialog::on_context_titleTemplateCommonSub()
 }
 
 void OptionDialog::constructTitleTemplateMenu(QMenu& contextMenu,
-                            QList< QSharedPointer<QAction> >& acts,
-                            bool isMain)
+                                              QList< QSharedPointer<QAction> >& acts,
+                                              bool isMain)
 {
     static const auto alltargets = []()
     {
@@ -255,17 +255,17 @@ void OptionDialog::constructTitleTemplateMenu(QMenu& contextMenu,
         return alltargets;
     }();
 
-//    QStringList all;
-//    for(size_t i=0 ; i < sizeof(alltargets)/sizeof(alltargets[0]); ++i )
-//    {
-//        if(all.contains(alltargets[i]))
-//        {
-//            Q_ASSERT(false);
-//            continue;
-//        }
-//        all.append(alltargets[i]);
-//    }
-//    std::sort(all.begin(),all.end());
+    //    QStringList all;
+    //    for(size_t i=0 ; i < sizeof(alltargets)/sizeof(alltargets[0]); ++i )
+    //    {
+    //        if(all.contains(alltargets[i]))
+    //        {
+    //            Q_ASSERT(false);
+    //            continue;
+    //        }
+    //        all.append(alltargets[i]);
+    //    }
+    //    std::sort(all.begin(),all.end());
 
     for(auto&& pair : alltargets)
     {

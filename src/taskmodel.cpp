@@ -52,8 +52,8 @@ void TaskModel::RemoveTask(int id)
     TaskListDataPointer p = map_[id];
     Q_ASSERT(p);
 
-//    int row = findRow(p);
-//    Q_ASSERT(row >= 0);
+    //    int row = findRow(p);
+    //    Q_ASSERT(row >= 0);
     
     // beginRemoveRows(QModelIndex(), row, row);
     Q_ASSERT(items_.contains(p));
@@ -72,23 +72,23 @@ void TaskModel::RemoveTask(int id)
 }
 void TaskModel::ClearAllTasks()
 {
-	beginResetModel();
-	map_.clear();
-	//for (int i = 0; i < items_.count(); ++i)
-	//{
-	//	delete items_[i];
-	//}
-	items_.clear();
-	endResetModel();
+    beginResetModel();
+    map_.clear();
+    //for (int i = 0; i < items_.count(); ++i)
+    //{
+    //	delete items_[i];
+    //}
+    items_.clear();
+    endResetModel();
 }
 void TaskModel::myupdate()
 {
     if(gStop)
         return;
 
-//    QRegion r(parent_->rect());
-//    parent_->setDirtyRegion(r);
-//    return;
+    //    QRegion r(parent_->rect());
+    //    parent_->setDirtyRegion(r);
+    //    return;
     ((QWidget*)parent_)->update();
     parent_->repaint();
     parent_->updateGeometry();
@@ -103,7 +103,7 @@ void TaskModel::SetProgress(int id, TaskFFmpeg::Progress progress)
 
     Q_ASSERT(map_.contains(id));
 
-	TaskListDataPointer p = map_[id];
+    TaskListDataPointer p = map_[id];
     Q_ASSERT(p);
 
     p->SetProgress(progress);
@@ -123,18 +123,18 @@ QVariant TaskModel::data(const QModelIndex &index, int role) const
     if(role != Qt::DisplayRole)
         return QVariant();
 
-//    switch(index.column())
-//    {
-//    case 0:
-//        return items_[index.row()]->GetProgressString();
-//    case 1:
-//        return items_[index.row()]->GetIdString();
-//    case 2:
-//        return items_[index.row()]->GetMovieFile();
-//    default:
-//        Q_ASSERT(false);
-//    }
-//    return QVariant();
+    //    switch(index.column())
+    //    {
+    //    case 0:
+    //        return items_[index.row()]->GetProgressString();
+    //    case 1:
+    //        return items_[index.row()]->GetIdString();
+    //    case 2:
+    //        return items_[index.row()]->GetMovieFile();
+    //    default:
+    //        Q_ASSERT(false);
+    //    }
+    //    return QVariant();
 
     Q_ASSERT(index.column()==0);
     QString ret;

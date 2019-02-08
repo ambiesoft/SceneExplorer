@@ -51,10 +51,10 @@ void MainWindow::showEvent( QShowEvent* event )
         // Alert(this, QString("ScrollIndex:%1-%2").arg(mi.row()).arg(mi.column()));
 
 
-		// ui->tableView->selectionModel()->select(mi,	QItemSelectionModel::ClearAndSelect);
-		ui->tableView->selectionModel()->setCurrentIndex(mi, QItemSelectionModel::ClearAndSelect);
-		
-		proxyModel_->ensureIndex(mi);
+        // ui->tableView->selectionModel()->select(mi,	QItemSelectionModel::ClearAndSelect);
+        ui->tableView->selectionModel()->setCurrentIndex(mi, QItemSelectionModel::ClearAndSelect);
+
+        proxyModel_->ensureIndex(mi);
         QApplication::processEvents();
         ui->tableView->scrollTo(mi);
 

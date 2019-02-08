@@ -29,15 +29,15 @@ public:
     DirectoryEntry(QWidget *parent = Q_NULLPTR):
         QListWidget(parent)
     {}
-	DirectoryItem* getShowAllItem();
-	DirectoryItem* takeShowAllItem();
-	DirectoryItem* takeMissingItem();
-	
-	void addItem(DirectoryItem* item);
+    DirectoryItem* getShowAllItem();
+    DirectoryItem* takeShowAllItem();
+    DirectoryItem* takeMissingItem();
+
+    void addItem(DirectoryItem* item);
 
 
     QList<DirectoryItem*> GetCheckedItems();
-	QList<DirectoryItem*> GetAllNormalItems();
+    QList<DirectoryItem*> GetAllNormalItems();
     void SetCheck(const QStringList& dirs, bool bRemoveSelection);
 
     bool IsAllItemSelectedOrChecked() const;

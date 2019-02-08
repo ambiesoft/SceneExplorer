@@ -55,8 +55,8 @@ public:
 
 private:
     void constructTitleTemplateMenu(QMenu& contextMenu,
-                  QList< QSharedPointer<QAction> >& acts,
-                  bool isMain);
+                                    QList< QSharedPointer<QAction> >& acts,
+                                    bool isMain);
 
 protected:
     void showEvent(QShowEvent *) override;

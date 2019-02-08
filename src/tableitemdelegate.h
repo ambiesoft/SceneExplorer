@@ -45,7 +45,7 @@ public:
     }
 protected:
     virtual void initStyleOption(QStyleOptionViewItem *option,
-                                const QModelIndex &index) const
+                                 const QModelIndex &index) const
     {
         QStyledItemDelegate::initStyleOption(option,index);
     }

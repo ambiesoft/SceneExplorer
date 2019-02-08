@@ -25,13 +25,13 @@
 #include <QProcess>
 
 class TaskFFmpeg : public QObject, public QRunnable
-// class TaskFFMpeg : public QRunnable
+        // class TaskFFMpeg : public QRunnable
 {
     Q_OBJECT
 
     static int waitMax_;
 
-	QThread::Priority* priority_ = nullptr;
+    QThread::Priority* priority_ = nullptr;
 
 public:
     enum Progress
@@ -88,13 +88,13 @@ public:
 
 
 signals:
-//    void sayBorn(int id,
-//                 const QString& movieFile);
+    //    void sayBorn(int id,
+    //                 const QString& movieFile);
     void sayHello(int loopId, int id,
-                   const QString& movieFile);
+                  const QString& movieFile);
     void sayNo(int loopId, int id,
-                   const QString& movieFile,
-                   const QString& errorReason);
+               const QString& movieFile,
+               const QString& errorReason);
 
     void sayGoodby(int loopId, int id,
                    const QStringList& files,

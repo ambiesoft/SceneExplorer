@@ -35,7 +35,7 @@
 using namespace Consts;
 
 void MainWindow::sayHello(int loopId, int id,
-               const QString& movieFile)
+                          const QString& movieFile)
 {
     if(loopId != gLoopId)
         return;
@@ -67,8 +67,8 @@ void MainWindow::sayGoodby(int loopId,  int id,
 
                            const QString& thumbext)
 {
-	if (loopId != gLoopId)
-	{
+    if (loopId != gLoopId)
+    {
         for(const QString& thumbfile:files)
         {
             if(isThumbFileName(thumbfile))
@@ -80,30 +80,30 @@ void MainWindow::sayGoodby(int loopId,  int id,
                 }
             }
         }
-		return;
-	}
+        return;
+    }
 
     QFileInfo fi(movieFile);
 
     QString dir,name;
     nomalizeDirAndName(fi.absoluteFilePath(), dir, name);
     TableItemDataPointer pTID = TableItemData::Create(
-                            0,
-                            files,
-                            dir,
-                            name,
-                            fi.size(),
-                            fi.birthTime().toSecsSinceEpoch(),
-                            fi.lastModified().toSecsSinceEpoch(),
-                            thumbwidth,thumbheight,
-                            duration,
-                            format,
-                            bitrate,
-                            vcodec,acodec,
-                            vWidth,vHeight,
+                0,
+                files,
+                dir,
+                name,
+                fi.size(),
+                fi.birthTime().toSecsSinceEpoch(),
+                fi.lastModified().toSecsSinceEpoch(),
+                thumbwidth,thumbheight,
+                duration,
+                format,
+                bitrate,
+                vcodec,acodec,
+                vWidth,vHeight,
 
-                            0,
-                            0);
+                0,
+                0);
     pTID->setThumbExt(thumbext);
 
     if(IsDirSelected(normalizeDir(fi.absolutePath())))
@@ -160,7 +160,7 @@ void MainWindow::finished_FFMpeg(int loopId, int id)
     }
 }
 void MainWindow::warning_FFMpeg(int loopId, int id,
-                    const QString& warning)
+                                const QString& warning)
 {
     if(loopId != gLoopId)
         return;

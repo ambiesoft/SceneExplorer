@@ -96,13 +96,13 @@ void MainWindow::OnCopyTag()
             all.append(ti->text() + "\t" + ti->yomi());
         }
     }
-//    QByteArray dirdata("aaa");
-//    QMimeData mimeDir;
-//    mimeDir.setData("text/SceneExplorerTag", dirdata);
+    //    QByteArray dirdata("aaa");
+    //    QMimeData mimeDir;
+    //    mimeDir.setData("text/SceneExplorerTag", dirdata);
 
-//    QClipboard* clip = QApplication::clipboard();
-//    clip->setText(ti->text());
-//    clip->setMimeData(&mimeDir);
+    //    QClipboard* clip = QApplication::clipboard();
+    //    clip->setText(ti->text());
+    //    clip->setMimeData(&mimeDir);
 
     QString toSet = STR_TAG_ENTRY_SIGNATURE;
     toSet += "\n";

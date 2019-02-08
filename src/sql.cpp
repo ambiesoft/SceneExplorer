@@ -83,11 +83,11 @@ bool Sql::CreateDBInfoTable()
         return false;
     }
 
-//    SQC(query,exec("SELECT * FROM DbInfo WHERE id=1"));
-//    if(!query.next())
-//    {
-//        SQC(query,exec("INSERT INTO DbInfo (id) VALUES (1)"));
-//    }
+    //    SQC(query,exec("SELECT * FROM DbInfo WHERE id=1"));
+    //    if(!query.next())
+    //    {
+    //        SQC(query,exec("INSERT INTO DbInfo (id) VALUES (1)"));
+    //    }
     return true;
 }
 int Sql::GetDBVersion()
@@ -167,7 +167,7 @@ Sql::Sql() : db_(QSqlDatabase::addDatabase("QSQLITE"))
     query.exec("CREATE UNIQUE INDEX idx_directoryname ON FileInfo(directory,name)");
     query.exec("CREATE INDEX idx_salient ON FileInfo(salient)");
     // query.exec("CREATE INDEX idx_lastaccess ON FileInfo(lastaccess)");
-//    query.exec("ALTER TABLE FileInfo Add opencount_tmp INT");
+    //    query.exec("ALTER TABLE FileInfo Add opencount_tmp INT");
     //    query.exec("ALTER TABLE FileInfo Add lastaccess_tmp INT");
     query.exec("ALTER TABLE FileInfo Add thumbext");
     qDebug() << query.lastError().text();
@@ -397,10 +397,10 @@ QSqlQuery* Sql::getInsertQuery(TableItemDataPointer tid)
     pQInsert_->bindValue(bindIndex++, tid->getMovieFileName());
     pQInsert_->bindValue(bindIndex++, tid->getMovieFileName());
 
-//    // 3rd COALEASE
-//    pQInsert_->bindValue(bindIndex++, tid->getMovieDirectory());
-//    pQInsert_->bindValue(bindIndex++, tid->getMovieFileName());
-//    pQInsert_->bindValue(bindIndex++, tid->getOpenCount());
+    //    // 3rd COALEASE
+    //    pQInsert_->bindValue(bindIndex++, tid->getMovieDirectory());
+    //    pQInsert_->bindValue(bindIndex++, tid->getMovieFileName());
+    //    pQInsert_->bindValue(bindIndex++, tid->getOpenCount());
 
     return pQInsert_;
 }
@@ -529,8 +529,8 @@ int Sql::GetAllEntry(const QString& dir,
                      QStringList& salients)
 {
     MYQMODIFIER QSqlQuery query("select name, size, ctime, wtime, salient from FileInfo where "
-                           "directory=?",
-                           db_);
+                                "directory=?",
+                                db_);
     query.bindValue(0, dir);
 
     if(!query.exec())
@@ -684,8 +684,8 @@ int Sql::hasThumb(const QString& movieFile)
     return THUMB_NOT_EXIST;
 }
 bool Sql::DeleteEntryThumbFiles(const QString& dir,
-                           const QString& name,
-                           QString* removedThumbID)
+                                const QString& name,
+                                QString* removedThumbID)
 {
     if(dir.isEmpty() || name.isEmpty())
     {
@@ -693,7 +693,7 @@ bool Sql::DeleteEntryThumbFiles(const QString& dir,
         return false;
     }
     QSqlQuery query = myPrepare("SELECT thumbid FROM FileInfo WHERE "
-                   "directory=? and name=?");
+                                "directory=? and name=?");
 
     int i=0;
     query.bindValue(i++, dir);
@@ -729,8 +729,8 @@ int Sql::RemoveEntryFromThumbID(const QString& thumbid)
         return THUMBID_IS_NOT_UUID;
 
     MYQMODIFIER QSqlQuery query("delete from FileInfo where "
-                    "thumbid=?",
-                    db_);
+                                "thumbid=?",
+                                db_);
 
     int i = 0;
     query.bindValue(i++, thumbid);
@@ -848,8 +848,8 @@ bool Sql::GetAllSqlString(
     {
         // check dbid is same or NULL(joined)
         // sql += " WHERE (" + docdb_ + ".Access.dbid='" + gpSQL->getDbID() + "' OR " + docdb_ +".Access.dbid IS NULL) AND (";
-//        sql += QString(" WHERE (%1.Access.dbid='%2' OR %3.Access.dbid IS NULL) AND (").
-//                arg(docdb_).arg(gpSQL->getDbID()).arg(docdb_);
+        //        sql += QString(" WHERE (%1.Access.dbid='%2' OR %3.Access.dbid IS NULL) AND (").
+        //                arg(docdb_).arg(gpSQL->getDbID()).arg(docdb_);
         sql += " WHERE (";
 
         const int dircount = dirs.count();
@@ -997,10 +997,10 @@ bool Sql::GetAll(QList<TableItemDataPointer>& v,
 
         QString thumbext = query.value("thumbext").toString();
         QString thumbid = query.value("thumbid").toString();
-//        if(thumbext.isEmpty() && !thumbid.isEmpty())
-//        {
-//            VERIFY(UpdateThumbExtFromFile(id,thumbid, thumbext));
-//        }
+        //        if(thumbext.isEmpty() && !thumbid.isEmpty())
+        //        {
+        //            VERIFY(UpdateThumbExtFromFile(id,thumbid, thumbext));
+        //        }
         QStringList thumbs;
         for(int i=1 ; i <= 5 ; ++i)
         {
@@ -1074,7 +1074,7 @@ bool Sql::IsEntryExists(const QString& newDir, const QString& newFile)
 {
     // check if new entry already exists.
     MYQMODIFIER QSqlQuery query = myPrepare("SELECT id FROM FileInfo WHERE "
-                                "directory=? and name=?");
+                                            "directory=? and name=?");
 
     int i=0;
     query.bindValue(i++, newDir);
@@ -1113,8 +1113,8 @@ bool Sql::RenameEntry(const QString& oldDirc,
         }
 
         MYQMODIFIER QSqlQuery query = myPrepare("update FileInfo "
-                        "set directory=?,name=? "
-                        "where directory=? and name=?");
+                                                "set directory=?,name=? "
+                                                "where directory=? and name=?");
 
         int i=0;
         query.bindValue(i++, newDir);
@@ -1142,8 +1142,8 @@ bool Sql::RenameEntries(const QString& dir,
         if(!QFile(pathCombine(dir, oldfile)).exists())
         {
             MYQMODIFIER QSqlQuery query = myPrepare("update FileInfo "
-                            "set name=? "
-                            "where directory=? and name=?");
+                                                    "set name=? "
+                                                    "where directory=? and name=?");
             int i=0;
             query.bindValue(i++, newfile);
             query.bindValue(i++, dir);
@@ -1166,7 +1166,7 @@ bool Sql::getEntryFromSalient(const QString& salient,
                               QList<qint64>& sizesDB)
 {
     MYQMODIFIER QSqlQuery query("select directory, name, size from FileInfo where "
-                           "salient = ?");
+                                "salient = ?");
 
     query.bindValue(0, salient);
     SQC(query, exec());
@@ -1194,7 +1194,7 @@ bool Sql::hasEntry(const QString& dir,
                    const QString& sa)
 {
     MYQMODIFIER QSqlQuery query = myPrepare("select name from FileInfo where "
-                           "directory=? and name=? and size=? and wtime=? and salient=?");
+                                            "directory=? and name=? and size=? and wtime=? and salient=?");
 
     int i=0;
     query.bindValue(i++, dir);
@@ -1207,8 +1207,8 @@ bool Sql::hasEntry(const QString& dir,
     return query.next();
 }
 bool Sql::GetID(const QString& dir,
-           const QString& file,
-           qint64& id)
+                const QString& file,
+                qint64& id)
 {
     MYQMODIFIER QSqlQuery query = myPrepare("SELECT id FROM FileInfo WHERE directory=? AND name=?");
     int i=0;

@@ -70,11 +70,11 @@ void TableModel:: AppendData(TableItemDataPointer pItemData, const bool enableUp
 
     parent_->setSpan(newRowFilename,0,1,columnCountImage_);
     parent_->setSpan(newRowInfo,0,1,columnCountImage_);
-	
-	// parent_->resizeRowsToContents();
+
+    // parent_->resizeRowsToContents();
 
 
-	if(!initColumnWidth_)
+    if(!initColumnWidth_)
     {
         initColumnWidth_=true;
         for(int i=0 ; i < columnCountImage_ ; ++i)
@@ -102,11 +102,11 @@ void TableModel::ResetData(const QList<TableItemDataPointer>& all)
         AppendData(all[i], false);
     }
 
-//    beginInsertRows(QModelIndex(),
-//                    0,
-//                    (itemDatas_.count()*RowCountPerEntry)+RowCountPerEntry-1);
+    //    beginInsertRows(QModelIndex(),
+    //                    0,
+    //                    (itemDatas_.count()*RowCountPerEntry)+RowCountPerEntry-1);
 
-//    endInsertRows();
+    //    endInsertRows();
     //Sort_obsolete(GetSortColumn(), GetSortReverse());
     endResetModel();
     emit itemCountChanged();
@@ -115,7 +115,7 @@ void TableModel::ResetData(const QList<TableItemDataPointer>& all)
 
 int TableModel::rowCount(const QModelIndex & /*parent*/) const
 {
-   return itemDatas_.count()*RowCountPerEntry;
+    return itemDatas_.count()*RowCountPerEntry;
 }
 
 void TableModel::ClearData()
@@ -144,7 +144,7 @@ QString size_human(const qint64& size)
     QString unit("bytes");
 
     while(num >= 1024.0 && i.hasNext())
-     {
+    {
         unit = i.next();
         num /= 1024.0;
     }
@@ -153,8 +153,8 @@ QString size_human(const qint64& size)
 
 QString filetime_human(const qint64& filetime)
 {
-	QDateTime qdt = QDateTime::fromTime_t(filetime);
-	return dq(qdt.toString(Qt::DateFormat::DefaultLocaleShortDate));
+    QDateTime qdt = QDateTime::fromTime_t(filetime);
+    return dq(qdt.toString(Qt::DateFormat::DefaultLocaleShortDate));
 }
 QString duration_human(double duration)
 {
@@ -165,9 +165,9 @@ QString duration_human(double duration)
     int seconds = iduration%60;
 
     return
-                QString("%1").arg((int)hour, 2, 10, QChar('0')) + ":"+
-                QString("%1").arg((int)minutes, 2, 10, QChar('0'))+":"+
-                QString("%1").arg((int)seconds, 2, 10, QChar('0'));
+            QString("%1").arg((int)hour, 2, 10, QChar('0')) + ":"+
+            QString("%1").arg((int)minutes, 2, 10, QChar('0'))+":"+
+            QString("%1").arg((int)seconds, 2, 10, QChar('0'));
 
 }
 
@@ -181,7 +181,7 @@ static QString bitrate_human(int bitrate)
     QString unit("bytes");
 
     while(num >= 1024.0 && i.hasNext())
-     {
+    {
         unit = i.next();
         num /= 1024.0;
     }
@@ -198,16 +198,16 @@ static QString opencount_human(int count)
 QString TableModel::GetTitleText(TableItemDataPointer item) const
 {
     return ExtractInfoText(item, titleTemplate_);
-//    static const char* sep = "   ";
+    //    static const char* sep = "   ";
 
-//    if(GetSortColumn()==SORT_FILENAME)
-//        return item->getMovieFileName();
+    //    if(GetSortColumn()==SORT_FILENAME)
+    //        return item->getMovieFileName();
 
-//    QString ret = GetSortColumnValue(item);
-//    ret.append(sep);
-//    ret.append(item->getMovieFileName());
+    //    QString ret = GetSortColumnValue(item);
+    //    ret.append(sep);
+    //    ret.append(item->getMovieFileName());
 
-//    return ret;
+    //    return ret;
 }
 
 static bool checkDup(const QString& s, QSet<QString>& map)
@@ -354,39 +354,39 @@ QString TableModel::GetInfoText(TableItemDataPointer item) const
     // QString str = "${size}, name=\"${name}\"";
     return ExtractInfoText(item, infoTemplate_);
 
-//    QString ret;
-//    static const char* sep = " ";
+    //    QString ret;
+    //    static const char* sep = " ";
 
-//    ret.append(size_human(item->getSize()));
-//	ret.append(sep);
+    //    ret.append(size_human(item->getSize()));
+    //	ret.append(sep);
 
-//    ret.append(filetime_human(item->getWtime()));
-//	ret.append(sep);
+    //    ret.append(filetime_human(item->getWtime()));
+    //	ret.append(sep);
 
-//    ret.append(duration_human(item->getDuration()));
-//    ret.append(sep);
+    //    ret.append(duration_human(item->getDuration()));
+    //    ret.append(sep);
 
-//    ret.append(dq(item->getFormat()));
-//    ret.append(sep);
+    //    ret.append(dq(item->getFormat()));
+    //    ret.append(sep);
 
-//    ret.append(bitrate_human(item->getBitrate()));
-//    ret.append(sep);
+    //    ret.append(bitrate_human(item->getBitrate()));
+    //    ret.append(sep);
 
-//    ret.append(item->getVcodec());
-//    ret.append(sep);
-//    ret.append(resolution_human(item->getVWidth(),item->getVHeight()));
-//    ret.append(sep);
+    //    ret.append(item->getVcodec());
+    //    ret.append(sep);
+    //    ret.append(resolution_human(item->getVWidth(),item->getVHeight()));
+    //    ret.append(sep);
 
-//    ret.append(item->getAcodec());
-//	ret.append(sep);
+    //    ret.append(item->getAcodec());
+    //	ret.append(sep);
 
-//    ret.append(dq(item->getMovieDirectory()));
-//    ret.append(sep);
+    //    ret.append(dq(item->getMovieDirectory()));
+    //    ret.append(sep);
 
-//    ret.append(opencount_human(item->getOpenCount()));
-//    // ret.append(sep);
+    //    ret.append(opencount_human(item->getOpenCount()));
+    //    // ret.append(sep);
 
-//    return ret;
+    //    return ret;
 }
 
 QSize TableModel::calculateSize(const QModelIndex& index, const QString& str) const
@@ -410,7 +410,7 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
     int mod = index.row() % RowCountPerEntry;
     bool isFilename = mod==0;
     bool isImage = mod==1;
-	bool isInfo = mod == 2;
+    bool isInfo = mod == 2;
 
     if(role==TableRole::MovieFileFull)
     {
@@ -428,101 +428,101 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
 
         switch(role)
         {
-            case Qt::DisplayRole:
-            {
+        case Qt::DisplayRole:
+        {
             // infinite loop
-//                parent_->setSpan(index.row(),0,1,5);
-//                parent_->setSpan(index.row()+3,0,1,5);
-//                parent_->setSpan(index.row()+6,0,1,5);
-				QString titleText = GetTitleText(itemDatas_[actualIndex]);
-                QSize qs = calculateSize(index, titleText);
-                parent_->setRowHeight(index.row(), qs.height());
-                return titleText; //->getMovieFileName();
-            }
+            //                parent_->setSpan(index.row(),0,1,5);
+            //                parent_->setSpan(index.row()+3,0,1,5);
+            //                parent_->setSpan(index.row()+6,0,1,5);
+            QString titleText = GetTitleText(itemDatas_[actualIndex]);
+            QSize qs = calculateSize(index, titleText);
+            parent_->setRowHeight(index.row(), qs.height());
+            return titleText; //->getMovieFileName();
+        }
             break;
 
-            case Qt::TextColorRole:
+        case Qt::TextColorRole:
+        {
+            if(bShowMissing_)
             {
-                if(bShowMissing_)
+                if(!QFile(itemDatas_[actualIndex]->getMovieFileFull()).exists())
                 {
-                    if(!QFile(itemDatas_[actualIndex]->getMovieFileFull()).exists())
-                    {
-                        return QColor(Qt::red);
-                    }
+                    return QColor(Qt::red);
                 }
             }
+        }
             break;
 
-            case Qt::TextAlignmentRole:
-            {
-                return Qt::AlignBottom;
-            }
+        case Qt::TextAlignmentRole:
+        {
+            return Qt::AlignBottom;
+        }
             break;
 
-            case Qt::FontRole:
-            {
-                return fontInfo_;
-            }
+        case Qt::FontRole:
+        {
+            return fontInfo_;
+        }
             break;
 
             // never comes
-//			case Qt::SizeHintRole:
-//			{
-//			}
-//			break;
+            //			case Qt::SizeHintRole:
+            //			{
+            //			}
+            //			break;
         }
     }
     else if(isImage)
     {
         switch(role)
         {
-            case Qt::DecorationRole:
+        case Qt::DecorationRole:
+        {
+
+            TableItemDataPointer itemData = itemDatas_[actualIndex];
+            if(!itemData->isDisplayed())
+                qDebug() << "Image DecorationRoll First: Index=" << index.row();
+            itemData->setDisplayed();
+
+            parent_->setColumnWidth(index.row(), THUMB_WIDTH);
+            // qDebug() << "DecorationRole previous rowheight = " << parent_->rowHeight(index.row());
+            parent_->setRowHeight(index.row(), THUMB_HEIGHT);
+
+            QString imageFile = pathCombine(FILEPART_THUMBS,
+                                            itemData->getThumbnailFiles()[getActualColumnIndex(index.column())]);
+
+            if(imagecache_==ImageCacheType::IC_NEVER)
             {
-
-                TableItemDataPointer itemData = itemDatas_[actualIndex];
-                if(!itemData->isDisplayed())
-                    qDebug() << "Image DecorationRoll First: Index=" << index.row();
-                itemData->setDisplayed();
-
-                parent_->setColumnWidth(index.row(), THUMB_WIDTH);
-                // qDebug() << "DecorationRole previous rowheight = " << parent_->rowHeight(index.row());
-                parent_->setRowHeight(index.row(), THUMB_HEIGHT);
-
-                QString imageFile = pathCombine(FILEPART_THUMBS,
-                                                itemData->getThumbnailFiles()[getActualColumnIndex(index.column())]);
-
-                if(imagecache_==ImageCacheType::IC_NEVER)
-                {
-                    QImage image(imageFile);
-                    return QPixmap::fromImage(image);
-                }
-
-                if(mapPixmaps_.keys().contains(imageFile))
-                {
-                    return mapPixmaps_[imageFile];
-                }
-                if(suspendImageIndexes_.contains(index))
-                    suspendImageIndexes_.removeOne(index);
-
-                suspendImageIndexes_.push(index);
-
-                TableModel* pThis = const_cast<TableModel*>(this);
-                pThis->StartImageTimer();
-                return QVariant();
+                QImage image(imageFile);
+                return QPixmap::fromImage(image);
             }
+
+            if(mapPixmaps_.keys().contains(imageFile))
+            {
+                return mapPixmaps_[imageFile];
+            }
+            if(suspendImageIndexes_.contains(index))
+                suspendImageIndexes_.removeOne(index);
+
+            suspendImageIndexes_.push(index);
+
+            TableModel* pThis = const_cast<TableModel*>(this);
+            pThis->StartImageTimer();
+            return QVariant();
+        }
             break;
         }
     }
-	else if (isInfo)
-	{
-		switch (role)
-		{
-		case Qt::DisplayRole:
-		{
-//            parent_->setSpan(index.row(),0,1,5);
-//            parent_->setSpan(index.row()+3,0,1,5);
-//            parent_->setSpan(index.row()+6,0,1,5);
-			QString infoText = GetInfoText(itemDatas_[actualIndex]);
+    else if (isInfo)
+    {
+        switch (role)
+        {
+        case Qt::DisplayRole:
+        {
+            //            parent_->setSpan(index.row(),0,1,5);
+            //            parent_->setSpan(index.row()+3,0,1,5);
+            //            parent_->setSpan(index.row()+6,0,1,5);
+            QString infoText = GetInfoText(itemDatas_[actualIndex]);
             QSize qs = calculateSize(index, infoText);
             parent_->setRowHeight(index.row(), qs.height());
 
@@ -530,36 +530,36 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
             // parent_->resizeRowToContents(index.row());
             // parent_->resizeColumnToContents(index.column());
             return infoText;
-		}
-		break;
+        }
+            break;
 
         case Qt::TextColorRole:
         {
-			if (bShowMissing_)
-			{
-				if (!QFile(itemDatas_[actualIndex]->getMovieFileFull()).exists())
-				{
-					return QColor(Qt::red);
-				}
-			}
+            if (bShowMissing_)
+            {
+                if (!QFile(itemDatas_[actualIndex]->getMovieFileFull()).exists())
+                {
+                    return QColor(Qt::red);
+                }
+            }
         }
-        break;
+            break;
 
         case Qt::TextAlignmentRole:
         {
             return Qt::AlignTop;
         }
-        break;
+            break;
 
         case Qt::FontRole:
         {
             return fontDetail_;
         }
-        break;
+            break;
 
 
-		}
-	}
+        }
+    }
     return QVariant();
 }
 Qt::ItemFlags TableModel::flags(const QModelIndex &index) const
@@ -697,9 +697,9 @@ QString TableModel::GetSortColumnValue(SORTCOLUMNMY sc, TableItemDataPointer ite
 //    return ret;
 //}
 bool TableModel::RenameEntry(const QString& oldDir,
-                 const QString& oldFile,
-                 const QString& newdir,
-                 const QString& newfile)
+                             const QString& oldFile,
+                             const QString& newdir,
+                             const QString& newfile)
 {
     QString oldfull = pathCombine(oldDir,oldFile);
     TableItemDataPointer pID = mapsFullpathToItem_[oldfull];
@@ -722,21 +722,21 @@ bool TableModel::RenameEntry(const QString& oldDir,
 }
 
 void TableModel::UpdateOpenCountAndLastAccess(const QString& movieFile,
-                                                      const int opencount,
-                                                      const qint64& lastaccess)
+                                              const int opencount,
+                                              const qint64& lastaccess)
 {
-	TableItemDataPointer pID = mapsFullpathToItem_[normalizeFile(movieFile)];
+    TableItemDataPointer pID = mapsFullpathToItem_[normalizeFile(movieFile)];
 
-	if (pID)
-	{
+    if (pID)
+    {
         // pID->IncrementOpenCount();
         pID->setOpenCount(opencount);
         pID->setLastAccess(lastaccess);
 
-		int row = itemDatas_.indexOf(pID);
-		Q_ASSERT(row >= 0);
-		emit dataChanged(createIndex(row * 3, 0), createIndex((row * 3) + 2, 0));
-	}
+        int row = itemDatas_.indexOf(pID);
+        Q_ASSERT(row >= 0);
+        emit dataChanged(createIndex(row * 3, 0), createIndex((row * 3) + 2, 0));
+    }
 }
 QModelIndex TableModel::GetIndex(const QString& movieFile) const
 {

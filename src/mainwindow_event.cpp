@@ -112,9 +112,9 @@ void MainWindow::closeEvent(QCloseEvent *event) {
     // recents
     settings_.setValue(KEY_RECENT_OPENDOCUMENTS,recents_);
 
-	// sort
-	settings_.setValue(KEY_SORT, (int)sortManager_.GetCurrentSort());
-	settings_.setValue(KEY_SORTREV, sortManager_.GetCurrentRev());
+    // sort
+    settings_.setValue(KEY_SORT, (int)sortManager_.GetCurrentSort());
+    settings_.setValue(KEY_SORTREV, sortManager_.GetCurrentRev());
 
     settings_.sync();
     QMainWindow::closeEvent(event);

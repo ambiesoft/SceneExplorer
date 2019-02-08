@@ -49,7 +49,7 @@ using namespace Consts;
 
 QString normalizeFile(const QString& file)
 {
-	return QFileInfo(file).absoluteFilePath();
+    return QFileInfo(file).absoluteFilePath();
 }
 void nomalizeDirAndName(const QString& full, QString&dir, QString& name)
 {
@@ -60,37 +60,37 @@ void nomalizeDirAndName(const QString& full, QString&dir, QString& name)
 void Info(QWidget* parent, QString message)
 {
     QMessageBox msgBox(parent && parent->isVisible() ? parent:nullptr);
-	
+
     msgBox.setWindowTitle(APPNAME_DISPLAY);
-	// msgBox.setInformativeText(message);
-	msgBox.setText(message);
-	msgBox.setStandardButtons(QMessageBox::Ok);
-	msgBox.setIcon(QMessageBox::Information);
-	msgBox.exec();
+    // msgBox.setInformativeText(message);
+    msgBox.setText(message);
+    msgBox.setStandardButtons(QMessageBox::Ok);
+    msgBox.setIcon(QMessageBox::Information);
+    msgBox.exec();
 }
 void Alert(QWidget* parent, QString message)
 {
     QMessageBox msgBox(parent && parent->isVisible() ? parent:nullptr);
-	
-	// msgBox.setInformativeText(message);
-	msgBox.setText(message);
-	msgBox.setStandardButtons(QMessageBox::Ok);
+
+    // msgBox.setInformativeText(message);
+    msgBox.setText(message);
+    msgBox.setStandardButtons(QMessageBox::Ok);
     msgBox.setIcon(QMessageBox::Warning);
-	msgBox.exec();
+    msgBox.exec();
 }
 bool YesNo(QWidget* parent,
            QString message,
            QMessageBox::Icon icon)
 {
     QMessageBox msgBox(parent && parent->isVisible() ? parent:nullptr);
-	
+
     msgBox.setWindowTitle(APPNAME_DISPLAY);
-	msgBox.setText(message);
-	msgBox.setStandardButtons(QMessageBox::Yes);
-	msgBox.addButton(QMessageBox::No);
-	msgBox.setDefaultButton(QMessageBox::No);
+    msgBox.setText(message);
+    msgBox.setStandardButtons(QMessageBox::Yes);
+    msgBox.addButton(QMessageBox::No);
+    msgBox.setDefaultButton(QMessageBox::No);
     msgBox.setIcon(icon);
-	return msgBox.exec() == QMessageBox::Yes;
+    return msgBox.exec() == QMessageBox::Yes;
 }
 
 static QString getBytecode1(char c)
@@ -114,7 +114,7 @@ static QString getBytecode1(char c)
     case 0xd: ret+="d";break;
     case 0xe: ret+="e";break;
     case 0xf: ret+="f";break;
-default:
+    default:
         Q_ASSERT(false);
     }
     switch(c & 0x0F)
@@ -135,7 +135,7 @@ default:
     case 0xd: ret+="d";break;
     case 0xe: ret+="e";break;
     case 0xf: ret+="f";break;
-default:
+    default:
         Q_ASSERT(false);
     }
 
@@ -220,23 +220,23 @@ Qt::WindowFlags GetDefaultDialogFlags()
 
 QString GetSortColumnName(SORTCOLUMNMY sc)
 {
-	switch (sc)
-	{
-	case SORT_NONE:return QString();
-	case SORT_FILENAME:return QObject::tr("Filename");
+    switch (sc)
+    {
+    case SORT_NONE:return QString();
+    case SORT_FILENAME:return QObject::tr("Filename");
     case SORT_FULLNAME:return QObject::tr("Fullname");
-	case SORT_SIZE:return QObject::tr("Size");
-	case SORT_WTIME:return QObject::tr("Wtime");
-	case SORT_RESOLUTION: return QObject::tr("Resolution");
-	case SORT_DURATION:return QObject::tr("Duration");
-	case SORT_BITRATE:return QObject::tr("Bitrate");
-	case SORT_OPENCOUNT:return QObject::tr("Open count");
+    case SORT_SIZE:return QObject::tr("Size");
+    case SORT_WTIME:return QObject::tr("Wtime");
+    case SORT_RESOLUTION: return QObject::tr("Resolution");
+    case SORT_DURATION:return QObject::tr("Duration");
+    case SORT_BITRATE:return QObject::tr("Bitrate");
+    case SORT_OPENCOUNT:return QObject::tr("Open count");
     case SORT_LASTACCESS:return QObject::tr("Last Access");
-	default:
-		Q_ASSERT(false);
+    default:
+        Q_ASSERT(false);
 
-	}
-	return QString();
+    }
+    return QString();
 }
 
 QString GetAppDir()
@@ -310,34 +310,34 @@ bool processCommandLine(QString* helpText)
 
     QCommandLineOption helpOption = parser.addHelpOption();
     QCommandLineOption versionOption = parser.addVersionOption();
-//    parser.addPositionalArgument("source", QCoreApplication::translate("main", "Source file to copy."));
-//    parser.addPositionalArgument("destination", QCoreApplication::translate("main", "Destination directory."));
+    //    parser.addPositionalArgument("source", QCoreApplication::translate("main", "Source file to copy."));
+    //    parser.addPositionalArgument("destination", QCoreApplication::translate("main", "Destination directory."));
 
     // A boolean option with a single name (-p)
-//    QCommandLineOption showProgressOption("p", QCoreApplication::translate("main", "Show progress during copy"));
-//    parser.addOption(showProgressOption);
+    //    QCommandLineOption showProgressOption("p", QCoreApplication::translate("main", "Show progress during copy"));
+    //    parser.addOption(showProgressOption);
 
     // A boolean option with multiple names (-f, --force)
-//    QCommandLineOption forceOption(QStringList() << "f" << "force",
-//                                   QCoreApplication::translate("main", "Overwrite existing files."));
-//    parser.addOption(forceOption);
+    //    QCommandLineOption forceOption(QStringList() << "f" << "force",
+    //                                   QCoreApplication::translate("main", "Overwrite existing files."));
+    //    parser.addOption(forceOption);
 
     // An option with a value
     QCommandLineOption dbDirectoryOption(QStringList() << "d" << "database-directory",
-                                             QCoreApplication::translate("main", "Set database directory <directory>."),
-                                             "directory");
+                                         QCoreApplication::translate("main", "Set database directory <directory>."),
+                                         "directory");
     parser.addOption(dbDirectoryOption);
 
 
 
-//    QStringList lll = QCoreApplication::arguments();
-//    QString sss;
-//    for(QString s: lll)
-//    {
-//        sss += s;
-//        sss += "   ";
-//    }
-//    Alert(nullptr,"arg=" + sss);
+    //    QStringList lll = QCoreApplication::arguments();
+    //    QString sss;
+    //    for(QString s: lll)
+    //    {
+    //        sss += s;
+    //        sss += "   ";
+    //    }
+    //    Alert(nullptr,"arg=" + sss);
 
     // Process the actual command line arguments given by the user
     parser.parse(QCoreApplication::arguments());
@@ -380,8 +380,8 @@ bool processCommandLine(QString* helpText)
         }
     }
 
-	Q_ASSERT(!gpCommandOption.get());
-	gpCommandOption.reset(new CommandOption(dbdir, doc));
+    Q_ASSERT(!gpCommandOption.get());
+    gpCommandOption.reset(new CommandOption(dbdir, doc));
 
     return true;
 }
@@ -439,15 +439,15 @@ void setClipboardText(const QString& text)
 }
 bool IsClipboardTagDataAvalable()
 {
-	QString clipText = getClipboardText();
-	QStringList lines = clipText.split('\n');
-	if (lines.isEmpty())
-		return false;
+    QString clipText = getClipboardText();
+    QStringList lines = clipText.split('\n');
+    if (lines.isEmpty())
+        return false;
 
-	if (lines[0].startsWith(STR_TAG_ENTRY_SIGNATURE))
-		return true;
+    if (lines[0].startsWith(STR_TAG_ENTRY_SIGNATURE))
+        return true;
 
-	return false;
+    return false;
 }
 
 bool isLegalFileExt(QString ext)
@@ -510,17 +510,17 @@ bool isUUID(const QString& s)
 std::wstring qToStdWString(const QString &str)
 {
 #ifdef _MSC_VER
- return std::wstring((const wchar_t*)str.utf16());
+    return std::wstring((const wchar_t*)str.utf16());
 #else
- return str.toStdWString();
+    return str.toStdWString();
 #endif
 }
 QString stdWToQString(const std::wstring &str)
 {
 #ifdef _MSC_VER
- return QString::fromUtf16((const ushort*)str.c_str());
+    return QString::fromUtf16((const ushort*)str.c_str());
 #else
- return QString::fromStdWString(str);
+    return QString::fromStdWString(str);
 #endif
 }
 

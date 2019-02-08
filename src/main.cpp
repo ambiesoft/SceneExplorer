@@ -288,7 +288,7 @@ int main2(int argc, char *argv[], QApplication& theApp)
         }
         qDebug() << "Qt language" << qti18nFile;
         if(qtTranslator.load(qti18nFile,
-                          QLibraryInfo::location(QLibraryInfo::TranslationsPath)))
+                             QLibraryInfo::location(QLibraryInfo::TranslationsPath)))
         {
             theApp.installTranslator(&qtTranslator);
         }

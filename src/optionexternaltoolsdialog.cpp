@@ -31,11 +31,11 @@ using namespace Consts;
 
 OptionExternalToolsDialog::OptionExternalToolsDialog(Settings& settings, QWidget *parent) :
     QDialog(parent,GetDefaultDialogFlags()),
-	settings_(settings),
+    settings_(settings),
     ui(new Ui::OptionExternalToolsDialog)
 {
     ui->setupUi(this);
-	lastSelectedExeDir_ = settings_.valueString(KEY_EXTERNALTOOLS_LASTSELECTEDEXEDIR);
+    lastSelectedExeDir_ = settings_.valueString(KEY_EXTERNALTOOLS_LASTSELECTEDEXEDIR);
     setWindowTitle(tr("Option") + " | " + tr("External tools"));
 }
 void OptionExternalToolsDialog::showEvent(QShowEvent *ev)
@@ -117,27 +117,27 @@ void OptionExternalToolsDialog::on_listWidget_currentItemChanged(QListWidgetItem
 
     if(previous)
     {
-//        ExternalToolWidgetItem* pItem = (ExternalToolWidgetItem*)previous;
-//        pItem->SetItemName(ui->lineName->text());
-//        pItem->SetItemExe(ui->lineExe->text());
-//        pItem->SetItemArg(ui->lineArg->text());
-//        int prevI = GetItemIndex(previous);
-//        items_[prevI].SetName(ui->lineName->text());
-//        items_[prevI].SetExe(ui->lineExe->text());
-//        items_[prevI].SetArg(ui->lineArg->text());
+        //        ExternalToolWidgetItem* pItem = (ExternalToolWidgetItem*)previous;
+        //        pItem->SetItemName(ui->lineName->text());
+        //        pItem->SetItemExe(ui->lineExe->text());
+        //        pItem->SetItemArg(ui->lineArg->text());
+        //        int prevI = GetItemIndex(previous);
+        //        items_[prevI].SetName(ui->lineName->text());
+        //        items_[prevI].SetExe(ui->lineExe->text());
+        //        items_[prevI].SetArg(ui->lineArg->text());
     }
 
     if(current)
     {
-//        ExternalToolWidgetItem* pItem = (ExternalToolWidgetItem*)current;
-//        ui->lineName->setText(pItem->GetItemName());
-//        ui->lineExe->setText(pItem->GetItemExe());
-//        ui->lineArg->setText(pItem->GetItemArg());
+        //        ExternalToolWidgetItem* pItem = (ExternalToolWidgetItem*)current;
+        //        ui->lineName->setText(pItem->GetItemName());
+        //        ui->lineExe->setText(pItem->GetItemExe());
+        //        ui->lineArg->setText(pItem->GetItemArg());
 
-//        int currentI = GetItemIndex(current);
-//        ui->lineName->setText(items_[currentI].GetName());
-//        ui->lineExe->setText(items_[currentI].GetExe());
-//        ui->lineArg->setText(items_[currentI].GetArg());
+        //        int currentI = GetItemIndex(current);
+        //        ui->lineName->setText(items_[currentI].GetName());
+        //        ui->lineExe->setText(items_[currentI].GetExe());
+        //        ui->lineArg->setText(items_[currentI].GetArg());
     }
 }
 
@@ -168,17 +168,17 @@ void OptionExternalToolsDialog::on_pbAdd_clicked()
                 ExternalToolItem(newitemname, QString(), "\"${filefullpath}\"", false));
     ui->listWidget->addItem(newitem);
     ui->listWidget->setCurrentItem(newitem);
-//    for(int i=0 ; i < ui->listWidget->count(); ++i)
-//    {
-//        if(ui->listWidget->item(i) != newitem)
-//        {
-//            ui->listWidget->item(i)->setSelected(false);
-//        }
-//        else
-//        {
-//            ui->listWidget->item(i)->setSelected(true);
-//        }
-//    }
+    //    for(int i=0 ; i < ui->listWidget->count(); ++i)
+    //    {
+    //        if(ui->listWidget->item(i) != newitem)
+    //        {
+    //            ui->listWidget->item(i)->setSelected(false);
+    //        }
+    //        else
+    //        {
+    //            ui->listWidget->item(i)->setSelected(true);
+    //        }
+    //    }
 }
 
 void OptionExternalToolsDialog::on_pbRemove_clicked()
@@ -267,8 +267,8 @@ void OptionExternalToolsDialog::on_buttonBox_accepted()
     items_.clear();
     for(int i=0 ; i < ui->listWidget->count(); ++i)
     {
-         ExternalToolWidgetItem* item = (ExternalToolWidgetItem*)ui->listWidget->item(i);
-         items_.append(item->GetItem());
+        ExternalToolWidgetItem* item = (ExternalToolWidgetItem*)ui->listWidget->item(i);
+        items_.append(item->GetItem());
     }
 }
 void OptionExternalToolsDialog::UpdateData()
@@ -287,10 +287,10 @@ void OptionExternalToolsDialog::UpdateData()
 
 void OptionExternalToolsDialog::on_tbExecutable_clicked()
 {
-	// QString filefull = ui->lineExe->text();
-	// QDir dir = QDir(filefull);
+    // QString filefull = ui->lineExe->text();
+    // QDir dir = QDir(filefull);
 
-	QFileDialog dialog(this, tr("Choose Executable"), lastSelectedExeDir_);
+    QFileDialog dialog(this, tr("Choose Executable"), lastSelectedExeDir_);
     dialog.setFileMode(QFileDialog::ExistingFile);
     if(!dialog.exec())
         return;
@@ -301,7 +301,7 @@ void OptionExternalToolsDialog::on_tbExecutable_clicked()
         return;
     }
 
-	QString selectedFile = dialog.selectedFiles()[0];
+    QString selectedFile = dialog.selectedFiles()[0];
     ui->lineExe->setText(selectedFile);
 
     lastSelectedExeDir_ = QFileInfo(selectedFile).absoluteDir().absolutePath();
@@ -316,7 +316,7 @@ void OptionExternalToolsDialog::on_context_titleTemplateCommonMain()
     ui->lineArg->insert(target);
 }
 void OptionExternalToolsDialog::constructTitleTemplateMenu(QMenu& contextMenu,
-                            QList< QSharedPointer<QAction> >& acts)
+                                                           QList< QSharedPointer<QAction> >& acts)
 {
     const char* alltargets[] = {
         "filefullpath",
