@@ -557,9 +557,9 @@ void MainWindow::insertLog(TaskKind kind,
 //            }
 //            break;
 
-            default:
-                Q_ASSERT(false);
-                return;
+//            default:
+//                Q_ASSERT(false);
+//                return;
         }
 
         head.append("> ");
@@ -996,7 +996,7 @@ void MainWindow::OnContextAddTags()
         return;
     }
 
-    QAction* act = (QAction*)QObject::sender();
+    QAction* act = static_cast<QAction*>(QObject::sender());
     qint64 tagid = act->data().toLongLong();
     // check state is already updated
     pDoc_->SetTagged(id, tagid, act->isChecked());
@@ -1007,7 +1007,7 @@ void MainWindow::OnContextExternalTools()
     const QString movieFileNative = getSelectedVideo(true);
     if(movieFileNative.isEmpty()) { Alert(this, TR_NOVIDEO_SELECTED()); return;}
 
-    QAction* act = (QAction*)QObject::sender();
+    QAction* act = static_cast<QAction*>(QObject::sender());
     int i = act->data().toInt();
     QString exe = externalTools_[i].GetExe();
     QString arg = externalTools_[i].GetArg();
@@ -1123,7 +1123,7 @@ void MainWindow::itemChangedCommon(bool bForceRead)
     // when blank area is clicked, all selection is gone
     // if(allSelectedOrChecked.isEmpty())
     {
-        DirectoryItem* currentDi =(DirectoryItem*)ui->directoryWidget->currentItem();
+        DirectoryItem* currentDi =static_cast<DirectoryItem*>(ui->directoryWidget->currentItem());
         if(currentDi && !allSelectedOrChecked.contains(currentDi))
         {
             allSelectedOrChecked.append(currentDi);
@@ -1185,11 +1185,11 @@ void MainWindow::itemChangedCommon(bool bForceRead)
 void MainWindow::GetSelectedAndCurrentTagIDs(TagidsInfo& tagInfos)
 {
     QList<qint64> tagids;
-	TagItem* tiCurrent = (TagItem*)ui->listTag->currentItem();
+    TagItem* tiCurrent = static_cast<TagItem*>(ui->listTag->currentItem());
 	
     for(int i=0 ; i < ui->listTag->count(); ++i)
     {
-        TagItem* ti = (TagItem*)ui->listTag->item(i);
+        TagItem* ti = static_cast<TagItem*>(ui->listTag->item(i));
         if(ti->IsAllItem())
         {
             if(ti->isSelected() || ti==tiCurrent)
@@ -1225,7 +1225,7 @@ void MainWindow::GetSelectedAndCurrentTagIDs(TagidsInfo& tagInfos)
         QList<qint64> allids;
         for(int i=0 ; i < ui->listTag->count(); ++i)
         {
-            TagItem* ti = (TagItem*)ui->listTag->item(i);
+            TagItem* ti = static_cast<TagItem*>(ui->listTag->item(i));
             if(ti->IsNormalItem())
             {
                 allids.append(ti->tagid());
@@ -1261,7 +1261,7 @@ void MainWindow::GetSqlAllSetTable(const QStringList& dirs,
 		qlonglong count = gpSQL->GetAllCount(dirs);
 		limitManager_->SetAllCount(count);
 
-		size_t cmbcount = (count / limitManager_->GetNumberOfRows());
+        size_t cmbcount = static_cast<size_t>(count / limitManager_->GetNumberOfRows());
 		if ((count % limitManager_->GetNumberOfRows()) != 0)
 			cmbcount++;
 
@@ -1270,7 +1270,7 @@ void MainWindow::GetSqlAllSetTable(const QStringList& dirs,
 		for (size_t i = 0; i < cmbcount; ++i)
 		{
             cmbLimit_->addItem(QString("%1").arg(i+1));
-            cmbLimit_->setItemData((int)i, Qt::AlignCenter, Qt::TextAlignmentRole);
+            cmbLimit_->setItemData(static_cast<int>(i), Qt::AlignCenter, Qt::TextAlignmentRole);
 		}
 	}
 
@@ -1358,8 +1358,8 @@ void MainWindow::UpdateTitle(const QStringList& dirs, UpdateTitleType utt)
         break;
     case UpdateTitleType::INIT:
         break;
-    default:
-        Q_ASSERT(false);
+//    default:
+//        Q_ASSERT(false);
     }
 
     QString title;
@@ -1491,7 +1491,7 @@ bool MainWindow::HasDirectory(const QString& dir)
     QString dirNormlized = normalizeDir(dir);
     for(int i=0 ; i < ui->directoryWidget->count();++i)
     {
-        DirectoryItem* di = (DirectoryItem*)ui->directoryWidget->item(i);
+        DirectoryItem* di = static_cast<DirectoryItem*>(ui->directoryWidget->item(i));
         if(di->text()==dirNormlized)
             return true;
     }
@@ -1735,7 +1735,7 @@ void MainWindow::on_listTag_itemSelectionChanged()
 
 void MainWindow::editTag()
 {
-    TagItem* ti =(TagItem*) ui->listTag->currentItem();
+    TagItem* ti =static_cast<TagItem*>( ui->listTag->currentItem());
     if(ti->IsAllItem())
         return;
 
@@ -1771,7 +1771,7 @@ void MainWindow::editTag()
 }
 void MainWindow::deleteTag()
 {
-    TagItem* ti =(TagItem*) ui->listTag->currentItem();
+    TagItem* ti =static_cast<TagItem*>( ui->listTag->currentItem());
      if(ti->IsAllItem())
          return;
 
@@ -1804,7 +1804,7 @@ void MainWindow::checkAllTagCommon(const bool bCheck)
         BlockedBool tb(&tagChanging_);
         for(int i=0 ; i < ui->listTag->count();++i)
         {
-            TagItem* ti = (TagItem*)ui->listTag->item(i);
+            TagItem* ti = static_cast<TagItem*>(ui->listTag->item(i));
             if(ti->IsNormalItem())
             {
                 ti->setCheckState(bCheck ? Qt::Checked : Qt::Unchecked);
@@ -1823,7 +1823,7 @@ void MainWindow::uncheckAllTag()
 }
 void MainWindow::showTagContextMenu(const QPoint &pos)
 {
-    TagItem* ti =(TagItem*) ui->listTag->itemAt(pos);
+    TagItem* ti =static_cast<TagItem*>( ui->listTag->itemAt(pos));
     if(!ti)
     {
         // no item selected
@@ -2018,7 +2018,7 @@ void MainWindow::on_action_OpenDirectory_triggered()
     {
         for(QListWidgetItem* qi : ui->directoryWidget->selectedItems())
         {
-            DirectoryItem* di = (DirectoryItem*)qi;
+            DirectoryItem* di = static_cast<DirectoryItem*>(qi);
             if(di->IsNormalItem())
             {
                 QString dir = di->text();
@@ -2072,7 +2072,7 @@ int MainWindow::GetTaskPriorityAsInt()
 {
     if(!taskPriority_)
         return -1;
-    return (int)(*taskPriority_);
+    return static_cast<int>((*taskPriority_));
 }
 void MainWindow::SetTaskPriorityAsInt(int priority)
 {
@@ -2086,7 +2086,7 @@ void MainWindow::SetTaskPriorityAsInt(int priority)
     if(!taskPriority_) {
         taskPriority_.reset(new QThread::Priority);
     }
-    *taskPriority_ = (QThread::Priority) priority;
+    *taskPriority_ = static_cast<QThread::Priority>( priority);
 }
 
 
@@ -2104,7 +2104,7 @@ void MainWindow::on_action_ScanArbitraryDirectory_triggered()
 
 void MainWindow::on_directoryWidget_itemDoubleClicked(QListWidgetItem *item)
 {
-    DirectoryItem* di = (DirectoryItem*)item;
+    DirectoryItem* di = static_cast<DirectoryItem*>(item);
     if(!di)
         return;
 
@@ -2116,7 +2116,7 @@ void MainWindow::on_directoryWidget_itemDoubleClicked(QListWidgetItem *item)
 
 void MainWindow::on_listTag_itemDoubleClicked(QListWidgetItem *item)
 {
-    TagItem* ti = (TagItem*)item;
+    TagItem* ti = static_cast<TagItem*>(item);
     if(!ti)
         return;
 
@@ -2150,14 +2150,14 @@ void MainWindow::on_action_ShowAllItem_triggered()
 
         // directory, select all
         ui->directoryWidget->clearSelection();
-        DirectoryItem* dall = (DirectoryItem*)ui->directoryWidget->item(0);
+        DirectoryItem* dall = static_cast<DirectoryItem*>(ui->directoryWidget->item(0));
         Q_ASSERT(dall->IsAllItem());
         dall->setSelected(true);
         ui->directoryWidget->setCurrentItem(dall);
 
         // tag select all
         ui->listTag->clearSelection();
-        TagItem* tall = (TagItem*)ui->listTag->item(0);
+        TagItem* tall = static_cast<TagItem*>(ui->listTag->item(0));
         Q_ASSERT(tall->IsAllItem());
         tall->setSelected(true);
         ui->listTag->setCurrentItem(tall);
