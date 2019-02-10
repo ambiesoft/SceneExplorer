@@ -49,10 +49,10 @@ bool showInGraphicalShell(QWidget *parent, const QString &pathIn)
 }
 
 // https://stackoverflow.com/a/17974223
-bool TrashInitialized = false;
-QString TrashPath;
-QString TrashPathInfo;
-QString TrashPathFiles;
+static bool TrashInitialized = false;
+static QString TrashPath;
+static QString TrashPathInfo;
+static QString TrashPathFiles;
 
 void MoveToTrashImpl( QString file ){
 #ifdef QT_GUI_LIB

@@ -73,6 +73,7 @@ void MainWindow::openVideo(const qint64& id, const QString& movieFile)
 {
     if(movieFile.isEmpty()) { Alert(this, TR_NOVIDEO_SELECTED()); return;}
 
+    WaitCursor wc;
     if(!QDesktopServices::openUrl(QUrl::fromLocalFile(movieFile)))
     {
         Alert(this, tr("failed to launch %1.").arg(movieFile));
