@@ -19,10 +19,11 @@
 #include <QListWidgetItem>
 #include <QScrollBar>
 
+#include "../../lsMisc/stdQt/settings.h"
+
 #include "consts.h"
 #include "globals.h"
 #include "waitcursorq.h"
-#include "settings.h"
 #include "sql.h"
 #include "extension.h"
 #include "helper.h"

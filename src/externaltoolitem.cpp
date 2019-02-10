@@ -16,9 +16,9 @@
 //You should have received a copy of the GNU General Public License
 //along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-#include "consts.h"
-#include "settings.h"
+#include "../../lsMisc/stdQt/settings.h"
 
+#include "consts.h"
 #include "externaltoolitem.h"
 
 using namespace Consts;

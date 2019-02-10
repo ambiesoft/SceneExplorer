@@ -22,7 +22,8 @@
 #include <QDialog>
 #include <QListWidgetItem>
 
-#include "settings.h"
+#include "../../lsMisc/stdQt/settings.h"
+
 #include "externaltoolitem.h"
 
 namespace Ui {

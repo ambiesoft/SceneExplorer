@@ -21,7 +21,7 @@
 
 #include <QReadWriteLock>
 
-#include "settings.h"
+#include "../../lsMisc/stdQt/settings.h"
 
 class FFMpeg
 {

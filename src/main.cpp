@@ -36,6 +36,7 @@
 
 #include "../../lsMisc/stdQt/stdQt.h"
 #include "../../lsMisc/stdQt/runguard.h"
+#include "../../lsMisc/stdQt/settings.h"
 
 #include "consts.h"
 #include "globals.h"
@@ -44,7 +45,6 @@
 #include "taskgetdir.h"
 #include "helper.h"
 #include "tableitemdata.h"
-#include "settings.h"
 #include "ffmpeg.h"
 #include "commandoption.h"
 #include "mainwindow.h"

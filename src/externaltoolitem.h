@@ -20,7 +20,9 @@
 #define EXTERNALTOOLITEM_H
 
 #include <QString>
-#include "settings.h"
+
+#include "../../lsMisc/stdQt/settings.h"
+
 class ExternalToolItem
 {
     QString name_;

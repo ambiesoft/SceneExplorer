@@ -28,6 +28,7 @@
 #include <QStyleFactory>
 
 #include "../../lsMisc/stdQt/stdQt.h"
+#include "../../lsMisc/stdQt/settings.h"
 
 #include "consts.h"
 #include "globals.h"
@@ -42,7 +43,6 @@
 #include "directoryentry.h"
 #include "directoryitem.h"
 
-#include "settings.h"
 #include "sql.h"
 #include "helper.h"
 #include "osd.h"

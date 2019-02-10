@@ -22,7 +22,7 @@
 #include <QReadWriteLock>
 #include <QSet>
 
-#include "settings.h"
+#include "../../lsMisc/stdQt/settings.h"
 
 class Extension
 {

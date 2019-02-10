@@ -25,11 +25,12 @@
 #include <QPushButton>
 #include <QThread>
 
+#include "../../lsMisc/stdQt/settings.h"
+
 #include "tablemodel.h"
 #include "directoryentry.h"
 #include "directoryitem.h"
 #include "findcombobox.h"
-#include "settings.h"
 #include "externaltoolitem.h"
 #include "document.h"
 #include "blockedbool.h"

@@ -27,7 +27,6 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     tablemodel.cpp \
-    settings.cpp \
     taskffmpeg.cpp \
     taskgetdir.cpp \
     optiondialog.cpp \
@@ -69,12 +68,12 @@ SOURCES += \
     waitcursorq.cpp \
     ../../lsMisc/stdQt/stdQt.cpp \
     ../../lsMisc/stdQt/runguard.cpp \
-    tagidsinfo.cpp
+    tagidsinfo.cpp \
+    ../../lsMisc/stdQt/settings.cpp
 
 HEADERS += \
         mainwindow.h \
     tablemodel.h \
-    settings.h \
     consts.h \
     taskffmpeg.h \
     taskgetdir.h \
@@ -115,7 +114,8 @@ HEADERS += \
     waitcursorq.h \
     ../../lsMisc/stdQt/stdQt.h \
     ../../lsMisc/stdQt/runguard.h \
-    tagidsinfo.h
+    tagidsinfo.h \
+    ../../lsMisc/stdQt/settings.h
 
 FORMS += \
         mainwindow.ui \

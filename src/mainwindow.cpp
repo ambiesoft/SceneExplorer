@@ -46,6 +46,7 @@
 #include <QInputDialog>
 
 #include "../../lsMisc/stdQt/stdQt.h"
+#include "../../lsMisc/stdQt/settings.h"
 
 #include "taskgetdir.h"
 #include "taskffmpeg.h"
@@ -53,7 +54,6 @@
 #include "tablemodel.h"
 #include "taskmodel.h"
 #include "tableitemdata.h"
-#include "settings.h"
 #include "waitcursorq.h"
 // #include "taskfilter.h"
 #include "errorinfoexception.h"
