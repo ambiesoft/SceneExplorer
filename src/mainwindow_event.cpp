@@ -20,10 +20,10 @@
 #include <QScrollBar>
 
 #include "../../lsMisc/stdQt/settings.h"
+#include "../../lsMisc/stdQt/waitingcursor.h"
 
 #include "consts.h"
 #include "globals.h"
-#include "waitcursorq.h"
 #include "sql.h"
 #include "extension.h"
 #include "helper.h"
@@ -32,6 +32,7 @@
 #include "mainwindow.h"
 
 using namespace Consts;
+using namespace AmbiesoftQt;
 
 
 void MainWindow::resizeEvent(QResizeEvent *event)
@@ -59,7 +60,7 @@ void MainWindow::closeEvent(QCloseEvent *event) {
     Q_UNUSED(event);
 
     gPaused = false;
-    WaitCursor wc;
+    WaitingCursor wc;
 
     clearAllPool();
 
@@ -100,7 +101,7 @@ void MainWindow::closeEvent(QCloseEvent *event) {
 
     settings_.setValue(KEY_TITLE_TEXT_TEMPLATE, tableModel_->GetTitleTextTemplate());
     settings_.setValue(KEY_INFO_TEXT_TEMPLATE, tableModel_->GetInfoTextTemplate());
-    settings_.setValue(KEY_IMAGECACHETYPE, (int)tableModel_->GetImageCache());
+    settings_.setValue(KEY_IMAGECACHETYPE, static_cast<int>(tableModel_->GetImageCache()));
 
     Extension::Save(settings_);
 
@@ -114,7 +115,7 @@ void MainWindow::closeEvent(QCloseEvent *event) {
     settings_.setValue(KEY_RECENT_OPENDOCUMENTS,recents_);
 
     // sort
-    settings_.setValue(KEY_SORT, (int)sortManager_.GetCurrentSort());
+    settings_.setValue(KEY_SORT, static_cast<int>(sortManager_.GetCurrentSort()));
     settings_.setValue(KEY_SORTREV, sortManager_.GetCurrentRev());
 
     settings_.sync();

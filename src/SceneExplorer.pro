@@ -65,11 +65,11 @@ SOURCES += \
     mainwindow_onedit.cpp \
     mainwindow_onselectall.cpp \
     mainwindow_working.cpp \
-    waitcursorq.cpp \
     ../../lsMisc/stdQt/stdQt.cpp \
     ../../lsMisc/stdQt/runguard.cpp \
     tagidsinfo.cpp \
-    ../../lsMisc/stdQt/settings.cpp
+    ../../lsMisc/stdQt/settings.cpp \
+    ../../lsMisc/stdQt/waitingcursor.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -111,11 +111,11 @@ HEADERS += \
 	../../profile/cpp/Profile/include/ambiesoft.profile.h \
 	../../lsMisc/stdosd/SetPrority.h \
     stdafx.h \
-    waitcursorq.h \
     ../../lsMisc/stdQt/stdQt.h \
     ../../lsMisc/stdQt/runguard.h \
     tagidsinfo.h \
-    ../../lsMisc/stdQt/settings.h
+    ../../lsMisc/stdQt/settings.h \
+    ../../lsMisc/stdQt/waitingcursor.h
 
 FORMS += \
         mainwindow.ui \

@@ -29,10 +29,10 @@
 
 #include "../../lsMisc/stdQt/stdQt.h"
 #include "../../lsMisc/stdQt/settings.h"
+#include "../../lsMisc/stdQt/waitingcursor.h"
 
 #include "consts.h"
 #include "globals.h"
-#include "waitcursorq.h"
 #include "ffmpeg.h"
 #include "taskmodel.h"
 #include "tableitemdata.h"
@@ -73,7 +73,7 @@ void MainWindow::openVideo(const qint64& id, const QString& movieFile)
 {
     if(movieFile.isEmpty()) { Alert(this, TR_NOVIDEO_SELECTED()); return;}
 
-    WaitCursor wc;
+    WaitingCursor wc(Qt::BusyCursor);
     if(!QDesktopServices::openUrl(QUrl::fromLocalFile(movieFile)))
     {
         Alert(this, tr("failed to launch %1.").arg(movieFile));
@@ -526,7 +526,7 @@ void MainWindow::onTaskEnded()
 void MainWindow::on_action_Stop_triggered()
 {
     gPaused = false;
-    WaitCursor wc;
+    WaitingCursor wc;
 
     clearAllPool();
     onTaskEnded();
@@ -628,7 +628,7 @@ void MainWindow::SortManager::UpdateButtonText()
 
 void MainWindow::onSortCommon(SORTCOLUMNMY sortColumn)
 {
-    WaitCursor wc;
+    WaitingCursor wc;
     sortManager_.onSort(sortColumn);
     if (limitManager_)
         limitManager_->Reset();

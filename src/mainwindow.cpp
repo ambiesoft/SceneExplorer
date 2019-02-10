@@ -47,6 +47,7 @@
 
 #include "../../lsMisc/stdQt/stdQt.h"
 #include "../../lsMisc/stdQt/settings.h"
+#include "../../lsMisc/stdQt/waitingcursor.h"
 
 #include "taskgetdir.h"
 #include "taskffmpeg.h"
@@ -54,7 +55,6 @@
 #include "tablemodel.h"
 #include "taskmodel.h"
 #include "tableitemdata.h"
-#include "waitcursorq.h"
 // #include "taskfilter.h"
 #include "errorinfoexception.h"
 #include "consts.h"
@@ -1008,6 +1008,8 @@ void MainWindow::OnContextExternalTools()
     const QString movieFileNative = getSelectedVideo(true);
     if(movieFileNative.isEmpty()) { Alert(this, TR_NOVIDEO_SELECTED()); return;}
 
+    WaitingCursor wc(Qt::BusyCursor);
+
     QAction* act = static_cast<QAction*>(QObject::sender());
     int i = act->data().toInt();
     QString exe = externalTools_[i].GetExe();
@@ -1115,7 +1117,7 @@ void MainWindow::itemChangedCommon(bool bForceRead)
     if ((directoryChanging_ || tagChanging_) && !bForceRead)
         return;
 
-    WaitCursor wc;
+    WaitingCursor wc;
 
     QStringList dirs;
     bool bOnlyMissing = false;
@@ -1391,13 +1393,13 @@ void MainWindow::UpdateTitle(const QStringList& dirs, UpdateTitleType utt)
 }
 void MainWindow::on_action_Top_triggered()
 {
-    WaitCursor wc;
+    WaitingCursor wc;
     ui->tableView->scrollToTop();
 }
 
 void MainWindow::on_action_Bottom_triggered()
 {
-    WaitCursor wc;
+    WaitingCursor wc;
     proxyModel_->ensureBottom();
     QApplication::processEvents();
     ui->tableView->scrollToBottom();

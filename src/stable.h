@@ -33,6 +33,7 @@
 #include <QComboBox>
 #include <QCommandLineParser>
 #include <QCoreApplication>
+#include <QCursor>
 #include <QCryptographicHash>
 #include <QDateTime>
 #include <QDebug>
