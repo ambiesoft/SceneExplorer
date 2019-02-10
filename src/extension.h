@@ -60,8 +60,8 @@ public:
 
     static bool IsMovieExtension(const QString& file);
 
-    static void Load(Settings& settings);
-    static void Save(Settings& settings);
+    static void Load(AmbiesoftQt::IniSettings& settings);
+    static void Save(AmbiesoftQt::IniSettings& settings);
 };
 
 #endif // EXTENSION_H

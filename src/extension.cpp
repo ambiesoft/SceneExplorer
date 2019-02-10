@@ -19,8 +19,10 @@
 
 
 #include "extension.h"
+#include "consts.h"
 
 using namespace Consts;
+using namespace AmbiesoftQt;
 
 QReadWriteLock Extension::sLock_;
 bool Extension::bOrderAllow_;
@@ -232,7 +234,7 @@ void Extension::SetOrderAllow(bool b)
     bOrderAllow_=b;
 }
 
-void Extension::Load(Settings& settings)
+void Extension::Load(IniSettings& settings)
 {
     bOrderAllow_ = settings.valueBool(KEY_EXTENSION_ORDERALLOW, true);
 
@@ -257,7 +259,7 @@ void Extension::Load(Settings& settings)
         Extension::SetMovieExtensionDeny(Extension::GetDefaultDeny());
     }
 }
-void Extension::Save(Settings& settings)
+void Extension::Save(IniSettings& settings)
 {
     settings.setValue(KEY_EXTENSION_ORDERALLOW, bOrderAllow_);
     settings.setValue(KEY_ALLOW_EXTENSIONS, GetMovieExtensionAllow());

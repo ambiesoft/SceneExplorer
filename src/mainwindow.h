@@ -41,7 +41,7 @@ class QThreadPool;
 class QLabel;
 class ListModel;
 class TableItemData;
-class Settings;
+// class AmbiesoftQt::Settings;
 class TaskModel;
 class TaskFFmpeg;
 class QLabel;
@@ -73,7 +73,7 @@ class MainWindow : public QMainWindow, IMainWindow
 
     Ui::MainWindow *ui;
     // setting keys
-    Settings& settings_;
+    AmbiesoftQt::IniSettings& settings_;
     Document* pDoc_ = nullptr;
     QStringList recents_;
 
@@ -86,7 +86,7 @@ class MainWindow : public QMainWindow, IMainWindow
 
 public:
     explicit MainWindow(QWidget *parent,
-                        Settings& settings,
+                        AmbiesoftQt::IniSettings& settings,
                         const QString& docToOpen);
     ~MainWindow();
 
@@ -202,9 +202,9 @@ private:
         {
             switch(idkind)
             {
-            case GetDir: return idGetDir_;
+            case IDKIND_GetDir: return idGetDir_;
                 // case Filter: return idFilter_;
-            case FFMpeg: return idFFMpeg_;
+            case IDKIND_FFmpeg: return idFFMpeg_;
             }
             Q_ASSERT(false);
             return 0;
@@ -213,9 +213,9 @@ private:
         {
             switch(idkind)
             {
-            case GetDir: return idGetDirDone_;
+            case IDKIND_GetDir: return idGetDirDone_;
                 // case Filter: return idFilterDone_;
-            case FFMpeg: return idFFMpegDone_;
+            case IDKIND_FFmpeg: return idFFMpegDone_;
             }
             Q_ASSERT(false);
             return 0;
@@ -225,11 +225,9 @@ private:
             int ret;
             switch(idkind)
             {
-            case GetDir: ret = ++idGetDir_;break;
+            case IDKIND_GetDir: ret = ++idGetDir_;break;
                 // case Filter: ret = ++idFilter_;break;
-            case FFMpeg: ret = ++idFFMpeg_;break;
-            default:
-                Q_ASSERT(false);
+            case IDKIND_FFmpeg: ret = ++idFFMpeg_;break;
             }
             updateStatus();
             return ret;
@@ -239,11 +237,9 @@ private:
             int ret;
             switch(idkind)
             {
-            case GetDir: ret = ++idGetDirDone_;break;
+            case IDKIND_GetDir: ret = ++idGetDirDone_;break;
                 // case Filter: ret = ++idFilterDone_;break;
-            case FFMpeg: ret = ++idFFMpegDone_;break;
-            default:
-                Q_ASSERT(false);
+            case IDKIND_FFmpeg: ret = ++idFFMpegDone_;break;
             }
             updateStatus();
             return ret;
@@ -634,10 +630,10 @@ private:
     void resizeDock_obsolete(QDockWidget* dock, const QSize& size);
 
     enum TaskKind {
-        GetDir,
-        FFMpeg,
-        SQL,
-        App,
+        TaskKind_GetDir,
+        TaskKind_FFMpeg,
+        TaskKind_SQL,
+        TaskKind_App,
     };
     void insertLog(TaskKind kind, int id, const QString& text, bool bError=false);
     void insertLog(TaskKind kind, const QVector<int>& ids, const QStringList& texts, bool bError=false);

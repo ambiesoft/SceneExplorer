@@ -57,7 +57,7 @@
 #include "waitcursorq.h"
 // #include "taskfilter.h"
 #include "errorinfoexception.h"
-
+#include "consts.h"
 #include "optiondialog.h"
 #include "optionextension.h"
 #include "optionexternaltoolsdialog.h"
@@ -79,6 +79,7 @@
 #include "mainwindow.h"
 
 using namespace Consts;
+using namespace AmbiesoftQt;
 
 MainWindow::SortManager::SortManager()
 {
@@ -428,7 +429,7 @@ QThreadPool* MainWindow::getPoolFFmpeg()
 void MainWindow::clearAllPool(bool bAppendLog)
 {
     if(bAppendLog)
-        insertLog(TaskKind::App, 0, tr("Clearing all tasks..."));
+        insertLog(TaskKind_App, 0, tr("Clearing all tasks..."));
 
     BlockedBool btStop(&gStop, true, false);
     BlockedBool btPaused(&gPaused, false, gPaused);
@@ -466,7 +467,7 @@ void MainWindow::clearAllPool(bool bAppendLog)
     taskModel_->ClearAllTasks();
 
     if(bAppendLog)
-        insertLog(TaskKind::App, 0, tr("======== All tasks Cleared ========"));
+        insertLog(TaskKind_App, 0, tr("======== All tasks Cleared ========"));
 }
 
 
@@ -526,26 +527,26 @@ void MainWindow::insertLog(TaskKind kind,
         QString head;
         switch(kind)
         {
-        case TaskKind::GetDir:
+        case TaskKind_GetDir:
         {
             head.append(tr("Iterate"));
             head.append(QString::number(id));
         }
             break;
-        case TaskKind::FFMpeg:
+        case TaskKind_FFMpeg:
         {
             head.append(tr("Thumbnail"));
             head.append(QString::number(id));
         }
             break;
-        case TaskKind::SQL:
+        case TaskKind_SQL:
         {
             head.append(tr("Database"));
             head.append(QString::number(id));
         }
             break;
 
-        case TaskKind::App:
+        case TaskKind_App:
         {
             head.append(tr("Application"));
         }
@@ -661,7 +662,7 @@ void MainWindow::afterGetDir(int loopId, int id,
         {
             if(true) // gpSQL->hasThumb(dir, file))
             {
-                insertLog(TaskKind::GetDir, id, tr("Already exists. \"%1\"").
+                insertLog(TaskKind_GetDir, id, tr("Already exists. \"%1\"").
                           arg(fi.absoluteFilePath()));
                 continue;
             }
@@ -692,7 +693,7 @@ void MainWindow::afterGetDir(int loopId, int id,
                     // db size is same size with disk
                     // and salient is same ( conditonal queried from db )
                     // we assume file is moved
-                    insertLog(TaskKind::GetDir, id, tr("Rename detected. \"%1\" -> \"%2\"").
+                    insertLog(TaskKind_GetDir, id, tr("Rename detected. \"%1\" -> \"%2\"").
                               arg(dbFile).
                               arg(pathCombine(dir,file)));
                     if(gpSQL->RenameEntry(dirsDB[i], filesDB[i], dir, file))
@@ -731,7 +732,7 @@ void MainWindow::finished_GetDir(int loopId, int id, const QString& dir)
     idManager_->IncrementDone(IDKIND_GetDir);
     Q_ASSERT(idManager_->Get(IDKIND_GetDir) >= idManager_->GetDone(IDKIND_GetDir));
 
-    insertLog(TaskKind::GetDir, id, tr("Scan directory finished. %1").arg(dir));
+    insertLog(TaskKind_GetDir, id, tr("Scan directory finished. %1").arg(dir));
 
     checkTaskFinished();
 }
@@ -755,11 +756,11 @@ void MainWindow::afterFilter2(int loopId,int id,
 
     if(filteredFiles.isEmpty())
     {
-        insertLog(TaskKind::GetDir, id, tr("No new files found in %1").arg(dir));
+        insertLog(TaskKind_GetDir, id, tr("No new files found in %1").arg(dir));
     }
     else
     {
-        insertLog(TaskKind::GetDir, id, tr("%1 new items found in %2").
+        insertLog(TaskKind_GetDir, id, tr("%1 new items found in %2").
                   arg(QString::number(filteredFiles.count())).
                   arg(dir));
     }
@@ -804,7 +805,7 @@ void MainWindow::afterFilter2(int loopId,int id,
         logids.append(idManager_->Get(IDKIND_FFmpeg));
         logtexts.append(QString(tr("Task registered. %1")).arg(file));
     }
-    insertLog(TaskKind::FFMpeg, logids, logtexts);
+    insertLog(TaskKind_FFMpeg, logids, logtexts);
     taskModel_->AddTasks(tasks);
 
     checkTaskFinished();
@@ -817,7 +818,7 @@ void MainWindow::checkTaskFinished()
     {
         onTaskEnded();
         clearAllPool(false);
-        insertLog(TaskKind::App, 0, tr("======== All Tasks finished ========"));
+        insertLog(TaskKind_App, 0, tr("======== All Tasks finished ========"));
     }
 }
 
@@ -1318,7 +1319,7 @@ void MainWindow::GetSqlAllSetTable(const QStringList& dirs,
 
     UpdateTitle(dirs, bOnlyMissing ? UpdateTitleType::ONLYMISSING : UpdateTitleType::DEFAULT);
 
-    insertLog(TaskKind::App,
+    insertLog(TaskKind_App,
               0,
               tr("Querying Database takes %1 milliseconds.").arg(timer.elapsed()));
 
@@ -1328,7 +1329,7 @@ void MainWindow::GetSqlAllSetTable(const QStringList& dirs,
     timer.start();
     tableModel_->ResetData(all);
 
-    insertLog(TaskKind::App,
+    insertLog(TaskKind_App,
               0,
               tr("Resetting data takes %1 milliseconds.").arg(timer.elapsed()));
 

@@ -50,6 +50,7 @@
 #include "mainwindow.h"
 
 using namespace Consts;
+using namespace AmbiesoftQt;
 
 #ifdef QT_DEBUG
 static void testSQL()
@@ -173,7 +174,7 @@ bool OpenDatabaseDirectory(const QString& dbDir)
     return true;
 }
 
-bool GetDatabaseDirectory(Settings& settings, QString& dbDirToSet, bool& bQuit)
+bool GetDatabaseDirectory(IniSettings& settings, QString& dbDirToSet, bool& bQuit)
 {
     bQuit = false;
     if(settings.valueBool(KEY_USE_CUSTOMDATABASEDIR))
@@ -250,7 +251,9 @@ int main2(int argc, char *argv[], QApplication& theApp)
     QString inifile = getInifile(bExit);// "N:\\Ambiesoft\\SceneExplorer\\SceneExplorer.ini";
     if(bExit)
         return 1;
-    QScopedPointer<Settings> settings(inifile.isEmpty() ? new Settings : new Settings(inifile));
+    QScopedPointer<IniSettings> settings(inifile.isEmpty() ?
+                                          new IniSettings(QApplication::organizationName(), QApplication::applicationName()) :
+                                          new IniSettings(inifile));
     if(!settings->isAccessible())
     {
         Alert(nullptr,

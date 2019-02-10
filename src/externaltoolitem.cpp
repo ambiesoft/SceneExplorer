@@ -22,8 +22,9 @@
 #include "externaltoolitem.h"
 
 using namespace Consts;
+using namespace AmbiesoftQt;
 
-ExternalToolItem ExternalToolItem::Load(int i, Settings& settings)
+ExternalToolItem ExternalToolItem::Load(int i, IniSettings& settings)
 {
     QString group = KEY_EXTERNALTOOLS_GROUPPRIX + QString::number(i);
 
@@ -36,7 +37,7 @@ ExternalToolItem ExternalToolItem::Load(int i, Settings& settings)
 
     return ExternalToolItem(name,exe,arg,bCountAsOpen);
 }
-void ExternalToolItem::Save(int i, Settings& settings)
+void ExternalToolItem::Save(int i, IniSettings& settings)
 {
     QString group = KEY_EXTERNALTOOLS_GROUPPRIX + QString::number(i);
 

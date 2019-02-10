@@ -22,8 +22,9 @@
 #include "extension.h"
 #include "optionextension.h"
 
+using namespace AmbiesoftQt;
 
-OptionExtension::OptionExtension(QWidget* parent, Settings& settings)
+OptionExtension::OptionExtension(QWidget* parent, IniSettings& settings)
     : QDialog(parent, GetDefaultDialogFlags()),
       settings_(settings)
 {

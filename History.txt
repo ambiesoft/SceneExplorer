@@ -1,3 +1,6 @@
+2019/02/10 1.19.16
+Move some files
+
 2019/02/08 1.19.15
 Fix: Translate supplement menu of Option dialog's [Item title] and [Item information]
 

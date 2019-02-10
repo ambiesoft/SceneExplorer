@@ -167,12 +167,12 @@ void MainWindow::on_action_Options_triggered()
 }
 void MainWindow::onUserDirectoryTriggered()
 {
-    QAction* action = (QAction*)sender();
+    QAction* action = static_cast<QAction*>(sender());
     if(!action)
         return;
 
     int index = action->data().toInt();
-    DirectoryItem* di = (DirectoryItem*) ui->directoryWidget->item(index);
+    DirectoryItem* di = static_cast<DirectoryItem*>( ui->directoryWidget->item(index));
 
     di->setCheckState(di->IsChecked() ? Qt::Unchecked : Qt::Checked);
 }
@@ -191,7 +191,7 @@ void MainWindow::onMenuDirectory_AboutToShow()
     bool bAdded = false;
     for(int i=0 ; i < ui->directoryWidget->count(); ++i)
     {
-        DirectoryItem* di = (DirectoryItem*)ui->directoryWidget->item(i);
+        DirectoryItem* di = static_cast<DirectoryItem*>(ui->directoryWidget->item(i));
         if(di->IsAllItem() || di->IsMissingItem())
             continue;
         bAdded = true;
@@ -215,12 +215,12 @@ void MainWindow::onMenuDirectory_AboutToShow()
 
 void MainWindow::OnUserTagTriggered()
 {
-    QAction* action = (QAction*)sender();
+    QAction* action = static_cast<QAction*>(sender());
     if(!action)
         return;
 
     int index = action->data().toInt();
-    TagItem* ti = (TagItem*) ui->listTag->item(index);
+    TagItem* ti = static_cast<TagItem*>( ui->listTag->item(index));
 
 
     ti->setCheckState(ti->IsChecked() ? Qt::Unchecked : Qt::Checked);
@@ -239,7 +239,7 @@ void MainWindow::onMenuTag_AboutToShow()
     bool bAdded = false;
     for(int i=0; i < ui->listTag->count(); ++i)
     {
-        TagItem* ti = (TagItem*)ui->listTag->item(i);
+        TagItem* ti = static_cast<TagItem*>(ui->listTag->item(i));
         if(ti->IsAllItem())
             continue;
         bAdded=true;
@@ -312,7 +312,7 @@ void MainWindow::on_action_DockTag_triggered()
 void MainWindow::OnRecentDocumentsTriggered(bool checked)
 {
     Q_UNUSED(checked);
-    QAction* qa = (QAction*)QObject::sender();
+    QAction* qa = static_cast<QAction*>(QObject::sender());
     Q_ASSERT(qa);
 
     QString file = qa->text();
@@ -404,7 +404,7 @@ void MainWindow::AddUserEntryDirectory_obsolete(
 
         for(int i=0 ; i < ui->directoryWidget->count(); ++i)
         {
-            DirectoryItem* item = (DirectoryItem*)ui->directoryWidget->item(i);
+            DirectoryItem* item = static_cast<DirectoryItem*>(ui->directoryWidget->item(i));
             if(!item->IsNormalItem())
                 continue;
             QDir d(item->text());
@@ -449,7 +449,7 @@ void MainWindow::AddUserEntryDirectory_obsolete(
 
 bool MainWindow::IsAllTagSelected() const
 {
-    TagItem* ti = (TagItem*)ui->listTag->item(0);
+    TagItem* ti = static_cast<TagItem*>(ui->listTag->item(0));
     Q_ASSERT(ti->IsAllItem());
 
     return ui->listTag->currentItem()==ti || ti->isSelected();
@@ -481,7 +481,7 @@ void MainWindow::StartScan(const QString& dir)
     QString errString;
     if(!checkFFprobe(errString) || !checkFFmpeg(errString))
     {
-        insertLog(TaskKind::App, 0,
+        insertLog(TaskKind_App, 0,
                   tr("Failed to launch ffprobe or ffmpeg. (%1)").arg(errString) +
                   " " +
                   tr("Check the option setting."));
@@ -490,7 +490,7 @@ void MainWindow::StartScan(const QString& dir)
 
     if(!QDir(dir).exists())
     {
-        insertLog(TaskKind::App, 0, tr("Directoy not found. (%1) ").
+        insertLog(TaskKind_App, 0, tr("Directoy not found. (%1) ").
                   arg(dir));
         return;
     }
@@ -507,7 +507,7 @@ void MainWindow::StartScan(const QString& dir)
     getPoolGetDir()->start(pTaskGetDir);
 
     onTaskStarted();
-    insertLog(TaskKind::GetDir, idManager_->Get(IDKIND_GetDir),
+    insertLog(TaskKind_GetDir, idManager_->Get(IDKIND_GetDir),
               tr("Task registered. %1").arg(dir));
 }
 
@@ -601,7 +601,7 @@ void MainWindow::SortManager::UpdateButtonText()
         {
             acs_[i]->setIcon(ascending_[i] ? iconsAscend_[i] : iconsDescend_[i]);
 
-            QString text = GetSortColumnName((SORTCOLUMNMY)i);
+            QString text = GetSortColumnName(static_cast<SORTCOLUMNMY>(i));
             if(sort_ == i)
                 text += (ascending_[i] ? " ASC" : " DESC");
             tbs_[i]->setText( text );
@@ -818,7 +818,7 @@ void MainWindow::ScanSelectedDirectory(const bool bAll)
 
         for(QListWidgetItem* qi : ui->directoryWidget->selectedItems())
         {
-            DirectoryItem* item = (DirectoryItem*)qi;
+            DirectoryItem* item = static_cast<DirectoryItem*>(qi);
             if (item->IsMissingItem())
                 continue;
             else if(item->IsNormalItem())
@@ -862,7 +862,7 @@ void MainWindow::OnDirectoryRemove()
     if(ui->directoryWidget->selectedItems().isEmpty())
         return;
 
-    DirectoryItem* item = (DirectoryItem*) ui->directoryWidget->selectedItems()[0];
+    DirectoryItem* item = static_cast<DirectoryItem*>( ui->directoryWidget->selectedItems()[0]);
     if (!item->IsNormalItem())
         return;
     if (!YesNo(this,
@@ -881,7 +881,7 @@ void MainWindow::OnDirectoryRemoveMissingItems()
     if(ui->directoryWidget->selectedItems().isEmpty())
         return;
 
-    DirectoryItem* item = (DirectoryItem*) ui->directoryWidget->selectedItems()[0];
+    DirectoryItem* item = static_cast<DirectoryItem*>( ui->directoryWidget->selectedItems()[0]);
 
     if (!YesNo(this,
                tr("Are you sure you want to remove missing items from database?")))
@@ -904,7 +904,7 @@ void MainWindow::OnDirectoryCheckAll()
 
         for (int i = 0; i < ui->directoryWidget->count(); ++i)
         {
-            DirectoryItem* item = (DirectoryItem*)ui->directoryWidget->item(i);
+            DirectoryItem* item = static_cast<DirectoryItem*>(ui->directoryWidget->item(i));
             if(item->IsNormalItem())
                 item->setCheckState(Qt::Checked);
         }
@@ -919,7 +919,7 @@ void MainWindow::OnDirectoryUncheckAll()
 
         for (int i = 0; i < ui->directoryWidget->count(); ++i)
         {
-            DirectoryItem* item = (DirectoryItem*)ui->directoryWidget->item(i);
+            DirectoryItem* item = static_cast<DirectoryItem*>(ui->directoryWidget->item(i));
             if(item->IsNormalItem())
                 item->setCheckState(Qt::Unchecked);
         }
@@ -951,7 +951,7 @@ void MainWindow::directoryWidgetMoveUpCommon(const bool bUp)
     Q_ASSERT(!directoryChanging_);
     BlockedBool bt(&directoryChanging_, true, false);
 
-    DirectoryItem* item = (DirectoryItem*)ui->directoryWidget->selectedItems()[0];
+    DirectoryItem* item = static_cast<DirectoryItem*>(ui->directoryWidget->selectedItems()[0]);
     if (!item->IsNormalItem())
         return;
 
@@ -966,7 +966,7 @@ void MainWindow::directoryWidgetMoveUpCommon(const bool bUp)
         if (ui->directoryWidget->IsBottomNormalItem(row))
             return;
     }
-    item = (DirectoryItem*)ui->directoryWidget->takeItem(row);
+    item = static_cast<DirectoryItem*>(ui->directoryWidget->takeItem(row));
     ui->directoryWidget->insertItem(row + (bUp ? -1:1), item);
     item->setSelected(true);
     ui->directoryWidget->setFocus();
@@ -984,7 +984,7 @@ void MainWindow::OnDirectoryMoveDown()
 
 void MainWindow::on_directoryWidget_customContextMenuRequested(const QPoint &pos)
 {
-    DirectoryItem* di = (DirectoryItem*)ui->directoryWidget->itemAt(pos);
+    DirectoryItem* di = static_cast<DirectoryItem*>(ui->directoryWidget->itemAt(pos));
 
     if(!di)
     {
@@ -1185,7 +1185,7 @@ void MainWindow::langChanged_common(const QString& lang)
 
 void MainWindow::OnMenuStyle()
 {
-    QAction* pA = (QAction*)QObject::sender();
+    QAction* pA = static_cast<QAction*>(QObject::sender());
     QString style = pA->text();
 
     settings_.setValue(KEY_STYLE, style);

@@ -28,9 +28,9 @@ class OptionExtension : public QDialog
 
 private:
     Ui::OptionExtension ui;
-    Settings& settings_;
+    AmbiesoftQt::IniSettings& settings_;
 public:
-    OptionExtension(QWidget* parent, Settings& settings);
+    OptionExtension(QWidget* parent, AmbiesoftQt::IniSettings& settings);
 
 protected:
     void showEvent(QShowEvent *) override;

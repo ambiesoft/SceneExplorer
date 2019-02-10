@@ -41,7 +41,7 @@ void MainWindow::sayHello(int loopId, int id,
         return;
 
     taskModel_->SetProgress(id, TaskFFmpeg::Progressing);
-    insertLog(TaskKind::FFMpeg, id, QString("%1 \"%2\"").arg(tr("Started"), movieFile));
+    insertLog(TaskKind_FFMpeg, id, QString("%1 \"%2\"").arg(tr("Started"), movieFile));
 }
 void MainWindow::sayNo(int loopId,
                        int id,
@@ -51,7 +51,7 @@ void MainWindow::sayNo(int loopId,
     if(loopId != gLoopId)
         return;
 
-    insertLog(TaskKind::FFMpeg, id, QString("%1 (%2) \"%3\"").arg(tr("Not a video"), errorReason, movieFile));
+    insertLog(TaskKind_FFMpeg, id, QString("%1 (%2) \"%3\"").arg(tr("Not a video"), errorReason, movieFile));
 }
 void MainWindow::sayGoodby(int loopId,  int id,
                            const QStringList& files,
@@ -115,7 +115,7 @@ void MainWindow::sayGoodby(int loopId,  int id,
     QString removedThumbID;
     if(gpSQL->DeleteEntryThumbFiles(dir,name, &removedThumbID))
     {
-        insertLog(TaskKind::SQL, id, QString(tr("Thumbnail %1 has been removed from database").
+        insertLog(TaskKind_SQL, id, QString(tr("Thumbnail %1 has been removed from database").
                                              arg(removedThumbID)));
     }
 
@@ -124,14 +124,14 @@ void MainWindow::sayGoodby(int loopId,  int id,
 
     if(sqlError==0)
     {
-        insertLog(TaskKind::SQL, id, QString("%1 \"%2\"").arg(tr("Written in Database"), movieFile));
+        insertLog(TaskKind_SQL, id, QString("%1 \"%2\"").arg(tr("Written in Database"), movieFile));
     }
     else
     {
-        insertLog(TaskKind::SQL, id, QString("%1 \"%2\"").arg(tr("Failed to write on Database"), movieFile));
+        insertLog(TaskKind_SQL, id, QString("%1 \"%2\"").arg(tr("Failed to write on Database"), movieFile));
     }
 
-    insertLog(TaskKind::FFMpeg, id, QString("%1 \"%2\"").arg(tr("Done"), movieFile));
+    insertLog(TaskKind_FFMpeg, id, QString("%1 \"%2\"").arg(tr("Done"), movieFile));
 
 }
 void MainWindow::sayDead(int loopId, int id)
@@ -156,7 +156,7 @@ void MainWindow::finished_FFMpeg(int loopId, int id)
     {
         onTaskEnded();
         clearAllPool(false);
-        insertLog(TaskKind::App, 0, tr("======== All Tasks finished ========"));
+        insertLog(TaskKind_App, 0, tr("======== All Tasks finished ========"));
     }
 }
 void MainWindow::warning_FFMpeg(int loopId, int id,
@@ -165,7 +165,7 @@ void MainWindow::warning_FFMpeg(int loopId, int id,
     if(loopId != gLoopId)
         return;
 
-    insertLog(TaskKind::FFMpeg,
+    insertLog(TaskKind_FFMpeg,
               id,
               tr("Warning") + ": " + warning,
               true);

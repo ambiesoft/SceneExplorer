@@ -22,6 +22,7 @@
 #include <QReadWriteLock>
 
 #include "../../lsMisc/stdQt/settings.h"
+using namespace AmbiesoftQt;
 
 class FFMpeg
 {
@@ -35,14 +36,14 @@ public:
     //    static QString GetFFprobe() {
     //        return ffprobe_;
     //    }
-    static QString GetFFprobe(Settings& setting);
-    static void SetFFprobe(Settings& setting, const QString& file);
+    static QString GetFFprobe(IniSettings& setting);
+    static void SetFFprobe(IniSettings& setting, const QString& file);
 
     //    static QString GetFFmpeg() {
     //        return ffmpeg_;
     //    }
-    static QString GetFFmpeg(Settings& setting);
-    static void SetFFmpeg(Settings& setting, const QString& file);
+    static QString GetFFmpeg(IniSettings& setting);
+    static void SetFFmpeg(IniSettings& setting, const QString& file);
 };
 
 #endif // FFMPEG_H

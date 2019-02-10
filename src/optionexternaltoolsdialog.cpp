@@ -23,13 +23,15 @@
 #include "blockedbool.h"
 #include "mycontextmenu.h"
 #include "mycontextmenu.h"
+#include "consts.h"
 
 #include "optionexternaltoolsdialog.h"
 #include "ui_optionexternaltoolsdialog.h"
 
 using namespace Consts;
+using namespace AmbiesoftQt;
 
-OptionExternalToolsDialog::OptionExternalToolsDialog(Settings& settings, QWidget *parent) :
+OptionExternalToolsDialog::OptionExternalToolsDialog(IniSettings& settings, QWidget *parent) :
     QDialog(parent,GetDefaultDialogFlags()),
     settings_(settings),
     ui(new Ui::OptionExternalToolsDialog)

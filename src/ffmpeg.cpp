@@ -32,26 +32,26 @@ QReadWriteLock FFMpeg::sLock_;
 //QString FFMpeg::ffprobe_;
 //QString FFMpeg::ffmpeg_;
 
-QString FFMpeg::GetFFprobe(Settings& setting)
+QString FFMpeg::GetFFprobe(IniSettings& setting)
 {
     QReadLocker locker(&sLock_);
     QString ffprobe = setting.valueString(KEY_FFPROBE_EXECUTABLE);
     return ffprobe.isEmpty() ? GetDefaultFFprobe() : ffprobe;
 }
-void FFMpeg::SetFFprobe(Settings& setting, const QString& file)
+void FFMpeg::SetFFprobe(IniSettings& setting, const QString& file)
 {
     QWriteLocker locker(&sLock_);
     // ffprobe_ = file;
     setting.setValue(KEY_FFPROBE_EXECUTABLE, file);
 }
 
-QString FFMpeg::GetFFmpeg(Settings& setting)
+QString FFMpeg::GetFFmpeg(IniSettings& setting)
 {
     QReadLocker locker(&sLock_);
     QString ffmpeg = setting.valueString(KEY_FFMPEG_EXECUTABLE);
     return ffmpeg.isEmpty() ? GetDefaultFFmpeg() : ffmpeg;
 }
-void FFMpeg::SetFFmpeg(Settings& setting, const QString& file)
+void FFMpeg::SetFFmpeg(IniSettings& setting, const QString& file)
 {
     QWriteLocker locker(&sLock_);
     // ffmpeg_ = file;

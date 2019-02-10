@@ -25,6 +25,7 @@
 #include "ffmpeg.h"
 #include "tagitem.h"
 #include "helper.h"
+#include "consts.h"
 
 #include "ui_mainwindow.h"
 #include "mainwindow.h"
@@ -32,7 +33,7 @@
 using namespace Consts;
 
 MainWindow::MainWindow(QWidget *parent,
-                       Settings& settings,
+                       IniSettings& settings,
                        const QString& docToOpen) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
@@ -308,7 +309,7 @@ MainWindow::MainWindow(QWidget *parent,
     tableModel_->SetTitleTextTemplate(settings_.valueString(KEY_TITLE_TEXT_TEMPLATE, DEFAULT_ITEM_MAIN_TEXT));
     tableModel_->SetInfoTextTemplate(settings_.valueString(KEY_INFO_TEXT_TEMPLATE, DEFAULT_ITEM_SUB_TEXT));
 
-    tableModel_->SetImageCache((ImageCacheType)settings_.valueInt(KEY_IMAGECACHETYPE,1));
+    tableModel_->SetImageCache(static_cast<ImageCacheType>(settings_.valueInt(KEY_IMAGECACHETYPE,1)));
 
 
     // extension
@@ -393,7 +394,7 @@ MainWindow::MainWindow(QWidget *parent,
 
 
     // sort
-    sortManager_.InitCurrentSort((SORTCOLUMNMY)settings.valueInt(KEY_SORT, (int)SORT_NONE),
+    sortManager_.InitCurrentSort(static_cast<SORTCOLUMNMY>(settings.valueInt(KEY_SORT, static_cast<int>(SORT_NONE))),
                                  settings_.valueBool(KEY_SORTREV, false));
 
 

@@ -47,8 +47,8 @@ public:
         this->arg_ = that.arg_;
         this->countAsOpen_ = that.countAsOpen_;
     }
-    static ExternalToolItem Load(int i, Settings& settings);
-    void Save(int i, Settings& settings);
+    static ExternalToolItem Load(int i, AmbiesoftQt::IniSettings& settings);
+    void Save(int i, AmbiesoftQt::IniSettings& settings);
 
     QString GetName() const {
         return name_;

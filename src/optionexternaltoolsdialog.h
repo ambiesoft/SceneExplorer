@@ -82,10 +82,10 @@ class OptionExternalToolsDialog : public QDialog
 
     bool HasItemWithName(const QString& name);
     void UpdateData();
-    Settings& settings_;
+    AmbiesoftQt::IniSettings& settings_;
     QString lastSelectedExeDir_;
 public:
-    explicit OptionExternalToolsDialog(Settings& settings, QWidget *parent = 0);
+    explicit OptionExternalToolsDialog(AmbiesoftQt::IniSettings& settings, QWidget *parent = 0);
     ~OptionExternalToolsDialog();
 
     QList<ExternalToolItem> items_;
