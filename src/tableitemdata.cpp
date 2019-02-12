@@ -27,6 +27,8 @@
 #include "helper.h"
 #include "tableitemdata.h"
 
+using namespace AmbiesoftQt;
+
 #ifdef QT_DEBUG
 int TableItemData::dinstcount_ = 0;
 #endif

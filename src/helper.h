@@ -52,8 +52,7 @@ QString GetAppDir();
 QString GetSystemDefaultLang();
 void InsertUniqueTextToComboBox(QComboBox& combo, const QString& text);
 
-QString dq(const QString& s);
-QString undq(QString s);
+
 
 bool processCommandLine(QString* helpText=nullptr);
 

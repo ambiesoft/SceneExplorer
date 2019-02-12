@@ -41,6 +41,8 @@
 
 using namespace Ambiesoft::stdosd::Process;
 using namespace Ambiesoft;
+using namespace AmbiesoftQt;
+
 
 // https://stackoverflow.com/a/3546503
 bool showInGraphicalShell(QWidget *parent, const QString &pathIn)

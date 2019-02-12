@@ -40,6 +40,7 @@
 #include "tablemodel.h"
 
 using namespace Consts;
+using namespace AmbiesoftQt;
 
 TableModel::TableModel(QTableView *parent, IMainWindow* mainWindow)
     :QAbstractTableModel(parent), parent_(parent), mainWindow_(mainWindow)
@@ -154,7 +155,7 @@ QString size_human(const qint64& size)
 QString filetime_human(const qint64& filetime)
 {
     QDateTime qdt = QDateTime::fromTime_t(filetime);
-    return dq(qdt.toString(Qt::DateFormat::DefaultLocaleShortDate));
+    return doublequoteIfNecessary(qdt.toString(Qt::DateFormat::DefaultLocaleShortDate));
 }
 QString duration_human(double duration)
 {

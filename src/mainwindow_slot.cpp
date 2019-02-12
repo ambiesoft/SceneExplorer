@@ -33,6 +33,7 @@
 #include "mainwindow.h"
 
 using namespace Consts;
+using namespace AmbiesoftQt;
 
 void MainWindow::sayHello(int loopId, int id,
                           const QString& movieFile)

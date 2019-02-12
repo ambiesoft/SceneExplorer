@@ -1046,7 +1046,7 @@ void MainWindow::OnContextExternalTools()
     //    arg << movieFile;
 
     QString command;
-    command += dq(exe);
+    command += doublequoteIfNecessary(exe);
     command += " ";
     command += argparsed;
     qDebug() << "QProcess::startDetached:" << command;

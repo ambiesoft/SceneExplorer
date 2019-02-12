@@ -33,6 +33,8 @@
 
 #include "documentsql.h"
 
+using namespace AmbiesoftQt;
+
 static void showFatal(const QString& error)
 {
     Alert(nullptr, error);

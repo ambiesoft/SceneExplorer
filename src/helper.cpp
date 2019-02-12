@@ -41,7 +41,7 @@
 
 
 using namespace Consts;
-
+using namespace AmbiesoftQt;
 
 
 
@@ -272,36 +272,7 @@ void InsertUniqueTextToComboBox(QComboBox& combo, const QString& text)
     combo.insertItem(0, text);
 }
 
-QString dq(const QString& s)
-{
-    if (s.isEmpty())
-        return "\"\"";
 
-    if (s[0] == '\\')
-        return s;
-
-    if(s[0] == '"')
-        return s;
-
-    if (!s.contains(" ") && !s.contains(","))
-        return s;
-
-    return "\"" + s + "\"";
-}
-QString undq(QString s)
-{
-    if(s.isEmpty())
-        return s;
-    if(s[0] != '"')
-        return s;
-    if(!s.endsWith('"'))
-        return s;
-
-    s = s.right(s.length()-1);
-    s = s.left(s.length()-1);
-
-    return s;
-}
 
 bool processCommandLine(QString* helpText)
 {

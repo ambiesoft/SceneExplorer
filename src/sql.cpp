@@ -41,6 +41,7 @@
 #include "sqlcommon.h"
 
 using namespace Consts;
+using namespace AmbiesoftQt;
 
 static void showFatal(const QString& error)
 {

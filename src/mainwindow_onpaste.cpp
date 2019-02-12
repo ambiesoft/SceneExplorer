@@ -16,10 +16,14 @@
 //You should have received a copy of the GNU General Public License
 //along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+#include "../../lsMisc/stdQt/stdQt.h"
+
 #include "helper.h"
 
 #include "ui_mainwindow.h"
 #include "mainwindow.h"
+
+using namespace AmbiesoftQt;
 
 void MainWindow::on_action_Paste_triggered()
 {
@@ -71,7 +75,7 @@ void MainWindow::OnPasteDirectory()
             continue;
         if(line[0]=='#')
             continue;
-        line = undq(line);
+        line = undoublequoteIfNecessary(line);
         all.append(line);
     }
 
