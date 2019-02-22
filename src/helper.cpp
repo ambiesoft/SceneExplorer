@@ -509,23 +509,19 @@ bool IsSubDir(const QString& parent, const QString& child)
 
 QStringList RemoveDuplicateSubDirectory(const QStringList& sources)
 {
-    QList<QPair<int, QString>> canonicalSources;
-    for(int i=0 ; i < sources.size(); ++i)
-    {
-        QString s(sources[i]);
-        canonicalSources.append(QPair<int,QString>(i, QDir(s).canonicalPath()));
-    }
+    QStringList canonicalSources;
+    for(auto&& s : sources)
+        canonicalSources.append(QDir(s).canonicalPath());
 
-    QList<QPair<int, QString>> canonicalResults{canonicalSources};
-
-    QVector<int> toRemoves;
+    QStringList canonicalResults{canonicalSources};
     QStringList results{sources};
+
     foreach(auto&& target, canonicalSources)
     {
         foreach(auto&& testee, canonicalResults)
         {
             // IsSubDir returns true for same directory
-            if(target.second != testee.second && IsSubDir(target.second, testee.second))
+            if(target != testee && IsSubDir(target, testee))
             {
                 // Remove testee.second from results
                 bool done = false;
@@ -537,7 +533,7 @@ QStringList RemoveDuplicateSubDirectory(const QStringList& sources)
                         for(auto&& s : results)
                         {
                             QString c = QDir(s).canonicalPath();
-                            if(c == testee.second)
+                            if(c == testee)
                             {
                                 results.removeOne(s);
                                 return;
