@@ -471,12 +471,6 @@ bool MainWindow::IsDirSelected(const QString& dir) const
     return false;
 }
 
-void MainWindow::StartScan(QListWidgetItem* item)
-{
-    StartScan(item->text());
-}
-
-
 void MainWindow::StartScan(const QString& dir)
 {
     QString errString;
@@ -514,15 +508,13 @@ void MainWindow::StartScan(const QString& dir)
 
 void MainWindow::onTaskStarted()
 {
-    // statusBar()->palette().setColor(QPalette::Background, QColor("palegreen"));
-
     statusBar()->setStyleSheet("background-color : brown; color : white;");
 }
 void MainWindow::onTaskEnded()
 {
-    // statusBar()->setPalette(QApplication::palette());
     statusBar()->setStyleSheet(QString());
 }
+
 void MainWindow::on_action_Stop_triggered()
 {
     gPaused = false;
@@ -801,15 +793,16 @@ void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
 }
 
 
+
 void MainWindow::ScanSelectedDirectory(const bool bAll)
 {
-    QList<DirectoryItem*> toScan;
+    QStringList toScan;
 
     if(bAll || ui->directoryWidget->IsAllItemSelectedOrChecked())
     {
         foreach(DirectoryItem* di, ui->directoryWidget->GetAllNormalItems())
         {
-            toScan.append(di);
+            toScan.append(di->text());
         }
     }
     else
@@ -823,7 +816,7 @@ void MainWindow::ScanSelectedDirectory(const bool bAll)
             if (item->IsMissingItem())
                 continue;
             else if(item->IsNormalItem())
-                toScan.append(item);
+                toScan.append(item->text());
             else if(item->IsAllItem())
             {
                 Q_ASSERT_X(false, "selected", "All item must not selected.");
@@ -851,9 +844,12 @@ void MainWindow::ScanSelectedDirectory(const bool bAll)
     //				return FALSE;
     //		}
     //    }
-    foreach(DirectoryItem* di, toScan)
+
+    toScan = RemoveDuplicateSubDirectory(toScan);
+
+    foreach(auto&& text, toScan)
     {
-        StartScan(di);
+        StartScan(text);
     }
 }
 void MainWindow::OnDirectoryRemove()
