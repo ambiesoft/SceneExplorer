@@ -810,8 +810,8 @@ void TableModel::timerEvent(QTimerEvent *event)
         imageElapsedTimer_.start();
     }
 
-    if((QApplication::mouseButtons() & Qt::MouseButton::LeftButton) != 0)
-        return;
+//    if((QApplication::mouseButtons() & Qt::MouseButton::LeftButton) != 0)
+//        return;
 
     QModelIndex index = suspendImageIndexes_.pop();
     qDebug() << QString("TableModel timer row=%1, col=%2, count=%3").arg(index.row()).arg(index.column()).
