@@ -1231,6 +1231,10 @@
         <source>Unknow scroll mode &apos;%1&apos;</source>
         <translation>認識できないスクロールモード &apos;%1&apos;</translation>
     </message>
+    <message>
+        <source>&apos;%1&apos; is excluded from scanning because its parent directory is included.</source>
+        <translation>&apos;%1&apos; は親ディレクトリが含まれているため除かれます。</translation>
+    </message>
 </context>
 <context>
     <name>Option</name>

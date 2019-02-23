@@ -74,7 +74,7 @@ std::wstring qToStdWString(const QString &str);
 QString stdWToQString(const std::wstring &str);
 
 bool IsSubDir(const QString& parent, const QString& child);
-QStringList RemoveDuplicateSubDirectory(const QStringList& sources);
+QStringList RemoveDuplicateSubDirectory(const QStringList& sources, QStringList& removed);
 
 
 #endif // HELPER_H

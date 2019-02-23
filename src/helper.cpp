@@ -507,21 +507,21 @@ bool IsSubDir(const QString& parent, const QString& child)
     return false;
 }
 
-QStringList RemoveDuplicateSubDirectory(const QStringList& sources)
+QStringList RemoveDuplicateSubDirectory(const QStringList& sources, QStringList& removedRet)
 {
     QStringList canonicalSources;
     for(auto&& s : sources)
-        canonicalSources.append(QDir(s).canonicalPath());
+        canonicalSources.append(QFileInfo(s).canonicalFilePath());
 
     QStringList canonicalResults{canonicalSources};
     QStringList results{sources};
 
-    foreach(auto&& target, canonicalSources)
+    foreach(auto&& firstLoopElem, canonicalSources)
     {
-        foreach(auto&& testee, canonicalResults)
+        foreach(auto&& secondLoopElem, canonicalResults)
         {
             // IsSubDir returns true for same directory
-            if(target != testee && IsSubDir(target, testee))
+            if(firstLoopElem != secondLoopElem && IsSubDir(firstLoopElem, secondLoopElem))
             {
                 // Remove testee.second from results
                 bool done = false;
@@ -530,12 +530,18 @@ QStringList RemoveDuplicateSubDirectory(const QStringList& sources)
                     // Use lambda for break by return
                     [&]()
                     {
+                        // Remove secondLoopElem from results
                         for(auto&& s : results)
                         {
-                            QString c = QDir(s).canonicalPath();
-                            if(c == testee)
+                            QString c = QFileInfo(s).canonicalFilePath();
+                            if(c == secondLoopElem)
                             {
+                                qDebug() << "removed " << s << "(" << c << ")";
+                                removedRet.append(s);
+
+                                qDebug() << "results " << results;
                                 results.removeOne(s);
+                                qDebug() << "results " << results;
                                 return;
                             }
                         }

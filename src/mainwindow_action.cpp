@@ -845,7 +845,15 @@ void MainWindow::ScanSelectedDirectory(const bool bAll)
     //		}
     //    }
 
-    toScan = RemoveDuplicateSubDirectory(toScan);
+    QStringList removeds;
+    toScan = RemoveDuplicateSubDirectory(toScan, removeds);
+
+    for(auto&& removed:removeds)
+    {
+        insertLog(TaskKind_App,
+                  0,
+                  tr("'%1' is excluded from scanning because its parent directory is included.").arg(removed));
+    }
 
     foreach(auto&& text, toScan)
     {
