@@ -1,3 +1,7 @@
+2019/02/23 1.19.17
+Show subnails while scrolling
+Exclude child dirs from scanning if their parent dir is included
+
 2019/02/10 1.19.16
 Move some files
 
