@@ -87,7 +87,11 @@ void TableModel:: AppendData(TableItemDataPointer pItemData, const bool enableUp
 
     emit itemCountChanged();
 
-    parent_->setRowHeight(newRowImage, THUMB_HEIGHT);
+    // parent_->setRowHeight(newRowImage, THUMB_HEIGHT);
+//    setData(index(newRowImage,0), QSize(THUMB_WIDTH, THUMB_HEIGHT), Qt::SizeHintRole);
+//    QHeaderView *verticalHeader = parent_->verticalHeader();
+//    verticalHeader->setSectionResizeMode(QHeaderView::Fixed);
+//    verticalHeader->setDefaultSectionSize(24);
 }
 void TableModel::ResetData(const QList<TableItemDataPointer>& all)
 {
