@@ -69,7 +69,8 @@ SOURCES += \
     ../../lsMisc/stdQt/runguard.cpp \
     tagidsinfo.cpp \
     ../../lsMisc/stdQt/settings.cpp \
-    ../../lsMisc/stdQt/waitingcursor.cpp
+    ../../lsMisc/stdQt/waitingcursor.cpp \
+    itempropertydialog.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -115,7 +116,8 @@ HEADERS += \
     ../../lsMisc/stdQt/runguard.h \
     tagidsinfo.h \
     ../../lsMisc/stdQt/settings.h \
-    ../../lsMisc/stdQt/waitingcursor.h
+    ../../lsMisc/stdQt/waitingcursor.h \
+    itempropertydialog.h
 
 FORMS += \
         mainwindow.ui \
@@ -125,7 +127,8 @@ FORMS += \
     aboutdialog.ui \
     docinfodialog.ui \
     taginputdialog.ui \
-    renamedialog.ui
+    renamedialog.ui \
+    itempropertydialog.ui
 
 RC_FILE = app.rc
 

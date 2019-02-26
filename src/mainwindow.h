@@ -706,6 +706,7 @@ public slots:
 
     void OnContextCopySelectedVideoFilename();
     void OnContextRemoveFromDatabase();
+    void OnContextItemProperty();
     void OnContextRename();
     void OnContextExternalTools();
     void OnContextAddTags();

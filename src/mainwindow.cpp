@@ -74,6 +74,7 @@
 #include "taginputdialog.h"
 #include "mycontextmenu.h"
 #include "tagidsinfo.h"
+#include "itempropertydialog.h"
 
 #include "ui_mainwindow.h"
 #include "mainwindow.h"
@@ -984,6 +985,15 @@ void MainWindow::OnContextRemoveFromDatabase()
         }
     }
 }
+
+
+void MainWindow::OnContextItemProperty()
+{
+    ItemPropertyDialog dlg(this);
+    if(!dlg.exec())
+        return;
+}
+
 
 void MainWindow::OnContextAddTags()
 {
