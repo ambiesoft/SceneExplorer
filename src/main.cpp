@@ -242,6 +242,12 @@ enum PROGRAM_RETURN {
 
 std::unique_ptr<CommandOption> gpCommandOption;
 
+static bool IsAvailableLanguage(const QString& lang)
+{
+    QString i18nFile = ":/translations/i18n_" + lang + ".qm";
+    return QFile(i18nFile).exists();
+}
+
 int main2(int argc, char *argv[], QApplication& theApp)
 {
     Q_UNUSED(argc);
@@ -270,7 +276,7 @@ int main2(int argc, char *argv[], QApplication& theApp)
         {
             // default
             QString syslang = GetSystemDefaultLang();
-            if(syslang=="English")
+            if(syslang=="English" || !IsAvailableLanguage(syslang))
                 break;
 
             qti18nFile += QLocale::system().name();
@@ -309,8 +315,9 @@ int main2(int argc, char *argv[], QApplication& theApp)
         {
             // default
             QString syslang = GetSystemDefaultLang();
-            if(syslang=="English")
+            if(syslang=="English" || !IsAvailableLanguage(syslang))
                 break;
+
             i18nFile += syslang;
         }
         else if(lang=="English")
