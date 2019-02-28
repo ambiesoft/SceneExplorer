@@ -1,3 +1,7 @@
+2019/03/01 1.19.18
+Fix: If the default language of OS is neigher English or Japanese, 
+An Error MessageBox appeared.
+
 2019/02/23 1.19.17
 Show subnails while scrolling
 Exclude child dirs from scanning if their parent dir is included
