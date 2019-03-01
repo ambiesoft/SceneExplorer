@@ -17,7 +17,7 @@
 //along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 // #define _WIN32_WINNT 0x0501 // XP and above
-#include <Windows.h>
+#include <windows.h>
 #include <Shlobj.h>
 
 #include <QApplication>
@@ -28,6 +28,10 @@
 //#include <QDesktopServices>
 #include <QWidget>
 #include <QThread>
+#include <QStandardPaths>
+#include <QProcessEnvironment>
+#include <QProcess>
+#include <QDebug>
 
 #include "../../lsMisc/stdQt/stdQt.h"
 
@@ -101,7 +105,7 @@ void MoveToTrashImpl( QString file ){
     fileop.fFlags = FOF_ALLOWUNDO | FOF_NOCONFIRMATION | FOF_NOERRORUI | FOF_SILENT;
     int rv = SHFileOperation( &fileop );
     if( 0 != rv ){
-        qDebug() << rv << QString::number( rv ).toInt( 0, 8 );
+        qDebug() << rv << QString::number( rv ).toInt( nullptr, 8 );
         throw ErrorInfoException( QObject::tr("move to trash failed" ));
     }
 }
@@ -120,9 +124,9 @@ static QString getSpecialFolder(int id)
 {
     wchar_t path[MAX_PATH] = {0};
     if(S_OK != SHGetFolderPath(
-                NULL,
+                nullptr,
                 id,
-                NULL,
+                nullptr,
                 SHGFP_TYPE_CURRENT,
                 path))
 
@@ -390,4 +394,17 @@ bool myRename(const QString& oldfull, const QString& newfull, QString& error)
         return false;
     }
     return true;
+}
+
+QString GetUserDocumentDirectory()
+{
+    QString result = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+    if(!result.isEmpty())
+        return result;
+
+    result = getSpecialFolder(CSIDL_MYDOCUMENTS);
+    if(!result.isEmpty())
+        return result;
+
+    return QDir::homePath();
 }

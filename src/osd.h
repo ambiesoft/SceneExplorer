@@ -36,4 +36,5 @@ bool setProcessPriority(const qint64& pid, QThread::Priority priority, QStringLi
 
 bool myRename(const QString& oldfull, const QString& newfull, QString& error);
 
+QString GetUserDocumentDirectory();
 #endif // OSD_H

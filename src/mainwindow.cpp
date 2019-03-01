@@ -1580,7 +1580,7 @@ void MainWindow::on_action_New_triggered()
 {
     QFileDialog dlg(this);
     dlg.setWindowTitle(tr("Create New Document"));
-    dlg.setDirectory(lastSelectedDocumentDir_);
+    dlg.setDirectory(lastSelectedDocumentDir_.isEmpty()?GetUserDocumentDirectory():lastSelectedDocumentDir_);
     dlg.setFileMode(QFileDialog::AnyFile);
     dlg.setAcceptMode(QFileDialog::AcceptMode::AcceptSave);
 
@@ -2107,7 +2107,7 @@ void MainWindow::SetTaskPriorityAsInt(int priority)
 void MainWindow::on_action_ScanArbitraryDirectory_triggered()
 {
     QString dir = QFileDialog::getExistingDirectory(this, tr("Select Directory"),
-                                                    lastSelectedScanDir_);
+                                                    lastSelectedScanDir_.isEmpty()?GetUserDocumentDirectory():lastSelectedScanDir_);
     if(dir.isEmpty())
         return;
     lastSelectedScanDir_ = dir;
@@ -2223,7 +2223,7 @@ void MainWindow::on_action_AddDirectory_triggered()
         return;
 
     QString dir = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
-                                                    lastSelectedAddDir_);
+                                                    lastSelectedAddDir_.isEmpty() ? GetUserDocumentDirectory():lastSelectedAddDir_);
     if(dir.isEmpty())
         return;
     lastSelectedAddDir_ = dir;
