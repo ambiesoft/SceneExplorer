@@ -220,3 +220,12 @@ bool myRename(const QString& oldfull, const QString& newfull, QString& error)
     }
     return true;
 }
+
+QString GetUserDocumentDirectory()
+{
+    QString result = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
+    if(!result.isEmpty())
+        return result;
+
+    return QDir::homePath();
+}
