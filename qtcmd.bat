@@ -6,12 +6,14 @@ if not exist %~dp0prepare.bat (
 )
 call %~dp0prepare.bat
 
+setlocal
+
 set TEST=%QTROOT%\%QTVERSION%\%QTVERSIONTOOLS%\bin
 if not exist %TEST%\ (
   echo %TEST% not found
   goto err
 )
-set PATH=%TEST%;%PATH%
+
 
 ::set TEST=%QTROOT%\Tools\%QTTOOLS%\bin
 ::if not exist %TEST%\ (
@@ -20,8 +22,9 @@ set PATH=%TEST%;%PATH%
 ::)
 ::set PATH=%TEST%;%PATH%
 
+endlocal && set PATH=%TEST%;%PATH%
+
 echo Qt is inserted in path.
-@echo on
 cmd /k
 
 
