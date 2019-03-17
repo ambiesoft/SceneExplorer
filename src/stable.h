@@ -62,6 +62,7 @@
 #include <QKeyEvent>
 #include <QLabel>
 #include <QLibraryInfo>
+#include <QLineEdit>
 #include <QList>
 #include <QListView>
 #include <QListWidget>
@@ -74,6 +75,7 @@
 #include <QMimeData>
 #include <QModelIndex>
 #include <QObject>
+#include <QPalette>
 #include <QPair>
 #include <QPixmap>
 #include <QProcess>

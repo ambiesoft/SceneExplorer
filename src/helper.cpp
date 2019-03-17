@@ -31,6 +31,8 @@
 #include <QClipboard>
 #include <QDebug>
 #include <QSqlError>
+#include <QPalette>
+#include <QLineEdit>
 
 #include "../../lsMisc/stdQt/stdQt.h"
 
