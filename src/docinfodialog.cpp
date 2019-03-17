@@ -37,6 +37,11 @@ DocinfoDialog::DocinfoDialog(QWidget *parent,
 {
     ui->setupUi(this);
 
+    setReadOnly(*ui->lineExe);
+    setReadOnly(*ui->lineDoc);
+    setReadOnly(*ui->lineIni);
+    setReadOnly(*ui->lineDb);
+
     ui->lineExe->setText(exe);
     ui->lineDoc->setText(doc);
     ui->lineIni->setText(ini);

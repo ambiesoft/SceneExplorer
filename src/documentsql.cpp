@@ -435,6 +435,7 @@ bool DocumentSql::IncrementOpenCountAndLastAccess(const qint64& id)
                                                 "COALESCE((SELECT opencount FROM " + docdb("Access") + " WHERE id=? AND dbid=?),0)+1,"
                                                                                                        "?,"
                                                                                                        "?)";
+    qDebug() << __FUNCTION__ << state;
 
     MYQMODIFIER QSqlQuery query = myPrepare(state);
 
@@ -481,6 +482,47 @@ bool DocumentSql::setOpenCountAndLascAccess_obsolete(const QList<TableItemDataPo
     return true;
 }
 
+bool DocumentSql::getOpenCount(const qint64& id, qint64& openCount)
+{
+    MYQMODIFIER QSqlQuery query("SELECT opencount FROM " + docdb("Access") + " WHERE id=? AND dbid=?");
+
+    int i=0;
+    query.bindValue(i++, id);
+    query.bindValue(i++, gpSQL->getDbID());
+
+    SQC(query,exec());
+    if(!query.next())
+        return false;
+
+    openCount = query.value("opencount").toLongLong();
+    return true;
+}
+bool DocumentSql::setOpenCount(const qint64& id, const qint64& openCount)
+{
+    MYQMODIFIER QString state =
+            "REPLACE into " + docdb("Access") + " (id,opencount,lastaccess,dbid) VALUES "
+                                                "(?,"
+                                                "?,"
+                                                "COALESCE((SELECT lastaccess FROM " + docdb("Access") + " WHERE id=? AND dbid=?),0),"
+                                                "?)";
+
+    qDebug() << __FUNCTION__ << state;
+    MYQMODIFIER QSqlQuery query = myPrepare(state);
+
+    int i=0;
+    query.bindValue(i++, id);
+    query.bindValue(i++, openCount);
+
+    query.bindValue(i++, id);
+    query.bindValue(i++, gpSQL->getDbID());
+
+    query.bindValue(i++, gpSQL->getDbID());
+
+    SQC(query,exec());
+    Q_ASSERT(query.numRowsAffected() == 1);
+
+    return true;
+}
 #include <tagitem.h>
 bool DocumentSql::GetAllTags(QList<TagItem*>& tags,bool bHasParent) const
 {

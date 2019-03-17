@@ -989,9 +989,35 @@ void MainWindow::OnContextRemoveFromDatabase()
 
 void MainWindow::OnContextItemProperty()
 {
+    if(!pDoc_)
+    {
+        return;
+    }
+
+    const qint64 id = getSelectedID();
+    const QString video = getSelectedVideo();
+
+    if(id==-1)
+    {
+        Alert(this,
+              tr("No item selected."));
+        return;
+    }
+
     ItemPropertyDialog dlg(this);
+    dlg.id_ = id;
+    dlg.file_ = video;
+    if(!pDoc_->getOpenCount(id, dlg.openCount_))
+    {
+        dlg.openCount_ = 0;
+    }
+
     if(!dlg.exec())
         return;
+
+    pDoc_->setOpenCount(id, dlg.openCount_);
+    int intOpenCount = static_cast<int>(dlg.openCount_);
+    tableModel_->UpdateOpenCountAndLastAccess(video, &intOpenCount, nullptr);
 }
 
 
@@ -2319,10 +2345,10 @@ void MainWindow::on_action_AboutDocument_triggered()
     //    msgbox.exec();
 
     DocinfoDialog dlg(this,
-                      QCoreApplication::applicationFilePath(),
-                      pDoc_ ? pDoc_->GetFullName(): tr("<No document>"),
-                      settings_.fileName(),
-                      QDir(".").absolutePath());
+                      QDir::toNativeSeparators(QCoreApplication::applicationFilePath()),
+                      pDoc_ ? QDir::toNativeSeparators(pDoc_->GetFullName()): tr("<No document>"),
+                      QDir::toNativeSeparators(settings_.fileName()),
+                      QDir::toNativeSeparators(QDir(".").absolutePath()));
 
     if(QDialog::Accepted != dlg.exec())
         return;

@@ -727,16 +727,18 @@ bool TableModel::RenameEntry(const QString& oldDir,
 }
 
 void TableModel::UpdateOpenCountAndLastAccess(const QString& movieFile,
-                                              const int opencount,
-                                              const qint64& lastaccess)
+                                              const int* opencount,
+                                              const qint64* lastaccess)
 {
     TableItemDataPointer pID = mapsFullpathToItem_[normalizeFile(movieFile)];
 
     if (pID)
     {
-        // pID->IncrementOpenCount();
-        pID->setOpenCount(opencount);
-        pID->setLastAccess(lastaccess);
+        if(opencount)
+            pID->setOpenCount(*opencount);
+
+        if(lastaccess)
+            pID->setLastAccess(*lastaccess);
 
         int row = itemDatas_.indexOf(pID);
         Q_ASSERT(row >= 0);

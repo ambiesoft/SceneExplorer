@@ -198,6 +198,12 @@ public:
     bool GetID(const QString& dir,
                const QString& file,
                qint64& id);
+
+    bool GetProperty_obsolete(const qint64& id,
+                     QString& dir,
+                     QString& file,
+                     qint64& openCount
+                     );
 };
 
 #endif // SQL_H

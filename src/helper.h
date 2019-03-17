@@ -40,8 +40,7 @@ bool YesNo(QWidget* parent,
 QString createSalient(const QString& file, const qint64& size);
 QString getUUIDFromThumbfile(const QString& file);
 Qt::WindowFlags GetDefaultDialogFlags();
-
-
+void setReadOnly(QLineEdit& le);
 
 
 

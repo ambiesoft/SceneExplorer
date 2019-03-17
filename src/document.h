@@ -111,6 +111,14 @@ public:
     {
         return docSql_->setOpenCountAndLascAccess_obsolete(all);
     }
+    bool getOpenCount(const qint64& id, qint64& openCount)
+    {
+        return docSql_->getOpenCount(id,openCount);
+    }
+    bool setOpenCount(const qint64& id, const qint64& openCount)
+    {
+        return docSql_->setOpenCount(id,openCount);
+    }
     // bool sort(QList<TableItemDataPointer>& all, SORTCOLUMNMY sc, bool rev) const;
 
     bool GetAllTags(QList<TagItem*>& tags, bool bHasParent) const

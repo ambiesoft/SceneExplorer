@@ -1412,3 +1412,35 @@ bool Sql::UpdateDatabase1_2()
 
     return true;
 }
+
+bool Sql::GetProperty_obsolete(const qint64& id,
+                      QString& dir,
+                      QString& file,
+                      qint64& openCount)
+{
+    QString sql("SELECT * ");
+
+    Q_ASSERT(!docdb_.isEmpty() && docdb_ != "nodb");
+    sql += "FROM FileInfo LEFT JOIN " + docdb_ + ".Access ON FileInfo.id = " + docdb_ + ".Access.id " +
+            "AND " + docdb_ + ".Access.dbid='" + gpSQL->getDbID() + "'";
+    sql += " WHERE FileInfo.id=?";
+
+    qDebug() << __FUNCTION__ << sql;
+    MYQMODIFIER QSqlQuery query = myPrepare(sql);
+    int i=0;
+    query.bindValue(i++,id);
+
+    SQC(query,exec());
+    if(!query.next())
+    {
+        return false;
+    }
+
+    dir = query.value("directory").toString();
+    file = query.value("name").toString();
+    openCount = query.value("opencount").toLongLong();
+
+    return true;
+}
+
+

@@ -81,6 +81,9 @@ public:
     bool IncrementOpenCountAndLastAccess(const qint64& id);
     bool setOpenCountAndLascAccess_obsolete(const QList<TableItemDataPointer>& all);
 
+    bool getOpenCount(const qint64& id, qint64& openCount);
+    bool setOpenCount(const qint64& id, const qint64& openCount);
+
     bool GetAllTags(QList<TagItem*>& tags,bool bHasParent) const;
     bool IsTagExist(const QString& tag) const;
     bool Insert(const QString& tag, const QString& yomi, qint64& insertedTag) const;

@@ -66,7 +66,7 @@ void MainWindow::updateOnOpened(const qint64& id, const QString& movieFile)
         qint64 lastaccess=0;
         pDoc_->GetOpenCountAndLastAccess(id,opencount,lastaccess);
 
-        tableModel_->UpdateOpenCountAndLastAccess(movieFile,opencount,lastaccess);
+        tableModel_->UpdateOpenCountAndLastAccess(movieFile,&opencount,&lastaccess);
     }
 }
 void MainWindow::openVideo(const qint64& id, const QString& movieFile)
@@ -786,7 +786,7 @@ void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
 
         contextMenu.addSeparator();
 
-        QAction actionItemProperty(tr("&Property"));
+        QAction actionItemProperty(tr("&Property..."));
         connect(&actionItemProperty, SIGNAL(triggered()),
                 this, SLOT(OnContextItemProperty()));
         contextMenu.addAction(&actionItemProperty);

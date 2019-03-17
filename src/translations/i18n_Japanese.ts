@@ -130,6 +130,25 @@
     </message>
 </context>
 <context>
+    <name>ItemPropertyDialog</name>
+    <message>
+        <source>Property</source>
+        <translation>プロパティ</translation>
+    </message>
+    <message>
+        <source>&amp;OpenCount:</source>
+        <translation>オープンカウント(&amp;O):</translation>
+    </message>
+    <message>
+        <source>&amp;ID:</source>
+        <translation>&amp;ID:</translation>
+    </message>
+    <message>
+        <source>&amp;File:</source>
+        <translation>ファイル(&amp;F):</translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
         <source>MainWindow</source>
@@ -1234,6 +1253,18 @@
     <message>
         <source>&apos;%1&apos; is excluded from scanning because its parent directory is included.</source>
         <translation>&apos;%1&apos; は親ディレクトリが含まれているため除かれます。</translation>
+    </message>
+    <message>
+        <source>No item selected.</source>
+        <translation>アイテムが選択されていません。</translation>
+    </message>
+    <message>
+        <source>&amp;Property</source>
+        <translation type="vanished">プロパティ(&amp;P)</translation>
+    </message>
+    <message>
+        <source>&amp;Property...</source>
+        <translation>プロパティ(&amp;P)...</translation>
     </message>
 </context>
 <context>

@@ -1,3 +1,6 @@
+2019/03/17 1.19.19
+Add Property dialog
+
 2019/03/01 1.19.18
 Fix: If the default language of OS is neigher English or Japanese, 
 An Error MessageBox appeared.

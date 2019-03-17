@@ -121,8 +121,8 @@ public:
         return bShowMissing_;
     }
     void UpdateOpenCountAndLastAccess(const QString& movieFile,
-                                      const int opencount,
-                                      const qint64& lastaccess);
+                                      const int* opencount,
+                                      const qint64* lastaccess);
     void RemoveItem(const QString& movieFile);
     QModelIndex GetIndex(const QString& movieFile) const;
     QFont GetInfoFont() {

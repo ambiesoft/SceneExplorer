@@ -216,7 +216,13 @@ Qt::WindowFlags GetDefaultDialogFlags()
 {
     return ((Qt::WindowTitleHint | Qt::WindowCloseButtonHint| Qt::WindowFlags()) & ~Qt::WindowContextHelpButtonHint);
 }
-
+void setReadOnly(QLineEdit& le)
+{
+    QPalette palette;
+    palette.setColor(QPalette::Base,Qt::gray);
+    palette.setColor(QPalette::Text,Qt::black);
+    le.setPalette(palette);
+}
 
 QString GetSortColumnName(SORTCOLUMNMY sc)
 {
