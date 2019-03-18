@@ -69,7 +69,7 @@
      <x>0</x>
      <y>0</y>
      <width>1009</width>
-     <height>22</height>
+     <height>23</height>
     </rect>
    </property>
    <property name="font">
@@ -1048,11 +1048,6 @@
   <action name="actiondummy_2">
    <property name="text">
     <string>dummy</string>
-   </property>
-  </action>
-  <action name="action">
-   <property name="text">
-    <string>-</string>
    </property>
   </action>
   <action name="action_Property">

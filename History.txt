@@ -1,3 +1,6 @@
+2019/03/18 1.19.20
+Wordwrapping for log
+
 2019/03/17 1.19.19
 Add Property dialog
 

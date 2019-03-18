@@ -1266,6 +1266,18 @@
         <source>&amp;Property...</source>
         <translation>プロパティ(&amp;P)...</translation>
     </message>
+    <message>
+        <source>P&amp;roperty...</source>
+        <translation>プロパティ(&amp;R)...</translation>
+    </message>
+    <message>
+        <source>&amp;Wrap</source>
+        <translation>折返し(&amp;R)</translation>
+    </message>
+    <message>
+        <source>Copy &amp;All</source>
+        <translation>すべてコピー(&amp;A)</translation>
+    </message>
 </context>
 <context>
     <name>Option</name>

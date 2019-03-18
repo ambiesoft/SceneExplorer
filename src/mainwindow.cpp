@@ -2398,7 +2398,7 @@ void MainWindow::on_txtLog_customContextMenuRequested(const QPoint &pos)
             this, SLOT(OnTxtLogCopy()));
     menu.addAction(&actCopy);
 
-    QAction actCopyAll(tr("&Copy All"));
+    QAction actCopyAll(tr("Copy &All"));
     connect(&actCopyAll, SIGNAL(triggered(bool)),
             this, SLOT(OnTxtLogCopyAll()));
     menu.addAction(&actCopyAll);
