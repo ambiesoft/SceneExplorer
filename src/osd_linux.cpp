@@ -212,10 +212,16 @@ bool setProcessPriority(const qint64& pid, QThread::Priority priority, QStringLi
 
 bool myRename(const QString& oldfull, const QString& newfull, QString& error)
 {
-    QFile filefull(oldfull);
-    if(!filefull.rename(newfull))
+//    QFile filefull(oldfull);
+//    if(!filefull.rename(newfull))
+//    {
+//        error = filefull.errorString();
+//        return false;
+//    }
+//    return true;
+    if(0 != rename(oldfull.toStdString().c_str(), newfull.toStdString().c_str()))
     {
-        error = filefull.errorString();
+        error = QString::fromStdString(strerror(errno));
         return false;
     }
     return true;
