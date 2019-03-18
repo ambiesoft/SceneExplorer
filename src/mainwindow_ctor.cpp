@@ -20,6 +20,8 @@
 #include <QLabel>
 #include <QDebug>
 
+#include "../../lsMisc/stdQt/stdQt.h"
+
 #include "taskmodel.h"
 #include "extension.h"
 #include "ffmpeg.h"
@@ -31,6 +33,7 @@
 #include "mainwindow.h"
 
 using namespace Consts;
+using namespace AmbiesoftQt;
 
 MainWindow::MainWindow(QWidget *parent,
                        IniSettings& settings,
@@ -45,7 +48,7 @@ MainWindow::MainWindow(QWidget *parent,
     DirectoryItem::parent_ = ui->directoryWidget;
     TagItem::parent_ = ui->listTag;
 
-    this->setWindowTitle(APPNAME_DISPLAY);
+    this->setWindowTitle(qAppName());
 
 
 
@@ -279,6 +282,9 @@ MainWindow::MainWindow(QWidget *parent,
         tbShowNonExistant_->setChecked(true);
     }
 
+    vVal = settings.value(KEY_TXTLOG_WRAP);
+    if(vVal.isValid() && vVal.toBool())
+        ui->txtLog->setLineWrapMode(QPlainTextEdit::WidgetWidth);
 
 
     optionThreadcountGetDir_ = settings_.valueInt(KEY_MAX_GETDIR_THREADCOUNT, optionThreadcountGetDir_);

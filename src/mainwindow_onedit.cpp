@@ -16,10 +16,14 @@
 //You should have received a copy of the GNU General Public License
 //along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+#include "../../lsMisc/stdQt/stdQt.h"
+
 #include "helper.h"
 
 #include "ui_mainwindow.h"
 #include "mainwindow.h"
+
+using namespace AmbiesoftQt;
 
 QList<QAction*> MainWindow::getAllSortAction()
 {
@@ -120,6 +124,9 @@ void MainWindow::onMenuEdit_AboutToShow()
 
     // clear
     ui->action_ClearContent->setEnabled(ui->txtLog->hasFocus());
+
+    // Property
+    ui->action_Property->setEnabled((ui->tableView->hasFocus() && ui->tableView->selectionModel()->hasSelection()));
 }
 
 void MainWindow::on_action_ClearContent_triggered()
@@ -131,4 +138,10 @@ void MainWindow::on_action_ClearContent_triggered()
 
         ui->txtLog->clear();
     }
+}
+
+
+void MainWindow::on_action_Property_triggered()
+{
+    OnContextItemProperty();
 }

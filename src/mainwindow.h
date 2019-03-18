@@ -571,6 +571,10 @@ private slots:
 
     void on_action_AddDirectory_triggered();
 
+    void on_action_Property_triggered();
+
+    void on_txtLog_customContextMenuRequested(const QPoint &pos);
+
 private:
     void OnCopyTable();
     void OnCopyDirectory();
@@ -725,6 +729,11 @@ public slots:
     void OnFindComboEnterPressed();
 
     void OnTableViewScrollChanged(int pos);
+
+    void OnTxtLogCopy();
+    void OnTxtLogCopyAll();
+    void OnTxtLogWrap(bool b);
+    void OnTxtLogClear();
 };
 
 #endif // MAINWINDOW_H

@@ -19,6 +19,8 @@
 #include <QFileDialog>
 #include <QMenu>
 
+#include "../../lsMisc/stdQt/stdQt.h"
+
 #include "helper.h"
 #include "blockedbool.h"
 #include "mycontextmenu.h"

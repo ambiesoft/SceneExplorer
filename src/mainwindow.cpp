@@ -1415,11 +1415,11 @@ void MainWindow::UpdateTitle(const QStringList& dirs, UpdateTitleType utt)
     }
 
     if(title.isEmpty())
-        title = APPNAME_DISPLAY;
+        title = qAppName();
     else
     {
         title.append(" - ");
-        title.append(APPNAME_DISPLAY);
+        title.append(qAppName());
     }
 
 #ifdef QT_DEBUG
@@ -2312,7 +2312,7 @@ void MainWindow::on_action_ExternalTools_triggered()
 
 void MainWindow::on_action_AboutDocument_triggered()
 {
-    QString title = APPNAME_DISPLAY;
+    QString title = qAppName();
     //    QString text;
 
     //    text.append(tr("Executable"));
@@ -2370,3 +2370,55 @@ void MainWindow::on_action_AboutQt_triggered()
     QMessageBox::aboutQt(this);
 }
 
+
+
+void MainWindow::OnTxtLogCopy()
+{
+    ui->txtLog->copy();
+}
+void MainWindow::OnTxtLogCopyAll()
+{
+    QApplication::clipboard()->setText(ui->txtLog->toPlainText());
+}
+void MainWindow::OnTxtLogWrap(bool b)
+{
+    ui->txtLog->setLineWrapMode(b ? QPlainTextEdit::WidgetWidth : QPlainTextEdit::NoWrap);
+}
+void MainWindow::OnTxtLogClear()
+{
+    ui->txtLog->clear();
+}
+void MainWindow::on_txtLog_customContextMenuRequested(const QPoint &pos)
+{
+    MyContextMenu menu("txtLog Context Menu",this);
+
+    QAction actCopy(tr("&Copy"));
+    actCopy.setEnabled(ui->txtLog->textCursor().hasSelection());
+    connect(&actCopy, SIGNAL(triggered(bool)),
+            this, SLOT(OnTxtLogCopy()));
+    menu.addAction(&actCopy);
+
+    QAction actCopyAll(tr("&Copy All"));
+    connect(&actCopyAll, SIGNAL(triggered(bool)),
+            this, SLOT(OnTxtLogCopyAll()));
+    menu.addAction(&actCopyAll);
+
+    menu.addSeparator();
+
+    QAction actWrap(tr("&Wrap"));
+    actWrap.setCheckable(true);
+    actWrap.setChecked(ui->txtLog->lineWrapMode()==QPlainTextEdit::WidgetWidth);
+    connect(&actWrap, SIGNAL(toggled(bool)),
+            this, SLOT(OnTxtLogWrap(bool)));
+    menu.addAction(&actWrap);
+
+    menu.addSeparator();
+
+    QAction actClear(tr("C&lear"));
+    connect(&actClear, SIGNAL(triggered(bool)),
+            this, SLOT(OnTxtLogClear()));
+    menu.addAction(&actClear);
+
+
+    menu.exec(ui->txtLog->mapToGlobal(pos));
+}

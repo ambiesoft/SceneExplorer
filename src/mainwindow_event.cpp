@@ -88,6 +88,7 @@ void MainWindow::closeEvent(QCloseEvent *event) {
 
     settings_.setValue(KEY_SHOWMISSING, tbShowNonExistant_->isChecked());
 
+    settings_.setValue(KEY_TXTLOG_WRAP, ui->txtLog->lineWrapMode()==QPlainTextEdit::WidgetWidth);
 
     StoreDocument();
 

@@ -59,41 +59,6 @@ void nomalizeDirAndName(const QString& full, QString&dir, QString& name)
     dir = normalizeDir(fi.absolutePath());
     name = fi.fileName();
 }
-void Info(QWidget* parent, QString message)
-{
-    QMessageBox msgBox(parent && parent->isVisible() ? parent:nullptr);
-
-    msgBox.setWindowTitle(APPNAME_DISPLAY);
-    // msgBox.setInformativeText(message);
-    msgBox.setText(message);
-    msgBox.setStandardButtons(QMessageBox::Ok);
-    msgBox.setIcon(QMessageBox::Information);
-    msgBox.exec();
-}
-void Alert(QWidget* parent, QString message)
-{
-    QMessageBox msgBox(parent && parent->isVisible() ? parent:nullptr);
-
-    // msgBox.setInformativeText(message);
-    msgBox.setText(message);
-    msgBox.setStandardButtons(QMessageBox::Ok);
-    msgBox.setIcon(QMessageBox::Warning);
-    msgBox.exec();
-}
-bool YesNo(QWidget* parent,
-           QString message,
-           QMessageBox::Icon icon)
-{
-    QMessageBox msgBox(parent && parent->isVisible() ? parent:nullptr);
-
-    msgBox.setWindowTitle(APPNAME_DISPLAY);
-    msgBox.setText(message);
-    msgBox.setStandardButtons(QMessageBox::Yes);
-    msgBox.addButton(QMessageBox::No);
-    msgBox.setDefaultButton(QMessageBox::No);
-    msgBox.setIcon(icon);
-    return msgBox.exec() == QMessageBox::Yes;
-}
 
 static QString getBytecode1(char c)
 {

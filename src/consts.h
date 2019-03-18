@@ -24,7 +24,7 @@ namespace Consts
 const char ORGANIZATION[] = "Ambiesoft";
 const char APPDOMAIN[] = "ambiesoft.fam.cx";
 const char APPNAME[] = "SceneExplorer";
-const char APPNAME_DISPLAY[] = "Scene Explorer";
+// const char APPNAME_DISPLAY[] = "Scene Explorer";
 const char APPVERSION[] = "1.19.19";
 
 
@@ -44,6 +44,7 @@ const char KEY_LISTTASKSIZE[] = "listtasksize";
 const char KEY_COMBO_FINDTEXTS[] = "combofindtexts";
 const char KEY_SHOWMISSING[] = "showmissing";
 
+const char KEY_TXTLOG_WRAP[] = "txtlogwrap";
 
 const char KEY_LASTSELECTEDADDDIRECTORY[] = "lastselectedadddir";
 const char KEY_LASTSELECTEDSCANDIRECTORY[] = "lastselectedscandir";

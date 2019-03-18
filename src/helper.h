@@ -32,11 +32,7 @@
 
 QString normalizeFile(const QString& file);
 void nomalizeDirAndName(const QString& full, QString&dir, QString& name);
-void Info(QWidget* parent, QString message);
-void Alert(QWidget* parent, QString message);
-bool YesNo(QWidget* parent,
-           QString message,
-           QMessageBox::Icon = QMessageBox::Question);
+
 QString createSalient(const QString& file, const qint64& size);
 QString getUUIDFromThumbfile(const QString& file);
 Qt::WindowFlags GetDefaultDialogFlags();

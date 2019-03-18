@@ -69,7 +69,7 @@
      <x>0</x>
      <y>0</y>
      <width>1009</width>
-     <height>23</height>
+     <height>22</height>
     </rect>
    </property>
    <property name="font">
@@ -243,6 +243,8 @@
     <addaction name="action_SelectAll"/>
     <addaction name="separator"/>
     <addaction name="action_ClearContent"/>
+    <addaction name="separator"/>
+    <addaction name="action_Property"/>
    </widget>
    <addaction name="menu_File"/>
    <addaction name="menu_Edit"/>
@@ -334,6 +336,12 @@
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
+       </property>
+       <property name="contextMenuPolicy">
+        <enum>Qt::CustomContextMenu</enum>
+       </property>
+       <property name="lineWrapMode">
+        <enum>QPlainTextEdit::NoWrap</enum>
        </property>
        <property name="readOnly">
         <bool>true</bool>
@@ -1040,6 +1048,16 @@
   <action name="actiondummy_2">
    <property name="text">
     <string>dummy</string>
+   </property>
+  </action>
+  <action name="action">
+   <property name="text">
+    <string>-</string>
+   </property>
+  </action>
+  <action name="action_Property">
+   <property name="text">
+    <string>P&amp;roperty...</string>
    </property>
   </action>
  </widget>

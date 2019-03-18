@@ -20,12 +20,15 @@
 #include <QClipboard>
 #include <QMimeData>
 
+#include "../../lsMisc/stdQt/stdQt.h"
+
 #include "ui_mainwindow.h"
 #include "mainwindow.h"
 
 #include "tagitem.h"
 #include "helper.h"
 
+using namespace AmbiesoftQt;
 
 void MainWindow::OnCopyTable()
 {

@@ -16,12 +16,15 @@
 //You should have received a copy of the GNU General Public License
 //along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+#include "../../lsMisc/stdQt/stdQt.h"
 
 #include "helper.h"
 #include "osd.h"
 
 #include "renamedialog.h"
 #include "ui_renamedialog.h"
+
+using namespace AmbiesoftQt;
 
 RenameDialog::RenameDialog(QWidget *parent) :
     QDialog(parent,GetDefaultDialogFlags()),

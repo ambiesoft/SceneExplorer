@@ -22,10 +22,14 @@
 #include <QAction>
 #include <QSharedPointer>
 
+#include "../../lsMisc/stdQt/stdQt.h"
+
 #include "mycontextmenu.h"
 #include "consts.h"
 #include "helper.h"
 #include "optiondialog.h"
+
+using namespace AmbiesoftQt;
 
 OptionDialog::OptionDialog(QWidget* parent)
     : QDialog(parent,GetDefaultDialogFlags()),

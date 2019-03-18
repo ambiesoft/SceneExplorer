@@ -34,7 +34,7 @@ AboutDialog::AboutDialog(QWidget *parent) :
 
     // QString title = APPNAME_DISPLAY;
 
-    QString txtVersion = APPNAME_DISPLAY;
+    QString txtVersion = qAppName();
     txtVersion.append(" ");
     txtVersion.append("ver ");
     txtVersion.append(APPVERSION);
@@ -63,7 +63,7 @@ AboutDialog::AboutDialog(QWidget *parent) :
     //    ui->lblWebpage->setOpenExternalLinks(true);
 
     QString aboutText;
-    aboutText += QString() + "<h1>" + APPNAME_DISPLAY + "</h1>";
+    aboutText += QString() + "<h1>" + qAppName() + "</h1>";
     aboutText +=
             "Copyright (C) 2018 Ambiesoft<br />"
             "<br />"

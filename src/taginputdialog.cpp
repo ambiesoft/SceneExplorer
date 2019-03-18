@@ -16,10 +16,14 @@
 //You should have received a copy of the GNU General Public License
 //along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+#include "../../lsMisc/stdQt/stdQt.h"
+
 #include "taginputdialog.h"
 #include "ui_taginputdialog.h"
 #include "blockedbool.h"
 #include "helper.h"
+
+using namespace AmbiesoftQt;
 
 TagInputDialog::TagInputDialog(QWidget *parent) :
     QDialog(parent,GetDefaultDialogFlags()),
