@@ -148,12 +148,12 @@ static void testSQL()
 
 bool OpenDatabaseDirectory(const QString& dbDir)
 {
-    if(!QDir(dbDir).exists())
+    if(Q_UNLIKELY(!QDir(dbDir).exists()))
     {
         Alert(nullptr,QObject::tr("\"%1\" is not directory.").arg(dbDir));
         return false;
     }
-    if(!QDir::setCurrent(dbDir))
+    if(Q_UNLIKELY(!QDir::setCurrent(dbDir)))
     {
         Alert(nullptr, QObject::tr("Failed to set \"%1\" as current directory.").arg(dbDir));
         return false;
@@ -163,7 +163,7 @@ bool OpenDatabaseDirectory(const QString& dbDir)
 
     // create and check thumbs dir
     QDir(".").mkdir(FILEPART_THUMBS);
-    if(!QDir(FILEPART_THUMBS).exists())
+    if(Q_UNLIKELY(!QDir(FILEPART_THUMBS).exists()))
     {
         Alert(nullptr, QObject::tr("Failed to mkdir \"%1\" or it is not a directory.").
               arg(QFileInfo(FILEPART_THUMBS).absoluteFilePath()));
@@ -402,7 +402,7 @@ int main2(int argc, char *argv[], QApplication& theApp)
     }
 
     Sql theSql;
-    if (!theSql.isOK())
+    if (Q_UNLIKELY(!theSql.isOK()))
     {
         QString errMessage =
                 QObject::tr("Failed to open or create database. \"%1\"").
@@ -420,7 +420,7 @@ int main2(int argc, char *argv[], QApplication& theApp)
 
 
     MainWindow w(nullptr, *settings, gpCommandOption->doc());
-    if(!w.IsInitialized())
+    if(Q_UNLIKELY(!w.IsInitialized()))
     {
         Alert(nullptr, QObject::tr("Window initialization failed."));
         return PR_WINDOWINITFAILED;
@@ -482,7 +482,7 @@ int main(int argc, char *argv[])
         if(args.length() != 0)
             args.removeFirst();;
 
-        if(!QProcess::startDetached(thisapp, args))
+        if(Q_UNLIKELY(!QProcess::startDetached(thisapp, args)))
         {
             Alert(nullptr, QObject::tr("Failed to launch \"%1\"").
                   arg(thisapp));
