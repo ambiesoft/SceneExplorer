@@ -26,7 +26,7 @@ void MainWindow::on_action_SelectAll_triggered()
 {
     if(ui->directoryWidget->hasFocus())
     {
-        BlockedBool bd(&directoryChanging_);
+        Ambiesoft::BlockedBool bd(&directoryChanging_);
         {
             for(int i=0 ; i < ui->directoryWidget->count();++i)
             {
@@ -47,7 +47,7 @@ void MainWindow::on_action_SelectAll_triggered()
 
     if(ui->listTag->hasFocus())
     {
-        BlockedBool bt(&tagChanging_);
+        Ambiesoft::BlockedBool bt(&tagChanging_);
         {
             for(int i=0 ; i < ui->listTag->count(); ++i)
             {

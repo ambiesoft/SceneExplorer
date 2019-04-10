@@ -19,10 +19,10 @@
 #include <QFileDialog>
 #include <QMenu>
 
+#include "../../lsMisc/blockedbool.h"
 #include "../../lsMisc/stdQt/stdQt.h"
 
 #include "helper.h"
-#include "blockedbool.h"
 #include "mycontextmenu.h"
 #include "mycontextmenu.h"
 #include "consts.h"
@@ -69,7 +69,7 @@ OptionExternalToolsDialog::~OptionExternalToolsDialog()
 
 void OptionExternalToolsDialog::on_listWidget_itemSelectionChanged()
 {
-    BlockedBool bb(&selectionChanging_);
+    Ambiesoft::BlockedBool bb(&selectionChanging_);
     if(ui->listWidget->selectedItems().isEmpty())
     {
         ui->lineName->setEnabled(false);

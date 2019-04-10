@@ -45,6 +45,7 @@
 #include <QFontDialog>
 #include <QInputDialog>
 
+#include "../../lsMisc/blockedbool.h"
 #include "../../lsMisc/stdQt/stdQt.h"
 #include "../../lsMisc/stdQt/settings.h"
 #include "../../lsMisc/stdQt/waitingcursor.h"
@@ -65,7 +66,6 @@
 #include "globals.h"
 #include "helper.h"
 #include "osd.h"
-#include "blockedbool.h"
 #include "extension.h"
 #include "sql.h"
 #include "tableitemdelegate.h"
@@ -250,8 +250,8 @@ bool MainWindow::CloseDocument()
     if(!pDoc_)
         return true;
 
-    BlockedBool dc(&directoryChanging_);
-    BlockedBool tc(&tagChanging_);
+    Ambiesoft::BlockedBool dc(&directoryChanging_);
+    Ambiesoft::BlockedBool tc(&tagChanging_);
 
     StoreDocument();
     delete pDoc_;
@@ -266,7 +266,7 @@ bool MainWindow::CloseDocument()
 bool MainWindow::LoadTags()
 {
     Q_ASSERT(!tagChanging_);
-    BlockedBool blockUpdate(&tagChanging_);
+    Ambiesoft::BlockedBool blockUpdate(&tagChanging_);
 
     // Tags
     ui->listTag->clear();
@@ -320,7 +320,7 @@ void MainWindow::InitDocument()
     if(!pDoc_)
         return;
 
-    BlockedBool btD(&directoryChanging_);
+    Ambiesoft::BlockedBool btD(&directoryChanging_);
 
     ui->directoryWidget->clear();
 
@@ -432,8 +432,8 @@ void MainWindow::clearAllPool(bool bAppendLog)
     if(bAppendLog)
         insertLog(TaskKind_App, 0, tr("Clearing all tasks..."));
 
-    BlockedBool btStop(&gStop, true, false);
-    BlockedBool btPaused(&gPaused, false, gPaused);
+    Ambiesoft::BlockedBool btStop(&gStop, true, false);
+    Ambiesoft::BlockedBool btPaused(&gPaused, false, gPaused);
 
     // Wait All tasks in pools
     for(;;)
@@ -1304,7 +1304,7 @@ void MainWindow::GetSqlAllSetTable(const QStringList& dirs,
         if ((count % limitManager_->GetNumberOfRows()) != 0)
             cmbcount++;
 
-        BlockedBool blc(limitManager_->GetBlockPointer());
+        Ambiesoft::BlockedBool blc(limitManager_->GetBlockPointer());
         cmbLimit_->clear();
         for (size_t i = 0; i < cmbcount; ++i)
         {
@@ -1840,7 +1840,7 @@ void MainWindow::deleteTag()
 void MainWindow::checkAllTagCommon(const bool bCheck)
 {
     {
-        BlockedBool tb(&tagChanging_);
+        Ambiesoft::BlockedBool tb(&tagChanging_);
         for(int i=0 ; i < ui->listTag->count();++i)
         {
             TagItem* ti = static_cast<TagItem*>(ui->listTag->item(i));
@@ -2178,8 +2178,8 @@ void MainWindow::on_action_FocusItemTable_triggered()
 void MainWindow::on_action_ShowAllItem_triggered()
 {
     {
-        BlockedBool dc(&directoryChanging_);
-        BlockedBool tc(&tagChanging_);
+        Ambiesoft::BlockedBool dc(&directoryChanging_);
+        Ambiesoft::BlockedBool tc(&tagChanging_);
 
         if(limitManager_)
             limitManager_->Reset();

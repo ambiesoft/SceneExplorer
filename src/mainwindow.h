@@ -26,6 +26,7 @@
 #include <QThread>
 
 #include "../../lsMisc/stdQt/settings.h"
+#include "../../lsMisc/blockedbool.h"
 
 #include "tablemodel.h"
 #include "directoryentry.h"
@@ -33,7 +34,6 @@
 #include "findcombobox.h"
 #include "externaltoolitem.h"
 #include "document.h"
-#include "blockedbool.h"
 #include "tagidsinfo.h"
 #include "imainwindow.h"
 
@@ -140,7 +140,7 @@ private:
     public:
         LimitManager(int numOfRows, QComboBox* cmb) : numOfRows_(numOfRows), cmb_(cmb){}
         void Reset() {
-            BlockedBool bb(&blocking_);
+            Ambiesoft::BlockedBool bb(&blocking_);
             cmb_->setCurrentIndex(0);
             allCount_ = -1;
         }
@@ -166,11 +166,11 @@ private:
             allCount_ = l;
         }
         void SetIndexFirst() {
-            BlockedBool bb(&blocking_);
+            Ambiesoft::BlockedBool bb(&blocking_);
             cmb_->setCurrentIndex(0);
         }
         void SetIndexLast() {
-            BlockedBool bb(&blocking_);
+            Ambiesoft::BlockedBool bb(&blocking_);
             cmb_->setCurrentIndex(cmb_->count()-1);
         }
         bool* GetBlockPointer() {

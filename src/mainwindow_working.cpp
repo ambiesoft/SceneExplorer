@@ -16,6 +16,8 @@
 //You should have received a copy of the GNU General Public License
 //along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+#include "../../lsMisc/blockedbool.h"
+
 #include "ui_mainwindow.h"
 #include "mainwindow.h"
 
@@ -28,7 +30,7 @@ void MainWindow::showEvent( QShowEvent* event )
 
 
 
-    BlockedBool bbInit(&initShown_, false, true);
+    Ambiesoft::BlockedBool bbInit(&initShown_, false, true);
 
 
     ui->directoryWidget->setMaximumSize(10000,10000);

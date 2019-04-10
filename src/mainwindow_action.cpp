@@ -46,7 +46,6 @@
 #include "sql.h"
 #include "helper.h"
 #include "osd.h"
-#include "blockedbool.h"
 #include "tagitem.h"
 
 #include "mycontextmenu.h"
@@ -668,7 +667,7 @@ void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
 {
     if(ui->tableView->selectionModel()->hasSelection())
     {
-        BlockedBool bb(&tableContextMenuActivaing_);
+        Ambiesoft::BlockedBool bb(&tableContextMenuActivaing_);
 
         MyContextMenu contextMenu("TableView Context Menu", this);
 
@@ -883,7 +882,7 @@ void MainWindow::OnDirectoryRemove()
     
     // pDoc_->DeleteDirectory(item);
 
-    BlockedBool bt(&directoryChanging_);
+    Ambiesoft::BlockedBool bt(&directoryChanging_);
     delete ui->directoryWidget->takeItem(ui->directoryWidget->row(item));
 
     pDoc_->SetReordered();
@@ -912,7 +911,7 @@ void MainWindow::OnDirectoryRemoveMissingItems()
 void MainWindow::OnDirectoryCheckAll()
 {
     {
-        BlockedBool bt(&directoryChanging_, true, false);
+        Ambiesoft::BlockedBool bt(&directoryChanging_, true, false);
 
         for (int i = 0; i < ui->directoryWidget->count(); ++i)
         {
@@ -927,7 +926,7 @@ void MainWindow::OnDirectoryCheckAll()
 void MainWindow::OnDirectoryUncheckAll()
 {
     {
-        BlockedBool bt(&directoryChanging_, true, false);
+        Ambiesoft::BlockedBool bt(&directoryChanging_, true, false);
 
         for (int i = 0; i < ui->directoryWidget->count(); ++i)
         {
@@ -947,7 +946,7 @@ void MainWindow::OnDirectorySortByName()
     CHECK_DOCUMENT(pDoc_);
 
     Q_ASSERT(!directoryChanging_);
-    BlockedBool bt(&directoryChanging_, true, false);
+    Ambiesoft::BlockedBool bt(&directoryChanging_, true, false);
 
     ui->directoryWidget->SortNormalItems();
 
@@ -961,7 +960,7 @@ void MainWindow::directoryWidgetMoveUpCommon(const bool bUp)
         return;
 
     Q_ASSERT(!directoryChanging_);
-    BlockedBool bt(&directoryChanging_, true, false);
+    Ambiesoft::BlockedBool bt(&directoryChanging_, true, false);
 
     DirectoryItem* item = static_cast<DirectoryItem*>(ui->directoryWidget->selectedItems()[0]);
     if (!item->IsNormalItem())
@@ -1090,7 +1089,7 @@ void MainWindow::on_ShowMissingClicked_common(bool bNextCheck)
     static bool sIn = false;
     if(sIn)
         return;
-    BlockedBool bb(&sIn);
+    Ambiesoft::BlockedBool bb(&sIn);
 
     if(!bNextCheck)
     {
@@ -1165,7 +1164,7 @@ bool MainWindow::LimitManager::Decrement()
     --ci;
     if(ci < 0)
         return false;
-    BlockedBool bb(&blocking_);
+    Ambiesoft::BlockedBool bb(&blocking_);
     cmb_->setCurrentIndex(ci);
     return true;
 }
@@ -1175,7 +1174,7 @@ bool MainWindow::LimitManager::Increment()
     ++ci;
     if(cmb_->count() <= ci)
         return false;
-    BlockedBool bb(&blocking_);
+    Ambiesoft::BlockedBool bb(&blocking_);
     cmb_->setCurrentIndex(ci);
     return true;
 }

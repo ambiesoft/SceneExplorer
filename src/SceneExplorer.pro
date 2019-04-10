@@ -43,7 +43,6 @@ SOURCES += \
     directoryitem.cpp \
     findcombobox.cpp \
     errorinfoexception.cpp \
-    blockedbool.cpp \
     extension.cpp \
     optionexternaltoolsdialog.cpp \
     externaltoolitem.cpp \
@@ -70,7 +69,8 @@ SOURCES += \
     tagidsinfo.cpp \
     ../../lsMisc/stdQt/settings.cpp \
     ../../lsMisc/stdQt/waitingcursor.cpp \
-    itempropertydialog.cpp
+    itempropertydialog.cpp \
+    ../../lsMisc/blockedbool.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -90,7 +90,6 @@ HEADERS += \
     directoryitem.h \
     findcombobox.h \
     errorinfoexception.h \
-    blockedbool.h \
     extension.h \
     optionexternaltoolsdialog.h \
     externaltoolitem.h \
@@ -117,7 +116,8 @@ HEADERS += \
     tagidsinfo.h \
     ../../lsMisc/stdQt/settings.h \
     ../../lsMisc/stdQt/waitingcursor.h \
-    itempropertydialog.h
+    itempropertydialog.h \
+    ../../lsMisc/blockedbool.h
 
 FORMS += \
         mainwindow.ui \
