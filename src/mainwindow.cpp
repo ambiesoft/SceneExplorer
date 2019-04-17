@@ -835,6 +835,11 @@ QString MainWindow::getSelectedVideo(bool bNativeFormat)
 
     return bNativeFormat ? QDir::toNativeSeparators(s) : s;
 }
+QString MainWindow::getVideoFromIndex(const QModelIndex& index)
+{
+    QVariant v = proxyModel_->data(index, TableModel::MovieFileFull);
+    return v.toString();
+}
 qint64 MainWindow::getSelectedID()
 {
     QItemSelectionModel *select = ui->tableView->selectionModel();
@@ -845,7 +850,18 @@ qint64 MainWindow::getSelectedID()
     QVariant v = proxyModel_->data(select->selectedIndexes()[0], TableModel::ID);
     return v.toLongLong();
 }
+qint64 MainWindow::getIDFromIndex(const QModelIndex& index)
+{
+    QVariant v = proxyModel_->data(index, TableModel::ID);
+    if(v.isNull())
+        return -1;
 
+    bool ok;
+    qint64 ret = v.toLongLong(&ok);
+    if(!ok)
+        return -1;
+    return ret;
+}
 
 #include "renamedialog.h"
 void MainWindow::OnContextRename()
@@ -1504,18 +1520,18 @@ void MainWindow::on_action_Clear_triggered()
     cmbFind_->setCurrentText(QString());
     itemChangedCommon(true);
 
-    if(!selPath.isEmpty())
-    {
-        QModelIndex miToSelect = proxyModel_->findIndex(selPath);
-        if(miToSelect.isValid())
-        {
-            ui->tableView->selectionModel()->select(miToSelect,
-                                                    QItemSelectionModel::ClearAndSelect);
-            proxyModel_->ensureIndex(miToSelect);
-            QApplication::processEvents();
-            ui->tableView->scrollTo(miToSelect);
-        }
-    }
+//    if(!selPath.isEmpty())
+//    {
+//        QModelIndex miToSelect = proxyModel_->findIndex(selPath);
+//        if(miToSelect.isValid())
+//        {
+//            ui->tableView->selectionModel()->select(miToSelect,
+//                                                    QItemSelectionModel::ClearAndSelect);
+//            proxyModel_->ensureIndex(miToSelect);
+//            QApplication::processEvents();
+//            ui->tableView->scrollTo(miToSelect);
+//        }
+//    }
 }
 
 void MainWindow::OnFindComboEnterPressed()

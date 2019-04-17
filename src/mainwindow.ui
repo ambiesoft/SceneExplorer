@@ -246,9 +246,18 @@
     <addaction name="separator"/>
     <addaction name="action_Property"/>
    </widget>
+   <widget class="QMenu" name="menu_History">
+    <property name="title">
+     <string>H&amp;istory</string>
+    </property>
+    <addaction name="action_GoBack"/>
+    <addaction name="action_GoForward"/>
+    <addaction name="separator"/>
+   </widget>
    <addaction name="menu_File"/>
    <addaction name="menu_Edit"/>
    <addaction name="menu_View"/>
+   <addaction name="menu_History"/>
    <addaction name="menu_Task"/>
    <addaction name="menu_Directory"/>
    <addaction name="menu_Tag"/>
@@ -278,6 +287,9 @@
    </attribute>
    <addaction name="action_ShowAllItem"/>
    <addaction name="action_Refresh"/>
+   <addaction name="separator"/>
+   <addaction name="action_GoBack"/>
+   <addaction name="action_GoForward"/>
    <addaction name="placeHolder_Sort"/>
    <addaction name="separator"/>
    <addaction name="action_Top"/>
@@ -1053,6 +1065,24 @@
   <action name="action_Property">
    <property name="text">
     <string>P&amp;roperty...</string>
+   </property>
+  </action>
+  <action name="action_GoBack">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/resource/images/left-arrow.png</normaloff>:/resource/images/left-arrow.png</iconset>
+   </property>
+   <property name="text">
+    <string>Go Back</string>
+   </property>
+  </action>
+  <action name="action_GoForward">
+   <property name="icon">
+    <iconset resource="resource.qrc">
+     <normaloff>:/resource/images/right-arrow.png</normaloff>:/resource/images/right-arrow.png</iconset>
+   </property>
+   <property name="text">
+    <string>Go Forward</string>
    </property>
   </action>
  </widget>

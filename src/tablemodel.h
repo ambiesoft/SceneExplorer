@@ -245,9 +245,22 @@ public:
     //            return QString;
     //        return v.toString();
     //    }
-    QModelIndex findIndex(const QString& selPath) const {
+    enum class FIND_INDEX {
+        FIND_INDEX_TITLE,
+        FIND_INDEX_MOVIE,
+        FIND_INDEX_DESCRIPTION,
+    };
+
+    QModelIndex findIndex(const QString& selPath, const FIND_INDEX& fi) const {
         QModelIndex sourceIndex = ((TableModel*) sourceModel())->GetIndex(selPath);
-        return index(sourceIndex.row(),sourceIndex.column());
+
+        int toAdd=0;
+        if(fi==FIND_INDEX::FIND_INDEX_TITLE)
+            toAdd=1;
+        else if(fi==FIND_INDEX::FIND_INDEX_DESCRIPTION)
+            toAdd=2;
+
+        return index(sourceIndex.row() + toAdd, sourceIndex.column());
     }
 
 };

@@ -70,7 +70,9 @@ SOURCES += \
     ../../lsMisc/stdQt/settings.cpp \
     ../../lsMisc/stdQt/waitingcursor.cpp \
     itempropertydialog.cpp \
-    ../../lsMisc/blockedbool.cpp
+    ../../lsMisc/blockedbool.cpp \
+    historylist.cpp \
+    mainwindow_history.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -117,7 +119,8 @@ HEADERS += \
     ../../lsMisc/stdQt/settings.h \
     ../../lsMisc/stdQt/waitingcursor.h \
     itempropertydialog.h \
-    ../../lsMisc/blockedbool.h
+    ../../lsMisc/blockedbool.h \
+    historylist.h
 
 FORMS += \
         mainwindow.ui \

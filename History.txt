@@ -1,3 +1,6 @@
+2019/04/17 1.19.21
+Add History of Item Selection
+
 2019/03/18 1.19.20
 Wordwrapping for log
 

@@ -36,6 +36,7 @@
 #include "document.h"
 #include "tagidsinfo.h"
 #include "imainwindow.h"
+#include "historylist.h"
 
 class QThreadPool;
 class QLabel;
@@ -56,7 +57,7 @@ class MainWindow;
 
 #define CHECK_DOCUMENT(doc) do { if(!doc) { Alert(this, TR_NO_DOCUMENT()); return;}} while(false)
 
-class MainWindow : public QMainWindow, IMainWindow
+class MainWindow : public QMainWindow, IMainWindow, IHistoryList
 {
     Q_OBJECT
 
@@ -84,12 +85,15 @@ class MainWindow : public QMainWindow, IMainWindow
     int GetTaskPriorityAsInt();
     void SetTaskPriorityAsInt(int priority);
 
+    HistoryList hisList_;
+    bool bHistoryActivating_=false;
 public:
     explicit MainWindow(QWidget *parent,
                         AmbiesoftQt::IniSettings& settings,
                         const QString& docToOpen);
     ~MainWindow();
 
+    void selectItem(const QString& movie);
     bool IsInitialized() const;
 
 private:
@@ -376,12 +380,14 @@ private slots:
     void on_action_Pause_triggered();
     void on_action_Stop_triggered();
     void onUserDirectoryTriggered();
+    void onArbitraryHistory();
     void OnUserTagTriggered();
     void onMenuTag_AboutToShow();
     void onMenuDirectory_AboutToShow();
     void onMenuTask_AboutToShow();
     void onMenuView_AboutToShow();
     void onMenuEdit_AboutToShow();
+    void onMenuHistory_AboutToShow();
     void onMenuStyle_AboutToShow();
     void onMenuLanguage_AboutToShow();
     void onMenuDocking_windows_AboutToShow();
@@ -401,6 +407,7 @@ private slots:
     void on_action_Bottom_triggered();
 
     void OndirectoryItemChanged(QListWidgetItem *item);
+    void OnTableItemChanged(QModelIndex newIndex, QModelIndex oldIndex);
 
 
     void on_directoryWidget_customContextMenuRequested(const QPoint &pos);
@@ -575,6 +582,12 @@ private slots:
 
     void on_txtLog_customContextMenuRequested(const QPoint &pos);
 
+    void on_tableView_activated(const QModelIndex &index);
+
+    void on_action_GoBack_triggered();
+
+    void on_action_GoForward_triggered();
+
 private:
     void OnCopyTable();
     void OnCopyDirectory();
@@ -644,7 +657,9 @@ private:
     void openVideo(const qint64& id, const QString& movieFile);
     void openVideoDirectory(const QString& movieFile);
     QString getSelectedVideo(bool bNativeFormat = true);
+    QString getVideoFromIndex(const QModelIndex& index);
     qint64 getSelectedID();
+    qint64 getIDFromIndex(const QModelIndex& index);
 
     bool IsAllTagSelected() const;
     bool IsDirSelected(const QString& dir) const;

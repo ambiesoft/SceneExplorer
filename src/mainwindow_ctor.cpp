@@ -40,7 +40,8 @@ MainWindow::MainWindow(QWidget *parent,
                        const QString& docToOpen) :
     QMainWindow(parent),
     ui(new Ui::MainWindow),
-    settings_(settings)
+    settings_(settings),
+    hisList_(this)
 {
     ui->setupUi(this);
     initLangMenus();
@@ -57,6 +58,8 @@ MainWindow::MainWindow(QWidget *parent,
             this, &MainWindow::onMenuView_AboutToShow);
     connect(ui->menu_Edit, &QMenu::aboutToShow,
             this, &MainWindow::onMenuEdit_AboutToShow);
+    connect(ui->menu_History, &QMenu::aboutToShow,
+            this, &MainWindow::onMenuHistory_AboutToShow);
     connect(ui->menu_Task, &QMenu::aboutToShow,
             this, &MainWindow::onMenuTask_AboutToShow);
     connect(ui->menu_Directory, &QMenu::aboutToShow,
@@ -71,6 +74,7 @@ MainWindow::MainWindow(QWidget *parent,
             this, &MainWindow::onMenuLanguage_AboutToShow);
     connect(ui->menu_Style, &QMenu::aboutToShow,
             this, &MainWindow::onMenuStyle_AboutToShow);
+
 
     // sortManager <-> action
     sortManager_.setAction(SORT_FILENAME,ui->actionSort_by_file_name);
@@ -90,12 +94,7 @@ MainWindow::MainWindow(QWidget *parent,
     ui->tableView->setSelectionBehavior( QAbstractItemView::SelectItems );
     ui->tableView->setSelectionMode( QAbstractItemView::SingleSelection );
 
-    connect(ui->tableView->verticalScrollBar(), &QScrollBar::valueChanged,
-            this, &MainWindow::OnTableViewScrollChanged);
-
-
     tableModel_=new TableModel(ui->tableView, this);
-
 
     proxyModel_ = new FileMissingFilterProxyModel(ui->tableView);
     proxyModel_->setSourceModel(tableModel_);
@@ -106,10 +105,13 @@ MainWindow::MainWindow(QWidget *parent,
 
     QObject::connect(tableModel_, &TableModel::itemCountChanged,
                      this, &MainWindow::tableItemCountChanged);
-    //QObject::connect(tableModel_, &TableModel::sortParameterChanged,
-    //                 this, &MainWindow::tableSortParameterChanged);
     // not called
     // ui->tableView->setItemDelegate(new ImageSizeDelegate(ui->tableView));
+
+    connect(ui->tableView->verticalScrollBar(), &QScrollBar::valueChanged,
+            this, &MainWindow::OnTableViewScrollChanged);
+    connect(ui->tableView->selectionModel(), &QItemSelectionModel::currentRowChanged,
+            this, &MainWindow::OnTableItemChanged);
 
 
     // directory
@@ -458,3 +460,4 @@ MainWindow::MainWindow(QWidget *parent,
     UpdateTitle(QStringList(), UpdateTitleType::INIT);
     initialized_ = true;
 }
+
