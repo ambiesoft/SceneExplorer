@@ -1073,7 +1073,7 @@
      <normaloff>:/resource/images/left-arrow.png</normaloff>:/resource/images/left-arrow.png</iconset>
    </property>
    <property name="text">
-    <string>Go Back</string>
+    <string>Go &amp;Back</string>
    </property>
   </action>
   <action name="action_GoForward">
@@ -1082,7 +1082,7 @@
      <normaloff>:/resource/images/right-arrow.png</normaloff>:/resource/images/right-arrow.png</iconset>
    </property>
    <property name="text">
-    <string>Go Forward</string>
+    <string>Go &amp;Forward</string>
    </property>
   </action>
  </widget>

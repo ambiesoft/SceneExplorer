@@ -1278,6 +1278,22 @@
         <source>Copy &amp;All</source>
         <translation>すべてコピー(&amp;A)</translation>
     </message>
+    <message>
+        <source>H&amp;istory</source>
+        <translation>履歴(&amp;I)</translation>
+    </message>
+    <message>
+        <source>Item not found</source>
+        <translation>アイテムが見つかりません</translation>
+    </message>
+    <message>
+        <source>Go &amp;Back</source>
+        <translation>戻る(&amp;B)</translation>
+    </message>
+    <message>
+        <source>Go &amp;Forward</source>
+        <translation>進む(&amp;F)</translation>
+    </message>
 </context>
 <context>
     <name>Option</name>
