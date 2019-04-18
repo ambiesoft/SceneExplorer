@@ -75,6 +75,7 @@
 #include "mycontextmenu.h"
 #include "tagidsinfo.h"
 #include "itempropertydialog.h"
+#include "renamedialog.h"
 
 #include "ui_mainwindow.h"
 #include "mainwindow.h"
@@ -204,64 +205,6 @@ void MainWindow::CreateLimitManager()
 
     // ui->mainToolBar->removeAction(ui->actionplaceHolder_Limit);
 }
-QString MainWindow::GetDefaultDocumentPath()
-{
-    QString docdir = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
-    if(docdir.isEmpty())
-    {
-        Alert(this, tr("Failed to get document directory."));
-        return QString();
-    }
-    docdir=pathCombine(docdir, APPNAME);
-    QDir().mkpath(docdir);
-    if(!QDir(docdir).exists())
-    {
-        Alert(this, tr("Failed to create directory. \"%1\"").arg(docdir));
-        return QString();
-    }
-
-    return pathCombine(docdir,"default.scexd");
-}
-
-bool MainWindow::OpenDocument(const QString& file, const bool bExists)
-{
-    CloseDocument();
-
-    Document* pNewDoc = new Document;
-    if(!pNewDoc->Load(file, bExists))
-    {
-        Alert(this,
-              QString("%0\n%1").arg(pNewDoc->GetLastErr()).arg(file));
-        delete pNewDoc;
-        return false;
-    }
-
-    qDebug() << "Document Opened: " << file;
-    recents_.removeDuplicates();
-    recents_.removeOne(file);
-    recents_.insert(0, file);
-
-    pDoc_ = pNewDoc;
-    InitDocument();
-    return true;
-}
-bool MainWindow::CloseDocument()
-{
-    if(!pDoc_)
-        return true;
-
-    Ambiesoft::BlockedBool dc(&directoryChanging_);
-    Ambiesoft::BlockedBool tc(&tagChanging_);
-
-    StoreDocument();
-    delete pDoc_;
-    pDoc_=nullptr;
-
-    ui->directoryWidget->clear();
-    ui->listTag->clear();
-
-    return true;
-}
 
 bool MainWindow::LoadTags()
 {
@@ -315,55 +258,7 @@ bool MainWindow::LoadTags()
     }
     return true;
 }
-void MainWindow::InitDocument()
-{
-    if(!pDoc_)
-        return;
 
-    Ambiesoft::BlockedBool btD(&directoryChanging_);
-
-    ui->directoryWidget->clear();
-
-    //    AddUserEntryDirectory(DirectoryItem::DI_ALL,
-    //                          -1,
-    //                          QString(),
-    //                          pDoc_->IsDirAllSelected(),
-    //                          pDoc_->IsDirAllChecked());
-    DirectoryItem* allitem = new DirectoryItem(-1,
-                                               DirectoryItem::DI_ALL_MY,
-                                               tr("All"));
-    // allitem->setChecked(pDoc_->IsDirAllChecked());
-    allitem->setSelected(pDoc_->IsDirAllSelected());
-    ui->directoryWidget->addItem(allitem);
-
-    //    const int count = pDoc_==nullptr ? 0 : pDoc_->dirCount();
-    //    for(int i=1 ; i <= count ; ++i)
-    //    {
-    //        AddUserEntryDirectory(DirectoryItem::DI_NORMAL,
-    //                              po
-    //                              pDoc_->GetDEText(i),
-    //                              pDoc_->IsDESelected(i),
-    //                              pDoc_->IsDEChecked(i));
-    //    }
-    QList<DirectoryItem*> dirs;
-    pDoc_->GetAllDirs(dirs);
-    for(DirectoryItem* di : dirs)
-    {
-        ui->directoryWidget->addItem(di);
-    }
-    //    AddUserEntryDirectory(DirectoryItem::DI_MISSING,
-    //                          -2,
-    //                          QString(), false, false);
-
-    DirectoryItem* missitem = new DirectoryItem(-2,
-                                                DirectoryItem::DI_MISSING_MY,
-                                                tr("Missing"));
-    ui->directoryWidget->addItem(missitem);
-
-    LoadTags();
-
-    itemChangedCommon(true);
-}
 //void MainWindow::setTableSpan()
 //{
 //    int newRowFilename = ui->tableView->model()->rowCount()-TableModel::RowCountPerEntry;
@@ -863,7 +758,7 @@ qint64 MainWindow::getIDFromIndex(const QModelIndex& index)
     return ret;
 }
 
-#include "renamedialog.h"
+
 void MainWindow::OnContextRename()
 {
     QString oldfull = getSelectedVideo(false);

@@ -114,18 +114,20 @@ void MainWindow::selectItem(const QString& movie)
     QModelIndex toSelectMovie = proxyModel_->findIndex(movie, FileMissingFilterProxyModel::FIND_INDEX::FIND_INDEX_MOVIE);
     Q_ASSERT(toSelectMovie.isValid());
 
-    ui->tableView->selectionModel()->select(toSelectMovie,
-                                            QItemSelectionModel::ClearAndSelect);
+    // Select multiple items one by one for ensuring visible
+//    ui->tableView->selectionModel()->select(toSelectMovie,
+//                                            QItemSelectionModel::ClearAndSelect);
     proxyModel_->ensureIndex(toSelectMovie);
-    QApplication::processEvents();
+    //QApplication::processEvents();
     ui->tableView->scrollTo(toSelectMovie);
 
-
-    ui->tableView->selectionModel()->select(toSelectTitle,
-                                            QItemSelectionModel::ClearAndSelect);
+    // TODO: not selected
     proxyModel_->ensureIndex(toSelectTitle);
     QApplication::processEvents();
     ui->tableView->scrollTo(toSelectTitle);
+    ui->tableView->selectionModel()->select(toSelectTitle,
+                                            QItemSelectionModel::ClearAndSelect);
+
 }
 
 void MainWindow::on_action_GoBack_triggered()

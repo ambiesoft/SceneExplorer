@@ -72,7 +72,8 @@ SOURCES += \
     itempropertydialog.cpp \
     ../../lsMisc/blockedbool.cpp \
     historylist.cpp \
-    mainwindow_history.cpp
+    mainwindow_history.cpp \
+    mainwindow_document.cpp
 
 HEADERS += \
         mainwindow.h \
