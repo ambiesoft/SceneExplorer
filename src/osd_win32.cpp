@@ -38,6 +38,7 @@
 #include "../../lsMisc/GetLastErrorString.h"
 #include "../../profile/cpp/Profile/include/ambiesoft.profile.h"
 #include "../../lsMisc/stdosd/SetPrority.h"
+#include "../../lsMisc/OpenCommon.h"
 
 #include "errorinfoexception.h"
 #include "helper.h"
@@ -407,4 +408,11 @@ QString GetUserDocumentDirectory()
         return result;
 
     return QDir::homePath();
+}
+
+bool StartProcessDetached(const QString& exe, const QString& arg)
+{
+    return !!OpenCommon(nullptr,
+               exe.toStdWString().c_str(),
+               arg.toStdWString().c_str());
 }

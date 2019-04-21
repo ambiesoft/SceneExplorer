@@ -144,10 +144,12 @@ PRECOMPILED_HEADER = stable.h
 message($$QMAKESPEC)
 
 win32 {
-   HEADERS += ../../lsMisc/GetLastErrorString.h
-   SOURCES += ../../lsMisc/GetLastErrorString.cpp \
-			osd_win32.cpp \
-			../../lsMisc/stdosd/SetPrority_win.cpp
+   HEADERS += ../../lsMisc/OpenCommon.h \
+            ../../lsMisc/GetLastErrorString.h
+   SOURCES += ../../lsMisc/OpenCommon.cpp \
+            ../../lsMisc/GetLastErrorString.cpp \
+            osd_win32.cpp \
+            ../../lsMisc/stdosd/SetPrority_win.cpp
 
 #    win32-g++ {
 #        LIBS += -lOle32

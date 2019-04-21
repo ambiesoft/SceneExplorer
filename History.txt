@@ -1,3 +1,6 @@
+2019/04/21 1.19.22
+Change the way of StartProcessDetached
+
 2019/04/17 1.19.21
 Add History of Item Selection
 

@@ -992,19 +992,16 @@ void MainWindow::OnContextExternalTools()
     //    QStringList argconst;
     //    arg << movieFile;
 
-    QString command;
-    command += doublequoteIfNecessary(exe);
-    command += " ";
-    command += argparsed;
-    qDebug() << "QProcess::startDetached:" << command;
-    if(!QProcess::startDetached(command))
+
+    qDebug() << __FUNCTION__ << exe << " " << argparsed;
+    if(!StartProcessDetached(exe,argparsed))
     {
         QString message;
         message += tr("Failed to start new process.");
         message += "\n\n";
-        message += tr("Command line:");
+        message += tr("Executable:") + exe;
         message += "\n";
-        message += command;
+        message += tr("Argument:") + argparsed;
         Alert(this, message);
         return;
     }

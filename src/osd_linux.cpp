@@ -34,12 +34,13 @@
 #include <QDateTime>
 
 #include "../../lsMisc/stdosd/SetPrority.h"
+#include "../../lsMisc/stdQt/stdQt.h"
 
 #include "errorinfoexception.h"
 #include "osd.h"
 
 using namespace Ambiesoft::stdosd::Process;
-
+using namespace AmbiesoftQt;
 
 // https://stackoverflow.com/a/3546503
 bool showInGraphicalShell(QWidget *parent, const QString &pathIn)
@@ -234,4 +235,14 @@ QString GetUserDocumentDirectory()
         return result;
 
     return QDir::homePath();
+}
+
+
+bool StartProcessDetached(const QString& exe, const QString& arg)
+{
+    QString command;
+    command += doublequoteIfNecessary(exe);
+    command += " ";
+    command += arg;
+    return QProcess::startDetached(command);
 }
