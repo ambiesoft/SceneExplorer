@@ -151,12 +151,12 @@ win32 {
             osd_win32.cpp \
             ../../lsMisc/stdosd/SetPrority_win.cpp
 
-#    win32-g++ {
-#        LIBS += -lOle32
-#    }
-#    win32-msvc* {
-#        LIBS += Ole32.lib
-#    }
+    win32-g++ {
+        LIBS += -lshlwapi
+    }
+    win32-msvc* {
+#       LIBS += Ole32.lib
+    }
 }
 linux-g++ {
     SOURCES += \
