@@ -32,6 +32,7 @@
 #include <QDebug>
 #include <QDir>
 #include <QDateTime>
+#include <QProcess>
 
 #include "../../lsMisc/stdosd/SetPrority.h"
 #include "../../lsMisc/stdQt/stdQt.h"
