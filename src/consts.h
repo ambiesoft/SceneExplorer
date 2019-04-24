@@ -25,7 +25,7 @@ const char ORGANIZATION[] = "Ambiesoft";
 const char APPDOMAIN[] = "ambiesoft.fam.cx";
 const char APPNAME[] = "SceneExplorer";
 // const char APPNAME_DISPLAY[] = "Scene Explorer";
-const char APPVERSION[] = "1.19.22";
+const char APPVERSION[] = "1.19.23";
 
 
 const char KEY_STYLE[] = "style";
