@@ -1187,19 +1187,48 @@ bool Sql::getEntryFromSalient(const QString& salient,
     return true;
 }
 
+static QString GetAsciiLower(const QString& s)
+{
+    std::wstring w = s.toStdWString();
 
+    transform(
+      w.begin(), w.end(),
+      w.begin(),
+      towlower);
+
+    return QString::fromStdWString(w);
+}
 bool Sql::hasEntry(const QString& dir,
                    const QString& file,
                    const qint64& size,
                    const qint64& wtime,
                    const QString& sa)
 {
+#ifdef AMBIESOFT_FILENAME_CASESENSITIVE
     MYQMODIFIER QSqlQuery query = myPrepare("select name from FileInfo where "
                                             "directory=? and name=? and size=? and wtime=? and salient=?");
-
     int i=0;
     query.bindValue(i++, dir);
     query.bindValue(i++, file);
+#else
+    MYQMODIFIER QSqlQuery query = myPrepare("select name from FileInfo where "
+                                            "lower(directory)=? and lower(name)=? and size=? and wtime=? and salient=?");
+    // Basically Windows' ntfs is case-insensitive.
+    // But it can be configured to be case-sensitive.
+    // This app keep case-insensitve for windows becase when it gets
+    // back to case-sensitive, something might get troublesome.
+    int i=0;
+    qDebug() << "dir:" << dir << __FUNCTION__;
+    qDebug() << "file:" << file << __FUNCTION__;
+    qDebug() << "dir.toLower:" << dir.toLower() << __FUNCTION__;
+    qDebug() << "file.toLower:" << file.toLower() << __FUNCTION__;
+    qDebug() << "GetAsciiLower(dir):" << GetAsciiLower(dir) << __FUNCTION__;
+    qDebug() << "GetAsciiLower(file):" << GetAsciiLower(file) << __FUNCTION__;
+//    query.bindValue(i++, dir.toLower());
+//    query.bindValue(i++, file.toLower());
+    query.bindValue(i++, GetAsciiLower(dir));
+    query.bindValue(i++, GetAsciiLower(file));
+#endif
     query.bindValue(i++, size);
     query.bindValue(i++, wtime);
     query.bindValue(i++, sa);

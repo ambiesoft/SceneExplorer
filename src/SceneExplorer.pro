@@ -144,21 +144,28 @@ PRECOMPILED_HEADER = stable.h
 message($$QMAKESPEC)
 
 win32 {
-   HEADERS += ../../lsMisc/OpenCommon.h \
+    message("win32")
+    HEADERS += ../../lsMisc/OpenCommon.h \
             ../../lsMisc/GetLastErrorString.h
-   SOURCES += ../../lsMisc/OpenCommon.cpp \
+
+    SOURCES += ../../lsMisc/OpenCommon.cpp \
             ../../lsMisc/GetLastErrorString.cpp \
             osd_win32.cpp \
             ../../lsMisc/stdosd/SetPrority_win.cpp
 
     win32-g++ {
+        message("win32-g++")
         LIBS += -lshlwapi
     }
     win32-msvc* {
+        message("win32-msvc*")
 #       LIBS += Ole32.lib
     }
 }
 linux-g++ {
+    message("linux-g++")
+    DEFINES += "AMBIESOFT_FILENAME_CASESENSITIVE=\"1\""
+
     SOURCES += \
 			osd_linux.cpp \
 			../../lsMisc/stdosd/SetPrority_linux.cpp
