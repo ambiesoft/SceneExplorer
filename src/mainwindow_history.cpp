@@ -101,6 +101,13 @@ void MainWindow::OnTableItemChanged(QModelIndex newIndex, QModelIndex oldIndex)
 
     hisList_.OnItemChanged(id,movieFile);
 }
+
+void MainWindow::updateToolButton()
+{
+    ui->action_GoBack->setEnabled(hisList_.canGoBack());
+    ui->action_GoForward->setEnabled(hisList_.canGoForward());
+}
+
 void MainWindow::selectItem(const QString& movie)
 {
     Ambiesoft::BlockedBool bb(&bHistoryActivating_);
@@ -134,7 +141,11 @@ void MainWindow::on_action_GoBack_triggered()
 {
     if(bHistoryActivating_)
         return;
-    hisList_.OnGoBack();
+    if(hisList_.currentDbID()==getSelectedID())
+        hisList_.OnGoBack();
+    else
+        hisList_.OnGoLast();
+
 }
 
 void MainWindow::on_action_GoForward_triggered()
@@ -144,6 +155,12 @@ void MainWindow::on_action_GoForward_triggered()
     hisList_.OnGoForward();
 }
 
+void MainWindow::onClearHistory()
+{
+    if(bHistoryActivating_)
+        return;
+    hisList_.Clear();
+}
 void MainWindow::onArbitraryHistory()
 {
     if(bHistoryActivating_)
@@ -166,18 +183,48 @@ void MainWindow::onMenuHistory_AboutToShow()
     while(ui->menu_History->actions().count() > (nSepIndex+1))
         delete ui->menu_History->actions().takeAt(ui->menu_History->actions().count()-1);
 
+    int MAX_HISTORY_ON_MENU = 32;
+    int MAX_HISTORY_DISPLAY_LENGTH = 32;
+    int addedCount = 0;
     for(int i=hisList_.count()-1 ; i >=0; --i)
     {
         QAction* qa = new QAction();
-        qa->setText(QFileInfo(hisList_.getMovie(i)).fileName());
+        const QString movieFile = hisList_.getMovie(i);
+        QString dispText = QFileInfo(movieFile).fileName();
+        if(dispText.length() > MAX_HISTORY_DISPLAY_LENGTH)
+            dispText = dispText.left(MAX_HISTORY_ON_MENU) + " ...";
+
+#ifdef QT_DEBUG
+        dispText = QString("[%1] %2").arg(hisList_.getDbID(i)).arg(dispText);
+#endif
+
+        qa->setText(dispText);
         qa->setData(i);
         if(i==hisList_.current())
         {
-            qa->setCheckable(true);
-            qa->setChecked(true);
+            // if(hisList_.getDbID(i)==getSelectedID())
+            {
+                qa->setCheckable(true);
+                qa->setChecked(true);
+            }
         }
         connect(qa, &QAction::triggered,
                 this, &MainWindow::onArbitraryHistory);
+
+        QModelIndex tableIndex = proxyModel_->findIndex(movieFile,
+                                                        FileMissingFilterProxyModel::FIND_INDEX::FIND_INDEX_MOVIE);
+        qa->setEnabled(tableIndex.isValid());
+
         ui->menu_History->addAction(qa);
+        if(++addedCount > MAX_HISTORY_ON_MENU)
+            break;
     }
+
+    ui->menu_History->addSeparator();
+
+    QAction* qaClear = new QAction();
+    qaClear->setText(tr("&Clear"));
+    connect(qaClear, &QAction::triggered,
+            this, &MainWindow::onClearHistory);
+    ui->menu_History->addAction(qaClear);
 }

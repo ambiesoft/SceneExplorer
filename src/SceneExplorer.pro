@@ -27,6 +27,7 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     tablemodel.cpp \
+    tableproxymodel.cpp \
     taskffmpeg.cpp \
     taskgetdir.cpp \
     optiondialog.cpp \
@@ -79,6 +80,7 @@ HEADERS += \
         mainwindow.h \
     tablemodel.h \
     consts.h \
+    tableproxymodel.h \
     taskffmpeg.h \
     taskgetdir.h \
     optiondialog.h \

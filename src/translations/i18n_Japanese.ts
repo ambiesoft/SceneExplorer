@@ -780,7 +780,7 @@
     </message>
     <message>
         <source>Command line:</source>
-        <translation>コマンドライン：</translation>
+        <translation type="vanished">コマンドライン：</translation>
     </message>
     <message>
         <source>Failed to launch ffprobe or ffmpeg. (%1)</source>
@@ -1293,6 +1293,14 @@
     <message>
         <source>Go &amp;Forward</source>
         <translation>進む(&amp;F)</translation>
+    </message>
+    <message>
+        <source>Executable:</source>
+        <translation>実行ファイル:</translation>
+    </message>
+    <message>
+        <source>Argument:</source>
+        <translation>引数：</translation>
     </message>
 </context>
 <context>
@@ -2005,6 +2013,10 @@
     <message>
         <source>Set database directory &lt;directory&gt;.</source>
         <translation>データベースディレクトリを指定 &lt;directory&gt;</translation>
+    </message>
+    <message>
+        <source>document to open.</source>
+        <translation>開くドキュメント。</translation>
     </message>
 </context>
 </TS>

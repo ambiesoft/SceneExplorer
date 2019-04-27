@@ -250,11 +250,13 @@ void InsertUniqueTextToComboBox(QComboBox& combo, const QString& text)
 bool processCommandLine(QString* helpText)
 {
     QCommandLineParser parser;
-    parser.setApplicationDescription("SceneExplorer");
+    // parser.setApplicationDescription("SceneExplorer");
 
     QCommandLineOption helpOption = parser.addHelpOption();
     QCommandLineOption versionOption = parser.addVersionOption();
-    //    parser.addPositionalArgument("source", QCoreApplication::translate("main", "Source file to copy."));
+
+    parser.addPositionalArgument("document", QCoreApplication::translate("main", "document to open."));
+
     //    parser.addPositionalArgument("destination", QCoreApplication::translate("main", "Destination directory."));
 
     // A boolean option with a single name (-p)
@@ -274,23 +276,9 @@ bool processCommandLine(QString* helpText)
 
 
 
-    //    QStringList lll = QCoreApplication::arguments();
-    //    QString sss;
-    //    for(QString s: lll)
-    //    {
-    //        sss += s;
-    //        sss += "   ";
-    //    }
-    //    Alert(nullptr,"arg=" + sss);
 
     // Process the actual command line arguments given by the user
     parser.parse(QCoreApplication::arguments());
-
-    // const QStringList args = parser.positionalArguments();
-    // source is args.at(0), destination is args.at(1)
-
-    // bool showProgress = parser.isSet(showProgressOption);
-    // bool force = parser.isSet(forceOption);
 
     if(helpText != nullptr)
     {
@@ -451,22 +439,22 @@ bool isUUID(const QString& s)
     return rx.exactMatch(s);
 }
 
-std::wstring qToStdWString(const QString &str)
-{
-#ifdef _MSC_VER
-    return std::wstring((const wchar_t*)str.utf16());
-#else
-    return str.toStdWString();
-#endif
-}
-QString stdWToQString(const std::wstring &str)
-{
-#ifdef _MSC_VER
-    return QString::fromUtf16((const ushort*)str.c_str());
-#else
-    return QString::fromStdWString(str);
-#endif
-}
+//std::wstring qToStdWString(const QString &str)
+//{
+//#ifdef _MSC_VER
+//    return std::wstring((const wchar_t*)str.utf16());
+//#else
+//    return str.toStdWString();
+//#endif
+//}
+//QString stdWToQString(const std::wstring &str)
+//{
+//#ifdef _MSC_VER
+//    return QString::fromUtf16((const ushort*)str.c_str());
+//#else
+//    return QString::fromStdWString(str);
+//#endif
+//}
 
 bool IsSubDir(const QString& parent, const QString& child)
 {

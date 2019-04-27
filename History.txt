@@ -1,3 +1,6 @@
+2019/04/27　1.19.24
+Fix history, Scroll, and more
+
 2019/04/25 1.19.23
 DB could have duplicate entry due to case-sensitibity of windows
 

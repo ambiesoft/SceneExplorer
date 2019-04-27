@@ -7,6 +7,7 @@ void HistoryList::OnItemChanged(const qint64& id, const QString& movie)
     {
         list_.push_back(item);
         current_=0;
+        parent_->updateToolButton();
     }
     else
     {
@@ -15,14 +16,20 @@ void HistoryList::OnItemChanged(const qint64& id, const QString& movie)
         // Remove after current
         while( (current_+1) != list_.length())
             list_.removeLast();
-        current_ = list_.length()-1;
 
-        // if same skip
-        if(!list_.isEmpty() && list_.last()==item)
-            return;
+        do
+        {
+            current_ = list_.length()-1;
 
-        list_.push_back(item);
-        ++current_;
+            // if same skip
+            if(!list_.isEmpty() && list_.last()==item)
+                break;
+
+            list_.push_back(item);
+            ++current_;
+        } while(false);
+
+        parent_->updateToolButton();
     }
 }
 void HistoryList::OnGoBack()
@@ -37,6 +44,7 @@ void HistoryList::OnGoBack()
 
     HistoryItemType item = list_[current_];
     parent_->selectItem(item.second);
+    parent_->updateToolButton();
 }
 void HistoryList::OnGoForward()
 {
@@ -50,7 +58,17 @@ void HistoryList::OnGoForward()
 
     HistoryItemType item = list_[current_];
     parent_->selectItem(item.second);
+    parent_->updateToolButton();
 }
+void HistoryList::OnGoLast()
+{
+    current_ = list_.length()-1;
+    HistoryItemType item = list_[current_];
+    parent_->selectItem(item.second);
+    parent_->updateToolButton();
+}
+
+
 void HistoryList::doSelect(int index)
 {
     if(!(0 <= index && index < list_.length()))
@@ -58,4 +76,37 @@ void HistoryList::doSelect(int index)
 
     current_=index;
     parent_->selectItem(list_[index].second);
+    parent_->updateToolButton();
+}
+bool HistoryList::canGoBack() const
+{
+    if(list_.isEmpty())
+        return false;
+    if(current_ <= 0)
+        return false;
+    return true;
+}
+bool HistoryList::canGoForward() const
+{
+    if(list_.isEmpty())
+        return false;
+    if(current_ >= (list_.length()-1))
+        return false;
+    return true;
+}
+void HistoryList::Clear()
+{
+    list_.clear();
+    current_ = -1;
+    parent_->updateToolButton();
+}
+
+qint64 HistoryList::currentDbID() const
+{
+    Q_ASSERT(0 <= current() && current() < list_.length());
+
+    if(list_.isEmpty())
+        return -1;
+
+    return list_[current_].first;
 }

@@ -1,8 +1,9 @@
 *.sdf
 *.suo
+debugdir/
 prepare.bat
 prepare.bat.sample
-
+.*~
 out-*/
 
 .qmake.stash

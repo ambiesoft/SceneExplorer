@@ -29,6 +29,7 @@
 #include "../../lsMisc/blockedbool.h"
 
 #include "tablemodel.h"
+#include "tableproxymodel.h"
 #include "directoryentry.h"
 #include "directoryitem.h"
 #include "findcombobox.h"
@@ -93,7 +94,11 @@ public:
                         const QString& docToOpen);
     ~MainWindow();
 
+    // History's virtual function
     void selectItem(const QString& movie);
+    void updateToolButton();
+
+
     bool IsInitialized() const;
 
 private:
@@ -381,6 +386,7 @@ private slots:
     void on_action_Stop_triggered();
     void onUserDirectoryTriggered();
     void onArbitraryHistory();
+    void onClearHistory();
     void OnUserTagTriggered();
     void onMenuTag_AboutToShow();
     void onMenuDirectory_AboutToShow();
