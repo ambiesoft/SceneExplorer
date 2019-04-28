@@ -1,6 +1,6 @@
 # SceneExplorer
 
-SceneExplore explores video files by viewing its thumbnails.
+SceneExplore explores video files through thumbnails.
 
 ## Feature
 * You can explorers video files by viewing its thumbnails.
@@ -24,21 +24,21 @@ SceneExplorer needs FFmpeg and FFprove to create thumbnails. In windows distribu
 
 
 ## How to use
-### Add a folder(directory)
-You can add a folder from **[Folder]->[Add Folder]**.
+### Add a folder containing videos.
+Choose **[Folder]->[Add Folder]**.
 
 
 ### Creating thumbnails
 * From the folder pane, Right-click a folder and select **[Rescan to create thumbnails]**.
-* From the menu, select **[Task]->[start scan to create thumbnails...]** to start creating thumbnails.
+* Or from the menu, select **[Task]->[start scan to create thumbnails...]** to start creating thumbnails.
 
 ### View thumbnails
-From the folder pane, choose a folder to view its thumbnails. Clicking **[All]** shows all thumbnails and **[Missing]** shows thumbnails which original video files are missing.
+From the folder pane, choose a folder to show its thumbnails. Clicking **[All]** shows all thumbnails and **[Missing]** shows thumbnails which original video files are missing.
 
 ### Adding Tags
 Tags provide a useful way to group related videos together and tell what a video is about. Tags also make it easier to find your content. Tags are similar to but more specific than, directories. The use of tags is completely optional.
 
-You can create a new tag from **[Tag]->[Add New Tag...]** and it will be shown on Tag pane. If you select Tag,  tagged videoes will be shown.
+You can create a new tag from **[Tag]->[Add New Tag...]** and it will be shown on Tag pane. If you select Tag, tagged videoes will be shown.
 
 ## Files and Directories
 There are 3 types of path SceneExplorer uses.
@@ -56,13 +56,15 @@ This file holds Folders which user assigns. If you supply filename in command-li
 If you want to make SceneExplorer portable, follow these instructions.
 1. Launch **FolderConfig.exe** and select "Under this folder".
 2. Launch SceneExplorer.exe, open **option**, Check **Use custom database directory**, and enter **Database directory** as *${SCENEEXPLORER_ROOT}/db*.
-3. Create a document file in this directory.
-4. Create a *.bat file in the directory and write down the script as follow. This example launch **MyApp.scexd**.
+3. Or use command-line opton "-d" to specifiy the database directory.
+4. Create a document file in this directory.
+5. Create a *.bat file in the directory and write down the script as follow. This example launch **MyApp.scexd**.
 ```
 start "" %~dp0SceneExplorer.exe %~dp0MyApp.scexd
 ```
+6. Or create a shortcut file.
 
-See *Help -> About Documents* to confirm which files are read.
+See *Help -> About Documents* to confirm which files are used.
 
 ## Uninstall
 1. Select **[Help] -> [About Document]** and find which directory is used. 
@@ -70,7 +72,10 @@ See *Help -> About Documents* to confirm which files are read.
 
 
 ## Build
-### Windows
+### Windows (by QtCreator)
+Open 'src\SceneExplorer.pro' and build.
+
+### Windows (incomplete)
 Get the source and build tools by running the following command.
 ```
 git clone https://github.com/ambiesoft/distSolution.git
