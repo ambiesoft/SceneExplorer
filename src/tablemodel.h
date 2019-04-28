@@ -63,9 +63,7 @@ private:
     QMap<QString, TableItemDataPointer> mapsFullpathToItem_;
     mutable QMap<QString, QVariant> mapPixmaps_;
     ImageCacheType imagecache_;
-
     bool bShowMissing_ = false;
-
     QTableView* parent_;
     IMainWindow* mainWindow_;
 
@@ -90,8 +88,7 @@ public:
         ID,
     };
     TableModel(QTableView *parent, IMainWindow* mainWindow);
-    void AppendData(TableItemDataPointer pItemData, const bool enableUpdate = true);
-    // void AppendDatas(const QList<TableItemData*>&v);
+    void AppendData(const TableItemDataPointer& pItemData, const bool enableUpdate = true);
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override ;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;

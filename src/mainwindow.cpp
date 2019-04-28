@@ -1339,15 +1339,19 @@ void MainWindow::on_action_Top_triggered()
 {
     WaitingCursor wc;
     ui->tableView->scrollToTop();
+    OnTableViewScrollChanged(-1);
 }
 
 void MainWindow::on_action_Bottom_triggered()
 {
+    // TODO: not working
     WaitingCursor wc;
-    proxyModel_->ensureBottom();
-    QApplication::processEvents();
+    // proxyModel_->ensureBottom();
     ui->tableView->scrollToBottom();
 
+    OnTableViewScrollChanged(std::numeric_limits<int>::max());
+    QApplication::processEvents();
+    OnTableViewScrollChanged(std::numeric_limits<int>::max());
     QApplication::processEvents();
     ui->tableView->scrollToBottom();
 }

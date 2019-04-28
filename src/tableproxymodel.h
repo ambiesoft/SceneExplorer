@@ -13,7 +13,7 @@ public:
             int sourceRow,
             const QModelIndex &sourceParent) const;
 
-    void ensureBottom();
+    // void ensureBottom();
     void ensureIndex(const QModelIndex& mi);
     int GetItemCount() const {
         return rowCount()/3;

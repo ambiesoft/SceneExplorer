@@ -1,3 +1,6 @@
+2019/04/27　1.19.25
+Incomplete (scroll to bottom with hiding missing item)
+
 2019/04/27　1.19.24
 Fix history, Scroll, and more
 

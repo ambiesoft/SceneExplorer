@@ -73,19 +73,26 @@ void MainWindow::OnTableViewScrollChanged(int pos)
 {
 //    if(tableModel_->GetImageCache() != ImageCacheType::IC_NEVER)
 //        return;
+//    QAbstractItemModel* sourceModel = proxyModel_->sourceModel();
+//    Q_ASSERT(proxyModel==proxyModel_);
 
     QModelIndex indexTop = ui->tableView->indexAt(ui->tableView->rect().topLeft());
     QModelIndex indexBottom = ui->tableView->indexAt(ui->tableView->rect().bottomLeft());
     int rowCountPerScreen = indexBottom.row()-indexTop.row()+1;
 
+    static auto func = [&](int i){
+//        QModelIndex indexProxy = proxyModel_->index(i,0);
+//        QModelIndex indexSource = proxyModel_->mapToSource(indexProxy);
+//        tableModel_->data(indexSource, Qt::DecorationRole);
+//        tableModel_->data(indexSource, Qt::DisplayRole);
+        tableModel_->data(tableModel_->index(i,0), Qt::DecorationRole);
+        tableModel_->data(tableModel_->index(i,0), Qt::DisplayRole);
+    };
     int top = qMax(0, indexTop.row()-rowCountPerScreen);
     int topEnd = pos < 0 ? indexBottom.row() : indexTop.row();
     for(int i=top ; i <= topEnd; ++i)
     {
-        QModelIndex mi = proxyModel_->index(i,0);
-        proxyModel_->data(mi, Qt::DecorationRole);
-        proxyModel_->data(mi, Qt::DisplayRole);
-        // ui->tableView->resizeRowToContents(mi.row());
+        func(i);
     }
 
 
@@ -93,9 +100,10 @@ void MainWindow::OnTableViewScrollChanged(int pos)
     int maxBottom = rowBottom + rowCountPerScreen; // upto next page
     for(int i=rowBottom; i < maxBottom; ++i)
     {
-        QModelIndex mi = proxyModel_->index(i,0);
-        proxyModel_->data(mi, Qt::DecorationRole);
-        proxyModel_->data(mi, Qt::DisplayRole);
+        func(i);
+//        QModelIndex mi = proxyModel->index(i,0);
+//        proxyModel->data(mi, Qt::DecorationRole);
+//        proxyModel->data(mi, Qt::DisplayRole);
         // ui->tableView->resizeRowToContents(mi.row());
     }
 }

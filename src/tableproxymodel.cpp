@@ -14,21 +14,27 @@ bool FileMissingFilterProxyModel::filterAcceptsRow(
     QString s = v.toString();
     return QFile(s).exists();
 }
-void FileMissingFilterProxyModel::ensureBottom()
-{
-    int allcount = rowCount();
-    int startI = allcount-(3*10);
-    if (startI < 0)
-        return;
-    for(int i=startI; i < allcount; ++i)
-    {
-        sourceModel()->data(sourceModel()->index(i,0),Qt::DecorationRole);
-        sourceModel()->data(sourceModel()->index(i,1),Qt::DecorationRole);
-        sourceModel()->data(sourceModel()->index(i,2),Qt::DecorationRole);
-        sourceModel()->data(sourceModel()->index(i,3),Qt::DecorationRole);
-        sourceModel()->data(sourceModel()->index(i,4),Qt::DecorationRole);
-    }
-}
+//void FileMissingFilterProxyModel::ensureBottom()
+//{
+//    int allcount = rowCount();
+//    int startProxyI = allcount-(3*10);
+//    if (startProxyI < 0)
+//        return;
+
+//    for(int i=startProxyI; i < allcount; ++i)
+//    {
+//        for(int col = 0 ; col < 5; ++col)
+//        {
+//            QModelIndex sourceIndex = mapToSource(index(i,col));
+//            sourceModel()->data(sourceIndex,Qt::DecorationRole);
+//            sourceModel()->data(sourceIndex,Qt::DisplayRole);
+//        }
+////        sourceModel()->data(sourceModel()->index(i,1),Qt::DecorationRole);
+////        sourceModel()->data(sourceModel()->index(i,2),Qt::DecorationRole);
+////        sourceModel()->data(sourceModel()->index(i,3),Qt::DecorationRole);
+////        sourceModel()->data(sourceModel()->index(i,4),Qt::DecorationRole);
+//    }
+//}
 void FileMissingFilterProxyModel::ensureIndex(const QModelIndex& mi)
 {
     int startI = mi.row();
@@ -39,7 +45,10 @@ void FileMissingFilterProxyModel::ensureIndex(const QModelIndex& mi)
     int endI = mi.row() + 10;
     if(endI >= rowCount())
         endI = rowCount();
-    for(int i=startI; i < endI; ++i)
+
+    int startSourceI = mapToSource(index(startI,0)).row();
+    int endSourceI = mapToSource(index(endI,0)).row();
+    for(int i=startSourceI; i < endSourceI; ++i)
     {
         sourceModel()->data(sourceModel()->index(i,0),Qt::DecorationRole);
         sourceModel()->data(sourceModel()->index(i,1),Qt::DecorationRole);

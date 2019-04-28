@@ -47,7 +47,7 @@ TableModel::TableModel(QTableView *parent, IMainWindow* mainWindow)
 {
 
 }
-void TableModel:: AppendData(TableItemDataPointer pItemData, const bool enableUpdate)
+void TableModel:: AppendData(const TableItemDataPointer& pItemData, const bool enableUpdate)
 {
     if(enableUpdate)
     {
@@ -72,9 +72,6 @@ void TableModel:: AppendData(TableItemDataPointer pItemData, const bool enableUp
     parent_->setSpan(newRowFilename,0,1,columnCountImage_);
     parent_->setSpan(newRowInfo,0,1,columnCountImage_);
 
-    // parent_->resizeRowsToContents();
-
-
     if(!initColumnWidth_)
     {
         initColumnWidth_=true;
@@ -84,8 +81,8 @@ void TableModel:: AppendData(TableItemDataPointer pItemData, const bool enableUp
         }
     }
 
-
-    emit itemCountChanged();
+    if(enableUpdate)
+        emit itemCountChanged();
 
     // parent_->setRowHeight(newRowImage, THUMB_HEIGHT);
 //    setData(index(newRowImage,0), QSize(THUMB_WIDTH, THUMB_HEIGHT), Qt::SizeHintRole);
@@ -98,24 +95,16 @@ void TableModel::ResetData(const QList<TableItemDataPointer>& all)
     beginResetModel();
     ClearData();
 
-
-    parent_->scrollToTop();
-
-
-    for(int i=0;i < all.count(); ++i)
+    for(auto&& item : all)
     {
-        AppendData(all[i], false);
+        AppendData(item, false);
     }
 
-    //    beginInsertRows(QModelIndex(),
-    //                    0,
-    //                    (itemDatas_.count()*RowCountPerEntry)+RowCountPerEntry-1);
-
-    //    endInsertRows();
-    //Sort_obsolete(GetSortColumn(), GetSortReverse());
     endResetModel();
     emit itemCountChanged();
     StartImageTimer();
+
+    parent_->scrollToTop();
 }
 
 int TableModel::rowCount(const QModelIndex & /*parent*/) const
