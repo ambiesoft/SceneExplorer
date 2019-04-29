@@ -116,7 +116,7 @@ bool MainWindow::OpenDocument(const QString& file, const bool bExists)
         return false;
     }
 
-    qDebug() << "Document Opened: " << file;
+    qDebug() << "Document Opened: " << file << __FUNCTION__;
     recents_.removeDuplicates();
     recents_.removeOne(file);
     recents_.insert(0, file);

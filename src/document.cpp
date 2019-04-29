@@ -61,7 +61,7 @@ bool Document::Load(const QString& file, const bool bMustExists)
         return false;
     }
 
-    qDebug() << "Start opening document " << file;
+    qDebug() << "Start opening document " << file << __FUNCTION__;
 
     if(docSql_)
         delete docSql_;

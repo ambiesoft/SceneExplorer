@@ -85,7 +85,7 @@
 
 void MainWindow::on_tableView_activated(const QModelIndex &index)
 {
-    qDebug() << "activated" << index;
+    qDebug() << "activated" << index << __FUNCTION__;
 }
 
 void MainWindow::OnTableItemChanged(QModelIndex newIndex, QModelIndex oldIndex)

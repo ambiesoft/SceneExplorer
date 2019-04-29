@@ -106,7 +106,7 @@ void MoveToTrashImpl( QString file ){
     fileop.fFlags = FOF_ALLOWUNDO | FOF_NOCONFIRMATION | FOF_NOERRORUI | FOF_SILENT;
     int rv = SHFileOperation( &fileop );
     if( 0 != rv ){
-        qDebug() << rv << QString::number( rv ).toInt( nullptr, 8 );
+        qDebug() << rv << QString::number( rv ).toInt( nullptr, 8 ) << __FUNCTION__;
         throw ErrorInfoException( QObject::tr("move to trash failed" ));
     }
 }

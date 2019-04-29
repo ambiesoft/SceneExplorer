@@ -408,7 +408,7 @@ MainWindow::MainWindow(QWidget *parent,
 
     // recents
     recents_ = settings_.valueStringList(KEY_RECENT_OPENDOCUMENTS);
-    qDebug() << "recents" << recents_;
+    qDebug() << "recents" << recents_ << __FUNCTION__;
 
 
     if(!docToOpen.isEmpty())

@@ -119,7 +119,7 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
 
             TableItemDataPointer itemData = itemDatas_[actualIndex];
             if(!itemData->isDisplayed())
-                qDebug() << "Image DecorationRoll First: Index=" << index.row();
+                qDebug() << "Image DecorationRoll First: Index=" << index.row() << __FUNCTION__;
             itemData->setDisplayed();
 
             parent_->setColumnWidth(index.row(), THUMB_WIDTH);

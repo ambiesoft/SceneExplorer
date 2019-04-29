@@ -107,7 +107,7 @@ DocumentSql::DocumentSql(const QString& file) :
         QSqlDatabase db(QSqlDatabase::addDatabase("QSQLITE",getDBConnection()));
 
 
-        qDebug() << db.databaseName();
+        qDebug() << db.databaseName() << __FUNCTION__;
 
         db.setDatabaseName(file);
         if (!db.open() || !db.isOpen() || !db.isValid())
@@ -129,20 +129,20 @@ DocumentSql::DocumentSql(const QString& file) :
                "lastcolumn INT NOT NULL DEFAULT '0'"
                ")"
                );
-        qDebug() << q.lastError().text();
+        qDebug() << q.lastError().text() << __FUNCTION__;
         q.exec("ALTER TABLE Settings ADD COLUMN alltagselected INT NOT NULL DEFAULT '0'");
-        qDebug() << q.lastError().text();
+        qDebug() << q.lastError().text() << __FUNCTION__;
         q.exec("ALTER TABLE Settings ADD COLUMN notagstagselected INT NOT NULL DEFAULT '0'");
-        qDebug() << q.lastError().text();
+        qDebug() << q.lastError().text() << __FUNCTION__;
         {
             // Create record 1
             q.exec("SELECT id FROM Settings WHERE id=1");
             q.exec();
-            qDebug() << q.lastError().text();
+            qDebug() << q.lastError().text() << __FUNCTION__;
             if(!q.next())
             {
                 q.exec("INSERT INTO Settings (id) VALUES (1)");
-                qDebug() << q.lastError().text();
+                qDebug() << q.lastError().text() << __FUNCTION__;
             }
         }
 
@@ -162,7 +162,7 @@ DocumentSql::DocumentSql(const QString& file) :
                "selected INT,"
                "checked INT)"
                );
-        qDebug() << q.lastError().text();
+        qDebug() << q.lastError().text() << __FUNCTION__;
 
         q.exec("SELECT name FROM sqlite_master WHERE type='table' AND name='Directories';");
         q.next();
@@ -180,9 +180,9 @@ DocumentSql::DocumentSql(const QString& file) :
                "lastaccess INT,"
                "dbid TEXT NOT NULL)"
                );
-        qDebug() << q.lastError().text();
+        qDebug() << q.lastError().text() << __FUNCTION__;
         q.exec("CREATE UNIQUE INDEX idx_Access_id_dbid ON Access(id,dbid)");
-        qDebug() << q.lastError().text();
+        qDebug() << q.lastError().text() << __FUNCTION__;
         q.exec("SELECT name FROM sqlite_master WHERE type='table' AND name='Access';");
         q.next();
         if("Access" != q.value("name").toString())
@@ -198,9 +198,9 @@ DocumentSql::DocumentSql(const QString& file) :
                "yomi,"
                "dbid TEXT NOT NULL)"
                );
-        qDebug() << q.lastError().text();
+        qDebug() << q.lastError().text() << __FUNCTION__;
         q.exec("CREATE UNIQUE INDEX idx_Tag_tagid_dbid ON Tag(tagid,dbid)");
-        qDebug() << q.lastError().text();
+        qDebug() << q.lastError().text() << __FUNCTION__;
         q.exec("ALTER TABLE Tag ADD COLUMN selected INT NOT NULL DEFAULT '0'");
         q.exec("ALTER TABLE Tag ADD COLUMN checked INT NOT NULL DEFAULT '0'");
 
@@ -217,9 +217,9 @@ DocumentSql::DocumentSql(const QString& file) :
                "tagid INTEGER NOT NULL,"
                "dbid TEXT NOT NULL)"
                );
-        qDebug() << q.lastError().text();
+        qDebug() << q.lastError().text() << __FUNCTION__;
         q.exec("CREATE UNIQUE INDEX idx_Tagged_id_tagid_dbid ON Tagged(id,tagid,dbid)");
-        qDebug() << q.lastError().text();
+        qDebug() << q.lastError().text() << __FUNCTION__;
         q.exec("SELECT name FROM sqlite_master WHERE type='table' AND name='Tagged';");
         q.next();
         if("Tagged" != q.value("name").toString())
@@ -308,7 +308,7 @@ bool DocumentSql::setDirNormalItemState(const DirectoryItem* item)
     query.bindValue(i++, item->IsCheckedInt());
     query.bindValue(i++, item->dirid());
     SQC(query,exec());
-    qDebug() << query.numRowsAffected();
+    qDebug() << query.numRowsAffected() << __FUNCTION__;
     return true;
 }
 bool DocumentSql::isDirAllChecked() const

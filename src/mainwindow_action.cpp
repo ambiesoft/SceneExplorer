@@ -266,7 +266,7 @@ void MainWindow::onMenuTag_AboutToShow()
 }
 void MainWindow::onMenuTask_AboutToShow()
 {
-    qDebug() << "gPaused" << gPaused;
+    qDebug() << "gPaused" << gPaused << __FUNCTION__;
     ui->action_Pause->setChecked(gPaused);
 }
 

@@ -62,7 +62,7 @@ void MoveToTrashImpl( QString file ){
         QStringList paths;
         const char* xdg_data_home = getenv( "XDG_DATA_HOME" );
         if( xdg_data_home ){
-            qDebug() << "XDG_DATA_HOME not yet tested";
+            qDebug() << "XDG_DATA_HOME not yet tested" << __FUNCTION__;
             QString xdgTrash( xdg_data_home );
             paths.append( xdgTrash + "/Trash" );
         }

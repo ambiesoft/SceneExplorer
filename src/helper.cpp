@@ -354,7 +354,7 @@ QSqlQuery myPrepare(const QString& sql)
     QSqlQuery q;
     if(!q.prepare(sql))
     {
-        qDebug() << q.lastError();
+        qDebug() << q.lastError() << __FUNCTION__;
         Q_ASSERT(false);
         return q;
     }
@@ -497,12 +497,12 @@ QStringList RemoveDuplicateSubDirectory(const QStringList& sources, QStringList&
                             QString c = QFileInfo(s).canonicalFilePath();
                             if(c == secondLoopElem)
                             {
-                                qDebug() << "removed " << s << "(" << c << ")";
+                                qDebug() << "removed " << s << "(" << c << ")" << __FUNCTION__;
                                 removedRet.append(s);
 
-                                qDebug() << "results " << results;
+                                qDebug() << "results " << results << __FUNCTION__;
                                 results.removeOne(s);
-                                qDebug() << "results " << results;
+                                qDebug() << "results " << results << __FUNCTION__;
                                 return;
                             }
                         }
@@ -514,4 +514,69 @@ QStringList RemoveDuplicateSubDirectory(const QStringList& sources, QStringList&
     }
 
     return results;
+}
+
+
+// http://comments.gmane.org/gmane.comp.lib.qt.general/34914
+QString size_human(const qint64& size)
+{
+    float num = size;
+    static const QStringList list{ "KB", "MB", "GB", "TB"};
+
+    QStringListIterator i(list);
+    QString unit("bytes");
+
+    while(num >= FLOAT1024 && i.hasNext())
+    {
+        unit = i.next();
+        num /= FLOAT1024;
+    }
+    return QString().setNum(num,'f',2)+ unit;
+}
+
+QString filetime_human(const qint64& filetime)
+{
+    QDateTime qdt = QDateTime::fromTime_t(filetime);
+    return doublequoteIfNecessary(qdt.toString(Qt::DateFormat::DefaultLocaleShortDate));
+}
+QString duration_human(double duration)
+{
+    int iduration = (int)(duration);
+
+    int hour = iduration/3600;
+    int minutes = (iduration%3600)/60;
+    int seconds = iduration%60;
+
+    return
+            QString("%1").arg((int)hour, 2, 10, QChar('0')) + ":"+
+            QString("%1").arg((int)minutes, 2, 10, QChar('0'))+":"+
+            QString("%1").arg((int)seconds, 2, 10, QChar('0'));
+
+}
+QString format_human(const QString& s)
+{
+    return s.split(',')[0];
+}
+QString bitrate_human(int bitrate)
+{
+    float num = bitrate;
+    static const QStringList list{"kb/s","mb/s","gb/s","tb/s"};
+
+    QStringListIterator i(list);
+    QString unit("bytes");
+
+    while(num >= FLOAT1000 && i.hasNext())
+    {
+        unit = i.next();
+        num /= FLOAT1000;
+    }
+    return QString().setNum(num,'f',2)+ unit;
+}
+QString resolution_human(int width, int height)
+{
+    return QString::number(width) + "x" + QString::number(height);
+}
+QString opencount_human(int count)
+{
+    return QString::number(count);
 }

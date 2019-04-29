@@ -993,7 +993,7 @@ void MainWindow::OnContextExternalTools()
     //    arg << movieFile;
 
 
-    qDebug() << __FUNCTION__ << exe << " " << argparsed;
+    qDebug() << __FUNCTION__ << exe << " " << argparsed << __FUNCTION__;
     if(!StartProcessDetached(exe,argparsed))
     {
         QString message;

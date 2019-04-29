@@ -72,4 +72,17 @@ bool IsSubDir(const QString& parent, const QString& child);
 QStringList RemoveDuplicateSubDirectory(const QStringList& sources, QStringList& removed);
 
 
+
+// http://comments.gmane.org/gmane.comp.lib.qt.general/34914
+QString size_human(const qint64& size);
+QString filetime_human(const qint64& filetime);
+QString duration_human(double duration);
+QString format_human(const QString& s);
+QString bitrate_human(int bitrate);
+QString resolution_human(int width, int height);
+QString opencount_human(int count);
+
+
+
+
 #endif // HELPER_H

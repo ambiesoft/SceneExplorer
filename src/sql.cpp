@@ -136,7 +136,7 @@ Sql::Sql() : db_(QSqlDatabase::addDatabase("QSQLITE"))
         QString sql ="INSERT OR REPLACE INTO DbInfo (id, dbid) VALUES (1, '" + dbid_ + "')";
         if(!query.exec(sql))
         {
-            qDebug() << query.lastError().text();
+            qDebug() << query.lastError().text() << __FUNCTION__;
             lastError_ = query.lastError().text();
             return;
         }
@@ -159,7 +159,7 @@ Sql::Sql() : db_(QSqlDatabase::addDatabase("QSQLITE"))
                "vwidth INT NOT NULL DEFAULT '0',"
                "vheight INT NOT NULL DEFAULT '0')"
                );
-    qDebug() << query.lastError().text();
+    qDebug() << query.lastError().text() << __FUNCTION__;
     //query.exec("ALTER TABLE FileInfo Add lastaccess");
 
     query.exec("CREATE INDEX idx_directory ON FileInfo(directory)");
@@ -171,11 +171,11 @@ Sql::Sql() : db_(QSqlDatabase::addDatabase("QSQLITE"))
     //    query.exec("ALTER TABLE FileInfo Add opencount_tmp INT");
     //    query.exec("ALTER TABLE FileInfo Add lastaccess_tmp INT");
     query.exec("ALTER TABLE FileInfo Add thumbext");
-    qDebug() << query.lastError().text();
+    qDebug() << query.lastError().text() << __FUNCTION__;
 
 #ifdef QT__DEBUG
     for (int i = 0; i < db_.tables().count(); i ++) {
-        qDebug() << db_.tables().at(i);
+        qDebug() << db_.tables().at(i) << __FUNCTION__;
     }
 #endif
 
@@ -191,7 +191,7 @@ Sql::Sql() : db_(QSqlDatabase::addDatabase("QSQLITE"))
         if(!col.endsWith("_tmp"))
             allColumns_.append(col);
     }
-    qDebug() << allColumns_;
+    qDebug() << allColumns_ << __FUNCTION__;
 
 
     if(version != DBVERSION)
@@ -274,7 +274,7 @@ QSqlQuery* Sql::getDeleteFromDirectoryName()
     if(!pQDeleteFromDirectoryName_->prepare("delete from FileInfo where "
                                             "directory=? and name=?"))
     {
-        qDebug() << pQDeleteFromDirectoryName_->lastError();
+        qDebug() << pQDeleteFromDirectoryName_->lastError() << __FUNCTION__;
         Q_ASSERT(false);
         return nullptr;
     }
@@ -357,12 +357,12 @@ QSqlQuery* Sql::getInsertQuery(TableItemDataPointer tid)
         //        getAllColumns(true,false) +
         //        "values "+
         //        getAllColumns(true,true);
-        qDebug() << preparing;
+        qDebug() << preparing << __FUNCTION__;
 
 
         if(!pQInsert_->prepare(preparing))
         {
-            qDebug() << pQInsert_->lastError() << preparing;
+            qDebug() << pQInsert_->lastError() << preparing << __FUNCTION__;
             Q_ASSERT(false);
             return nullptr;
         }
@@ -415,7 +415,7 @@ qint64 Sql::AppendData(TableItemDataPointer tid)
 
     if(!pQInsert->exec())
     {
-        qDebug() << pQInsert->lastError();
+        qDebug() << pQInsert->lastError() << __FUNCTION__;
         return SQL_EXEC_FAILED;
     }
     tid->setID(pQInsert->lastInsertId().toLongLong());
@@ -430,7 +430,7 @@ QSqlQuery* Sql::getGetInfoQuery()
     if(!pQGetInfo_->prepare("SELECT * FROM FileInfo WHERE "
                             "size=? and directory=? and name=? and salient=? and ctime=? and wtime=?"))
     {
-        qDebug() << pQGetInfo_->lastError();
+        qDebug() << pQGetInfo_->lastError() << __FUNCTION__;
         Q_ASSERT(false);
         return nullptr;
     }
@@ -494,7 +494,7 @@ int Sql::filterWithEntry(const QString& movieDir,
     if(!query.prepare("select size,name,salient from FileInfo where "
                       "directory=?"))
     {
-        qDebug() << pQGetInfo_->lastError();
+        qDebug() << pQGetInfo_->lastError() << __FUNCTION__;
         Q_ASSERT(false);
         return SQL_PREPARE_FAILED;
     }
@@ -654,7 +654,7 @@ int Sql::hasThumb(const QString& movieFile)
     pGetInfo->bindValue(i++, wtime);
     if(!pGetInfo->exec())
     {
-        qDebug() << pGetInfo->lastError();
+        qDebug() << pGetInfo->lastError() << __FUNCTION__;
         return SQL_EXEC_FAILED;
     }
     while (pGetInfo->next())
@@ -737,7 +737,7 @@ int Sql::RemoveEntryFromThumbID(const QString& thumbid)
     query.bindValue(i++, thumbid);
     if(!query.exec())
     {
-        qDebug() << query.lastError();
+        qDebug() << query.lastError() << __FUNCTION__;
         return SQL_EXEC_FAILED;
     }
     return 0;
@@ -905,7 +905,7 @@ bool Sql::GetAllSqlString(
 
         AppendSortArg(sql, sortby, sortrev);
         AppendLitmiArg(sql, limit);
-        qDebug() << sql;
+        qDebug() << sql << __FUNCTION__;
         SQC(query, prepare(sql));
 
         int bindIndex;

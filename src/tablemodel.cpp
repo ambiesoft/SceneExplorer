@@ -24,6 +24,7 @@
 #include <QTableView>
 #include <QColor>
 #include <QSharedPointer>
+#include <QString>
 #include <QMap>
 #include <QDateTime>
 #include <QRegExp>
@@ -127,69 +128,6 @@ int TableModel::columnCount(const QModelIndex & /*parent*/) const
     return columnCountImage_;
 }
 
-// http://comments.gmane.org/gmane.comp.lib.qt.general/34914
-QString size_human(const qint64& size)
-{
-    float num = size;
-    static const QStringList list{ "KB", "MB", "GB", "TB"};
-
-    QStringListIterator i(list);
-    QString unit("bytes");
-
-    while(num >= FLOAT1024 && i.hasNext())
-    {
-        unit = i.next();
-        num /= FLOAT1024;
-    }
-    return QString().setNum(num,'f',2)+ unit;
-}
-
-QString filetime_human(const qint64& filetime)
-{
-    QDateTime qdt = QDateTime::fromTime_t(filetime);
-    return doublequoteIfNecessary(qdt.toString(Qt::DateFormat::DefaultLocaleShortDate));
-}
-QString duration_human(double duration)
-{
-    int iduration = (int)(duration);
-
-    int hour = iduration/3600;
-    int minutes = (iduration%3600)/60;
-    int seconds = iduration%60;
-
-    return
-            QString("%1").arg((int)hour, 2, 10, QChar('0')) + ":"+
-            QString("%1").arg((int)minutes, 2, 10, QChar('0'))+":"+
-            QString("%1").arg((int)seconds, 2, 10, QChar('0'));
-
-}
-QString format_human(const QString& s)
-{
-    return s;
-}
-static QString bitrate_human(int bitrate)
-{
-    float num = bitrate;
-    static const QStringList list{"kb/s","mb/s","gb/s","tb/s"};
-
-    QStringListIterator i(list);
-    QString unit("bytes");
-
-    while(num >= FLOAT1000 && i.hasNext())
-    {
-        unit = i.next();
-        num /= FLOAT1000;
-    }
-    return QString().setNum(num,'f',2)+ unit;
-}
-static QString resolution_human(int width, int height)
-{
-    return QString::number(width) + "x" + QString::number(height);
-}
-static QString opencount_human(int count)
-{
-    return QString::number(count);
-}
 QString TableModel::GetTitleText(TableItemDataPointer item) const
 {
     return ExtractInfoText(item, titleTemplate_);
@@ -642,7 +580,7 @@ void TableModel::timerEvent(QTimerEvent *event)
         {
             imageInterval_ += 10;
         }
-        qDebug() << "Image Timer Interval" << imageInterval_;
+        qDebug() << "Image Timer Interval" << imageInterval_ << __FUNCTION__;
         lastTenTick.clear();
         imageElapsedTimer_.invalidate();
         imageElapsedTimer_.start();
@@ -653,7 +591,7 @@ void TableModel::timerEvent(QTimerEvent *event)
 
     QModelIndex index = suspendImageIndexes_.pop();
     qDebug() << QString("TableModel timer row=%1, col=%2, count=%3").arg(index.row()).arg(index.column()).
-                arg(suspendImageIndexes_.count());
+                arg(suspendImageIndexes_.count()) << __FUNCTION__;
 
     const int actualIndex = index.row()/RowCountPerEntry;
 
@@ -680,11 +618,11 @@ void TableModel::StartImageTimer()
     Q_ASSERT(0 < imageInterval_);
     timerID_ = startTimer(imageInterval_);
     imageElapsedTimer_.start();
-    qDebug() << QString("Timer %1 started").arg(timerID_);
+    qDebug() << QString("Timer %1 started").arg(timerID_) << __FUNCTION__;
 }
 void TableModel::KillImageTimer()
 {
-    qDebug() << QString("Timer %1 killed").arg(timerID_);
+    qDebug() << QString("Timer %1 killed").arg(timerID_) << __FUNCTION__;
     killTimer(timerID_);
     timerID_=0;
 }

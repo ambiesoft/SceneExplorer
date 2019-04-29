@@ -19,9 +19,9 @@
 // Visual Leak Detector
 // #include <vld.h>
 
+#include <QCoreApplication>
 #include <QApplication>
 #include <QSettings>
-
 #include <QStandardPaths>
 #include <QDir>
 #include <QMessageBox>
@@ -56,8 +56,9 @@ using namespace AmbiesoftQt;
 static void testSQL()
 {
 	// These must be compile error
-	// APPNAME[0] = 'a';
-	// memset(APPNAME, 0, 1);
+    // APPNAME[0] = 'a';
+    // memset(APPNAME, 0, 1);
+    Q_ASSERT(format_human("")=="");
 
     Q_ASSERT(isThumbFileName("58c4d22e-8b8b-4773-9fac-80a69a8fa880-5.jpg"));
     Q_ASSERT(isThumbFileName("58c4d22e-AAAA-4773-9fac-80a69a8fa880-5.jpg"));
@@ -86,7 +87,7 @@ static void testSQL()
     Q_ASSERT(gpSQL->RemoveAllMissingEntries(dir));
 
     // prepare actual file for not causing assert.
-    qDebug() << "Test file is " << pathCombine(dir,file);
+    qDebug() << "Test file is " << pathCombine(dir,file) << __FUNCTION__;
     {
         QFile f(pathCombine(dir,file));
         Q_ASSERT(f.open(QFile::WriteOnly));
@@ -127,11 +128,11 @@ static void testSQL()
     // insert same tid and check same id
     gpSQL->AppendData(tid);
     qint64 id1 = tid->getID();
-    qDebug() << "InsertedID=" << id1;
+    qDebug() << "InsertedID=" << id1 << __FUNCTION__;
 
     gpSQL->AppendData(tid);
     qint64 id2 = tid->getID();
-    qDebug() << "InsertedID=" << id2;
+    qDebug() << "InsertedID=" << id2 << __FUNCTION__;
 
     Q_ASSERT(id1==id2);
 
@@ -163,7 +164,7 @@ bool OpenDatabaseDirectory(const QString& dbDir)
         return false;
     }
 
-    qDebug() << "Current Directory =" << dbDir;
+    qDebug() << "Current Directory =" << dbDir << __FUNCTION__;
 
     // create and check thumbs dir
     QDir(".").mkdir(FILEPART_THUMBS);
@@ -299,7 +300,7 @@ int main2(int argc, char *argv[], QApplication& theApp)
             Q_ASSERT(false);
             break;
         }
-        qDebug() << "Qt language" << qti18nFile;
+        qDebug() << "Qt language" << qti18nFile << __FUNCTION__;
         if(qtTranslator.load(qti18nFile,
                              QLibraryInfo::location(QLibraryInfo::TranslationsPath)))
         {
@@ -355,7 +356,7 @@ int main2(int argc, char *argv[], QApplication& theApp)
         return 0;
     }
 
-    qDebug () << "CurrentStyle: " << QApplication::style()->objectName();
+    qDebug () << "CurrentStyle: " << QApplication::style()->objectName() << __FUNCTION__;
 
     // style:  "windows", "windowsvista", "fusion", or "macintosh".
     QString style = settings->valueString(KEY_STYLE);

@@ -43,8 +43,16 @@ if not exist %FFCEXE% (
   echo %FFCEXE% not found. Check the directory.
   goto :error
 )
+if %FFMPEGSOURCEDIR%x==x (
+  echo FFMPEGSOURCEDIR not defined.
+  goto :error
+)
 if not exist %FFMPEGSOURCEDIR%\ (
   echo %FFMPEGSOURCEDIR% not found. Check the directory.
+  goto :error
+)
+if %FOLDERCONFIGDIR%x==x (
+  echo FOLDERCONFIGDIR not defined.
   goto :error
 )
 if not exist %FOLDERCONFIGDIR%\ (
