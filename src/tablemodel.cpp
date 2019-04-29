@@ -131,18 +131,17 @@ int TableModel::columnCount(const QModelIndex & /*parent*/) const
 QString size_human(const qint64& size)
 {
     float num = size;
-    QStringList list;
-    list << "KB" << "MB" << "GB" << "TB";
+    static const QStringList list{ "KB", "MB", "GB", "TB"};
 
     QStringListIterator i(list);
     QString unit("bytes");
 
-    while(num >= 1024.0 && i.hasNext())
+    while(num >= FLOAT1024 && i.hasNext())
     {
         unit = i.next();
-        num /= 1024.0;
+        num /= FLOAT1024;
     }
-    return QString().setNum(num,'f',2)+ "" +unit;
+    return QString().setNum(num,'f',2)+ unit;
 }
 
 QString filetime_human(const qint64& filetime)
@@ -164,22 +163,24 @@ QString duration_human(double duration)
             QString("%1").arg((int)seconds, 2, 10, QChar('0'));
 
 }
-
+QString format_human(const QString& s)
+{
+    return s;
+}
 static QString bitrate_human(int bitrate)
 {
     float num = bitrate;
-    QStringList list;
-    list << "kb/s" << "mb/s" << "gb/s" << "tb/s";
+    static const QStringList list{"kb/s","mb/s","gb/s","tb/s"};
 
     QStringListIterator i(list);
     QString unit("bytes");
 
-    while(num >= 1024.0 && i.hasNext())
+    while(num >= FLOAT1000 && i.hasNext())
     {
         unit = i.next();
-        num /= 1024.0;
+        num /= FLOAT1000;
     }
-    return QString().setNum(num,'f',2)+ " " +unit;
+    return QString().setNum(num,'f',2)+ unit;
 }
 static QString resolution_human(int width, int height)
 {
@@ -290,7 +291,7 @@ QString TableModel::ExtractInfoText(TableItemDataPointer item, const QString& st
         }
         else if(s=="${format}")
         {
-            result += item->getFormat();
+            result += format_human(item->getFormat());
         }
         else if(s=="${id}")
         {
@@ -397,164 +398,6 @@ QSize TableModel::calculateSize(const QModelIndex& index, const QString& str) co
     // int multi = outRect.width() / parent_->columnWidth(index.column());
     baseSize.setHeight(outRect.height() + 5);
     return baseSize;
-}
-QVariant TableModel::data(const QModelIndex &index, int role) const
-{
-    const int actualIndex = index.row()/RowCountPerEntry;
-    int mod = index.row() % RowCountPerEntry;
-    bool isFilename = mod==0;
-    bool isImage = mod==1;
-    bool isInfo = mod == 2;
-
-    if(role==TableRole::MovieFileFull)
-    {
-        return itemDatas_[actualIndex]->getMovieFileFull();
-    }
-    else if(role==TableRole::ID)
-    {
-        return itemDatas_[actualIndex]->getID();
-    }
-
-    if(isFilename)
-    {
-        if(index.column() != 0)
-            return QVariant();
-
-        switch(role)
-        {
-        case Qt::DisplayRole:
-        {
-            // infinite loop
-            //                parent_->setSpan(index.row(),0,1,5);
-            //                parent_->setSpan(index.row()+3,0,1,5);
-            //                parent_->setSpan(index.row()+6,0,1,5);
-            QString titleText = GetTitleText(itemDatas_[actualIndex]);
-            QSize qs = calculateSize(index, titleText);
-            parent_->setRowHeight(index.row(), qs.height());
-            return titleText; //->getMovieFileName();
-        }
-            break;
-
-        case Qt::TextColorRole:
-        {
-            if(bShowMissing_)
-            {
-                if(!QFile(itemDatas_[actualIndex]->getMovieFileFull()).exists())
-                {
-                    return QColor(Qt::red);
-                }
-            }
-        }
-            break;
-
-        case Qt::TextAlignmentRole:
-        {
-            return Qt::AlignBottom;
-        }
-            break;
-
-        case Qt::FontRole:
-        {
-            return fontInfo_;
-        }
-            break;
-
-            // never comes
-            //			case Qt::SizeHintRole:
-            //			{
-            //			}
-            //			break;
-        }
-    }
-    else if(isImage)
-    {
-        switch(role)
-        {
-        case Qt::DecorationRole:
-        {
-
-            TableItemDataPointer itemData = itemDatas_[actualIndex];
-            if(!itemData->isDisplayed())
-                qDebug() << "Image DecorationRoll First: Index=" << index.row();
-            itemData->setDisplayed();
-
-            parent_->setColumnWidth(index.row(), THUMB_WIDTH);
-            // qDebug() << "DecorationRole previous rowheight = " << parent_->rowHeight(index.row());
-            parent_->setRowHeight(index.row(), THUMB_HEIGHT);
-
-            QString imageFile = pathCombine(FILEPART_THUMBS,
-                                            itemData->getThumbnailFiles()[getActualColumnIndex(index.column())]);
-
-            if(imagecache_==ImageCacheType::IC_NEVER)
-            {
-                QImage image(imageFile);
-                return QPixmap::fromImage(image);
-            }
-
-            if(mapPixmaps_.keys().contains(imageFile))
-            {
-                return mapPixmaps_[imageFile];
-            }
-            if(suspendImageIndexes_.contains(index))
-                suspendImageIndexes_.removeOne(index);
-
-            suspendImageIndexes_.push(index);
-
-            TableModel* pThis = const_cast<TableModel*>(this);
-            pThis->StartImageTimer();
-            return QVariant();
-        }
-            break;
-        }
-    }
-    else if (isInfo)
-    {
-        switch (role)
-        {
-        case Qt::DisplayRole:
-        {
-            //            parent_->setSpan(index.row(),0,1,5);
-            //            parent_->setSpan(index.row()+3,0,1,5);
-            //            parent_->setSpan(index.row()+6,0,1,5);
-            QString infoText = GetInfoText(itemDatas_[actualIndex]);
-            QSize qs = calculateSize(index, infoText);
-            parent_->setRowHeight(index.row(), qs.height());
-
-            // reentrant stack overflow
-            // parent_->resizeRowToContents(index.row());
-            // parent_->resizeColumnToContents(index.column());
-            return infoText;
-        }
-            break;
-
-        case Qt::TextColorRole:
-        {
-            if (bShowMissing_)
-            {
-                if (!QFile(itemDatas_[actualIndex]->getMovieFileFull()).exists())
-                {
-                    return QColor(Qt::red);
-                }
-            }
-        }
-            break;
-
-        case Qt::TextAlignmentRole:
-        {
-            return Qt::AlignTop;
-        }
-            break;
-
-        case Qt::FontRole:
-        {
-            return fontDetail_;
-        }
-            break;
-
-
-        }
-    }
-    return QVariant();
 }
 Qt::ItemFlags TableModel::flags(const QModelIndex &index) const
 {

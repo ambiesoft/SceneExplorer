@@ -21,8 +21,8 @@
 
 namespace Consts
 {
-const char ORGANIZATION[] = "Ambiesoft";
-const char APPDOMAIN[] = "ambiesoft.fam.cx";
+Q_CONSTEXPR const char ORGANIZATION[] = "Ambiesoft";
+Q_CONSTEXPR const char APPDOMAIN[] = "ambiesoft.fam.cx";
 const char APPNAME[] = "SceneExplorer";
 // const char APPNAME_DISPLAY[] = "Scene Explorer";
 const char APPVERSION[] = "1.19.25";
@@ -125,5 +125,7 @@ const int MAX_COMBOFIND_SAVECOUNT = 256;
 
 const char STR_ENV_SCENEEXPLORER_ROOT[] = "${SCENEEXPLORER_ROOT}";
 
+const float FLOAT1000 = 1000.0f;
+const float FLOAT1024 = 1024.0f;
 }
 #endif // CONSTS_H

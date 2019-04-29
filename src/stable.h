@@ -21,6 +21,8 @@
 
 #if defined __cplusplus
 // Add C++ includes here
+#include <memory>
+#include <string>
 
 // Qt includes
 #include <QAbstractListModel>
@@ -121,8 +123,8 @@
 #include <QVector>
 #include <QWidget>
 
-#include <memory>
-#include <string>
+// mine
+#include "debugflag.h"
 
 #endif // __cplusplus
 

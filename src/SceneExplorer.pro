@@ -27,6 +27,7 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
     tablemodel.cpp \
+    tablemodel_data.cpp \
     tableproxymodel.cpp \
     taskffmpeg.cpp \
     taskgetdir.cpp \
@@ -77,6 +78,7 @@ SOURCES += \
     mainwindow_document.cpp
 
 HEADERS += \
+    debugflag.h \
         mainwindow.h \
     tablemodel.h \
     consts.h \
