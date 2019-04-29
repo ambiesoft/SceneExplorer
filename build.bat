@@ -1,5 +1,7 @@
 @echo off
 
+
+
 if not exist %~dp0prepare.bat (
   echo prepare.bat not exist. Copy prepare.bat.sample and edit it.
   goto :error
@@ -12,19 +14,10 @@ if not exist %DISTDIR%\ (
   goto :error
 )
 
-copy /y %~dp0history.txt "%DISTDIR%\"
-copy /y %~dp0README.md "%DISTDIR%\"
-copy /y %~dp0README.jp.md "%DISTDIR%\"
-copy /y %~dp0LICENSE "%DISTDIR%\"
-
-xcopy C:\Linkout\FolderConfig\* "%DISTDIR%\" /E /Y
-copy /y %~dp0src\FolderConfig.ini "%DISTDIR%\"
-
 if %PYTHONEXE%x==x (
   echo PYTHONEXE not defined.
   goto :error
 )
-
 if not exist %PYTHONEXE% (
   echo %PYTHONEXE% not found. Check the directory.
   goto :error
@@ -46,10 +39,33 @@ if not exist %QTROOT%\%QTVERSION%\%QTVERSIONTOOLS%\ (
 ::  goto :error
 ::)
 
+if not exist %FFCEXE% (
+  echo %FFCEXE% not found. Check the directory.
+  goto :error
+)
+if not exist %FFMPEGSOURCEDIR%\ (
+  echo %FFMPEGSOURCEDIR% not found. Check the directory.
+  goto :error
+)
+if not exist %FOLDERCONFIGDIR%\ (
+  echo %FOLDERCONFIGDIR% not found. Check the directory.
+  goto :error
+)
+
+call :myCopy "%~dp0history.txt" "%DISTDIR%\"
+call :myCopy "%~dp0README.md" "%DISTDIR%\"
+call :myCopy "%~dp0README.jp.md" "%DISTDIR%\"
+call :myCopy "%~dp0LICENSE" "%DISTDIR%\"
+REM call :myXcopy "C:\Linkout\FolderConfig\*" "%DISTDIR%\" /E /Y
+call :myCopy "%~dp0src\FolderConfig.ini" "%DISTDIR%\"
+
+
 %FFCEXE% /t12 "%FFMPEGSOURCEDIR%" /to:%DISTDIR%\
+%FFCEXE% /t12 "%FOLDERCONFIGDIR%\*" /to:%DISTDIR%\
+
 set QTPROJECTFILE=%SOURCEDIR%\%PRONAME%.pro
 @echo on
-%PYTHONEXE% ../distSolution/distqt.py %QTPROJECTFILE% -distdir "%DISTDIR%" -qtroot %QTROOT% -qtversion %QTVERSION% -qtversiontools %QTVERSIONTOOLS% -distfile dist.json -make %MAKE%
+%PYTHONEXE% "%~dp0../distSolution/distqt.py" %QTPROJECTFILE% -distdir "%DISTDIR%" -qtroot %QTROOT% -qtversion %QTVERSION% -qtversiontools %QTVERSIONTOOLS% -distfile "%~dp0dist.json" -make %MAKE%
 @echo off
 if ERRORLEVEL 1 (
   goto :error
@@ -61,6 +77,28 @@ if ERRORLEVEL 1 (
 ::ping 127.0.0.1 -n 30 > nul
 ::exit /b
 
+
 :error
 pause
 exit /b
+
+:myCopy
+echo. copying %~1 to %~2
+copy /y %~1 %~2
+IF %ERRORLEVEL% NEQ 0 (
+  echo. Failed copy %1
+  pause
+  call %~dp0ExitBatch.bat
+)
+exit /b
+
+:myXcopy
+echo. xcopying %~1 to %~2
+xcopy %~1 %~2 /E /Y
+IF %ERRORLEVEL% NEQ 0 (
+  echo. Failed xcopy %1
+  pause
+  call %~dp0ExitBatch.bat
+)
+exit /b
+

@@ -1,7 +1,11 @@
-set PYTHONEXE=C:\local\python3.5\python.exe
+set PYTHONEXE=C:\local\python3\python.exe
 set QTROOT=C:\local\Qt
 set QTVERSION=5.11.1
-set QTVERSIONTOOLS=mingw53_32
+set QTVERSIONTOOLS=msvc2015
+
+:: For Visual Studio 2015
+call "C:\Program Files\Microsoft Visual Studio 14.0\Common7\Tools\VsDevCmd.bat"
+set MAKE=nmake
 
 :: For Visual Studio 2017 x64
 ::call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
@@ -10,8 +14,8 @@ set QTVERSIONTOOLS=mingw53_32
 :: For MingW
 :: set PATH=<path to mingw bin>
 :: set MAKE=nmake
-set PATH=%QTROOT%\Tools\mingw530_32\bin;%PATH%
-set MAKE=mingw32-make.exe
+:: set PATH=%QTROOT%\Tools\mingw530_32\bin;%PATH%
+:: set MAKE=mingw32-make.exe
 
 
 set SOURCEDIR=src
@@ -20,5 +24,9 @@ set DISTDIR=C:\Linkout\SceneExplorer
 
 
 set FFMPEGSOURCEDIR=C:\LegacyPrograms\ffmpeg
+
+:: https://github.com/ambiesoft/FolderConfig/releases
+set FOLDERCONFIGDIR=C:\Linkout\FolderConfig
+
+:: https://www.vector.co.jp/soft/winnt/util/se378224.html
 set FFCEXE=C:\LegacyPrograms\FFC\FFC.exe
-set DISTDIR=C:\Linkout\SceneExplorer

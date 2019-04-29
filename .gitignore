@@ -24,6 +24,7 @@ ui_aboutdialog.h
 ui_docinfodialog.h
 ui_taginputdialog.h
 ui_renamedialog.h
+ui_itempropertydialog.h
 
 /build-*
 *.user

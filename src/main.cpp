@@ -55,6 +55,10 @@ using namespace AmbiesoftQt;
 #ifdef QT_DEBUG
 static void testSQL()
 {
+	// These must be compile error
+	// APPNAME[0] = 'a';
+	// memset(APPNAME, 0, 1);
+
     Q_ASSERT(isThumbFileName("58c4d22e-8b8b-4773-9fac-80a69a8fa880-5.jpg"));
     Q_ASSERT(isThumbFileName("58c4d22e-AAAA-4773-9fac-80a69a8fa880-5.jpg"));
     Q_ASSERT(!isThumbFileName("58c4d22e8b8b47739fac80a69a8fa8805.jpg"));
