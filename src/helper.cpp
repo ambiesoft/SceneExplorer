@@ -33,6 +33,7 @@
 #include <QSqlError>
 #include <QPalette>
 #include <QLineEdit>
+#include <QDateTime>
 
 #include "../../lsMisc/stdQt/stdQt.h"
 

@@ -192,7 +192,7 @@ defineReplace(prependAll) {
 }
 
 TRANSLATIONS = $$prependAll(LANGUAGES, $$PWD/translations/i18n_, .ts)
-message("Fix me, why this message appears 3 times")
+message("Fix me, why this message appears 3 times in Windows.")
 # message($$TRANSLATIONS)
 
 # TRANSLATIONS_FILES =

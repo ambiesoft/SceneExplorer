@@ -21,13 +21,13 @@
 //#include <QImage>
 //#include <QPixmap>
 //#include <QFileInfo>
-//#include <QTableView>
+#include <QTableView>
 //#include <QColor>
 //#include <QSharedPointer>
 //#include <QMap>
 //#include <QDateTime>
 //#include <QRegExp>
-//#include <QDebug>
+#include <QDebug>
 //#include <QTimerEvent>
 
 #include "../../lsMisc/stdQt/stdQt.h"

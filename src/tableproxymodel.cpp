@@ -1,3 +1,4 @@
+#include <QtDebug>
 
 #include "tablemodel.h"
 #include "tableproxymodel.h"
