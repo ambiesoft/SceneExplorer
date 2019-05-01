@@ -45,6 +45,7 @@
         "Qt5Gui.dll",
         "Qt5Sql.dll",
         "Qt5Svg.dll",
+        "Qt5WinExtras.dll",
         "Qt5Widgets.dll",
         "README.jp.md",
         "README.md",
