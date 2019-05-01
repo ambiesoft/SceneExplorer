@@ -4,9 +4,13 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT += core gui
 QT += sql
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+win32 {
+    # for QtWin::fromHICON
+    QT += winextras
+}
 
 TARGET = SceneExplorer
 TEMPLATE = app
@@ -163,7 +167,8 @@ win32 {
     }
     win32-msvc* {
         message("win32-msvc*")
-#       LIBS += Ole32.lib
+        LIBS += User32.lib
+        # Ole32.lib
     }
 }
 linux-g++ {

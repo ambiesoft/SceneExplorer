@@ -18,6 +18,7 @@
 
 #include "../../lsMisc/stdQt/settings.h"
 
+#include "osd.h"
 #include "consts.h"
 #include "externaltoolitem.h"
 
@@ -47,5 +48,14 @@ void ExternalToolItem::Save(int i, IniSettings& settings)
     settings.setValue(KEY_EXTERNALTOOLS_ARG, arg_);
     settings.setValue(KEY_EXTERNALTOOLS_COUNTASOPEN, countAsOpen_);
     settings.endGroup();
+}
 
+void ExternalToolItem::SetExe(const QString& exe) {
+    if(exe_==exe)
+        return;
+    exe_ = exe;
+    if(exe.isEmpty())
+        icon_ = QIcon();
+    else
+        icon_ = GetIconFromExecutable(exe);
 }

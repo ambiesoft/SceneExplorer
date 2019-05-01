@@ -37,10 +37,9 @@ public:
     ExternalToolWidgetItem(const ExternalToolItem& item) :
         item_(item){
         this->setText(item.GetName());
+        this->setIcon(item.GetIcon());
     }
-    ~ExternalToolWidgetItem() {
-
-    }
+    // ~ExternalToolWidgetItem() {}
 
     ExternalToolItem GetItem() {
         return item_;

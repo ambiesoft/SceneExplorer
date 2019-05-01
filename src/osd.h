@@ -40,7 +40,7 @@ QString GetUserDocumentDirectory();
 
 bool StartProcessDetached(const QString& exe, const QString& arg);
 
-
+QIcon GetIconFromExecutable(const QString& exe);
 
 
 

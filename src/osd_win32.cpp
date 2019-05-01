@@ -17,8 +17,8 @@
 //along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 // #define _WIN32_WINNT 0x0501 // XP and above
-#include <windows.h>
-#include <Shlobj.h>
+#include <Windows.h>
+#include <ShlObj.h>
 
 #include <QApplication>
 #include <QDir>
@@ -32,6 +32,7 @@
 #include <QProcessEnvironment>
 #include <QProcess>
 #include <QDebug>
+#include <QtWin>
 
 #include "../../lsMisc/stdQt/stdQt.h"
 
@@ -415,4 +416,38 @@ bool StartProcessDetached(const QString& exe, const QString& arg)
     return !!OpenCommon(nullptr,
                exe.toStdWString().c_str(),
                arg.toStdWString().c_str());
+}
+
+QIcon GetIconFromExecutable(const QString& exe)
+{
+    SHFILEINFO info = {};
+    std::unique_ptr<SHFILEINFO,std::function<void(SHFILEINFO*p)>> freer(
+                                                                      &info,
+                                                                      [](SHFILEINFO*p)
+    {
+        if(p && p->hIcon)
+            DestroyIcon(p->hIcon);
+    });
+
+    UINT flags =
+            SHGFI_USEFILEATTRIBUTES |
+            SHGFI_ICON |
+            SHGFI_SMALLICON;
+
+    if(!SHGetFileInfo(QDir::toNativeSeparators(exe).toStdWString().c_str(),
+                      0,
+                      &info,
+                      sizeof(info),
+                      flags))
+    {
+        qDebug() << "SHGetFileInfo failed" << __FUNCTION__;
+        return QIcon();
+    }
+    if(!info.hIcon)
+    {
+        qDebug() << "SHGetFileInfo returns null icon" << __FUNCTION__;
+        return QIcon();
+    }
+
+    return QIcon(QtWin::fromHICON(info.hIcon));
 }

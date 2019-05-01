@@ -20,13 +20,14 @@
 #define EXTERNALTOOLITEM_H
 
 #include <QString>
-
+#include <QIcon>
 #include "../../lsMisc/stdQt/settings.h"
 
 class ExternalToolItem
 {
     QString name_;
     QString exe_;
+    QIcon icon_;
     QString arg_;
     bool countAsOpen_;
 public:
@@ -35,15 +36,17 @@ public:
                      const QString& arg,
                      bool bCountAsOpen):
         name_(name),
-        exe_(exe),
         arg_(arg),
-        countAsOpen_(bCountAsOpen){}
+        countAsOpen_(bCountAsOpen){
+        SetExe(exe);
+    }
 
     ExternalToolItem(const ExternalToolItem& that) {
         if(this==&that)
             return;
         this->name_ = that.name_;
         this->exe_ = that.exe_;
+        this->icon_ = that.icon_;
         this->arg_ = that.arg_;
         this->countAsOpen_ = that.countAsOpen_;
     }
@@ -60,9 +63,11 @@ public:
     QString GetExe() const {
         return exe_;
     }
-    void SetExe(const QString& exe) {
-        exe_ = exe;
+    QIcon GetIcon() const {
+        return icon_;
     }
+
+    void SetExe(const QString& exe);
 
     QString GetArg() const {
         return arg_;
