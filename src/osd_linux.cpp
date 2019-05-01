@@ -33,6 +33,7 @@
 #include <QDir>
 #include <QDateTime>
 #include <QProcess>
+#include <QIcon>
 
 #include "../../lsMisc/stdosd/SetPrority.h"
 #include "../../lsMisc/stdQt/stdQt.h"
@@ -246,4 +247,11 @@ bool StartProcessDetached(const QString& exe, const QString& arg)
     command += " ";
     command += arg;
     return QProcess::startDetached(command);
+}
+
+QIcon GetIconFromExecutable(const QString& exe)
+{
+    // TODO: find icon return it
+    Q_UNUSED(exe);
+    return QIcon();
 }
