@@ -90,8 +90,8 @@ class MainWindow : public QMainWindow, IMainWindow, IHistoryList
     bool bHistoryActivating_=false;
 public:
     explicit MainWindow(QWidget *parent,
-                        AmbiesoftQt::IniSettings& settings,
-                        const QString& docToOpen);
+                        AmbiesoftQt::IniSettings& settings);
+
     ~MainWindow();
 
     // History's virtual function
@@ -426,7 +426,7 @@ private slots:
     void OnShowMissingClicked();
     void on_action_Find_triggered();
 
-    void on_action_Clear_triggered();
+    void on_action_ClearFind_triggered();
 
     void OnRecentDocumentsTriggered(bool checked=false);
     void OnClearRecentItemsTriggered(bool checked=false);
@@ -560,7 +560,7 @@ private slots:
 
     void on_action_ShowMissingFiles_triggered();
 
-    void on_action_EmptyFindTexts_triggered();
+    void on_action_ClearFindHistory_triggered();
 
     void on_action_FocusFind_triggered();
 
@@ -593,6 +593,16 @@ private slots:
     void on_action_GoBack_triggered();
 
     void on_action_GoForward_triggered();
+
+    void on_action_Rename_triggered();
+
+    void on_action_Remove_triggered();
+
+
+
+
+
+
 
 private:
     void OnCopyTable();
@@ -677,7 +687,7 @@ private:
     void CreateLimitManager();
     QString GetDefaultDocumentPath();
 
-    bool OpenDocument(const QString& file, const bool bExists);
+    bool OpenDocument(const QString& file, const bool bExists, const bool noHistory = false);
     bool CloseDocument();
     void InitDocument();
     bool LoadTags();
@@ -730,9 +740,9 @@ public slots:
 
 
     void OnContextCopySelectedVideoFilename();
-    void OnContextRemoveFromDatabase();
-    void OnContextItemProperty();
-    void OnContextRename();
+    void OnRemove();
+    void OnProperty();
+    void OnRename();
     void OnContextExternalTools();
     void OnContextAddTags();
 

@@ -26,15 +26,20 @@ class CommandOption
 {
     QString dbdir_;
     QString doc_;
+    bool noRecent_;
 public:
     CommandOption(const QString& dbdir,
-                  const QString& doc);
+                  const QString& doc,
+                  bool noRecent);
 
     QString DBDir() const {
         return dbdir_;
     }
     QString doc() const {
         return doc_;
+    }
+    bool noRecent() const {
+        return noRecent_;
     }
 };
 

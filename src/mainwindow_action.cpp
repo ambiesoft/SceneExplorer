@@ -775,20 +775,20 @@ void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
 
         QAction actionRename(tr("Re&name"));
         connect(&actionRename, SIGNAL(triggered()),
-                this, SLOT(OnContextRename()));
+                this, SLOT(OnRename()));
         contextMenu.addAction(&actionRename);
 
 
-        QAction actionRemoveFromDB(tr("&Remove from database"));
+        QAction actionRemoveFromDB(tr("&Remove"));
         connect(&actionRemoveFromDB, SIGNAL(triggered()),
-                this, SLOT(OnContextRemoveFromDatabase()));
+                this, SLOT(OnRemove()));
         contextMenu.addAction(&actionRemoveFromDB);
 
         contextMenu.addSeparator();
 
         QAction actionItemProperty(tr("&Property..."));
         connect(&actionItemProperty, SIGNAL(triggered()),
-                this, SLOT(OnContextItemProperty()));
+                this, SLOT(OnProperty()));
         contextMenu.addAction(&actionItemProperty);
 
         contextMenu.exec(ui->tableView->mapToGlobal(pos));

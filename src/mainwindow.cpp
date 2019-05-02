@@ -759,7 +759,7 @@ qint64 MainWindow::getIDFromIndex(const QModelIndex& index)
 }
 
 
-void MainWindow::OnContextRename()
+void MainWindow::OnRename()
 {
     QString oldfull = getSelectedVideo(false);
     if(oldfull.isEmpty()) { Alert(this, TR_NOVIDEO_SELECTED()); return;}
@@ -826,7 +826,7 @@ void MainWindow::OnContextRename()
     tableModel_->RenameEntry(olddir, oldname, olddir, targetname);
 }
 
-void MainWindow::OnContextRemoveFromDatabase()
+void MainWindow::OnRemove()
 {
     QString movieFile = getSelectedVideo(false);
     if(movieFile.isEmpty()) { Alert(this, TR_NOVIDEO_SELECTED()); return;}
@@ -898,7 +898,7 @@ void MainWindow::OnContextRemoveFromDatabase()
 }
 
 
-void MainWindow::OnContextItemProperty()
+void MainWindow::OnProperty()
 {
     if(!pDoc_)
     {
@@ -1400,7 +1400,7 @@ void MainWindow::on_action_Find_triggered()
     InsertUniqueTextToComboBox(*cmbFind_, cur);
     cmbFind_->setCurrentIndex(0);
 }
-void MainWindow::on_action_Clear_triggered()
+void MainWindow::on_action_ClearFind_triggered()
 {
     QModelIndex curSel = ui->tableView->currentIndex();
     QString selPath;
@@ -2124,7 +2124,7 @@ void MainWindow::on_action_ShowMissingFiles_triggered()
     on_ShowMissingClicked_common(ui->action_ShowMissingFiles->isChecked());
 }
 
-void MainWindow::on_action_EmptyFindTexts_triggered()
+void MainWindow::on_action_ClearFindHistory_triggered()
 {
     int count = cmbFind_->count();
     if(count==0)
@@ -2334,3 +2334,8 @@ void MainWindow::on_txtLog_customContextMenuRequested(const QPoint &pos)
 
     menu.exec(ui->txtLog->mapToGlobal(pos));
 }
+
+
+
+
+

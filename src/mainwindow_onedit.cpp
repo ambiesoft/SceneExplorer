@@ -87,14 +87,16 @@ void MainWindow::onMenuView_AboutToShow()
 }
 void MainWindow::onMenuEdit_AboutToShow()
 {
+    const bool bTableSelected = ui->tableView->hasFocus() &&
+            ui->tableView->selectionModel()->hasSelection();
+
     // open video menu
-    ui->action_OpenVideo->setEnabled(
-                ui->tableView->hasFocus() &&
-                ui->tableView->selectionModel()->hasSelection());
+    ui->action_OpenVideo->setEnabled(bTableSelected);
+
 
     // open directory menu
     bool bOpenDirectory = false;
-    if(ui->tableView->hasFocus() && ui->tableView->selectionModel()->hasSelection())
+    if(bTableSelected)
         bOpenDirectory = true;
     else if(ui->directoryWidget->hasFocus() && !ui->directoryWidget->selectedItems().isEmpty())
         bOpenDirectory = true;
@@ -125,8 +127,14 @@ void MainWindow::onMenuEdit_AboutToShow()
     // clear
     ui->action_ClearContent->setEnabled(ui->txtLog->hasFocus());
 
+    // rename
+    ui->action_Rename->setEnabled(bTableSelected);
+
+    // remove
+    ui->action_Remove->setEnabled(bTableSelected);
+
     // Property
-    ui->action_Property->setEnabled((ui->tableView->hasFocus() && ui->tableView->selectionModel()->hasSelection()));
+    ui->action_Property->setEnabled(bTableSelected);
 }
 
 void MainWindow::on_action_ClearContent_triggered()
@@ -143,5 +151,25 @@ void MainWindow::on_action_ClearContent_triggered()
 
 void MainWindow::on_action_Property_triggered()
 {
-    OnContextItemProperty();
+    OnProperty();
+}
+
+void MainWindow::on_action_Rename_triggered()
+{
+    const bool bTableSelected = ui->tableView->hasFocus() &&
+            ui->tableView->selectionModel()->hasSelection();
+    if(!bTableSelected)
+        return;
+
+    OnRename();
+}
+
+void MainWindow::on_action_Remove_triggered()
+{
+    const bool bTableSelected = ui->tableView->hasFocus() &&
+            ui->tableView->selectionModel()->hasSelection();
+    if(!bTableSelected)
+        return;
+
+    OnRemove();
 }

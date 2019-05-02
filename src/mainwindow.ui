@@ -211,8 +211,8 @@
     <addaction name="menu_Docking_windows"/>
     <addaction name="separator"/>
     <addaction name="action_Find"/>
-    <addaction name="action_Clear"/>
-    <addaction name="action_EmptyFindTexts"/>
+    <addaction name="action_ClearFind"/>
+    <addaction name="action_ClearFindHistory"/>
     <addaction name="separator"/>
     <addaction name="menu_Focus"/>
    </widget>
@@ -243,6 +243,8 @@
     <addaction name="action_SelectAll"/>
     <addaction name="separator"/>
     <addaction name="action_ClearContent"/>
+    <addaction name="action_Rename"/>
+    <addaction name="action_Remove"/>
     <addaction name="separator"/>
     <addaction name="action_Property"/>
    </widget>
@@ -299,7 +301,7 @@
    <addaction name="separator"/>
    <addaction name="placeHolder_ComboBox"/>
    <addaction name="action_Find"/>
-   <addaction name="action_Clear"/>
+   <addaction name="action_ClearFind"/>
    <addaction name="separator"/>
    <addaction name="actionplaceHolder_Limit"/>
    <addaction name="action_Options"/>
@@ -500,6 +502,9 @@
    <property name="text">
     <string>&amp;Close</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
+   </property>
   </action>
   <action name="action_About">
    <property name="text">
@@ -555,6 +560,9 @@
    <property name="text">
     <string>&amp;Directory</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+., T</string>
+   </property>
   </action>
   <action name="action_DockTask">
    <property name="checkable">
@@ -563,6 +571,9 @@
    <property name="text">
     <string>&amp;Task</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+., K</string>
+   </property>
   </action>
   <action name="action_DockOutput">
    <property name="checkable">
@@ -570,6 +581,9 @@
    </property>
    <property name="text">
     <string>&amp;Output</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+., O</string>
    </property>
   </action>
   <action name="actionSort_by_file_name">
@@ -782,7 +796,7 @@
   </action>
   <action name="action_FocusFind">
    <property name="text">
-    <string>&amp;Focus find</string>
+    <string>&amp;Focus Find</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+F</string>
@@ -800,21 +814,21 @@
     <string>Find</string>
    </property>
   </action>
-  <action name="action_Clear">
+  <action name="action_ClearFind">
    <property name="icon">
     <iconset resource="resource.qrc">
      <normaloff>:/resource/images/eraser.png</normaloff>:/resource/images/eraser.png</iconset>
    </property>
    <property name="text">
-    <string>&amp;Clear</string>
+    <string>&amp;Clear current Find</string>
    </property>
    <property name="toolTip">
-    <string>Clear</string>
+    <string>Clear current</string>
    </property>
   </action>
-  <action name="action_EmptyFindTexts">
+  <action name="action_ClearFindHistory">
    <property name="text">
-    <string>&amp;Empty find texts...</string>
+    <string>Clear Find history...</string>
    </property>
   </action>
   <action name="placeHolder_Sort">
@@ -903,6 +917,9 @@
    </property>
    <property name="text">
     <string>Ta&amp;g</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+., T</string>
    </property>
   </action>
   <action name="action_ShowAllItem">
@@ -1011,6 +1028,9 @@
    <property name="text">
     <string>Scan se&amp;lected directory</string>
    </property>
+   <property name="shortcut">
+    <string>F7</string>
+   </property>
   </action>
   <action name="actionSort_by_full_name">
    <property name="checkable">
@@ -1066,6 +1086,9 @@
    <property name="text">
     <string>P&amp;roperty...</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
+   </property>
   </action>
   <action name="action_GoBack">
    <property name="icon">
@@ -1083,6 +1106,22 @@
    </property>
    <property name="text">
     <string>Go &amp;Forward</string>
+   </property>
+  </action>
+  <action name="action_Rename">
+   <property name="text">
+    <string>Re&amp;name</string>
+   </property>
+   <property name="shortcut">
+    <string>F2</string>
+   </property>
+  </action>
+  <action name="action_Remove">
+   <property name="text">
+    <string>&amp;Remove</string>
+   </property>
+   <property name="shortcut">
+    <string>Del</string>
    </property>
   </action>
  </widget>

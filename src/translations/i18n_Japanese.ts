@@ -440,11 +440,11 @@
     </message>
     <message>
         <source>&amp;Focus find</source>
-        <translation>検索にフォーカス(&amp;F)</translation>
+        <translation type="vanished">検索にフォーカス(&amp;F)</translation>
     </message>
     <message>
         <source>&amp;Empty find texts...</source>
-        <translation>検索テキストを空にする(&amp;E)...</translation>
+        <translation type="vanished">検索テキストを空にする(&amp;E)...</translation>
     </message>
     <message>
         <source>placeHolder_Sort</source>
@@ -592,7 +592,7 @@
     </message>
     <message>
         <source>&amp;Remove from database</source>
-        <translation>データベースから削除(&amp;R)</translation>
+        <translation type="vanished">データベースから削除(&amp;R)</translation>
     </message>
     <message>
         <source>Are you sure you want to remove &quot;%1&quot; from the lists?</source>
@@ -720,7 +720,7 @@
     </message>
     <message>
         <source>Clear</source>
-        <translation>クリア</translation>
+        <translation type="vanished">クリア</translation>
     </message>
     <message>
         <source>&amp;General Options...</source>
@@ -1301,6 +1301,70 @@
     <message>
         <source>Argument:</source>
         <translation>引数：</translation>
+    </message>
+    <message>
+        <source>Ctrl+Q</source>
+        <translation>Ctrl+Q</translation>
+    </message>
+    <message>
+        <source>Ctrl+D, T</source>
+        <translation type="vanished">Ctrl+D, T</translation>
+    </message>
+    <message>
+        <source>Ctrl+D, K</source>
+        <translation type="vanished">Ctrl+D, K</translation>
+    </message>
+    <message>
+        <source>Ctrl+D, O</source>
+        <translation type="vanished">Ctrl+D, O</translation>
+    </message>
+    <message>
+        <source>&amp;Focus Find</source>
+        <translation>検索をフォーカス(&amp;F)</translation>
+    </message>
+    <message>
+        <source>&amp;Clear current Find</source>
+        <translation>現在の検索をクリア(&amp;C)</translation>
+    </message>
+    <message>
+        <source>Clear current</source>
+        <translation>現在をクリア</translation>
+    </message>
+    <message>
+        <source>Clear Find history...</source>
+        <translation>検索履歴をクリア</translation>
+    </message>
+    <message>
+        <source>Ctrl+P</source>
+        <translation>Ctrl+P</translation>
+    </message>
+    <message>
+        <source>F2</source>
+        <translation>F2</translation>
+    </message>
+    <message>
+        <source>&amp;Remove</source>
+        <translation>削除(&amp;R)</translation>
+    </message>
+    <message>
+        <source>Del</source>
+        <translation>Del</translation>
+    </message>
+    <message>
+        <source>Ctrl+., T</source>
+        <translation>Ctrl+., T</translation>
+    </message>
+    <message>
+        <source>Ctrl+., K</source>
+        <translation>Ctrl+., K</translation>
+    </message>
+    <message>
+        <source>Ctrl+., O</source>
+        <translation>Ctrl+., O</translation>
+    </message>
+    <message>
+        <source>F7</source>
+        <translation>F7</translation>
     </message>
 </context>
 <context>
@@ -2017,6 +2081,10 @@
     <message>
         <source>document to open.</source>
         <translation>開くドキュメント。</translation>
+    </message>
+    <message>
+        <source>Do not add to recent open documents.</source>
+        <translation>最近開いたファイルに追加しない。</translation>
     </message>
 </context>
 </TS>

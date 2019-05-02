@@ -245,7 +245,7 @@ enum PROGRAM_RETURN {
     PR_LAUNCHTHISAPPFAILED,
 };
 
-std::unique_ptr<CommandOption> gpCommandOption;
+
 
 static bool IsAvailableLanguage(const QString& lang)
 {
@@ -424,7 +424,7 @@ int main2(int argc, char *argv[], QApplication& theApp)
 #endif
 
 
-    MainWindow w(nullptr, *settings, gpCommandOption->doc());
+    MainWindow w(nullptr, *settings);
     if(Q_UNLIKELY(!w.IsInitialized()))
     {
         Alert(nullptr, QObject::tr("Window initialization failed."));

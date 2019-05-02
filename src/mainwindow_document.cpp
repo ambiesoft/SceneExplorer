@@ -103,7 +103,7 @@ QString MainWindow::GetDefaultDocumentPath()
     return pathCombine(docdir,"default.scexd");
 }
 
-bool MainWindow::OpenDocument(const QString& file, const bool bExists)
+bool MainWindow::OpenDocument(const QString& file, const bool bExists, const bool noHistory)
 {
     CloseDocument();
 
@@ -117,9 +117,12 @@ bool MainWindow::OpenDocument(const QString& file, const bool bExists)
     }
 
     qDebug() << "Document Opened: " << file << __FUNCTION__;
-    recents_.removeDuplicates();
-    recents_.removeOne(file);
-    recents_.insert(0, file);
+    if(!noHistory)
+    {
+        recents_.removeDuplicates();
+        recents_.removeOne(file);
+        recents_.insert(0, file);
+    }
 
     pDoc_ = pNewDoc;
     InitDocument();

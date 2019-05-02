@@ -4,7 +4,8 @@
 
 
 CommandOption::CommandOption(const QString& dbdir,
-                             const QString& doc)
+                             const QString& doc,
+                             bool noRecent)
 {
     if(!dbdir.isEmpty())
     {
@@ -14,4 +15,5 @@ CommandOption::CommandOption(const QString& dbdir,
     {
         doc_ = QFileInfo(doc).absoluteFilePath();
     }
+    noRecent_ = noRecent;
 }

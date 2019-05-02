@@ -22,6 +22,8 @@
 #include <memory>
 #include <QFont>
 
+#include "commandoption.h"
+
 extern volatile bool gPaused;
 extern volatile bool gStop;
 class Sql;
@@ -65,6 +67,8 @@ enum SORTCOLUMNMY{
 };
 
 extern std::unique_ptr<QFont> gpMenuFont_;
+
+extern std::unique_ptr<CommandOption> gpCommandOption;
 
 #define STR_DIRECTORY_ENTRY_SIGNATURE "# SceneExplorer Directory Entries 2AA6B5CF-C02C-4E1C-B996-CE89F37BEB90"
 #define STR_TAG_ENTRY_SIGNATURE "# SceneExplorer Tag Entries D462D547-C22A-4D03-B0FC-87513E0EC9EF"

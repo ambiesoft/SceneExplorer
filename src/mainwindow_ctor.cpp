@@ -28,6 +28,7 @@
 #include "tagitem.h"
 #include "helper.h"
 #include "consts.h"
+#include "globals.h"
 
 #include "ui_mainwindow.h"
 #include "mainwindow.h"
@@ -36,8 +37,7 @@ using namespace Consts;
 using namespace AmbiesoftQt;
 
 MainWindow::MainWindow(QWidget *parent,
-                       IniSettings& settings,
-                       const QString& docToOpen) :
+                       IniSettings& settings):
     QMainWindow(parent),
     ui(new Ui::MainWindow),
     settings_(settings),
@@ -411,10 +411,10 @@ MainWindow::MainWindow(QWidget *parent,
     qDebug() << "recents" << recents_ << __FUNCTION__;
 
 
+    const QString docToOpen = gpCommandOption->doc();
     if(!docToOpen.isEmpty())
     {
-        // Alert(this, "docToOpen" + docToOpen);
-        if(!OpenDocument(docToOpen, false))
+        if(!OpenDocument(docToOpen, false, gpCommandOption->noRecent()))
             return ;
     }
     else
