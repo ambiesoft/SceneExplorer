@@ -112,7 +112,7 @@ private:
     bool directoryChanging_ = false;
     bool tagChanging_ = false;
     bool lastQueriedOnlyMissing_ = false;
-    QStringList lastQueriedDirs_ = {"dummy"};
+    QStringList lastQueriedDirs_ = {QLatin1String("dummy")};
     //    bool lastQueriedIsAllTag_ = false;
     //    QSet<qint64> lastQueriedTaggedIDs_ = {-1};
     TagidsInfo lastQueriedTaggedIds_;
@@ -280,7 +280,7 @@ private:
     int optionThreadcountGetDir_ = 1;
     int optionThreadcountThumbnail_ = 2;
     int optionThumbCount_ = 3; // default is 3
-    QString optionThumbFormat_ = "jpg";
+    QString optionThumbFormat_ = QStringLiteral("jpg");
 
 
     bool initShown_=false;
@@ -371,7 +371,7 @@ protected:
     QList<QWidget*> getAllDockingWindow();
 
 
-private slots:
+private Q_SLOTS:
     void editTag();
     void deleteTag();
     void checkAllTag();
@@ -692,7 +692,7 @@ private:
     void InitDocument();
     bool LoadTags();
     void directoryWidgetMoveUpCommon(const bool bUp);
-public slots:
+public Q_SLOTS:
     //    void sayBorn(int id,
     //                   const QString& movieFile);
     void sayHello(int loopId, int id,

@@ -2050,6 +2050,7 @@ void MainWindow::on_action_ScanArbitraryDirectory_triggered()
         return;
     lastSelectedScanDir_ = dir;
 
+    AmbiesoftQt::WaitingCursor wc;
     StartScan(dir);
 }
 

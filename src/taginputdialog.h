@@ -33,7 +33,7 @@ class TagInputDialog : public QDialog
     bool yomiChangging_=false;
     bool yomiChanged_ = false;
 public:
-    explicit TagInputDialog(QWidget *parent = 0);
+    explicit TagInputDialog(QWidget *parent = nullptr);
     ~TagInputDialog();
 
     QString tag() const;
@@ -42,7 +42,7 @@ public:
     QString yomi() const;
     void setYomi(const QString& txt);
 
-private slots:
+private Q_SLOTS:
     void on_lineTag_textChanged(const QString &arg1);
 
     void on_lineYomi_textChanged(const QString &arg1);

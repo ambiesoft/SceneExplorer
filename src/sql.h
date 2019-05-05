@@ -56,7 +56,7 @@ class Sql : public QObject
     QString dbid_;
     bool ok_=false;
     QString docFile_;
-    QString docdb_ = "nodb";
+    QString docdb_ = QStringLiteral("nodb");
     QStringList allColumns_;
     int GetMovieFileInfo(const QString& movieFile,
                          bool& exist,
@@ -106,7 +106,7 @@ public:
         return dbid_;
     }
     static QString getDBFileName() {
-        return DBFILENAME;
+        return QStringLiteral(DBFILENAME);
     }
     QString getLastError() const {
         return lastError_;
@@ -122,7 +122,7 @@ public:
     QSqlQuery* pQGetInfo_=nullptr;
     QSqlQuery* getGetInfoQuery();
 
-    Sql();
+    Sql(QObject* =nullptr);
     ~Sql();
     qint64 AppendData(TableItemDataPointer tid);
     bool IsSameFile(const QString& dir,
@@ -191,7 +191,7 @@ public:
         return lastError_;
     }
     QString docdb() const {
-        Q_ASSERT(!docdb_.isEmpty() && docdb_ != "nodb");
+        Q_ASSERT(!docdb_.isEmpty() && docdb_ != QLatin1String("nodb"));
         return docdb_;
     }
 

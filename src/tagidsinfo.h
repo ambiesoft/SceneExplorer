@@ -15,8 +15,18 @@ public:
 private:
     TAGIDS_INFO_TYPE infotype_ = TAGIDSINFO_ALL;
     QSet<qint64> fileids_;
+    void CopyMember(const TagidsInfo& that)
+    {
+        this->infotype_ = that.infotype_;
+        this->fileids_ = that.fileids_;
+    }
 public:
     TagidsInfo(){}
+    TagidsInfo(const TagidsInfo& that){
+        CopyMember(that);
+    }
+    ~TagidsInfo(){}
+
     TagidsInfo(TAGIDS_INFO_TYPE t) : infotype_(t){}
 
     bool operator ==(const TagidsInfo& that) {
@@ -27,8 +37,7 @@ public:
     const TagidsInfo& operator=(const TagidsInfo& that) {
         if(this != &that)
         {
-            this->infotype_ = that.infotype_;
-            this->fileids_ = that.fileids_;
+            CopyMember(that);
         }
         return *this;
     }

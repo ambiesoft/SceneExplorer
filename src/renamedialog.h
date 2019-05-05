@@ -12,8 +12,8 @@ class RenameDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit RenameDialog(QWidget *parent = 0);
-    ~RenameDialog();
+    explicit RenameDialog(QWidget *parent = nullptr);
+    ~RenameDialog() override;
 
     QString basename() const;
     QString ext() const;
@@ -24,8 +24,8 @@ public:
     QString filename() const;
 protected:
     void showEvent(QShowEvent *) override;
-private slots:
-    virtual void done(int r);
+private Q_SLOTS:
+    virtual void done(int r) override;
 
 
 

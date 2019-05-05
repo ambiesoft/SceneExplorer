@@ -174,7 +174,7 @@ public:
         Q_ASSERT(false);
         return 0;
     }
-signals:
+Q_SIGNALS:
     void itemCountChanged();
     //void sortParameterChanged(SORTCOLUMN sc, bool rev);
 };

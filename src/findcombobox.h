@@ -32,12 +32,12 @@ protected:
     {
         // qDebug() << e->key();
         if(e->key() == Qt::Key_Enter || e->key() == Qt::Key_Return)
-            emit on_EnterPressed();
+            Q_EMIT on_EnterPressed();
 
         QComboBox::keyPressEvent(e);
     }
 
-signals:
+Q_SIGNALS:
     void on_EnterPressed();
 };
 

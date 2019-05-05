@@ -32,6 +32,8 @@ class OptionExternalToolsDialog;
 
 class ExternalToolWidgetItem : public QListWidgetItem
 {
+    Q_DISABLE_COPY(ExternalToolWidgetItem)
+
     ExternalToolItem item_;
 public:
     ExternalToolWidgetItem(const ExternalToolItem& item) :
@@ -84,8 +86,8 @@ class OptionExternalToolsDialog : public QDialog
     AmbiesoftQt::IniSettings& settings_;
     QString lastSelectedExeDir_;
 public:
-    explicit OptionExternalToolsDialog(AmbiesoftQt::IniSettings& settings, QWidget *parent = 0);
-    ~OptionExternalToolsDialog();
+    explicit OptionExternalToolsDialog(AmbiesoftQt::IniSettings& settings, QWidget *parent = nullptr);
+    ~OptionExternalToolsDialog() override;
 
     QList<ExternalToolItem> items_;
     int GetItemIndex(QListWidgetItem* item) const;
@@ -97,7 +99,7 @@ protected:
             QMenu& contextMenu,
             QList< QSharedPointer<QAction> >& acts);
 
-private slots:
+private Q_SLOTS:
     void on_listWidget_itemSelectionChanged();
 
     void on_listWidget_currentItemChanged(QListWidgetItem *current, QListWidgetItem *previous);

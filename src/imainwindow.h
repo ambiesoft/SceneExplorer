@@ -19,6 +19,7 @@
 #ifndef IMAINWINDOW_H
 #define IMAINWINDOW_H
 
+#include "globals.h"
 
 class IMainWindow
 {

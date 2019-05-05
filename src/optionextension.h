@@ -35,7 +35,7 @@ public:
 protected:
     void showEvent(QShowEvent *) override;
     void on_radioAllow_clicked_common();
-private slots:
+private Q_SLOTS:
     void on_buttonBox_accepted();
     void on_btnRestoreDefault_clicked();
     void on_radioAllow_clicked();

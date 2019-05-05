@@ -36,10 +36,10 @@ extern std::unique_ptr<CommandOption> gpCommandOption;
 # if !defined(QT_NO_DEBUG)
 #  define VERIFY Q_ASSERT
 # else
-#  define VERIFY(expr)  \
-    do                    \
-{                     \
-    (void) (expr);    \
+#  define VERIFY(expr)          \
+    do                          \
+    {                           \
+        (void) (expr);          \
     } while (0)
 # endif
 #endif
@@ -73,6 +73,13 @@ extern std::unique_ptr<CommandOption> gpCommandOption;
 #define STR_DIRECTORY_ENTRY_SIGNATURE "# SceneExplorer Directory Entries 2AA6B5CF-C02C-4E1C-B996-CE89F37BEB90"
 #define STR_TAG_ENTRY_SIGNATURE "# SceneExplorer Tag Entries D462D547-C22A-4D03-B0FC-87513E0EC9EF"
 
+/**
+#define DISABLE_FOR_VIRTUALCLASS(clazz)              \
+    clazz() = delete;                                \
+    clazz(const clazz&) = delete;                    \
+    ~clazz() = delete;                               \
+    clazz& operator=(const clazz&) = delete;         \
+**/
 
 
 #endif // GLOBALS_H

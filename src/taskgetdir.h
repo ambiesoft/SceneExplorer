@@ -35,6 +35,9 @@ private:
     QThread::Priority* priority_ = nullptr;
     void runStuff(const QString& dir);
 
+    TaskGetDir(QObject* =nullptr) {
+        Q_ASSERT(false);
+    }
 public:
     static void RegisterMetaType();
 
@@ -42,11 +45,11 @@ public:
                int id,
                const QString& dir,
                QThread::Priority* priority);
-    virtual ~TaskGetDir();
+    virtual ~TaskGetDir() override;
 
     void run() override;
 
-signals:
+Q_SIGNALS:
     void afterGetDir(int loopId, int id,
                      const QString& dir,
                      const QStringList& files,

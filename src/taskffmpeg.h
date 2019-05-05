@@ -69,6 +69,9 @@ private:
 
     void setPriority(QProcess& process);
 public:
+    TaskFFmpeg(QObject* =nullptr){
+        Q_ASSERT(false);
+    }
     TaskFFmpeg(const QString& ffprobe,
                const QString& ffmpeg,
                int loopId,
@@ -76,7 +79,7 @@ public:
                const QString& file,
                QThread::Priority* priority,
                const QString& thumbext);
-    virtual ~TaskFFmpeg();
+    virtual ~TaskFFmpeg() override;
     void run() override ;
     int GetId() const
     {
@@ -87,7 +90,7 @@ public:
     }
 
 
-signals:
+Q_SIGNALS:
     //    void sayBorn(int id,
     //                 const QString& movieFile);
     void sayHello(int loopId, int id,

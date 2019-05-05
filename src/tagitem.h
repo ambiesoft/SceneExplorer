@@ -23,6 +23,8 @@
 
 class TagItem : public QListWidgetItem
 {
+    Q_DISABLE_COPY(TagItem)
+
 public:
     enum TagItemType
     {

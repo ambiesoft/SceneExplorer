@@ -51,7 +51,7 @@ class Document : public QObject
     DocumentSql* docSql_ = nullptr;
     bool bReordered_ = false;
 public:
-    Document(){}
+    Document(QObject* =nullptr){}
     ~Document() {
         delete s_;
         delete docSql_;

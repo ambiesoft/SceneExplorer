@@ -30,6 +30,7 @@ typedef QSharedPointer<TaskListData> TaskListDataPointer;
 
 class TaskListData
 {
+    Q_DISABLE_COPY(TaskListData)
 
 private:
 #ifdef QT_DEBUG
@@ -38,7 +39,6 @@ private:
     int id_;
     QString movieFile_;
     TaskFFmpeg::Progress progress_ = TaskFFmpeg::Progress::Uninitialized;
-
 
     TaskListData(int id, const QString& movieFile):id_(id), movieFile_(movieFile)
     {

@@ -99,7 +99,7 @@ int Sql::GetDBVersion()
         return -1;
     return query.value("version").toInt();
 }
-Sql::Sql() : db_(QSqlDatabase::addDatabase("QSQLITE"))
+Sql::Sql(QObject*) : db_(QSqlDatabase::addDatabase("QSQLITE"))
 {
     db_.setDatabaseName(DBFILENAME);
     if (!db_.open())

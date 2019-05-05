@@ -24,18 +24,19 @@
 class TableItemDelegate : public QStyledItemDelegate
 {
     Q_OBJECT
+    using ParentClass = QStyledItemDelegate;
 public:
-    explicit TableItemDelegate(QObject *parent = 0) : QStyledItemDelegate(parent){}
+    explicit TableItemDelegate(QObject *parent = nullptr) : ParentClass(parent){}
 
     void paint(QPainter *painter,
                const QStyleOptionViewItem &option, const QModelIndex &index) const Q_DECL_OVERRIDE
     {
-        QStyledItemDelegate::paint(painter,option,index);
+        ParentClass::paint(painter,option,index);
     }
     QSize sizeHint(const QStyleOptionViewItem &option,
                    const QModelIndex &index) const Q_DECL_OVERRIDE
     {
-        QSize baseSize = this->QStyledItemDelegate::sizeHint(option, index);
+        QSize baseSize = this->ParentClass::sizeHint(option, index);
         baseSize.setHeight(10000);//something very high, or the maximum height of your text block
 
         QFontMetrics metrics(option.font);
@@ -44,11 +45,11 @@ public:
         return baseSize;
     }
 protected:
-    virtual void initStyleOption(QStyleOptionViewItem *option,
-                                 const QModelIndex &index) const
-    {
-        QStyledItemDelegate::initStyleOption(option,index);
-    }
+//    virtual void initStyleOption(QStyleOptionViewItem *option,
+//                                 const QModelIndex &index) const
+//    {
+//        ParentClass::initStyleOption(option,index);
+//    }
 
 };
 

@@ -60,7 +60,7 @@ private:
 
 protected:
     void showEvent(QShowEvent *) override;
-private slots:
+private Q_SLOTS:
     void on_buttonBox_accepted();
     void on_tbDBDir_clicked();
     void on_tbffprobe_clicked();
@@ -73,8 +73,8 @@ private slots:
 
     void on_context_titleTemplateCommonMain();
     void on_context_titleTemplateCommonSub();
-private slots:
-    virtual void done(int r);
+private Q_SLOTS:
+    virtual void done(int r) override;
 };
 
 #endif // OPTIONDIALOG_H
