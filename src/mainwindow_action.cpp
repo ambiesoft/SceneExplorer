@@ -803,6 +803,8 @@ void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
 
 void MainWindow::ScanSelectedDirectory(const bool bAll)
 {
+    AmbiesoftQt::WaitingCursor wc;
+
     QStringList toScan;
 
     if(bAll || ui->directoryWidget->IsAllItemSelectedOrChecked())
