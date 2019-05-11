@@ -224,7 +224,7 @@ bool GetDatabaseDirectory(IniSettings& settings, QString& dbDirToSet, bool& bQui
             if(dlg.selectedFiles().isEmpty())
                 return false;
 
-            dbDirToSet = dlg.selectedFiles()[0];
+            dbDirToSet = dlg.selectedFiles().constFirst();
             settings.setValue(KEY_DATABASE_PATH, dbDirToSet);
         }
         else
@@ -253,13 +253,14 @@ static bool IsAvailableLanguage(const QString& lang)
     return QFile(i18nFile).exists();
 }
 
-int main2(int argc, char *argv[], QApplication& theApp)
+int main2(QApplication& theApp)
 {
-    Q_UNUSED(argc);
-    Q_UNUSED(argv);
-
     bool bExit = false;
-    QString inifile = getInifile(bExit);// "N:\\Ambiesoft\\SceneExplorer\\SceneExplorer.ini";
+    Q_ASSERT(isLegalFilePath(theApp.organizationName()));
+    Q_ASSERT(isLegalFilePath(theApp.applicationName()));
+    QString inifile = getInifile(bExit,
+                                 theApp.organizationName(),
+                                 theApp.applicationName());
     if(bExit)
         return 1;
     QScopedPointer<IniSettings> settings(inifile.isEmpty() ?
@@ -479,7 +480,7 @@ int main(int argc, char *argv[])
     if(!processCommandLine())
         return 0;
 
-    int ret = main2(argc, argv, app);
+    int ret = main2(app);
     if(gReboot)
     {
         QString thisapp = QCoreApplication::applicationFilePath();

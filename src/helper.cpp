@@ -218,10 +218,6 @@ QString GetAppDir()
     return QFileInfo(QCoreApplication::applicationFilePath()).absolutePath();
 }
 
-QString GetSystemDefaultLang()
-{
-    return QLocale::languageToString(QLocale::system().language());
-}
 
 void InsertUniqueTextToComboBox(QComboBox& combo, const QString& text)
 {

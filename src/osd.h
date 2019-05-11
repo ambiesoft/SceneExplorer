@@ -27,16 +27,16 @@ void MoveToTrashImpl( QString file );
 QString GetDefaultFFprobe();
 QString GetDefaultFFmpeg();
 
-QString getInifile(bool& bExit);
 
-bool isLegalFilePath(QString filename, QString* pError);
+
+bool isLegalFilePath(QString filename, QString* pError = nullptr);
 QString GetIllegalFilenameCharacters();
 
 bool setProcessPriority(const qint64& pid, QThread::Priority priority, QStringList& errors);
 
 bool myRename(const QString& oldfull, const QString& newfull, QString& error);
 
-QString GetUserDocumentDirectory();
+
 
 bool StartProcessDetached(const QString& exe, const QString& arg);
 

@@ -122,103 +122,6 @@ QString GetDefaultFFmpeg()
     return pathCombine(GetAppDir(), "ffmpeg/bin/ffmpeg.exe");
 }
 
-static QString getSpecialFolder(int id)
-{
-    wchar_t path[MAX_PATH] = {0};
-    if(S_OK != SHGetFolderPath(
-                nullptr,
-                id,
-                nullptr,
-                SHGFP_TYPE_CURRENT,
-                path))
-
-    {
-        Alert(nullptr, QObject::tr("Failed to get folder location."));
-        return QString();
-    }
-
-
-    //    PWSTR pOut=NULL;
-    //    if(S_OK != SHGetKnownFolderPath(id,0,NULL,&pOut))
-    //    {
-    //        Alert(nullptr, QObject::tr("Failed to get Roaming folder. Default folder will be used."));
-    //        return QString();
-    //    }
-
-    QString dir = QString::fromUtf16((const ushort*)path);
-    //    CoTaskMemFree(pOut);
-
-    dir = QDir(dir).absolutePath();
-
-    QDir(dir).mkdir("Ambiesoft");
-    dir = pathCombine(dir, "Ambiesoft");
-
-    QDir(dir).mkdir("SceneExplorer");
-    dir = pathCombine(dir, "SceneExplorer");
-
-    return dir;
-}
-QString getInifile(bool& bExit)
-{
-    QFileInfo trfi(QCoreApplication::applicationFilePath());
-    std::string folini = pathCombine(trfi.absolutePath(), "folder.ini").toStdString();
-    int intval = -1;
-    Profile::GetInt("Main", "PathType", -1, intval, folini);
-
-    QString dir;
-    switch (intval)
-    {
-    case 0:
-        dir = trfi.absolutePath();
-        break;
-
-    case 1:
-        dir = getSpecialFolder(CSIDL_LOCAL_APPDATA);
-        break;
-
-    default:
-    case 2:
-        dir = getSpecialFolder(CSIDL_APPDATA);
-        break;
-
-    case 3:
-    {
-        std::string t;
-        Profile::GetString("Main", "folder", "", t, folini);
-        dir = t.c_str();
-        if(dir.isEmpty())
-        {
-            Alert(nullptr, QObject::tr("Folder settings does not have sufficient data. Lanuch FolderConfig.exe and reconfigure."));
-            bExit=true;
-            return QString();
-        }
-        else
-        {
-            if(!QDir(dir).exists())
-            {
-                if(!YesNo(nullptr, QObject::tr("\"%1\" does not exist. Do you want to create it?").arg(dir)))
-                {
-                    bExit=true;
-                    return QString();
-                }
-                QDir(dir).mkpath(".");
-                if(!QDir(dir).exists())
-                {
-                    Alert(nullptr, QObject::tr("Failed to create directory."));
-                    bExit=true;
-                    return QString();
-                }
-            }
-        }
-    }
-        break;
-    } // switch
-
-    if (dir.isEmpty())
-        return QString();
-
-    return pathCombine(dir, "SceneExplorer.ini");
-}
 
 // https://stackoverflow.com/a/45282192
 bool isLegalFilePath(QString filename, QString* pError)
@@ -398,18 +301,7 @@ bool myRename(const QString& oldfull, const QString& newfull, QString& error)
     return true;
 }
 
-QString GetUserDocumentDirectory()
-{
-    QString result = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
-    if(!result.isEmpty())
-        return result;
 
-    result = getSpecialFolder(CSIDL_MYDOCUMENTS);
-    if(!result.isEmpty())
-        return result;
-
-    return QDir::homePath();
-}
 
 bool StartProcessDetached(const QString& exe, const QString& arg)
 {

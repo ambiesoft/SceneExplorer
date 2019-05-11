@@ -130,11 +130,7 @@ QString GetDefaultFFmpeg()
     return "ffmpeg";
 }
 
-QString getInifile(bool& bExit)
-{
-    Q_UNUSED(bExit);
-    return QString();
-}
+
 bool isLegalFilePath(QString filename, QString* pError)
 {
     for( QChar& c : filename)
@@ -230,14 +226,6 @@ bool myRename(const QString& oldfull, const QString& newfull, QString& error)
     return true;
 }
 
-QString GetUserDocumentDirectory()
-{
-    QString result = QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
-    if(!result.isEmpty())
-        return result;
-
-    return QDir::homePath();
-}
 
 
 bool StartProcessDetached(const QString& exe, const QString& arg)

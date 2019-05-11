@@ -44,7 +44,7 @@ void setReadOnly(QLineEdit& le);
 
 QString GetSortColumnName(SORTCOLUMNMY sc);
 QString GetAppDir();
-QString GetSystemDefaultLang();
+
 void InsertUniqueTextToComboBox(QComboBox& combo, const QString& text);
 
 

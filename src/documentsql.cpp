@@ -308,7 +308,7 @@ bool DocumentSql::setDirNormalItemState(const DirectoryItem* item)
     query.bindValue(i++, item->IsCheckedInt());
     query.bindValue(i++, item->dirid());
     SQC(query,exec());
-    qDebug() << query.numRowsAffected() << __FUNCTION__;
+    qDebug() << "RowsAffected=" << query.numRowsAffected() << __FUNCTION__;
     return true;
 }
 bool DocumentSql::isDirAllChecked() const

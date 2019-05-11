@@ -28,8 +28,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += \
-        main.cpp \
-        mainwindow.cpp \
+    main.cpp \
+    mainwindow.cpp \
     tablemodel.cpp \
     tablemodel_data.cpp \
     tableproxymodel.cpp \
@@ -83,7 +83,7 @@ SOURCES += \
 
 HEADERS += \
     debugflag.h \
-        mainwindow.h \
+    mainwindow.h \
     tablemodel.h \
     consts.h \
     tableproxymodel.h \
@@ -159,7 +159,8 @@ win32 {
     SOURCES += ../../lsMisc/OpenCommon.cpp \
             ../../lsMisc/GetLastErrorString.cpp \
             osd_win32.cpp \
-            ../../lsMisc/stdosd/SetPrority_win.cpp
+            ../../lsMisc/stdosd/SetPrority_win.cpp \
+            ../../lsMisc/stdQt/stdQt_win32.cpp
 
     win32-g++ {
         message("win32-g++")
@@ -176,8 +177,9 @@ linux-g++ {
     DEFINES += "AMBIESOFT_FILENAME_CASESENSITIVE=\"1\""
 
     SOURCES += \
-			osd_linux.cpp \
-			../../lsMisc/stdosd/SetPrority_linux.cpp
+        osd_linux.cpp \
+        ../../lsMisc/stdosd/SetPrority_linux.cpp \
+        ../../lsMisc/stdQt/stdQt_linux.cpp
 }
 
 
