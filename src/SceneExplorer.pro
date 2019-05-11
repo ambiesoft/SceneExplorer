@@ -172,7 +172,7 @@ win32 {
         # Ole32.lib
     }
 }
-linux-g++ {
+linux {
     message("linux-g++")
     DEFINES += "AMBIESOFT_FILENAME_CASESENSITIVE=\"1\""
 

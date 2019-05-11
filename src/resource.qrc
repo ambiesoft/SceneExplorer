@@ -24,5 +24,6 @@
         <file>resource/images/notags.png</file>
         <file>resource/images/left-arrow.png</file>
         <file>resource/images/right-arrow.png</file>
+        <file>icon.ico</file>
     </qresource>
 </RCC>

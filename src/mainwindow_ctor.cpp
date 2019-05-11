@@ -50,8 +50,7 @@ MainWindow::MainWindow(QWidget *parent,
     TagItem::parent_ = ui->listTag;
 
     this->setWindowTitle(qAppName());
-
-
+    this->setWindowIcon(QIcon(":/icon.ico"));
 
     // menu
     connect(ui->menu_View, &QMenu::aboutToShow,
