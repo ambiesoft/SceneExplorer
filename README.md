@@ -20,7 +20,7 @@ Installation is not required, extract an archive file.
 
 
 ## FFmpeg and FFprobe
-SceneExplorer needs FFmpeg and FFprove to create thumbnails. In windows distribution, as these files are included in the archive file, you do not need to obtain them by yourself. But these files are built by LGPL compatible mode, some feature needed to create particular thumbnails is missing. You can configure SceneExplore to use custom FFmpeg and FFprobe from Option.
+SceneExplorer needs FFmpeg and FFprove to create thumbnails. In windows distribution, these files are included in the archive file, you do not need to obtain them by yourself. 
 
 
 ## How to use
