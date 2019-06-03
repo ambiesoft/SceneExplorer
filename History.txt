@@ -1,15 +1,15 @@
-2019/05/01　1.19.27
+2019/05/01 1.19.27
 Show icon of external tools on the context menu and the setting's dialog.
 
-2019/04/27　1.19.26
+2019/04/27 1.19.26
 update build script
 add __FUNCTION__ to qDebug()
 format_human()
 
-2019/04/27　1.19.25
+2019/04/27 1.19.25
 Incomplete (scroll to bottom with hiding missing item)
 
-2019/04/27　1.19.24
+2019/04/27 1.19.24
 Fix history, Scroll, and more
 
 2019/04/25 1.19.23
