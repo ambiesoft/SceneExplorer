@@ -17,6 +17,7 @@
 //along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <QFile>
+#include <QSysInfo>
 
 #include "helper.h"
 #include "consts.h"
@@ -26,13 +27,16 @@
 
 using namespace Consts;
 
+namespace {
+    int gCurrentIndex;
+}
 AboutDialog::AboutDialog(QWidget *parent) :
     QDialog(parent,GetDefaultDialogFlags()),
     ui(new Ui::AboutDialog)
 {
     ui->setupUi(this);
 
-    // QString title = APPNAME_DISPLAY;
+    ui->tabWidget->setCurrentIndex(gCurrentIndex);
 
     QString txtVersion = qAppName();
     txtVersion.append(" ");
@@ -52,15 +56,6 @@ AboutDialog::AboutDialog(QWidget *parent) :
     ui->lblCopyright->setOpenExternalLinks(true);
 
 
-    //    QString webText;
-    //    webText += QString("<a href=\"http://ambiesoft.fam.cx/main/index.php?page=sceneexplorer\">%1</a>").
-    //            arg(tr("webpage"));
-    //    webText += QString("<a href=\"https://github.com/ambiesoft/SceneExplorer\">%1</a>").
-    //            arg(tr("development"));
-    //    ui->lblWebpage->setText(webText);
-    //    ui->lblWebpage->setTextFormat(Qt::RichText);
-    //    ui->lblWebpage->setTextInteractionFlags(Qt::TextBrowserInteraction);
-    //    ui->lblWebpage->setOpenExternalLinks(true);
 
     QString aboutText;
     aboutText += QString() + "<h1>" + qAppName() + "</h1>";
@@ -100,6 +95,7 @@ AboutDialog::AboutDialog(QWidget *parent) :
     ui->tbAbout->setHtml(aboutText);
 
 
+
     QFile licensefile(":/resource/license/GPLv3.html");
     if (licensefile.open(QIODevice::ReadOnly | QIODevice::Text))
     {
@@ -110,6 +106,49 @@ AboutDialog::AboutDialog(QWidget *parent) :
     {
         ui->tbLicense->setText(tr("<Resource not found>"));
     }
+
+
+    QString txtPlatform;
+    txtPlatform += "ByteOrder:\n";
+    switch(QSysInfo::ByteOrder)
+    {
+    case QSysInfo::LittleEndian:
+        txtPlatform += tr("LittleEndian");
+        break;
+    case QSysInfo::BigEndian:
+        txtPlatform += tr("BigEndian");
+        break;
+    }
+    txtPlatform += "\n\n";
+
+    txtPlatform += tr("WordSize") + ":\n";
+    txtPlatform += QString::number(QSysInfo::WordSize);
+    txtPlatform += "\n\n";
+
+    txtPlatform += "buildAbi:\n";
+    txtPlatform += QSysInfo::buildAbi();
+    txtPlatform += "\n\n";
+
+    txtPlatform += "buildCpuArchitecture:\n";
+    txtPlatform += QSysInfo::buildCpuArchitecture();
+    txtPlatform += "\n\n";
+
+    txtPlatform += "currentCpuArchitecture:\n";
+    txtPlatform += QSysInfo::currentCpuArchitecture();
+    txtPlatform += "\n\n";
+
+    txtPlatform += "kernelType:\n";
+    txtPlatform += QSysInfo::kernelType();
+    txtPlatform += "\n\n";
+
+    txtPlatform += "kernelVersion:\n";
+    txtPlatform += QSysInfo::kernelVersion();
+    txtPlatform += "\n\n";
+
+
+
+    ui->tbPlatform->setText(txtPlatform);
+
 
     QString qtText;
     qtText += "Qt: ";
@@ -122,5 +161,6 @@ AboutDialog::AboutDialog(QWidget *parent) :
 
 AboutDialog::~AboutDialog()
 {
+    gCurrentIndex = ui->tabWidget->currentIndex();
     delete ui;
 }
