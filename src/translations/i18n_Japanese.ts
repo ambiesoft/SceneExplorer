@@ -47,6 +47,42 @@
         <source>&lt;p&gt;Support our software by making &lt;a href=&quot;http://ambiesoft.fam.cx/donate/&quot;&gt;donation&lt;/a&gt;.&lt;/p&gt;</source>
         <translation>&lt;p&gt;Ambiesoftでは開発をサポートのための&lt;a href=&quot;http://ambiesoft.fam.cx/donate/&quot;&gt;寄付&lt;/a&gt;を募集しています。&lt;/p&gt;</translation>
     </message>
+    <message>
+        <source>Platform</source>
+        <translation>プラットフォーム</translation>
+    </message>
+    <message>
+        <source>ByteOrder:
+</source>
+        <translation type="vanished">バイトオーダー：</translation>
+    </message>
+    <message>
+        <source>LittleEndian</source>
+        <translation>リトルエンディアン</translation>
+    </message>
+    <message>
+        <source>BigEndian</source>
+        <translation>ビッグエンディアン</translation>
+    </message>
+    <message>
+        <source>WordSize:
+</source>
+        <translation type="vanished">ワードサイズ：</translation>
+    </message>
+    <message>
+        <source>buildAbi:
+</source>
+        <translation type="vanished">buildAbi:</translation>
+    </message>
+    <message>
+        <source>buildCpuArchitecture:
+</source>
+        <translation type="vanished">buildCpuArchitecture:</translation>
+    </message>
+    <message>
+        <source>WordSize</source>
+        <translation>ワードサイズ</translation>
+    </message>
 </context>
 <context>
     <name>DocinfoDialog</name>

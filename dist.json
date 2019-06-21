@@ -8,12 +8,19 @@
 		"imageformats/qjpeg.dll"
 	],
 	"copytranslations":[
-		"qtquick1_ja.qm",
-		"qtscript_ja.qm",
 		"qtxmlpatterns_ja.qm",
+		"assistant_ja.qm",
+		"designer_ja.qm",
+		"linguist_ja.qm",
+		"qt_help_ja.qm",
 		"qt_ja.qm",
 		"qtbase_ja.qm",
-		"qtmultimedia_ja.qm"
+		"qtdeclarative_ja.qm",
+		"qtmultimedia_ja.qm",
+		"qtquickcontrols_ja.qm",
+		"qtscript_ja.qm",
+		"qtserialport_ja.qm",
+		"qtwebsockets_ja.qm"
 	],
 	
     "ShouldBeFiles": [
@@ -105,12 +112,19 @@
         "platforms\\qwindows.dll",
         "sqldrivers\\qsqlite.dll",
         "imageformats\\qjpeg.dll",
-		"translations\\qtbase_ja.qm",
 		"translations\\qtxmlpatterns_ja.qm",
-		"translations\\qtscript_ja.qm",
-		"translations\\qtmultimedia_ja.qm",
+		"translations\\assistant_ja.qm",
+		"translations\\designer_ja.qm",
+		"translations\\linguist_ja.qm",
+		"translations\\qt_help_ja.qm",
 		"translations\\qt_ja.qm",
-		"translations\\qtquick1_ja.qm"
+		"translations\\qtbase_ja.qm",
+		"translations\\qtdeclarative_ja.qm",
+		"translations\\qtmultimedia_ja.qm",
+		"translations\\qtquickcontrols_ja.qm",
+		"translations\\qtscript_ja.qm",
+		"translations\\qtserialport_ja.qm",
+		"translations\\qtwebsockets_ja.qm"
     ],
 
 

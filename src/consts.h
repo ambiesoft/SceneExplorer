@@ -24,8 +24,7 @@ namespace Consts
 Q_CONSTEXPR char ORGANIZATION[] = "Ambiesoft";
 Q_CONSTEXPR char APPDOMAIN[] = "ambiesoft.fam.cx";
 Q_CONSTEXPR char APPNAME[] = "SceneExplorer";
-// Q_CONSTEXPR char APPNAME_DISPLAY[] = "Scene Explorer";
-Q_CONSTEXPR char APPVERSION[] = "1.19.27";
+Q_CONSTEXPR char APPVERSION[] = "1.19.28";
 
 
 Q_CONSTEXPR char KEY_STYLE[] = "style";
