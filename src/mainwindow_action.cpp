@@ -623,7 +623,11 @@ void MainWindow::onSortCommon(SORTCOLUMNMY sortColumn)
     sortManager_.onSort(sortColumn);
     if (limitManager_)
         limitManager_->Reset();
-    GetSqlAllSetTable(lastQueriedDirs_, lastQueriedTaggedIds_);
+    GetSqlAllSetTable(lastQueriedDirs_,
+                      lastQueriedTaggedIds_,
+                      lastQueriedOnlyMissing_,
+                      lastQueriedOnlyExistant_);
+
 }
 void MainWindow::on_actionSort_by_file_name_triggered()
 {
@@ -1084,7 +1088,7 @@ void MainWindow::on_directoryWidget_customContextMenuRequested(const QPoint &pos
     }
 }
 
-void MainWindow::on_ShowMissingClicked_common(bool bNextCheck)
+void MainWindow::on_ShowMissingClicked_common(bool bShowMissing)
 {
     if (!IsInitialized() || IsClosed())
         return;
@@ -1094,21 +1098,23 @@ void MainWindow::on_ShowMissingClicked_common(bool bNextCheck)
         return;
     Ambiesoft::BlockedBool bb(&sIn);
 
-    if(!bNextCheck)
+    if(!bShowMissing)
     {
         if(!YesNo(
                     this,
                     tr("Excluding an item which has missig files will take some time for querying. Do you wan to continue?")))
         {
-            ui->action_ShowMissingFiles->setChecked(!bNextCheck);
-            tbShowNonExistant_->setChecked(!bNextCheck);
+            ui->action_ShowMissingFiles->setChecked(!bShowMissing);
+            tbShowNonExistant_->setChecked(!bShowMissing);
 
             return;
         }
     }
-    ui->action_ShowMissingFiles->setChecked(bNextCheck);
-    tbShowNonExistant_->setChecked(bNextCheck);
-    GetSqlAllSetTable(lastQueriedDirs_, lastQueriedTaggedIds_);
+    ui->action_ShowMissingFiles->setChecked(bShowMissing);
+    tbShowNonExistant_->setChecked(bShowMissing);
+    GetSqlAllSetTable(lastQueriedDirs_, lastQueriedTaggedIds_,
+                      false,
+                      !bShowMissing);
 }
 void MainWindow::OnShowMissingClicked()
 {

@@ -1065,6 +1065,7 @@ void MainWindow::itemChangedCommon(bool bForceRead)
 
     QStringList dirs;
     bool bOnlyMissing = false;
+    bool bOnlyExistant = false;
     QList<DirectoryItem*> allSelectedOrChecked = ui->directoryWidget->selectedOrCheckedItems();
     // Add also current item
     // when blank area is clicked, all selection is gone
@@ -1100,15 +1101,24 @@ void MainWindow::itemChangedCommon(bool bForceRead)
         Q_ASSERT(false);
     }
 
+
+
     // Get Tag selected
     // QSet<qint64> taggedids;
     TagidsInfo tagInfos(TagidsInfo::TAGIDS_INFO_TYPE::TAGIDSINFO_USERSELECTED);
     GetSelectedAndCurrentTagIDs(tagInfos);
 
+    bOnlyExistant = !tbShowNonExistant_->isChecked();
+    // If your click 'missing item in tree', toolbutton 'show nonexistant' will be disabled
+    if(bOnlyMissing && bOnlyExistant)
+    {
+        bOnlyExistant=false;
+    }
     tbShowNonExistant_->setEnabled(!bOnlyMissing);
 
+
     const bool isSameReq =
-            lastQueriedOnlyMissing_ == bOnlyMissing &&
+            lastQueriedOnlyExistant_ == bOnlyExistant &&
             lastQueriedDirs_ == dirs  &&
             //            lastQueriedIsAllTag_==isAllTag &&
             //            lastQueriedTaggedIDs_==taggedids;
@@ -1122,11 +1132,12 @@ void MainWindow::itemChangedCommon(bool bForceRead)
         limitManager_->Reset();
     }
     lastQueriedOnlyMissing_ = bOnlyMissing;
+    lastQueriedOnlyExistant_ = bOnlyExistant;
     lastQueriedDirs_ = dirs;
     //    lastQueriedIsAllTag_ = isAllTag;
     //    lastQueriedTaggedIDs_ = taggedids;
     lastQueriedTaggedIds_ = tagInfos;
-    GetSqlAllSetTable(dirs, tagInfos, bOnlyMissing);
+    GetSqlAllSetTable(dirs, tagInfos, bOnlyMissing, bOnlyExistant);
 }
 
 void MainWindow::GetSelectedAndCurrentTagIDs(TagidsInfo& tagInfos)
@@ -1197,9 +1208,10 @@ void MainWindow::GetSelectedAndCurrentTagIDs(TagidsInfo& tagInfos)
 
 void MainWindow::GetSqlAllSetTable(const QStringList& dirs,
                                    const TagidsInfo& tagInfos,
-                                   bool bOnlyMissing)
+                                   bool bOnlyMissing,
+                                   bool bOnlyExistant)
 {
-    tableModel_->SetShowMissing(tbShowNonExistant_->isChecked() );
+    // tableModel_->SetShowMissing(tbShowNonExistant_->isChecked() );
     QElapsedTimer timer;
     timer.start();
 
@@ -1221,41 +1233,12 @@ void MainWindow::GetSqlAllSetTable(const QStringList& dirs,
         }
     }
 
-    // these 2 columns exists in doc, so copy them into main DB.
-    //    switch(sortManager_.GetCurrentSort())
-    //    {
-    //        case SORTCOLUMNMY::SORT_OPENCOUNT:
-    //        {
-    //            if(!pDoc_->IsOpenCountAndLastAccessClean())
-    //            {
-    //                QMap<qint64,int> opencounts;
-    //                pDoc_->GetOpenCounts(opencounts);
-    //                gpSQL->ApplyOpenCount(opencounts);
-    //                pDoc_->SetOpenCountAndLastAccessClean();
-    //            }
-    //        }
-    //        break;
-
-    //        case SORTCOLUMNMY::SORT_LASTACCESS:
-    //        {
-    //            if(!pDoc_->IsOpenCountAndLastAccessClean())
-    //            {
-    //                QMap<qint64,qint64> lastaccesses;
-    //                pDoc_->GetLastAccesses(lastaccesses);
-    //                gpSQL->ApplyLastAccesses(lastaccesses);
-    //                pDoc_->SetOpenCountAndLastAccessClean();
-    //            }
-    //        }
-    //        break;
-
-    //    default:
-    //        break;
-    //    }
     QList<TableItemDataPointer> all;
     gpSQL->GetAll(all,
                   dirs,
                   cmbFind_->currentText(),
                   bOnlyMissing,
+                  bOnlyExistant,
                   sortManager_.GetCurrentSort(),
                   sortManager_.GetCurrentRev(),
                   limitManager_ ?
@@ -1263,7 +1246,7 @@ void MainWindow::GetSqlAllSetTable(const QStringList& dirs,
                   tagInfos);
 
 
-    UpdateTitle(dirs, bOnlyMissing ? UpdateTitleType::ONLYMISSING : UpdateTitleType::DEFAULT);
+    UpdateTitle(dirs, bOnlyExistant ? UpdateTitleType::ONLYMISSING : UpdateTitleType::DEFAULT);
 
     insertLog(TaskKind_App,
               0,

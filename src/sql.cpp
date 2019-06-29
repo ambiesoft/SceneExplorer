@@ -760,12 +760,20 @@ QString Sql::getErrorStrig(int thumbRet)
     return QString();
 }
 
-void AppendLitmiArg(QString& sql, const LimitArg& limit)
+void AppendLitmiArg(QString& sql, const LimitArg& limit, const bool bOnlyExistant)
 {
     if(!limit)
         return;
 
-    sql += QString(" LIMIT %1, %2").arg(limit.GetOffset()).arg(limit.GetCount());
+    if(bOnlyExistant)
+    {
+        // count is done in result, because file existance is unknown
+        sql += QString(" LIMIT %1, %2").arg(limit.GetOffset()).arg(-1);
+    }
+    else
+    {
+        sql += QString(" LIMIT %1, %2").arg(limit.GetOffset()).arg(limit.GetCount());
+    }
 }
 void AppendSortArg(QString& sql, const QStringList& sortbys, bool sortrev)
 {
@@ -788,11 +796,15 @@ bool Sql::GetAllSqlString(
         const QStringList& selects,
         const QStringList& dirs,
         const QString& find,
+        const bool bOnlyMissing,
+        const bool bOnlyExistant,
         SORTCOLUMNMY sortcolumn,
         bool sortrev,
         const LimitArg& limit,
         const TagidsInfo& tagInfos)
 {
+    Q_UNUSED(bOnlyMissing);
+
     QString sql = "SELECT ";
     for (int i = 0; i < selects.count(); ++i)
     {
@@ -904,7 +916,7 @@ bool Sql::GetAllSqlString(
         }
 
         AppendSortArg(sql, sortby, sortrev);
-        AppendLitmiArg(sql, limit);
+        AppendLitmiArg(sql, limit, bOnlyExistant);
         qDebug() << sql << __FUNCTION__;
         SQC(query, prepare(sql));
 
@@ -946,6 +958,7 @@ qlonglong Sql::GetAllCount(const QStringList& dirs)
                 QStringList() << "Count(*) AS C",
                 dirs,
                 QString(),
+                false, false, // bOnly***
                 SORT_NONE,
                 false,
                 LimitArg(),
@@ -960,17 +973,21 @@ qlonglong Sql::GetAllCount(const QStringList& dirs)
 bool Sql::GetAll(QList<TableItemDataPointer>& v,
                  const QStringList& dirs,
                  const QString& find,
-                 bool bOnlyMissing,
+                 const bool bOnlyMissing,
+                 const bool bOnlyExistant,
                  SORTCOLUMNMY sortcolumn,
                  bool sortrev,
                  const LimitArg& limit,
                  const TagidsInfo& tagInfos)
 {
+    Q_ASSERT(!(bOnlyMissing && bOnlyExistant));
     QSqlQuery query(db_);
     GetAllSqlString(query,
                     QStringList() << "*",
                     dirs,
                     find,
+                    bOnlyMissing,
+                    bOnlyExistant,
                     sortcolumn,
                     sortrev,
                     limit,
@@ -978,6 +995,7 @@ bool Sql::GetAll(QList<TableItemDataPointer>& v,
 
     SQC(query,exec());
 
+    const int initialLen = v.length();
     while (query.next())
     {
         qint64 id = query.value("id").toLongLong();
@@ -993,6 +1011,12 @@ bool Sql::GetAll(QList<TableItemDataPointer>& v,
         {
             QString movieFileFull = pathCombine(directory,name);
             if(QFile(movieFileFull).exists())
+                continue;
+        }
+        else if(bOnlyExistant)
+        {
+            QString movieFileFull = pathCombine(directory,name);
+            if(!QFile(movieFileFull).exists())
                 continue;
         }
 
@@ -1052,6 +1076,17 @@ bool Sql::GetAll(QList<TableItemDataPointer>& v,
 
 
         v.append(pID);
+
+        if(bOnlyExistant)
+        {
+            if(limit)
+            {
+                if((v.length()-initialLen) >= limit.GetCount())
+                {
+                    break;
+                }
+            }
+        }
     }
     return true;
 }

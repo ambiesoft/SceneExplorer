@@ -111,6 +111,7 @@ private:
     bool directoryChanging_ = false;
     bool tagChanging_ = false;
     bool lastQueriedOnlyMissing_ = false;
+    bool lastQueriedOnlyExistant_ = false;
     QStringList lastQueriedDirs_ = {QLatin1String("dummy")};
     //    bool lastQueriedIsAllTag_ = false;
     //    QSet<qint64> lastQueriedTaggedIDs_ = {-1};
@@ -128,7 +129,8 @@ private:
     void GetSelectedAndCurrentTagIDs(TagidsInfo& tagInfos);
     void GetSqlAllSetTable(const QStringList& dirs,
                            const TagidsInfo& tagInfos,
-                           bool bOnlyMissing = false);
+                           bool bOnlyMissing,
+                           bool bOnlyExistant);
     QToolButton* tbShowNonExistant_ = nullptr;
 
     enum UpdateTitleType { DEFAULT, ONLYMISSING, INIT };

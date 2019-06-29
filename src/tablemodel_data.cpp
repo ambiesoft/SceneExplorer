@@ -81,7 +81,7 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
 
         case Qt::TextColorRole:
         {
-            if(bShowMissing_)
+            // if(bShowMissing_)
             {
                 if(!QFile(itemDatas_[actualIndex]->getMovieFileFull()).exists())
                 {
@@ -173,7 +173,7 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
 
         case Qt::TextColorRole:
         {
-            if (bShowMissing_)
+            // if (bShowMissing_)
             {
                 if (!QFile(itemDatas_[actualIndex]->getMovieFileFull()).exists())
                 {

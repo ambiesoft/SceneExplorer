@@ -55,6 +55,13 @@ protected:
     void timerEvent(QTimerEvent *event) override;
 
 public:
+    enum class FIND_INDEX {
+        FIND_INDEX_TITLE,
+        FIND_INDEX_MOVIE,
+        FIND_INDEX_DESCRIPTION,
+    };
+    void ensureIndex(const QModelIndex& mi);
+    QModelIndex findIndex(const QString& selPath, const FIND_INDEX& fi) const;
 
     // static QString GetSortColumnName(SORTCOLUMN sc);
     QString GetSortColumnValue(SORTCOLUMNMY sc, TableItemDataPointer item) const;
@@ -63,7 +70,7 @@ private:
     QMap<QString, TableItemDataPointer> mapsFullpathToItem_;
     mutable QMap<QString, QVariant> mapPixmaps_;
     ImageCacheType imagecache_;
-    bool bShowMissing_ = false;
+    // bool bShowMissing_ = false;
     QTableView* parent_;
     IMainWindow* mainWindow_;
 
@@ -110,13 +117,13 @@ public:
         return itemDatas_.count();
     }
 
-    void SetShowMissing(bool bToggle)
-    {
-        bShowMissing_ = bToggle;
-    }
-    bool IsShowMissing() const {
-        return bShowMissing_;
-    }
+//    void SetShowMissing(bool bToggle)
+//    {
+//        bShowMissing_ = bToggle;
+//    }
+//    bool IsShowMissing() const {
+//        return bShowMissing_;
+//    }
     void UpdateOpenCountAndLastAccess(const QString& movieFile,
                                       const int* opencount,
                                       const qint64* lastaccess);

@@ -112,24 +112,24 @@ void MainWindow::selectItem(const QString& movie)
 {
     Ambiesoft::BlockedBool bb(&bHistoryActivating_);
 
-    QModelIndex toSelectTitle = proxyModel_->findIndex(movie, FileMissingFilterProxyModel::FIND_INDEX::FIND_INDEX_TITLE);
+    QModelIndex toSelectTitle = tableModel_->findIndex(movie, TableModel::FIND_INDEX::FIND_INDEX_TITLE);
     if(!toSelectTitle.isValid())
     {
         statusBar()->showMessage(tr("Item not found"), 2000);
         return;
     }
-    QModelIndex toSelectMovie = proxyModel_->findIndex(movie, FileMissingFilterProxyModel::FIND_INDEX::FIND_INDEX_MOVIE);
+    QModelIndex toSelectMovie = tableModel_->findIndex(movie, TableModel::FIND_INDEX::FIND_INDEX_MOVIE);
     Q_ASSERT(toSelectMovie.isValid());
 
     // Select multiple items one by one for ensuring visible
 //    ui->tableView->selectionModel()->select(toSelectMovie,
 //                                            QItemSelectionModel::ClearAndSelect);
-    proxyModel_->ensureIndex(toSelectMovie);
+    tableModel_->ensureIndex(toSelectMovie);
     //QApplication::processEvents();
     ui->tableView->scrollTo(toSelectMovie);
 
     // TODO: not selected
-    proxyModel_->ensureIndex(toSelectTitle);
+    tableModel_->ensureIndex(toSelectTitle);
     QApplication::processEvents();
     ui->tableView->scrollTo(toSelectTitle);
     ui->tableView->selectionModel()->select(toSelectTitle,
@@ -211,8 +211,8 @@ void MainWindow::onMenuHistory_AboutToShow()
         connect(qa, &QAction::triggered,
                 this, &MainWindow::onArbitraryHistory);
 
-        QModelIndex tableIndex = proxyModel_->findIndex(movieFile,
-                                                        FileMissingFilterProxyModel::FIND_INDEX::FIND_INDEX_MOVIE);
+        QModelIndex tableIndex = tableModel_->findIndex(movieFile,
+                                                        TableModel::FIND_INDEX::FIND_INDEX_MOVIE);
         qa->setEnabled(tableIndex.isValid());
 
         ui->menu_History->addAction(qa);
