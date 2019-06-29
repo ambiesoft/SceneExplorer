@@ -94,11 +94,11 @@ void MainWindow::openVideoDirectory(const QString& movieFile)
 }
 void MainWindow::on_tableView_doubleClicked(const QModelIndex &index)
 {
-    QVariant v = proxyModel_->data(index, TableModel::TableRole::MovieFileFull);
+    QVariant v = tableModel_->data(index, TableModel::TableRole::MovieFileFull);
     Q_ASSERT(v.isValid());
     Q_ASSERT(!v.toString().isEmpty());
 
-    QVariant vID = proxyModel_->data(index, TableModel::TableRole::ID);
+    QVariant vID = tableModel_->data(index, TableModel::TableRole::ID);
     openVideo(vID.toLongLong(), v.toString());
 }
 

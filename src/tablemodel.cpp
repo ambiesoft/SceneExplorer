@@ -626,3 +626,46 @@ void TableModel::KillImageTimer()
     killTimer(timerID_);
     timerID_=0;
 }
+void TableModel::ensureIndex(const QModelIndex& mi)
+{
+    int startI = mi.row();
+    startI = startI -(3*10);
+    if(startI < 0)
+        startI=0;
+
+    int endI = mi.row() + 10;
+    if(endI >= rowCount())
+        endI = rowCount();
+
+    int startSourceI = (index(startI,0)).row();
+    int endSourceI = (index(endI,0)).row();
+    for(int i=startSourceI; i < endSourceI; ++i)
+    {
+        data(index(i,0),Qt::DecorationRole);
+        data(index(i,1),Qt::DecorationRole);
+        data(index(i,2),Qt::DecorationRole);
+        data(index(i,3),Qt::DecorationRole);
+        data(index(i,4),Qt::DecorationRole);
+    }
+}
+QModelIndex TableModel::findIndex(const QString& selPath, const FIND_INDEX& fi) const
+{
+    QModelIndex sourceIndex = GetIndex(selPath);
+
+    if(!sourceIndex.isValid())
+    {
+        qDebug() << "sourceIndex is Invalid" << __FUNCTION__;
+        return QModelIndex();
+    }
+
+    int toAdd=0;
+    if(fi==FIND_INDEX::FIND_INDEX_TITLE)
+        toAdd=1;
+    else if(fi==FIND_INDEX::FIND_INDEX_DESCRIPTION)
+        toAdd=2;
+
+    QModelIndex retSourceIndex = index(sourceIndex.row() + toAdd, sourceIndex.column());
+    QModelIndex retIndex = (retSourceIndex);
+    qDebug() << "source:" << retSourceIndex << " after:" << retIndex << __FUNCTION__;
+    return retIndex;
+}

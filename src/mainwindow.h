@@ -29,7 +29,6 @@
 #include "../../lsMisc/stdosd/blockedbool.h"
 
 #include "tablemodel.h"
-#include "tableproxymodel.h"
 #include "directoryentry.h"
 #include "directoryitem.h"
 #include "findcombobox.h"
@@ -652,7 +651,6 @@ private:
 
 
     TableModel* tableModel_;
-    FileMissingFilterProxyModel *proxyModel_;
     QString lastSelectedAddDir_;
     QString lastSelectedScanDir_;
     QString lastSelectedDocumentDir_;

@@ -724,7 +724,7 @@ QString MainWindow::getSelectedVideo(bool bNativeFormat)
 
     if(!select->hasSelection())
         return QString();
-    QVariant v = proxyModel_->data(select->selectedIndexes()[0], TableModel::MovieFileFull);
+    QVariant v = tableModel_->data(select->selectedIndexes()[0], TableModel::MovieFileFull);
     QString s = v.toString();
     Q_ASSERT(!s.isEmpty());
 
@@ -732,7 +732,7 @@ QString MainWindow::getSelectedVideo(bool bNativeFormat)
 }
 QString MainWindow::getVideoFromIndex(const QModelIndex& index)
 {
-    QVariant v = proxyModel_->data(index, TableModel::MovieFileFull);
+    QVariant v = tableModel_->data(index, TableModel::MovieFileFull);
     return v.toString();
 }
 qint64 MainWindow::getSelectedID()
@@ -742,12 +742,12 @@ qint64 MainWindow::getSelectedID()
     if(!select->hasSelection())
         return -1;
 
-    QVariant v = proxyModel_->data(select->selectedIndexes()[0], TableModel::ID);
+    QVariant v = tableModel_->data(select->selectedIndexes()[0], TableModel::ID);
     return v.toLongLong();
 }
 qint64 MainWindow::getIDFromIndex(const QModelIndex& index)
 {
-    QVariant v = proxyModel_->data(index, TableModel::ID);
+    QVariant v = tableModel_->data(index, TableModel::ID);
     if(v.isNull())
         return -1;
 
@@ -1370,7 +1370,7 @@ void MainWindow::OndirectoryItemChanged(QListWidgetItem *item)
 
 void MainWindow::tableItemCountChanged()
 {
-    slItemCount_->setText(tr("Items: %1").arg(proxyModel_->GetItemCount()));
+    slItemCount_->setText(tr("Items: %1").arg(tableModel_->GetItemCount()));
 }
 void MainWindow::tableSortParameterChanged(SORTCOLUMNMY sc, bool rev)
 {
@@ -1406,7 +1406,7 @@ void MainWindow::on_action_ClearFind_triggered()
     QString selPath;
     if(curSel.isValid())
     {
-        QVariant v = proxyModel_->data(curSel, TableModel::TableRole::MovieFileFull);
+        QVariant v = tableModel_->data(curSel, TableModel::TableRole::MovieFileFull);
         if(v.isValid())
             selPath = v.toString();
     }

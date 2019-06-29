@@ -95,11 +95,9 @@ MainWindow::MainWindow(QWidget *parent,
 
     tableModel_=new TableModel(ui->tableView, this);
 
-    proxyModel_ = new FileMissingFilterProxyModel(ui->tableView);
-    proxyModel_->setSourceModel(tableModel_);
     // very slow
     // ui->tableView->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
-    ui->tableView->setModel(proxyModel_);
+    ui->tableView->setModel(tableModel_);
 
 
     QObject::connect(tableModel_, &TableModel::itemCountChanged,

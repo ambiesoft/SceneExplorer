@@ -49,21 +49,21 @@ void MainWindow::showEvent( QShowEvent* event )
     int column = 0;
     if(pDoc_ && pDoc_->getLastPos(row,column))
     {
-        QModelIndex mi = proxyModel_->index(row,column);
+        QModelIndex mi = tableModel_->index(row,column);
         // Alert(this, QString("ScrollIndex:%1-%2").arg(mi.row()).arg(mi.column()));
 
 
         // ui->tableView->selectionModel()->select(mi,	QItemSelectionModel::ClearAndSelect);
         ui->tableView->selectionModel()->setCurrentIndex(mi, QItemSelectionModel::ClearAndSelect);
 
-        proxyModel_->ensureIndex(mi);
+        tableModel_->ensureIndex(mi);
         QApplication::processEvents();
         ui->tableView->scrollTo(mi);
 
         OnTableViewScrollChanged(-1);
 
 
-        proxyModel_->ensureIndex(mi);
+        tableModel_->ensureIndex(mi);
         QApplication::processEvents();
         ui->tableView->scrollTo(mi);
     }
