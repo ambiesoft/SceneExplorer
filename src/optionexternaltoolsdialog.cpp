@@ -19,7 +19,7 @@
 #include <QFileDialog>
 #include <QMenu>
 
-#include "../../lsMisc/blockedbool.h"
+#include "../../lsMisc/stdosd/blockedbool.h"
 #include "../../lsMisc/stdQt/stdQt.h"
 
 #include "helper.h"

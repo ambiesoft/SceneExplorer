@@ -26,7 +26,7 @@
 #include <QThread>
 
 #include "../../lsMisc/stdQt/settings.h"
-#include "../../lsMisc/blockedbool.h"
+#include "../../lsMisc/stdosd/blockedbool.h"
 
 #include "tablemodel.h"
 #include "tableproxymodel.h"

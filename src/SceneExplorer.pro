@@ -76,7 +76,7 @@ SOURCES += \
     ../../lsMisc/stdQt/settings.cpp \
     ../../lsMisc/stdQt/waitingcursor.cpp \
     itempropertydialog.cpp \
-    ../../lsMisc/blockedbool.cpp \
+    ../../lsMisc/stdosd/blockedbool.cpp \
     historylist.cpp \
     mainwindow_history.cpp \
     mainwindow_document.cpp
@@ -128,7 +128,7 @@ HEADERS += \
     ../../lsMisc/stdQt/settings.h \
     ../../lsMisc/stdQt/waitingcursor.h \
     itempropertydialog.h \
-    ../../lsMisc/blockedbool.h \
+    ../../lsMisc/stdosd/blockedbool.h \
     historylist.h
 
 FORMS += \
@@ -164,7 +164,7 @@ win32 {
 
     win32-g++ {
         message("win32-g++")
-        LIBS += -lshlwapi
+        LIBS += -lshlwapi -lPsapi
     }
     win32-msvc* {
         message("win32-msvc*")

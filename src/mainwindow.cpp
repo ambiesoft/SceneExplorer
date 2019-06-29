@@ -45,7 +45,7 @@
 #include <QFontDialog>
 #include <QInputDialog>
 
-#include "../../lsMisc/blockedbool.h"
+#include "../../lsMisc/stdosd/blockedbool.h"
 #include "../../lsMisc/stdQt/stdQt.h"
 #include "../../lsMisc/stdQt/settings.h"
 #include "../../lsMisc/stdQt/waitingcursor.h"
