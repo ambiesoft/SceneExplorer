@@ -139,10 +139,19 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
             {
                 return mapPixmaps_[imageFile];
             }
-            if(suspendImageIndexes_.contains(index))
-                suspendImageIndexes_.removeOne(index);
+//            if(suspendImageIndexes_.contains(index))
+//                suspendImageIndexes_.removeOne(index);
 
-            suspendImageIndexes_.push(index);
+//            suspendImageIndexes_.push(index);
+
+            std::deque<QModelIndex>::iterator found =
+                    std::find(suspendImageIndexes_.begin(), suspendImageIndexes_.end(), index);
+            if(found != suspendImageIndexes_.end())
+            {
+                suspendImageIndexes_.erase(found);
+            }
+            suspendImageIndexes_.push_back(index);
+
 
             TableModel* pThis = const_cast<TableModel*>(this);
             pThis->StartImageTimer();

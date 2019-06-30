@@ -19,6 +19,8 @@
 #ifndef IMAGEMODEL_H
 #define IMAGEMODEL_H
 
+#include <deque>
+
 #include <QAbstractTableModel>
 #include <QSortFilterProxyModel>
 #include <QWidget>
@@ -44,7 +46,7 @@ class TableModel : public QAbstractTableModel
     QFont fontInfo_;
     QFont fontDetail_;
 
-    mutable QStack<QModelIndex> suspendImageIndexes_;
+    mutable std::deque<QModelIndex> suspendImageIndexes_;
     mutable int timerID_=0;
     mutable QElapsedTimer imageElapsedTimer_;
     mutable int imageInterval_ = 100;
