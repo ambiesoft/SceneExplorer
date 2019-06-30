@@ -23,6 +23,7 @@
 // Add C++ includes here
 #include <memory>
 #include <string>
+#include <deque>
 
 // Qt includes
 #include <QAbstractListModel>
