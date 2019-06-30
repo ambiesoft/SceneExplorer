@@ -1246,7 +1246,8 @@ void MainWindow::GetSqlAllSetTable(const QStringList& dirs,
                   tagInfos);
 
 
-    UpdateTitle(dirs, bOnlyExistant ? UpdateTitleType::ONLYMISSING : UpdateTitleType::DEFAULT);
+    UpdateTitle(dirs,
+                bOnlyMissing ? UpdateTitleType::ONLYMISSING : UpdateTitleType::DEFAULT);
 
     insertLog(TaskKind_App,
               0,
