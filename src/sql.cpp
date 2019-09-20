@@ -1266,7 +1266,7 @@ bool Sql::hasEntry(const QString& dir,
                    qint64* id)
 {
 #ifdef AMBIESOFT_FILENAME_CASESENSITIVE
-    MYQMODIFIER QSqlQuery query = myPrepare("select name,recordversion from FileInfo where "
+    MYQMODIFIER QSqlQuery query = myPrepare("select id,name,recordversion from FileInfo where "
                                             "directory=? and name=? and size=? and wtime=? and salient=?");
     int i=0;
     query.bindValue(i++, dir);
