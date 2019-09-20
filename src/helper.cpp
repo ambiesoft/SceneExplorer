@@ -542,7 +542,7 @@ QString filetime_human(const qint64& filetime)
 }
 QString fps_human(const double& fps)
 {
-    return QString::number(fps);//,'g',2);
+    return QString::number(fps,'g',2);
 }
 QString duration_human(double duration)
 {
