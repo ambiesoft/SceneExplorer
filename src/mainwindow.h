@@ -700,6 +700,16 @@ public Q_SLOTS:
     void sayNo(int loopId, int id,
                const QString& movieFile,
                const QString& errorReason);
+    void sayUpdated(int loopId, int id,
+                    const qint64& recordid,
+                   const QString& movieFile,
+                   const double& duration,
+                   const QString& format,
+                   int bitrate,
+                   const QString& vcodec,
+                   const QString& acodec,
+                   int vWidth,int vHeight,
+                   const double& fps);
     void sayGoodby(int loopId, int id,
                    const QStringList& files,
                    const QString& movieFile,
@@ -711,7 +721,8 @@ public Q_SLOTS:
                    const QString& vcodec,
                    const QString& acodec,
                    int vWidth,int vHeight,
-                   const QString& thumbext);
+                   const QString& thumbext,
+                   const double& fps);
     void sayDead(int loopId, int id);
     void finished_FFMpeg(int loopId, int id);
     void warning_FFMpeg(int loopId, int id,
@@ -725,6 +736,7 @@ public Q_SLOTS:
                      const QList<qint64> wtimes,
 
                      const QStringList& salients);
+
     void finished_GetDir(int loopId, int id ,const QString& dir);
     //    void afterFilter(int loopId, int id,
     //                     const QString& dir,
@@ -733,7 +745,10 @@ public Q_SLOTS:
     //                     const QStringList& renameNews);
     void afterFilter2(int loopId, int id,
                       const QString& dir,
-                      const QStringList& filteredFiles);
+                      const QStringList& filteredFiles,
+                      const QList<QPair<qint64,QString>>& toUpdateFiles);
+
+
     //    void finished_Filter(int loopId, int id);
 
 

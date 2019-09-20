@@ -72,6 +72,8 @@ class TableItemData
                   const QString& acodec,
                   int vWidth,int vHeight,
 
+                  const double& fps,
+
                   int opencount,
                   const qint64& lastaccess);
 
@@ -95,6 +97,7 @@ public:
             const QString& vcodec,
             const QString& acodec,
             int vWidth, int vHeight,
+            const double& fps,
             int opencount,
             const qint64& lastaccess)
     {
@@ -123,6 +126,8 @@ public:
                                         acodec,
 
                                         vWidth, vHeight,
+
+                                        fps,
 
                                         opencount,
                                         lastaccess));
@@ -174,23 +179,44 @@ public:
     QString getFormat() const {
         return format_;
     }
+    void setFormat(const QString& s) {
+        format_ = s;
+    }
     int getBitrate() const {
         return bitrate_;
+    }
+    void setBitrate(int i) {
+        bitrate_=i;
     }
     double getDuration() const {
         return duration_;
     }
+    void setDuration(const double& d) {
+        duration_=d;
+    }
     QString getVcodec() const {
         return vcodec_;
+    }
+    void setVcodec(const QString& s) {
+        vcodec_=s;
     }
     QString getAcodec() const {
         return acodec_;
     }
+    void setAcodec(const QString& s) {
+        acodec_=s;
+    }
     int getVWidth() const {
         return vWidth_;
     }
+    void setVWidth(int i) {
+        vWidth_=i;
+    }
     int getVHeight() const {
         return vHeight_;
+    }
+    void setVHeight(int i) {
+        vHeight_=i;
     }
     qint64 getSize() const;
     qint64 getCtime() const;
@@ -217,6 +243,23 @@ public:
     void setThumbExt(const QString& ext) {
         thumbExt_=ext;
     }
+
+    double fps_=0;
+    double getFps() const {
+        return fps_;
+    }
+    void setFps(const double& d) {
+        fps_=d;
+    }
+
+//    int recordversion_=0;
+//    int getRecodVersion() const {
+//        return recordversion_;
+//    }
+//    void setRecordVersion(const int& i) {
+//        recordversion_=i;
+//    }
+
     int getResolutionMultiplied() const {
         return vWidth_*vHeight_;
     }
@@ -251,6 +294,7 @@ public:
     void setDisplayed() {
         displayed_=true;
     }
+
 };
 
 #endif // LISTITEMDATA_H

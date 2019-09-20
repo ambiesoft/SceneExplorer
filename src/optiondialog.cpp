@@ -252,6 +252,7 @@ void OptionDialog::constructTitleTemplateMenu(QMenu& contextMenu,
         alltargets.append(QPair<QString,QString>("acodec" ,tr("Audio codec")));
         alltargets.append(QPair<QString,QString>("vcodec" ,tr("Video codec")));
         alltargets.append(QPair<QString,QString>("resolution" ,tr("Resolution")));
+        alltargets.append(QPair<QString,QString>("fps" ,tr("fps")));
 
         alltargets.append(QPair<QString,QString>("opencount" ,tr("Open count")));
         alltargets.append(QPair<QString,QString>("tags" ,tr("Tags")));

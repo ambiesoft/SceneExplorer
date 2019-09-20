@@ -81,6 +81,7 @@ QString format_human(const QString& s);
 QString bitrate_human(int bitrate);
 QString resolution_human(int width, int height);
 QString opencount_human(int count);
+QString fps_human(const double& fps);
 
 
 

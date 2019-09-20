@@ -271,6 +271,10 @@ QString TableModel::ExtractInfoText(TableItemDataPointer item, const QString& st
         {
             result += filetime_human(item->getWtime());
         }
+        else if(s=="${fps}")
+        {
+            result += fps_human(item->getFps());
+        }
         else
         {
             result += str.mid(pos, matchedlen);
@@ -509,6 +513,34 @@ void TableModel::UpdateOpenCountAndLastAccess(const QString& movieFile,
 
         if(lastaccess)
             pID->setLastAccess(*lastaccess);
+
+        int row = itemDatas_.indexOf(pID);
+        Q_ASSERT(row >= 0);
+        emit dataChanged(createIndex(row * 3, 0), createIndex((row * 3) + 2, 0));
+    }
+}
+
+void TableModel::UpdateRecord(const QString& movieFile,
+                              const double& duration,
+                              const QString& format,
+                              int bitrate,
+                              const QString& vcodec,
+                              const QString& acodec,
+                              int vWidth,int vHeight,
+                              const double& fps)
+{
+    TableItemDataPointer pID = mapsFullpathToItem_[normalizeFile(movieFile)];
+
+    if (pID)
+    {
+        pID->setDuration(duration);
+        pID->setFormat(format);
+        pID->setBitrate(bitrate);
+        pID->setVcodec(vcodec);
+        pID->setAcodec(acodec);
+        pID->setVWidth(vWidth);
+        pID->setVHeight(vHeight);
+        pID->setFps(fps);
 
         int row = itemDatas_.indexOf(pID);
         Q_ASSERT(row >= 0);

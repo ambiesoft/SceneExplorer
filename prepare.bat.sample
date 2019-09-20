@@ -12,9 +12,8 @@ set MAKE=nmake
 ::set MAKE=nmake
 
 :: For MingW
-:: set PATH=<path to mingw bin>
 :: set MAKE=nmake
-:: set PATH=%QTROOT%\Tools\mingw530_32\bin;%PATH%
+:: set PATH=%QTROOT%\Tools\%QTVERSIONTOOLS%\bin;%PATH%
 :: set MAKE=mingw32-make.exe
 
 

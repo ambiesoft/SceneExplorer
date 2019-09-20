@@ -121,6 +121,7 @@ static void testSQL()
                                                      "ac",
                                                      640,
                                                      480,
+                                                     29.97,
                                                      oc++,
                                                      ++la);
     tid->setThumbExt("jpg");

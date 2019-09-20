@@ -183,6 +183,16 @@ public:
         Q_ASSERT(false);
         return 0;
     }
+
+    void UpdateRecord(const QString& movieFile,
+                                  const double& duration,
+                                  const QString& format,
+                                  int bitrate,
+                                  const QString& vcodec,
+                                  const QString& acodec,
+                                  int vWidth,int vHeight,
+                                  const double& fps);
+
 Q_SIGNALS:
     void itemCountChanged();
     //void sortParameterChanged(SORTCOLUMN sc, bool rev);

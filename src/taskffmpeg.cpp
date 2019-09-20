@@ -43,7 +43,8 @@ TaskFFmpeg::TaskFFmpeg(const QString& ffprobe,
                        int id,
                        const QString& file,
                        QThread::Priority* priority,
-                       const QString& thumbext)
+                       const QString& thumbext,
+                       const bool isUpdateOnly)
 {
     loopId_ = loopId;
     id_=id;
@@ -62,6 +63,8 @@ TaskFFmpeg::TaskFFmpeg(const QString& ffprobe,
 
     thumbext_ = thumbext;
     // emit sayBorn(id,file);
+
+    isUpdateOnly_=isUpdateOnly;
 }
 TaskFFmpeg::~TaskFFmpeg()
 {
@@ -93,6 +96,8 @@ bool TaskFFmpeg::getProbe(const QString& file,
 
                           int& outVWidth,
                           int& outVHeight,
+
+                          double& outFps,
 
                           QString& errorReason)
 {
@@ -205,6 +210,31 @@ bool TaskFFmpeg::getProbe(const QString& file,
                 outVideoCodec = item["codec_name"].toString();
                 outVWidth = item["coded_width"].toInt();
                 outVHeight = item["coded_height"].toInt();
+
+                QString sFps = item["r_frame_rate"].toString();
+                QStringList sFpsPart = sFps.split('/');
+                switch(sFpsPart.count())
+                {
+                default:
+                case 0:
+                    outFps=0;
+                    break;
+                case 1:
+                    outFps = sFpsPart[0].toDouble();
+                    break;
+                case 2:
+                    {
+                        double d1 = sFpsPart[0].toDouble();
+                        double d2 = sFpsPart[1].toDouble();
+                        if(d2==0.0)
+                        {
+                            outFps=0;
+                            break;
+                        }
+                        outFps=d1/d2;
+                    }
+                    break;
+                }
             }
             if(outAudioCodec.isEmpty() && ctype=="audio")
             {
@@ -275,6 +305,7 @@ bool TaskFFmpeg::run3(QString& errorReason)
     QString format;
     int bitrate=0;
     QString vcodec,acodec;
+    double fps=0;
     int vWidth,vHeight;
     if(!getProbe(movieFile_,
                  duration,
@@ -283,9 +314,24 @@ bool TaskFFmpeg::run3(QString& errorReason)
                  vcodec,
                  acodec,
                  vWidth,vHeight,
+                 fps,
                  errorReason))
     {
         return false;
+    }
+    if(isUpdateOnly_)
+    {
+        Q_ASSERT(recordid_ != 0);
+        emit sayUpdated(loopId_,id_,
+                        recordid_,
+                       movieFile_,
+                       duration,
+                       format,
+                       bitrate,
+                       vcodec,acodec,
+                       vWidth,vHeight,
+                       fps);
+        return true;
     }
 
     QString strWidthHeight;
@@ -376,7 +422,6 @@ bool TaskFFmpeg::run3(QString& errorReason)
         emitFiles.append(filename);
     }
 
-    // emit sayGoodby(id_,emitFiles, THUMB_WIDTH, THUMB_HEIGHT, movieFile_, format);
     emit sayGoodby(loopId_,id_,
                    emitFiles,
                    movieFile_,
@@ -387,7 +432,8 @@ bool TaskFFmpeg::run3(QString& errorReason)
                    bitrate,
                    vcodec,acodec,
                    vWidth,vHeight,
-                   thumbext_);
+                   thumbext_,
+                   fps);
 
     return true;
 }

@@ -26,7 +26,8 @@
 #include "tagidsinfo.h"
 
 #define DBFILENAME "./db.sqlite3"
-#define DBVERSION 2
+#define DBVERSION 3
+#define DBRECORD_VERSION 1
 
 class LimitArg
 {
@@ -87,6 +88,8 @@ class Sql : public QObject
     bool CreateDBInfoTable();
     int GetDBVersion();
     bool UpdateDatabase1_2();
+
+
 public:
     enum SQL_ERROR {
         NO_ERROR,
@@ -178,7 +181,10 @@ public:
                   const qint64& size,
                   const qint64& wtime,
 
-                  const QString& sa);
+                  const QString& sa,
+                  bool* isUptodate,
+                  qint64* id);
+
     bool RemoveEntry(const QString& dir,
                      const QString& file,
                      QString* error = nullptr);
@@ -207,6 +213,16 @@ public:
                      QString& file,
                      qint64& openCount
                      );
+    bool UpdateRecord(
+            const qint64& dbid,
+            const double& duration,
+           const QString& format,
+           int bitrate,
+           const QString& vcodec,
+           const QString& acodec,
+           int vWidth,int vHeight,
+           const double& fps);
+
 };
 
 #endif // SQL_H

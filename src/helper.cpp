@@ -539,6 +539,10 @@ QString filetime_human(const qint64& filetime)
     QDateTime qdt = QDateTime::fromTime_t(filetime);
     return doublequoteIfNecessary(qdt.toString(Qt::DateFormat::DefaultLocaleShortDate));
 }
+QString fps_human(const double& fps)
+{
+    return QString::number(fps);//,'g',2);
+}
 QString duration_human(double duration)
 {
     int iduration = (int)(duration);

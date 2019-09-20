@@ -52,6 +52,8 @@ private:
     // int fileIndex_=0;
     Progress progress_;
     QString thumbext_;
+    bool isUpdateOnly_=false;
+    qint64 recordid_=0;
     bool getProbe(const QString& file,
                   double& outDuration,
                   QString& outFormat,
@@ -62,6 +64,8 @@ private:
 
                   int& outVWidth,
                   int& outVHeight,
+
+                  double& outFps,
 
                   QString& errorReason);
     void run2();
@@ -78,8 +82,12 @@ public:
                int id,
                const QString& file,
                QThread::Priority* priority,
-               const QString& thumbext);
+               const QString& thumbext,
+               const bool isUpdateOnly);
     virtual ~TaskFFmpeg() override;
+    void setRecordID(const qint64& recordid) {
+        recordid_=recordid;
+    }
     void run() override ;
     int GetId() const
     {
@@ -99,6 +107,18 @@ Q_SIGNALS:
                const QString& movieFile,
                const QString& errorReason);
 
+
+
+    void sayUpdated(int loopId, int id,
+                    const qint64& recordid,
+                   const QString& movieFile,
+                   const double& duration,
+                   const QString& format,
+                   int bitrate,
+                   const QString& vcodec,
+                   const QString& acodec,
+                   int vWidth,int vHeight,
+                   const double& fps);
     void sayGoodby(int loopId, int id,
                    const QStringList& files,
                    const QString& movieFile,
@@ -110,7 +130,8 @@ Q_SIGNALS:
                    const QString& vcodec,
                    const QString& acodec,
                    int vWidth,int vHeight,
-                   const QString& thumbext);
+                   const QString& thumbext,
+                   const double& fps);
     void sayDead(int loopId, int id);
     void finished_FFMpeg(int loopId, int id);
     void warning_FFMpeg(int loopId, int id,

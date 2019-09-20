@@ -50,6 +50,7 @@ TableItemData::TableItemData(const qint64& id,
                              const QString& vcodec,
                              const QString& acodec,
                              int vWidth,int vHeight,
+                             const double& fps,
                              int opencount,
                              const qint64& lastaccess)
 {
@@ -77,6 +78,7 @@ TableItemData::TableItemData(const qint64& id,
     vWidth_=vWidth;
     vHeight_=vHeight;
 
+    fps_=fps;
     opencount_=opencount;
     lastaccess_ = lastaccess;
 }
@@ -120,5 +122,10 @@ QMap<QString,QVariant> TableItemData::getColumnValues() const
     //	ret["opencount"] = getOpenCount();
     //	ret["lastaccess"] = getLastAccess();
     ret["thumbext"] = getThumbExt();
+
+    // version 3
+    ret["fps"] = getFps();
+
+
     return ret;
 }

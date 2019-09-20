@@ -54,6 +54,43 @@ void MainWindow::sayNo(int loopId,
 
     insertLog(TaskKind_FFMpeg, id, QString("%1 (%2) \"%3\"").arg(tr("Not a video"), errorReason, movieFile));
 }
+void MainWindow::sayUpdated(int loopId, int id,
+                            const qint64& recordid,
+               const QString& movieFile,
+               const double& duration,
+               const QString& format,
+               int bitrate,
+               const QString& vcodec,
+               const QString& acodec,
+               int vWidth,int vHeight,
+               const double& fps)
+{
+    if (loopId != gLoopId)
+        return;
+
+    QFileInfo fi(movieFile);
+    QString dir,name;
+    nomalizeDirAndName(fi.absoluteFilePath(), dir, name);
+
+    bool bSqlSuccess = gpSQL->UpdateRecord(recordid,duration,format,bitrate,vcodec,acodec,vWidth,vHeight,fps);
+
+    if(IsDirSelected(normalizeDir(fi.absolutePath())))
+    {
+        tableModel_->UpdateRecord(movieFile,duration,format,bitrate,vcodec,acodec,vWidth,vHeight,fps);
+    }
+
+    if(bSqlSuccess)
+    {
+        insertLog(TaskKind_SQL, id, QString("%1 \"%2\"").arg(tr("Written in Database"), movieFile));
+    }
+    else
+    {
+        insertLog(TaskKind_SQL, id, QString("%1 \"%2\"").arg(tr("Failed to write on Database"), movieFile));
+    }
+
+    insertLog(TaskKind_FFMpeg, id, QString("%1 \"%2\"").arg(tr("Done"), movieFile));
+}
+
 void MainWindow::sayGoodby(int loopId,  int id,
                            const QStringList& files,
                            const QString& movieFile,
@@ -66,7 +103,9 @@ void MainWindow::sayGoodby(int loopId,  int id,
                            const QString& acodec,
                            int vWidth,int vHeight,
 
-                           const QString& thumbext)
+                           const QString& thumbext,
+
+                           const double& fps)
 {
     if (loopId != gLoopId)
     {
@@ -102,6 +141,7 @@ void MainWindow::sayGoodby(int loopId,  int id,
                 bitrate,
                 vcodec,acodec,
                 vWidth,vHeight,
+                fps,
 
                 0,
                 0);

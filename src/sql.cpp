@@ -171,6 +171,11 @@ Sql::Sql(QObject*) : db_(QSqlDatabase::addDatabase("QSQLITE"))
     //    query.exec("ALTER TABLE FileInfo Add opencount_tmp INT");
     //    query.exec("ALTER TABLE FileInfo Add lastaccess_tmp INT");
     query.exec("ALTER TABLE FileInfo Add thumbext");
+
+    // version 3 (from 2)
+    query.exec("ALTER TABLE FileInfo Add fps");
+    query.exec("ALTER TABLE FileInfo Add recordversion");
+
     qDebug() << query.lastError().text() << __FUNCTION__;
 
 #ifdef QT__DEBUG
@@ -202,6 +207,8 @@ Sql::Sql(QObject*) : db_(QSqlDatabase::addDatabase("QSQLITE"))
                     arg(version).arg(DBVERSION);
             return;
         }
+
+        // Now version is smaller than current implementation(DBVERSION)
         if(version <= 0)
         {
 
@@ -212,6 +219,10 @@ Sql::Sql(QObject*) : db_(QSqlDatabase::addDatabase("QSQLITE"))
             {
                 return;
             }
+        }
+        if(version <= 2)
+        {
+            // no need to update
         }
 
         SQCN(query,prepare("UPDATE DbInfo SET version=?"));
@@ -371,6 +382,8 @@ QSqlQuery* Sql::getInsertQuery(TableItemDataPointer tid)
     int bindIndex=0;
 
     QMap<QString,QVariant> allmap = tid->getColumnValues();
+    allmap["recordversion"] = DBRECORD_VERSION;
+
 #ifdef QT_DEBUG
     for(const QString& s:allcolumns)
     {
@@ -1050,6 +1063,8 @@ bool Sql::GetAll(QList<TableItemDataPointer>& v,
         int vwidth = query.value("vwidth").toInt();
         int vheight = query.value("vheight").toInt();
 
+        double fps = query.value("fps").toDouble();
+
         int opencount = query.value("opencount").toInt();
         qint64 lastaccess = query.value("lastaccess").toLongLong();
 
@@ -1070,6 +1085,8 @@ bool Sql::GetAll(QList<TableItemDataPointer>& v,
 
                                                          vcodec,acodec,
                                                          vwidth,vheight,
+
+                                                         fps,
 
                                                          opencount,
                                                          lastaccess);
@@ -1235,20 +1252,24 @@ static QString GetAsciiLower(const QString& s)
     return QString::fromStdWString(w);
 }
 #endif // not AMBIESOFT_FILENAME_CASESENSITIVE
+
+
 bool Sql::hasEntry(const QString& dir,
                    const QString& file,
                    const qint64& size,
                    const qint64& wtime,
-                   const QString& sa)
+                   const QString& sa,
+                   bool* isUptodate,
+                   qint64* id)
 {
 #ifdef AMBIESOFT_FILENAME_CASESENSITIVE
-    MYQMODIFIER QSqlQuery query = myPrepare("select name from FileInfo where "
+    MYQMODIFIER QSqlQuery query = myPrepare("select name,recordversion from FileInfo where "
                                             "directory=? and name=? and size=? and wtime=? and salient=?");
     int i=0;
     query.bindValue(i++, dir);
     query.bindValue(i++, file);
 #else
-    MYQMODIFIER QSqlQuery query = myPrepare("select name from FileInfo where "
+    MYQMODIFIER QSqlQuery query = myPrepare("select id,name,recordversion from FileInfo where "
                                             "lower(directory)=? and lower(name)=? and size=? and wtime=? and salient=?");
     // Basically Windows' ntfs is case-insensitive.
     // But it can be configured to be case-sensitive.
@@ -1272,8 +1293,28 @@ bool Sql::hasEntry(const QString& dir,
     query.bindValue(i++, sa);
 
     SQC(query,exec());
-    return query.next();
+    const bool bRet = query.next();
+    if(!bRet)
+        return bRet;
+    if(id)
+    {
+        *id = query.value("id").toLongLong();
+    }
+
+    if(!isUptodate)
+        return bRet;
+
+    // check if uptodate
+    QVariant vRecordVersion = query.value("recordversion");
+    if(!vRecordVersion.isValid())
+    {
+        *isUptodate = false;
+        return bRet;
+    }
+    *isUptodate = vRecordVersion.toInt()==DBRECORD_VERSION;
+    return bRet;
 }
+
 bool Sql::GetID(const QString& dir,
                 const QString& file,
                 qint64& id)
@@ -1511,3 +1552,30 @@ bool Sql::GetProperty_obsolete(const qint64& id,
 }
 
 
+bool Sql::UpdateRecord(
+        const qint64& id,
+               const double& duration,
+               const QString& format,
+               int bitrate,
+               const QString& vcodec,
+               const QString& acodec,
+               int vWidth,int vHeight,
+               const double& fps)
+{
+    MYQMODIFIER QSqlQuery query("UPDATE FileInfo SET "
+                                "duration=?,format=?,bitrate=?,vcodec=?,acodec=?,vwidth=?,vheight=?,fps=?,recordversion=? WHERE id=?");
+
+    int i=0;
+    query.bindValue(i++, duration);
+    query.bindValue(i++, format);
+    query.bindValue(i++, bitrate);
+    query.bindValue(i++, vcodec);
+    query.bindValue(i++, acodec);
+    query.bindValue(i++, vWidth);
+    query.bindValue(i++, vHeight);
+    query.bindValue(i++, fps);
+    query.bindValue(i++, DBRECORD_VERSION);
+    query.bindValue(i++, id);
+    SQC(query,exec());
+    return query.numRowsAffected()==1;
+}

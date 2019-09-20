@@ -540,6 +540,7 @@ void MainWindow::afterGetDir(int loopId, int id,
 
     QString dir = normalizeDir(QDir(dirc).absolutePath());
 
+    QList<QPair<qint64,QString>> toUpdateFiles;
     QStringList filteredFiles;
 
     // check file is in DB
@@ -554,8 +555,19 @@ void MainWindow::afterGetDir(int loopId, int id,
 
         // QString sa = createSalient(fi.absoluteFilePath(), fi.size());
 
-        if(gpSQL->hasEntry(dir,file,size,wtime,sa))
+        bool isUptodate = false;
+        qint64 recordid = 0;
+        if(gpSQL->hasEntry(dir,file,size,wtime,sa,&isUptodate,&recordid))
         {
+            Q_ASSERT(recordid != 0);
+            if(!isUptodate)
+            {
+                // need update db
+                insertLog(TaskKind_GetDir, id, tr("Needs update record of \"%1\"").
+                          arg(fi.absoluteFilePath()));
+                toUpdateFiles.append(QPair<qint64,QString>(recordid,file));
+                continue;
+            }
             if(true) // gpSQL->hasThumb(dir, file))
             {
                 insertLog(TaskKind_GetDir, id, tr("Already exists. \"%1\"").
@@ -613,7 +625,8 @@ void MainWindow::afterGetDir(int loopId, int id,
     afterFilter2(loopId,
                  id,
                  dir,
-                 filteredFiles
+                 filteredFiles,
+                 toUpdateFiles
                  );
 
 
@@ -634,31 +647,30 @@ void MainWindow::finished_GetDir(int loopId, int id, const QString& dir)
 }
 void MainWindow::afterFilter2(int loopId,int id,
                               const QString& dir,
-                              const QStringList& filteredFiles)
+                              const QStringList& filteredFiles,
+                              const QList<QPair<qint64,QString>>& toUpdateFiles)
 {
     if(loopId != gLoopId)
         return;
 
-    Q_UNUSED(id);
-
-
-
-    //    QStringList filteredFiles;
-    //    int ret = gpSQL->filterWithEntry(dir, filesIn, filteredFiles);
-    //    if(ret != 0)
-    //    {
-    //        insertLog(TaskKind::SQL, 0, Sql::getErrorStrig(ret), true);
-    //    }
-
-    if(filteredFiles.isEmpty())
+    if(filteredFiles.isEmpty() && toUpdateFiles.isEmpty())
     {
         insertLog(TaskKind_GetDir, id, tr("No new files found in %1").arg(dir));
     }
     else
     {
-        insertLog(TaskKind_GetDir, id, tr("%1 new items found in %2").
-                  arg(QString::number(filteredFiles.count())).
-                  arg(dir));
+        if(!filteredFiles.isEmpty())
+        {
+            insertLog(TaskKind_GetDir, id, tr("%1 new items found in %2").
+                      arg(QString::number(filteredFiles.count())).
+                      arg(dir));
+        }
+        if(!toUpdateFiles.isEmpty())
+        {
+            insertLog(TaskKind_GetDir, id, tr("%1 items in %2 need to update").
+                      arg(QString::number(toUpdateFiles.count())).
+                      arg(dir));
+        }
     }
 
     // afterfilter must perform salient check from SQL, for filter-passed files
@@ -678,7 +690,8 @@ void MainWindow::afterFilter2(int loopId,int id,
                                            idManager_->Increment(IDKIND_FFmpeg),
                                            file,
                                            GetTaskPriority(),
-                                           optionThumbFormat_);
+                                           optionThumbFormat_,
+                                           false);
         pTask->setAutoDelete(true);
         //        QObject::connect(pTask, &TaskFFMpeg::sayBorn,
         //                         this, &MainWindow::sayBorn);
@@ -701,13 +714,51 @@ void MainWindow::afterFilter2(int loopId,int id,
         logids.append(idManager_->Get(IDKIND_FFmpeg));
         logtexts.append(QString(tr("Task registered. %1")).arg(file));
     }
+
+    for(int i=0 ; i < toUpdateFiles.length(); ++i)
+    {
+        Q_ASSERT(isLegalFileExt(optionThumbFormat_));
+        QString file = pathCombine(dir, toUpdateFiles[i].second);
+        TaskFFmpeg* pTask = new TaskFFmpeg(FFMpeg::GetFFprobe(settings_),
+                                           FFMpeg::GetFFmpeg(settings_),
+                                           gLoopId,
+                                           idManager_->Increment(IDKIND_FFmpeg),
+                                           file,
+                                           GetTaskPriority(),
+                                           optionThumbFormat_,
+                                           true);
+        pTask->setRecordID(toUpdateFiles[i].first);
+        pTask->setAutoDelete(true);
+        //        QObject::connect(pTask, &TaskFFMpeg::sayBorn,
+        //                         this, &MainWindow::sayBorn);
+        QObject::connect(pTask, &TaskFFmpeg::sayHello,
+                         this, &MainWindow::sayHello);
+        QObject::connect(pTask, &TaskFFmpeg::sayNo,
+                         this, &MainWindow::sayNo);
+        QObject::connect(pTask, &TaskFFmpeg::sayUpdated,
+                         this, &MainWindow::sayUpdated);
+//        QObject::connect(pTask, &TaskFFmpeg::sayGoodby,
+//                         this, &MainWindow::sayGoodby);
+        QObject::connect(pTask, &TaskFFmpeg::sayDead,
+                         this, &MainWindow::sayDead);
+        QObject::connect(pTask, &TaskFFmpeg::finished_FFMpeg,
+                         this, &MainWindow::finished_FFMpeg);
+        QObject::connect(pTask, &TaskFFmpeg::warning_FFMpeg,
+                         this, &MainWindow::warning_FFMpeg);
+
+        tasks.append(TaskListData::Create(pTask->GetId(),pTask->GetMovieFile()));
+        getPoolFFmpeg()->start(pTask);
+
+        logids.append(idManager_->Get(IDKIND_FFmpeg));
+        logtexts.append(QString(tr("Task registered. %1")).arg(file));
+    }
+
     insertLog(TaskKind_FFMpeg, logids, logtexts);
     taskModel_->AddTasks(tasks);
 
     checkTaskFinished();
-
-
 }
+
 void MainWindow::checkTaskFinished()
 {
     if(idManager_->isAllTaskFinished())
