@@ -206,6 +206,7 @@ QString GetSortColumnName(SORTCOLUMNMY sc)
     case SORT_BITRATE:return QObject::tr("Bitrate");
     case SORT_OPENCOUNT:return QObject::tr("Open count");
     case SORT_LASTACCESS:return QObject::tr("Last Access");
+    case SORT_FPS:return QObject::tr("FPS");
     default:
         Q_ASSERT(false);
 

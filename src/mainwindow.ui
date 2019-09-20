@@ -69,7 +69,7 @@
      <x>0</x>
      <y>0</y>
      <width>1009</width>
-     <height>23</height>
+     <height>22</height>
     </rect>
    </property>
    <property name="font">
@@ -200,6 +200,7 @@
     <addaction name="actionSort_by_resolution"/>
     <addaction name="actionSort_by_duration"/>
     <addaction name="actionSort_by_bitrate"/>
+    <addaction name="actionSort_by_fps"/>
     <addaction name="actionSort_by_open_count"/>
     <addaction name="actionSort_by_last_access"/>
     <addaction name="separator"/>
@@ -631,7 +632,7 @@
      <normaloff>:/resource/images/sort-wtime-rev.png</normaloff>:/resource/images/sort-wtime-rev.png</iconset>
    </property>
    <property name="text">
-    <string>Sort by wtime</string>
+    <string>Sort by &amp;wtime</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+K, W</string>
@@ -722,7 +723,7 @@
      <normaloff>:/resource/images/sort-opencount-rev.png</normaloff>:/resource/images/sort-opencount-rev.png</iconset>
    </property>
    <property name="text">
-    <string>Sort by open count</string>
+    <string>Sort by &amp;open count</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+K, O</string>
@@ -1122,6 +1123,17 @@
    </property>
    <property name="shortcut">
     <string>Del</string>
+   </property>
+  </action>
+  <action name="actionSort_by_fps">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Sort by f&amp;ps</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+K, F</string>
    </property>
   </action>
  </widget>

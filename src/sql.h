@@ -86,11 +86,18 @@ class Sql : public QObject
             const LimitArg& limit,
             const TagidsInfo& tagInfos);
     bool CreateDBInfoTable();
-    int GetDBVersion();
+    int GetFileDBVersion();
     bool UpdateDatabase1_2();
 
 
 public:
+    static int GetAppDBVersion() {
+        return DBVERSION;
+    }
+    static int GetAppRecordVersion() {
+        return DBRECORD_VERSION;
+    }
+
     enum SQL_ERROR {
         NO_ERROR,
         MOVIEFILE_NOT_FOUND,

@@ -666,6 +666,10 @@ void MainWindow::on_actionSort_by_last_access_triggered()
 {
     onSortCommon(SORT_LASTACCESS);
 }
+void MainWindow::on_actionSort_by_fps_triggered()
+{
+    onSortCommon(SORT_FPS);
+}
 
 void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
 {

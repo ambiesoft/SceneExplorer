@@ -605,6 +605,8 @@ private Q_SLOTS:
 
 
 
+    void on_actionSort_by_fps_triggered();
+
 private:
     void OnCopyTable();
     void OnCopyDirectory();

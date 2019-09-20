@@ -83,6 +83,10 @@
         <source>WordSize</source>
         <translation>ワードサイズ</translation>
     </message>
+    <message>
+        <source>Database</source>
+        <translation>データベース</translation>
+    </message>
 </context>
 <context>
     <name>DocinfoDialog</name>
@@ -296,7 +300,7 @@
     </message>
     <message>
         <source>Sort by wtime</source>
-        <translation>修正時刻でソート</translation>
+        <translation type="vanished">修正時刻でソート</translation>
     </message>
     <message>
         <source>&amp;Top</source>
@@ -332,7 +336,7 @@
     </message>
     <message>
         <source>Sort by open count</source>
-        <translation>オープンカウントでソート</translation>
+        <translation type="vanished">オープンカウントでソート</translation>
     </message>
     <message>
         <source>&amp;Extentions...</source>
@@ -1402,6 +1406,30 @@
         <source>F7</source>
         <translation>F7</translation>
     </message>
+    <message>
+        <source>Sort by &amp;wtime</source>
+        <translation>修正時刻でソート(&amp;W)</translation>
+    </message>
+    <message>
+        <source>Sort by &amp;open count</source>
+        <translation>オープンカウントでソート(&amp;O)</translation>
+    </message>
+    <message>
+        <source>Sort by f&amp;ps</source>
+        <translation>FPSでソート(&amp;P)</translation>
+    </message>
+    <message>
+        <source>Ctrl+K, F</source>
+        <translation>Ctrl+K,F</translation>
+    </message>
+    <message>
+        <source>Needs update record of &quot;%1&quot;</source>
+        <translation>&quot;%1&quot;のレコードがアップデート必要</translation>
+    </message>
+    <message>
+        <source>%1 items in %2 need to update</source>
+        <translation>%2の%1個のアイテムがアップデート必要</translation>
+    </message>
 </context>
 <context>
     <name>Option</name>
@@ -1635,6 +1663,10 @@
     <message>
         <source>Tags</source>
         <translation>タグ</translation>
+    </message>
+    <message>
+        <source>fps</source>
+        <translation>fps</translation>
     </message>
 </context>
 <context>
@@ -1947,6 +1979,10 @@
     <message>
         <source>Failed to set language to &apos;%1&apos;.</source>
         <translation>言語を&apos;%1&apos;に設定できませんでした。</translation>
+    </message>
+    <message>
+        <source>FPS</source>
+        <translation>FPS</translation>
     </message>
 </context>
 <context>

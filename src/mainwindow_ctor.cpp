@@ -85,6 +85,7 @@ MainWindow::MainWindow(QWidget *parent,
     sortManager_.setAction(SORT_BITRATE,ui->actionSort_by_bitrate);
     sortManager_.setAction(SORT_OPENCOUNT,ui->actionSort_by_open_count);
     sortManager_.setAction(SORT_LASTACCESS,ui->actionSort_by_last_access);
+    sortManager_.setAction(SORT_FPS,ui->actionSort_by_fps);
 
 
 

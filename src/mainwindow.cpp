@@ -2375,3 +2375,4 @@ void MainWindow::on_txtLog_customContextMenuRequested(const QPoint &pos)
 
 
 
+

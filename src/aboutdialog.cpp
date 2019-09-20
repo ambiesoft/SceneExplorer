@@ -21,6 +21,7 @@
 
 #include "helper.h"
 #include "consts.h"
+#include "sql.h"
 
 #include "aboutdialog.h"
 #include "ui_aboutdialog.h"
@@ -145,9 +146,20 @@ AboutDialog::AboutDialog(QWidget *parent) :
     txtPlatform += QSysInfo::kernelVersion();
     txtPlatform += "\n\n";
 
-
-
     ui->tbPlatform->setText(txtPlatform);
+
+
+    QString txtDB;
+    txtDB += "Sql::GetAppDBVersion():\n";
+    txtDB += QString::number(Sql::GetAppDBVersion());
+    txtDB += "\n\n";
+
+    txtDB += "Sql::GetAppRecordVersion():\n";
+    txtDB += QString::number( Sql::GetAppRecordVersion());
+    txtDB += "\n\n";
+
+
+    ui->tbDatabase->setText(txtDB);
 
 
     QString qtText;

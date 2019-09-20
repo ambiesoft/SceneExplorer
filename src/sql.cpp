@@ -91,7 +91,7 @@ bool Sql::CreateDBInfoTable()
     //    }
     return true;
 }
-int Sql::GetDBVersion()
+int Sql::GetFileDBVersion()
 {
     QSqlQuery query;
     SQCI(query,exec("SELECT version FROM DbInfo WHERE id=1"));
@@ -110,7 +110,7 @@ Sql::Sql(QObject*) : db_(QSqlDatabase::addDatabase("QSQLITE"))
 
     if(!CreateDBInfoTable())
         return;
-    int version = GetDBVersion();
+    int version = GetFileDBVersion();
 
     QSqlQuery query;
 
@@ -859,6 +859,9 @@ bool Sql::GetAllSqlString(
         break;
     case SORT_LASTACCESS:
         sortby << "lastaccess";
+        break;
+    case SORT_FPS:
+        sortby << "fps";
         break;
 
     default:

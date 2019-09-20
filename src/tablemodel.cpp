@@ -421,6 +421,7 @@ QString TableModel::GetSortColumnValue(SORTCOLUMNMY sc, TableItemDataPointer ite
     case SORT_BITRATE:return bitrate_human(item->getBitrate());
     case SORT_OPENCOUNT:return opencount_human(item->getOpenCount());
     case SORT_LASTACCESS:return filetime_human(item->getLastAccess());
+    case SORT_FPS:return fps_human(item->getFps());
     default :
         Q_ASSERT(false);
 
