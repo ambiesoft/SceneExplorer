@@ -47,7 +47,7 @@ AboutDialog::AboutDialog(QWidget *parent) :
 
     QString txtCopyright;
     txtCopyright.append("copyright 2018 ");
-    txtCopyright.append(QString("<a href=\"http://ambiesoft.fam.cx/main/index.php?page=sceneexplorer\">%1</a> ").
+    txtCopyright.append(QString("<a href=\"https://ambiesoft.github.io/webjumper/?target=sceneexplorer\">%1</a> ").
                         arg(ORGANIZATION));
     txtCopyright.append(QString("(<a href=\"https://github.com/ambiesoft/SceneExplorer\">%1</a>)").
                         arg("github"));
@@ -168,7 +168,7 @@ AboutDialog::AboutDialog(QWidget *parent) :
     ui->tbOtherVersion->setText(qtText);
 
     ui->tbDonate->setOpenExternalLinks(true);
-    ui->tbDonate->setHtml(tr("<p>Support our software by making <a href=\"http://ambiesoft.fam.cx/donate/\">donation</a>.</p>"));
+    ui->tbDonate->setHtml(tr("<p>Support our software by making <a href=\"http://ambiesoft.mooo.com/donate/\">donation</a>.</p>"));
 }
 
 AboutDialog::~AboutDialog()
