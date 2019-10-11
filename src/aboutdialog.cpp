@@ -168,7 +168,7 @@ AboutDialog::AboutDialog(QWidget *parent) :
     ui->tbOtherVersion->setText(qtText);
 
     ui->tbDonate->setOpenExternalLinks(true);
-    ui->tbDonate->setHtml(tr("<p>Support our software by making <a href=\"http://ambiesoft.mooo.com/donate/\">donation</a>.</p>"));
+    ui->tbDonate->setHtml(tr("<p>Support our software by making <a href=\"https://ambiesoft.github.io/webjumper/?target=donate\">donation</a>.</p>"));
 }
 
 AboutDialog::~AboutDialog()
