@@ -122,13 +122,13 @@ $ make
 If you have troubles, post *Issue* on <https://github.com/ambiesoft/SceneExplorer/issues>.
 
 ## 寄付
-Ambiesoftでは寄付を募集しています。詳しくは<http://ambiesoft.fam.cx/donate/>を御覧ください。
+Ambiesoftでは寄付を募集しています。詳しくは<http://ambiesoft.mooo.com/donate/>を御覧ください。
 
 ## コンタクト
 - 作者: Ambiesoft trueff
 - E-mail: <ambiesoft.trueff@gmail.com>
-- ウェブページ: <http://ambiesoft.fam.cx/main/index.php?page=sceneexplorer>
-- 掲示板: <http://ambiesoft.fam.cx/minibbs/minibbs.php>
+- ウェブページ: <http://ambiesoft.mooo.com/main/index.php?page=sceneexplorer>
+- 掲示板: <http://ambiesoft.mooo.com/minibbs/minibbs.php>
 - 開発: <https://github.com/ambiesoft/SceneExplorer>
 
 

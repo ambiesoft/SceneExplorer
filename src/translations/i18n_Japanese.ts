@@ -40,14 +40,6 @@
         <translation>寄付</translation>
     </message>
     <message>
-        <source>&lt;p&gt;Support our software by &lt;a href=&quot;http://ambiesoft.fam.cx/donate/&quot;&gt;donation&lt;/a&gt;.&lt;/p&gt;</source>
-        <translation type="vanished">Ambiesoftでは開発をサポートのための&lt;a href=&quot;http://ambiesoft.fam.cx/donate/&quot;&gt;寄付&lt;/a&gt;を募集しています。</translation>
-    </message>
-    <message>
-        <source>&lt;p&gt;Support our software by making &lt;a href=&quot;http://ambiesoft.fam.cx/donate/&quot;&gt;donation&lt;/a&gt;.&lt;/p&gt;</source>
-        <translation>&lt;p&gt;Ambiesoftでは開発をサポートのための&lt;a href=&quot;http://ambiesoft.fam.cx/donate/&quot;&gt;寄付&lt;/a&gt;を募集しています。&lt;/p&gt;</translation>
-    </message>
-    <message>
         <source>Platform</source>
         <translation>プラットフォーム</translation>
     </message>
@@ -86,6 +78,10 @@
     <message>
         <source>Database</source>
         <translation>データベース</translation>
+    </message>
+    <message>
+        <source>&lt;p&gt;Support our software by making &lt;a href=&quot;https://ambiesoft.github.io/webjumper/?target=donate&quot;&gt;donation&lt;/a&gt;.&lt;/p&gt;</source>
+        <translation type="unfinished">&lt;p&gt;Ambiesoftでは開発をサポートのための&lt;a href=&quot;https://ambiesoft.github.io/webjumper/?target=donate&quot;&gt;寄付&lt;/a&gt;を募集しています。&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
