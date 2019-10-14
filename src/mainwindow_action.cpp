@@ -684,21 +684,6 @@ void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
 
         contextMenu.addSeparator();
 
-        contextMenu.addEnablingAction(ui->action_Copy);
-
-        // sub menu start --->
-        QMenu menuCopyOther(tr("C&opy others..."), this);
-
-        QAction actionCopyFilename(tr("&Filename"));
-        connect(&actionCopyFilename, SIGNAL(triggered()),
-                this, SLOT(OnContextCopySelectedVideoFilename()));
-        menuCopyOther.addAction(&actionCopyFilename);
-
-        contextMenu.addMenu(&menuCopyOther);
-        // <--- sub menu end
-
-        contextMenu.addSeparator();
-
         // external tools ----->
         QMenu menuExternalTools(tr("External &tools..."), this);
         QList< QSharedPointer<QAction> > actExts;
@@ -727,6 +712,21 @@ void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
 
         contextMenu.addMenu(&menuExternalTools);
         // <---- external tools
+        contextMenu.addSeparator();
+
+        contextMenu.addEnablingAction(ui->action_Copy);
+
+        // sub menu start --->
+        QMenu menuCopyOther(tr("C&opy others..."), this);
+
+        QAction actionCopyFilename(tr("&Filename"));
+        connect(&actionCopyFilename, SIGNAL(triggered()),
+                this, SLOT(OnContextCopySelectedVideoFilename()));
+        menuCopyOther.addAction(&actionCopyFilename);
+
+        contextMenu.addMenu(&menuCopyOther);
+        // <--- sub menu end
+
 
         contextMenu.addSeparator();
 
