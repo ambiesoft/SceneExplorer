@@ -57,7 +57,7 @@ void MainWindow::StoreDocument()
 }
 
 void MainWindow::closeEvent(QCloseEvent *event) {
-    Q_UNUSED(event);
+    Q_UNUSED(event)
 
     gPaused = false;
     WaitingCursor wc;
