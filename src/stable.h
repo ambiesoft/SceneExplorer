@@ -102,6 +102,7 @@
 #include <QStack>
 #include <QStandardItemModel>
 #include <QStandardPaths>
+#include <QStorageInfo>
 #include <QString>
 #include <QStringList>
 #include <QStyledItemDelegate>

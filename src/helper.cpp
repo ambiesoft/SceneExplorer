@@ -522,7 +522,7 @@ QStringList RemoveDuplicateSubDirectory(const QStringList& sources, QStringList&
 QString size_human(const qint64& size)
 {
     float num = size;
-    static const QStringList list{ "KB", "MB", "GB", "TB"};
+    static const QStringList list{ "KiB", "MiB", "GiB", "TiB"};
 
     QStringListIterator i(list);
     QString unit("bytes");

@@ -44,6 +44,7 @@
 #include <QSortFilterProxyModel>
 #include <QFontDialog>
 #include <QInputDialog>
+#include <QStorageInfo>
 
 #include "../../lsMisc/stdosd/blockedbool.h"
 #include "../../lsMisc/stdQt/stdQt.h"
@@ -1113,6 +1114,8 @@ void MainWindow::itemChangedCommon(bool bForceRead)
         return;
 
     WaitingCursor wc;
+
+    updateFreeSpace();
 
     QStringList dirs;
     bool bOnlyMissing = false;
@@ -2372,7 +2375,21 @@ void MainWindow::on_txtLog_customContextMenuRequested(const QPoint &pos)
 }
 
 
+void MainWindow::updateFreeSpace()
+{
+    Q_ASSERT(slFreeSpace_);
 
+    const QString dir = ui->directoryWidget->getSelectedFirstDirectory();
+    if(dir.isEmpty())
+    {
+        slFreeSpace_->setText(QString());
+        return;
+    }
+    QStorageInfo si(dir);
+    slFreeSpace_->setText(QString("%1 %2 free").arg(
+                              si.rootPath(),
+                              size_human(si.bytesFree())));
+}
 
 
 

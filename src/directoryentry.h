@@ -49,6 +49,7 @@ public:
     void SortNormalItems();
 
     QList<DirectoryItem*> selectedOrCheckedItems();
+    QString getSelectedFirstDirectory();
 };
 
 #endif // DIRECTORYENTRY_H

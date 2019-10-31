@@ -182,3 +182,17 @@ QList<DirectoryItem*> DirectoryEntry::selectedOrCheckedItems()
     }
     return items;
 }
+QString DirectoryEntry::getSelectedFirstDirectory()
+{
+    for(int i=0 ; i < count(); ++i)
+    {
+        DirectoryItem* di = (DirectoryItem*)item(i);
+        if(di->isSelected())
+        {
+            if(!di->IsNormalItem())
+                return QString();
+            return di->text();
+        }
+    }
+    return QString();
+}

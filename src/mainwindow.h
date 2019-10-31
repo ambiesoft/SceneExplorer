@@ -289,6 +289,9 @@ private:
         return closed_;
     }
 
+    QLabel *slFreeSpace_ = nullptr;
+    void updateFreeSpace();
+
     QLabel *slPaused_ = nullptr;
     QLabel *slTask_ = nullptr;
     QLabel *slItemCount_ = nullptr;

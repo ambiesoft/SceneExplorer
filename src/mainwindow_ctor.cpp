@@ -222,10 +222,10 @@ MainWindow::MainWindow(QWidget *parent,
     CreateLimitManager();
 
 
-    // status bar
     taskModel_ = new TaskModel(ui->listTask);
     ui->listTask->setModel(taskModel_);
 
+    // status bar
     slItemSort_ = new QLabel(this);
     ui->statusBar->addPermanentWidget(slItemSort_);
 
@@ -240,6 +240,9 @@ MainWindow::MainWindow(QWidget *parent,
     slPaused_->hide();
     ui->statusBar->addPermanentWidget(slPaused_);
 
+    slFreeSpace_ = new QLabel(this);
+    ui->statusBar->addPermanentWidget(slFreeSpace_);
+    updateFreeSpace();
 
 
     QVariant vVal;
