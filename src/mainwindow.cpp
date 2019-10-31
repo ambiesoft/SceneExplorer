@@ -738,8 +738,8 @@ void MainWindow::afterFilter2(int loopId,int id,
                          this, &MainWindow::sayNo);
         QObject::connect(pTask, &TaskFFmpeg::sayUpdated,
                          this, &MainWindow::sayUpdated);
-//        QObject::connect(pTask, &TaskFFmpeg::sayGoodby,
-//                         this, &MainWindow::sayGoodby);
+        //        QObject::connect(pTask, &TaskFFmpeg::sayGoodby,
+        //                         this, &MainWindow::sayGoodby);
         QObject::connect(pTask, &TaskFFmpeg::sayDead,
                          this, &MainWindow::sayDead);
         QObject::connect(pTask, &TaskFFmpeg::finished_FFMpeg,
@@ -1454,18 +1454,18 @@ void MainWindow::on_action_ClearFind_triggered()
     cmbFind_->setCurrentText(QString());
     itemChangedCommon(true);
 
-//    if(!selPath.isEmpty())
-//    {
-//        QModelIndex miToSelect = proxyModel_->findIndex(selPath);
-//        if(miToSelect.isValid())
-//        {
-//            ui->tableView->selectionModel()->select(miToSelect,
-//                                                    QItemSelectionModel::ClearAndSelect);
-//            proxyModel_->ensureIndex(miToSelect);
-//            QApplication::processEvents();
-//            ui->tableView->scrollTo(miToSelect);
-//        }
-//    }
+    //    if(!selPath.isEmpty())
+    //    {
+    //        QModelIndex miToSelect = proxyModel_->findIndex(selPath);
+    //        if(miToSelect.isValid())
+    //        {
+    //            ui->tableView->selectionModel()->select(miToSelect,
+    //                                                    QItemSelectionModel::ClearAndSelect);
+    //            proxyModel_->ensureIndex(miToSelect);
+    //            QApplication::processEvents();
+    //            ui->tableView->scrollTo(miToSelect);
+    //        }
+    //    }
 }
 
 void MainWindow::OnFindComboEnterPressed()
@@ -2379,16 +2379,26 @@ void MainWindow::updateFreeSpace()
 {
     Q_ASSERT(slFreeSpace_);
 
-    const QString dir = ui->directoryWidget->getSelectedFirstDirectory();
-    if(dir.isEmpty())
+    do
     {
-        slFreeSpace_->setText(QString());
+        const QString dir = ui->directoryWidget->getSelectedFirstDirectory();
+        if(dir.isEmpty())
+            break;
+
+        qint64 bytesFree;
+        QString root;
+        if(!GetFreeStorage(dir, bytesFree, root))
+            break;
+
+        slFreeSpace_->setText(QString("%1 %2 free").arg(
+                                  root,
+                                  size_human(bytesFree)));
         return;
-    }
-    QStorageInfo si(dir);
-    slFreeSpace_->setText(QString("%1 %2 free").arg(
-                              si.rootPath(),
-                              size_human(si.bytesFree())));
+    } while(false);
+
+    // hide
+    slFreeSpace_->setText(QString());
+    return;
 }
 
 
