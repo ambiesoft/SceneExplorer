@@ -17,19 +17,19 @@ if %PYTHONEXE%x==x (
   goto :error
 )
 if not exist %PYTHONEXE% (
-  echo %PYTHONEXE% not found. Check the directory.
+  echo PYTHONEXE %PYTHONEXE% not found. Check the directory.
   goto :error
 )
 if not exist %QTROOT%\ (
-  echo %QTROOT% not found. Check the directory.
+  echo QTROOT %QTROOT% not found. Check the directory.
   goto :error
 )
 if not exist %QTROOT%\%QTVERSION%\ (
-  echo  %QTROOT%\%QTVERSION% not found. Check the directory.
+  echo  QTROOT\QTVERSION %QTROOT%\%QTVERSION% not found. Check the directory.
   goto :error
 )
 if not exist %QTROOT%\%QTVERSION%\%QTVERSIONTOOLS%\ (
-  echo %QTVERSIONTOOLS% not found. Check the directory.
+  echo %QTROOT%\%QTVERSION%\%QTVERSIONTOOLS% not found. Check the directory.
   goto :error
 )
 ::if not exist %QTROOT%\Tools\%QTTOOLS%\ (
