@@ -730,6 +730,19 @@ void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
 
         contextMenu.addSeparator();
 
+        QAction actionRename(tr("Re&name"));
+        connect(&actionRename, SIGNAL(triggered()),
+                this, SLOT(OnRename()));
+        contextMenu.addAction(&actionRename);
+
+
+        QAction actionRemoveFromDB(tr("&Remove"));
+        connect(&actionRemoveFromDB, SIGNAL(triggered()),
+                this, SLOT(OnRemove()));
+        contextMenu.addAction(&actionRemoveFromDB);
+
+        contextMenu.addSeparator();
+
         // Tags tools ----->
         QMenu menuAddTags(tr("Ta&g..."), this);
         QList< QSharedPointer<QAction> > actTags;
@@ -767,39 +780,16 @@ void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
         // <---- Tags
 
 
-
-
-
-
-
-
-
-
-
-
-
-
         contextMenu.addSeparator();
 
-        QAction actionRename(tr("Re&name"));
-        connect(&actionRename, SIGNAL(triggered()),
-                this, SLOT(OnRename()));
-        contextMenu.addAction(&actionRename);
-
-
-        QAction actionRemoveFromDB(tr("&Remove"));
-        connect(&actionRemoveFromDB, SIGNAL(triggered()),
-                this, SLOT(OnRemove()));
-        contextMenu.addAction(&actionRemoveFromDB);
-
-        contextMenu.addSeparator();
-
+        // ---> Property
         QAction actionItemProperty(tr("&Property..."));
         connect(&actionItemProperty, SIGNAL(triggered()),
                 this, SLOT(OnProperty()));
         contextMenu.addAction(&actionItemProperty);
 
         contextMenu.exec(ui->tableView->mapToGlobal(pos));
+        // <--- Property
     }
     else
     {
