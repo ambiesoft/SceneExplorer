@@ -140,7 +140,7 @@ FORMS += \
     renamedialog.ui \
     itempropertydialog.ui
 
-RC_FILE = app.rc
+# RC_FILE = app.rc
 
 DISTFILES += \
     ../History.txt
@@ -169,6 +169,7 @@ win32 {
         LIBS += User32.lib
         # Ole32.lib
     }
+    RC_ICONS += icon.ico
 }
 linux {
     message("linux-g++")
@@ -178,6 +179,8 @@ linux {
         osd_linux.cpp \
         ../../lsMisc/stdosd/SetPrority_linux.cpp \
         ../../lsMisc/stdQt/stdQt_linux.cpp
+
+    RC_ICONS += icon.ico
 }
 
 

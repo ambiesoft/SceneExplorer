@@ -439,9 +439,9 @@ int main2(QApplication& theApp)
 
 void noMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
-    Q_UNUSED(type);
-    Q_UNUSED(context);
-    Q_UNUSED(msg);
+    Q_UNUSED(type)
+    Q_UNUSED(context)
+    Q_UNUSED(msg)
     //    QByteArray localMsg = msg.toLocal8Bit();
     //    switch (type) {
     //    case QtDebugMsg:

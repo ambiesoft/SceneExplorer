@@ -29,8 +29,8 @@ QString GetDefaultFFmpeg();
 
 
 
-bool isLegalFilePath(QString filename, QString* pError = nullptr);
-QString GetIllegalFilenameCharacters();
+
+
 
 bool setProcessPriority(const qint64& pid, QThread::Priority priority, QStringList& errors);
 
