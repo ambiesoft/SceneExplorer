@@ -652,7 +652,7 @@ private:
 
     void langChanged_common(const QString& lang);
 
-    void StartScan(const QString& dir);
+    void StartScan(const QStringList& dirs);
 
     // QFileIconProvider fiProvider_;
 

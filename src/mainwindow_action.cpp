@@ -470,7 +470,7 @@ bool MainWindow::IsDirSelected(const QString& dir) const
     return false;
 }
 
-void MainWindow::StartScan(const QString& dir)
+void MainWindow::StartScan(const QStringList& dirs)
 {
     QString errString;
     if(!checkFFprobe(errString) || !checkFFmpeg(errString))
@@ -482,27 +482,34 @@ void MainWindow::StartScan(const QString& dir)
         return;
     }
 
-    if(!QDir(dir).exists())
-    {
-        insertLog(TaskKind_App, 0, tr("Directoy not found. (%1) ").
-                  arg(dir));
-        return;
-    }
-    TaskGetDir* pTaskGetDir = new TaskGetDir(
-                gLoopId,
-                idManager_->Increment(IDKIND_GetDir),
-                dir,
-                GetTaskPriority());
-    pTaskGetDir->setAutoDelete(true);
-    QObject::connect(pTaskGetDir, &TaskGetDir::afterGetDir,
-                     this, &MainWindow::afterGetDir);
-    QObject::connect(pTaskGetDir, &TaskGetDir::finished_GetDir,
-                     this, &MainWindow::finished_GetDir);
-    getPoolGetDir()->start(pTaskGetDir);
 
-    onTaskStarted();
-    insertLog(TaskKind_GetDir, idManager_->Get(IDKIND_GetDir),
-              tr("Task registered. %1").arg(dir));
+    QStringList dirsEachDevice = SortDevice1by1(dirs);
+    Q_ASSERT(IsSameContents(dirsEachDevice,dirs));
+
+    for(auto&& dir : dirsEachDevice)
+    {
+        if(!QDir(dir).exists())
+        {
+            insertLog(TaskKind_App, 0, tr("Directoy not found. (%1) ").
+                      arg(dir));
+            continue;
+        }
+        TaskGetDir* pTaskGetDir = new TaskGetDir(
+                    gLoopId,
+                    idManager_->Increment(IDKIND_GetDir),
+                    dir,
+                    GetTaskPriority());
+        pTaskGetDir->setAutoDelete(true);
+        QObject::connect(pTaskGetDir, &TaskGetDir::afterGetDir,
+                         this, &MainWindow::afterGetDir);
+        QObject::connect(pTaskGetDir, &TaskGetDir::finished_GetDir,
+                         this, &MainWindow::finished_GetDir);
+        getPoolGetDir()->start(pTaskGetDir);
+
+        onTaskStarted();
+        insertLog(TaskKind_GetDir, idManager_->Get(IDKIND_GetDir),
+                  tr("Task registered. %1").arg(dir));
+    }
 }
 
 void MainWindow::onTaskStarted()
@@ -862,10 +869,7 @@ void MainWindow::ScanSelectedDirectory(const bool bAll)
                   tr("'%1' is excluded from scanning because its parent directory is included.").arg(removed));
     }
 
-    foreach(auto&& text, toScan)
-    {
-        StartScan(text);
-    }
+    StartScan(toScan);
 }
 void MainWindow::OnDirectoryRemove()
 {

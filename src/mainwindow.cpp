@@ -2089,7 +2089,7 @@ void MainWindow::on_action_ScanArbitraryDirectory_triggered()
     lastSelectedScanDir_ = dir;
 
     AmbiesoftQt::WaitingCursor wc;
-    StartScan(dir);
+    StartScan(QStringList(dir));
 }
 
 void MainWindow::on_directoryWidget_itemDoubleClicked(QListWidgetItem *item)
