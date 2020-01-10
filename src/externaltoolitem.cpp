@@ -16,7 +16,7 @@
 //You should have received a copy of the GNU General Public License
 //along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-#include "../../lsMisc/stdQt/settings.h"
+#include "../../lsMisc/stdQt/inisettings.h"
 
 #include "osd.h"
 #include "consts.h"

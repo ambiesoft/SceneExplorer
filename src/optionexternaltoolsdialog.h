@@ -22,7 +22,7 @@
 #include <QDialog>
 #include <QListWidgetItem>
 
-#include "../../lsMisc/stdQt/settings.h"
+#include "../../lsMisc/stdQt/inisettings.h"
 
 #include "externaltoolitem.h"
 

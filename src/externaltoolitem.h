@@ -21,7 +21,7 @@
 
 #include <QString>
 #include <QIcon>
-#include "../../lsMisc/stdQt/settings.h"
+#include "../../lsMisc/stdQt/inisettings.h"
 
 class ExternalToolItem
 {

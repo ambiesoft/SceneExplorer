@@ -28,6 +28,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += \
+    ../../lsMisc/stdQt/ambapp.cpp \
+    ../../lsMisc/stdQt/inisettings.cpp \
     main.cpp \
     mainwindow.cpp \
     tablemodel.cpp \
@@ -72,7 +74,6 @@ SOURCES += \
     ../../lsMisc/stdQt/stdQt.cpp \
     ../../lsMisc/stdQt/runguard.cpp \
     tagidsinfo.cpp \
-    ../../lsMisc/stdQt/settings.cpp \
     ../../lsMisc/stdQt/waitingcursor.cpp \
     itempropertydialog.cpp \
     ../../lsMisc/stdosd/blockedbool.cpp \
@@ -81,6 +82,8 @@ SOURCES += \
     mainwindow_document.cpp
 
 HEADERS += \
+    ../../lsMisc/stdQt/ambapp.h \
+    ../../lsMisc/stdQt/inisettings.h \
     debugflag.h \
     mainwindow.h \
     tablemodel.h \
@@ -123,7 +126,6 @@ HEADERS += \
     ../../lsMisc/stdQt/stdQt.h \
     ../../lsMisc/stdQt/runguard.h \
     tagidsinfo.h \
-    ../../lsMisc/stdQt/settings.h \
     ../../lsMisc/stdQt/waitingcursor.h \
     itempropertydialog.h \
     ../../lsMisc/stdosd/blockedbool.h \

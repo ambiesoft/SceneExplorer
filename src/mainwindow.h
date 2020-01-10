@@ -25,7 +25,7 @@
 #include <QPushButton>
 #include <QThread>
 
-#include "../../lsMisc/stdQt/settings.h"
+#include "../../lsMisc/stdQt/inisettings.h"
 #include "../../lsMisc/stdosd/blockedbool.h"
 
 #include "tablemodel.h"
