@@ -37,6 +37,8 @@
 #include "../../lsMisc/stdQt/stdQt.h"
 #include "../../lsMisc/stdQt/runguard.h"
 #include "../../lsMisc/stdQt/inisettings.h"
+#include "../../lsMisc/stdQt/ambapp.h"
+
 
 #include "consts.h"
 #include "globals.h"
@@ -248,128 +250,14 @@ enum PROGRAM_RETURN {
 
 
 
-static bool IsAvailableLanguage(const QString& lang)
+
+
+
+int main2(AmbApp& theApp)
 {
-    QString i18nFile = ":/translations/i18n_" + lang + ".qm";
-    return QFile(i18nFile).exists();
-}
-
-int main2(QApplication& theApp)
-{
-    bool bExit = false;
-    Q_ASSERT(isLegalFilePath(theApp.organizationName()));
-    Q_ASSERT(isLegalFilePath(theApp.applicationName()));
-    QString inifile = getInifile(bExit,
-                                 theApp.organizationName(),
-                                 theApp.applicationName());
-    if(bExit)
+    QScopedPointer<IniSettings> settings;
+    if(!theApp.InitApplication(&settings))
         return 1;
-    QScopedPointer<IniSettings> settings(inifile.isEmpty() ?
-                                          new IniSettings(QApplication::organizationName(), QApplication::applicationName()) :
-                                          new IniSettings(inifile));
-    if(!settings->isAccessible())
-    {
-        Alert(nullptr,
-              QObject::tr("\"%1\" is not accessible.").arg(settings->fileName()));
-        return 1;
-    }
-
-    const QString lang = settings->valueString(KEY_LANGUAGE);
-
-    QTranslator qtTranslator;
-    do {
-        QString qti18nFile = "qt_";
-        if(lang.isEmpty())
-        {
-            // default
-            QString syslang = GetSystemDefaultLang();
-            if(syslang=="English" || !IsAvailableLanguage(syslang))
-                break;
-
-            qti18nFile += QLocale::system().name();
-        }
-        else if(lang=="English")
-        {
-            qti18nFile += "en_US";
-            break;
-        }
-        else if(lang=="Japanese")
-        {
-            qti18nFile += "ja_JP";
-        }
-        else
-        {
-            Q_ASSERT(false);
-            break;
-        }
-        qDebug() << "Qt language" << qti18nFile << __FUNCTION__;
-        if(qtTranslator.load(qti18nFile,
-                             QLibraryInfo::location(QLibraryInfo::TranslationsPath)))
-        {
-            theApp.installTranslator(&qtTranslator);
-        }
-        else
-        {
-            Alert(nullptr, QObject::tr("Failed to set Qt language to '%1'.").arg(lang));
-        }
-    } while(false);
-
-    QTranslator myappTranslator;
-    QString i18nFile = ":/translations/i18n_";
-
-    do {
-        if(lang.isEmpty())
-        {
-            // default
-            QString syslang = GetSystemDefaultLang();
-            if(syslang=="English" || !IsAvailableLanguage(syslang))
-                break;
-
-            i18nFile += syslang;
-        }
-        else if(lang=="English")
-        {
-            i18nFile.clear();
-            break;
-        }
-        else if(lang=="Japanese")
-        {
-            i18nFile += lang;
-        }
-        else
-        {
-            Q_ASSERT(false);
-            break;
-        }
-        if(myappTranslator.load(i18nFile)) //, trdir);
-        {
-            theApp.installTranslator(&myappTranslator);
-        }
-        else
-        {
-            Alert(nullptr, QObject::tr("Failed to set language to '%1'.").arg(lang));
-        }
-    } while(false);
-
-    RunGuard guard("SceneExplorer");
-    if (!guard.tryToRun())
-    {
-        Info(nullptr, QObject::tr("Another instance is already running."));
-        return 0;
-    }
-
-    qDebug () << "CurrentStyle: " << QApplication::style()->objectName() << __FUNCTION__;
-
-    // style:  "windows", "windowsvista", "fusion", or "macintosh".
-    QString style = settings->valueString(KEY_STYLE);
-    if(!style.isEmpty())
-    {
-        if(!QApplication::setStyle(style))
-        {
-            Alert(nullptr, QObject::tr("Failed to set style") + ": " + style);
-        }
-    }
-
 
     TaskGetDir::RegisterMetaType();
 
@@ -469,7 +357,11 @@ int main(int argc, char *argv[])
     QCoreApplication::setApplicationName(APPNAME);
     QCoreApplication::setApplicationVersion(APPVERSION);
 
-    QApplication app(argc, argv);
+    AmbApp::AmbAppArgs args;
+    args.keyLanguage = KEY_LANGUAGE;
+    args.keyStyle = KEY_STYLE;
+    args.singleInstance = true;
+    AmbApp app(argc, argv, args);
 
 #ifdef QT_NO_DEBUG
     if ( !app.arguments().contains(QLatin1String("--with-debug") ))
@@ -487,7 +379,7 @@ int main(int argc, char *argv[])
         QString thisapp = QCoreApplication::applicationFilePath();
         QStringList args = QCoreApplication::arguments();
         if(args.length() != 0)
-            args.removeFirst();;
+            args.removeFirst();
 
         if(Q_UNLIKELY(!QProcess::startDetached(thisapp, args)))
         {

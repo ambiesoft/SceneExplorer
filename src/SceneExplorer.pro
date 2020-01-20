@@ -28,6 +28,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += \
+    ../../lsMisc/stdQt/ambapp.cpp \
+    ../../lsMisc/stdQt/inisettings.cpp \
     main.cpp \
     mainwindow.cpp \
     tablemodel.cpp \
@@ -81,6 +83,8 @@ SOURCES += \
     mainwindow_document.cpp
 
 HEADERS += \
+    ../../lsMisc/stdQt/ambapp.h \
+    ../../lsMisc/stdQt/inisettings.h \
     debugflag.h \
     mainwindow.h \
     tablemodel.h \
