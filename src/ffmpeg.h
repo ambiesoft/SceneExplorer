@@ -21,7 +21,7 @@
 
 #include <QReadWriteLock>
 
-#include "../../lsMisc/stdQt/settings.h"
+#include "../../lsMisc/stdQt/inisettings.h"
 using namespace AmbiesoftQt;
 
 class FFMpeg

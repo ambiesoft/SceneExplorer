@@ -72,7 +72,7 @@ SOURCES += \
     ../../lsMisc/stdQt/stdQt.cpp \
     ../../lsMisc/stdQt/runguard.cpp \
     tagidsinfo.cpp \
-    ../../lsMisc/stdQt/settings.cpp \
+    ../../lsMisc/stdQt/inisettings.cpp \
     ../../lsMisc/stdQt/waitingcursor.cpp \
     itempropertydialog.cpp \
     ../../lsMisc/stdosd/blockedbool.cpp \
@@ -123,7 +123,7 @@ HEADERS += \
     ../../lsMisc/stdQt/stdQt.h \
     ../../lsMisc/stdQt/runguard.h \
     tagidsinfo.h \
-    ../../lsMisc/stdQt/settings.h \
+    ../../lsMisc/stdQt/inisettings.h \
     ../../lsMisc/stdQt/waitingcursor.h \
     itempropertydialog.h \
     ../../lsMisc/stdosd/blockedbool.h \

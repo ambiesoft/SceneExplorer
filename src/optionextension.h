@@ -19,7 +19,7 @@
 #ifndef OPTIONEXTENSION_H
 #define OPTIONEXTENSION_H
 
-#include "../../lsMisc/stdQt/settings.h"
+#include "../../lsMisc/stdQt/inisettings.h"
 #include "ui_optionextension.h"
 
 class OptionExtension : public QDialog

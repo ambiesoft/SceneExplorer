@@ -48,7 +48,7 @@
 
 #include "../../lsMisc/stdosd/blockedbool.h"
 #include "../../lsMisc/stdQt/stdQt.h"
-#include "../../lsMisc/stdQt/settings.h"
+#include "../../lsMisc/stdQt/inisettings.h"
 #include "../../lsMisc/stdQt/waitingcursor.h"
 
 #include "taskgetdir.h"
@@ -404,7 +404,7 @@ void MainWindow::insertLog(TaskKind kind,
                            const QStringList& texts,
                            bool bError)
 {
-    Q_UNUSED(bError);
+    Q_UNUSED(bError)
     if(ids.isEmpty())
     {
         Q_ASSERT(texts.isEmpty());
@@ -534,7 +534,7 @@ void MainWindow::afterGetDir(int loopId, int id,
 
     // BlockedBool btPause(&gPaused, true, gPaused);
 
-    Q_UNUSED(id);
+    Q_UNUSED(id)
     // WaitCursor wc;
 
     bool needUpdate = false;
@@ -868,7 +868,7 @@ void MainWindow::OnRename()
             continue;
         }
         break;
-    };
+    }
 
     if(!gpSQL->RenameEntry(olddir, oldname, olddir,targetname))
     {
@@ -1086,8 +1086,8 @@ void MainWindow::IDManager::updateStatus()
 
 void MainWindow::OnDirectorySelectionChanged(const QItemSelection &selected, const QItemSelection &deselected)
 {
-    Q_UNUSED(selected);
-    Q_UNUSED(deselected);
+    Q_UNUSED(selected)
+    Q_UNUSED(deselected)
 
     if (!initialized_ || closed_ || directoryChanging_)
         return;
@@ -1243,7 +1243,7 @@ void MainWindow::GetSelectedAndCurrentTagIDs(TagidsInfo& tagInfos)
                 allids.append(ti->tagid());
             }
         }
-        QSet<qint64> allfileids;;
+        QSet<qint64> allfileids;
         pDoc_ && pDoc_->GetTaggedIDs(allids, allfileids);
         tagInfos.setFileIds(allfileids);
         return;
@@ -1397,7 +1397,7 @@ void MainWindow::on_action_Bottom_triggered()
 
 void MainWindow::OndirectoryItemChanged(QListWidgetItem *item)
 {
-    Q_UNUSED(item);
+    Q_UNUSED(item)
 
     if(limitManager_)
         limitManager_->Reset();
