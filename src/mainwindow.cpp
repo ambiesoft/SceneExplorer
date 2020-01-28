@@ -2403,3 +2403,8 @@ void MainWindow::updateFreeSpace()
 
 
 
+
+void MainWindow::on_directoryWidget_clicked(const QModelIndex &index)
+{
+
+}
