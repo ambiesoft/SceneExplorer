@@ -79,7 +79,8 @@ SOURCES += \
     ../../lsMisc/stdosd/blockedbool.cpp \
     historylist.cpp \
     mainwindow_history.cpp \
-    mainwindow_document.cpp
+    mainwindow_document.cpp \
+    tagentry.cpp
 
 HEADERS += \
     ../../lsMisc/stdQt/ambapp.h \
@@ -129,7 +130,8 @@ HEADERS += \
     ../../lsMisc/stdQt/waitingcursor.h \
     itempropertydialog.h \
     ../../lsMisc/stdosd/blockedbool.h \
-    historylist.h
+    historylist.h \
+    tagentry.h
 
 FORMS += \
         mainwindow.ui \

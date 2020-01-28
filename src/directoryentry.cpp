@@ -16,6 +16,8 @@
 //You should have received a copy of the GNU General Public License
 //along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+#include <QMouseEvent>
+
 #include "directoryentry.h"
 #include "directoryitem.h"
 
@@ -195,4 +197,19 @@ QString DirectoryEntry::getSelectedFirstDirectory()
         }
     }
     return QString();
+}
+
+void DirectoryEntry::mouseReleaseEvent(QMouseEvent *e)
+{
+    QPoint pos = e->pos();
+    QPersistentModelIndex index = indexAt(pos);
+
+    if(!index.isValid())
+    {
+        // Cancel click of white area
+        e->setAccepted(true);
+        return;
+    }
+
+    ParentClass::mouseReleaseEvent(e);
 }

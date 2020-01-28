@@ -610,7 +610,6 @@ private Q_SLOTS:
 
     void on_actionSort_by_fps_triggered();
 
-    void on_directoryWidget_clicked(const QModelIndex &index);
 
 private:
     void OnCopyTable();

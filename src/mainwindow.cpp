@@ -2400,11 +2400,3 @@ void MainWindow::updateFreeSpace()
     slFreeSpace_->setText(QString());
     return;
 }
-
-
-
-
-void MainWindow::on_directoryWidget_clicked(const QModelIndex &index)
-{
-
-}

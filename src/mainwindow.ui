@@ -69,7 +69,7 @@
      <x>0</x>
      <y>0</y>
      <width>1009</width>
-     <height>22</height>
+     <height>21</height>
     </rect>
    </property>
    <property name="font">
@@ -490,7 +490,7 @@
       <number>0</number>
      </property>
      <item>
-      <widget class="QListWidget" name="listTag">
+      <widget class="TagEntry" name="listTag">
        <property name="selectionMode">
         <enum>QAbstractItemView::ExtendedSelection</enum>
        </property>
@@ -1143,6 +1143,11 @@
    <class>DirectoryEntry</class>
    <extends>QListWidget</extends>
    <header>directoryentry.h</header>
+  </customwidget>
+  <customwidget>
+   <class>TagEntry</class>
+   <extends>QListWidget</extends>
+   <header>tagentry.h</header>
   </customwidget>
  </customwidgets>
  <resources>

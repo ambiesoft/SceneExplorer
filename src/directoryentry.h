@@ -25,10 +25,18 @@
 
 class DirectoryEntry : public QListWidget
 {
+    using ParentClass = QListWidget;
+
 public:
     DirectoryEntry(QWidget *parent = Q_NULLPTR):
         QListWidget(parent)
     {}
+
+protected:
+    void mouseReleaseEvent(QMouseEvent *e) override;
+
+
+public:
     DirectoryItem* getShowAllItem();
     DirectoryItem* takeShowAllItem();
     DirectoryItem* takeMissingItem();
