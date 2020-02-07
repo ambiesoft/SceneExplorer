@@ -44,12 +44,6 @@
 using namespace Ambiesoft::stdosd::Process;
 using namespace AmbiesoftQt;
 
-// https://stackoverflow.com/a/3546503
-bool showInGraphicalShell(QWidget *parent, const QString &pathIn)
-{
-    Q_UNUSED(parent);
-    return QDesktopServices::openUrl(QUrl::fromLocalFile(QFileInfo(pathIn).absolutePath()));
-}
 
 // https://stackoverflow.com/a/17974223
 static bool TrashInitialized = false;

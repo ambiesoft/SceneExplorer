@@ -21,7 +21,7 @@
 
 #include <QThread>
 
-bool showInGraphicalShell(QWidget *parent, const QString &pathIn);
+
 void MoveToTrashImpl( QString file );
 
 QString GetDefaultFFprobe();
