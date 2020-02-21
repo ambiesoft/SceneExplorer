@@ -73,6 +73,7 @@ class TableItemData
                   int vWidth,int vHeight,
 
                   const double& fps,
+                  const QString& url, const QString& memo,
 
                   int opencount,
                   const qint64& lastaccess);
@@ -98,6 +99,7 @@ public:
             const QString& acodec,
             int vWidth, int vHeight,
             const double& fps,
+            const QString& url, const QString& memo,
             int opencount,
             const qint64& lastaccess)
     {
@@ -127,7 +129,7 @@ public:
 
                                         vWidth, vHeight,
 
-                                        fps,
+                                        fps,url,memo,
 
                                         opencount,
                                         lastaccess));
@@ -250,6 +252,22 @@ public:
     }
     void setFps(const double& d) {
         fps_=d;
+    }
+
+    QString url_;
+    QString getUrl() const {
+        return url_;
+    }
+    void setUrl(const QString& url) {
+        url_ = url;
+    }
+
+    QString memo_;
+    QString getMemo() const {
+        return memo_;
+    }
+    void setMemo(const QString& memo) {
+        memo_=memo;
     }
 
 //    int recordversion_=0;

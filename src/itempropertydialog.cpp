@@ -24,9 +24,9 @@ void ItemPropertyDialog::showEvent(QShowEvent *ev)
     // Variable to Dialog
     updateData(true);
 }
-void ItemPropertyDialog::updateData(bool bUpdate)
+void ItemPropertyDialog::updateData(const bool bDataToDialog)
 {
-    if(bUpdate)
+    if(bDataToDialog)
     {
         // must be set
         Q_ASSERT(id_ != -1);
@@ -36,10 +36,18 @@ void ItemPropertyDialog::updateData(bool bUpdate)
         ui->lineFile->setText(file_);
     }
 
-    if(bUpdate)
+    if(bDataToDialog)
+    {
+        ui->lineUrl->setText(url_);
+        ui->plainTextMemo->setPlainText(memo_);
         ui->sbOpenCount->setValue((int)openCount_);
+    }
     else
+    {
+        url_ = ui->lineUrl->text();
+        memo_ = ui->plainTextMemo->toPlainText();
         openCount_ = ui->sbOpenCount->value();
+    }
 }
 ItemPropertyDialog::~ItemPropertyDialog()
 {

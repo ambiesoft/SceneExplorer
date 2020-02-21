@@ -26,7 +26,7 @@
 #include "tagidsinfo.h"
 
 #define DBFILENAME "./db.sqlite3"
-#define DBVERSION 3
+#define DBVERSION 4
 #define DBRECORD_VERSION 1
 
 class LimitArg
@@ -230,6 +230,8 @@ public:
            int vWidth,int vHeight,
            const double& fps);
 
+    bool SetUrl(const qint64& id, const QString& url);
+    bool SetMemo(const qint64& id, const QString& memo);
 };
 
 #endif // SQL_H

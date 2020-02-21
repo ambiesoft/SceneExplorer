@@ -176,6 +176,10 @@ Sql::Sql(QObject*) : db_(QSqlDatabase::addDatabase("QSQLITE"))
     query.exec("ALTER TABLE FileInfo Add fps");
     query.exec("ALTER TABLE FileInfo Add recordversion");
 
+    // version 4
+    query.exec("ALTER TABLE FileInfo Add url");
+    query.exec("ALTER TABLE FileInfo Add memo");
+
     qDebug() << query.lastError().text() << __FUNCTION__;
 
 #ifdef QT__DEBUG
@@ -1067,6 +1071,8 @@ bool Sql::GetAll(QList<TableItemDataPointer>& v,
         int vheight = query.value("vheight").toInt();
 
         double fps = query.value("fps").toDouble();
+        QString url = query.value("url").toString();
+        QString memo = query.value("memo").toString();
 
         int opencount = query.value("opencount").toInt();
         qint64 lastaccess = query.value("lastaccess").toLongLong();
@@ -1089,7 +1095,7 @@ bool Sql::GetAll(QList<TableItemDataPointer>& v,
                                                          vcodec,acodec,
                                                          vwidth,vheight,
 
-                                                         fps,
+                                                         fps,url,memo,
 
                                                          opencount,
                                                          lastaccess);
@@ -1580,5 +1586,27 @@ bool Sql::UpdateRecord(
     query.bindValue(i++, DBRECORD_VERSION);
     query.bindValue(i++, id);
     SQC(query,exec());
+    return query.numRowsAffected()==1;
+}
+bool Sql::SetUrl(const qint64& id, const QString& url)
+{
+    MYQMODIFIER QSqlQuery query("UPDATE FileInfo SET url=? WHERE id=?");
+
+    int i=0;
+    query.bindValue(i++, url);
+    query.bindValue(i++, id);
+    SQC(query,exec());
+    Q_ASSERT(query.numRowsAffected()==1 || query.numRowsAffected()==0);
+    return query.numRowsAffected()==1;
+}
+bool Sql::SetMemo(const qint64& id, const QString& memo)
+{
+    MYQMODIFIER QSqlQuery query("UPDATE FileInfo SET memo=? WHERE id=?");
+
+    int i=0;
+    query.bindValue(i++, memo);
+    query.bindValue(i++, id);
+    SQC(query,exec());
+    Q_ASSERT(query.numRowsAffected()==1 || query.numRowsAffected()==0);
     return query.numRowsAffected()==1;
 }

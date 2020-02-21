@@ -1,3 +1,6 @@
+2020/02/21 1.21.8
+Add Url to Property
+
 2020/01/29 1.21.7
 Click on a blank area does not deselect item on ListWidget
 

@@ -81,7 +81,7 @@
     </message>
     <message>
         <source>&lt;p&gt;Support our software by making &lt;a href=&quot;https://ambiesoft.github.io/webjumper/?target=donate&quot;&gt;donation&lt;/a&gt;.&lt;/p&gt;</source>
-        <translation type="unfinished">&lt;p&gt;Ambiesoftでは開発をサポートのための&lt;a href=&quot;https://ambiesoft.github.io/webjumper/?target=donate&quot;&gt;寄付&lt;/a&gt;を募集しています。&lt;/p&gt;</translation>
+        <translation>&lt;p&gt;Ambiesoftでは開発をサポートのための&lt;a href=&quot;https://ambiesoft.github.io/webjumper/?target=donate&quot;&gt;寄付&lt;/a&gt;を募集しています。&lt;/p&gt;</translation>
     </message>
 </context>
 <context>
@@ -182,6 +182,26 @@
     <message>
         <source>&amp;File:</source>
         <translation>ファイル(&amp;F):</translation>
+    </message>
+    <message>
+        <source>Database</source>
+        <translation>データベース</translation>
+    </message>
+    <message>
+        <source>Database Addition</source>
+        <translation>データベース追加</translation>
+    </message>
+    <message>
+        <source>&amp;Url:</source>
+        <translation>&amp;Url:</translation>
+    </message>
+    <message>
+        <source>&amp;Memo:</source>
+        <translation>メモ(&amp;M):</translation>
+    </message>
+    <message>
+        <source>Personal settings</source>
+        <translation>個人設定</translation>
     </message>
 </context>
 <context>
@@ -1425,6 +1445,30 @@
     <message>
         <source>%1 items in %2 need to update</source>
         <translation>%2の%1個のアイテムがアップデート必要</translation>
+    </message>
+    <message>
+        <source>Invalid index.</source>
+        <translation>無効なインデックスです。</translation>
+    </message>
+    <message>
+        <source>Invalid video.</source>
+        <translation>無効なビデオです。</translation>
+    </message>
+    <message>
+        <source>Failed to set url.</source>
+        <translation>Urlの設定に失敗しました。</translation>
+    </message>
+    <message>
+        <source>Failed to set memo.</source>
+        <translation>メモの設定に失敗しました。</translation>
+    </message>
+    <message>
+        <source>Url is empty.</source>
+        <translation>Urlが空です。</translation>
+    </message>
+    <message>
+        <source>Open &amp;Url</source>
+        <translation>Urlを開く(&amp;U)</translation>
     </message>
 </context>
 <context>

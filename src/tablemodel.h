@@ -95,6 +95,8 @@ public:
     enum TableRole {
         MovieFileFull = Qt::UserRole + 1,
         ID,
+        GetUrl,
+        GetMemo,
     };
     TableModel(QTableView *parent, IMainWindow* mainWindow);
     void AppendData(const TableItemDataPointer& pItemData, const bool enableUpdate = true);
@@ -129,6 +131,9 @@ public:
     void UpdateOpenCountAndLastAccess(const QString& movieFile,
                                       const int* opencount,
                                       const qint64* lastaccess);
+    void UpdateProperty(const QString& movieFile,
+                                    const QString& url,
+                                    const QString& memo);
     void RemoveItem(const QString& movieFile);
     QModelIndex GetIndex(const QString& movieFile) const;
     QFont GetInfoFont() {

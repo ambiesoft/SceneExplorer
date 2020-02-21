@@ -94,7 +94,7 @@ void MainWindow::OnTableItemChanged(QModelIndex newIndex, QModelIndex oldIndex)
         return;
 
     qint64 id = getIDFromIndex(newIndex);
-    QString movieFile = getVideoFromIndex(newIndex);
+    QString movieFile = getVideoFromIndex(newIndex, false);
     qDebug() << "old=" << oldIndex << ",new=" << newIndex << ":ID=" << id << ":" << movieFile << __FUNCTION__;
     if(id < 0)
         return;

@@ -142,6 +142,7 @@ void MainWindow::sayGoodby(int loopId,  int id,
                 vcodec,acodec,
                 vWidth,vHeight,
                 fps,
+                "","", // url and memo
 
                 0,
                 0);

@@ -679,7 +679,10 @@ private:
     void openVideo(const qint64& id, const QString& movieFile);
     void openVideoDirectory(const QString& movieFile);
     QString getSelectedVideo(bool bNativeFormat = true);
-    QString getVideoFromIndex(const QModelIndex& index);
+    QString getVideoFromIndex(const QModelIndex& index, bool bNativeFormat);
+    QString getUrlFromIndex(const QModelIndex& index);
+    QString getMemoFromIndex(const QModelIndex& index);
+    QModelIndex getSelectedIndex();
     qint64 getSelectedID();
     qint64 getIDFromIndex(const QModelIndex& index);
 
@@ -763,6 +766,7 @@ public Q_SLOTS:
     void OnContextCopySelectedVideoFilename();
     void OnRemove();
     void OnProperty();
+    void OnOpenUrl();
     void OnRename();
     void OnContextExternalTools();
     void OnContextAddTags();

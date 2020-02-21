@@ -719,6 +719,7 @@ void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
 
         contextMenu.addMenu(&menuExternalTools);
         // <---- external tools
+
         contextMenu.addSeparator();
 
         contextMenu.addEnablingAction(ui->action_Copy);
@@ -789,14 +790,24 @@ void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
 
         contextMenu.addSeparator();
 
+        // ---> Open URL
+        QAction actionItemOpenUrl(tr("Open &Url"));
+        connect(&actionItemOpenUrl, SIGNAL(triggered()),
+                this, SLOT(OnOpenUrl()));
+        contextMenu.addAction(&actionItemOpenUrl);
+        // <--- OpenURL
+
+        contextMenu.addSeparator();
+
         // ---> Property
         QAction actionItemProperty(tr("&Property..."));
         connect(&actionItemProperty, SIGNAL(triggered()),
                 this, SLOT(OnProperty()));
         contextMenu.addAction(&actionItemProperty);
+        // <--- Property
+
 
         contextMenu.exec(ui->tableView->mapToGlobal(pos));
-        // <--- Property
     }
     else
     {

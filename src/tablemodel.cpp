@@ -520,6 +520,18 @@ void TableModel::UpdateOpenCountAndLastAccess(const QString& movieFile,
         emit dataChanged(createIndex(row * 3, 0), createIndex((row * 3) + 2, 0));
     }
 }
+void TableModel::UpdateProperty(const QString& movieFile,
+                                const QString& url,
+                                const QString& memo)
+{
+    TableItemDataPointer pID = mapsFullpathToItem_[normalizeFile(movieFile)];
+
+    if (pID)
+    {
+        pID->setUrl(url);
+        pID->setMemo(memo);
+    }
+}
 
 void TableModel::UpdateRecord(const QString& movieFile,
                               const double& duration,

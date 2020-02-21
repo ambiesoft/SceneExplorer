@@ -7,14 +7,14 @@
     <x>0</x>
     <y>0</y>
     <width>558</width>
-    <height>351</height>
+    <height>412</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Property</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="5" column="1">
+   <item row="8" column="1">
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="sizePolicy">
       <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -30,30 +30,7 @@
      </property>
     </widget>
    </item>
-   <item row="2" column="1">
-    <widget class="QSpinBox" name="sbOpenCount"/>
-   </item>
-   <item row="2" column="0">
-    <widget class="QLabel" name="labelOpenCount">
-     <property name="text">
-      <string>&amp;OpenCount:</string>
-     </property>
-     <property name="buddy">
-      <cstring>sbOpenCount</cstring>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="0">
-    <widget class="QLabel" name="labelID">
-     <property name="text">
-      <string>&amp;ID:</string>
-     </property>
-     <property name="buddy">
-      <cstring>lineID</cstring>
-     </property>
-    </widget>
-   </item>
-   <item row="3" column="1">
+   <item row="6" column="1">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -66,27 +43,100 @@
      </property>
     </spacer>
    </item>
-   <item row="1" column="0">
-    <widget class="QLabel" name="labelFile">
-     <property name="text">
-      <string>&amp;File:</string>
+   <item row="1" column="0" colspan="2">
+    <widget class="QGroupBox" name="groupDb">
+     <property name="title">
+      <string>Database</string>
      </property>
-     <property name="buddy">
-      <cstring>lineFile</cstring>
-     </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="0" column="0">
+       <widget class="QLabel" name="labelID">
+        <property name="text">
+         <string>&amp;ID:</string>
+        </property>
+        <property name="buddy">
+         <cstring>lineID</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="labelFile">
+        <property name="text">
+         <string>&amp;File:</string>
+        </property>
+        <property name="buddy">
+         <cstring>lineFile</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="lineFile"/>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="lineID"/>
+      </item>
+     </layout>
     </widget>
    </item>
-   <item row="0" column="1">
-    <widget class="QLineEdit" name="lineID"/>
+   <item row="2" column="0" colspan="2">
+    <widget class="QGroupBox" name="groupDbAddition">
+     <property name="title">
+      <string>Database Addition</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_3">
+      <item row="0" column="0">
+       <widget class="QLabel" name="labelUrl">
+        <property name="text">
+         <string>&amp;Url:</string>
+        </property>
+        <property name="buddy">
+         <cstring>lineUrl</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="labelMemo">
+        <property name="text">
+         <string>&amp;Memo:</string>
+        </property>
+        <property name="buddy">
+         <cstring>plainTextMemo</cstring>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QPlainTextEdit" name="plainTextMemo"/>
+      </item>
+      <item row="0" column="1" colspan="2">
+       <widget class="QLineEdit" name="lineUrl"/>
+      </item>
+     </layout>
+    </widget>
    </item>
-   <item row="1" column="1">
-    <widget class="QLineEdit" name="lineFile"/>
+   <item row="5" column="0" colspan="2">
+    <widget class="QGroupBox" name="groupPersonal">
+     <property name="title">
+      <string>Personal settings</string>
+     </property>
+     <layout class="QGridLayout" name="gridLayout_4">
+      <item row="1" column="1">
+       <widget class="QSpinBox" name="sbOpenCount"/>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="labelOpenCount">
+        <property name="text">
+         <string>&amp;OpenCount:</string>
+        </property>
+        <property name="buddy">
+         <cstring>sbOpenCount</cstring>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
    </item>
   </layout>
  </widget>
- <tabstops>
-  <tabstop>sbOpenCount</tabstop>
- </tabstops>
  <resources/>
  <connections>
   <connection>
@@ -96,8 +146,8 @@
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>292</x>
-     <y>333</y>
+     <x>307</x>
+     <y>402</y>
     </hint>
     <hint type="destinationlabel">
      <x>157</x>
@@ -112,8 +162,8 @@
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>360</x>
-     <y>339</y>
+     <x>375</x>
+     <y>402</y>
     </hint>
     <hint type="destinationlabel">
      <x>286</x>

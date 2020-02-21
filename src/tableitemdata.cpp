@@ -51,6 +51,7 @@ TableItemData::TableItemData(const qint64& id,
                              const QString& acodec,
                              int vWidth,int vHeight,
                              const double& fps,
+                             const QString& url, const QString& memo,
                              int opencount,
                              const qint64& lastaccess)
 {
@@ -79,6 +80,8 @@ TableItemData::TableItemData(const qint64& id,
     vHeight_=vHeight;
 
     fps_=fps;
+    url_=url;
+    memo_=memo;
     opencount_=opencount;
     lastaccess_ = lastaccess;
 }
@@ -126,6 +129,9 @@ QMap<QString,QVariant> TableItemData::getColumnValues() const
     // version 3
     ret["fps"] = getFps();
 
+    // version 4
+    ret["url"] = getUrl();
+    ret["memo"] = getMemo();
 
     return ret;
 }

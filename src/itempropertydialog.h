@@ -11,7 +11,7 @@ class ItemPropertyDialog : public QDialog
 {
     Q_OBJECT
 
-    void updateData(bool bUpdate);
+    void updateData(const bool bDataToDialog);
 
 public:
     explicit ItemPropertyDialog(QWidget *parent = nullptr);
@@ -19,6 +19,8 @@ public:
 
     qint64 id_ = -1;
     QString file_;
+    QString url_;
+    QString memo_;
     qint64 openCount_;
 
 protected:

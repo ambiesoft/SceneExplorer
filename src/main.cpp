@@ -124,6 +124,7 @@ static void testSQL()
                                                      640,
                                                      480,
                                                      29.97,
+                                                     "http://example.com", "memo1",
                                                      oc++,
                                                      ++la);
     tid->setThumbExt("jpg");

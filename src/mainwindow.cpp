@@ -776,17 +776,35 @@ QString MainWindow::getSelectedVideo(bool bNativeFormat)
 
     if(!select->hasSelection())
         return QString();
-    QVariant v = tableModel_->data(select->selectedIndexes()[0], TableModel::MovieFileFull);
-    QString s = v.toString();
-    Q_ASSERT(!s.isEmpty());
 
-    return bNativeFormat ? QDir::toNativeSeparators(s) : s;
+    return getVideoFromIndex(select->selectedIndexes()[0],bNativeFormat);
 }
-QString MainWindow::getVideoFromIndex(const QModelIndex& index)
+QString MainWindow::getVideoFromIndex(const QModelIndex& index, bool bNativeFormat)
 {
     QVariant v = tableModel_->data(index, TableModel::MovieFileFull);
+    QString s = v.toString();
+    return bNativeFormat ? QDir::toNativeSeparators(s) : s;
+}
+QString MainWindow::getUrlFromIndex(const QModelIndex& index)
+{
+    QVariant v = tableModel_->data(index, TableModel::GetUrl);
     return v.toString();
 }
+QString MainWindow::getMemoFromIndex(const QModelIndex& index)
+{
+    QVariant v = tableModel_->data(index, TableModel::GetMemo);
+    return v.toString();
+}
+
+QModelIndex MainWindow::getSelectedIndex()
+{
+    QItemSelectionModel *select = ui->tableView->selectionModel();
+
+    if(!select->hasSelection())
+        return QModelIndex();
+    return select->selectedIndexes()[0];
+}
+
 qint64 MainWindow::getSelectedID()
 {
     QItemSelectionModel *select = ui->tableView->selectionModel();
@@ -949,7 +967,6 @@ void MainWindow::OnRemove()
     }
 }
 
-
 void MainWindow::OnProperty()
 {
     if(!pDoc_)
@@ -958,7 +975,6 @@ void MainWindow::OnProperty()
     }
 
     const qint64 id = getSelectedID();
-    const QString video = getSelectedVideo();
 
     if(id==-1)
     {
@@ -967,9 +983,26 @@ void MainWindow::OnProperty()
         return;
     }
 
+    const QModelIndex index = getSelectedIndex();
+    if(!index.isValid())
+    {
+        Alert(this,
+              tr("Invalid index."));
+        return;
+    }
+    const QString video = getVideoFromIndex(index, true);
+    if(video.isEmpty())
+    {
+        Alert(this,
+              tr("Invalid video."));
+        return;
+    }
+
     ItemPropertyDialog dlg(this);
     dlg.id_ = id;
     dlg.file_ = video;
+    dlg.url_ = getUrlFromIndex(index);
+    dlg.memo_ = getMemoFromIndex(index);
     if(!pDoc_->getOpenCount(id, dlg.openCount_))
     {
         dlg.openCount_ = 0;
@@ -978,9 +1011,43 @@ void MainWindow::OnProperty()
     if(!dlg.exec())
         return;
 
+    if(!gpSQL->SetUrl(id, dlg.url_))
+        Alert(this, tr("Failed to set url."));
+    if(!gpSQL->SetMemo(id, dlg.memo_))
+        Alert(this, tr("Failed to set memo."));
     pDoc_->setOpenCount(id, dlg.openCount_);
     int intOpenCount = static_cast<int>(dlg.openCount_);
+
     tableModel_->UpdateOpenCountAndLastAccess(video, &intOpenCount, nullptr);
+    tableModel_->UpdateProperty(video, dlg.url_, dlg.memo_);
+}
+void MainWindow::OnOpenUrl()
+{
+    if(!pDoc_)
+    {
+        return;
+    }
+
+    const QModelIndex index = getSelectedIndex();
+    if(!index.isValid())
+    {
+        Alert(this,
+              tr("Invalid index."));
+        return;
+    }
+
+    QString url = getUrlFromIndex(index);
+    if(url.isEmpty())
+    {
+        Alert(this, tr("Url is empty."));
+        return;
+    }
+
+    if(!QDesktopServices::openUrl(url))
+    {
+        Alert(this, tr("failed to launch %1.").arg(url));
+        return;
+    }
 }
 
 

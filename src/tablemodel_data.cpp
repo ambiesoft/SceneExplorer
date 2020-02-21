@@ -50,13 +50,19 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
     bool isImage = mod==1;
     bool isInfo = mod == 2;
 
-    if(role==TableRole::MovieFileFull)
+    switch(role)
     {
+    case TableRole::MovieFileFull:
         return itemDatas_[actualIndex]->getMovieFileFull();
-    }
-    else if(role==TableRole::ID)
-    {
+
+    case TableRole::ID:
         return itemDatas_[actualIndex]->getID();
+
+    case TableRole::GetUrl:
+        return itemDatas_[actualIndex]->getUrl();
+
+    case TableRole::GetMemo:
+        return itemDatas_[actualIndex]->getMemo();
     }
 
     if(isFilename)
