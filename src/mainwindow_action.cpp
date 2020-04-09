@@ -732,6 +732,11 @@ void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
                 this, SLOT(OnContextCopySelectedVideoFilename()));
         menuCopyOther.addAction(&actionCopyFilename);
 
+        QAction actionCopyFilenameWithoutExtension(tr("Filename without &extension"));
+        connect(&actionCopyFilenameWithoutExtension, SIGNAL(triggered()),
+                this, SLOT(OnContextCopySelectedVideoFilenameWithoutExtension()));
+        menuCopyOther.addAction(&actionCopyFilenameWithoutExtension);
+
         contextMenu.addMenu(&menuCopyOther);
         // <--- sub menu end
 
@@ -792,6 +797,7 @@ void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
 
         // ---> Open URL
         QAction actionItemOpenUrl(tr("Open &Url"));
+        actionItemOpenUrl.setEnabled(HasUrl(getSelectedIndex()));
         connect(&actionItemOpenUrl, SIGNAL(triggered()),
                 this, SLOT(OnOpenUrl()));
         contextMenu.addAction(&actionItemOpenUrl);

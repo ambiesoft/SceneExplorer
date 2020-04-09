@@ -764,8 +764,10 @@ public Q_SLOTS:
 
 
     void OnContextCopySelectedVideoFilename();
+    void OnContextCopySelectedVideoFilenameWithoutExtension();
     void OnRemove();
     void OnProperty();
+    bool HasUrl(const QModelIndex& index);
     void OnOpenUrl();
     void OnRename();
     void OnContextExternalTools();

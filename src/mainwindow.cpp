@@ -1021,6 +1021,13 @@ void MainWindow::OnProperty()
     tableModel_->UpdateOpenCountAndLastAccess(video, &intOpenCount, nullptr);
     tableModel_->UpdateProperty(video, dlg.url_, dlg.memo_);
 }
+bool MainWindow::HasUrl(const QModelIndex& index)
+{
+    if(!index.isValid())
+        return false;
+
+    return !getUrlFromIndex(index).isEmpty();
+}
 void MainWindow::OnOpenUrl()
 {
     if(!pDoc_)
@@ -1138,6 +1145,19 @@ void MainWindow::OnContextCopySelectedVideoFilename()
 
     QFileInfo fi(movieFile);
     QApplication::clipboard()->setText(fi.fileName());
+}
+void MainWindow::OnContextCopySelectedVideoFilenameWithoutExtension()
+{
+    QString movieFile = getSelectedVideo();
+    if(movieFile.isEmpty()) { Alert(this, TR_NOVIDEO_SELECTED()); return;}
+
+    QString toClip = RemoveExtensionFromPath(movieFile);
+    if(toClip.isEmpty())
+    {
+        Alert(this, tr("Name is empty"));
+        return;
+    }
+    QApplication::clipboard()->setText(toClip);
 }
 
 void MainWindow::IDManager::updateStatus()
