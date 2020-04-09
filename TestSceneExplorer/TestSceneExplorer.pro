@@ -5,6 +5,11 @@ CONFIG += qt
 QT += core gui
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
+# check submodule
+!exists( googletest/googletest/src/gtest-all.cc ) {
+    error( "Submodule not found: run 'git submodule update -i'" )
+}
+
 SOURCES += \
         ../../lsMisc/stdQt/stdQt.cpp \
         googletest/googletest/src/gtest-all.cc \
@@ -33,6 +38,10 @@ win32 {
     win32-g++ {
         message("win32-g++")
         LIBS += -lshlwapi -lPsapi
+    }
+    win32-msvc* {
+        message("win32-msvc*")
+        LIBS += User32.lib shlwapi.lib shell32.lib
     }
 }
 linux {
