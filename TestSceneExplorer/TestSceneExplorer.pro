@@ -16,8 +16,8 @@ INCLUDEPATH += googletest/googletest/include \
         googletest/googletest/
 
 HEADERS += \
-    ../../lsMisc/stdQt/stdQt.h \
-    ../../lsMisc/stdafx.h
+    ../../lsMisc/stdQt/stdQt.h \ \
+    stdafx.h
 
 
 win32 {
