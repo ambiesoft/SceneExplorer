@@ -10,13 +10,13 @@ SOURCES += \
         googletest/googletest/src/gtest-all.cc \
         googletest/googletest/src/gtest.cc \
         googletest/googletest/src/gtest_main.cc \
-        main.cpp
 
 INCLUDEPATH += googletest/googletest/include \
         googletest/googletest/
 
 HEADERS += \
     ../../lsMisc/stdQt/stdQt.h \ \
+    main.h \
     stdafx.h
 
 
@@ -27,7 +27,8 @@ win32 {
 
     SOURCES += \
         ../../lsMisc/stdQt/stdQt_win32.cpp \
-        ../../lsMisc/GetLastErrorString.cpp
+        ../../lsMisc/GetLastErrorString.cpp \
+        main_win32.cpp
 
     win32-g++ {
         message("win32-g++")
@@ -37,7 +38,8 @@ win32 {
 linux {
     message("linux-g++")
     SOURCES += \
-        ../../lsMisc/stdQt/stdQt_linux.cpp
+        ../../lsMisc/stdQt/stdQt_linux.cpp \
+        main_linux.cpp
 }
 
 

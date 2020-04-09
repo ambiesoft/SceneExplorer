@@ -4,11 +4,12 @@
 
 #include "../../lsMisc/stdQt/stdQt.h"
 
+#include "main.h"
 using namespace AmbiesoftQt;
 
-#define EXPECT_QSTREQ(left,right) EXPECT_STREQ(QString(left).toUtf8(), QString(right).toUtf8())
 
-TEST(stdQt,RemoveExtensionFromPath)
+
+TEST(stdQt,RemoveExtensionFromPathWin32)
 {
     QString path = "";
     EXPECT_TRUE(RemoveExtensionFromPath(nullptr).isEmpty());
