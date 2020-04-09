@@ -1,3 +1,6 @@
 [submodule "qt5"]
 	path = qt5
 	url = https://github.com/qt/qt5.git
+[submodule "TestSceneExplorer/googletest"]
+	path = TestSceneExplorer/googletest
+	url = https://github.com/google/googletest.git
