@@ -1470,6 +1470,14 @@
         <source>Open &amp;Url</source>
         <translation>Urlを開く(&amp;U)</translation>
     </message>
+    <message>
+        <source>Name is empty</source>
+        <translation>名前が空です</translation>
+    </message>
+    <message>
+        <source>Filename without &amp;extension</source>
+        <translation>拡張子を除いたファイル名(&amp;E)</translation>
+    </message>
 </context>
 <context>
     <name>Option</name>
@@ -2023,6 +2031,10 @@
     <message>
         <source>FPS</source>
         <translation>FPS</translation>
+    </message>
+    <message>
+        <source>Filename could not be empty.</source>
+        <translation>ファイル名が空であることはできません。</translation>
     </message>
 </context>
 <context>

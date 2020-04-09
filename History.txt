@@ -1,3 +1,8 @@
+2020/04/09 1.21.9
+add TestSceneExplorer
+add copy filenamewithoutextension
+disable 'open url' when no url is assigned
+
 2020/02/21 1.21.8
 Add Url to Property
 
