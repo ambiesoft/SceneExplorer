@@ -104,7 +104,9 @@ void MainWindow::OnTableItemChanged(QModelIndex newIndex, QModelIndex oldIndex)
 
 void MainWindow::updateToolButton()
 {
-    ui->action_GoBack->setEnabled(hisList_.canGoBack());
+    // if current selection is not in view,
+    // GoBack will scroll into the selected item
+    ui->action_GoBack->setEnabled(true); // hisList_.canGoBack());
     ui->action_GoForward->setEnabled(hisList_.canGoForward());
 }
 
