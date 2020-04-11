@@ -121,9 +121,6 @@ void MainWindow::selectItem(const QString& movie)
     QModelIndex toSelectMovie = tableModel_->findIndex(movie, TableModel::FIND_INDEX::FIND_INDEX_MOVIE);
     Q_ASSERT(toSelectMovie.isValid());
 
-    // Select multiple items one by one for ensuring visible
-//    ui->tableView->selectionModel()->select(toSelectMovie,
-//                                            QItemSelectionModel::ClearAndSelect);
     tableModel_->ensureIndex(toSelectMovie);
     //QApplication::processEvents();
     ui->tableView->scrollTo(toSelectMovie);
@@ -141,6 +138,24 @@ void MainWindow::on_action_GoBack_triggered()
 {
     if(bHistoryActivating_)
         return;
+
+    // First, try to move to selected Index if it is not in the View
+    if(ui->tableView->selectionModel()->hasSelection())
+    {
+        QModelIndex currentIndex = getSelectedIndex();
+        QModelIndex topIndexInView = ui->tableView->indexAt(QPoint(0,0));
+        QModelIndex bottomIndexInView = ui->tableView->indexAt(QPoint(0, ui->tableView->size().height()));
+        if(currentIndex.isValid() && topIndexInView.isValid() && bottomIndexInView.isValid())
+        {
+            if(!(topIndexInView.row() <= currentIndex.row() &&
+                 currentIndex.row() <= bottomIndexInView.row()))
+            {
+                selectItem(getSelectedVideo());
+                return;
+            }
+        }
+    }
+
     if(hisList_.currentDbID()==getSelectedID())
         hisList_.OnGoBack();
     else
