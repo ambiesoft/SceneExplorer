@@ -1,3 +1,6 @@
+2020/04/11 1.21.11
+Chage Width of FindCombo
+
 2020/04/11 1.21.10
 Going back in history tries to scroll into current Index if it is not in the View.
 

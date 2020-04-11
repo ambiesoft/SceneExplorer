@@ -203,8 +203,8 @@ MainWindow::MainWindow(QWidget *parent,
     //    ui->mainToolBar->addWidget(myTooButton);
 
     cmbFind_ = new FindComboBox(ui->mainToolBar);
-    cmbFind_->setMinimumWidth(100);
-    cmbFind_->setMaximumWidth(100);
+    cmbFind_->setMinimumWidth(FINDCOMBO_WIDTH);
+    cmbFind_->setMaximumWidth(FINDCOMBO_WIDTH);
     cmbFind_->setEditable(true);
     QStringList findtexts = settings_.valueStringList(KEY_COMBO_FINDTEXTS);
     cmbFind_->addItems(findtexts);

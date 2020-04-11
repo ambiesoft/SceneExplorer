@@ -24,7 +24,7 @@ namespace Consts
 Q_CONSTEXPR char ORGANIZATION[] = "Ambiesoft";
 Q_CONSTEXPR char APPDOMAIN[] = "ambiesoft.mooo.com";
 Q_CONSTEXPR char APPNAME[] = "SceneExplorer";
-Q_CONSTEXPR char APPVERSION[] = "1.21.10";
+Q_CONSTEXPR char APPVERSION[] = "1.21.11";
 
 
 Q_CONSTEXPR char KEY_STYLE[] = "style";
@@ -126,5 +126,7 @@ Q_CONSTEXPR char STR_ENV_SCENEEXPLORER_ROOT[] = "${SCENEEXPLORER_ROOT}";
 
 Q_CONSTEXPR float FLOAT1000 = 1000.0f;
 Q_CONSTEXPR float FLOAT1024 = 1024.0f;
+
+Q_CONSTEXPR int FINDCOMBO_WIDTH = 140;
 }
 #endif // CONSTS_H
