@@ -273,7 +273,8 @@ bool processCommandLine(QString* helpText)
     parser.addOption(dbDirectoryOption);
 
     // A boolean option with a single name (-n)
-    QCommandLineOption notAddToRecent("n", QCoreApplication::translate("main", "Do not add to recent open documents."));
+    QCommandLineOption notAddToRecent("n",
+                                      QCoreApplication::translate("main", "Do not add to recent open documents."));
     parser.addOption(notAddToRecent);
 
 
