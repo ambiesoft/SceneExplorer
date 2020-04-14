@@ -689,9 +689,8 @@ private:
     bool IsAllTagSelected() const;
     bool IsDirSelected(const QString& dir) const;
 
-    bool checkExeCommon(const QString& exe, QString& errString) const;
-    bool checkFFprobe(QString& errString) const;
-    bool checkFFmpeg(QString& errString) const;
+    bool GetFFprobeVersion(QString& errString, QString& outString) const;
+    bool GetFFmpegVersion(QString& errString, QString& outString) const;
 
     void CreateLimitManager();
     QString GetDefaultDocumentPath();

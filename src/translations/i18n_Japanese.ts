@@ -1478,6 +1478,14 @@
         <source>Filename without &amp;extension</source>
         <translation>拡張子を除いたファイル名(&amp;E)</translation>
     </message>
+    <message>
+        <source>Check FFprobe:</source>
+        <translation>FFprobeを検証：</translation>
+    </message>
+    <message>
+        <source>Check FFmpeg:</source>
+        <translation>FFmpegを検証：</translation>
+    </message>
 </context>
 <context>
     <name>Option</name>
@@ -2068,7 +2076,7 @@
     <name>Sql</name>
     <message>
         <source>No Error</source>
-        <translation>エラーなし</translation>
+        <translation type="vanished">エラーなし</translation>
     </message>
     <message>
         <source>Video file not found.</source>
@@ -2113,6 +2121,10 @@
     <message>
         <source>Database version(=%1) is higher than this client(=%2). Please update SceneExplorer.</source>
         <translation>データベースのバージョン(=%1)がクライアントのバージョン(=%2)よりも高いです。SceneExplorerを更新してください。</translation>
+    </message>
+    <message>
+        <source>No SQLError</source>
+        <translation>SQLエラーなし</translation>
     </message>
 </context>
 <context>

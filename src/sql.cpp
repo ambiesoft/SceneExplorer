@@ -763,7 +763,7 @@ QString Sql::getErrorStrig(int thumbRet)
 {
     switch(thumbRet)
     {
-    case NO_ERROR: return tr("No Error");
+    case NO_SQLERROR: return tr("No SQLError");
     case MOVIEFILE_NOT_FOUND: return tr("Video file not found.");
     case FILESIZE_UNDERZERO: return tr("File size is under 0.");
     case ERROR_CREATE_SALIENT: return tr("Failed to create Salient.");

@@ -1689,41 +1689,14 @@ void MainWindow::on_action_Save_triggered()
 }
 
 
-bool MainWindow::checkExeCommon(const QString& exe, QString& errString) const
+
+bool MainWindow::GetFFprobeVersion(QString& errString, QString& outString) const
 {
-    QProcess process;
-    process.setProgram(exe);
-    process.setArguments( QStringList() <<
-                          "-version"
-                          );
-
-    process.start(QProcess::ReadOnly);
-    if(!process.waitForStarted(-1))
-    {
-        errString = process.errorString();
-        return false;
-    }
-    if(!process.waitForFinished(-1))
-    {
-        errString = process.errorString();
-        return false;
-    }
-
-    if(0 != process.exitCode())
-    {
-        errString = process.errorString();
-        return false;
-    }
-    return true;
+    return GetExeVersionCommon(FFMpeg::GetFFprobe(settings_), errString, outString);
 }
-
-bool MainWindow::checkFFprobe(QString& errString) const
+bool MainWindow::GetFFmpegVersion(QString& errString, QString& outString) const
 {
-    return checkExeCommon(FFMpeg::GetFFmpeg(settings_), errString);
-}
-bool MainWindow::checkFFmpeg(QString& errString) const
-{
-    return checkExeCommon(FFMpeg::GetFFmpeg(settings_), errString);
+    return GetExeVersionCommon(FFMpeg::GetFFmpeg(settings_), errString, outString);
 }
 
 

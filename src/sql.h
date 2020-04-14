@@ -99,7 +99,7 @@ public:
     }
 
     enum SQL_ERROR {
-        NO_ERROR,
+        NO_SQLERROR,
         MOVIEFILE_NOT_FOUND,
         FILESIZE_UNDERZERO,
         ERROR_CREATE_SALIENT,

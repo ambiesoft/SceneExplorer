@@ -470,10 +470,10 @@ bool MainWindow::IsDirSelected(const QString& dir) const
     return false;
 }
 
-void MainWindow::StartScan(const QStringList& dirs)
+void MainWindow::StartScan(const QStringList& dirsOrig)
 {
-    QString errString;
-    if(!checkFFprobe(errString) || !checkFFmpeg(errString))
+    QString errString, ffprobeVersion, ffmpegVersion;
+    if(!GetFFprobeVersion(errString, ffprobeVersion) || !GetFFmpegVersion(errString, ffmpegVersion))
     {
         insertLog(TaskKind_App, 0,
                   tr("Failed to launch ffprobe or ffmpeg. (%1)").arg(errString) +
@@ -481,8 +481,24 @@ void MainWindow::StartScan(const QStringList& dirs)
                   tr("Check the option setting."));
         return;
     }
+    insertLog(TaskKind_App, 0,
+              tr("Check FFprobe:") + ffprobeVersion);
+    insertLog(TaskKind_App, 0,
+              tr("Check FFmpeg:") + ffmpegVersion);
 
 
+    // Remove duplicated directories
+    QStringList removeds;
+    QStringList dirs = RemoveDuplicateSubDirectory(dirsOrig, removeds);
+    for(auto&& removed:removeds)
+    {
+        insertLog(TaskKind_App,
+                  0,
+                  tr("'%1' is excluded from scanning because its parent directory is included.").arg(removed));
+    }
+
+    // make scan fast by reoder external device so that
+    // each threads start with different device
     QStringList dirsEachDevice = SortDevice1by1(dirs);
     Q_ASSERT(IsSameContents(dirsEachDevice,dirs));
 
@@ -859,32 +875,6 @@ void MainWindow::ScanSelectedDirectory(const bool bAll)
         }
     }
 
-    //    {
-    //		wstring left, right, common;
-    //		vector<wstring> vFolders;
-    //		m_clParse.getFoldersAsVector(vFolders);
-    //		if (!checkDupPaths(vFolders, left, right, common))
-    //		{
-    //			wstring message;
-    //			message += I18N(L"These two folder contains same folder. Do you want to continue?");
-    //			message += L"\r\n\r\n";
-    //			message += left;
-    //			message += L"\r\n";
-    //			message += right;
-    //			if (IDYES != AfxMessageBox(message.c_str(), MB_ICONQUESTION | MB_YESNO))
-    //				return FALSE;
-    //		}
-    //    }
-
-    QStringList removeds;
-    toScan = RemoveDuplicateSubDirectory(toScan, removeds);
-
-    for(auto&& removed:removeds)
-    {
-        insertLog(TaskKind_App,
-                  0,
-                  tr("'%1' is excluded from scanning because its parent directory is included.").arg(removed));
-    }
 
     StartScan(toScan);
 }

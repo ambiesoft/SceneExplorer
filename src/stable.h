@@ -36,8 +36,8 @@
 #include <QComboBox>
 #include <QCommandLineParser>
 #include <QCoreApplication>
-#include <QCursor>
 #include <QCryptographicHash>
+#include <QCursor>
 #include <QDateTime>
 #include <QDebug>
 #include <QDesktopServices>
@@ -77,9 +77,10 @@
 #include <QMessageBox>
 #include <QMimeData>
 #include <QModelIndex>
+#include <QMouseEvent>
 #include <QObject>
-#include <QPalette>
 #include <QPair>
+#include <QPalette>
 #include <QPixmap>
 #include <QProcess>
 #include <QProcessEnvironment>
@@ -120,11 +121,13 @@
 #include <QTranslator>
 #include <QtSql/QSqlDatabase>
 #include <QtSql/QSqlQuery>
+#include <QtWidgets>
 #include <QUrl>
 #include <QUuid>
 #include <QVariant>
 #include <QVector>
 #include <QWidget>
+
 
 // mine
 #include "debugflag.h"

@@ -1,4 +1,4 @@
-#include<QMouseEvent>
+#include <QMouseEvent>
 
 #include "tagentry.h"
 
