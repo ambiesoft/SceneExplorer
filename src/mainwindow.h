@@ -611,6 +611,10 @@ private Q_SLOTS:
     void on_actionSort_by_fps_triggered();
 
 
+    void on_action_SelectDeepestDirectory_triggered();
+
+    void on_action_SelectTags_triggered();
+
 private:
     void OnCopyTable();
     void OnCopyDirectory();

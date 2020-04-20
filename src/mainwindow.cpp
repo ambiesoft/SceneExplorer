@@ -2460,3 +2460,32 @@ void MainWindow::updateFreeSpace()
     slFreeSpace_->setText(QString());
     return;
 }
+
+
+void MainWindow::on_action_SelectTags_triggered()
+{
+    const qint64 id = getSelectedID();
+    if(id==0)
+    {
+        Alert(this, TR_NOVIDEO_SELECTED());
+        return;
+    }
+    QSet<qint64> tagids;
+    if(pDoc_)
+        pDoc_->GetTagsFromID(id,tagids);
+    if(tagids.isEmpty())
+    {
+        Alert(this, tr("There are no tags attached to this item."));
+        return;
+    }
+
+    for(int i=0; i < ui->listTag->count(); ++i)
+    {
+        TagItem* ti = static_cast<TagItem*>(ui->listTag->item(i));
+        if(ti->IsAllItem())
+            continue;
+        if(!tagids.contains(ti->tagid()))
+            continue;
+        ti->setSelected(true);
+    }
+}

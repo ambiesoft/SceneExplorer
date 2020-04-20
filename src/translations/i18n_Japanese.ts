@@ -1486,6 +1486,22 @@
         <source>Check FFmpeg:</source>
         <translation>FFmpegを検証：</translation>
     </message>
+    <message>
+        <source>Select Deepest Director&amp;y</source>
+        <translation>最深ディレクトリを選択(&amp;Y)</translation>
+    </message>
+    <message>
+        <source>Select &amp;Tags</source>
+        <translation>タグを選択(&amp;T)</translation>
+    </message>
+    <message>
+        <source>There are no tags attached to this item.</source>
+        <translation>このアイテムにタグはありません。</translation>
+    </message>
+    <message>
+        <source>There are no directories which hold the selected video.</source>
+        <translation>このアイテムを含むディレクトリはありません。</translation>
+    </message>
 </context>
 <context>
     <name>Option</name>

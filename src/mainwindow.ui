@@ -69,7 +69,7 @@
      <x>0</x>
      <y>0</y>
      <width>1009</width>
-     <height>21</height>
+     <height>23</height>
     </rect>
    </property>
    <property name="font">
@@ -242,12 +242,15 @@
     <addaction name="action_Paste"/>
     <addaction name="separator"/>
     <addaction name="action_SelectAll"/>
+    <addaction name="action_SelectDeepestDirectory"/>
+    <addaction name="action_SelectTags"/>
     <addaction name="separator"/>
     <addaction name="action_ClearContent"/>
     <addaction name="action_Rename"/>
     <addaction name="action_Remove"/>
     <addaction name="separator"/>
     <addaction name="action_Property"/>
+    <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menu_History">
     <property name="title">
@@ -1134,6 +1137,16 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+K, F</string>
+   </property>
+  </action>
+  <action name="action_SelectDeepestDirectory">
+   <property name="text">
+    <string>Select Deepest Director&amp;y</string>
+   </property>
+  </action>
+  <action name="action_SelectTags">
+   <property name="text">
+    <string>Select &amp;Tags</string>
    </property>
   </action>
  </widget>

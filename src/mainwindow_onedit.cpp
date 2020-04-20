@@ -87,16 +87,16 @@ void MainWindow::onMenuView_AboutToShow()
 }
 void MainWindow::onMenuEdit_AboutToShow()
 {
-    const bool bTableSelected = ui->tableView->hasFocus() &&
-            ui->tableView->selectionModel()->hasSelection();
+    const bool bTableSelected = ui->tableView->selectionModel()->hasSelection();
+    const bool bTableFcusedAndSelected = ui->tableView->hasFocus() && bTableSelected;
 
     // open video menu
-    ui->action_OpenVideo->setEnabled(bTableSelected);
+    ui->action_OpenVideo->setEnabled(bTableFcusedAndSelected);
 
 
     // open directory menu
     bool bOpenDirectory = false;
-    if(bTableSelected)
+    if(bTableFcusedAndSelected)
         bOpenDirectory = true;
     else if(ui->directoryWidget->hasFocus() && !ui->directoryWidget->selectedItems().isEmpty())
         bOpenDirectory = true;
@@ -124,17 +124,23 @@ void MainWindow::onMenuEdit_AboutToShow()
     }
     ui->action_SelectAll->setEnabled(bSelectAllEnable);
 
+    // select deepest directory
+    ui->action_SelectDeepestDirectory->setEnabled(bTableSelected);
+
+    // select tags
+    ui->action_SelectTags->setEnabled(bTableSelected);
+
     // clear
     ui->action_ClearContent->setEnabled(ui->txtLog->hasFocus());
 
     // rename
-    ui->action_Rename->setEnabled(bTableSelected);
+    ui->action_Rename->setEnabled(bTableFcusedAndSelected);
 
     // remove
-    ui->action_Remove->setEnabled(bTableSelected);
+    ui->action_Remove->setEnabled(bTableFcusedAndSelected);
 
     // Property
-    ui->action_Property->setEnabled(bTableSelected);
+    ui->action_Property->setEnabled(bTableFcusedAndSelected);
 }
 
 void MainWindow::on_action_ClearContent_triggered()

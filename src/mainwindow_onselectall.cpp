@@ -16,11 +16,16 @@
 //You should have received a copy of the GNU General Public License
 //along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+#include "../../lsMisc/stdQt/stdQt.h"
+
+#include "helper.h"
 
 #include "tagitem.h"
 
 #include "ui_mainwindow.h"
 #include "mainwindow.h"
+
+using namespace AmbiesoftQt;
 
 void MainWindow::on_action_SelectAll_triggered()
 {
@@ -78,3 +83,47 @@ void MainWindow::on_action_SelectAll_triggered()
         return;
     }
 }
+
+void MainWindow::on_action_SelectDeepestDirectory_triggered()
+{
+    QString videoFile = getSelectedVideo();
+    if(videoFile.isEmpty())
+    {
+        Alert(this, TR_NOVIDEO_SELECTED());
+        return;
+    }
+    QString videoDir = QFileInfo(videoFile).absolutePath();
+
+    // Find deepest directory
+    DirectoryItem* foundItem = nullptr;
+    for (int i = 0; i < ui->directoryWidget->count(); ++i)
+    {
+        DirectoryItem* item = static_cast<DirectoryItem*>(ui->directoryWidget->item(i));
+        if(!item->IsNormalItem())
+            continue;
+
+        if(IsSubDir(item->text(), videoDir))
+        {
+            if(!foundItem)
+            {
+                foundItem = item;
+            }
+            else
+            {
+                if(item->text().length() > foundItem->text().length())
+                {
+                    foundItem=item;
+                }
+            }
+        }
+    }
+
+    if(!foundItem)
+    {
+        Alert(this, tr("There are no directories which hold the selected video."));
+        return;
+    }
+
+    foundItem->setSelected(true);
+}
+

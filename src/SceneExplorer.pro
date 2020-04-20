@@ -31,6 +31,7 @@ SOURCES += \
     ../../lsMisc/stdQt/ambapp.cpp \
     main.cpp \
     mainwindow.cpp \
+    mainwindow_contextmenu.cpp \
     tablemodel.cpp \
     tablemodel_data.cpp \
     taskffmpeg.cpp \
