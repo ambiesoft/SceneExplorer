@@ -705,11 +705,20 @@ QModelIndex TableModel::findIndex(const QString& selPath, const FIND_INDEX& fi) 
         return QModelIndex();
     }
 
-    int toAdd=0;
-    if(fi==FIND_INDEX::FIND_INDEX_TITLE)
+    int toAdd;
+    switch (fi)
+    {
+    case FIND_INDEX::FIND_INDEX_TITLE:
+        toAdd=0;
+        break;
+    case FIND_INDEX::FIND_INDEX_MOVIE:
         toAdd=1;
-    else if(fi==FIND_INDEX::FIND_INDEX_DESCRIPTION)
+        break;
+    case FIND_INDEX::FIND_INDEX_DESCRIPTION:
         toAdd=2;
+        break;
+    }
+    Q_ASSERT(0 <= toAdd && toAdd <= 2);
 
     QModelIndex retSourceIndex = index(sourceIndex.row() + toAdd, sourceIndex.column());
     QModelIndex retIndex = (retSourceIndex);

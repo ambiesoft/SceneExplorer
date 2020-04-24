@@ -129,11 +129,20 @@ void MainWindow::selectItem(const QString& movie)
 
     // TODO: not selected
     tableModel_->ensureIndex(toSelectTitle);
-    QApplication::processEvents();
-    ui->tableView->scrollTo(toSelectTitle);
-    ui->tableView->selectionModel()->select(toSelectTitle,
-                                            QItemSelectionModel::ClearAndSelect);
 
+    //int safeLoop=0;
+
+    {
+        QApplication::processEvents();
+        ui->tableView->scrollTo(toSelectTitle);
+        ui->tableView->selectionModel()->setCurrentIndex(toSelectTitle,
+                                                QItemSelectionModel::ClearAndSelect);
+    }
+//    while(ui->tableView->selectionModel()->hasSelection()
+//          && ui->tableView->selectionModel()->selectedIndexes()[0] != toSelectTitle
+//          && (++safeLoop < 256));
+
+    ui->tableView->setFocus();
 }
 
 void MainWindow::on_action_GoBack_triggered()
