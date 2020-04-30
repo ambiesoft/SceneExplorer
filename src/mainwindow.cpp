@@ -1330,9 +1330,13 @@ void MainWindow::GetSelectedAndCurrentTagIDs(TagidsInfo& tagInfos)
                 allids.append(ti->tagid());
             }
         }
-        QSet<qint64> allfileids;
-        pDoc_ && pDoc_->GetTaggedIDs(allids, allfileids);
-        tagInfos.setFileIds(allfileids);
+//        QSet<qint64> allfileids;
+//        pDoc_ && pDoc_->GetTaggedIDs(allids, allfileids);
+        tagInfos.setTagIds(allids);
+
+        QList<qint64> alltaggedtagid;
+        pDoc_ && pDoc_->GetAllTaggedTagIDs(alltaggedtagid);
+        tagInfos.setAllTaggedTagids(alltaggedtagid);
         return;
     }
     if(tagids.isEmpty())
@@ -1341,9 +1345,9 @@ void MainWindow::GetSelectedAndCurrentTagIDs(TagidsInfo& tagInfos)
         tagInfos.setAll();
         return ;
     }
-    QSet<qint64> taggedids;
-    pDoc_ && pDoc_->GetTaggedIDs(tagids, taggedids);
-    tagInfos.setFileIds(taggedids);
+//    QSet<qint64> taggedids;
+//    pDoc_ && pDoc_->GetTaggedIDs(tagids, taggedids);
+    tagInfos.setTagIds(tagids);
     return;
 }
 

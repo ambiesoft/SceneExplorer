@@ -874,99 +874,135 @@ bool Sql::GetAllSqlString(
     }
 
     Q_ASSERT(!docdb_.isEmpty() && docdb_ != "nodb");
-    sql += " FROM FileInfo LEFT JOIN " + docdb_ + ".Access ON FileInfo.id = " + docdb_ + ".Access.id " +
-            "AND " + docdb_ + ".Access.dbid='" + gpSQL->getDbID() + "'";
+    sql += " FROM FileInfo LEFT JOIN " + docdb_ + ".Access a ON FileInfo.id = a.id " +
+            "AND a.dbid='" + gpSQL->getDbID() + "'";
+
+    if(tagInfos.isAll())
+    {}
+    else// if(tagInfos.isNotags())
+    {
+        // LEFT JOIN tagged but exclude removed tagids
+        sql += " LEFT JOIN " + docdb_ + ".Tagged t ON FileInfo.id = t.id " +
+                "AND t.dbid='" + gpSQL->getDbID() + "' AND (" ;
+
+        for(int i=0 ; i < tagInfos.removedTaggedCount(); ++i)
+        {
+            sql += " t.tagid != " + QString::number(tagInfos.removedTag(i)) + " AND";
+        }
+        sql += " 1=1)";
+    }
+//    else
+//    {
+//        // LEFT JOIN tagged but exclude removed tagids
+//        sql += " LEFT JOIN " + docdb_ + ".Tagged t ON FileInfo.id = t.id " +
+//                "AND t.dbid='" + gpSQL->getDbID() + "'";
+//    }
 
     QVector<QVariant> binds;
+
+    sql += " WHERE (";
+
+    const int dircount = dirs.count();
+    if(dircount != 0)
     {
-        // check dbid is same or NULL(joined)
-        // sql += " WHERE (" + docdb_ + ".Access.dbid='" + gpSQL->getDbID() + "' OR " + docdb_ +".Access.dbid IS NULL) AND (";
-        //        sql += QString(" WHERE (%1.Access.dbid='%2' OR %3.Access.dbid IS NULL) AND (").
-        //                arg(docdb_).arg(gpSQL->getDbID()).arg(docdb_);
-        sql += " WHERE (";
-
-        const int dircount = dirs.count();
-        if(dircount != 0)
+        for(int i=0 ; i < dircount; ++i)
         {
-            for(int i=0 ; i < dircount; ++i)
-            {
-                sql += "directory LIKE ?";
-                if((i+1)!=dircount)
-                    sql += " or ";
-            }
-        }
-        else
-        {
-            sql += "1==1";
-        }
-        sql += ") ";
-
-        if(!find.isEmpty())
-            sql += " and name LIKE ?";
-
-        if(tagInfos.isAll())
-        {}
-        else if(tagInfos.isNotags())
-        {
-            sql += " AND (1==1 AND ";
-            for(int i=0 ; i < tagInfos.fileIdCount(); ++i)
-            {
-                sql += "FileInfo.id!=?";
-                sql += " AND ";
-            }
-            sql += "1==1)";
-        }
-        else
-        {
-            if(tagInfos.isFileIdEmpty())
-            {
-                sql += " AND 0=1 ";
-            }
-            else
-            {
-                sql += " AND (";
-                for(int i=0 ; i < tagInfos.fileIdCount(); ++i)
-                {
-                    sql += "FileInfo.id=?";
-                    if( (i+1) != tagInfos.fileIdCount())
-                        sql += " or ";
-                }
-                sql += ")";
-            }
-        }
-
-        AppendSortArg(sql, sortby, sortrev);
-        AppendLitmiArg(sql, limit, bOnlyExistant);
-        qDebug() << sql << __FUNCTION__;
-        SQC(query, prepare(sql));
-
-        int bindIndex;
-        for(bindIndex=0 ; bindIndex < dirs.count(); ++bindIndex)
-        {
-            Q_ASSERT(dirs[bindIndex].endsWith('/'));
-            query.bindValue(bindIndex, dirs[bindIndex] + "%");
-        }
-        if(!find.isEmpty())
-            query.bindValue(bindIndex++, "%"+find+"%");
-
-        // if(tagids && !tagids->isEmpty())
-        if(tagInfos.isAll())
-        {}
-        else if(tagInfos.isNotags())
-        {
-            for( const qint64& tagid : tagInfos.fileIds())
-            {
-                query.bindValue(bindIndex++, tagid);
-            }
-        }
-        else
-        {
-            for( const qint64& tagid : tagInfos.fileIds())
-            {
-                query.bindValue(bindIndex++, tagid);
-            }
+            sql += "directory LIKE ?";
+            if((i+1)!=dircount)
+                sql += " or ";
         }
     }
+    else
+    {
+        sql += "1==1";
+    }
+    sql += ") ";
+
+    if(!find.isEmpty())
+        sql += " and name LIKE ?";
+
+    // tag
+    if(tagInfos.isAll())
+    {}
+    else if(tagInfos.isNotags())
+    {
+        sql += " AND t.tagid IS NULL";
+
+        // 1,2,3,4,5,6,7
+        // Missing after tag removed
+//        sql += " AND (t.tagid IS NULL OR (";
+//        for(int i=0 ; i < tagInfos.alltaggedtagidCount(); ++i)
+//        {
+//            sql += " t.tagid != " + QString::number(tagInfos.alltaggedtagid(i)) + " AND";
+//        }
+//        sql += " 1=1))";
+//        sql += " GROUP BY FileInfo.id";
+
+        // 1,2,3,7
+        // Not filltered after adding tag
+//        sql += " AND (t.tagid IS NULL OR (";
+//        for(int i=0 ; i < tagInfos.tagCount(); ++i)
+//        {
+//            sql += " t.tagid != " + QString::number(tagInfos.tagid(i)) + " AND";
+//        }
+//        sql += " 1=1))";
+//        sql += " GROUP BY FileInfo.id";
+
+        // 4,5,6
+        // Not filtered
+//        sql += " AND (t.tagid IS NULL OR (";
+//        for(int i=0 ; i < tagInfos.removeTaggedCount(); ++i)
+//        {
+//            sql += " t.tagid != " + QString::number(tagInfos.removedTag(i)) + " AND";
+//        }
+//        sql += " 1=1))";
+//        sql += " GROUP BY FileInfo.id";
+    }
+    else
+    {
+        sql += " AND (";
+        for(int i=0 ; i < tagInfos.tagCount(); ++i)
+        {
+            sql += " t.tagid=" + QString::number(tagInfos.tagid(i)) + " OR";
+        }
+        sql += " 1=0)";
+        sql += " GROUP BY FileInfo.id";
+    }
+
+    AppendSortArg(sql, sortby, sortrev);
+    AppendLitmiArg(sql, limit, bOnlyExistant);
+
+
+    qDebug() << sql << __FUNCTION__;
+    SQC(query, prepare(sql));
+
+    int bindIndex;
+    for(bindIndex=0 ; bindIndex < dirs.count(); ++bindIndex)
+    {
+        Q_ASSERT(dirs[bindIndex].endsWith('/'));
+        query.bindValue(bindIndex, dirs[bindIndex] + "%");
+    }
+    if(!find.isEmpty())
+        query.bindValue(bindIndex++, "%"+find+"%");
+
+    // if(tagids && !tagids->isEmpty())
+//        if(tagInfos.isAll())
+//        {}
+//        else if(tagInfos.isNotags())
+//        {
+//            for( const qint64& tagid : tagInfos.fileIds())
+//            {
+//                query.bindValue(bindIndex++, tagid);
+//            }
+//        }
+//        else
+//        {
+//            for( const qint64& tagid : tagInfos.fileIds())
+//            {
+//                query.bindValue(bindIndex++, tagid);
+//            }
+//        }
+
 
     return true;
 }

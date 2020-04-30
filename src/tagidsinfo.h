@@ -14,11 +14,14 @@ public:
     };
 private:
     TAGIDS_INFO_TYPE infotype_ = TAGIDSINFO_ALL;
-    QSet<qint64> fileids_;
+    QList<qint64> alltaggedtagids_;
+    QList<qint64> tagids_;
+    mutable QList<qint64> removedTagids_;
     void CopyMember(const TagidsInfo& that)
     {
         this->infotype_ = that.infotype_;
-        this->fileids_ = that.fileids_;
+        this->alltaggedtagids_=that.alltaggedtagids_;
+        this->tagids_=that.tagids_;
     }
 public:
     TagidsInfo(){}
@@ -32,7 +35,8 @@ public:
     bool operator ==(const TagidsInfo& that) {
         return
                 this->infotype_ == that.infotype_ &&
-                this->fileids_== that.fileids_;
+                this->tagids_== that.tagids_ &&
+                this->alltaggedtagids_ == that.alltaggedtagids_;
     }
     const TagidsInfo& operator=(const TagidsInfo& that) {
         if(this != &that)
@@ -46,7 +50,6 @@ public:
     }
     void setAll() {
         infotype_ = TAGIDSINFO_ALL;
-        fileids_.clear();
     }
 
     bool isNotags() const {
@@ -54,24 +57,39 @@ public:
     }
     void setNotags() {
         infotype_ = TAGIDSINFO_NOTAGS;
-        fileids_.clear();
     }
-    bool isFileIdEmpty() const {
-        Q_ASSERT(infotype_ == TAGIDSINFO_USERSELECTED);
-        return fileids_.empty();
-    }
-    int fileIdCount() const {
+    void setTagIds(QList<qint64>& tagids) {
         Q_ASSERT(infotype_ == TAGIDSINFO_NOTAGS || infotype_ == TAGIDSINFO_USERSELECTED);
-        return fileids_.count();
+        tagids_=tagids;
     }
-    void setFileIds(QSet<qint64>& fileids) {
+    int tagCount() const {
         Q_ASSERT(infotype_ == TAGIDSINFO_NOTAGS || infotype_ == TAGIDSINFO_USERSELECTED);
-        fileids_ = fileids;
+        return tagids_.count();
     }
-    const QSet<qint64>& fileIds() const {
+    qint64 tagid(int i) const {
         Q_ASSERT(infotype_ == TAGIDSINFO_NOTAGS || infotype_ == TAGIDSINFO_USERSELECTED);
-        return fileids_;
+        return tagids_[i];
     }
+
+    void setAllTaggedTagids(QList<qint64>& alltaggedtagids) {
+        Q_ASSERT(infotype_ == TAGIDSINFO_NOTAGS);
+        alltaggedtagids_ = alltaggedtagids;
+    }
+    int alltaggedtagidCount() const {
+        Q_ASSERT(infotype_ == TAGIDSINFO_NOTAGS);
+        return alltaggedtagids_.count();
+    }
+    qint64 alltaggedtagid(int i) const {
+        return alltaggedtagids_[i];
+    }
+
+
+    int removedTaggedCount() const;
+    qint64 removedTag(int i) const;
+
+private:
+    mutable bool bRemovedTagConstructed = false;
+    void constructRemoveTaggedCount() const;
 };
 
 #endif // TAGIDSINFO_H

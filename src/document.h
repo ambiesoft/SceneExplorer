@@ -141,6 +141,9 @@ public:
     {
         return docSql_->SetTagged(id,tagid,bSet);
     }
+    bool GetAllTaggedTagIDs(QList<qint64>& alltaggedtagids) const {
+        return docSql_->GetAllTaggedTagids(alltaggedtagids);
+    }
     bool GetTag(const qint64& tagid, QString& tag, QString& yomi) const
     {
         return docSql_->GetTag(tagid,tag,yomi);

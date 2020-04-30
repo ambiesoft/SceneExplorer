@@ -30,6 +30,7 @@
 #include "helper.h"
 #include "sql.h"
 #include "directoryitem.h"
+#include "tagitem.h"
 
 #include "documentsql.h"
 
@@ -523,7 +524,7 @@ bool DocumentSql::setOpenCount(const qint64& id, const qint64& openCount)
 
     return true;
 }
-#include <tagitem.h>
+
 bool DocumentSql::GetAllTags(QList<TagItem*>& tags,bool bHasParent) const
 {
     MYQMODIFIER QSqlQuery query("SELECT * FROM " + docdb("Tag") + " WHERE dbid=? ORDER BY yomi");
@@ -540,6 +541,19 @@ bool DocumentSql::GetAllTags(QList<TagItem*>& tags,bool bHasParent) const
                                   query.value("yomi").toString());
 
         tags.append(ti);
+    }
+    return true;
+}
+bool DocumentSql::GetAllTaggedTagids(QList<qint64>& alltaggedids) const
+{
+    MYQMODIFIER QSqlQuery query("SELECT DISTINCT tagid FROM " + docdb("Tagged") + " WHERE dbid=?");
+
+    int i=0;
+    query.bindValue(i++, gpSQL->getDbID());
+    SQC(query,exec());
+    while(query.next())
+    {
+        alltaggedids.append(query.value("tagid").toLongLong());
     }
     return true;
 }
