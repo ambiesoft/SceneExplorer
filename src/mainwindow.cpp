@@ -1928,10 +1928,9 @@ QString MainWindow::GetTags(const qint64& id)
         return QString();
     }
 
-    QString ret;
-    for(const qint64& tagid : tagids) // int i=0; i < tagids.count(); ++i)
+    QStringList rets;
+    for(const qint64& tagid : tagids)
     {
-        // qint64 tagid = tagids[i];
         QString tag,yomi;
         if(!pDoc_->GetTag(tagid,tag,yomi))
         {
@@ -1939,13 +1938,12 @@ QString MainWindow::GetTags(const qint64& id)
                   tr("Failed to GetTag."));
             return QString();
         }
-        if (!ret.isEmpty())
-            ret += ",";
-        ret += tag;
-        //if((i+1) != tagids.count())
-        //    ret += ",";
+        if (!tag.isEmpty())
+        {
+            rets.append(tag);
+        }
     }
-    return ret;
+    return rets.join(",");
 }
 
 void MainWindow::on_listTag_itemChanged(QListWidgetItem *)
