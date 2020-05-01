@@ -1851,7 +1851,7 @@ void MainWindow::deleteTag()
     delete ui->listTag->takeItem(ui->listTag->row(ti));
 }
 
-void MainWindow::checkAllTagCommon(const bool bCheck)
+void MainWindow::checkAllTagCommon(const bool bCheck, const bool bSelection)
 {
     {
         Ambiesoft::BlockedBool tb(&tagChanging_);
@@ -1860,20 +1860,40 @@ void MainWindow::checkAllTagCommon(const bool bCheck)
             TagItem* ti = static_cast<TagItem*>(ui->listTag->item(i));
             if(ti->IsNormalItem())
             {
-                ti->setCheckState(bCheck ? Qt::Checked : Qt::Unchecked);
+                if(bSelection)
+                {
+                    if(ti->isSelected())
+                    {
+                        ti->setCheckState(bCheck ? Qt::Checked : Qt::Unchecked);
+                    }
+                }
+                else
+                {
+                    ti->setCheckState(bCheck ? Qt::Checked : Qt::Unchecked);
+                }
             }
         }
     }
     itemChangedCommon();
 }
-void MainWindow::checkAllTag()
+void MainWindow::OnCheckAllTag()
 {
     checkAllTagCommon(true);
 }
-void MainWindow::uncheckAllTag()
+void MainWindow::OnUncheckAllTag()
 {
     checkAllTagCommon(false);
 }
+
+void MainWindow::OnCheckSelectedTag()
+{
+    checkAllTagCommon(true, true);
+}
+void MainWindow::OnUncheckSelectedTag()
+{
+    checkAllTagCommon(false, true);
+}
+
 void MainWindow::showTagContextMenu(const QPoint &pos)
 {
     TagItem* ti =static_cast<TagItem*>( ui->listTag->itemAt(pos));
@@ -1886,8 +1906,8 @@ void MainWindow::showTagContextMenu(const QPoint &pos)
         myMenuFreeArea.addAction(ui->action_Paste);
         ui->action_Paste->setEnabled(IsClipboardTagDataAvalable());
         myMenuFreeArea.addSeparator();
-        myMenuFreeArea.addAction(tr("&Check All"), this, SLOT(checkAllTag()));
-        myMenuFreeArea.addAction(tr("&Uncheck All"), this, SLOT(uncheckAllTag()));
+        myMenuFreeArea.addAction(tr("&Check All"), this, SLOT(OnCheckAllTag()));
+        myMenuFreeArea.addAction(tr("&Uncheck All"), this, SLOT(OnUncheckAllTag()));
 
         // Show context menu at handling position
         myMenuFreeArea.exec(ui->listTag->mapToGlobal(pos));
@@ -1902,6 +1922,14 @@ void MainWindow::showTagContextMenu(const QPoint &pos)
         MyContextMenu myMenuItemArea;
         myMenuItemArea.addAction(tr("&Edit"), this, SLOT(editTag()));
         myMenuItemArea.addAction(tr("&Delete"), this, SLOT(deleteTag()));
+
+        myMenuItemArea.addSeparator();
+        myMenuItemArea.addAction(tr("Check &Selection"), this, SLOT(OnCheckSelectedTag()));
+        myMenuItemArea.addAction(tr("Uncheck Se&lection"), this, SLOT(OnUncheckSelectedTag()));
+
+        //myMenuItemArea.addSeparator();
+        myMenuItemArea.addAction(tr("&Check All"), this, SLOT(OnCheckAllTag()));
+        myMenuItemArea.addAction(tr("&Uncheck All"), this, SLOT(OnUncheckAllTag()));
 
         // Show context menu at handling position
         myMenuItemArea.exec(ui->listTag->mapToGlobal(pos));

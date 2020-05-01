@@ -211,6 +211,11 @@ void MainWindow::onMenuDirectory_AboutToShow()
         actionNoDir->setEnabled(false);
         ui->menu_Directory->addAction(actionNoDir);
     }
+
+    // check or uncheck all
+    ui->menu_Directory->addSeparator();
+    ui->menu_Directory->addAction(tr("&Check All"), this, SLOT(OnDirectoryCheckAll()));
+    ui->menu_Directory->addAction(tr("&Uncheck All"), this, SLOT(OnDirectoryUncheckAll()));
 }
 
 void MainWindow::OnUserTagTriggered()
@@ -240,7 +245,7 @@ void MainWindow::onMenuTag_AboutToShow()
     for(int i=0; i < ui->listTag->count(); ++i)
     {
         TagItem* ti = static_cast<TagItem*>(ui->listTag->item(i));
-        if(ti->IsAllItem())
+        if(!ti->IsNormalItem())
             continue;
         bAdded=true;
         QString text = ti->text();
@@ -263,7 +268,13 @@ void MainWindow::onMenuTag_AboutToShow()
         actionNoDir->setEnabled(false);
         ui->menu_Tag->addAction(actionNoDir);
     }
+
+    // check all and uncheck all
+    ui->menu_Tag->addSeparator();
+    ui->menu_Tag->addAction(tr("&Check All"), this, SLOT(OnCheckAllTag()));
+    ui->menu_Tag->addAction(tr("&Uncheck All"), this, SLOT(OnUncheckAllTag()));
 }
+
 void MainWindow::onMenuTask_AboutToShow()
 {
     qDebug() << "gPaused" << gPaused << __FUNCTION__;
@@ -776,7 +787,8 @@ void MainWindow::OnDirectoryRemoveMissingItems()
 
     itemChangedCommon(true);
 }
-void MainWindow::OnDirectoryCheckAll()
+
+void MainWindow::CheckDirectoryCommon(const bool bCheck, const bool bSelection)
 {
     {
         Ambiesoft::BlockedBool bt(&directoryChanging_, true, false);
@@ -785,27 +797,43 @@ void MainWindow::OnDirectoryCheckAll()
         {
             DirectoryItem* item = static_cast<DirectoryItem*>(ui->directoryWidget->item(i));
             if(item->IsNormalItem())
-                item->setCheckState(Qt::Checked);
+            {
+                if(bSelection)
+                {
+                    if(item->isSelected())
+                    {
+                        item->setCheckState(bCheck ? Qt::Checked : Qt::Unchecked);
+                    }
+                }
+                else
+                {
+                    item->setCheckState(bCheck ? Qt::Checked : Qt::Unchecked);
+                }
+            }
         }
     }
 
     itemChangedCommon();
+}
+
+void MainWindow::OnDirectoryCheckAll()
+{
+    CheckDirectoryCommon(true,false);
 }
 void MainWindow::OnDirectoryUncheckAll()
 {
-    {
-        Ambiesoft::BlockedBool bt(&directoryChanging_, true, false);
-
-        for (int i = 0; i < ui->directoryWidget->count(); ++i)
-        {
-            DirectoryItem* item = static_cast<DirectoryItem*>(ui->directoryWidget->item(i));
-            if(item->IsNormalItem())
-                item->setCheckState(Qt::Unchecked);
-        }
-    }
-
-    itemChangedCommon();
+    CheckDirectoryCommon(false,false);
 }
+void MainWindow::OnDirectoryCheckSelection()
+{
+    CheckDirectoryCommon(true,true);
+}
+void MainWindow::OnDirectoryUncheckSelection()
+{
+    CheckDirectoryCommon(false,true);
+}
+
+
 
 
 
@@ -870,6 +898,7 @@ void MainWindow::on_directoryWidget_customContextMenuRequested(const QPoint &pos
         MyContextMenu menu("DirectoryWidget Context Menu",this);
         menu.addEnablingAction(ui->action_AddDirectory);
         menu.addEnablingAction(ui->action_Paste);
+
         menu.addSeparator();
 
         QAction actCheckAll(tr("&Check All"));
@@ -901,6 +930,10 @@ void MainWindow::on_directoryWidget_customContextMenuRequested(const QPoint &pos
 
         menu.addEnablingAction(ui->action_ScanSelectedDirectory);
         menu.addSeparator();
+
+        menu.addAction(tr("Check &Selection"), this, SLOT(OnDirectoryCheckSelection()));
+        menu.addAction(tr("Uncheck Se&lection"), this, SLOT(OnDirectoryUncheckSelection()));
+        // menu.addSeparator();
 
         QAction actCheckAll(tr("&Check All"));
         connect(&actCheckAll, SIGNAL(triggered(bool)),

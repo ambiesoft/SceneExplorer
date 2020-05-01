@@ -1502,6 +1502,14 @@
         <source>There are no directories which hold the selected video.</source>
         <translation>このアイテムを含むディレクトリはありません。</translation>
     </message>
+    <message>
+        <source>Check &amp;Selection</source>
+        <translation>選択をチェック(&amp;S)</translation>
+    </message>
+    <message>
+        <source>Uncheck Se&amp;lection</source>
+        <translation>選択をチェックしない(&amp;L)</translation>
+    </message>
 </context>
 <context>
     <name>Option</name>

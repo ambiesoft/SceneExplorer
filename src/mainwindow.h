@@ -364,7 +364,7 @@ protected:
     QToolButton* tbLabelSort_ = nullptr;
 
     void on_ShowMissingClicked_common(bool nNextCheck);
-    void checkAllTagCommon(const bool bCheck);
+    void checkAllTagCommon(const bool bCheck, const bool bSelection = false);
 
 
     void setFontCommon1(const QString& savekey,
@@ -378,8 +378,10 @@ protected:
 private Q_SLOTS:
     void editTag();
     void deleteTag();
-    void checkAllTag();
-    void uncheckAllTag();
+    void OnCheckAllTag();
+    void OnUncheckAllTag();
+    void OnCheckSelectedTag();
+    void OnUncheckSelectedTag();
     void showTagContextMenu(const QPoint&);
     void OnMenuStyle();
     void on_action_Close_triggered();
@@ -782,8 +784,11 @@ public Q_SLOTS:
 
     void OnDirectoryRemove();
     void OnDirectoryRemoveMissingItems();
+    void CheckDirectoryCommon(const bool bCheck, const bool bSelection);
     void OnDirectoryCheckAll();
     void OnDirectoryUncheckAll();
+    void OnDirectoryCheckSelection();
+    void OnDirectoryUncheckSelection();
     void OnDirectorySortByName();
     void OnDirectoryMoveUp();
     void OnDirectoryMoveDown();
