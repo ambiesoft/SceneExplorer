@@ -66,7 +66,7 @@ public:
     bool IsCheckedInt() const {
         return IsChecked() ? 1:0;
     }
-
+    void Refresh();
 };
 
 #endif // DIRECTORYITEM_H

@@ -60,7 +60,7 @@ class MainWindow;
 class MainWindow : public QMainWindow, IMainWindow, IHistoryList
 {
     Q_OBJECT
-
+    using ParentClass = QMainWindow;
     QString TR_NOVIDEO_SELECTED() { return tr("No Video Selected"); }
     QString TR_NODIRECTORY_SELECTED() { return  tr("No Directory Selected");}
     QString TR_ALLITEM_COULDNOTBE_COPIED() { return  tr("All item could not be copied.");}
@@ -317,7 +317,9 @@ protected:
     virtual void resizeEvent(QResizeEvent *event);
     void closeEvent(QCloseEvent *event);
     void showEvent( QShowEvent* event );
+    virtual bool event(QEvent *event) override;
 
+    void RefreshDirectoryTree();
     void initLangMenus();
     class SortManager
     {

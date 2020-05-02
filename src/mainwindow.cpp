@@ -2059,12 +2059,28 @@ void MainWindow::on_action_FontStatusbar_triggered()
     );
 }
 
+void MainWindow::RefreshDirectoryTree()
+{
+    // Refresh directory tree
+    foreach(DirectoryItem* di, ui->directoryWidget->GetAllNormalItems())
+    {
+        di->Refresh();
+    }
+}
 void MainWindow::on_action_Refresh_triggered()
 {
+    RefreshDirectoryTree();
     itemChangedCommon(true);
 }
 
-
+bool MainWindow::event(QEvent *e)
+{
+    if (e->type() == QEvent::WindowActivate)
+    {
+        RefreshDirectoryTree();
+    }
+    return ParentClass::event(e);
+}
 
 
 QList<QWidget*> MainWindow::getAllStatusBarWidgets()
