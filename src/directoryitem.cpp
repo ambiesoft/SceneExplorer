@@ -17,10 +17,11 @@
 //along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <QIcon>
+#include <QDir>
 #include "directoryitem.h"
 
 QListWidget* DirectoryItem::parent_;
-QBrush* defaultFore_;
+
 DirectoryItem::DirectoryItem(const qint64& dirid,
                              DirectoryItemType itemType,
                              const QString& text) :
@@ -29,11 +30,6 @@ DirectoryItem::DirectoryItem(const qint64& dirid,
     itemType_(itemType)
 {
     Q_ASSERT(parent_);
-    if(!defaultFore_)
-    {
-        defaultFore_ = new QBrush();
-        *defaultFore_ = foreground();
-    }
     setText(text);
     if(itemType==DirectoryItem::DI_ALL_MY)
     {
@@ -60,11 +56,13 @@ DirectoryItem::DirectoryItem(const qint64& dirid,
 
 void DirectoryItem::Refresh()
 {
+    static QBrush defaultFore = foreground();
+
     if(IsNormalItem())
     {
         if(!QDir(text()).exists())
             setForeground(Qt::red);
         else
-            setForeground(*defaultFore_);
+            setForeground(defaultFore);
     }
 }
