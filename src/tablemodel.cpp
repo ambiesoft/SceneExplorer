@@ -705,7 +705,7 @@ QModelIndex TableModel::findIndex(const QString& selPath, const FIND_INDEX& fi) 
         return QModelIndex();
     }
 
-    int toAdd;
+    int toAdd = -1;
     switch (fi)
     {
     case FIND_INDEX::FIND_INDEX_TITLE:
