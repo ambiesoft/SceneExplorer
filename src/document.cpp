@@ -74,29 +74,57 @@ bool Document::Load(const QString& file, const bool bMustExists)
     return true;
 }
 
-void Document::Store(QListWidget* pLW,
+bool Document::StoreTagsSelectionState(QListWidget* pListTag)
+{
+    // save tag select state, each tag is saved when it's created or editted,
+    // here save only selection state
+    bool success = true;
+    for(int i=0 ; i < pListTag->count(); ++i)
+    {
+        TagItem* ti = (TagItem*)pListTag->item(i);
+        if(ti->IsAllItem())
+        {
+            success &= docSql_->setTagAllSelected(ti->isSelected());
+        }
+        else if(ti->IsNormalItem())
+        {
+            success &= docSql_->SetTagSelectedAndChecked(ti->tagid(), ti->isSelected(),ti->IsChecked());
+        }
+        else if(ti->IsNotagItem())
+        {
+            success &= docSql_->setTagNotagsSelected(ti->isSelected());
+        }
+        else
+        {
+            Q_ASSERT(false);
+        }
+    }
+    return success;
+}
+bool Document::Store(QListWidget* pLW,
                      QListWidget* pListTag,
                      const QModelIndex& index)
 {
+    bool success=true;
     int normalCount = 0;
     for(int i=0 ; i <pLW->count();++i)
     {
         DirectoryItem* item = (DirectoryItem*)pLW->item(i);
         if(item->IsAllItem())
         {
-            docSql_->setDirAllSelected(item->isSelected());
-            docSql_->setDirAllChecked(item->checkState() == Qt::Checked);
+            success &= docSql_->setDirAllSelected(item->isSelected());
+            success &= docSql_->setDirAllChecked(item->checkState() == Qt::Checked);
         }
         else if(item->IsNormalItem())
         {
             if(bReordered_)
             {
                 normalCount++;
-                docSql_->setDirectory(normalCount,item);
+                success &= docSql_->setDirectory(normalCount,item);
             }
             else
             {
-                docSql_->setDirNormalItemState(item);
+                success &= docSql_->setDirNormalItemState(item);
             }
         }
         else if(item->IsMissingItem())
@@ -105,35 +133,18 @@ void Document::Store(QListWidget* pLW,
         }
     }
     if(bReordered_)
-        docSql_->removeDirectoryOver(normalCount);
+        success &= docSql_->removeDirectoryOver(normalCount);
 
     bReordered_ = false;
 
 
 
-    // save tag select state, each tag is saved when it's created or editted,
-    // here save only selection state
-    for(int i=0 ; i < pListTag->count(); ++i)
-    {
-        TagItem* ti = (TagItem*)pListTag->item(i);
-        if(ti->IsAllItem())
-        {
-            docSql_->setTagAllSelected(ti->isSelected());
-        }
-        else if(ti->IsNormalItem())
-        {
-            docSql_->SetTagSelectedAndChecked(ti->tagid(), ti->isSelected(),ti->IsChecked());
-        }
-        else if(ti->IsNotagItem())
-        {
-            docSql_->setTagNotagsSelected(ti->isSelected());
-        }
-        else
-        {
-            Q_ASSERT(false);
-        }
-    }
-    docSql_->SetLastPos(index.row(),index.column());
+
+    success &= StoreTagsSelectionState(pListTag);
+
+    success &= docSql_->SetLastPos(index.row(),index.column());
+
+    return success;
 }
 
 int Document::dirCount() const

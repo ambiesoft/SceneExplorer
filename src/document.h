@@ -61,7 +61,8 @@ public:
     QString GetLastErr() const {
         return lastErr_;
     }
-    void Store(QListWidget* pLW,
+    bool StoreTagsSelectionState(QListWidget* pListTag);
+    bool Store(QListWidget* pLW,
                QListWidget* pListTag,
                const QModelIndex& index);
 
@@ -136,6 +137,10 @@ public:
     bool GetTaggedIDs(const QList<qint64>& tagids, QSet<qint64>& taggedids) const
     {
         return docSql_->GetTaggedIDs(tagids, taggedids);
+    }
+    bool GetTaggedCount(const qint64& tagid, int& count) const
+    {
+        return docSql_->GetTaggedCount(tagid,count);
     }
     bool SetTagged(const qint64& id, const qint64& tagid, const bool bSet) const
     {

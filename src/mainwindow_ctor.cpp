@@ -404,7 +404,7 @@ MainWindow::MainWindow(QWidget *parent,
 
     // sort
     sortManager_.InitCurrentSort(static_cast<SORTCOLUMNMY>(settings.valueInt(KEY_SORT, static_cast<int>(SORT_NONE))),
-                                 settings_.valueBool(KEY_SORTREV, false));
+                                 settings_.valueBool(KEY_SORTREV, KEY_SORTREV_default));
 
 
     // recents
@@ -420,7 +420,7 @@ MainWindow::MainWindow(QWidget *parent,
     }
     else
     {
-        if(settings_.valueBool(KEY_OPEN_LASTOPENEDDOCUMENT, true))
+        if(settings_.valueBool(KEY_OPEN_LASTOPENEDDOCUMENT, KEY_OPEN_LASTOPENEDDOCUMENT_default))
         {
             // Alert(this, "recnet[0]=" +recents_[0]);
             if(recents_.isEmpty() ||

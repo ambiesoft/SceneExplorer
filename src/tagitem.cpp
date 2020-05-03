@@ -45,5 +45,6 @@ TagItem::TagItem(bool bHasParent,
     }
     else
         Q_ASSERT(false);
-    setText(text);
+
+    setTagText(text);
 }

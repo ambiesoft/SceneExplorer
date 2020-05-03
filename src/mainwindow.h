@@ -320,6 +320,7 @@ protected:
     virtual bool event(QEvent *event) override;
 
     void RefreshDirectoryTree();
+    void RefreshTagTree();
     void initLangMenus();
     class SortManager
     {

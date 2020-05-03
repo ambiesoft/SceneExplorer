@@ -86,6 +86,7 @@ public:
 
     bool GetAllTags(QList<TagItem*>& tags,bool bHasParent) const;
     bool GetAllTaggedTagids(QList<qint64>& alltaggedids) const;
+    bool GetTaggedCount(const qint64& tagid, int& count) const;
     bool IsTagExist(const QString& tag) const;
     bool Insert(const QString& tag, const QString& yomi, qint64& insertedTag) const;
     bool GetTaggedIDs(const QList<qint64>& tagids, QSet<qint64>& taggedids) const;

@@ -24,7 +24,7 @@
 class TagItem : public QListWidgetItem
 {
     Q_DISABLE_COPY(TagItem)
-
+    using ParentClass = QListWidgetItem;
 public:
     enum TagItemType
     {
@@ -35,7 +35,9 @@ public:
 private:
     qint64 tagid_;
     TagItemType itemType_;
+    QString tag_;
     QString yomi_;
+    int tagcount_ = 0;
 public:
     static QListWidget* parent_;
     TagItem(bool bHasParent,
@@ -61,7 +63,28 @@ public:
     }
 
 
-
+    QString text() const = delete;
+    void setText(const QString& text) = delete;
+    QString tagtext() const {
+        return tag_;
+    }
+    void setTagText(const QString& text) {
+        tag_ = text;
+        ParentClass::setText(text);
+    }
+    QString dispText() const {
+        return ParentClass::text();
+    }
+    void setTagCount(int count) {
+        tagcount_ = count;
+    }
+    void updateDispText(bool bShowCount) {
+        if(bShowCount) {
+            ParentClass::setText(QString("%1 (%2)").arg(tagtext()).arg(tagcount_));
+        } else {
+            ParentClass::setText(tagtext());
+        }
+    }
     QString yomi() const {
         return yomi_;
     }

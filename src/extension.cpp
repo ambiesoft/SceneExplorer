@@ -236,7 +236,7 @@ void Extension::SetOrderAllow(bool b)
 
 void Extension::Load(IniSettings& settings)
 {
-    bOrderAllow_ = settings.valueBool(KEY_EXTENSION_ORDERALLOW, true);
+    bOrderAllow_ = settings.valueBool(KEY_EXTENSION_ORDERALLOW, KEY_EXTENSION_ORDERALLOW_default);
 
     QVariant vVal;
     vVal = settings.value(KEY_ALLOW_EXTENSIONS);

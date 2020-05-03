@@ -139,7 +139,7 @@ void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
         {
             for(TagItem* ti : tags)
             {
-                QString text = ti->text();
+                QString text = ti->tagtext();
                 QSharedPointer<QAction> act(new QAction(text));
                 connect(act.data(), SIGNAL(triggered()),
                         this, SLOT(OnContextAddTags()));

@@ -52,7 +52,7 @@ public:
     int maxRows_;
     bool openlastdoc_;
     QString ffprobe_, ffmpeg_;
-
+    bool showtagcount_;
 private:
     void constructTitleTemplateMenu(QMenu& contextMenu,
                                     QList< QSharedPointer<QAction> >& acts,

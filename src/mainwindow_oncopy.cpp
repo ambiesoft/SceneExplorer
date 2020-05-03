@@ -96,7 +96,7 @@ void MainWindow::OnCopyTag()
         TagItem* ti = (TagItem*)qi;
         if(ti->IsNormalItem())
         {
-            all.append(ti->text() + "\t" + ti->yomi());
+            all.append(ti->tagtext() + "\t" + ti->yomi());
         }
     }
     //    QByteArray dirdata("aaa");

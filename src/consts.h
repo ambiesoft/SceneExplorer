@@ -24,7 +24,7 @@ namespace Consts
 Q_CONSTEXPR char ORGANIZATION[] = "Ambiesoft";
 Q_CONSTEXPR char APPDOMAIN[] = "ambiesoft.mooo.com";
 Q_CONSTEXPR char APPNAME[] = "SceneExplorer";
-Q_CONSTEXPR char APPVERSION[] = "1.21.17";
+Q_CONSTEXPR char APPVERSION[] = "1.21.18";
 
 
 Q_CONSTEXPR char KEY_STYLE[] = "style";
@@ -71,6 +71,8 @@ Q_CONSTEXPR char KEY_IMAGECACHETYPE[] = "imagecachetype";
 
 
 Q_CONSTEXPR char KEY_EXTENSION_ORDERALLOW[] = "extensionoderallow";
+Q_CONSTEXPR bool KEY_EXTENSION_ORDERALLOW_default = true;
+
 Q_CONSTEXPR char KEY_ALLOW_EXTENSIONS[] = "allowextensions";
 Q_CONSTEXPR char KEY_DENY_EXTENSIONS[] = "denyextensions";
 
@@ -97,17 +99,20 @@ Q_CONSTEXPR char KEY_EXTERNALTOOLS_COUNTASOPEN[] = "externaltoolcountasopen";
 Q_CONSTEXPR char KEY_RECENT_OPENDOCUMENTS[] = "recentdocuments";
 Q_CONSTEXPR char KEY_SORT[] = "sort";
 Q_CONSTEXPR char KEY_SORTREV[] = "sortrev";
+Q_CONSTEXPR bool KEY_SORTREV_default = false;
 
 Q_CONSTEXPR char KEY_LIMIT_ITEMS[] = "limititems";
 Q_CONSTEXPR char KEY_LIMIT_NUMBEROFROWS[] = "limitnumberofrows";
 
 Q_CONSTEXPR char KEY_OPEN_LASTOPENEDDOCUMENT[] = "openlastdocument";
-
+Q_CONSTEXPR bool KEY_OPEN_LASTOPENEDDOCUMENT_default = true;
 Q_CONSTEXPR char KEY_FFPROBE_EXECUTABLE[] = "ffprobeexecutable";
 Q_CONSTEXPR char KEY_FFMPEG_EXECUTABLE[] = "ffmpegexecutable";
 
 Q_CONSTEXPR char KEY_MESSAGEBOX_REMOVEFORMEXTERNALMEDIA[] = "mb_removefromexternalmedia";
 
+Q_CONSTEXPR char KEY_SHOW_TAGCOUNT[] = "showtagcount";
+Q_CONSTEXPR bool KEY_SHOW_TAGCOUNT_default = true;
 
 Q_CONSTEXPR char FILEPART_THUMBS[] = "thumbs";
 

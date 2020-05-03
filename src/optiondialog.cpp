@@ -126,6 +126,8 @@ void OptionDialog::showEvent(QShowEvent *ev)
     ui.lineffprobe->setText(ffprobe_);
     ui.lineffmpeg->setText(ffmpeg_);
 
+    ui.chkShowTagCount->setChecked(showtagcount_);
+
     on_chkUseCustomDatabaseDirectory_stateChanged(0);
     on_chkLimitItems_stateChanged(0);
 
@@ -164,6 +166,8 @@ void OptionDialog::on_buttonBox_accepted()
 
     ffprobe_ = ui.lineffprobe->text();
     ffmpeg_ = ui.lineffmpeg->text();
+
+    showtagcount_ = ui.chkShowTagCount->isChecked();
 }
 
 void OptionDialog::on_tbDBDir_clicked()

@@ -1510,6 +1510,18 @@
         <source>Uncheck Se&amp;lection</source>
         <translation>選択をチェックしない(&amp;L)</translation>
     </message>
+    <message>
+        <source>Failed to store tag.</source>
+        <translation>タグの保存に失敗しました。</translation>
+    </message>
+    <message>
+        <source>Failed to load tags.</source>
+        <translation>タグのロードに失敗しました。</translation>
+    </message>
+    <message>
+        <source>Failed to get tagged count.</source>
+        <translation>タグ個数の取得に失敗しました。</translation>
+    </message>
 </context>
 <context>
     <name>Option</name>
@@ -1632,6 +1644,10 @@
     <message>
         <source>Thumbnail Scroll Mode:</source>
         <translation>サムネイルスクロール:</translation>
+    </message>
+    <message>
+        <source>Show Ta&amp;g Count:</source>
+        <translation>タグカウント表示(&amp;G):</translation>
     </message>
 </context>
 <context>

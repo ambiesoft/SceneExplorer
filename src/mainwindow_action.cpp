@@ -119,9 +119,10 @@ void MainWindow::on_action_Options_triggered()
     QString prevDbdir = dlg.dbdir_ = settings_.valueString(KEY_DATABASE_PATH); //QDir::currentPath();
     dlg.limitItems_ = settings_.valueBool(KEY_LIMIT_ITEMS, false);
     dlg.maxRows_ = settings_.valueInt(KEY_LIMIT_NUMBEROFROWS, 1000);
-    dlg.openlastdoc_ = settings_.valueBool(KEY_OPEN_LASTOPENEDDOCUMENT, true);
+    dlg.openlastdoc_ = settings_.valueBool(KEY_OPEN_LASTOPENEDDOCUMENT, KEY_OPEN_LASTOPENEDDOCUMENT_default);
     dlg.ffprobe_ = settings_.valueString(KEY_FFPROBE_EXECUTABLE); // FFMpeg::GetFFprobe(settings_);
     dlg.ffmpeg_ = settings_.valueString(KEY_FFMPEG_EXECUTABLE); //FFMpeg::GetFFmpeg(settings_);
+    dlg.showtagcount_ = settings_.valueBool(KEY_SHOW_TAGCOUNT, KEY_SHOW_TAGCOUNT_default);
 
     if(QDialog::Accepted != dlg.exec())
         return;
@@ -157,8 +158,10 @@ void MainWindow::on_action_Options_triggered()
     settings_.setValue(KEY_DATABASE_PATH, dlg.dbdir_);
     FFMpeg::SetFFprobe(settings_, dlg.ffprobe_);
     FFMpeg::SetFFmpeg(settings_, dlg.ffmpeg_);
+    settings_.setValue(KEY_SHOW_TAGCOUNT, dlg.showtagcount_);
 
     CreateLimitManager();
+    RefreshTagTree();
 
     if( (prevUseCustomDBDir != dlg.useCustomDBDir_) || (prevDbdir != dlg.dbdir_) )
     {
@@ -248,7 +251,7 @@ void MainWindow::onMenuTag_AboutToShow()
         if(!ti->IsNormalItem())
             continue;
         bAdded=true;
-        QString text = ti->text();
+        QString text = ti->tagtext();
 
         // passing this makes |action| delete when |this| is deleting
         // Deleting |action| manually cause stop above action, I believe.

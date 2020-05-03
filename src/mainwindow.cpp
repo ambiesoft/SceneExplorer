@@ -225,12 +225,9 @@ bool MainWindow::LoadTags()
     tagAll->setSelected(pDoc_->IsTagAllSelected());
     ui->listTag->addItem(tagAll);
 
-    // QList<QPair<qint64, QString> > tags;
     QList<TagItem*> tags;
     if(pDoc_->GetAllTags(tags, true))
     {
-        // for(qint64& key : tags.keys())
-        // for( const QPair<qint64,QString>& pair : tags)
         foreach(TagItem* ti, tags)
         {
             bool bSel,bCheck;
@@ -1074,6 +1071,7 @@ void MainWindow::OnContextAddTags()
     qint64 tagid = act->data().toLongLong();
     // check state is already updated
     pDoc_->SetTagged(id, tagid, act->isChecked());
+    RefreshTagTree();
 }
 
 void MainWindow::OnContextExternalTools()
@@ -1774,7 +1772,18 @@ bool MainWindow::CreateNewTag(const QString& tag,
         return false;
     }
 
-    return LoadTags();
+    if(!pDoc_->StoreTagsSelectionState(ui->listTag))
+    {
+        Alert(this,tr("Failed to store tag."));
+        return false;
+    }
+    if(!LoadTags())
+    {
+        Alert(this,tr("Failed to load tags."));
+        return false;
+    }
+
+    return true;
 }
 
 
@@ -1789,7 +1798,7 @@ void MainWindow::on_listTag_itemSelectionChanged()
 void MainWindow::editTag()
 {
     TagItem* ti =static_cast<TagItem*>( ui->listTag->currentItem());
-    if(ti->IsAllItem())
+    if(!ti->IsNormalItem())
         return;
 
     if(!pDoc_)
@@ -1820,7 +1829,8 @@ void MainWindow::editTag()
         return;
     }
 
-    ti->setText(dlg.tag());
+    ti->setTagText(dlg.tag());
+    RefreshTagTree();
 }
 void MainWindow::deleteTag()
 {
@@ -1836,7 +1846,7 @@ void MainWindow::deleteTag()
     }
 
     if(!YesNo(this,
-              tr("Are you sure you want to delete Tag \"%1\"").arg(ti->text())))
+              tr("Are you sure you want to delete Tag \"%1\"").arg(ti->tagtext())))
     {
         return;
     }
@@ -2067,9 +2077,36 @@ void MainWindow::RefreshDirectoryTree()
         di->Refresh();
     }
 }
+void MainWindow::RefreshTagTree()
+{
+    Q_ASSERT(!tagChanging_);
+    Ambiesoft::BlockedBool blockUpdate(&tagChanging_);
+
+    const bool bShowCount = settings_.valueBool(KEY_SHOW_TAGCOUNT, KEY_SHOW_TAGCOUNT_default);
+
+    for(int i=0 ; i < ui->listTag->count(); ++i)
+    {
+        TagItem* ti = (TagItem*)ui->listTag->item(i);
+        if(!ti->IsNormalItem())
+            continue;
+        if(bShowCount)
+        {
+            int count=0;
+            if(!pDoc_->GetTaggedCount(ti->tagid(), count))
+            {
+                Alert(this, tr("Failed to get tagged count."));
+                return;
+            }
+            ti->setTagCount(count);
+        }
+        ti->updateDispText(bShowCount);
+    }
+
+}
 void MainWindow::on_action_Refresh_triggered()
 {
     RefreshDirectoryTree();
+    RefreshTagTree();
     itemChangedCommon(true);
 }
 
@@ -2355,6 +2392,8 @@ void MainWindow::on_action_AddNewTag_triggered()
         if(id >= 0)
             pDoc_->SetTagged(id, insertedTag, true);
     }
+
+    RefreshTagTree();
 }
 
 void MainWindow::on_action_ExternalTools_triggered()

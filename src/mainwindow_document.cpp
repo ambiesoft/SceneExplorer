@@ -175,6 +175,6 @@ void MainWindow::InitDocument()
     ui->directoryWidget->addItem(missitem);
 
     LoadTags();
-
+    RefreshTagTree();
     itemChangedCommon(true);
 }
