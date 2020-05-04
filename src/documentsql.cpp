@@ -557,22 +557,6 @@ bool DocumentSql::GetAllTaggedTagids(QList<qint64>& alltaggedids) const
     }
     return true;
 }
-bool DocumentSql::GetTaggedCount(const qint64& tagid, int& count) const
-{
-    MYQMODIFIER QSqlQuery query("SELECT count(*) FROM " + docdb("Tagged") + " WHERE dbid=? AND tagid=?");
-
-    int i=0;
-    query.bindValue(i++, gpSQL->getDbID());
-    query.bindValue(i++, tagid);
-    SQC(query,exec());
-    if(!query.next())
-    {
-        count=0;
-        return true;
-    }
-    count = query.value(0).toInt();
-    return true;
-}
 bool DocumentSql::IsTagExist(const QString& tag) const
 {
     MYQMODIFIER QSqlQuery query = myPrepare("SELECT tagid FROM " + docdb("Tag") + " WHERE tag=? AND dbid=?");

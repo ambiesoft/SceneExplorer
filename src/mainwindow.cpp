@@ -962,6 +962,8 @@ void MainWindow::OnRemove()
             Alert(this, ex.getErrorInfo());
         }
     }
+
+    RefreshTagTree();
 }
 
 void MainWindow::OnProperty()
@@ -2092,7 +2094,7 @@ void MainWindow::RefreshTagTree()
         if(bShowCount)
         {
             int count=0;
-            if(!pDoc_->GetTaggedCount(ti->tagid(), count))
+            if(!gpSQL->GetTaggedCount(ti->tagid(), count))
             {
                 Alert(this, tr("Failed to get tagged count."));
                 return;

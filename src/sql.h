@@ -232,6 +232,7 @@ public:
 
     bool SetUrl(const qint64& id, const QString& url);
     bool SetMemo(const qint64& id, const QString& memo);
+    bool GetTaggedCount(const qint64& tagid, int& count);
 };
 
 #endif // SQL_H

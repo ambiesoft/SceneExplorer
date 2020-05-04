@@ -1646,3 +1646,23 @@ bool Sql::SetMemo(const qint64& id, const QString& memo)
     Q_ASSERT(query.numRowsAffected()==1 || query.numRowsAffected()==0);
     return query.numRowsAffected()==1;
 }
+bool Sql::GetTaggedCount(const qint64& tagid, int& count)
+{
+    Q_ASSERT(!docdb_.isEmpty() && docdb_ != "nodb");
+    QString sql = QString(
+                "SELECT COUNT(*) FROM FileInfo LEFT JOIN %1.Tagged t ON FileInfo.id = t.id AND t.dbid='%2' "
+                "WHERE t.tagid=%3"
+                ).arg(docdb_).arg(gpSQL->getDbID()).arg(tagid);
+
+
+    MYQMODIFIER QSqlQuery query(sql);
+
+    SQC(query,exec());
+    if(!query.next())
+    {
+        count=0;
+        return true;
+    }
+    count = query.value(0).toInt();
+    return true;
+}
