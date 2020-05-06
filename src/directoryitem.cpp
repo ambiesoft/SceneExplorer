@@ -24,13 +24,17 @@ QListWidget* DirectoryItem::parent_;
 
 DirectoryItem::DirectoryItem(const qint64& dirid,
                              DirectoryItemType itemType,
-                             const QString& text) :
+                             const QString& text,
+                             const QString& displaytext) :
     QListWidgetItem(parent_),
     dirid_(dirid),
     itemType_(itemType)
 {
     Q_ASSERT(parent_);
-    setText(text);
+
+    setDirectory(text);
+    setDisplayText(displaytext);
+
     if(itemType==DirectoryItem::DI_ALL_MY)
     {
         setFlags(flags() & ~Qt::ItemIsUserCheckable);
@@ -60,7 +64,7 @@ void DirectoryItem::Refresh()
 
     if(IsNormalItem())
     {
-        if(!QDir(text()).exists())
+        if(!QDir(directory()).exists())
             setForeground(Qt::red);
         else
             setForeground(defaultFore);

@@ -71,6 +71,7 @@ class MainWindow : public QMainWindow, IMainWindow, IHistoryList
     QString TR_CLIPBOARD_IS_EMPTY() { return tr("Clipboard is empty.");}
     QString TR_FAILED_TO_INSERT_DIRECTORY_INTO_DATABASE() { return tr("Failed to insert directory into Database.");}
     QString TR_FAILED_TO_INSERT_TAG_INTO_DATABASE() { return tr("Failed to insert tag into Database.");}
+    QString TR_FAILED_TO_UPDATE_DIRECTORY_ON_DATABASE() { return tr("Failed to update directory on Database.");}
 
     Ui::MainWindow *ui;
     // setting keys
@@ -112,7 +113,8 @@ private:
     bool tagChanging_ = false;
     bool lastQueriedOnlyMissing_ = false;
     bool lastQueriedOnlyExistant_ = false;
-    QStringList lastQueriedDirs_ = {QLatin1String("dummy")};
+    QStringList lastQueriedDirs_ = QStringList(QLatin1String("dummy"));
+    QStringList lastQueriedTitles_ = QStringList(QLatin1String("dummy"));
     //    bool lastQueriedIsAllTag_ = false;
     //    QSet<qint64> lastQueriedTaggedIDs_ = {-1};
     TagidsInfo lastQueriedTaggedIds_;
@@ -127,7 +129,8 @@ private:
                       qint64* insertedTag=nullptr);
     QList<QWidget*> getAllStatusBarWidgets();
     void GetSelectedAndCurrentTagIDs(TagidsInfo& tagInfos);
-    void GetSqlAllSetTable(const QStringList& dirs,
+    void GetSqlAllSetTable(const QStringList dirs,
+                           const QStringList titles,
                            const TagidsInfo& tagInfos,
                            bool bOnlyMissing,
                            bool bOnlyExistant);
@@ -651,12 +654,12 @@ private:
 
     void clearAllPool(bool bAppendLog=true);
 
-    void AddUserEntryDirectory_obsolete(
-            DirectoryItem::DirectoryItemType itemType,
-            const qint64& dirid,
-            const QString& dir,
-            bool sel,
-            bool check);
+//    void AddUserEntryDirectory_obsolete(
+//            DirectoryItem::DirectoryItemType itemType,
+//            const qint64& dirid,
+//            const QString& dir,
+//            bool sel,
+//            bool check);
     bool HasDirectory(const QString& dir);
     void itemChangedCommon(bool bForceRead=false);
 
@@ -787,6 +790,7 @@ public Q_SLOTS:
 
     void OnDirectoryRemove();
     void OnDirectoryRemoveMissingItems();
+    void OnDirectoryProperty();
     void CheckDirectoryCommon(const bool bCheck, const bool bSelection);
     void OnDirectoryCheckAll();
     void OnDirectoryUncheckAll();

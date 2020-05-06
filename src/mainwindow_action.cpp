@@ -198,7 +198,7 @@ void MainWindow::onMenuDirectory_AboutToShow()
         if(di->IsAllItem() || di->IsMissingItem())
             continue;
         bAdded = true;
-        QString dir = di->text();
+        QString dir = di->displaytext();
         QAction* action = new QAction(dir, this);
         action->setCheckable(true);
         action->setChecked(di->IsChecked());
@@ -402,63 +402,63 @@ void MainWindow::on_action_Pause_triggered()
     }
 }
 
-void MainWindow::AddUserEntryDirectory_obsolete(
-        DirectoryItem::DirectoryItemType itemType,
-        const qint64& dirid,
-        const QString& cdir,
-        bool sel,
-        bool check)
-{
-    QString text;
-    bool hasCheckbox = true;
+//void MainWindow::AddUserEntryDirectory_obsolete(
+//        DirectoryItem::DirectoryItemType itemType,
+//        const qint64& dirid,
+//        const QString& cdir,
+//        bool sel,
+//        bool check)
+//{
+//    QString text;
+//    bool hasCheckbox = true;
 
-    if(itemType==DirectoryItem::DI_NORMAL_MY)
-    {
-        QDir di(cdir);
+//    if(itemType==DirectoryItem::DI_NORMAL_MY)
+//    {
+//        QDir di(cdir);
 
-        for(int i=0 ; i < ui->directoryWidget->count(); ++i)
-        {
-            DirectoryItem* item = static_cast<DirectoryItem*>(ui->directoryWidget->item(i));
-            if(!item->IsNormalItem())
-                continue;
-            QDir d(item->text());
-            if(di == d)
-            {
-                return;
-            }
-        }
-        text=normalizeDir(cdir);
-    }
-    else if(itemType==DirectoryItem::DI_ALL_MY)
-    {
-        text=tr("All");
-        hasCheckbox = false;
-    }
-    else if(itemType==DirectoryItem::DI_MISSING_MY)
-    {
-        text=tr("Missing");
-        hasCheckbox = false;
-    }
-    else
-    {
-        Q_ASSERT(false);
-        return;
-    }
-    DirectoryItem* newitem = new DirectoryItem(dirid,
-                                               itemType,
-                                               text);
+//        for(int i=0 ; i < ui->directoryWidget->count(); ++i)
+//        {
+//            DirectoryItem* item = static_cast<DirectoryItem*>(ui->directoryWidget->item(i));
+//            if(!item->IsNormalItem())
+//                continue;
+//            QDir d(item->text());
+//            if(di == d)
+//            {
+//                return;
+//            }
+//        }
+//        text=normalizeDir(cdir);
+//    }
+//    else if(itemType==DirectoryItem::DI_ALL_MY)
+//    {
+//        text=tr("All");
+//        hasCheckbox = false;
+//    }
+//    else if(itemType==DirectoryItem::DI_MISSING_MY)
+//    {
+//        text=tr("Missing");
+//        hasCheckbox = false;
+//    }
+//    else
+//    {
+//        Q_ASSERT(false);
+//        return;
+//    }
+//    DirectoryItem* newitem = new DirectoryItem(dirid,
+//                                               itemType,
+//                                               text);
 
-    if(hasCheckbox)
-        newitem->setFlags(newitem->flags() | Qt::ItemIsUserCheckable);
+//    if(hasCheckbox)
+//        newitem->setFlags(newitem->flags() | Qt::ItemIsUserCheckable);
 
-    newitem->setSelected(sel);
-    if(hasCheckbox)
-        newitem->setCheckState(check ? Qt::Checked : Qt::Unchecked);
+//    newitem->setSelected(sel);
+//    if(hasCheckbox)
+//        newitem->setCheckState(check ? Qt::Checked : Qt::Unchecked);
 
 
 
-    ui->directoryWidget->addItem(newitem);
-}
+//    ui->directoryWidget->addItem(newitem);
+//}
 
 
 bool MainWindow::IsAllTagSelected() const
@@ -661,6 +661,7 @@ void MainWindow::onSortCommon(SORTCOLUMNMY sortColumn)
     if (limitManager_)
         limitManager_->Reset();
     GetSqlAllSetTable(lastQueriedDirs_,
+                      lastQueriedTitles_,
                       lastQueriedTaggedIds_,
                       lastQueriedOnlyMissing_,
                       lastQueriedOnlyExistant_);
@@ -719,7 +720,7 @@ void MainWindow::ScanSelectedDirectory(const bool bAll)
     {
         foreach(DirectoryItem* di, ui->directoryWidget->GetAllNormalItems())
         {
-            toScan.append(di->text());
+            toScan.append(di->directory());
         }
     }
     else
@@ -733,7 +734,7 @@ void MainWindow::ScanSelectedDirectory(const bool bAll)
             if (item->IsMissingItem())
                 continue;
             else if(item->IsNormalItem())
-                toScan.append(item->text());
+                toScan.append(item->directory());
             else if(item->IsAllItem())
             {
                 Q_ASSERT_X(false, "selected", "All item must not selected.");
@@ -759,7 +760,7 @@ void MainWindow::OnDirectoryRemove()
     if (!item->IsNormalItem())
         return;
     if (!YesNo(this,
-               tr("Are you sure you want to remove \"%1\" from list?").arg(item->text())))
+               tr("Are you sure you want to remove \"%1\" from list?").arg(item->directory())))
         return;
     
     // pDoc_->DeleteDirectory(item);
@@ -784,7 +785,7 @@ void MainWindow::OnDirectoryRemoveMissingItems()
     
     QString dir;
     if(item->IsNormalItem())
-        dir = item->text();
+        dir = item->directory();
 
     gpSQL->RemoveAllMissingEntries(dir);
 
@@ -981,6 +982,12 @@ void MainWindow::on_directoryWidget_customContextMenuRequested(const QPoint &pos
                 this, SLOT(OnDirectoryRemoveMissingItems()));
         menu.addAction(&actRemoveMissingItems);
 
+        menu.addSeparator();
+        QAction actProperty(tr("&Property"));
+        connect(&actProperty, SIGNAL(triggered(bool)),
+                this, SLOT(OnDirectoryProperty()));
+        menu.addAction(&actProperty);
+
         menu.exec(ui->directoryWidget->mapToGlobal(pos));
     }
 }
@@ -1009,7 +1016,9 @@ void MainWindow::on_ShowMissingClicked_common(bool bShowMissing)
     }
     ui->action_ShowMissingFiles->setChecked(bShowMissing);
     tbShowNonExistant_->setChecked(bShowMissing);
-    GetSqlAllSetTable(lastQueriedDirs_, lastQueriedTaggedIds_,
+    GetSqlAllSetTable(lastQueriedDirs_,
+                      lastQueriedTitles_,
+                      lastQueriedTaggedIds_,
                       false,
                       !bShowMissing);
 }

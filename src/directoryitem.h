@@ -24,6 +24,7 @@
 
 class DirectoryItem : public QListWidgetItem
 {
+    using ParentClass = QListWidgetItem;
 public:
     enum DirectoryItemType
     {
@@ -36,11 +37,15 @@ private:
     DirectoryItemType itemType_;
     QFileIconProvider fiProvider_;
 
+    QString directory_;
+    QString displaytext_;
+
 public:
     static QListWidget* parent_;
     DirectoryItem(const qint64& dirid,
                   DirectoryItemType itemType,
-                  const QString& text);
+                  const QString& text,
+                  const QString& displaytext);
     qint64 dirid() const {
         return dirid_;
     }
@@ -67,6 +72,34 @@ public:
         return IsChecked() ? 1:0;
     }
     void Refresh();
+
+
+    QString text() const = delete;
+    void setText(const QString &atext) = delete;
+
+    QString directory() const {
+        return directory_;
+    }
+    void setDirectory(const QString& dir) {
+        directory_ = dir;
+        if(displaytext_.isEmpty()) {
+            ParentClass::setText(dir);
+        }
+    }
+
+    QString displaytext() const {
+        return !displaytext_.isEmpty() ? displaytext_ : directory_;
+    }
+    QString displaytextraw() const {
+        return displaytext_;
+    }
+    void setDisplayText(const QString& displaytext) {
+        if(displaytext == displaytext_)
+            return;
+        displaytext_ = displaytext;
+        ParentClass::setText(displaytext.isEmpty() ? directory_ : displaytext_);
+    }
+
 };
 
 #endif // DIRECTORYITEM_H

@@ -81,7 +81,8 @@ SOURCES += \
     historylist.cpp \
     mainwindow_history.cpp \
     mainwindow_document.cpp \
-    tagentry.cpp
+    tagentry.cpp \
+    directoryentrydialog.cpp
 
 HEADERS += \
     ../../lsMisc/stdQt/ambapp.h \
@@ -132,7 +133,8 @@ HEADERS += \
     itempropertydialog.h \
     ../../lsMisc/stdosd/blockedbool.h \
     historylist.h \
-    tagentry.h
+    tagentry.h \
+    directoryentrydialog.h
 
 FORMS += \
         mainwindow.ui \
@@ -143,7 +145,8 @@ FORMS += \
     docinfodialog.ui \
     taginputdialog.ui \
     renamedialog.ui \
-    itempropertydialog.ui
+    itempropertydialog.ui \
+    directoryentrydialog.ui
 
 # RC_FILE = app.rc
 

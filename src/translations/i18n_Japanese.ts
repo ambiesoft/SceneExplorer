@@ -85,6 +85,33 @@
     </message>
 </context>
 <context>
+    <name>DirectoryEntryDialog</name>
+    <message>
+        <source>Dialog</source>
+        <translation type="obsolete">ダイアログ</translation>
+    </message>
+    <message>
+        <source>...</source>
+        <translation>...</translation>
+    </message>
+    <message>
+        <source>&amp;Text:</source>
+        <translation>テキスト(&amp;T):</translation>
+    </message>
+    <message>
+        <source>&amp;Directory:</source>
+        <translation>ディレクトリ(&amp;D):</translation>
+    </message>
+    <message>
+        <source>Open Directory</source>
+        <translation>ディレクトリを開く</translation>
+    </message>
+    <message>
+        <source>Directory</source>
+        <translation>ディレクトリ</translation>
+    </message>
+</context>
+<context>
     <name>DocinfoDialog</name>
     <message>
         <source>Files and Directory</source>
@@ -163,6 +190,14 @@
     <message>
         <source>Tagid or ID is below 0.</source>
         <translation>Tagid または ID が０より小さいです。</translation>
+    </message>
+    <message>
+        <source>Database version(=%1) is higher than this client(=%2). Please update SceneExplorer.</source>
+        <translation>データベースのバージョン(=%1)がクライアントのバージョン(=%2)よりも高いです。SceneExplorerを更新してください。</translation>
+    </message>
+    <message>
+        <source>Directory is empty.</source>
+        <translation>ディレクトリが空です。</translation>
     </message>
 </context>
 <context>
@@ -556,7 +591,7 @@
     </message>
     <message>
         <source>Open Directory</source>
-        <translation>ディレクトリを開く</translation>
+        <translation type="vanished">ディレクトリを開く</translation>
     </message>
     <message>
         <source>SceneExplorer Document (*.scexd)</source>
@@ -1076,7 +1111,7 @@
     </message>
     <message>
         <source>Directory entriy is empty.</source>
-        <translation>ディレクトリエントリが空です。</translation>
+        <translation type="vanished">ディレクトリエントリが空です。</translation>
     </message>
     <message>
         <source>Are you sure you want to add follwing directories?</source>
@@ -1316,7 +1351,7 @@
     </message>
     <message>
         <source>&amp;Property</source>
-        <translation type="vanished">プロパティ(&amp;P)</translation>
+        <translation>プロパティ(&amp;P)</translation>
     </message>
     <message>
         <source>&amp;Property...</source>
@@ -1521,6 +1556,26 @@
     <message>
         <source>Failed to get tagged count.</source>
         <translation>タグ個数の取得に失敗しました。</translation>
+    </message>
+    <message>
+        <source>Directory is empty.</source>
+        <translation>ディレクトリが空です。</translation>
+    </message>
+    <message>
+        <source>Failed to update directory on Database.</source>
+        <translation>データベースのディレクトリのアップデートに失敗しました。</translation>
+    </message>
+    <message>
+        <source>Directory entry is empty.</source>
+        <translation>ディレクトリエントリが空です。</translation>
+    </message>
+    <message>
+        <source>Illegal Directory entry &apos;%1&apos;</source>
+        <translation>&apos;%1&apos; 不正なディレクトリエントリ</translation>
+    </message>
+    <message>
+        <source>&apos;%1&apos; already exists. Are you sure to add it?</source>
+        <translation>&apos;%1&apos; はすでに存在します。追加しますか？</translation>
     </message>
 </context>
 <context>

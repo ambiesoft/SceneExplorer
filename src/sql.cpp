@@ -91,14 +91,14 @@ bool Sql::CreateDBInfoTable()
     //    }
     return true;
 }
-int Sql::GetFileDBVersion()
+int Sql::GetFileDBVersion(QSqlQuery& query)
 {
-    QSqlQuery query;
     SQCI(query,exec("SELECT version FROM DbInfo WHERE id=1"));
     if(!query.next())
         return -1;
     return query.value("version").toInt();
 }
+
 Sql::Sql(QObject*) : db_(QSqlDatabase::addDatabase("QSQLITE"))
 {
     db_.setDatabaseName(DBFILENAME);
@@ -110,9 +110,17 @@ Sql::Sql(QObject*) : db_(QSqlDatabase::addDatabase("QSQLITE"))
 
     if(!CreateDBInfoTable())
         return;
-    int version = GetFileDBVersion();
 
     QSqlQuery query;
+
+    const int version = GetFileDBVersion(query);
+    if(version < 0) {
+        qDebug() << query.lastError().text() << __FUNCTION__;
+        lastError_ = query.lastError().text();
+        return;
+    }
+
+
 
     query.exec("SELECT dbid FROM DbInfo WHERE id=1");
     query.next();
@@ -1114,7 +1122,7 @@ bool Sql::GetAll(QList<TableItemDataPointer>& v,
         qint64 lastaccess = query.value("lastaccess").toLongLong();
 
 
-        TableItemDataPointer pID = TableItemData::Create(id,
+        TableItemDataPointer pID = TableItemData::Create(TableItemData::TableItemDataArgs(id,
                                                          thumbs,
                                                          directory,
                                                          name,
@@ -1134,7 +1142,7 @@ bool Sql::GetAll(QList<TableItemDataPointer>& v,
                                                          fps,url,memo,
 
                                                          opencount,
-                                                         lastaccess);
+                                                         lastaccess));
 
 
         v.append(pID);

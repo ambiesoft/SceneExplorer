@@ -31,111 +31,103 @@ class TableItemData
 #ifdef QT_DEBUG
     static int dinstcount_;
 #endif
-    QStringList thumbFiles_;
-    QString movieDirectory_;
-    QString movieFilename_;
-
-    qint64 id_ = 0;
-    int width_;
-    int height_;
-    qint64 size_=-1;
-    qint64 ctime_=-1;
-    qint64 wtime_=-1;
-    int thumbwidth_=-1;
-    int thumbheight_=-1;
-    double duration_=-1;
-    QString format_;
-    int bitrate_=0;
-    QString vcodec_;
-    QString acodec_;
-    int vWidth_,vHeight_;
-
-    int opencount_=0;
-    qint64 lastaccess_ = 0;
-
-    bool displayed_=false;
-    TableItemData(const qint64& id,
-                  const QStringList& files,
-                  const QString& movieDirectory,
-                  const QString& movieFileName,
-
-                  const qint64& size,
-                  const qint64& ctime,
-                  const qint64& wtime,
-
-                  int thumbwidth,
-                  int thumbheight,
-                  const double& duration,
-                  const QString& format,
-                  int bitrate,
-                  const QString& vcodec,
-                  const QString& acodec,
-                  int vWidth,int vHeight,
-
-                  const double& fps,
-                  const QString& url, const QString& memo,
-
-                  int opencount,
-                  const qint64& lastaccess);
-
 
 public:
-    static TableItemDataPointer Create(
-            const qint64& id,
-            const QStringList& files,
-            const QString& movieDirectory,
-            const QString& movieFileName,
-
-            const qint64& size,
-            const qint64& ctime,
-            const qint64& wtime,
-
-            int thumbwidth,
-            int thumbheight,
-            const double& duration,
-            const QString& format,
-            int bitrate,
-            const QString& vcodec,
-            const QString& acodec,
-            int vWidth, int vHeight,
-            const double& fps,
-            const QString& url, const QString& memo,
-            int opencount,
-            const qint64& lastaccess)
+    class TableItemDataArgs
     {
-        Q_ASSERT(!movieDirectory.isEmpty());
-        Q_ASSERT(!movieFileName.isEmpty());
-        if(movieDirectory.isEmpty() || movieFileName.isEmpty())
+    public:
+         qint64 id = 0;
+         QStringList thumbFiles;
+         QString movieDirectory;
+         QString movieFileName;
+
+         qint64 size = 0;
+         qint64 ctime = 0;
+         qint64 wtime = 0;
+
+        int thumbwidth = 0, thumbheight = 0;
+        double duration = 0;
+        QString format;
+        int bitrate = 0;
+        QString vcodec;
+        QString acodec;
+        int vWidth = 0, vHeight = 0;
+
+        double fps = 0;
+        QString url;
+        QString memo;
+
+        int opencount = 0;
+        qint64 lastaccess = 0;
+    public:
+        TableItemDataArgs() = delete;
+        TableItemDataArgs(const qint64& id,
+                          const QStringList& thumbFiles,
+                          const QString& movieDirectory,
+                          const QString& movieFileName,
+
+                          const qint64& size,
+                          const qint64& ctime,
+                          const qint64& wtime,
+
+                          int thumbwidth,
+                          int thumbheight,
+                          const double& duration,
+                          const QString& format,
+                          int bitrate,
+                          const QString& vcodec,
+                          const QString& acodec,
+                          int vWidth,int vHeight,
+
+                          const double& fps,
+                          const QString& url,
+                          const QString& memo,
+
+                          int opencount,
+                          const qint64& lastaccess):
+            id(id),
+            thumbFiles(thumbFiles),
+            movieDirectory(movieDirectory),
+            movieFileName(movieFileName),
+
+            size(size),
+            ctime(ctime),
+            wtime(wtime),
+
+            thumbwidth(thumbwidth),
+            thumbheight(thumbheight),
+            duration(duration),
+            format(format),
+            bitrate(bitrate),
+            vcodec(vcodec),
+            acodec(acodec),
+            vWidth(vWidth),
+            vHeight(vHeight),
+
+            fps(fps),
+            url(url),
+            memo(memo),
+
+            opencount(opencount),
+            lastaccess(lastaccess){}
+    };
+private:
+    TableItemDataArgs values_;
+    QString thumbExt_;
+
+
+    TableItemData(const TableItemDataArgs& args);
+
+public:
+    static TableItemDataPointer Create(const TableItemDataArgs& args)
+    {
+        Q_ASSERT(!args.movieDirectory.isEmpty());
+        Q_ASSERT(!args.movieFileName.isEmpty());
+        if(args.movieDirectory.isEmpty() || args.movieFileName.isEmpty())
         {
             return nullptr;
         }
-        return TableItemDataPointer(new TableItemData(
-                                        id,
-                                        files,
-                                        movieDirectory,
-                                        movieFileName,
-
-                                        size,
-                                        ctime,
-                                        wtime,
-
-                                        thumbwidth,
-                                        thumbheight,
-                                        duration,
-                                        format,
-                                        bitrate,
-                                        vcodec,
-                                        acodec,
-
-                                        vWidth, vHeight,
-
-                                        fps,url,memo,
-
-                                        opencount,
-                                        lastaccess));
-
-
-
+        return TableItemDataPointer(new TableItemData(args));
     }
     ~TableItemData()
     {
@@ -150,94 +142,94 @@ public:
     }
 #endif
     qint64 getID() const {
-        return id_;
-    }
-    QVariant getIDVariant() const {
-        return id_==0 ? QVariant() : id_;
-    }
-    void setID(const qint64& id) {
-        Q_ASSERT(id_==0 || id_==id);
-        id_=id;
+        return values_.id;
     }
     QStringList getThumbnailFiles() const {
-        return thumbFiles_;
+        return values_.thumbFiles;
     }
-    int getWidth() const {
-        return width_;
+    QVariant getIDVariant() const {
+        return values_.id==0 ? QVariant() : values_.id;
     }
-    int getHeight() const {
-        return height_;
+    void setID(const qint64& id) {
+        Q_ASSERT(values_.id==0 || values_.id==id);
+        values_.id=id;
+    }
+    int getThumbWidth() const {
+        return values_.thumbwidth;
+    }
+    int getThumbHeight() const {
+        return values_.thumbheight;
     }
     QString getMovieDirectory() const
     {
-        Q_ASSERT(movieDirectory_.endsWith('/'));
-        return movieDirectory_;
+        Q_ASSERT(values_.movieDirectory.endsWith('/'));
+        return values_.movieDirectory;
     }
     QString getMovieFileName() const
     {
-        return movieFilename_;
+        return values_.movieFileName;
     }
     QString getMovieFileFull() const ;
     QString getFormat() const {
-        return format_;
+        return values_.format;
     }
     void setFormat(const QString& s) {
-        format_ = s;
+        values_.format = s;
     }
     int getBitrate() const {
-        return bitrate_;
+        return values_.bitrate;
     }
     void setBitrate(int i) {
-        bitrate_=i;
+        values_.bitrate=i;
     }
     double getDuration() const {
-        return duration_;
+        return values_.duration;
     }
     void setDuration(const double& d) {
-        duration_=d;
+        values_.duration=d;
     }
     QString getVcodec() const {
-        return vcodec_;
+        return values_.vcodec;
     }
     void setVcodec(const QString& s) {
-        vcodec_=s;
+        values_.vcodec=s;
     }
     QString getAcodec() const {
-        return acodec_;
+        return values_.acodec;
     }
     void setAcodec(const QString& s) {
-        acodec_=s;
+        values_.acodec=s;
     }
     int getVWidth() const {
-        return vWidth_;
+        return values_.vWidth;
     }
     void setVWidth(int i) {
-        vWidth_=i;
+        values_.vWidth=i;
     }
     int getVHeight() const {
-        return vHeight_;
+        return values_.vHeight;
     }
     void setVHeight(int i) {
-        vHeight_=i;
+        values_.vHeight=i;
     }
     qint64 getSize() const;
     qint64 getCtime() const;
     qint64 getWtime() const;
 
     int getOpenCount() const {
-        return opencount_;
+        return values_.opencount;
     }
     void setOpenCount(int v) {
-        opencount_ = v;
+        values_.opencount = v;
     }
     qint64 getLastAccess() const {
-        return lastaccess_;
+        return values_.lastaccess;
     }
     void setLastAccess(const qint64& v) {
-        lastaccess_ = v;
+        values_.lastaccess = v;
     }
 
-    QString thumbExt_;
+
     QString getThumbExt() const {
         Q_ASSERT(!thumbExt_.isEmpty());
         return thumbExt_;
@@ -246,28 +238,25 @@ public:
         thumbExt_=ext;
     }
 
-    double fps_=0;
     double getFps() const {
-        return fps_;
+        return values_.fps;
     }
     void setFps(const double& d) {
-        fps_=d;
+        values_.fps=d;
     }
 
-    QString url_;
     QString getUrl() const {
-        return url_;
+        return values_.url;
     }
     void setUrl(const QString& url) {
-        url_ = url;
+        values_.url = url;
     }
 
-    QString memo_;
     QString getMemo() const {
-        return memo_;
+        return values_.memo;
     }
     void setMemo(const QString& memo) {
-        memo_=memo;
+        values_.memo=memo;
     }
 
 //    int recordversion_=0;
@@ -279,23 +268,23 @@ public:
 //    }
 
     int getResolutionMultiplied() const {
-        return vWidth_*vHeight_;
+        return values_.vWidth * values_.vHeight;
     }
     bool Rename(const QString& olddir,
                 const QString& oldname,
                 const QString& newdir,
                 const QString& newname)
     {
-        Q_ASSERT(movieDirectory_==olddir);
-        Q_ASSERT(movieFilename_==oldname);
-        if(movieDirectory_!=olddir)
+        Q_ASSERT(values_.movieDirectory==olddir);
+        Q_ASSERT(values_.movieFileName==oldname);
+        if(values_.movieDirectory!=olddir)
             return false;
 
-        if(movieFilename_!=oldname)
+        if(values_.movieFileName==oldname)
             return false;
 
-        movieDirectory_=newdir;
-        movieFilename_=newname;
+        values_.movieDirectory=newdir;
+        values_.movieFileName=newname;
 
         return true;
     }
@@ -306,6 +295,7 @@ public:
     //        ++opencount_;
     //	}
 
+    bool displayed_=false;
     bool isDisplayed() const {
         return displayed_;
     }

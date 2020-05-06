@@ -86,7 +86,7 @@ class Sql : public QObject
             const LimitArg& limit,
             const TagidsInfo& tagInfos);
     bool CreateDBInfoTable();
-    int GetFileDBVersion();
+    int GetFileDBVersion(QSqlQuery& query);
     bool UpdateDatabase1_2();
 
 

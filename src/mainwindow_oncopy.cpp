@@ -54,7 +54,7 @@ void MainWindow::OnCopyDirectory()
         DirectoryItem* di = (DirectoryItem*)sels[i];
         if(di->IsNormalItem())
         {
-            all << di->text();
+            all << (di->directory() + ":" + di->displaytext());
         }
     }
     if(all.isEmpty())

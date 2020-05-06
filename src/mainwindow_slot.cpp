@@ -127,7 +127,7 @@ void MainWindow::sayGoodby(int loopId,  int id,
 
     QString dir,name;
     nomalizeDirAndName(fi.absoluteFilePath(), dir, name);
-    TableItemDataPointer pTID = TableItemData::Create(
+    TableItemDataPointer pTID = TableItemData::Create(TableItemData::TableItemDataArgs(
                 0,
                 files,
                 dir,
@@ -145,7 +145,7 @@ void MainWindow::sayGoodby(int loopId,  int id,
                 "","", // url and memo
 
                 0,
-                0);
+                0));
     pTID->setThumbExt(thumbext);
 
     if(IsDirSelected(normalizeDir(fi.absolutePath())))

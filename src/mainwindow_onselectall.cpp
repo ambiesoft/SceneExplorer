@@ -102,7 +102,7 @@ void MainWindow::on_action_SelectDeepestDirectory_triggered()
         if(!item->IsNormalItem())
             continue;
 
-        if(IsSubDir(item->text(), videoDir))
+        if(IsSubDir(item->directory(), videoDir))
         {
             if(!foundItem)
             {
@@ -110,7 +110,7 @@ void MainWindow::on_action_SelectDeepestDirectory_triggered()
             }
             else
             {
-                if(item->text().length() > foundItem->text().length())
+                if(item->directory().length() > foundItem->directory().length())
                 {
                     foundItem=item;
                 }

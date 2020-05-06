@@ -157,7 +157,8 @@ void MainWindow::InitDocument()
 
     DirectoryItem* allitem = new DirectoryItem(-1,
                                                DirectoryItem::DI_ALL_MY,
-                                               tr("All"));
+                                               tr("All"),
+                                               QString());
 
     allitem->setSelected(pDoc_->IsDirAllSelected());
     ui->directoryWidget->addItem(allitem);
@@ -171,7 +172,8 @@ void MainWindow::InitDocument()
 
     DirectoryItem* missitem = new DirectoryItem(-2,
                                                 DirectoryItem::DI_MISSING_MY,
-                                                tr("Missing"));
+                                                tr("Missing"),
+                                                QString());
     ui->directoryWidget->addItem(missitem);
 
     LoadTags();

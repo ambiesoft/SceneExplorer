@@ -104,7 +104,7 @@ void DirectoryEntry::SetCheck(const QStringList& dirs, bool bRemoveSelection)
 
         if (item->IsNormalItem())
         {
-            item->setCheckState(dirs.contains(item->text()) ?
+            item->setCheckState(dirs.contains(item->directory()) ?
                                     Qt::Checked : Qt::Unchecked);
         }
     }
@@ -193,7 +193,7 @@ QString DirectoryEntry::getSelectedFirstDirectory()
         {
             if(!di->IsNormalItem())
                 return QString();
-            return di->text();
+            return di->directory();
         }
     }
     return QString();

@@ -93,9 +93,8 @@ bool DocumentSql::CreateDBInfoTableDoc(QSqlDatabase& db)
     }
     return true;
 }
-int DocumentSql::GetDBVersionDoc(QSqlDatabase& db)
+int DocumentSql::GetDBVersionDoc(QSqlQuery& query)
 {
-    QSqlQuery query(db);
     SQCI(query,exec("SELECT version FROM DbInfoDoc WHERE id=1"));
     if(!query.next())
         return -1;
@@ -119,10 +118,17 @@ DocumentSql::DocumentSql(const QString& file) :
 
         if(!CreateDBInfoTableDoc(db))
             return;
-        int version = GetDBVersionDoc(db);
 
-        QSqlQuery q(db);
-        q.exec("CREATE TABLE Settings ( "
+        QSqlQuery query(db);
+
+        const int version = GetDBVersionDoc(query);
+        if(version < 0) {
+            qDebug() << query.lastError().text() << __FUNCTION__;
+            lastError_ = query.lastError().text();
+            return;
+        }
+
+        query.exec("CREATE TABLE Settings ( "
                "id INTEGER NOT NULL PRIMARY KEY,"
                "allselected INT NOT NULL DEFAULT '0',"
                "allchecked INT NOT NULL DEFAULT '0',"
@@ -130,26 +136,26 @@ DocumentSql::DocumentSql(const QString& file) :
                "lastcolumn INT NOT NULL DEFAULT '0'"
                ")"
                );
-        qDebug() << q.lastError().text() << __FUNCTION__;
-        q.exec("ALTER TABLE Settings ADD COLUMN alltagselected INT NOT NULL DEFAULT '0'");
-        qDebug() << q.lastError().text() << __FUNCTION__;
-        q.exec("ALTER TABLE Settings ADD COLUMN notagstagselected INT NOT NULL DEFAULT '0'");
-        qDebug() << q.lastError().text() << __FUNCTION__;
+        qDebug() << query.lastError().text() << __FUNCTION__;
+        query.exec("ALTER TABLE Settings ADD COLUMN alltagselected INT NOT NULL DEFAULT '0'");
+        qDebug() << query.lastError().text() << __FUNCTION__;
+        query.exec("ALTER TABLE Settings ADD COLUMN notagstagselected INT NOT NULL DEFAULT '0'");
+        qDebug() << query.lastError().text() << __FUNCTION__;
         {
             // Create record 1
-            q.exec("SELECT id FROM Settings WHERE id=1");
-            q.exec();
-            qDebug() << q.lastError().text() << __FUNCTION__;
-            if(!q.next())
+            query.exec("SELECT id FROM Settings WHERE id=1");
+            query.exec();
+            qDebug() << query.lastError().text() << __FUNCTION__;
+            if(!query.next())
             {
-                q.exec("INSERT INTO Settings (id) VALUES (1)");
-                qDebug() << q.lastError().text() << __FUNCTION__;
+                query.exec("INSERT INTO Settings (id) VALUES (1)");
+                qDebug() << query.lastError().text() << __FUNCTION__;
             }
         }
 
-        q.exec("SELECT name FROM sqlite_master WHERE type='table' AND name='Settings';");
-        q.next();
-        if("Settings" != q.value("name").toString())
+        query.exec("SELECT name FROM sqlite_master WHERE type='table' AND name='Settings';");
+        query.next();
+        if("Settings" != query.value("name").toString())
         {
             lastError_ = tr("Table Settings could not be created.");
             return;
@@ -157,73 +163,74 @@ DocumentSql::DocumentSql(const QString& file) :
 
 
 
-        q.exec("CREATE TABLE Directories ( "
+        query.exec("CREATE TABLE Directories ( "
                "id INTEGER NOT NULL PRIMARY KEY,"
                "directory TEXT,"
                "selected INT,"
                "checked INT)"
                );
-        qDebug() << q.lastError().text() << __FUNCTION__;
+        qDebug() << query.lastError().text() << __FUNCTION__;
 
-        q.exec("SELECT name FROM sqlite_master WHERE type='table' AND name='Directories';");
-        q.next();
-        if("Directories" != q.value("name").toString())
+        query.exec("SELECT name FROM sqlite_master WHERE type='table' AND name='Directories';");
+        query.next();
+        if("Directories" != query.value("name").toString())
         {
             lastError_ = tr("Table Directories could not be created.");
             return;
         }
+        // version 2 (from 1)
+        query.exec("ALTER TABLE Directories Add displaytext");
 
 
-
-        q.exec("CREATE TABLE Access ( "
+        query.exec("CREATE TABLE Access ( "
                "id INTEGER NOT NULL,"
                "opencount INT NOT NULL DEFAULT 0,"
                "lastaccess INT,"
                "dbid TEXT NOT NULL)"
                );
-        qDebug() << q.lastError().text() << __FUNCTION__;
-        q.exec("CREATE UNIQUE INDEX idx_Access_id_dbid ON Access(id,dbid)");
-        qDebug() << q.lastError().text() << __FUNCTION__;
-        q.exec("SELECT name FROM sqlite_master WHERE type='table' AND name='Access';");
-        q.next();
-        if("Access" != q.value("name").toString())
+        qDebug() << query.lastError().text() << __FUNCTION__;
+        query.exec("CREATE UNIQUE INDEX idx_Access_id_dbid ON Access(id,dbid)");
+        qDebug() << query.lastError().text() << __FUNCTION__;
+        query.exec("SELECT name FROM sqlite_master WHERE type='table' AND name='Access';");
+        query.next();
+        if("Access" != query.value("name").toString())
         {
             lastError_ = tr("Table Access could not be created.");
             return;
         }
 
 
-        q.exec("CREATE TABLE Tag ( "
+        query.exec("CREATE TABLE Tag ( "
                "tagid INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
                "tag,"
                "yomi,"
                "dbid TEXT NOT NULL)"
                );
-        qDebug() << q.lastError().text() << __FUNCTION__;
-        q.exec("CREATE UNIQUE INDEX idx_Tag_tagid_dbid ON Tag(tagid,dbid)");
-        qDebug() << q.lastError().text() << __FUNCTION__;
-        q.exec("ALTER TABLE Tag ADD COLUMN selected INT NOT NULL DEFAULT '0'");
-        q.exec("ALTER TABLE Tag ADD COLUMN checked INT NOT NULL DEFAULT '0'");
+        qDebug() << query.lastError().text() << __FUNCTION__;
+        query.exec("CREATE UNIQUE INDEX idx_Tag_tagid_dbid ON Tag(tagid,dbid)");
+        qDebug() << query.lastError().text() << __FUNCTION__;
+        query.exec("ALTER TABLE Tag ADD COLUMN selected INT NOT NULL DEFAULT '0'");
+        query.exec("ALTER TABLE Tag ADD COLUMN checked INT NOT NULL DEFAULT '0'");
 
-        q.exec("SELECT name FROM sqlite_master WHERE type='table' AND name='Tag';");
-        q.next();
-        if("Tag" != q.value("name").toString())
+        query.exec("SELECT name FROM sqlite_master WHERE type='table' AND name='Tag';");
+        query.next();
+        if("Tag" != query.value("name").toString())
         {
             lastError_ = tr("Table Tag could not be created.");
             return;
         }
 
-        q.exec("CREATE TABLE Tagged ( "
+        query.exec("CREATE TABLE Tagged ( "
                "id INTEGER NOT NULL,"
                "tagid INTEGER NOT NULL,"
                "dbid TEXT NOT NULL)"
                );
-        qDebug() << q.lastError().text() << __FUNCTION__;
-        q.exec("CREATE UNIQUE INDEX idx_Tagged_id_tagid_dbid ON Tagged(id,tagid,dbid)");
-        qDebug() << q.lastError().text() << __FUNCTION__;
-        q.exec("SELECT name FROM sqlite_master WHERE type='table' AND name='Tagged';");
-        q.next();
-        if("Tagged" != q.value("name").toString())
+        qDebug() << query.lastError().text() << __FUNCTION__;
+        query.exec("CREATE UNIQUE INDEX idx_Tagged_id_tagid_dbid ON Tagged(id,tagid,dbid)");
+        qDebug() << query.lastError().text() << __FUNCTION__;
+        query.exec("SELECT name FROM sqlite_master WHERE type='table' AND name='Tagged';");
+        query.next();
+        if("Tagged" != query.value("name").toString())
         {
             lastError_ = tr("Table Tagged could not be created.");
             return;
@@ -231,9 +238,22 @@ DocumentSql::DocumentSql(const QString& file) :
 
         if(version != DBVERSIONDOC)
         {
-            SQCN(q,prepare("UPDATE DbInfoDoc SET version=?"));
-            q.bindValue(0, DBVERSIONDOC);
-            SQCN(q,exec());
+            if(version > DBVERSION)
+            {
+                lastError_ = tr("Database version(=%1) is higher than this client(=%2). Please update SceneExplorer.").
+                        arg(version).arg(DBVERSION);
+                return;
+            }
+
+            // Now version is smaller than current implementation(DBVERSION)
+            Q_ASSERT(version >= 0);
+            if(version <= 1)
+            {
+            }
+
+            SQCN(query,prepare("UPDATE DbInfoDoc SET version=?"));
+            query.bindValue(0, DBVERSIONDOC);
+            SQCN(query,exec());
         }
     }
     if(!gpSQL->AttachDocument(file))
@@ -355,13 +375,14 @@ QString DocumentSql::getDirText(int index) const
 }
 bool DocumentSql::setDirectory(int index, DirectoryItem* di)
 {
-    MYQMODIFIER QSqlQuery query = myPrepare("INSERT OR REPLACE INTO " + docdb("Directories") + " (id, directory, selected, checked) VALUES (?,?,?,?)");
+    MYQMODIFIER QSqlQuery query = myPrepare("INSERT OR REPLACE INTO " + docdb("Directories") + " (id, directory, selected, checked, displaytext) VALUES (?,?,?,?,?)");
 
     int i = 0;
     query.bindValue(i++, index);
-    query.bindValue(i++, di->text());
+    query.bindValue(i++, di->directory());
     query.bindValue(i++, di->isSelected() ? 1 : 0);
     query.bindValue(i++, di->IsChecked() ? 1 : 0);
+    query.bindValue(i++, di->displaytext());
     SQC(query, exec());
     return true;
 }
@@ -783,7 +804,8 @@ bool DocumentSql::GetAllDirs(QList<DirectoryItem*>& dirs) const
         DirectoryItem* di = new DirectoryItem(
                     query.value("id").toLongLong(),
                     DirectoryItem::DirectoryItemType::DI_NORMAL_MY,
-                    query.value("directory").toString());
+                    query.value("directory").toString(),
+                    query.value("displaytext").toString());
         di->setSelected(query.value("selected").toInt() != 0);
         di->setCheckState(query.value("checked").toInt() != 0 ? Qt::Checked : Qt::Unchecked);
 
@@ -791,14 +813,17 @@ bool DocumentSql::GetAllDirs(QList<DirectoryItem*>& dirs) const
     }
     return true;
 }
-bool DocumentSql::InsertDirectory(const QString& dirOrig, DirectoryItem*& newdi)
+bool DocumentSql::InsertDirectory(const QString& dirOrig,
+                                  const QString& displaytext,
+                                  DirectoryItem*& newdi)
 {
-    MYQMODIFIER QSqlQuery query = myPrepare("INSERT INTO " + docdb("Directories") + " (directory) VALUES (?)");
+    MYQMODIFIER QSqlQuery query = myPrepare("INSERT INTO " + docdb("Directories") + " (directory,displaytext) VALUES (?,?)");
 
     QString dir = normalizeDir(dirOrig);
 
     int i = 0;
     query.bindValue(i++, dir);
+    query.bindValue(i++, displaytext);
     SQC(query, exec());
 
     bool ok=false;
@@ -807,10 +832,32 @@ bool DocumentSql::InsertDirectory(const QString& dirOrig, DirectoryItem*& newdi)
     Q_ASSERT(dirid > 0);
     newdi = new DirectoryItem(dirid,
                               DirectoryItem::DirectoryItemType::DI_NORMAL_MY,
-                              dir);
+                              dir,
+                              displaytext);
 
     return true;
 }
+bool DocumentSql::UpdateDirectory(const qint64& dirid,
+                                  const QString& dirOrig,
+                                  const QString& displaytext)
+{
+    MYQMODIFIER QSqlQuery query = myPrepare("UPDATE " + docdb("Directories") + " SET directory=?,displaytext=? WHERE id=?");
+
+    QString dir = normalizeDir(dirOrig);
+    if(dir.isEmpty()) {
+        Alert(nullptr, tr("Directory is empty."));
+        return false;
+    }
+    int i = 0;
+    query.bindValue(i++, dir);
+    query.bindValue(i++, displaytext);
+    query.bindValue(i++, dirid);
+    SQC(query, exec());
+    qDebug() << "RowsAffected=" << query.numRowsAffected() << __FUNCTION__;
+    Q_ASSERT(query.numRowsAffected()==1);
+    return true;
+}
+
 //bool DocumentSql::DeleteDirectory(DirectoryItem* di)
 //{
 //    MYQMODIFIER QSqlQuery query = myq("DELETE FROM " + docdb("Directories") + " WHERE id=? AND directory=? LIMIT 1");

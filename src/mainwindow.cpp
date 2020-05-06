@@ -77,6 +77,7 @@
 #include "tagidsinfo.h"
 #include "itempropertydialog.h"
 #include "renamedialog.h"
+#include "directoryentrydialog.h"
 
 #include "ui_mainwindow.h"
 #include "mainwindow.h"
@@ -1205,6 +1206,8 @@ void MainWindow::itemChangedCommon(bool bForceRead)
     updateFreeSpace();
 
     QStringList dirs;
+    QStringList titles;
+
     bool bOnlyMissing = false;
     bool bOnlyExistant = false;
     QList<DirectoryItem*> allSelectedOrChecked = ui->directoryWidget->selectedOrCheckedItems();
@@ -1224,11 +1227,13 @@ void MainWindow::itemChangedCommon(bool bForceRead)
         if(item->IsAllItem())
         {
             dirs = QStringList();
+            titles = QStringList();
             break;
         }
         else if(item->IsMissingItem())
         {
             dirs = QStringList();
+            titles = QStringList();
             bOnlyMissing = true;
             bForceRead = true;
             break;
@@ -1236,7 +1241,8 @@ void MainWindow::itemChangedCommon(bool bForceRead)
         else
         {
             Q_ASSERT(item->IsNormalItem());
-            dirs.append(item->text());
+            dirs.append(item->directory());
+            titles.append(item->displaytext());
             continue;
         }
         Q_ASSERT(false);
@@ -1275,10 +1281,12 @@ void MainWindow::itemChangedCommon(bool bForceRead)
     lastQueriedOnlyMissing_ = bOnlyMissing;
     lastQueriedOnlyExistant_ = bOnlyExistant;
     lastQueriedDirs_ = dirs;
+    lastQueriedTitles_= titles;
     //    lastQueriedIsAllTag_ = isAllTag;
     //    lastQueriedTaggedIDs_ = taggedids;
     lastQueriedTaggedIds_ = tagInfos;
-    GetSqlAllSetTable(dirs, tagInfos, bOnlyMissing, bOnlyExistant);
+    Q_ASSERT(dirs.length()==titles.length());
+    GetSqlAllSetTable(dirs, titles, tagInfos, bOnlyMissing, bOnlyExistant);
 }
 
 void MainWindow::GetSelectedAndCurrentTagIDs(TagidsInfo& tagInfos)
@@ -1351,11 +1359,14 @@ void MainWindow::GetSelectedAndCurrentTagIDs(TagidsInfo& tagInfos)
     return;
 }
 
-void MainWindow::GetSqlAllSetTable(const QStringList& dirs,
+void MainWindow::GetSqlAllSetTable(const QStringList dirs,
+                                   const QStringList titles,
                                    const TagidsInfo& tagInfos,
                                    bool bOnlyMissing,
                                    bool bOnlyExistant)
 {
+    Q_ASSERT(dirs.length()==titles.length());
+
     // tableModel_->SetShowMissing(tbShowNonExistant_->isChecked() );
     QElapsedTimer timer;
     timer.start();
@@ -1391,7 +1402,7 @@ void MainWindow::GetSqlAllSetTable(const QStringList& dirs,
                   tagInfos);
 
 
-    UpdateTitle(dirs,
+    UpdateTitle(titles,
                 bOnlyMissing ? UpdateTitleType::ONLYMISSING : UpdateTitleType::DEFAULT);
 
     insertLog(TaskKind_App,
@@ -1572,7 +1583,7 @@ bool MainWindow::HasDirectory(const QString& dir)
     for(int i=0 ; i < ui->directoryWidget->count();++i)
     {
         DirectoryItem* di = static_cast<DirectoryItem*>(ui->directoryWidget->item(i));
-        if(di->text()==dirNormlized)
+        if(di->directory()==dirNormlized)
             return true;
     }
     return false;
@@ -2155,7 +2166,7 @@ void MainWindow::on_action_OpenDirectory_triggered()
             DirectoryItem* di = static_cast<DirectoryItem*>(qi);
             if(di->IsNormalItem())
             {
-                QString dir = di->text();
+                QString dir = di->directory();
                 if(!QDesktopServices::openUrl(QUrl::fromLocalFile(dir)))
                 {
                     Alert(this, tr("failed to launch %1.").arg(dir));
@@ -2339,16 +2350,28 @@ void MainWindow::on_action_FocusTagPane_triggered()
 }
 
 
+
+
+
 void MainWindow::on_action_AddDirectory_triggered()
 {
     if(!pDoc_)
         return;
 
-    QString dir = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
-                                                    lastSelectedAddDir_.isEmpty() ? GetUserDocumentDirectory():lastSelectedAddDir_);
-    if(dir.isEmpty())
+    DirectoryEntryDialog dlg(this);
+    dlg.setLastSelectedDirectory(lastSelectedAddDir_);
+    if(!dlg.exec())
         return;
+    QString displaytext = dlg.displaytext();
+    QString dir = dlg.directory();
+    if(dir.isEmpty())
+    {
+        Alert(this, tr("Directory is empty."));
+        return;
+    }
+    dir=normalizeDir(dir);
     lastSelectedAddDir_ = dir;
+
 
     if(HasDirectory(dir))
     {
@@ -2357,7 +2380,7 @@ void MainWindow::on_action_AddDirectory_triggered()
     }
 
     DirectoryItem* newdi=nullptr;
-    if(!pDoc_->InsertDirectory(dir, newdi))
+    if(!pDoc_->InsertDirectory(dir, displaytext, newdi))
     {
         Alert(this,TR_FAILED_TO_INSERT_DIRECTORY_INTO_DATABASE());
         return;
@@ -2365,7 +2388,37 @@ void MainWindow::on_action_AddDirectory_triggered()
 
     ui->directoryWidget->addItem(newdi);
 }
+void MainWindow::OnDirectoryProperty()
+{
+    if(!pDoc_)
+        return;
+    if(ui->directoryWidget->selectedItems().isEmpty())
+        return;
 
+    DirectoryItem* item = static_cast<DirectoryItem*>( ui->directoryWidget->selectedItems()[0]);
+
+    DirectoryEntryDialog dlg(this);
+    dlg.setDirectory(item->directory());
+    dlg.setDisplayText(item->displaytextraw());
+    if(!dlg.exec())
+        return;
+    QString displaytext = dlg.displaytext();
+    QString dir = dlg.directory();
+    if(dir.isEmpty())
+    {
+        Alert(this, tr("Directory is empty."));
+        return;
+    }
+    dir=normalizeDir(dir);
+    if(!pDoc_->UpdateDirectory(item->dirid(), dir, displaytext))
+    {
+        Alert(this,TR_FAILED_TO_UPDATE_DIRECTORY_ON_DATABASE());
+        return;
+    }
+
+    item->setDirectory(dir);
+    item->setDisplayText(displaytext);
+}
 
 void MainWindow::on_action_AddNewTag_triggered()
 {

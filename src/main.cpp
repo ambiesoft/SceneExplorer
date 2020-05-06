@@ -107,7 +107,7 @@ static void testSQL()
     static int la=QTime::currentTime().second();
     static int oc=100;
 
-    TableItemDataPointer tid = TableItemData::Create(0,
+    TableItemDataPointer tid = TableItemData::Create(TableItemData::TableItemDataArgs(0,
                                                      thumbfiles,
                                                      dir,
                                                      file,
@@ -126,7 +126,7 @@ static void testSQL()
                                                      29.97,
                                                      "http://example.com", "memo1",
                                                      oc++,
-                                                     ++la);
+                                                     ++la));
     tid->setThumbExt("jpg");
 
     // insert same tid and check same id

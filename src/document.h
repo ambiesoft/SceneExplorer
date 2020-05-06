@@ -185,9 +185,13 @@ public:
     {
         return docSql_->GetAllDirs(dirs);
     }
-    bool InsertDirectory(const QString& dir, DirectoryItem*& newdi)
+    bool InsertDirectory(const QString& dir, const QString& displaytext, DirectoryItem*& newdi)
     {
-        return docSql_->InsertDirectory(dir,newdi);
+        return docSql_->InsertDirectory(dir,displaytext,newdi);
+    }
+    bool UpdateDirectory(const qint64& dirid,const QString& dir, const QString& displaytext)
+    {
+        return docSql_->UpdateDirectory(dirid,dir,displaytext);
     }
     void SetReordered() {
         bReordered_=true;

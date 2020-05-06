@@ -62,11 +62,12 @@ void MainWindow::OnPasteDirectory()
     }
     if(lines.count()==1)
     {
-        Alert(this, tr("Directory entriy is empty."));
+        Alert(this, tr("Directory entry is empty."));
         return;
     }
 
-    QStringList all;
+    QList<QPair<QString,QString>> all;
+    QStringList allDirs;
     for(int i=1; i < lines.count(); ++i)
     {
         QString line=lines[i];
@@ -75,20 +76,41 @@ void MainWindow::OnPasteDirectory()
             continue;
         if(line[0]=='#')
             continue;
-        line = undoublequoteIfNecessary(line);
-        all.append(line);
+        QStringList lists = line.split(":");
+        if(lists.length() != 2) {
+            Alert(this, tr("Illegal Directory entry '%1'").arg(line));
+            return;
+        }
+        QString dir = lists[0];
+        QString disp = lists[1];
+        dir = undoublequoteIfNecessary(dir);
+        all.append(QPair<QString,QString>(dir,disp));
+        allDirs.append(dir);
     }
 
     QString question = tr("Are you sure you want to add follwing directories?");
     question += "\n\n";
-    question += all.join("\n");
+    question += allDirs.join("\n");
     if(!YesNo(this, question))
         return;
 
-    for(QString dir : all)
+    for(auto&& entry : all)
     {
+        if(HasDirectory(entry.first))
+        {
+            switch(YesNoCancel(this,
+                        tr("'%1' already exists. Are you sure to add it?").arg(entry.first)))
+            {
+            case QMessageBox::Yes:
+                break;
+            case QMessageBox::No:
+                continue;
+            case QMessageBox::Cancel:
+                return;
+            }
+        }
         DirectoryItem* newdi=nullptr;
-        if(!pDoc_->InsertDirectory(dir, newdi))
+        if(!pDoc_->InsertDirectory(entry.first, entry.second, newdi))
         {
             Alert(this,TR_FAILED_TO_INSERT_DIRECTORY_INTO_DATABASE());
             continue;

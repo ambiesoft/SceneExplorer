@@ -33,76 +33,32 @@ using namespace AmbiesoftQt;
 int TableItemData::dinstcount_ = 0;
 #endif
 
-TableItemData::TableItemData(const qint64& id,
-                             const QStringList& files,
-                             const QString& movieDirectory,
-                             const QString& movieFileName,
-
-                             const qint64& size,
-                             const qint64& ctime,
-                             const qint64& wtime,
-
-                             int thumbwidth,
-                             int thumbheight,
-                             const double& duration,
-                             const QString& format,
-                             int bitrate,
-                             const QString& vcodec,
-                             const QString& acodec,
-                             int vWidth,int vHeight,
-                             const double& fps,
-                             const QString& url, const QString& memo,
-                             int opencount,
-                             const qint64& lastaccess)
+TableItemData::TableItemData(const TableItemDataArgs& args) :
+    values_(args)
 {
 #ifdef QT_DEBUG
     ++dinstcount_;
 #endif
-    id_=id;
-    thumbFiles_ = files;
-    movieDirectory_=movieDirectory;
-    movieFilename_=movieFileName;
-
-    size_=size;
-    ctime_=ctime;
-    wtime_=wtime;
-
-    thumbwidth_=thumbwidth;
-    thumbheight_=thumbheight;
-
-    duration_=duration;
-    format_=format;
-    bitrate_=bitrate;
-    vcodec_=vcodec;
-    acodec_=acodec;
-
-    vWidth_=vWidth;
-    vHeight_=vHeight;
-
-    fps_=fps;
-    url_=url;
-    memo_=memo;
-    opencount_=opencount;
-    lastaccess_ = lastaccess;
 }
-QString TableItemData::getMovieFileFull() const {
-    Q_ASSERT(!movieDirectory_.isEmpty());
-    Q_ASSERT(!movieFilename_.isEmpty());
 
-    return pathCombine(movieDirectory_,movieFilename_);
+QString TableItemData::getMovieFileFull() const {
+    Q_ASSERT(!values_.movieDirectory.isEmpty());
+    Q_ASSERT(!values_.movieFileName.isEmpty());
+
+    return pathCombine(values_.movieDirectory,values_.movieFileName);
 }
 
 qint64 TableItemData::getSize() const
 {
-    return size_;
+    return values_.size;
 }
 qint64 TableItemData::getCtime() const
 {
-    return ctime_;
+    return values_.ctime;
 }
 qint64 TableItemData::getWtime() const
 {
-    return wtime_;
+    return values_.wtime;
 }
 
 QMap<QString,QVariant> TableItemData::getColumnValues() const

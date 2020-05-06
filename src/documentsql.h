@@ -23,7 +23,7 @@
 
 #include "tableitemdata.h"
 
-#define DBVERSIONDOC 1
+#define DBVERSIONDOC 2
 class DirectoryItem;
 class TagItem;
 
@@ -35,7 +35,7 @@ class DocumentSql : public QObject
     bool ok_ = false;
     mutable QString lastError_;
 
-    int GetDBVersionDoc(QSqlDatabase& db);
+    int GetDBVersionDoc(QSqlQuery& query);
     bool CreateDBInfoTableDoc(QSqlDatabase& db);
 
 public:
@@ -102,7 +102,8 @@ public:
     bool SetTagSelectedAndChecked(const qint64& tagid, const bool bSel, const bool bCheck);
     bool setDirNormalItemState(const DirectoryItem* item);
     bool GetAllDirs(QList<DirectoryItem*>& dirs) const;
-    bool InsertDirectory(const QString& dir, DirectoryItem*& newdi);
+    bool InsertDirectory(const QString& dir, const QString& displaytext, DirectoryItem*& newdi);
+    bool UpdateDirectory(const qint64& dirid, const QString& dir, const QString& displaytext);
     // bool DeleteDirectory(DirectoryItem* di);
 };
 
