@@ -280,7 +280,7 @@ public:
         if(values_.movieDirectory!=olddir)
             return false;
 
-        if(values_.movieFileName==oldname)
+        if(values_.movieFileName != oldname)
             return false;
 
         values_.movieDirectory=newdir;
