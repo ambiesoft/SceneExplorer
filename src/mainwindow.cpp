@@ -2369,7 +2369,7 @@ void MainWindow::on_action_AddDirectory_triggered()
         Alert(this, tr("Directory is empty."));
         return;
     }
-    dir=normalizeDir(dir);
+    dir = normalizeDir(dir);
     lastSelectedAddDir_ = dir;
 
 
@@ -2409,7 +2409,7 @@ void MainWindow::OnDirectoryProperty()
         Alert(this, tr("Directory is empty."));
         return;
     }
-    dir=normalizeDir(dir);
+    dir = normalizeDir(dir);
     if(!pDoc_->UpdateDirectory(item->dirid(), dir, displaytext))
     {
         Alert(this,TR_FAILED_TO_UPDATE_DIRECTORY_ON_DATABASE());
