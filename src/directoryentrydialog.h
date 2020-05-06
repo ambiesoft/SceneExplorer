@@ -21,10 +21,8 @@ public:
 
 private slots:
     void on_btnBrowse_clicked();
-
     void on_buttonBox_accepted();
-
-    void on_tbBrowse_triggered(QAction *arg1);
+    void on_tbBrowse_clicked();
 
 private:
     Ui::DirectoryEntryDialog *ui;

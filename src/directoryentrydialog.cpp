@@ -50,7 +50,7 @@ void DirectoryEntryDialog::on_buttonBox_accepted()
     updateData(false);
 }
 
-void DirectoryEntryDialog::on_tbBrowse_triggered(QAction*)
+void DirectoryEntryDialog::on_tbBrowse_clicked()
 {
     QString dir = QFileDialog::getExistingDirectory(this,
                                                     tr("Open Directory"),
