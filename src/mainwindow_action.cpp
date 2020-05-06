@@ -841,17 +841,29 @@ void MainWindow::OnDirectoryUncheckSelection()
 
 
 
-void MainWindow::OnDirectorySortByName()
+void MainWindow::OnDirectorySortByDirectory()
 {
     CHECK_DOCUMENT(pDoc_);
 
     Q_ASSERT(!directoryChanging_);
     Ambiesoft::BlockedBool bt(&directoryChanging_, true, false);
 
-    ui->directoryWidget->SortNormalItems();
+    ui->directoryWidget->SortNormalItemsByDirectory();
 
     pDoc_->SetReordered();
 }
+void MainWindow::OnDirectorySortByText()
+{
+    CHECK_DOCUMENT(pDoc_);
+
+    Q_ASSERT(!directoryChanging_);
+    Ambiesoft::BlockedBool bt(&directoryChanging_, true, false);
+
+    ui->directoryWidget->SortNormalItemsByDisplayText();
+
+    pDoc_->SetReordered();
+}
+
 void MainWindow::directoryWidgetMoveUpCommon(const bool bUp)
 {
     CHECK_DOCUMENT(pDoc_);
@@ -917,10 +929,15 @@ void MainWindow::on_directoryWidget_customContextMenuRequested(const QPoint &pos
 
         menu.addSeparator();
 
-        QAction actSortByName(tr("&Sort by name"));
-        connect(&actSortByName, SIGNAL(triggered(bool)),
-                this, SLOT(OnDirectorySortByName()));
-        menu.addAction(&actSortByName);
+        QAction actSortByDirectoryName(tr("&Sort by Directory"));
+        connect(&actSortByDirectoryName, SIGNAL(triggered(bool)),
+                this, SLOT(OnDirectorySortByDirectory()));
+        menu.addAction(&actSortByDirectoryName);
+
+        QAction actSortByText(tr("Sort by &Text"));
+        connect(&actSortByText, SIGNAL(triggered(bool)),
+                this, SLOT(OnDirectorySortByText()));
+        menu.addAction(&actSortByText);
 
         menu.exec(ui->directoryWidget->mapToGlobal(pos));
     }
@@ -963,11 +980,15 @@ void MainWindow::on_directoryWidget_customContextMenuRequested(const QPoint &pos
 
         menu.addSeparator();
 
-        QAction actSortByName(tr("&Sort by name"));
-        connect(&actSortByName, SIGNAL(triggered(bool)),
-                this, SLOT(OnDirectorySortByName()));
-        menu.addAction(&actSortByName);
+        QAction actSortByDirectoryName(tr("&Sort by Directory"));
+        connect(&actSortByDirectoryName, SIGNAL(triggered(bool)),
+                this, SLOT(OnDirectorySortByDirectory()));
+        menu.addAction(&actSortByDirectoryName);
 
+        QAction actSortByText(tr("Sort by &Text"));
+        connect(&actSortByText, SIGNAL(triggered(bool)),
+                this, SLOT(OnDirectorySortByText()));
+        menu.addAction(&actSortByText);
 
         menu.addSeparator();
 

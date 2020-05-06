@@ -382,7 +382,7 @@ bool DocumentSql::setDirectory(int index, DirectoryItem* di)
     query.bindValue(i++, di->directory());
     query.bindValue(i++, di->isSelected() ? 1 : 0);
     query.bindValue(i++, di->IsChecked() ? 1 : 0);
-    query.bindValue(i++, di->displaytext());
+    query.bindValue(i++, di->displaytextraw());
     SQC(query, exec());
     return true;
 }

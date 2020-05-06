@@ -796,7 +796,8 @@ public Q_SLOTS:
     void OnDirectoryUncheckAll();
     void OnDirectoryCheckSelection();
     void OnDirectoryUncheckSelection();
-    void OnDirectorySortByName();
+    void OnDirectorySortByDirectory();
+    void OnDirectorySortByText();
     void OnDirectoryMoveUp();
     void OnDirectoryMoveDown();
     void OnFindComboEnterPressed();

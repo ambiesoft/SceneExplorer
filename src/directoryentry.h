@@ -46,6 +46,8 @@ public:
 
     QList<DirectoryItem*> GetCheckedItems();
     QList<DirectoryItem*> GetAllNormalItems();
+    DirectoryItem* TakeFirstNormalItem();
+    QList<DirectoryItem*> TakeAllNormalItems();
     void SetCheck(const QStringList& dirs, bool bRemoveSelection);
 
     bool IsAllItemSelectedOrChecked() const;
@@ -54,7 +56,8 @@ public:
     bool IsTopNormalItem(int row) const;
     bool IsBottomNormalItem(int row) const;
 
-    void SortNormalItems();
+    void SortNormalItemsByDirectory();
+    void SortNormalItemsByDisplayText();
 
     QList<DirectoryItem*> selectedOrCheckedItems();
     QString getSelectedFirstDirectory();

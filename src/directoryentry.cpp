@@ -93,6 +93,26 @@ QList<DirectoryItem*> DirectoryEntry::GetAllNormalItems()
     }
     return ret;
 }
+DirectoryItem* DirectoryEntry::TakeFirstNormalItem()
+{
+    for (int i = 0; i < count(); ++i)
+    {
+        DirectoryItem* item = (DirectoryItem*)this->item(i);
+        if (item->IsNormalItem())
+        {
+            return (DirectoryItem*)this->takeItem(i);
+        }
+    }
+    return nullptr;
+}
+QList<DirectoryItem*> DirectoryEntry::TakeAllNormalItems()
+{
+    QList<DirectoryItem*> ret;
+    DirectoryItem* item;
+    while( (item = TakeFirstNormalItem()) != nullptr)
+        ret.append(item);
+    return ret;
+}
 void DirectoryEntry::SetCheck(const QStringList& dirs, bool bRemoveSelection)
 {
     for (int i = 0; i < count(); ++i)
@@ -163,16 +183,53 @@ bool DirectoryEntry::IsBottomNormalItem(int row) const
     Q_ASSERT(((DirectoryItem*)item(count()-1))->IsMissingItem());
     return row==count()-2;
 }
-void DirectoryEntry::SortNormalItems()
+void DirectoryEntry::SortNormalItemsByDirectory()
 {
     DirectoryItem* itemAll = this->takeShowAllItem();
     Q_ASSERT(itemAll);
     DirectoryItem* itemMissing = this->takeMissingItem();
     Q_ASSERT(itemMissing);
-    sortItems();
+
+    int prevcount = count();
+    QList<DirectoryItem*> allNormalItems = TakeAllNormalItems();
+    Q_ASSERT(prevcount == allNormalItems.length());
+
+    std::sort(allNormalItems.begin(), allNormalItems.end(),
+         [](DirectoryItem* a, DirectoryItem* b) -> bool
+    {
+        return a->directory() < b->directory();
+    });
+
+    for(auto&& item : allNormalItems)
+        addItem(item);
+
     insertItem(0, itemAll);
     addItem(itemMissing);
 }
+void DirectoryEntry::SortNormalItemsByDisplayText()
+{
+    DirectoryItem* itemAll = this->takeShowAllItem();
+    Q_ASSERT(itemAll);
+    DirectoryItem* itemMissing = this->takeMissingItem();
+    Q_ASSERT(itemMissing);
+
+    int prevcount = count();
+    QList<DirectoryItem*> allNormalItems = TakeAllNormalItems();
+    Q_ASSERT(prevcount == allNormalItems.length());
+
+    std::sort(allNormalItems.begin(), allNormalItems.end(),
+         [](DirectoryItem* a, DirectoryItem* b) -> bool
+    {
+        return a->displaytext() < b->displaytext();
+    });
+
+    for(auto&& item : allNormalItems)
+        addItem(item);
+
+    insertItem(0, itemAll);
+    addItem(itemMissing);
+}
+
 QList<DirectoryItem*> DirectoryEntry::selectedOrCheckedItems()
 {
     QList<DirectoryItem*> items;

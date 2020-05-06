@@ -711,7 +711,7 @@
     </message>
     <message>
         <source>&amp;Sort by name</source>
-        <translation>名前でソート(&amp;S)</translation>
+        <translation type="vanished">名前でソート(&amp;S)</translation>
     </message>
     <message>
         <source>Re&amp;move this folder from database</source>
@@ -1576,6 +1576,14 @@
     <message>
         <source>&apos;%1&apos; already exists. Are you sure to add it?</source>
         <translation>&apos;%1&apos; はすでに存在します。追加しますか？</translation>
+    </message>
+    <message>
+        <source>&amp;Sort by Directory</source>
+        <translation>ディレクトリでソート(&amp;S)</translation>
+    </message>
+    <message>
+        <source>Sort by &amp;Text</source>
+        <translation>テキストでソート(&amp;T)</translation>
     </message>
 </context>
 <context>
