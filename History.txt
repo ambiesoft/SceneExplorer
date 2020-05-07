@@ -1,3 +1,6 @@
+2020/05/07 1.21.24
+Modified: Use db path for checking duplicate instance
+
 2020/05/06 1.21.23
 Fixed: The browse button on the directory dialog.
 
