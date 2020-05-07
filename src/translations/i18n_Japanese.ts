@@ -2005,7 +2005,7 @@
     </message>
     <message>
         <source>Another instance is already running.</source>
-        <translation>他のインスタンスがすでに起動しています。</translation>
+        <translation type="vanished">他のインスタンスがすでに起動しています。</translation>
     </message>
     <message>
         <source>Failed to get default database directory.</source>
@@ -2146,6 +2146,10 @@
     <message>
         <source>Filename could not be empty.</source>
         <translation>ファイル名が空であることはできません。</translation>
+    </message>
+    <message>
+        <source>Another instance which uses the same database is already running.</source>
+        <translation>同一データベースを利用する他のインスタンスがすでに起動しています。</translation>
     </message>
 </context>
 <context>

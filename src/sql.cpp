@@ -1292,20 +1292,6 @@ bool Sql::getEntryFromSalient(const QString& salient,
     return true;
 }
 
-#ifndef AMBIESOFT_FILENAME_CASESENSITIVE
-static QString GetAsciiLower(const QString& s)
-{
-    std::wstring w = s.toStdWString();
-
-    transform(
-      w.begin(), w.end(),
-      w.begin(),
-      towlower);
-
-    return QString::fromStdWString(w);
-}
-#endif // not AMBIESOFT_FILENAME_CASESENSITIVE
-
 
 bool Sql::hasEntry(const QString& dir,
                    const QString& file,
@@ -1333,13 +1319,13 @@ bool Sql::hasEntry(const QString& dir,
     qDebug() << "file:" << file << __FUNCTION__;
     qDebug() << "dir.toLower:" << dir.toLower() << __FUNCTION__;
     qDebug() << "file.toLower:" << file.toLower() << __FUNCTION__;
-    qDebug() << "GetAsciiLower(dir):" << GetAsciiLower(dir) << __FUNCTION__;
-    qDebug() << "GetAsciiLower(file):" << GetAsciiLower(file) << __FUNCTION__;
+    qDebug() << "GetAsciiLower(dir):" << ToAsciiLower(dir) << __FUNCTION__;
+    qDebug() << "GetAsciiLower(file):" << ToAsciiLower(file) << __FUNCTION__;
 
 //    query.bindValue(i++, dir.toLower());
 //    query.bindValue(i++, file.toLower());
-    query.bindValue(i++, GetAsciiLower(dir));
-    query.bindValue(i++, GetAsciiLower(file));
+    query.bindValue(i++, ToAsciiLower(dir));
+    query.bindValue(i++, ToAsciiLower(file));
 #endif
     query.bindValue(i++, size);
     query.bindValue(i++, wtime);

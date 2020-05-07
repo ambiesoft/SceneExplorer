@@ -297,6 +297,12 @@ int main2(AmbApp& theApp)
         return PR_OPENSCENEDIRECTORYFAILED;
     }
 
+    if(!theApp.InitAndCheckDuplicateInstance(MakeUniquablePath(dbdir)))
+    {
+        Info(nullptr, QObject::tr("Another instance which uses the same database is already running."));
+        return false;
+    }
+
     Sql theSql;
     if (Q_UNLIKELY(!theSql.isOK()))
     {
@@ -361,7 +367,6 @@ int main(int argc, char *argv[])
     AmbApp::AmbAppArgs args;
     args.keyLanguage = KEY_LANGUAGE;
     args.keyStyle = KEY_STYLE;
-    args.singleInstance = true;
     AmbApp app(argc, argv, args);
 
 #ifdef QT_NO_DEBUG
