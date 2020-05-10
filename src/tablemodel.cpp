@@ -615,8 +615,6 @@ void TableModel::timerEvent(QTimerEvent *event)
             sum += (lastTenTick[i] - lastTenTick[i-1] - imageInterval_);
 
         sum /= 9;
-        // Q_ASSERT(sum >= 0);
-
         if(sum < 10)
         {
             imageInterval_ = std::max(10, imageInterval_ - 10);
@@ -629,6 +627,7 @@ void TableModel::timerEvent(QTimerEvent *event)
         lastTenTick.clear();
         imageElapsedTimer_.invalidate();
         imageElapsedTimer_.start();
+
     }
 
 //    if((QApplication::mouseButtons() & Qt::MouseButton::LeftButton) != 0)
@@ -665,7 +664,7 @@ void TableModel::StartImageTimer()
     Q_ASSERT(0 < imageInterval_);
     timerID_ = startTimer(imageInterval_);
     imageElapsedTimer_.start();
-    qDebug() << QString("Timer %1 started").arg(timerID_) << __FUNCTION__;
+    qDebug() << QString("Timer %1 started with interval %2").arg(timerID_).arg(imageInterval_) << __FUNCTION__;
 }
 void TableModel::KillImageTimer()
 {
