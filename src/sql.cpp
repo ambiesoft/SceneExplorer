@@ -114,11 +114,11 @@ Sql::Sql(QObject*) : db_(QSqlDatabase::addDatabase("QSQLITE"))
     QSqlQuery query;
 
     const int version = GetFileDBVersion(query);
-    if(version < 0) {
-        qDebug() << query.lastError().text() << __FUNCTION__;
-        lastError_ = query.lastError().text();
-        return;
-    }
+//    if(version < 0) {
+//        qDebug() << query.lastError().text() << __FUNCTION__;
+//        lastError_ = query.lastError().text();
+//        return;
+//    }
 
 
 

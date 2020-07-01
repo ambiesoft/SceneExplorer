@@ -1,3 +1,6 @@
+2020/07/01 1.21.25
+Fix: Failed to start the app if db does not exist.
+
 2020/05/07 1.21.24
 Modified: Use db path for checking duplicate instance
 
