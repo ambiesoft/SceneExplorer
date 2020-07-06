@@ -1,3 +1,6 @@
+2020/07/06　1.22.1
+Update Qt and FFmpeg
+
 2020/07/01 1.21.25
 Fix: Failed to start the app if db does not exist.
 
