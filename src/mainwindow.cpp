@@ -2619,6 +2619,8 @@ void MainWindow::on_action_SelectTags_triggered()
         return;
     }
 
+    Q_ASSERT(!tagChanging_);
+    Ambiesoft::BlockedBool bt(&tagChanging_);
     for(int i=0; i < ui->listTag->count(); ++i)
     {
         TagItem* ti = static_cast<TagItem*>(ui->listTag->item(i));

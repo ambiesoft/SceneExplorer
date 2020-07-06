@@ -124,6 +124,8 @@ void MainWindow::on_action_SelectDeepestDirectory_triggered()
         return;
     }
 
+    Q_ASSERT(!directoryChanging_);
+    Ambiesoft::BlockedBool bt(&directoryChanging_);
     foundItem->setSelected(true);
 }
 
