@@ -325,6 +325,9 @@ void OptionExternalToolsDialog::constructTitleTemplateMenu(QMenu& contextMenu,
     const char* alltargets[] = {
         "filefullpath",
         "directoryfullpath",
+        "filefullpathwithoutextension",
+        "filename",
+        "filenamewithoutextension",
     };
 
     for(size_t i=0 ; i < sizeof(alltargets)/sizeof(alltargets[0]); ++i )

@@ -1106,7 +1106,21 @@ void MainWindow::OnContextExternalTools()
         }
         else if(s=="${directoryfullpath}")
         {
-            argparsed += QFileInfo(movieFileNative).dir().absolutePath();
+            argparsed += QDir::toNativeSeparators(QFileInfo(movieFileNative).dir().absolutePath());
+        }
+        else if(s=="${filefullpathwithoutextension}")
+        {
+            argparsed += QDir::toNativeSeparators(pathCombine(
+                        QFileInfo(movieFileNative).dir().absolutePath(),
+                        QFileInfo(QFileInfo(movieFileNative).fileName()).completeBaseName()));
+        }
+        else if(s=="${filename}")
+        {
+            argparsed += QFileInfo(movieFileNative).fileName();
+        }
+        else if(s=="${filenamewithoutextension}")
+        {
+            argparsed += QFileInfo(QFileInfo(movieFileNative).fileName()).completeBaseName();
         }
         pos += matchedlen;
         prevpos = pos;

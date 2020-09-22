@@ -1,3 +1,5 @@
+Add 'filename' and other options to ExternalTool dialog
+
 2020/07/06　1.22.1
 Update Qt and FFmpeg
 
