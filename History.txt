@@ -1,3 +1,6 @@
+2020/09/27　1.22.3
+Add 'Sort by format' and more
+
 2020/09/22　1.22.2
 Add 'filename' and other options to ExternalTool dialog
 

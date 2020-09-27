@@ -2645,3 +2645,5 @@ void MainWindow::on_action_SelectTags_triggered()
         ti->setSelected(true);
     }
 }
+
+

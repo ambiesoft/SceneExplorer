@@ -86,6 +86,9 @@ MainWindow::MainWindow(QWidget *parent,
     sortManager_.setAction(SORT_OPENCOUNT,ui->actionSort_by_open_count);
     sortManager_.setAction(SORT_LASTACCESS,ui->actionSort_by_last_access);
     sortManager_.setAction(SORT_FPS,ui->actionSort_by_fps);
+    sortManager_.setAction(SORT_FORMAT,ui->actionSort_by_format);
+    sortManager_.setAction(SORT_VCODEC,ui->actionSort_by_vcodec);
+    sortManager_.setAction(SORT_ACODEC,ui->actionSort_by_acodec);
 
 
 

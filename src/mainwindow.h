@@ -623,6 +623,12 @@ private Q_SLOTS:
 
     void on_action_SelectTags_triggered();
 
+    void on_actionSort_by_format_triggered();
+
+    void on_actionSort_by_vcodec_triggered();
+
+    void on_actionSort_by_acodec_triggered();
+
 private:
     void OnCopyTable();
     void OnCopyDirectory();

@@ -207,6 +207,9 @@ QString GetSortColumnName(SORTCOLUMNMY sc)
     case SORT_OPENCOUNT:return QObject::tr("Open count");
     case SORT_LASTACCESS:return QObject::tr("Last Access");
     case SORT_FPS:return QObject::tr("FPS");
+    case SORT_FORMAT:return QObject::tr("Format");
+    case SORT_VCODEC:return QObject::tr("Video codec");
+    case SORT_ACODEC:return QObject::tr("Audio codec");
     default:
         Q_ASSERT(false);
 

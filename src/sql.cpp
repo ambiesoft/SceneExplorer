@@ -875,6 +875,15 @@ bool Sql::GetAllSqlString(
     case SORT_FPS:
         sortby << "fps";
         break;
+    case SORT_FORMAT:
+        sortby << "format";
+        break;
+    case SORT_VCODEC:
+        sortby << "vcodec";
+        break;
+    case SORT_ACODEC:
+        sortby << "acodec";
+        break;
 
     default:
         Q_ASSERT(false);

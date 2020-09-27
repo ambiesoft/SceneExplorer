@@ -201,6 +201,9 @@
     <addaction name="actionSort_by_duration"/>
     <addaction name="actionSort_by_bitrate"/>
     <addaction name="actionSort_by_fps"/>
+    <addaction name="actionSort_by_format"/>
+    <addaction name="actionSort_by_vcodec"/>
+    <addaction name="actionSort_by_acodec"/>
     <addaction name="actionSort_by_open_count"/>
     <addaction name="actionSort_by_last_access"/>
     <addaction name="separator"/>
@@ -1147,6 +1150,39 @@
   <action name="action_SelectTags">
    <property name="text">
     <string>Select &amp;Tags</string>
+   </property>
+  </action>
+  <action name="actionSort_by_format">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Sort by format</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+K, M</string>
+   </property>
+  </action>
+  <action name="actionSort_by_vcodec">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Sort by vcodec</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+K, V</string>
+   </property>
+  </action>
+  <action name="actionSort_by_acodec">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Sort by acodec</string>
+   </property>
+   <property name="shortcut">
+    <string>Shift+K, U</string>
    </property>
   </action>
  </widget>

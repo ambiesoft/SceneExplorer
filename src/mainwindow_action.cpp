@@ -708,7 +708,20 @@ void MainWindow::on_actionSort_by_fps_triggered()
 {
     onSortCommon(SORT_FPS);
 }
+void MainWindow::on_actionSort_by_format_triggered()
+{
+    onSortCommon(SORT_FORMAT);
+}
 
+void MainWindow::on_actionSort_by_vcodec_triggered()
+{
+    onSortCommon(SORT_VCODEC);
+}
+
+void MainWindow::on_actionSort_by_acodec_triggered()
+{
+    onSortCommon(SORT_ACODEC);
+}
 
 void MainWindow::ScanSelectedDirectory(const bool bAll)
 {
