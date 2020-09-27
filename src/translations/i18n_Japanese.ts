@@ -1585,6 +1585,30 @@
         <source>Sort by &amp;Text</source>
         <translation>テキストでソート(&amp;T)</translation>
     </message>
+    <message>
+        <source>Ctrl+K, M</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Sort by for&amp;mat</source>
+        <translation>フォーマットでソート(&amp;M)</translation>
+    </message>
+    <message>
+        <source>Sort by &amp;vcodec</source>
+        <translation>映像コーデックでソート(&amp;V)</translation>
+    </message>
+    <message>
+        <source>Ctrl+K, V</source>
+        <translation></translation>
+    </message>
+    <message>
+        <source>Sort by acodec(&amp;U)</source>
+        <translation>音声コーデックでソート(&amp;U)</translation>
+    </message>
+    <message>
+        <source>Ctrl+K, U</source>
+        <translation></translation>
+    </message>
 </context>
 <context>
     <name>Option</name>
@@ -2150,6 +2174,18 @@
     <message>
         <source>Another instance which uses the same database is already running.</source>
         <translation>同一データベースを利用する他のインスタンスがすでに起動しています。</translation>
+    </message>
+    <message>
+        <source>Format</source>
+        <translation>フォーマット</translation>
+    </message>
+    <message>
+        <source>Video codec</source>
+        <translation>映像コーディック</translation>
+    </message>
+    <message>
+        <source>Audio codec</source>
+        <translation>音声コーディック</translation>
     </message>
 </context>
 <context>

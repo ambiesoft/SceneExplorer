@@ -1157,7 +1157,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Sort by format</string>
+    <string>Sort by for&amp;mat</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+K, M</string>
@@ -1168,10 +1168,10 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Sort by vcodec</string>
+    <string>Sort by &amp;vcodec</string>
    </property>
    <property name="shortcut">
-    <string>Shift+K, V</string>
+    <string>Ctrl+K, V</string>
    </property>
   </action>
   <action name="actionSort_by_acodec">
@@ -1179,10 +1179,10 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Sort by acodec</string>
+    <string>Sort by acodec(&amp;U)</string>
    </property>
    <property name="shortcut">
-    <string>Shift+K, U</string>
+    <string>Ctrl+K, U</string>
    </property>
   </action>
  </widget>
