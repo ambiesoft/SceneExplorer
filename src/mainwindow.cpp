@@ -2548,6 +2548,10 @@ void MainWindow::OnTxtLogCopyAll()
 void MainWindow::OnTxtLogWrap(bool b)
 {
     ui->txtLog->setLineWrapMode(b ? QPlainTextEdit::WidgetWidth : QPlainTextEdit::NoWrap);
+    if(ui->txtLog->lineWrapMode()==QPlainTextEdit::NoWrap)
+        ui->txtLog->setHorizontalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAlwaysOn);
+    if(ui->txtLog->lineWrapMode()==QPlainTextEdit::WidgetWidth)
+        ui->txtLog->setHorizontalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAsNeeded);
 }
 void MainWindow::OnTxtLogClear()
 {

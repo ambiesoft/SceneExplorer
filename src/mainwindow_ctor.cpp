@@ -291,7 +291,8 @@ MainWindow::MainWindow(QWidget *parent,
     vVal = settings.value(KEY_TXTLOG_WRAP);
     if(vVal.isValid() && vVal.toBool())
         ui->txtLog->setLineWrapMode(QPlainTextEdit::WidgetWidth);
-
+    if(ui->txtLog->lineWrapMode()==QPlainTextEdit::NoWrap)
+        ui->txtLog->setHorizontalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAlwaysOn);
 
     optionThreadcountGetDir_ = settings_.valueInt(KEY_MAX_GETDIR_THREADCOUNT, optionThreadcountGetDir_);
     optionThreadcountThumbnail_ = settings_.valueInt(KEY_MAX_THUMBNAIL_THREADCOUNT, optionThreadcountThumbnail_);
