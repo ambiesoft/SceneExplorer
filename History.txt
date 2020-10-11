@@ -1,3 +1,5 @@
+tooltip on directories
+
 2020/09/30　1.22.5
 Fixed: Auto-scroll of 'output log' window does not work when it's set as 'NoWrap'.
 
