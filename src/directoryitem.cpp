@@ -46,6 +46,7 @@ DirectoryItem::DirectoryItem(const qint64& dirid,
         setFlags(flags() | Qt::ItemIsUserCheckable);
         setChecked(false);
         setIcon(fiProvider_.icon(QFileIconProvider::Folder));
+        this->setToolTip(text);
     }
     else if(itemType==DirectoryItem::DI_MISSING_MY)
     {
