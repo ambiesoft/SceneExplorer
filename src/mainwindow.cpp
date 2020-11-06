@@ -2141,7 +2141,8 @@ bool MainWindow::event(QEvent *e)
 {
     if (e->type() == QEvent::WindowActivate)
     {
-        RefreshDirectoryTree();
+        // TODO: Network drive takes some time to find its existence
+        // RefreshDirectoryTree();
     }
     return ParentClass::event(e);
 }

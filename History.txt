@@ -1,4 +1,6 @@
+2020/11/07　1.22.6
 tooltip on directories
+stop refreshing of directory tree at the time the main window activates
 
 2020/09/30　1.22.5
 Fixed: Auto-scroll of 'output log' window does not work when it's set as 'NoWrap'.

@@ -67,6 +67,8 @@ void MainWindow::showEvent( QShowEvent* event )
         QApplication::processEvents();
         ui->tableView->scrollTo(mi);
     }
+
+    RefreshDirectoryTree();
 }
 
 void MainWindow::OnTableViewScrollChanged(int pos)
