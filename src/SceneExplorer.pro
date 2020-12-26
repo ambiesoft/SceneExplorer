@@ -6,10 +6,12 @@
 
 QT += core gui
 QT += sql
+message(QT_MAJOR_VERSION=$$QT_MAJOR_VERSION)
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 win32 {
     # for QtWin::fromHICON
-    QT += winextras
+    lessThan(QT_MAJOR_VERSION, 6): QT += winextras
+    # QT += winextras
 }
 
 TARGET = SceneExplorer

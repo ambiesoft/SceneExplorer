@@ -44,7 +44,7 @@
 #include <QDialog>
 #include <QDir>
 #include <QDirIterator>
-#include <QDirModel>
+// #include <QDirModel>
 #include <QElapsedTimer>
 #include <QException>
 #include <QFile>
@@ -87,7 +87,7 @@
 #include <QPushButton>
 #include <QReadLocker>
 #include <QReadWriteLock>
-#include <QRegExp>
+// #include <QRegExp>
 #include <QRunnable>
 #include <QScopedPointer>
 #include <QScrollBar>

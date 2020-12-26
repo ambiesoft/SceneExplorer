@@ -27,7 +27,7 @@
 #include <QString>
 #include <QMap>
 #include <QDateTime>
-#include <QRegExp>
+// #include <QRegExp>
 #include <QDebug>
 #include <QTimerEvent>
 
