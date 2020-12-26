@@ -1279,6 +1279,7 @@ void MainWindow::itemChangedCommon(bool bForceRead)
 
 
     const bool isSameReq =
+            lastQueriedOnlyMissing_ == bOnlyMissing &&
             lastQueriedOnlyExistant_ == bOnlyExistant &&
             lastQueriedDirs_ == dirs  &&
             //            lastQueriedIsAllTag_==isAllTag &&

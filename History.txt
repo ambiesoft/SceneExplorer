@@ -1,3 +1,7 @@
+2020/12/27　1.22.7
+Fixed: When 'All' is selected after 'Missing' was selected,
+refreshing of items does not occur.
+
 2020/11/07　1.22.6
 tooltip on directories
 stop refreshing of directory tree at the time the main window activates
