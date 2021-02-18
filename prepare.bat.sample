@@ -1,7 +1,9 @@
 set PYTHONEXE=C:\local\python3\python.exe
 set QTROOT=C:\local\Qt
-set QTVERSION=5.11.1
-set QTVERSIONTOOLS=msvc2015
+set QTVERSION=5.15.2
+
+:: See under %QTROOT%\%QTVERSION%
+set QTVERSIONTOOLS=msvc2019
 
 :: Uncomment if Visual Studio 2015
 :: call "C:\Program Files\Microsoft Visual Studio 14.0\Common7\Tools\VsDevCmd.bat"
@@ -11,10 +13,13 @@ set QTVERSIONTOOLS=msvc2015
 ::call "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
 ::set MAKE=nmake
 
+:: Uncomment if Visual Studio 2019
+call "C:\Program Files\Microsoft Visual Studio\2019\Community\Common7\Tools\VsDevCmd.bat"
+set MAKE=nmake
+
 :: Uncomment if MingW
-:: set MAKE=nmake
-:: set PATH=%QTROOT%\Tools\mingw730_32\bin;%PATH%
-:: set MAKE=mingw32-make.exe
+::set PATH=%QTROOT%\Tools\mingw810_32\bin;%PATH%
+::set MAKE=mingw32-make.exe
 
 
 :: Common setting

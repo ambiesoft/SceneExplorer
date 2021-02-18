@@ -36,3 +36,5 @@ qtSamples/src/build-*
 
 src/stable.h.cpp
 
+SceneExplorer_resource.rc
+ui_directoryentrydialog.h
