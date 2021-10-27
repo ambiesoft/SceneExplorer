@@ -24,13 +24,12 @@
 	],
 	
     "ShouldBeFiles": [
-		"Ambiesoft.AmbLibcpp.dll",
-		"Ambiesoft.Profile.pdb",
-		"Ambiesoft.AmbLibcpp.pdb",
         "Ambiesoft.FolderConfig.dll",
+        "Ambiesoft.FolderConfig.pdb",
         "Ambiesoft.FolderConfigHelper.dll",
         "Ambiesoft.FolderConfigHelper.pdb",
         "Ambiesoft.Profile.dll",
+		"Ambiesoft.Profile.pdb",        
         "D3Dcompiler_47.dll",
         "FolderConfig-History.txt",
         "FolderConfig-License.txt",
