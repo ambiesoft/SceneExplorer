@@ -1305,6 +1305,7 @@ bool Sql::getEntryFromSalient(const QString& salient,
 bool Sql::hasEntry(const QString& dir,
                    const QString& file,
                    const qint64& size,
+                   const qint64& ctime,
                    const qint64& wtime,
                    const QString& sa,
                    bool* isUptodate,
@@ -1312,13 +1313,13 @@ bool Sql::hasEntry(const QString& dir,
 {
 #ifdef AMBIESOFT_FILENAME_CASESENSITIVE
     MYQMODIFIER QSqlQuery query = myPrepare("select id,name,recordversion from FileInfo where "
-                                            "directory=? and name=? and size=? and wtime=? and salient=?");
+                                            "directory=? and name=? and size=? and ctime=? and wtime=? and salient=?");
     int i=0;
     query.bindValue(i++, dir);
     query.bindValue(i++, file);
 #else
     MYQMODIFIER QSqlQuery query = myPrepare("select id,name,recordversion from FileInfo where "
-                                            "lower(directory)=? and lower(name)=? and size=? and wtime=? and salient=?");
+                                            "lower(directory)=? and lower(name)=? and size=? and ctime=? and wtime=? and salient=?");
     // Basically Windows' ntfs is case-insensitive.
     // But it can be configured to be case-sensitive.
     // This app keep asumming case-insensitve for windows becase when it gets
@@ -1337,6 +1338,7 @@ bool Sql::hasEntry(const QString& dir,
     query.bindValue(i++, ToAsciiLower(file));
 #endif
     query.bindValue(i++, size);
+    query.bindValue(i++, ctime);
     query.bindValue(i++, wtime);
     query.bindValue(i++, sa);
 

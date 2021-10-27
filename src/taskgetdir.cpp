@@ -72,7 +72,9 @@ void TaskGetDir::runStuff(const QString& dir)
 
     {
         QStringList files;
-        QList<qint64> sizes,wtimes;
+        QList<qint64> sizes;
+        QList<qint64> ctimes;
+        QList<qint64> wtimes;
         QStringList salients;
         QDirIterator itFile(dir, QDir::NoDotAndDotDot|QDir::Files); // ,QDirIterator::Subdirectories);
         while(itFile.hasNext())
@@ -85,6 +87,7 @@ void TaskGetDir::runStuff(const QString& dir)
             {
                 files.append(itFile.fileName());
                 sizes.append(itFile.fileInfo().size());
+                ctimes.append(itFile.fileInfo().birthTime().toSecsSinceEpoch());
                 wtimes.append(itFile.fileInfo().lastModified().toSecsSinceEpoch());
                 salients.append(createSalient(itFile.filePath(), QFile(itFile.filePath()).size()));
             }
@@ -93,6 +96,7 @@ void TaskGetDir::runStuff(const QString& dir)
                          QDir(dir).absolutePath(),
                          files,
                          sizes,
+                         ctimes,
                          wtimes,
                          salients);
     }

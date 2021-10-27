@@ -55,6 +55,8 @@ Q_SIGNALS:
                      const QStringList& files,
 
                      const QList<qint64> sizes,
+
+                     const QList<qint64> ctimes,
                      const QList<qint64> wtimes,
 
                      const QStringList& salients);

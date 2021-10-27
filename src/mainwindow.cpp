@@ -522,6 +522,7 @@ void MainWindow::afterGetDir(int loopId, int id,
                              const QStringList& filesIn,
 
                              const QList<qint64> sizes,
+                             const QList<qint64> ctimes,
                              const QList<qint64> wtimes,
 
                              const QStringList& salients
@@ -548,6 +549,7 @@ void MainWindow::afterGetDir(int loopId, int id,
         const QString& file = filesIn[ifs];
         const QString& sa = salients[ifs];
         const qint64 size = sizes[ifs];
+        const qint64 ctime = ctimes[ifs];
         const qint64 wtime = wtimes[ifs];
 
         QFileInfo fi(pathCombine(dir, file));
@@ -556,7 +558,7 @@ void MainWindow::afterGetDir(int loopId, int id,
 
         bool isUptodate = false;
         qint64 recordid = 0;
-        if(gpSQL->hasEntry(dir,file,size,wtime,sa,&isUptodate,&recordid))
+        if(gpSQL->hasEntry(dir,file,size,ctime,wtime,sa,&isUptodate,&recordid))
         {
             Q_ASSERT(recordid != 0);
             if(!isUptodate)
@@ -592,7 +594,10 @@ void MainWindow::afterGetDir(int loopId, int id,
             const QString& dbFile = pathCombine(dirsDB[i], filesDB[i]);
             // same salient in db
             QFileInfo fidb(dbFile);
-            if(!fidb.exists())
+            // if dbfile not exists but the drive root exists, assume file is moved.
+            // if the drive does not exist, we assume it is temporarily removed and
+            // not rename from it.
+            if(!fidb.exists() && isRootDriveExists(dbFile))
             {
                 // file info in db does not exist on disk
                 if(fi.size()==sizesDB[i])
