@@ -679,6 +679,10 @@ void MainWindow::on_actionSort_by_file_size_triggered()
 {
     onSortCommon(SORT_SIZE);
 }
+void MainWindow::on_actionSort_by_ctime_triggered()
+{
+    onSortCommon(SORT_CTIME);
+}
 void MainWindow::on_actionSort_by_wtime_triggered()
 {
     onSortCommon(SORT_WTIME);

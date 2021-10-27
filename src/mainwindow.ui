@@ -196,6 +196,7 @@
     <addaction name="actionSort_by_file_name"/>
     <addaction name="actionSort_by_full_name"/>
     <addaction name="actionSort_by_file_size"/>
+    <addaction name="actionSort_by_ctime"/>
     <addaction name="actionSort_by_wtime"/>
     <addaction name="actionSort_by_resolution"/>
     <addaction name="actionSort_by_duration"/>
@@ -1186,6 +1187,17 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+K, U</string>
+   </property>
+  </action>
+  <action name="actionSort_by_ctime">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Sort by ctime</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+K, C</string>
    </property>
   </action>
  </widget>

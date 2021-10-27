@@ -853,6 +853,9 @@ bool Sql::GetAllSqlString(
     case SORT_SIZE:
         sortby << "size";
         break;
+    case SORT_CTIME:
+        sortby << "ctime";
+        break;
     case SORT_WTIME:
         sortby << "wtime";
         break;

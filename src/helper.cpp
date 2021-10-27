@@ -200,6 +200,7 @@ QString GetSortColumnName(SORTCOLUMNMY sc)
     case SORT_FILENAME:return QObject::tr("Filename");
     case SORT_FULLNAME:return QObject::tr("Fullname");
     case SORT_SIZE:return QObject::tr("Size");
+    case SORT_CTIME:return QObject::tr("Ctime");
     case SORT_WTIME:return QObject::tr("Wtime");
     case SORT_RESOLUTION: return QObject::tr("Resolution");
     case SORT_DURATION:return QObject::tr("Duration");

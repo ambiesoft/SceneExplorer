@@ -79,6 +79,7 @@ MainWindow::MainWindow(QWidget *parent,
     sortManager_.setAction(SORT_FILENAME,ui->actionSort_by_file_name);
     sortManager_.setAction(SORT_FULLNAME,ui->actionSort_by_full_name);
     sortManager_.setAction(SORT_SIZE,ui->actionSort_by_file_size);
+    sortManager_.setAction(SORT_CTIME,ui->actionSort_by_ctime);
     sortManager_.setAction(SORT_WTIME,ui->actionSort_by_wtime);
     sortManager_.setAction(SORT_RESOLUTION,ui->actionSort_by_resolution);
     sortManager_.setAction(SORT_DURATION,ui->actionSort_by_duration);

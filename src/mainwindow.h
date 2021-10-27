@@ -629,6 +629,8 @@ private Q_SLOTS:
 
     void on_actionSort_by_acodec_triggered();
 
+    void on_actionSort_by_ctime_triggered();
+
 private:
     void OnCopyTable();
     void OnCopyDirectory();
