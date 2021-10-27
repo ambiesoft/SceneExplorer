@@ -1609,6 +1609,14 @@
         <source>Ctrl+K, U</source>
         <translation></translation>
     </message>
+    <message>
+        <source>Ctrl+K, C</source>
+        <translation>Ctrl+K, C</translation>
+    </message>
+    <message>
+        <source>Sort by ctime(&amp;E)</source>
+        <translation>作成時刻でソート(&amp;E)</translation>
+    </message>
 </context>
 <context>
     <name>Option</name>
@@ -2186,6 +2194,10 @@
     <message>
         <source>Audio codec</source>
         <translation>音声コーディック</translation>
+    </message>
+    <message>
+        <source>Ctime</source>
+        <translation>作成時刻</translation>
     </message>
 </context>
 <context>

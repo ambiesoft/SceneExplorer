@@ -1194,7 +1194,7 @@
     <bool>true</bool>
    </property>
    <property name="text">
-    <string>Sort by ctime</string>
+    <string>Sort by ctime(&amp;E)</string>
    </property>
    <property name="shortcut">
     <string>Ctrl+K, C</string>
