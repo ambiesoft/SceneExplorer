@@ -84,18 +84,12 @@ void MainWindow::on_action_SelectAll_triggered()
     }
 }
 
-void MainWindow::on_action_SelectDeepestDirectory_triggered()
+DirectoryItem* MainWindow::getDeepestDirectory(const QString& videoFile) const
 {
-    QString videoFile = getSelectedVideo();
     if(videoFile.isEmpty())
-    {
-        Alert(this, TR_NOVIDEO_SELECTED());
-        return;
-    }
+        return nullptr;
     QString videoDir = QFileInfo(videoFile).absolutePath();
-
-    // Find deepest directory
-    DirectoryItem* foundItem = nullptr;
+    DirectoryItem* foundItem=nullptr;
     for (int i = 0; i < ui->directoryWidget->count(); ++i)
     {
         DirectoryItem* item = static_cast<DirectoryItem*>(ui->directoryWidget->item(i));
@@ -117,6 +111,26 @@ void MainWindow::on_action_SelectDeepestDirectory_triggered()
             }
         }
     }
+    return foundItem;
+}
+bool MainWindow::isDeepestDirectorySelected(const QString& videoFile) const
+{
+    DirectoryItem* foundItem = getDeepestDirectory(videoFile);
+    if(!foundItem)
+        return false;
+    return foundItem->isSelected();
+}
+void MainWindow::on_action_SelectDeepestDirectory_triggered()
+{
+    QString videoFile = getSelectedVideo();
+    if(videoFile.isEmpty())
+    {
+        Alert(this, TR_NOVIDEO_SELECTED());
+        return;
+    }
+
+    // Find deepest directory
+    DirectoryItem* foundItem = getDeepestDirectory(videoFile);
 
     if(!foundItem)
     {
@@ -126,6 +140,6 @@ void MainWindow::on_action_SelectDeepestDirectory_triggered()
 
     Q_ASSERT(!directoryChanging_);
     Ambiesoft::BlockedBool bt(&directoryChanging_);
-    foundItem->setSelected(true);
+    foundItem->setSelected(foundItem->isSelected() ? false : true);
 }
 

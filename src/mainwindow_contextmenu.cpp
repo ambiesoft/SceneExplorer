@@ -103,6 +103,7 @@ void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
 
         contextMenu.addSeparator();
         // select deepest directory
+        ui->action_SelectDeepestDirectory->setChecked(isDeepestDirectorySelected(getSelectedVideo()));
         contextMenu.addAction(ui->action_SelectDeepestDirectory);
         contextMenu.addAction(ui->action_SelectTags);
 

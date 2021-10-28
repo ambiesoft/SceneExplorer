@@ -1147,6 +1147,9 @@
    </property>
   </action>
   <action name="action_SelectDeepestDirectory">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
    <property name="text">
     <string>Select Deepest Director&amp;y</string>
    </property>

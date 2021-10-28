@@ -125,6 +125,7 @@ void MainWindow::onMenuEdit_AboutToShow()
     ui->action_SelectAll->setEnabled(bSelectAllEnable);
 
     // select deepest directory
+    ui->action_SelectDeepestDirectory->setChecked(isDeepestDirectorySelected(getSelectedVideo()));
     ui->action_SelectDeepestDirectory->setEnabled(bTableSelected);
 
     // select tags

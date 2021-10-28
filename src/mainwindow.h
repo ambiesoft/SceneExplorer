@@ -619,6 +619,8 @@ private Q_SLOTS:
     void on_actionSort_by_fps_triggered();
 
 
+    DirectoryItem* getDeepestDirectory(const QString& videoFile) const;
+    bool isDeepestDirectorySelected(const QString& videoFile) const;
     void on_action_SelectDeepestDirectory_triggered();
 
     void on_action_SelectTags_triggered();
