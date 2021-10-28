@@ -22,6 +22,7 @@
 #include "helper.h"
 #include "consts.h"
 #include "sql.h"
+#include "gitrev.h"
 
 #include "aboutdialog.h"
 #include "ui_aboutdialog.h"
@@ -160,6 +161,12 @@ AboutDialog::AboutDialog(QWidget *parent) :
 
 
     ui->tbDatabase->setText(txtDB);
+
+
+    QString txtGitrev;
+    // txtGitrev += "Gitrev:\n";
+    txtGitrev += GITREV::GetHashMessage().c_str();
+    ui->tbGitrev->setText(txtGitrev);
 
 
     QString qtText;

@@ -38,3 +38,5 @@ src/stable.h.cpp
 
 SceneExplorer_resource.rc
 ui_directoryentrydialog.h
+
+src/gitrev.h

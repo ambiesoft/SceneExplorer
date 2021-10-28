@@ -138,8 +138,19 @@ void MainWindow::on_action_SelectDeepestDirectory_triggered()
         return;
     }
 
+    const bool bNewSelect = foundItem->isSelected() ? false : true;
+    if(!bNewSelect)
+    {
+        // will deselect
+        if(ui->directoryWidget->selectedOrCheckedItems().count() <= 1)
+        {
+            // but only this
+            // should not deselect all
+            return;
+        }
+    }
     Q_ASSERT(!directoryChanging_);
     Ambiesoft::BlockedBool bt(&directoryChanging_);
-    foundItem->setSelected(foundItem->isSelected() ? false : true);
+    foundItem->setSelected(bNewSelect);
 }
 

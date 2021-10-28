@@ -87,6 +87,7 @@ SOURCES += \
 HEADERS += \
     ../../lsMisc/stdQt/ambapp.h \
     debugflag.h \
+    gitrev.h \
     mainwindow.h \
     tablemodel.h \
     consts.h \

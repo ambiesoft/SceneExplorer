@@ -3,6 +3,17 @@
 	"builtexes": [
 		"release/SceneExplorer.exe"
 	],
+    "gitrev": {
+    	"gits": ["C:/cygwin/bin/git.exe", "C:/local/msys2/usr/bin/git.exe"],
+    	"gitdirs": [
+	    	".", 
+	    	"../distSolution",
+	    	"../lsMisc",
+	    	"../profile"
+	    ],
+    	"outheader": "src/gitrev.h",
+    	"char": "char"
+    },	
 	"copyplugins": [
 		"sqldrivers/qsqlite.dll",
 		"imageformats/qjpeg.dll"

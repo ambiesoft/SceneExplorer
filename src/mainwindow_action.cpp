@@ -569,21 +569,6 @@ void MainWindow::on_action_About_triggered()
 {
     AboutDialog dlg(this);
     dlg.exec();
-
-    //    QString title = APPNAME_DISPLAY;
-    //    QString text = APPNAME;
-    //    text.append(" ");
-    //    text.append("ver ");
-    //    text.append(VERSION);
-    //    text.append("\n");
-    //    text.append("\n");
-    //    text.append("copyright 2018 ");
-    //    text.append(ORGANIZATION);
-    //    QMessageBox msgbox(this);
-    //    msgbox.setIcon(QMessageBox::Information);
-    //    msgbox.setText(text);
-    //    msgbox.setWindowTitle(title);
-    //    msgbox.exec();
 }
 
 void MainWindow::SortManager::setAction(SORTCOLUMNMY sc,
