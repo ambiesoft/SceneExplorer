@@ -22,6 +22,8 @@
 #include "helper.h"
 #include "consts.h"
 #include "sql.h"
+
+// run 'prepareGitrev.bat'
 #include "gitrev.h"
 
 #include "aboutdialog.h"
