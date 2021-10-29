@@ -27,6 +27,7 @@
 class OptionDialog:public QDialog
 {
     Q_OBJECT
+    using ParentClass = QDialog;
 
 private:
     Ui::Option ui;
@@ -42,6 +43,8 @@ public:
     int maxgd_;
     int maxff_;
     int thumbCount_;
+    int thumbWidth_, originalThumbWidth_;
+    int thumbHeight_, originalThumbHeight_;
     QString thumbFormat_;
     QString scrollMode_;
 
@@ -53,6 +56,8 @@ public:
     bool openlastdoc_;
     QString ffprobe_, ffmpeg_;
     bool showtagcount_;
+
+    virtual void accept() override;
 private:
     void constructTitleTemplateMenu(QMenu& contextMenu,
                                     QList< QSharedPointer<QAction> >& acts,

@@ -68,6 +68,11 @@ void OptionDialog::showEvent(QShowEvent *ev)
     else
         ui.cmbThumbCount->setCurrentIndex(0);
 
+    originalThumbWidth_ = thumbWidth_;
+    originalThumbHeight_ = thumbHeight_;
+
+    ui.spinBoxThumbWidth->setValue(thumbWidth_);
+    ui.spinBoxThumbHeight->setValue(thumbHeight_);
 
     Q_ASSERT(ui.cmbThumbImageFormat->count()==2);
     if(thumbFormat_=="jpg")
@@ -135,10 +140,15 @@ void OptionDialog::showEvent(QShowEvent *ev)
 }
 void OptionDialog::on_buttonBox_accepted()
 {
+}
+void OptionDialog::accept()
+{
     maxgd_ = ui.spinBoxGetDir->value();
     maxff_ = ui.spinBoxThumb->value();
 
     thumbCount_ = ui.cmbThumbCount->currentIndex()==0 ? 3 : 5;
+    thumbWidth_ = ui.spinBoxThumbWidth->value();
+    thumbHeight_ = ui.spinBoxThumbHeight->value();
     thumbFormat_ = ui.cmbThumbImageFormat->lineEdit()->text();
     scrollMode_ = ui.cmbScrollMode->currentIndex()==0 ? "item":"pixel";
 
@@ -168,8 +178,14 @@ void OptionDialog::on_buttonBox_accepted()
     ffmpeg_ = ui.lineffmpeg->text();
 
     showtagcount_ = ui.chkShowTagCount->isChecked();
-}
 
+    if(!(originalThumbWidth_ == thumbWidth_ && originalThumbHeight_ == thumbHeight_))
+    {
+        if(!YesNo(this, tr("By changing width or height of thumbnail, all thumbnails needs be recreated. Are you sure to continue?")))
+            return;
+    }
+    ParentClass::accept();
+}
 void OptionDialog::on_tbDBDir_clicked()
 {
     QFileDialog dlg(this);

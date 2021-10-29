@@ -48,6 +48,8 @@ static void showFatal(const QString& error)
     Alert(nullptr, error);
 }
 
+
+
 #define SQC_BASE(Q,siki,RET) do { if(!( Q.siki )) { showFatal(lastError_=(Q).lastError().text() + "\n" + (Q).lastQuery()); Q_ASSERT(false); RET;}} while(false)
 #define SQC(Q,siki) SQC_BASE(Q,siki,return false)
 #define SQCN(Q,siki) SQC_BASE(Q,siki,return)
@@ -174,6 +176,7 @@ Sql::Sql(QObject*) : db_(QSqlDatabase::addDatabase("QSQLITE"))
     query.exec("CREATE INDEX idx_name ON FileInfo(name)");
     // make "INSERT OR REPLACE" to work
     query.exec("CREATE UNIQUE INDEX idx_directoryname ON FileInfo(directory,name)");
+    qDebug() << query.lastError().text() << __FUNCTION__;
     query.exec("CREATE INDEX idx_salient ON FileInfo(salient)");
     // query.exec("CREATE INDEX idx_lastaccess ON FileInfo(lastaccess)");
     //    query.exec("ALTER TABLE FileInfo Add opencount_tmp INT");
@@ -245,13 +248,25 @@ Sql::Sql(QObject*) : db_(QSqlDatabase::addDatabase("QSQLITE"))
 }
 Sql::~Sql()
 {
-    delete pQDeleteFromDirectoryName_;
-    delete pQInsert_;
-    delete pQGetInfo_;
+    clearStatements();
 
     db_.close();
 }
 
+void Sql::clearStatements()
+{
+    delete pQDeleteFromDirectoryName_;
+    pQDeleteFromDirectoryName_=nullptr;
+
+    delete pQInsert_;
+    pQInsert_ = nullptr;
+
+    delete pQGetInfo_;
+    pQGetInfo_ = nullptr;
+
+    delete pQModifyFromFFmpeg_;
+    pQModifyFromFFmpeg_ = nullptr;
+}
 
 
 
@@ -273,7 +288,7 @@ int Sql::GetMovieFileInfo(const QString& movieFile,
     if(size <= 0)
         return FILESIZE_UNDERZERO;
 
-    directory = fi.absolutePath();
+    directory = normalizeDir(fi.absolutePath());
     name = fi.fileName();
 
     ctime = fi.birthTime().toSecsSinceEpoch();
@@ -430,11 +445,83 @@ QSqlQuery* Sql::getInsertQuery(TableItemDataPointer tid)
 
     return pQInsert_;
 }
-qint64 Sql::AppendData(TableItemDataPointer tid)
+QSqlQuery* Sql::getModifyFromFFmpegQuery(TableItemDataPointer tid, const qint64& id)
+{
+    Q_ASSERT(id!=0);
+    if(id==0)
+    {
+        showFatal("id should not 0");
+        return nullptr;
+    }
+    static QStringList allcolumns;
+    if(!pQModifyFromFFmpeg_)
+    {
+        pQModifyFromFFmpeg_=new QSqlQuery();
+        QString preparing;
+        allcolumns = getAllColumnNames();
+
+        VERIFY(allcolumns.removeOne("id"));
+        VERIFY(allcolumns.removeOne("url"));
+        VERIFY(allcolumns.removeOne("memo"));
+
+        preparing = "UPDATE FileInfo SET ";
+
+        for(int i=0 ; i < allcolumns.count(); ++i)
+        {
+            preparing += allcolumns[i];
+            if( (i+1) != allcolumns.count())
+                preparing += "=?, ";
+            else
+                preparing += "=? ";
+        }
+        preparing += "WHERE id=?";
+        qDebug() << preparing << __FUNCTION__;
+
+        if(!pQModifyFromFFmpeg_->prepare(preparing))
+        {
+            qDebug() << pQModifyFromFFmpeg_->lastError() << preparing << __FUNCTION__;
+            Q_ASSERT(false);
+            return nullptr;
+        }
+    }
+
+    int bindIndex=0;
+
+    QMap<QString,QVariant> allmap = tid->getColumnValues();
+    allmap["recordversion"] = DBRECORD_VERSION;
+
+#ifdef QT_DEBUG
+    for(const QString& s:allcolumns)
+    {
+        Q_ASSERT(allmap.contains(s));
+    }
+#endif
+
+    for (const QString& c : allcolumns)
+    {
+        pQModifyFromFFmpeg_->bindValue(bindIndex++, allmap[c]);
+    }
+    pQModifyFromFFmpeg_->bindValue(bindIndex++, id);
+    return pQModifyFromFFmpeg_;
+}
+
+qint64 Sql::InsertDataFromFFmpeg(TableItemDataPointer tid)
 {
     Q_ASSERT(tid->getThumbnailFiles().count()==5);
     if(tid->getThumbnailFiles().isEmpty())
         return THUMBFILE_NOT_FOUND;
+
+    qint64 id=0;
+    if(hasEntry(tid->getMovieDirectory(), tid->getMovieFileName(), &id))
+    {
+        Q_ASSERT(id!=0);
+        QSqlQuery* pQModify = getModifyFromFFmpegQuery(tid,id);
+        if(pQModify->exec())
+        {
+            tid->setID(id);
+            return 0;
+        }
+    }
 
     QSqlQuery* pQInsert = getInsertQuery(tid);
 
@@ -444,6 +531,7 @@ qint64 Sql::AppendData(TableItemDataPointer tid)
         return SQL_EXEC_FAILED;
     }
     tid->setID(pQInsert->lastInsertId().toLongLong());
+
     return 0;
 }
 QSqlQuery* Sql::getGetInfoQuery()
@@ -519,7 +607,7 @@ int Sql::filterWithEntry(const QString& movieDir,
     if(!query.prepare("select size,name,salient from FileInfo where "
                       "directory=?"))
     {
-        qDebug() << pQGetInfo_->lastError() << __FUNCTION__;
+        qDebug() << query.lastError() << __FUNCTION__;
         Q_ASSERT(false);
         return SQL_PREPARE_FAILED;
     }
@@ -648,7 +736,8 @@ QStringList GetAllThumbFilesFromThumbID(const QString& thumbID)
 //    }
 //    return ret;
 //}
-int Sql::hasThumb(const QString& movieFile)
+int Sql::hasThumb(const QString& movieFile,
+                  const int thumbWidth, const int thumbHeight)
 {
     bool exist;
     qint64 size;
@@ -689,17 +778,11 @@ int Sql::hasThumb(const QString& movieFile)
         QStringList thumbs;
         for(int i=1 ; i <= 5 ; ++i)
         {
-            QString t=thumbid;
-            t+="-";
-            t+=QString::number(i);
-            t+=".";
-            Q_ASSERT(isLegalFileExt(thumbext));
-            t+=thumbext;
+            QString t = pathCombine("thumbs", createThumbFileName(i, thumbid, thumbWidth, thumbHeight, thumbext));
 
-            t = pathCombine("thumbs", t);
             if(!QFile(t).exists())
             {
-                RemoveEntryFromThumbID(thumbid);
+                // RemoveEntryFromThumbID(thumbid);
                 return THUMBFILE_NOT_FOUND;
             }
         }
@@ -749,24 +832,24 @@ bool Sql::DeleteEntryThumbFiles(const QString& dir,
     return true;
 }
 
-int Sql::RemoveEntryFromThumbID(const QString& thumbid)
-{
-    if(!isUUID(thumbid))
-        return THUMBID_IS_NOT_UUID;
+//int Sql::RemoveEntryFromThumbID(const QString& thumbid)
+//{
+//    if(!isUUID(thumbid))
+//        return THUMBID_IS_NOT_UUID;
 
-    MYQMODIFIER QSqlQuery query("delete from FileInfo where "
-                                "thumbid=?",
-                                db_);
+//    MYQMODIFIER QSqlQuery query("delete from FileInfo where "
+//                                "thumbid=?",
+//                                db_);
 
-    int i = 0;
-    query.bindValue(i++, thumbid);
-    if(!query.exec())
-    {
-        qDebug() << query.lastError() << __FUNCTION__;
-        return SQL_EXEC_FAILED;
-    }
-    return 0;
-}
+//    int i = 0;
+//    query.bindValue(i++, thumbid);
+//    if(!query.exec())
+//    {
+//        qDebug() << query.lastError() << __FUNCTION__;
+//        return SQL_EXEC_FAILED;
+//    }
+//    return 0;
+//}
 QString Sql::getErrorStrig(int thumbRet)
 {
     switch(thumbRet)
@@ -1047,6 +1130,7 @@ qlonglong Sql::GetAllCount(const QStringList& dirs)
     return 0;
 }
 bool Sql::GetAll(QList<TableItemDataPointer>& v,
+                 int thumbWidth, int thumbHeight,
                  const QStringList& dirs,
                  const QString& find,
                  const bool bOnlyMissing,
@@ -1105,12 +1189,7 @@ bool Sql::GetAll(QList<TableItemDataPointer>& v,
         QStringList thumbs;
         for(int i=1 ; i <= 5 ; ++i)
         {
-            QString t=thumbid;
-            t+="-";
-            t+=QString::number(i);
-            t+=".";
-            t+=thumbext;
-            thumbs.append(t);
+            thumbs.append(createThumbFileName(i, thumbid, thumbWidth, thumbHeight,thumbext));
         }
 
         qint64 size = query.value("size").toLongLong();
@@ -1143,7 +1222,6 @@ bool Sql::GetAll(QList<TableItemDataPointer>& v,
                                                          ctime,
                                                          wtime,
 
-                                                         0,0,
                                                          duration,
                                                          format,
                                                          bitrate,
@@ -1226,8 +1304,7 @@ bool Sql::RenameEntry(const QString& oldDirc,
         if(IsEntryExists(newDir,newFile))
         {
             // new entry already exists in db
-            // remove old entry
-            return RemoveEntry(oldDir, oldFile);
+            return false; //RemoveEntry(oldDir, oldFile);
         }
 
         MYQMODIFIER QSqlQuery query = myPrepare("update FileInfo "
@@ -1365,6 +1442,47 @@ bool Sql::hasEntry(const QString& dir,
         return bRet;
     }
     *isUptodate = vRecordVersion.toInt()==DBRECORD_VERSION;
+    return bRet;
+}
+
+bool Sql::hasEntry(const QString& dir,
+                   const QString& file,
+                   qint64* id)
+{
+#ifdef AMBIESOFT_FILENAME_CASESENSITIVE
+    MYQMODIFIER QSqlQuery query = myPrepare("select id,name,recordversion from FileInfo where "
+                                            "directory=? and name=?");
+    int i=0;
+    query.bindValue(i++, dir);
+    query.bindValue(i++, file);
+#else
+    MYQMODIFIER QSqlQuery query = myPrepare("select id,name,recordversion from FileInfo where "
+                                            "lower(directory)=? and lower(name)=?");
+    // Basically Windows' ntfs is case-insensitive.
+    // But it can be configured to be case-sensitive.
+    // This app keep asumming case-insensitve for windows becase when it gets
+    // back to case-insensitive, something might get troublesome.
+    int i=0;
+    qDebug() << "dir:" << dir << __FUNCTION__;
+    qDebug() << "file:" << file << __FUNCTION__;
+    qDebug() << "dir.toLower:" << dir.toLower() << __FUNCTION__;
+    qDebug() << "file.toLower:" << file.toLower() << __FUNCTION__;
+    qDebug() << "GetAsciiLower(dir):" << ToAsciiLower(dir) << __FUNCTION__;
+    qDebug() << "GetAsciiLower(file):" << ToAsciiLower(file) << __FUNCTION__;
+
+    query.bindValue(i++, ToAsciiLower(dir));
+    query.bindValue(i++, ToAsciiLower(file));
+#endif
+
+    SQC(query,exec());
+    const bool bRet = query.next();
+    if(!bRet)
+        return bRet;
+    if(id)
+    {
+        *id = query.value("id").toLongLong();
+    }
+
     return bRet;
 }
 
@@ -1531,6 +1649,7 @@ bool Sql::AttachDocument(const QString& docFile)
 }
 bool Sql::DetachDocument()
 {
+    clearStatements();
     QSqlQuery q;
 
     Q_ASSERT(!docdb_.isEmpty() && docdb_ != "nodb");

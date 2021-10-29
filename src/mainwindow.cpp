@@ -569,19 +569,19 @@ void MainWindow::afterGetDir(int loopId, int id,
                 toUpdateFiles.append(QPair<qint64,QString>(recordid,file));
                 continue;
             }
-            if(true) // gpSQL->hasThumb(dir, file))
+            if(Sql::THUMB_EXIST == gpSQL->hasThumb(fi.absoluteFilePath(), GetThumbWidth(), GetThumbHeight()))
             {
                 insertLog(TaskKind_GetDir, id, tr("Already exists. \"%1\"").
                           arg(fi.absoluteFilePath()));
                 continue;
             }
-            else
-            {
-                // thumbs not exist
-                // may be crashed or failed to create
-                // remove entry
-                gpSQL->RemoveEntry(dir, file);
-            }
+//            else
+//            {
+//                // thumbs not exist
+//                // may be crashed or failed to create
+//                // remove entry
+//                gpSQL->RemoveEntry(dir, file);
+//            }
         }
 
         QStringList dirsDB;
@@ -589,6 +589,8 @@ void MainWindow::afterGetDir(int loopId, int id,
         QList<qint64> sizesDB;
         gpSQL->getEntryFromSalient(sa, dirsDB, filesDB, sizesDB);
         bool renamed = false;
+        QStringList renamedKouhoDir;
+        QStringList renamedKouhoName;
         for(int i=0 ; i < filesDB.count(); ++i)
         {
             const QString& dbFile = pathCombine(dirsDB[i], filesDB[i]);
@@ -605,19 +607,24 @@ void MainWindow::afterGetDir(int loopId, int id,
                     // db size is same size with disk
                     // and salient is same ( conditonal queried from db )
                     // we assume file is moved
-                    insertLog(TaskKind_GetDir, id, tr("Rename detected. \"%1\" -> \"%2\"").
-                              arg(dbFile).
-                              arg(pathCombine(dir,file)));
-                    if(gpSQL->RenameEntry(dirsDB[i], filesDB[i], dir, file))
-                    {
-                        if(!tableModel_->RenameEntry(dirsDB[i], filesDB[i], dir, file))
-                        {
-                            needUpdate = true;
-                        }
-                    }
-                    renamed = true;
-                    break;
+                    renamedKouhoDir.insert(0, dirsDB[i]);
+                    renamedKouhoName.insert(0, filesDB[i]);
                 }
+            }
+        }
+        for(int i=0; i < renamedKouhoDir.count(); ++i)
+        {
+            insertLog(TaskKind_GetDir, id, tr("Rename detected. \"%1\" -> \"%2\"").
+                      arg(renamedKouhoName[i]).
+                      arg(pathCombine(dir,file)));
+            if(gpSQL->RenameEntry(renamedKouhoDir[i], renamedKouhoName[i], dir, file))
+            {
+                if(!tableModel_->RenameEntry(renamedKouhoDir[i], renamedKouhoName[i], dir, file))
+                {
+                    needUpdate = true;
+                }
+                renamed = true;
+                break;
             }
         }
 
@@ -695,6 +702,7 @@ void MainWindow::afterFilter2(int loopId,int id,
                                            file,
                                            GetTaskPriority(),
                                            optionThumbFormat_,
+                                           GetThumbWidth(), GetThumbHeight(),
                                            false);
         pTask->setAutoDelete(true);
         //        QObject::connect(pTask, &TaskFFMpeg::sayBorn,
@@ -730,6 +738,7 @@ void MainWindow::afterFilter2(int loopId,int id,
                                            file,
                                            GetTaskPriority(),
                                            optionThumbFormat_,
+                                           GetThumbWidth(), GetThumbHeight(),
                                            true);
         pTask->setRecordID(toUpdateFiles[i].first);
         pTask->setAutoDelete(true);
@@ -1411,6 +1420,7 @@ void MainWindow::GetSqlAllSetTable(const QStringList dirs,
 
     QList<TableItemDataPointer> all;
     gpSQL->GetAll(all,
+                  GetThumbWidth(),GetThumbHeight(),
                   dirs,
                   cmbFind_->currentText(),
                   bOnlyMissing,
@@ -2017,6 +2027,16 @@ QString MainWindow::GetTags(const qint64& id)
     return rets.join(",");
 }
 
+int MainWindow::GetThumbWidth()
+{
+    Q_ASSERT(optionThumbWidth_ != 0);
+    return optionThumbWidth_;
+}
+int MainWindow::GetThumbHeight()
+{
+    Q_ASSERT(optionThumbHeight_ != 0);
+    return optionThumbHeight_;
+}
 void MainWindow::on_listTag_itemChanged(QListWidgetItem *)
 {
     if(limitManager_)

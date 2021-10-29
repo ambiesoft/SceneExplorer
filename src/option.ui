@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>562</width>
-    <height>533</height>
+    <height>541</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -25,7 +25,11 @@
     </widget>
    </item>
    <item row="0" column="1">
-    <widget class="QSpinBox" name="spinBoxGetDir"/>
+    <widget class="QSpinBox" name="spinBoxGetDir">
+     <property name="minimum">
+      <number>1</number>
+     </property>
+    </widget>
    </item>
    <item row="3" column="0">
     <widget class="QLabel" name="labelThumb">
@@ -38,9 +42,13 @@
     </widget>
    </item>
    <item row="3" column="1">
-    <widget class="QSpinBox" name="spinBoxThumb"/>
+    <widget class="QSpinBox" name="spinBoxThumb">
+     <property name="minimum">
+      <number>1</number>
+     </property>
+    </widget>
    </item>
-   <item row="15" column="0">
+   <item row="17" column="0">
     <widget class="QLabel" name="label">
      <property name="text">
       <string>&amp;Image cache:</string>
@@ -50,7 +58,7 @@
      </property>
     </widget>
    </item>
-   <item row="23" column="1">
+   <item row="25" column="1">
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -60,7 +68,7 @@
      </property>
     </widget>
    </item>
-   <item row="21" column="1">
+   <item row="23" column="1">
     <spacer name="verticalSpacer">
      <property name="orientation">
       <enum>Qt::Vertical</enum>
@@ -73,28 +81,28 @@
      </property>
     </spacer>
    </item>
-   <item row="15" column="1">
+   <item row="17" column="1">
     <widget class="QRadioButton" name="rbICNever">
      <property name="text">
       <string>&amp;Never</string>
      </property>
     </widget>
    </item>
-   <item row="16" column="1">
+   <item row="18" column="1">
     <widget class="QRadioButton" name="rbICPerDirectory">
      <property name="text">
       <string>&amp;Directory</string>
      </property>
     </widget>
    </item>
-   <item row="17" column="1">
+   <item row="19" column="1">
     <widget class="QRadioButton" name="rbICAll">
      <property name="text">
       <string>&amp;All</string>
      </property>
     </widget>
    </item>
-   <item row="11" column="0">
+   <item row="13" column="0">
     <widget class="QLabel" name="labelDBDir">
      <property name="text">
       <string>&amp;Database directory:</string>
@@ -104,7 +112,7 @@
      </property>
     </widget>
    </item>
-   <item row="11" column="1">
+   <item row="13" column="1">
     <layout class="QHBoxLayout" name="hlDatabaseDir">
      <property name="spacing">
       <number>0</number>
@@ -121,14 +129,14 @@
      </item>
     </layout>
    </item>
-   <item row="20" column="1">
+   <item row="22" column="1">
     <widget class="QCheckBox" name="chkOpenLastDocument">
      <property name="text">
       <string>Enable</string>
      </property>
     </widget>
    </item>
-   <item row="20" column="0">
+   <item row="22" column="0">
     <widget class="QLabel" name="labelOpenLastDocument">
      <property name="text">
       <string>Open &amp;last document:</string>
@@ -138,7 +146,7 @@
      </property>
     </widget>
    </item>
-   <item row="8" column="0">
+   <item row="10" column="0">
     <widget class="QLabel" name="labelffprobe">
      <property name="text">
       <string>FF&amp;probe:</string>
@@ -148,8 +156,8 @@
      </property>
     </widget>
    </item>
-   <item row="9" column="0">
-    <widget class="QLabel" name="label_3">
+   <item row="11" column="0">
+    <widget class="QLabel" name="labelffmpeg">
      <property name="text">
       <string>FF&amp;mpeg:</string>
      </property>
@@ -158,7 +166,7 @@
      </property>
     </widget>
    </item>
-   <item row="8" column="1">
+   <item row="10" column="1">
     <layout class="QHBoxLayout" name="hlffprobe">
      <property name="spacing">
       <number>0</number>
@@ -179,7 +187,7 @@
      </item>
     </layout>
    </item>
-   <item row="9" column="1">
+   <item row="11" column="1">
     <layout class="QHBoxLayout" name="hlffmpeg">
      <property name="spacing">
       <number>0</number>
@@ -200,7 +208,7 @@
      </item>
     </layout>
    </item>
-   <item row="10" column="0">
+   <item row="12" column="0">
     <widget class="QLabel" name="label_useCustomDatabase">
      <property name="text">
       <string>Use custom database directory:</string>
@@ -210,7 +218,7 @@
      </property>
     </widget>
    </item>
-   <item row="10" column="1">
+   <item row="12" column="1">
     <widget class="QCheckBox" name="chkUseCustomDatabaseDirectory">
      <property name="text">
       <string>Enable</string>
@@ -230,7 +238,7 @@
    <item row="5" column="1">
     <widget class="QComboBox" name="cmbThumbCount"/>
    </item>
-   <item row="18" column="0">
+   <item row="20" column="0">
     <widget class="QLabel" name="labelLimit">
      <property name="text">
       <string>Limit items:</string>
@@ -240,14 +248,14 @@
      </property>
     </widget>
    </item>
-   <item row="18" column="1">
+   <item row="20" column="1">
     <widget class="QCheckBox" name="chkLimitItems">
      <property name="text">
       <string>Enab&amp;le</string>
      </property>
     </widget>
    </item>
-   <item row="19" column="0">
+   <item row="21" column="0">
     <widget class="QLabel" name="labelNumberOfRows">
      <property name="text">
       <string>Number of rows:</string>
@@ -257,7 +265,7 @@
      </property>
     </widget>
    </item>
-   <item row="19" column="1">
+   <item row="21" column="1">
     <widget class="QSpinBox" name="spinNumberOfRows">
      <property name="minimum">
       <number>1</number>
@@ -267,7 +275,7 @@
      </property>
     </widget>
    </item>
-   <item row="13" column="0">
+   <item row="15" column="0">
     <widget class="QLabel" name="labelInfoMain">
      <property name="text">
       <string>Item Title:</string>
@@ -277,7 +285,7 @@
      </property>
     </widget>
    </item>
-   <item row="14" column="0">
+   <item row="16" column="0">
     <widget class="QLabel" name="labelInfoSub">
      <property name="text">
       <string>Item Information:</string>
@@ -287,7 +295,7 @@
      </property>
     </widget>
    </item>
-   <item row="13" column="1">
+   <item row="15" column="1">
     <layout class="QHBoxLayout" name="hlInfoMain">
      <property name="spacing">
       <number>0</number>
@@ -304,7 +312,7 @@
      </item>
     </layout>
    </item>
-   <item row="14" column="1">
+   <item row="16" column="1">
     <layout class="QHBoxLayout" name="hlInfoSub">
      <property name="spacing">
       <number>0</number>
@@ -331,7 +339,7 @@
    <item row="4" column="1">
     <widget class="QComboBox" name="cmbTaskPriority"/>
    </item>
-   <item row="6" column="0">
+   <item row="8" column="0">
     <widget class="QLabel" name="labelThumbImageFormat">
      <property name="text">
       <string>Thumbnail Image format:</string>
@@ -341,14 +349,14 @@
      </property>
     </widget>
    </item>
-   <item row="6" column="1">
+   <item row="8" column="1">
     <widget class="QComboBox" name="cmbThumbImageFormat">
      <property name="editable">
       <bool>true</bool>
      </property>
     </widget>
    </item>
-   <item row="7" column="0">
+   <item row="9" column="0">
     <widget class="QLabel" name="labelScrollMode">
      <property name="text">
       <string>Thumbnail Scroll Mode:</string>
@@ -358,10 +366,10 @@
      </property>
     </widget>
    </item>
-   <item row="7" column="1">
+   <item row="9" column="1">
     <widget class="QComboBox" name="cmbScrollMode"/>
    </item>
-   <item row="12" column="0">
+   <item row="14" column="0">
     <widget class="QLabel" name="labelShowTagCount">
      <property name="text">
       <string>Show Ta&amp;g Count:</string>
@@ -371,10 +379,50 @@
      </property>
     </widget>
    </item>
-   <item row="12" column="1">
+   <item row="14" column="1">
     <widget class="QCheckBox" name="chkShowTagCount">
      <property name="text">
       <string>Enable</string>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="0">
+    <widget class="QLabel" name="labelThumbnailWidth">
+     <property name="text">
+      <string>Thumbnail &amp;Width</string>
+     </property>
+     <property name="buddy">
+      <cstring>spinBoxThumbWidth</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="6" column="1">
+    <widget class="QSpinBox" name="spinBoxThumbWidth">
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>3840</number>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="0">
+    <widget class="QLabel" name="labelThumbnailHeight">
+     <property name="text">
+      <string>Thumbnail &amp;Height</string>
+     </property>
+     <property name="buddy">
+      <cstring>spinBoxThumbHeight</cstring>
+     </property>
+    </widget>
+   </item>
+   <item row="7" column="1">
+    <widget class="QSpinBox" name="spinBoxThumbHeight">
+     <property name="minimum">
+      <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>2160</number>
      </property>
     </widget>
    </item>
@@ -385,6 +433,8 @@
   <tabstop>spinBoxThumb</tabstop>
   <tabstop>cmbTaskPriority</tabstop>
   <tabstop>cmbThumbCount</tabstop>
+  <tabstop>spinBoxThumbWidth</tabstop>
+  <tabstop>spinBoxThumbHeight</tabstop>
   <tabstop>cmbThumbImageFormat</tabstop>
   <tabstop>cmbScrollMode</tabstop>
   <tabstop>lineffprobe</tabstop>

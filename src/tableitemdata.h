@@ -45,7 +45,6 @@ public:
          qint64 ctime = 0;
          qint64 wtime = 0;
 
-        int thumbwidth = 0, thumbheight = 0;
         double duration = 0;
         QString format;
         int bitrate = 0;
@@ -70,8 +69,6 @@ public:
                           const qint64& ctime,
                           const qint64& wtime,
 
-                          int thumbwidth,
-                          int thumbheight,
                           const double& duration,
                           const QString& format,
                           int bitrate,
@@ -94,8 +91,6 @@ public:
             ctime(ctime),
             wtime(wtime),
 
-            thumbwidth(thumbwidth),
-            thumbheight(thumbheight),
             duration(duration),
             format(format),
             bitrate(bitrate),
@@ -153,12 +148,6 @@ public:
     void setID(const qint64& id) {
         Q_ASSERT(values_.id==0 || values_.id==id);
         values_.id=id;
-    }
-    int getThumbWidth() const {
-        return values_.thumbwidth;
-    }
-    int getThumbHeight() const {
-        return values_.thumbheight;
     }
     QString getMovieDirectory() const
     {

@@ -26,6 +26,8 @@ class IMainWindow
 public:
     virtual SORTCOLUMNMY GetCurrentSort() = 0;
     virtual QString GetTags(const qint64& id) = 0;
+    virtual int GetThumbWidth() = 0;
+    virtual int GetThumbHeight() = 0;
 };
 
 #endif // IMAINWINDOW_H

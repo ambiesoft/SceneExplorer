@@ -83,6 +83,10 @@
         <source>&lt;p&gt;Support our software by making &lt;a href=&quot;https://ambiesoft.github.io/webjumper/?target=donate&quot;&gt;donation&lt;/a&gt;.&lt;/p&gt;</source>
         <translation>&lt;p&gt;Ambiesoftでは開発をサポートのための&lt;a href=&quot;https://ambiesoft.github.io/webjumper/?target=donate&quot;&gt;寄付&lt;/a&gt;を募集しています。&lt;/p&gt;</translation>
     </message>
+    <message>
+        <source>Gitrev</source>
+        <translation>Gitrev</translation>
+    </message>
 </context>
 <context>
     <name>DirectoryEntryDialog</name>
@@ -1744,6 +1748,14 @@
         <source>Show Ta&amp;g Count:</source>
         <translation>タグカウント表示(&amp;G):</translation>
     </message>
+    <message>
+        <source>Thumbnail &amp;Width</source>
+        <translation>サムネイルの幅(&amp;W)</translation>
+    </message>
+    <message>
+        <source>Thumbnail &amp;Height</source>
+        <translation>サムネイルの高さ(&amp;H)</translation>
+    </message>
 </context>
 <context>
     <name>OptionDialog</name>
@@ -1858,6 +1870,10 @@
     <message>
         <source>fps</source>
         <translation>fps</translation>
+    </message>
+    <message>
+        <source>By changing width or height of thumbnail, all thumbnails needs be recreated. Are you sure to continue?</source>
+        <translation>サムネイルの幅や高さを変えるとすべてのサムネイルを再生成しなければなりません。続けますか？</translation>
     </message>
 </context>
 <context>
@@ -2357,6 +2373,10 @@
     <message>
         <source>Failed to set priority %1.</source>
         <translation>優先度を %1 にするのに失敗しました。</translation>
+    </message>
+    <message>
+        <source>Failed to create dummy thumbnail</source>
+        <translation>ダミーサムネイルの作成に失敗しました</translation>
     </message>
 </context>
 <context>

@@ -285,7 +285,8 @@ private:
     int optionThreadcountThumbnail_ = 2;
     int optionThumbCount_ = 3; // default is 3
     QString optionThumbFormat_ = QStringLiteral("jpg");
-
+    int optionThumbWidth_ = 0;
+    int optionThumbHeight_ = 0;
 
     bool initShown_=false;
     bool IsClosed() const {
@@ -363,11 +364,14 @@ protected:
     QToolButton* tbOpenCount_ = nullptr;
     QToolButton* tbLastAccess_ = nullptr;
 
-    virtual SORTCOLUMNMY GetCurrentSort() {
+    virtual SORTCOLUMNMY GetCurrentSort() override {
         return sortManager_.GetCurrentSort();
     }
-    virtual QString GetTags(const qint64& id);
+    virtual QString GetTags(const qint64& id) override;
     QToolButton* tbLabelSort_ = nullptr;
+
+    virtual int GetThumbWidth() override;
+    virtual int GetThumbHeight() override;
 
     void on_ShowMissingClicked_common(bool nNextCheck);
     void checkAllTagCommon(const bool bCheck, const bool bSelection = false);

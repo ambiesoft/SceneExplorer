@@ -68,7 +68,7 @@ class Sql : public QObject
                          qint64& ctime,
                          qint64& wtime) const;
 
-    int RemoveEntryFromThumbID(const QString& thumbid);
+    // int RemoveEntryFromThumbID(const QString& thumbid);
     QStringList getAllColumnNames();
     QString getAllColumns(bool bBrace, bool bQ);
     // QString getAllColumnsUpdate(TableItemDataPointer tid);
@@ -89,7 +89,7 @@ class Sql : public QObject
     int GetFileDBVersion(QSqlQuery& query);
     bool UpdateDatabase1_2();
 
-
+    void clearStatements();
 public:
     static int GetAppDBVersion() {
         return DBVERSION;
@@ -131,12 +131,15 @@ public:
     QSqlQuery* pQInsert_=nullptr;
     QSqlQuery* getInsertQuery(TableItemDataPointer tid);
 
+    QSqlQuery* pQModifyFromFFmpeg_=nullptr;
+    QSqlQuery* getModifyFromFFmpegQuery(TableItemDataPointer tid, const qint64& id);
+
     QSqlQuery* pQGetInfo_=nullptr;
     QSqlQuery* getGetInfoQuery();
 
     Sql(QObject* =nullptr);
     ~Sql();
-    qint64 AppendData(TableItemDataPointer tid);
+    qint64 InsertDataFromFFmpeg(TableItemDataPointer tid);
     bool IsSameFile(const QString& dir,
                     const QString& name,
                     const qint64& size,
@@ -144,12 +147,13 @@ public:
     int filterWithEntry(const QString& movieDir,
                         const QStringList& movieFiles,
                         QStringList& results);
-    int hasThumb(const QString& movieFile) ;
+    int hasThumb(const QString& movieFile, const int thumbWidth, const int thumbHeight) ;
     bool DeleteEntryThumbFiles(const QString& dir,
                                const QString& name,
                                QString* removedThumbID);
     qlonglong GetAllCount(const QStringList& dirs);
     bool GetAll(QList<TableItemDataPointer>& v,
+                int thumbWidth, int thumbHeight,
                 const QStringList& dirs = QStringList(),
                 const QString& find = QString(),
                 const bool bOnlyMissing = false,
@@ -192,6 +196,9 @@ public:
 
                   const QString& sa,
                   bool* isUptodate,
+                  qint64* id);
+    bool hasEntry(const QString& dir,
+                  const QString& file,
                   qint64* id);
 
     bool RemoveEntry(const QString& dir,

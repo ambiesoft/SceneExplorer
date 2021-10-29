@@ -78,7 +78,7 @@ void TableModel:: AppendData(const TableItemDataPointer& pItemData, const bool e
         initColumnWidth_=true;
         for(int i=0 ; i < columnCountImage_ ; ++i)
         {
-            parent_->setColumnWidth(i, THUMB_WIDTH);
+            parent_->setColumnWidth(i, mainWindow_->GetThumbWidth());
         }
     }
 

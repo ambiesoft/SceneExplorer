@@ -128,9 +128,9 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
                 qDebug() << "Image DecorationRoll First: Index=" << index.row() << __FUNCTION__;
             itemData->setDisplayed();
 
-            parent_->setColumnWidth(index.row(), THUMB_WIDTH);
+            parent_->setColumnWidth(index.row(), mainWindow_->GetThumbWidth());
             // qDebug() << "DecorationRole previous rowheight = " << parent_->rowHeight(index.row());
-            parent_->setRowHeight(index.row(), THUMB_HEIGHT);
+            parent_->setRowHeight(index.row(), mainWindow_->GetThumbHeight());
 
             QString imageFile = pathCombine(FILEPART_THUMBS,
                                             itemData->getThumbnailFiles()[getActualColumnIndex(index.column())]);
@@ -145,10 +145,6 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
             {
                 return mapPixmaps_[imageFile];
             }
-//            if(suspendImageIndexes_.contains(index))
-//                suspendImageIndexes_.removeOne(index);
-
-//            suspendImageIndexes_.push(index);
 
             std::deque<QModelIndex>::iterator found =
                     std::find(suspendImageIndexes_.begin(), suspendImageIndexes_.end(), index);

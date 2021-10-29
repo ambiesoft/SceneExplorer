@@ -135,7 +135,6 @@ void MainWindow::sayGoodby(int loopId,  int id,
                 fi.size(),
                 fi.birthTime().toSecsSinceEpoch(),
                 fi.lastModified().toSecsSinceEpoch(),
-                thumbwidth,thumbheight,
                 duration,
                 format,
                 bitrate,
@@ -162,7 +161,7 @@ void MainWindow::sayGoodby(int loopId,  int id,
     }
 
 
-    int sqlError = gpSQL->AppendData(pTID);
+    int sqlError = gpSQL->InsertDataFromFFmpeg(pTID);
 
     if(sqlError==0)
     {

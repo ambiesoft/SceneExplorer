@@ -52,6 +52,8 @@ private:
     // int fileIndex_=0;
     Progress progress_;
     QString thumbext_;
+    int thumbWidth_=0;
+    int thumbHeight_=0;
     bool isUpdateOnly_=false;
     qint64 recordid_=0;
     bool getProbe(const QString& file,
@@ -83,6 +85,7 @@ public:
                const QString& file,
                QThread::Priority* priority,
                const QString& thumbext,
+               int thumbWidth, int thumbHeight,
                const bool isUpdateOnly);
     virtual ~TaskFFmpeg() override;
     void setRecordID(const qint64& recordid) {

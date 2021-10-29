@@ -280,7 +280,6 @@ MainWindow::MainWindow(QWidget *parent,
         ui->listTask->setMaximumSize(vVal.toSize());
 
     vVal = settings.value(KEY_SHOWMISSING);
-
     // make default true
     bool bShowMissing = (!vVal.isValid() || vVal.toBool());
     if(bShowMissing)
@@ -301,6 +300,9 @@ MainWindow::MainWindow(QWidget *parent,
     if(optionThumbCount_ != 3 && optionThumbCount_ != 5)
         optionThumbCount_ = 3;
     optionThumbFormat_ = settings_.valueString(KEY_THUMBNAIL_FORMAT, "jpg");
+    optionThumbWidth_ = settings_.valueInt(KEY_THUMBNAIL_WIDTH, THUMB_WIDTH_DEFAULT);
+    optionThumbHeight_ = settings_.valueInt(KEY_THUMBNAIL_HEIGHT, THUMB_HEIGHT_DEFAULT);
+
     QString scrollMode = settings_.valueString(KEY_THUMBNAIL_SCROLLMODE, "item");
     if(scrollMode.isEmpty() || scrollMode=="item")
     {

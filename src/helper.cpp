@@ -176,6 +176,14 @@ QString getUUIDFromThumbfile(const QString& file)
     if(ret.length() < 2)
         return QString();
     ret = ret.left(ret.length()-2);
+    if(isUUID(ret))
+        return ret;
+
+    // ex) 58c4d22e-8b8b-4773-9fac-80a69a8fa880-123x456
+    i = ret.lastIndexOf('-');
+    if(i<0)
+        return QString();
+    ret = ret.left(i);
     return ret;
 }
 
@@ -406,8 +414,30 @@ bool isLegalFileExt(QString ext)
 }
 bool isThumbFileName(const QString& file)
 {
-    // ex) 58c4d22e-8b8b-4773-9fac-80a69a8fa880-5.jpg
-    static QRegExp rx(
+    {
+        // ex) 58c4d22e-8b8b-4773-9fac-80a69a8fa880-5.jpg
+        static QRegExp rx(
+                    "^"
+                    "[a-fA-F0-9]{8}"
+                    "-"
+                    "[a-fA-F0-9]{4}"
+                    "-"
+                    "[a-fA-F0-9]{4}"
+                    "-"
+                    "[a-fA-F0-9]{4}"
+                    "-"
+                    "[a-fA-F0-9]{12}"
+                    "-"
+                    "[0-9]+"
+                    "\\."
+                    "[a-zA-Z0-9]+");
+
+        Q_ASSERT(rx.isValid());
+        if(rx.exactMatch(QFileInfo(file).fileName()))
+            return true;
+    }
+    // ex) 58c4d22e-8b8b-4773-9fac-80a69a8fa880-123x456-5.jpg
+    static QRegExp rx2(
                 "^"
                 "[a-fA-F0-9]{8}"
                 "-"
@@ -419,12 +449,14 @@ bool isThumbFileName(const QString& file)
                 "-"
                 "[a-fA-F0-9]{12}"
                 "-"
+                "[0-9]+x[0-9]+"
+                "-"
                 "[0-9]+"
                 "\\."
                 "[a-zA-Z0-9]+");
+    Q_ASSERT(rx2.isValid());
+    return rx2.exactMatch(QFileInfo(file).fileName());
 
-    Q_ASSERT(rx.isValid());
-    return rx.exactMatch(QFileInfo(file).fileName());
 }
 bool isUUID(const QString& s)
 {
@@ -589,4 +621,23 @@ QString resolution_human(int width, int height)
 QString opencount_human(int count)
 {
     return QString::number(count);
+}
+QString createThumbFileName(int i, const QString& thumbid, int thumbWidth, int thumbHeight, const QString& thumbext)
+{
+    QString t=thumbid;
+    t+="-";
+    Q_ASSERT(thumbWidth != 0);
+    Q_ASSERT(thumbHeight != 0);
+    if(!(thumbWidth==THUMB_WIDTH_DEFAULT && thumbHeight==THUMB_HEIGHT_DEFAULT))
+    {
+        t+=QString::number(thumbWidth);
+        t+="x";
+        t+=QString::number(thumbHeight);
+        t+="-";
+    }
+    t+=QString::number(i);
+    t+=".";
+    Q_ASSERT(isLegalFileExt(thumbext));
+    t+=thumbext;
+    return t;
 }

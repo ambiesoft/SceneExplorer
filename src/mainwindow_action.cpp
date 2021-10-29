@@ -109,6 +109,8 @@ void MainWindow::on_action_Options_triggered()
     dlg.maxgd_ = optionThreadcountGetDir_;
     dlg.maxff_ = optionThreadcountThumbnail_;
     dlg.thumbCount_ = optionThumbCount_;
+    dlg.thumbWidth_ = optionThumbWidth_;
+    dlg.thumbHeight_ = optionThumbHeight_;
     dlg.thumbFormat_ = optionThumbFormat_;
     dlg.scrollMode_ = ui->tableView->horizontalScrollMode()==QAbstractItemView::ScrollMode::ScrollPerItem ? "item" : "pixel";
     dlg.taskPriority_ = GetTaskPriorityAsInt();
@@ -130,6 +132,10 @@ void MainWindow::on_action_Options_triggered()
     optionThreadcountGetDir_ = dlg.maxgd_;
     optionThreadcountThumbnail_ = dlg.maxff_;
     optionThumbCount_ = dlg.thumbCount_;
+    const bool bThumbChanged = (optionThumbWidth_ != dlg.thumbWidth_) ||
+            (optionThumbHeight_ != dlg.thumbHeight_);
+    optionThumbWidth_ = dlg.thumbWidth_;
+    optionThumbHeight_ = dlg.thumbHeight_;
     optionThumbFormat_ = dlg.thumbFormat_;
     if(dlg.scrollMode_=="item")
     {
@@ -159,6 +165,9 @@ void MainWindow::on_action_Options_triggered()
     FFMpeg::SetFFprobe(settings_, dlg.ffprobe_);
     FFMpeg::SetFFmpeg(settings_, dlg.ffmpeg_);
     settings_.setValue(KEY_SHOW_TAGCOUNT, dlg.showtagcount_);
+
+    if(bThumbChanged)
+        itemChangedCommon(true);
 
     CreateLimitManager();
     RefreshTagTree();

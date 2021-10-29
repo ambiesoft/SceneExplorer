@@ -82,7 +82,7 @@ QString bitrate_human(int bitrate);
 QString resolution_human(int width, int height);
 QString opencount_human(int count);
 QString fps_human(const double& fps);
-
+QString createThumbFileName(int i, const QString& thumbid, int thumbWidth, int thumbHeight, const QString& thumbext);
 
 
 

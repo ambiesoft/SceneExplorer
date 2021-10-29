@@ -62,94 +62,184 @@ static void testSQL()
     // memset(APPNAME, 0, 1);
     Q_ASSERT(format_human("")=="");
 
+    Q_ASSERT(getUUIDFromThumbfile("58c4d22e-8b8b-4773-9fac-80a69a8fa880-5.jpg")
+             =="58c4d22e-8b8b-4773-9fac-80a69a8fa880");
+    Q_ASSERT(getUUIDFromThumbfile("58c4d22e-8b8b-4773-9fac-80a69a8fa880-123x456-5.jpg")
+             =="58c4d22e-8b8b-4773-9fac-80a69a8fa880");
+
     Q_ASSERT(isThumbFileName("58c4d22e-8b8b-4773-9fac-80a69a8fa880-5.jpg"));
     Q_ASSERT(isThumbFileName("58c4d22e-AAAA-4773-9fac-80a69a8fa880-5.jpg"));
     Q_ASSERT(!isThumbFileName("58c4d22e8b8b47739fac80a69a8fa8805.jpg"));
     Q_ASSERT(!isThumbFileName("58c4d22e-8b8b-4773-9fac-80a69a8fa880-5"));
     Q_ASSERT(!isThumbFileName("5b8b-4773-9fac-80a69a8fa880-5"));
 
+    Q_ASSERT(isThumbFileName("58c4d22e-8b8b-4773-9fac-80a69a8fa880-123x456-5.jpg"));
+    Q_ASSERT(isThumbFileName("58c4d22e-AAAA-4773-9fac-80a69a8fa880-123x456-5.jpg"));
+    Q_ASSERT(!isThumbFileName("58c4d22e8b8b47739fac80a69a8fa8805-123x456.jpg"));
+    Q_ASSERT(!isThumbFileName("58c4d22e-8b8b-4773-9fac-80a69a8fa880-123x456-5"));
+    Q_ASSERT(!isThumbFileName("5b8b-4773-9fac-80a69a8fa880-123x456-5"));
+
+
     Q_ASSERT(!isThumbFileName(""));
     Q_ASSERT(!isThumbFileName("a58c4d22e-8b8b-4773-9fac-80a69a8fa880-5.jpg"));
+    Q_ASSERT(!isThumbFileName("a58c4d22e-8b8b-4773-9fac-80a69a8fa880-123x456-5.jpg"));
+
 #ifdef Q_WS_WIN
     Q_ASSERT(isThumbFileName("thumb\\58c4d22e-8b8b-4773-9fac-80a69a8fa880-5.jpg"));
     Q_ASSERT(isThumbFileName("T:\\thumb\\58c4d22e-8b8b-4773-9fac-80a69a8fa880-5.jpg"));
+    Q_ASSERT(isThumbFileName("thumb\\58c4d22e-8b8b-4773-9fac-80a69a8fa880-123x456-5.jpg"));
+    Q_ASSERT(isThumbFileName("T:\\thumb\\58c4d22e-8b8b-4773-9fac-80a69a8fa880-123x456-5.jpg"));
 #endif
     Q_ASSERT(isThumbFileName("/thumb/58c4d22e-8b8b-4773-9fac-80a69a8fa880-5.jpg"));
     Q_ASSERT(isThumbFileName("thumb/58c4d22e-8b8b-4773-9fac-80a69a8fa880-5.jpg"));
+    Q_ASSERT(isThumbFileName("/thumb/58c4d22e-8b8b-4773-9fac-80a69a8fa880-123x456-5.jpg"));
+    Q_ASSERT(isThumbFileName("thumb/58c4d22e-8b8b-4773-9fac-80a69a8fa880-123x456-5.jpg"));
 
 
-    QString dir = normalizeDir(GetAppDir());
-    QString file = "moviefile.mp3";
-    QString file2 =  "file2.mp4";
-
-    // first clean all items of
-    QFile(pathCombine(dir,file)).remove();
-    QFile(pathCombine(dir,file2)).remove();
-
-    Q_ASSERT(gpSQL->RemoveAllMissingEntries(dir));
-
-    // prepare actual file for not causing assert.
-    qDebug() << "Test file is " << pathCombine(dir,file) << __FUNCTION__;
     {
-        QFile f(pathCombine(dir,file));
-        Q_ASSERT(f.open(QFile::WriteOnly));
-        f.write("data");
+        QString dir = normalizeDir(GetAppDir());
+        QString file = "moviefile.mp3";
+        QString file2 =  "file2.mp4";
+
+        // first clean all items of
+        QFile(pathCombine(dir,file)).remove();
+        QFile(pathCombine(dir,file2)).remove();
+
+        Q_ASSERT(gpSQL->RemoveAllMissingEntries(dir));
+
+        // prepare actual file for not causing assert.
+        qDebug() << "Test file is " << pathCombine(dir,file) << __FUNCTION__;
+        {
+            QFile f(pathCombine(dir,file));
+            Q_ASSERT(f.open(QFile::WriteOnly));
+            f.write("data");
+        }
+
+
+        QStringList thumbfiles;
+        thumbfiles << "00c75732-e92b-4e3c-90a1-914bd137797f-1.png";
+        thumbfiles << "00c75732-e92b-4e3c-90a1-914bd137797f-2.png";
+        thumbfiles << "00c75732-e92b-4e3c-90a1-914bd137797f-3.png";
+        thumbfiles << "00c75732-e92b-4e3c-90a1-914bd137797f-4.png";
+        thumbfiles << "00c75732-e92b-4e3c-90a1-914bd137797f-5.png";
+
+        static int la=QTime::currentTime().second();
+        static int oc=100;
+
+        TableItemDataPointer tid = TableItemData::Create(TableItemData::TableItemDataArgs(0,
+                                                         thumbfiles,
+                                                         dir,
+                                                         file,
+                                                         33333,
+                                                         22344,
+                                                         33333,
+                                                         33.33,
+                                                         "frm",
+                                                         33,
+                                                         "vc",
+                                                         "ac",
+                                                         640,
+                                                         480,
+                                                         29.97,
+                                                         "http://example.com", "memo1",
+                                                         oc++,
+                                                         ++la));
+        tid->setThumbExt("jpg");
+
+        // insert same tid and check same id
+        gpSQL->InsertDataFromFFmpeg(tid);
+        qint64 id1 = tid->getID();
+        qDebug() << "InsertedID=" << id1 << __FUNCTION__;
+
+        gpSQL->InsertDataFromFFmpeg(tid);
+        qint64 id2 = tid->getID();
+        qDebug() << "InsertedID=" << id2 << __FUNCTION__;
+
+        Q_ASSERT(id1==id2);
+
+
+        // check rename does not change id
+        QFile(pathCombine(dir,file)).rename(pathCombine(dir,file2));
+        Q_ASSERT(gpSQL->RenameEntry(dir, file, dir,file2));
+        qint64 id3;
+        Q_ASSERT(gpSQL->GetID(dir, file, id3));
+        Q_ASSERT(id3==-1);
+        Q_ASSERT(gpSQL->GetID(dir,file2,id3));
+        Q_ASSERT(id1==id3);
     }
 
+    // with thumbsize
+    {
+        QString dir = normalizeDir(GetAppDir());
+        QString file = "moviefilewithnewthum.mp3";
+        QString file2 =  "file2withnewthum.mp4";
 
-    QStringList thumbfiles;
-    thumbfiles << "00c75732-e92b-4e3c-90a1-914bd137797f-1.png";
-    thumbfiles << "00c75732-e92b-4e3c-90a1-914bd137797f-2.png";
-    thumbfiles << "00c75732-e92b-4e3c-90a1-914bd137797f-3.png";
-    thumbfiles << "00c75732-e92b-4e3c-90a1-914bd137797f-4.png";
-    thumbfiles << "00c75732-e92b-4e3c-90a1-914bd137797f-5.png";
+        // first clean all items of
+        QFile(pathCombine(dir,file)).remove();
+        QFile(pathCombine(dir,file2)).remove();
 
-    static int la=QTime::currentTime().second();
-    static int oc=100;
+        Q_ASSERT(gpSQL->RemoveAllMissingEntries(dir));
 
-    TableItemDataPointer tid = TableItemData::Create(TableItemData::TableItemDataArgs(0,
-                                                     thumbfiles,
-                                                     dir,
-                                                     file,
-                                                     33333,
-                                                     22344,
-                                                     33333,
-                                                     240,
-                                                     160,
-                                                     33.33,
-                                                     "frm",
-                                                     33,
-                                                     "vc",
-                                                     "ac",
-                                                     640,
-                                                     480,
-                                                     29.97,
-                                                     "http://example.com", "memo1",
-                                                     oc++,
-                                                     ++la));
-    tid->setThumbExt("jpg");
-
-    // insert same tid and check same id
-    gpSQL->AppendData(tid);
-    qint64 id1 = tid->getID();
-    qDebug() << "InsertedID=" << id1 << __FUNCTION__;
-
-    gpSQL->AppendData(tid);
-    qint64 id2 = tid->getID();
-    qDebug() << "InsertedID=" << id2 << __FUNCTION__;
-
-    Q_ASSERT(id1==id2);
+        // prepare actual file for not causing assert.
+        qDebug() << "Test file is " << pathCombine(dir,file) << __FUNCTION__;
+        {
+            QFile f(pathCombine(dir,file));
+            Q_ASSERT(f.open(QFile::WriteOnly));
+            f.write("data");
+        }
 
 
-    // check rename does not change id
-    QFile(pathCombine(dir,file)).rename(pathCombine(dir,file2));
-    Q_ASSERT(gpSQL->RenameEntry(dir, file, dir,file2));
-    qint64 id3;
-    Q_ASSERT(gpSQL->GetID(dir, file, id3));
-    Q_ASSERT(id3==-1);
-    Q_ASSERT(gpSQL->GetID(dir,file2,id3));
-    Q_ASSERT(id1==id3);
+        QStringList thumbfiles;
+        thumbfiles << "10c75732-e92b-4e3c-90a1-914bd137797a-123x456-1.png";
+        thumbfiles << "10c75732-e92b-4e3c-90a1-914bd137797a-123x456-2.png";
+        thumbfiles << "10c75732-e92b-4e3c-90a1-914bd137797a-123x456-3.png";
+        thumbfiles << "10c75732-e92b-4e3c-90a1-914bd137797a-123x456-4.png";
+        thumbfiles << "10c75732-e92b-4e3c-90a1-914bd137797a-123x456-5.png";
 
+        static int la=QTime::currentTime().second();
+        static int oc=100;
+
+        TableItemDataPointer tid = TableItemData::Create(TableItemData::TableItemDataArgs(0,
+                                                         thumbfiles,
+                                                         dir,
+                                                         file,
+                                                         33333,
+                                                         22344,
+                                                         33333,
+                                                         33.33,
+                                                         "frm",
+                                                         33,
+                                                         "vc",
+                                                         "ac",
+                                                         640,
+                                                         480,
+                                                         29.97,
+                                                         "http://example.com", "memo1",
+                                                         oc++,
+                                                         ++la));
+        tid->setThumbExt("jpg");
+
+        // insert same tid and check same id
+        gpSQL->InsertDataFromFFmpeg(tid);
+        qint64 id1 = tid->getID();
+        qDebug() << "InsertedID=" << id1 << __FUNCTION__;
+
+        gpSQL->InsertDataFromFFmpeg(tid);
+        qint64 id2 = tid->getID();
+        qDebug() << "InsertedID=" << id2 << __FUNCTION__;
+
+        Q_ASSERT(id1==id2);
+
+
+        // check rename does not change id
+        QFile(pathCombine(dir,file)).rename(pathCombine(dir,file2));
+        Q_ASSERT(gpSQL->RenameEntry(dir, file, dir,file2));
+        qint64 id3;
+        Q_ASSERT(gpSQL->GetID(dir, file, id3));
+        Q_ASSERT(id3==-1);
+        Q_ASSERT(gpSQL->GetID(dir,file2,id3));
+        Q_ASSERT(id1==id3);
+    }
 
 }
 #endif

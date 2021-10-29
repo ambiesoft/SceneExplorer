@@ -44,6 +44,7 @@ TaskFFmpeg::TaskFFmpeg(const QString& ffprobe,
                        const QString& file,
                        QThread::Priority* priority,
                        const QString& thumbext,
+                       int thumbWidth, int thumbHeight,
                        const bool isUpdateOnly)
 {
     loopId_ = loopId;
@@ -62,6 +63,8 @@ TaskFFmpeg::TaskFFmpeg(const QString& ffprobe,
     }
 
     thumbext_ = thumbext;
+    thumbWidth_ = thumbWidth;
+    thumbHeight_ = thumbHeight;
     // emit sayBorn(id,file);
 
     isUpdateOnly_=isUpdateOnly;
@@ -335,22 +338,17 @@ bool TaskFFmpeg::run3(QString& errorReason)
     }
 
     QString strWidthHeight;
-    strWidthHeight.append(QString::number(THUMB_WIDTH));
+    Q_ASSERT(thumbWidth_ != 0);
+    Q_ASSERT(thumbHeight_ != 0);
+    strWidthHeight.append(QString::number(thumbWidth_));
     strWidthHeight.append("x");
-    strWidthHeight.append(QString::number(THUMB_HEIGHT));
+    strWidthHeight.append(QString::number(thumbHeight_));
 
-    QString thumbfile = QUuid::createUuid().toString();
-    thumbfile = thumbfile.remove(L'{');
-    thumbfile = thumbfile.remove(L'}');
+    const QString thumbid = QUuid::createUuid().toString().remove(L'{').remove(L'}');
     QStringList emitFiles;
     for(int i=1 ; i <=5 ;++i)
     {
-        QString filename=thumbfile;
-        filename.append("-");
-        filename.append(QString::number(i));
-        filename.append(".");
-        Q_ASSERT(isLegalFileExt(thumbext_));
-        filename.append(thumbext_);
+        QString filename=createThumbFileName(i, thumbid, thumbWidth_, thumbHeight_,thumbext_);
 
         QString actualFile = QString(FILEPART_THUMBS) + QDir::separator() + filename;
 
@@ -419,14 +417,27 @@ bool TaskFFmpeg::run3(QString& errorReason)
                 return false;
             }
         }
+        else
+        {
+            // short movie will not create thumb
+            if (!QFile(actualFile).exists())
+            {
+                QFile f(actualFile);
+                if(!f.open(QIODevice::NewOnly | QIODevice::WriteOnly))
+                {
+                    errorReason = tr("Failed to create dummy thumbnail");
+                    return false;
+                }
+            }
+        }
         emitFiles.append(filename);
     }
 
     emit sayGoodby(loopId_,id_,
                    emitFiles,
                    movieFile_,
-                   THUMB_WIDTH,
-                   THUMB_HEIGHT,
+                   thumbWidth_,
+                   thumbHeight_,
                    duration,
                    format,
                    bitrate,
