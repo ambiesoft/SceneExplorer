@@ -1,3 +1,6 @@
+2021/10/30　1.22.12
+getThumbId with id
+
 2021/10/30　1.22.11
 Checking Thumbnail is done in thread pool to make main thread unbusy
 

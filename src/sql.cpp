@@ -736,19 +736,18 @@ QStringList GetAllThumbFilesFromThumbID(const QString& thumbID)
 //    }
 //    return ret;
 //}
-bool Sql::getThumbID(const QString& dir, const QString& name, QString* thumbid)
+bool Sql::getThumbID(const qint64& id, QString* thumbid)
 {
-    if(dir.isEmpty() || name.isEmpty())
+    if(id <= 0)
     {
         Q_ASSERT(false);
         return false;
     }
     QSqlQuery query = myPrepare("SELECT thumbid FROM FileInfo WHERE "
-                                "directory=? and name=?");
+                                "id=?");
 
     int i=0;
-    query.bindValue(i++, dir);
-    query.bindValue(i++, name);
+    query.bindValue(i++, id);
 
     SQC(query, exec());
 

@@ -581,21 +581,21 @@ void MainWindow::afterGetDir(int loopId, int id,
         // QString sa = createSalient(fi.absoluteFilePath(), fi.size());
 
         bool isUptodate = false;
-        qint64 recordid = 0;
-        if(gpSQL->hasEntry(dir,file,size,ctime,wtime,sa,&isUptodate,&recordid))
+        qint64 dbid = 0;
+        if(gpSQL->hasEntry(dir,file,size,ctime,wtime,sa,&isUptodate,&dbid))
         {
-            Q_ASSERT(recordid != 0);
+            Q_ASSERT(dbid != 0);
             if(!isUptodate)
             {
                 // need update db
                 insertLog(TaskKind_GetDir, id, tr("Needs update record of \"%1\"").
                           arg(fi.absoluteFilePath()));
-                toUpdateFiles.append(QPair<qint64,QString>(recordid,file));
+                toUpdateFiles.append(QPair<qint64,QString>(dbid,file));
                 continue;
             }
 
             QString dbThumpID;
-            if(gpSQL->getThumbID(dir, file, &dbThumpID))
+            if(gpSQL->getThumbID(dbid, &dbThumpID))
             {
                 // thumbid found in db
                 // check if thumbfiles exists by thread because it is IO
