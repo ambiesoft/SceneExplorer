@@ -94,8 +94,6 @@ void MainWindow::sayUpdated(int loopId, int id,
 void MainWindow::sayGoodby(int loopId,  int id,
                            const QStringList& files,
                            const QString& movieFile,
-                           int thumbwidth,
-                           int thumbheight,
                            const double& duration,
                            const QString& format,
                            int bitrate,
@@ -200,6 +198,7 @@ void MainWindow::finished_FFMpeg(int loopId, int id)
         insertLog(TaskKind_App, 0, tr("======== All Tasks finished ========"));
     }
 }
+
 void MainWindow::warning_FFMpeg(int loopId, int id,
                                 const QString& warning)
 {

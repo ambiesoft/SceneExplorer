@@ -95,8 +95,8 @@ public:
     ~MainWindow();
 
     // History's virtual function
-    void selectItem(const QString& movie);
-    void updateToolButton();
+    void selectItem(const QString& movie) override;
+    void updateToolButton() override;
 
 
     bool IsInitialized() const;
@@ -104,7 +104,7 @@ public:
 private:
     enum IDKIND {
         IDKIND_GetDir,
-        // IDKIND_Filter,
+        IDKIND_CheckThumbs,
         IDKIND_FFmpeg,
     };
     bool initialized_ = false;
@@ -200,11 +200,11 @@ private:
         MainWindow* win_;
 
         int idGetDir_ = 0;
-        // int idFilter_ = 0;
+        int idCheckThumbs_=0;
         int idFFMpeg_ = 0;
 
         int idGetDirDone_ = 0;
-        // int idFilterDone_ = 0;
+        int idCheckThumbsDone_=0;
         int idFFMpegDone_ = 0;
 
         void updateStatus();
@@ -216,7 +216,7 @@ private:
             switch(idkind)
             {
             case IDKIND_GetDir: return idGetDir_;
-                // case Filter: return idFilter_;
+            case IDKIND_CheckThumbs: return idCheckThumbs_;
             case IDKIND_FFmpeg: return idFFMpeg_;
             }
             Q_ASSERT(false);
@@ -227,7 +227,7 @@ private:
             switch(idkind)
             {
             case IDKIND_GetDir: return idGetDirDone_;
-                // case Filter: return idFilterDone_;
+            case IDKIND_CheckThumbs: return idCheckThumbsDone_;
             case IDKIND_FFmpeg: return idFFMpegDone_;
             }
             Q_ASSERT(false);
@@ -239,7 +239,7 @@ private:
             switch(idkind)
             {
             case IDKIND_GetDir: ret = ++idGetDir_;break;
-                // case Filter: ret = ++idFilter_;break;
+            case IDKIND_CheckThumbs: ret = ++idCheckThumbs_;break;
             case IDKIND_FFmpeg: ret = ++idFFMpeg_;break;
             }
             updateStatus();
@@ -251,7 +251,7 @@ private:
             switch(idkind)
             {
             case IDKIND_GetDir: ret = ++idGetDirDone_;break;
-                // case Filter: ret = ++idFilterDone_;break;
+            case IDKIND_CheckThumbs: ret = ++idCheckThumbsDone_;break;
             case IDKIND_FFmpeg: ret = ++idFFMpegDone_;break;
             }
             updateStatus();
@@ -260,7 +260,7 @@ private:
         void Clear()
         {
             idGetDir_ = idGetDirDone_ = 0;
-            // idFilter_ = idFilterDone_ = 0;
+            idCheckThumbs_ = idCheckThumbsDone_ = 0;
             idFFMpeg_ = idFFMpegDone_=0;
             updateStatus();
         }
@@ -268,6 +268,7 @@ private:
         {
             if(
                     Get(IDKIND_FFmpeg)==GetDone(IDKIND_FFmpeg) &&
+                    Get(IDKIND_CheckThumbs)==GetDone(IDKIND_CheckThumbs) &&
                     Get(IDKIND_GetDir)==GetDone(IDKIND_GetDir)
                     )
             {
@@ -318,10 +319,10 @@ private:
     void setMenuFont(QFont& font);
 
 protected:
-    virtual void resizeEvent(QResizeEvent *event);
-    void closeEvent(QCloseEvent *event);
-    void showEvent( QShowEvent* event );
-    virtual bool event(QEvent *event) override;
+    void resizeEvent(QResizeEvent *event) override;
+    void closeEvent(QCloseEvent *event) override;
+    void showEvent( QShowEvent* event ) override;
+    bool event(QEvent *event) override;
 
     void RefreshDirectoryTree();
     void RefreshTagTree();
@@ -657,11 +658,15 @@ private:
     void OnPasteTag();
 
 
+    QThreadPool* pPoolGetDir_ = nullptr;
+    QThreadPool* getPoolGetDir();
+
+    QThreadPool* pPoolCheckThumbs_ = nullptr;
+    QThreadPool* getPoolCheckThumbs();
+
     QThreadPool* pPoolFFmpeg_ = nullptr;
     QThreadPool* getPoolFFmpeg();
 
-    QThreadPool* pPoolGetDir_ = nullptr;
-    QThreadPool* getPoolGetDir();
 
     //    QThreadPool* pPoolFilter_ = nullptr;
     //    QThreadPool* getPoolFilter();
@@ -695,6 +700,7 @@ private:
 
     enum TaskKind {
         TaskKind_GetDir,
+        TaskKind_CheckThumbs,
         TaskKind_FFMpeg,
         TaskKind_SQL,
         TaskKind_App,
@@ -747,8 +753,6 @@ public Q_SLOTS:
     void sayGoodby(int loopId, int id,
                    const QStringList& files,
                    const QString& movieFile,
-                   int thumbwidth,
-                   int thumbheight,
                    const double& duration,
                    const QString& format,
                    int bitrate,
@@ -786,7 +790,16 @@ public Q_SLOTS:
 
     //    void finished_Filter(int loopId, int id);
 
-
+    void afterCheckThumbs(int loopId,
+                          int taskindex,
+                          int getdirid,
+                          const QString& dir,
+                          const QString& file,
+                          const QString& thumbid,
+                          int width,
+                          int height,
+                          bool bExists);
+    void finished_CheckThumbs(int loopId, int id);
 
 
     void OnContextCopySelectedVideoFilename();

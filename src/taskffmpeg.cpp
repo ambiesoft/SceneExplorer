@@ -436,8 +436,6 @@ bool TaskFFmpeg::run3(QString& errorReason)
     emit sayGoodby(loopId_,id_,
                    emitFiles,
                    movieFile_,
-                   thumbWidth_,
-                   thumbHeight_,
                    duration,
                    format,
                    bitrate,

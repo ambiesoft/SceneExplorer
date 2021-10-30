@@ -147,6 +147,7 @@ public:
     int filterWithEntry(const QString& movieDir,
                         const QStringList& movieFiles,
                         QStringList& results);
+    bool getThumbID(const QString& dir, const QString& name, QString* thumbid);
     int hasThumb(const QString& movieFile, const int thumbWidth, const int thumbHeight) ;
     bool DeleteEntryThumbFiles(const QString& dir,
                                const QString& name,

@@ -125,8 +125,6 @@ Q_SIGNALS:
     void sayGoodby(int loopId, int id,
                    const QStringList& files,
                    const QString& movieFile,
-                   int thumbwidth,
-                   int thumbheight,
                    const double& duration,
                    const QString& format,
                    int bitrate,

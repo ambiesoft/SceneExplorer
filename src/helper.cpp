@@ -641,3 +641,17 @@ QString createThumbFileName(int i, const QString& thumbid, int thumbWidth, int t
     t+=thumbext;
     return t;
 }
+bool fff(const QString& thumbid, const QString& thumbext,
+         int thumbwidth, int thumbheight)
+{
+     QStringList thumbs;
+     for(int i=1 ; i <= 5 ; ++i)
+     {
+         QString t = pathCombine("thumbs", createThumbFileName(i, thumbid, thumbwidth, thumbheight, thumbext));
+         if(!QFile(t).exists())
+         {
+             return false;
+         }
+     }
+     return true;
+}

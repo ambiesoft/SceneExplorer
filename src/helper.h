@@ -83,7 +83,8 @@ QString resolution_human(int width, int height);
 QString opencount_human(int count);
 QString fps_human(const double& fps);
 QString createThumbFileName(int i, const QString& thumbid, int thumbWidth, int thumbHeight, const QString& thumbext);
-
+bool fff(const QString& thumbid, const QString& thumbext,
+         int thumbwidth, int thumbheight);
 
 
 #endif // HELPER_H

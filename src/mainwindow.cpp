@@ -78,6 +78,7 @@
 #include "itempropertydialog.h"
 #include "renamedialog.h"
 #include "directoryentrydialog.h"
+#include "taskcheckthumbs.h"
 
 #include "ui_mainwindow.h"
 #include "mainwindow.h"
@@ -320,7 +321,16 @@ QThreadPool* MainWindow::getPoolFFmpeg()
     }
     return pPoolFFmpeg_;
 }
-
+QThreadPool* MainWindow::getPoolCheckThumbs()
+{
+    if(!pPoolCheckThumbs_)
+    {
+        pPoolCheckThumbs_ = new QThreadPool;
+        pPoolCheckThumbs_->setExpiryTimeout(-1);
+        pPoolCheckThumbs_->setMaxThreadCount(1);
+    }
+    return pPoolCheckThumbs_;
+}
 void MainWindow::clearAllPool(bool bAppendLog)
 {
     if(bAppendLog)
@@ -336,11 +346,16 @@ void MainWindow::clearAllPool(bool bAppendLog)
             pPoolFFmpeg_->clear();
         if(pPoolGetDir_)
             pPoolGetDir_->clear();
+        if(pPoolCheckThumbs_)
+            pPoolCheckThumbs_->clear();
         if(pPoolFFmpeg_)
             pPoolFFmpeg_->clear();
 
-        if( (pPoolGetDir_ && pPoolGetDir_->activeThreadCount() != 0) ||
-                (pPoolFFmpeg_ && pPoolFFmpeg_->activeThreadCount() != 0) )
+        if(
+                (pPoolGetDir_ && pPoolGetDir_->activeThreadCount() != 0) ||
+                (pPoolFFmpeg_ && pPoolFFmpeg_->activeThreadCount() != 0) ||
+                (pPoolCheckThumbs_ && pPoolCheckThumbs_->activeThreadCount() != 0)
+                )
         {
             // wait 1 sec
             QThread::sleep(1);
@@ -355,6 +370,9 @@ void MainWindow::clearAllPool(bool bAppendLog)
 
     delete pPoolGetDir_;
     pPoolGetDir_ = nullptr;
+
+    delete pPoolCheckThumbs_;
+    pPoolCheckThumbs_ = nullptr;
 
     delete pPoolFFmpeg_;
     pPoolFFmpeg_ = nullptr;
@@ -425,6 +443,12 @@ void MainWindow::insertLog(TaskKind kind,
         case TaskKind_GetDir:
         {
             head.append(tr("Iterate"));
+            head.append(QString::number(id));
+        }
+            break;
+        case TaskKind_CheckThumbs:
+        {
+            head.append(tr("Check Thumbnail"));
             head.append(QString::number(id));
         }
             break;
@@ -569,15 +593,31 @@ void MainWindow::afterGetDir(int loopId, int id,
                 toUpdateFiles.append(QPair<qint64,QString>(recordid,file));
                 continue;
             }
-            if(Sql::THUMB_EXIST == gpSQL->hasThumb(fi.absoluteFilePath(), GetThumbWidth(), GetThumbHeight()))
+
+            QString dbThumpID;
+            if(gpSQL->getThumbID(dir, file, &dbThumpID))
             {
-                insertLog(TaskKind_GetDir, id, tr("Already exists. \"%1\"").
-                          arg(fi.absoluteFilePath()));
+                // thumbid found in db
+                // check if thumbfiles exists by thread because it is IO
+                TaskCheckThumbs* pTask = new TaskCheckThumbs(gLoopId,
+                                                             idManager_->Increment(IDKIND_CheckThumbs),
+                                                             id,
+                                                             dir,
+                                                             file,
+                                                             dbThumpID,
+                                                             optionThumbFormat_,
+                                                             GetThumbWidth(),GetThumbHeight());
+                pTask->setAutoDelete(true);
+                QObject::connect(pTask, &TaskCheckThumbs::afterCheckThumbs,
+                                 this, &MainWindow::afterCheckThumbs);
+                QObject::connect(pTask, &TaskCheckThumbs::finished_CheckThumbs,
+                                 this, &MainWindow::finished_CheckThumbs);
+                getPoolCheckThumbs()->start(pTask);
+                insertLog(TaskKind_CheckThumbs,idManager_->Get(IDKIND_CheckThumbs),dbThumpID);
                 continue;
             }
+
         }
-
-
 
         QStringList dirsDB;
         QStringList filesDB;
@@ -639,6 +679,53 @@ void MainWindow::afterGetDir(int loopId, int id,
     if(needUpdate)
         itemChangedCommon();
 }
+void MainWindow::afterCheckThumbs(int loopId,
+                                  int taskindex,
+                                  int getdirid,
+                                  const QString& dir,
+                                  const QString& file,
+                                  const QString& thumbid,
+                                  int width,
+                                  int height,
+                                  bool bExists)
+{
+    Q_UNUSED(taskindex);
+    Q_UNUSED(thumbid);
+    Q_UNUSED(width);
+    Q_UNUSED(height);
+
+    if(bExists)
+    {
+        insertLog(TaskKind_GetDir, getdirid, tr("Already exists. \"%1\"").
+                  arg(pathCombine(dir,file)));
+
+        return;
+    }
+    afterFilter2(loopId,
+                  getdirid,
+                  dir,
+                  QStringList(file),
+                  QList<QPair<qint64,QString>>()
+                  );
+}
+void MainWindow::finished_CheckThumbs(int loopId, int id)
+{
+    if(loopId != gLoopId)
+        return;
+
+    Q_UNUSED(id);
+
+    idManager_->IncrementDone(IDKIND_CheckThumbs);
+    Q_ASSERT(idManager_->Get(IDKIND_CheckThumbs) >= idManager_->GetDone(IDKIND_CheckThumbs));
+
+
+    if(idManager_->isAllTaskFinished())
+    {
+        onTaskEnded();
+        clearAllPool(false);
+        insertLog(TaskKind_App, 0, tr("======== All Tasks finished ========"));
+    }
+}
 void MainWindow::finished_GetDir(int loopId, int id, const QString& dir)
 {
     if(loopId != gLoopId)
@@ -661,7 +748,7 @@ void MainWindow::afterFilter2(int loopId,int id,
 
     if(filteredFiles.isEmpty() && toUpdateFiles.isEmpty())
     {
-        insertLog(TaskKind_GetDir, id, tr("No new files found in %1").arg(dir));
+        // insertLog(TaskKind_GetDir, id, tr("No new files found in %1").arg(dir));
     }
     else
     {
@@ -1186,9 +1273,9 @@ void MainWindow::OnContextCopySelectedVideoFilenameWithoutExtension()
 
 void MainWindow::IDManager::updateStatus()
 {
-    QString s = QString("D: %1/%2   M: %3/%4").
+    QString s = QString("D: %1/%2   T: %3/%4   M: %5/%6").
             arg(idGetDirDone_).arg(idGetDir_).
-            // arg(idFilterDone_).arg(idFilter_).
+            arg(idCheckThumbsDone_).arg(idCheckThumbs_).
             arg(idFFMpegDone_).arg(idFFMpeg_);
 
     win_->slTask_->setText(s);

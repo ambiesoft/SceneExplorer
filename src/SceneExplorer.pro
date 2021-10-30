@@ -34,6 +34,7 @@ SOURCES += \
     mainwindow_contextmenu.cpp \
     tablemodel.cpp \
     tablemodel_data.cpp \
+    taskcheckthumbs.cpp \
     taskffmpeg.cpp \
     taskgetdir.cpp \
     optiondialog.cpp \
@@ -91,6 +92,7 @@ HEADERS += \
     mainwindow.h \
     tablemodel.h \
     consts.h \
+    taskcheckthumbs.h \
     taskffmpeg.h \
     taskgetdir.h \
     optiondialog.h \
