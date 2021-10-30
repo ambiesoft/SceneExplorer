@@ -575,14 +575,9 @@ void MainWindow::afterGetDir(int loopId, int id,
                           arg(fi.absoluteFilePath()));
                 continue;
             }
-//            else
-//            {
-//                // thumbs not exist
-//                // may be crashed or failed to create
-//                // remove entry
-//                gpSQL->RemoveEntry(dir, file);
-//            }
         }
+
+
 
         QStringList dirsDB;
         QStringList filesDB;
