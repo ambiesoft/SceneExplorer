@@ -98,7 +98,6 @@ public:
     void selectItem(const QString& movie) override;
     void updateToolButton() override;
 
-
     bool IsInitialized() const;
 
 private:

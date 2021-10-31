@@ -50,6 +50,36 @@ TableModel::TableModel(QTableView *parent, IMainWindow* mainWindow)
 }
 void TableModel:: AppendData(const TableItemDataPointer& pItemData, const bool enableUpdate)
 {
+    if(mapsFullpathToItem_.contains(pItemData->getMovieFileFull()))
+    {
+        TableItemDataPointer pOldTD = mapsFullpathToItem_[pItemData->getMovieFileFull()];
+        mapsFullpathToItem_[pItemData->getMovieFileFull()] = pItemData;
+
+        // Remove image cache
+        for(int i=0 ; i < columnCountImage_; ++i)
+        {
+            QString imageFile = pathCombine(FILEPART_THUMBS,
+                                            pOldTD->getThumbnailFiles()[getActualColumnIndex(i)]);
+
+            if(mapPixmaps_.keys().contains(imageFile))
+            {
+                mapPixmaps_.remove(imageFile);
+                Q_ASSERT(!mapPixmaps_.keys().contains(imageFile));
+            }
+        }
+
+        const int row = itemDatas_.indexOf(pOldTD);
+        Q_ASSERT(row >= 0);
+
+        // Set new data
+        int toInsert = itemDatas_.indexOf(pOldTD);
+        itemDatas_.insert(toInsert, pItemData);
+        VERIFY(itemDatas_.removeOne(pOldTD));
+
+        emit dataChanged(createIndex(row*3,0), createIndex((row*3)+3,0));
+        return;
+    }
+
     if(enableUpdate)
     {
         beginInsertRows(QModelIndex(),
@@ -574,7 +604,7 @@ QModelIndex TableModel::GetIndex(const QString& movieFile) const
     }
     return QModelIndex();
 }
-void TableModel::RemoveItem(const QString& movieFile)
+void TableModel::RemoveItem(const QString& movieFile, bool bRefresh)
 {
     if(movieFile.isEmpty())
     {
@@ -590,11 +620,17 @@ void TableModel::RemoveItem(const QString& movieFile)
 
         int row = itemDatas_.indexOf(pID);
         Q_ASSERT(row >= 0);
-        //beginRemoveRows(QModelIndex(), row*RowCountPerEntry, (row*RowCountPerEntry)+RowCountPerEntry);
-        beginResetModel();
+        if(bRefresh)
+        {
+            //beginRemoveRows(QModelIndex(), row*RowCountPerEntry, (row*RowCountPerEntry)+RowCountPerEntry);
+            beginResetModel();
+        }
         itemDatas_.removeAt(row);
-        //endRemoveRows();
-        endResetModel();
+        if(bRefresh)
+        {
+            endResetModel();
+            //endRemoveRows();
+        }
     }
 }
 

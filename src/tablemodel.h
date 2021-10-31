@@ -134,7 +134,7 @@ public:
     void UpdateProperty(const QString& movieFile,
                                     const QString& url,
                                     const QString& memo);
-    void RemoveItem(const QString& movieFile);
+    void RemoveItem(const QString& movieFile, bool bRefresh = true);
     QModelIndex GetIndex(const QString& movieFile) const;
     QFont GetInfoFont() {
         return fontInfo_;

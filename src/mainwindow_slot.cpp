@@ -18,6 +18,7 @@
 
 #include <QFileInfo>
 #include <QDateTime>
+#include <QDebug>
 
 #include "../../lsMisc/stdQt/stdQt.h"
 
@@ -147,7 +148,7 @@ void MainWindow::sayGoodby(int loopId,  int id,
 
     if(IsDirSelected(normalizeDir(fi.absolutePath())))
     {
-        tableModel_->RemoveItem(fi.absoluteFilePath());
+        // tableModel_->RemoveItem(fi.absoluteFilePath());
         tableModel_->AppendData(pTID);
     }
 
