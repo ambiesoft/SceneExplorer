@@ -146,10 +146,14 @@ void MainWindow::sayGoodby(int loopId,  int id,
                 0));
     pTID->setThumbExt(thumbext);
 
-    if(IsDirSelected(normalizeDir(fi.absolutePath())))
+    if(!tableModel_->ModifyDataIf(pTID))
     {
-        // tableModel_->RemoveItem(fi.absoluteFilePath());
-        tableModel_->AppendData(pTID);
+        // TODO: must be filtered by search or tag
+        if(IsDirSelected(normalizeDir(fi.absolutePath())))
+        {
+            // tableModel_->RemoveItem(fi.absoluteFilePath());
+            tableModel_->AppendData(pTID);
+        }
     }
 
     QString removedThumbID;

@@ -99,7 +99,8 @@ public:
         GetMemo,
     };
     TableModel(QTableView *parent, IMainWindow* mainWindow);
-    void AppendData(const TableItemDataPointer& pItemData, const bool enableUpdate = true);
+    bool ModifyDataIf(const TableItemDataPointer& pItemData);
+    bool AppendData(const TableItemDataPointer& pItemData, const bool enableUpdate = true);
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override ;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;

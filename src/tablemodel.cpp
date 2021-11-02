@@ -48,7 +48,7 @@ TableModel::TableModel(QTableView *parent, IMainWindow* mainWindow)
 {
 
 }
-void TableModel:: AppendData(const TableItemDataPointer& pItemData, const bool enableUpdate)
+bool TableModel::ModifyDataIf(const TableItemDataPointer& pItemData)
 {
     if(mapsFullpathToItem_.contains(pItemData->getMovieFileFull()))
     {
@@ -77,8 +77,14 @@ void TableModel:: AppendData(const TableItemDataPointer& pItemData, const bool e
         VERIFY(itemDatas_.removeOne(pOldTD));
 
         emit dataChanged(createIndex(row*3,0), createIndex((row*3)+3,0));
-        return;
+        return true;
     }
+    return false;
+}
+bool TableModel:: AppendData(const TableItemDataPointer& pItemData, const bool enableUpdate)
+{
+    if(ModifyDataIf(pItemData))
+        return false;
 
     if(enableUpdate)
     {
@@ -115,12 +121,9 @@ void TableModel:: AppendData(const TableItemDataPointer& pItemData, const bool e
     if(enableUpdate)
         emit itemCountChanged();
 
-    // parent_->setRowHeight(newRowImage, THUMB_HEIGHT);
-//    setData(index(newRowImage,0), QSize(THUMB_WIDTH, THUMB_HEIGHT), Qt::SizeHintRole);
-//    QHeaderView *verticalHeader = parent_->verticalHeader();
-//    verticalHeader->setSectionResizeMode(QHeaderView::Fixed);
-//    verticalHeader->setDefaultSectionSize(24);
+    return true;
 }
+
 void TableModel::ResetData(const QList<TableItemDataPointer>& all)
 {
     beginResetModel();
