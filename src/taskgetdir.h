@@ -23,6 +23,7 @@
 #include <QRunnable>
 #include <QThread>
 
+#include "globals.h"
 
 class TaskGetDir : public QObject, public QRunnable
 {
@@ -32,7 +33,10 @@ private:
     int id_;
 
     QString dir_;
+    SORTCOLUMNMY sortby_ = SORT_NONE;
+    bool sortrev_=false;
     QThread::Priority* priority_ = nullptr;
+
     void runStuff(const QString& dir);
 
     TaskGetDir(QObject* =nullptr) {
@@ -44,6 +48,7 @@ public:
     TaskGetDir(int loopId,
                int id,
                const QString& dir,
+               SORTCOLUMNMY sortby, bool sortrev,
                QThread::Priority* priority);
     virtual ~TaskGetDir() override;
 

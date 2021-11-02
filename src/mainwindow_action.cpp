@@ -537,6 +537,7 @@ void MainWindow::StartScan(const QStringList& dirsOrig)
                     gLoopId,
                     idManager_->Increment(IDKIND_GetDir),
                     dir,
+                    sortManager_.GetCurrentSort(), sortManager_.GetCurrentRev(),
                     GetTaskPriority());
         pTaskGetDir->setAutoDelete(true);
         QObject::connect(pTaskGetDir, &TaskGetDir::afterGetDir,

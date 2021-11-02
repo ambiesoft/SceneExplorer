@@ -34,10 +34,12 @@ void TaskGetDir::RegisterMetaType()
 TaskGetDir::TaskGetDir(int loopId,
                        int id,
                        const QString& dir,
+                       SORTCOLUMNMY sortby, bool sortrev,
                        QThread::Priority* priority):
     loopId_(loopId),
     id_(id),
-    dir_(dir)
+    dir_(dir),
+    sortby_(sortby), sortrev_(sortrev)
 {
     Q_ASSERT(!dir.isEmpty());
     if(priority)
@@ -59,6 +61,16 @@ void TaskGetDir::run()
     runStuff(dir_);
     emit finished_GetDir(loopId_, id_, dir_);
 }
+
+struct FileInfos
+{
+    QString file_;
+    qint64 size_;
+    qint64 ctime_;
+    qint64 wtime_;
+    QString salient_;
+};
+
 void TaskGetDir::runStuff(const QString& dir)
 {
     if(gStop)
@@ -85,6 +97,7 @@ void TaskGetDir::runStuff(const QString& dir)
             Q_ASSERT(itFile.fileInfo().isFile());
             if (Extension::IsMovieExtension(itFile.fileName()))
             {
+                // Todo: implement sort by useing FileInfos
                 files.append(itFile.fileName());
                 sizes.append(itFile.fileInfo().size());
                 ctimes.append(itFile.fileInfo().birthTime().toSecsSinceEpoch());
