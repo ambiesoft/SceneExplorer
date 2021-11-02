@@ -1,3 +1,6 @@
+2021/11/02　1.22.14
+Tweak Image Timer
+
 2021/11/01　1.22.13
 Keep selection while modifing existing item
 

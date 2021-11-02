@@ -647,26 +647,28 @@ void TableModel::timerEvent(QTimerEvent *event)
 
     static QList<qint64> lastTenTick;
     lastTenTick.append(imageElapsedTimer_.elapsed());
-    if(lastTenTick.count() >= 10)
+    if(lastTenTick.count() >= 5)
     {
+        constexpr int MINTICK = 10;
+        const int tickCount = lastTenTick.count();
         qint64 sum = 0;
-        for(int i=1 ; i < 10; ++i)
+        for(int i=1 ; i < tickCount; ++i)
             sum += (lastTenTick[i] - lastTenTick[i-1] - imageInterval_);
 
-        sum /= 9;
-        if(sum < 10)
+        sum /= (tickCount-1);
+        const int newInterval = sum < MINTICK ?
+            std::max(MINTICK, imageInterval_ - MINTICK) :
+            imageInterval_ + MINTICK;
+        qDebug() << "Image Timer Interval=" << imageInterval_ << "->" << newInterval << __FUNCTION__;
+        if(imageInterval_ != newInterval)
         {
-            imageInterval_ = std::max(10, imageInterval_ - 10);
+            imageInterval_ = newInterval;
+//            KillImageTimer();
+//            StartImageTimer();
         }
-        else
-        {
-            imageInterval_ += 10;
-        }
-        qDebug() << "Image Timer Interval" << imageInterval_ << __FUNCTION__;
         lastTenTick.clear();
         imageElapsedTimer_.invalidate();
         imageElapsedTimer_.start();
-
     }
 
 //    if((QApplication::mouseButtons() & Qt::MouseButton::LeftButton) != 0)
@@ -684,16 +686,13 @@ void TableModel::timerEvent(QTimerEvent *event)
 
     QString imageFile = pathCombine(FILEPART_THUMBS,
                                     itemData->getThumbnailFiles()[getActualColumnIndex(index.column())]);
-
+    if(!mapPixmaps_.keys().contains(imageFile))
     {
-        if(!mapPixmaps_.keys().contains(imageFile))
-        {
-            QImage image(imageFile);
-            QVariant vpix(QPixmap::fromImage(image));
-            mapPixmaps_[imageFile]= vpix;
-        }
-        // return mapPixmaps_[imageFile];
+        QImage image(imageFile);
+        QVariant vpix(QPixmap::fromImage(image));
+        mapPixmaps_[imageFile]= vpix;
     }
+
     emit dataChanged(index,index);
 }
 void TableModel::StartImageTimer()
