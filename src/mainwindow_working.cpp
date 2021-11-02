@@ -39,7 +39,7 @@ void MainWindow::showEvent( QShowEvent* event )
     ui->listTag->setMaximumSize(10000,10000);
 
     itemChangedCommon();
-    tableSortParameterChanged(sortManager_.GetCurrentSort(), sortManager_.GetCurrentRev());  // tableModel_->GetSortColumn(), tableModel_->GetSortReverse());
+    tableSortParameterChanged(sortManager_.GetCurrentSort(), sortManager_.IsSortAscending());  // tableModel_->GetSortColumn(), tableModel_->GetSortReverse());
 
 
     OnTableViewScrollChanged(-1);

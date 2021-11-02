@@ -119,7 +119,7 @@ void MainWindow::closeEvent(QCloseEvent *event) {
 
     // sort
     settings_.setValue(KEY_SORT, static_cast<int>(sortManager_.GetCurrentSort()));
-    settings_.setValue(KEY_SORTREV, sortManager_.GetCurrentRev());
+    settings_.setValue(KEY_SORTREV, sortManager_.IsSortAscending());
 
     settings_.sync();
     QMainWindow::closeEvent(event);

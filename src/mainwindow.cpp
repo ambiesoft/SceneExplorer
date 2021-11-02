@@ -543,14 +543,7 @@ void MainWindow::resizeDock_obsolete(QDockWidget* dock, const QSize& size)
 
 void MainWindow::afterGetDir(int loopId, int id,
                              const QString& dirc,
-                             const QStringList& filesIn,
-
-                             const QList<qint64> sizes,
-                             const QList<qint64> ctimes,
-                             const QList<qint64> wtimes,
-
-                             const QStringList& salients
-                             )
+                             const QList<MovieFileInfo>& mfis)
 {
     if(loopId != gLoopId)
         return;
@@ -568,13 +561,13 @@ void MainWindow::afterGetDir(int loopId, int id,
     QStringList filteredFiles;
 
     // check file is in DB
-    for(int ifs = 0 ; ifs < filesIn.count();++ifs)
+    for(int ifs = 0 ; ifs < mfis.count();++ifs)
     {
-        const QString& file = filesIn[ifs];
-        const QString& sa = salients[ifs];
-        const qint64 size = sizes[ifs];
-        const qint64 ctime = ctimes[ifs];
-        const qint64 wtime = wtimes[ifs];
+        const QString& file = mfis[ifs].name();
+        const QString& sa = mfis[ifs].salient();
+        const qint64 size = mfis[ifs].size();
+        const qint64 ctime = mfis[ifs].ctime();
+        const qint64 wtime = mfis[ifs].wtime();
 
         QFileInfo fi(pathCombine(dir, file));
 
@@ -1508,7 +1501,7 @@ void MainWindow::GetSqlAllSetTable(const QStringList dirs,
                   bOnlyMissing,
                   bOnlyExistant,
                   sortManager_.GetCurrentSort(),
-                  sortManager_.GetCurrentRev(),
+                  sortManager_.IsSortAscending(),
                   limitManager_ ?
                       LimitArg(limitManager_->GetCurrentIndex(), limitManager_->GetNumberOfRows()): LimitArg(),
                   tagInfos);
@@ -1532,7 +1525,7 @@ void MainWindow::GetSqlAllSetTable(const QStringList dirs,
               tr("Resetting data takes %1 milliseconds.").arg(timer.elapsed()));
 
 
-    tableSortParameterChanged(sortManager_.GetCurrentSort(), sortManager_.GetCurrentRev());
+    tableSortParameterChanged(sortManager_.GetCurrentSort(), sortManager_.IsSortAscending());
 }
 
 void MainWindow::UpdateTitle(const QStringList& dirs, UpdateTitleType utt)

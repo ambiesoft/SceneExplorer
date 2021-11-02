@@ -341,7 +341,7 @@ protected:
         SORTCOLUMNMY GetCurrentSort() const {
             return sort_;
         }
-        bool GetCurrentRev() const {
+        bool IsSortAscending() const {
             return ascending_[sort_];
         }
         void setAction(SORTCOLUMNMY sc,
@@ -767,14 +767,7 @@ public Q_SLOTS:
 
     void afterGetDir(int loopId, int id,
                      const QString& dir,
-                     const QStringList& files,
-
-                     const QList<qint64> sizes,
-                     const QList<qint64> ctimes,
-                     const QList<qint64> wtimes,
-
-                     const QStringList& salients);
-
+                    const QList<MovieFileInfo>& mfis);
     void finished_GetDir(int loopId, int id ,const QString& dir);
     //    void afterFilter(int loopId, int id,
     //                     const QString& dir,

@@ -29,17 +29,18 @@
 void TaskGetDir::RegisterMetaType()
 {
     qRegisterMetaType< QList<qint64> >( "QList<qint64>" );
+    qRegisterMetaType< QList<MovieFileInfo> >( "QList<MovieFileInfo>" );
 }
 
 TaskGetDir::TaskGetDir(int loopId,
                        int id,
                        const QString& dir,
-                       SORTCOLUMNMY sortby, bool sortrev,
+                       SORTCOLUMNMY sortby, bool ascending,
                        QThread::Priority* priority):
     loopId_(loopId),
     id_(id),
     dir_(dir),
-    sortby_(sortby), sortrev_(sortrev)
+    sortby_(sortby), ascending_(ascending)
 {
     Q_ASSERT(!dir.isEmpty());
     if(priority)
@@ -62,15 +63,6 @@ void TaskGetDir::run()
     emit finished_GetDir(loopId_, id_, dir_);
 }
 
-struct FileInfos
-{
-    QString file_;
-    qint64 size_;
-    qint64 ctime_;
-    qint64 wtime_;
-    QString salient_;
-};
-
 void TaskGetDir::runStuff(const QString& dir)
 {
     if(gStop)
@@ -83,11 +75,7 @@ void TaskGetDir::runStuff(const QString& dir)
 
 
     {
-        QStringList files;
-        QList<qint64> sizes;
-        QList<qint64> ctimes;
-        QList<qint64> wtimes;
-        QStringList salients;
+        QList<MovieFileInfo> mfis;
         QDirIterator itFile(dir, QDir::NoDotAndDotDot|QDir::Files); // ,QDirIterator::Subdirectories);
         while(itFile.hasNext())
         {
@@ -97,21 +85,55 @@ void TaskGetDir::runStuff(const QString& dir)
             Q_ASSERT(itFile.fileInfo().isFile());
             if (Extension::IsMovieExtension(itFile.fileName()))
             {
-                // Todo: implement sort by useing FileInfos
-                files.append(itFile.fileName());
-                sizes.append(itFile.fileInfo().size());
-                ctimes.append(itFile.fileInfo().birthTime().toSecsSinceEpoch());
-                wtimes.append(itFile.fileInfo().lastModified().toSecsSinceEpoch());
-                salients.append(createSalient(itFile.filePath(), QFile(itFile.filePath()).size()));
+                MovieFileInfo mfi(itFile.fileName(),
+                                  itFile.fileInfo().size(),
+                                  itFile.fileInfo().birthTime().toSecsSinceEpoch(),
+                                  itFile.fileInfo().lastModified().toSecsSinceEpoch(),
+                                  createSalient(itFile.filePath(), QFile(itFile.filePath()).size()));
+                mfis.push_back(mfi);
             }
         }
+
+        // ascending           descending
+        // 3                   55
+        // 9                   12
+        // 12                   9
+        // 55                   3
+
+#define CASESORT(sorttype, func)                                    \
+    case sorttype:                                                  \
+        if(ascending_)                                              \
+        {                                                           \
+            std::sort(mfis.begin(), mfis.end(),                     \
+                 [](MovieFileInfo& a, MovieFileInfo& b) -> bool     \
+            {                                                       \
+                return a.func() < b.func();                         \
+            });                                                     \
+        }                                                           \
+        else                                                        \
+        {                                                           \
+            std::sort(mfis.begin(), mfis.end(),                     \
+                 [](MovieFileInfo& a, MovieFileInfo& b) -> bool     \
+            {                                                       \
+                return b.func() < a.func();                         \
+            });                                                     \
+        }                                                           \
+        break;
+
+
+        switch(sortby_)
+        {
+            CASESORT(SORT_FILENAME,name)
+            CASESORT(SORT_SIZE,size)
+            CASESORT(SORT_CTIME,ctime)
+            CASESORT(SORT_WTIME,wtime)
+            default:
+                break;
+        }
+#undef CASESORT
         emit afterGetDir(loopId_, id_,
                          QDir(dir).absolutePath(),
-                         files,
-                         sizes,
-                         ctimes,
-                         wtimes,
-                         salients);
+                         mfis);
     }
 
     {

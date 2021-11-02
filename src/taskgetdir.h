@@ -34,7 +34,7 @@ private:
 
     QString dir_;
     SORTCOLUMNMY sortby_ = SORT_NONE;
-    bool sortrev_=false;
+    bool ascending_=false;
     QThread::Priority* priority_ = nullptr;
 
     void runStuff(const QString& dir);
@@ -48,7 +48,7 @@ public:
     TaskGetDir(int loopId,
                int id,
                const QString& dir,
-               SORTCOLUMNMY sortby, bool sortrev,
+               SORTCOLUMNMY sortby, bool ascending,
                QThread::Priority* priority);
     virtual ~TaskGetDir() override;
 
@@ -57,14 +57,7 @@ public:
 Q_SIGNALS:
     void afterGetDir(int loopId, int id,
                      const QString& dir,
-                     const QStringList& files,
-
-                     const QList<qint64> sizes,
-
-                     const QList<qint64> ctimes,
-                     const QList<qint64> wtimes,
-
-                     const QStringList& salients);
+                    const QList<MovieFileInfo>& mfis);
     void finished_GetDir(int loopId,int id,const QString& dir);
 };
 

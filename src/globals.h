@@ -86,5 +86,40 @@ extern std::unique_ptr<CommandOption> gpCommandOption;
     clazz& operator=(const clazz&) = delete;         \
 **/
 
+class MovieFileInfo
+{
+    QString file_;
+    qint64 size_;
+    qint64 ctime_;
+    qint64 wtime_;
+    QString salient_;
+public:
+    MovieFileInfo(const QString& file,
+                  qint64 size,
+                  qint64 ctime,
+                  qint64 wtime,
+                  const QString& salient):
+        file_(file),
+        size_(size),
+        ctime_(ctime),
+        wtime_(wtime),
+        salient_(salient){}
+
+    QString name() const {
+        return file_;
+    }
+    qint64 size() const {
+        return size_;
+    }
+    qint64 ctime() const {
+        return ctime_;
+    }
+    qint64 wtime() const {
+        return wtime_;
+    }
+    QString salient() const {
+        return salient_;
+    }
+};
 
 #endif // GLOBALS_H
