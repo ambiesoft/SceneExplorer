@@ -32,6 +32,7 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     mainwindow_contextmenu.cpp \
+    showlastscanerrorsdialog.cpp \
     tablemodel.cpp \
     tablemodel_data.cpp \
     taskcheckthumbs.cpp \
@@ -90,6 +91,7 @@ HEADERS += \
     debugflag.h \
     gitrev.h \
     mainwindow.h \
+    showlastscanerrorsdialog.h \
     tablemodel.h \
     consts.h \
     taskcheckthumbs.h \
@@ -146,6 +148,7 @@ FORMS += \
     optionextension.ui \
     aboutdialog.ui \
     docinfodialog.ui \
+    showlastscanerrorsdialog.ui \
     taginputdialog.ui \
     renamedialog.ui \
     itempropertydialog.ui \

@@ -804,7 +804,7 @@ int Sql::hasThumb(const QString& movieFile,
         QString thumbext = pGetInfo->value("thumbext").toString();
         QStringList thumbs;
 
-        if(!fff(thumbid, thumbext, thumbWidth, thumbHeight))
+        if(!ThumbFilesExist(thumbid, thumbext, thumbWidth, thumbHeight))
         {
                 // RemoveEntryFromThumbID(thumbid);
                 return THUMBFILE_NOT_FOUND;

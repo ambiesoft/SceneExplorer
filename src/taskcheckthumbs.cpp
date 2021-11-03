@@ -11,7 +11,7 @@ void TaskCheckThumbs::run()
                 file_,
                 thumbid_,
                 width_,height_,
-                fff(thumbid_,thumbext_,width_,height_)
+                ThumbFilesExist(thumbid_,thumbext_,width_,height_)
                 );
     emit finished_CheckThumbs(loopid_, taskindex_);
 }

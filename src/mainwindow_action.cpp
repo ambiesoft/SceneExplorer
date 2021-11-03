@@ -495,6 +495,9 @@ bool MainWindow::IsDirSelected(const QString& dir) const
 
 void MainWindow::StartScan(const QStringList& dirsOrig)
 {
+    // clear error log
+    lastScanErrors_.clear();
+
     QString errString, ffprobeVersion, ffmpegVersion;
     if(!GetFFprobeVersion(errString, ffprobeVersion) || !GetFFmpegVersion(errString, ffmpegVersion))
     {

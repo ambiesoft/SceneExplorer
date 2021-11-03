@@ -88,6 +88,8 @@ class MainWindow : public QMainWindow, IMainWindow, IHistoryList
 
     HistoryList hisList_;
     bool bHistoryActivating_=false;
+
+    QList<QString> lastScanErrors_;
 public:
     explicit MainWindow(QWidget *parent,
                         AmbiesoftQt::IniSettings& settings);
@@ -637,6 +639,8 @@ private Q_SLOTS:
 
     void on_actionSort_by_ctime_triggered();
 
+    void on_actionShow_last_scan_error_triggered();
+
 private:
     void OnCopyTable();
     void OnCopyDirectory();
@@ -700,10 +704,21 @@ private:
     enum TaskKind {
         TaskKind_GetDir,
         TaskKind_CheckThumbs,
+        TaskKind_CheckThumbsError,
         TaskKind_FFMpeg,
+        TaskKind_FFMpegWarn,
+        TaskKind_FFMpegError,
         TaskKind_SQL,
+        TaskKind_SQLError,
         TaskKind_App,
     };
+    bool IsErrorLogKind(TaskKind kind) const {
+        return
+                kind==TaskKind_CheckThumbsError ||
+                kind==TaskKind_FFMpegWarn ||
+                kind==TaskKind_FFMpegError ||
+                kind==TaskKind_SQLError;
+    }
     void insertLog(TaskKind kind, int id, const QString& text, bool bError=false);
     void insertLog(TaskKind kind, const QVector<int>& ids, const QStringList& texts, bool bError=false);
     void updateOnOpened(const qint64& id, const QString& movieFile);

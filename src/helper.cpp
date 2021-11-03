@@ -641,7 +641,7 @@ QString createThumbFileName(int i, const QString& thumbid, int thumbWidth, int t
     t+=thumbext;
     return t;
 }
-bool fff(const QString& thumbid, const QString& thumbext,
+bool ThumbFilesExist(const QString& thumbid, const QString& thumbext,
          int thumbwidth, int thumbheight)
 {
      QStringList thumbs;

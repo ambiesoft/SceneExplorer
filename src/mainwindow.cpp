@@ -441,45 +441,28 @@ void MainWindow::insertLog(TaskKind kind,
         switch(kind)
         {
         case TaskKind_GetDir:
-        {
             head.append(tr("Iterate"));
             head.append(QString::number(id));
-        }
             break;
         case TaskKind_CheckThumbs:
-        {
+        case TaskKind_CheckThumbsError:
             head.append(tr("Check Thumbnail"));
             head.append(QString::number(id));
-        }
             break;
         case TaskKind_FFMpeg:
-        {
+        case TaskKind_FFMpegWarn:
+        case TaskKind_FFMpegError:
             head.append(tr("Thumbnail"));
             head.append(QString::number(id));
-        }
             break;
         case TaskKind_SQL:
-        {
+        case TaskKind_SQLError:
             head.append(tr("Database"));
             head.append(QString::number(id));
-        }
             break;
-
         case TaskKind_App:
-        {
             head.append(tr("Application"));
-        }
             break;
-
-            //            case TaskKind::Filter:
-            //            {
-            //                head.append(tr("Filter"));
-            //            }
-            //            break;
-
-            //            default:
-            //                Q_ASSERT(false);
-            //                return;
         }
 
         head.append("> ");
@@ -488,14 +471,16 @@ void MainWindow::insertLog(TaskKind kind,
         if( (i+1) != texts.length())
             message.append("\n");
     }
+
+    if(IsErrorLogKind(kind))
+    {
+        lastScanErrors_.append( message);
+    }
     int scrollMax=ui->txtLog->verticalScrollBar()->maximum();
     int scrollCur=ui->txtLog->verticalScrollBar()->value();
 
-    //int prevcursorPos = ui->txtLog->textCursor().position();
     ui->txtLog->appendPlainText(message);
-    //int aftercursorPos = ui->txtLog->textCursor().position();
 
-    //if(prevcursorPos < aftercursorPos)
     if(scrollMax==scrollCur)
     {
         ui->txtLog->verticalScrollBar()->setValue(
@@ -694,12 +679,14 @@ void MainWindow::afterCheckThumbs(int loopId,
 
         return;
     }
+    insertLog(TaskKind_CheckThumbsError, taskindex,
+              tr("\"%1\" does not exist.").arg(thumbid));
     afterFilter2(loopId,
-                  getdirid,
-                  dir,
-                  QStringList(file),
-                  QList<QPair<qint64,QString>>()
-                  );
+                 getdirid,
+                 dir,
+                 QStringList(file),
+                 QList<QPair<qint64,QString>>()
+                 );
 }
 void MainWindow::finished_CheckThumbs(int loopId, int id)
 {
@@ -1200,8 +1187,8 @@ void MainWindow::OnContextExternalTools()
         else if(s=="${filefullpathwithoutextension}")
         {
             argparsed += QDir::toNativeSeparators(pathCombine(
-                        QFileInfo(movieFileNative).dir().absolutePath(),
-                        QFileInfo(QFileInfo(movieFileNative).fileName()).completeBaseName()));
+                                                      QFileInfo(movieFileNative).dir().absolutePath(),
+                                                      QFileInfo(QFileInfo(movieFileNative).fileName()).completeBaseName()));
         }
         else if(s=="${filename}")
         {
@@ -1442,8 +1429,8 @@ void MainWindow::GetSelectedAndCurrentTagIDs(TagidsInfo& tagInfos)
                 allids.append(ti->tagid());
             }
         }
-//        QSet<qint64> allfileids;
-//        pDoc_ && pDoc_->GetTaggedIDs(allids, allfileids);
+        //        QSet<qint64> allfileids;
+        //        pDoc_ && pDoc_->GetTaggedIDs(allids, allfileids);
         tagInfos.setTagIds(allids);
 
         QList<qint64> alltaggedtagid;
@@ -1457,8 +1444,8 @@ void MainWindow::GetSelectedAndCurrentTagIDs(TagidsInfo& tagInfos)
         tagInfos.setAll();
         return ;
     }
-//    QSet<qint64> taggedids;
-//    pDoc_ && pDoc_->GetTaggedIDs(tagids, taggedids);
+    //    QSet<qint64> taggedids;
+    //    pDoc_ && pDoc_->GetTaggedIDs(tagids, taggedids);
     tagInfos.setTagIds(tagids);
     return;
 }
@@ -1704,14 +1691,14 @@ void MainWindow::on_action_Font_triggered()
 {
     setFontCommon2(KEY_FONT_TABLEINFO,
                    [this]() -> QFont { return tableModel_->GetInfoFont();},
-                   [this](QFont& font) { tableModel_->SetInfoFont(font);});
+    [this](QFont& font) { tableModel_->SetInfoFont(font);});
 }
 
 void MainWindow::on_action_FontDetail_triggered()
 {
     setFontCommon2(KEY_FONT_TABLEDETAIL,
                    [this]() -> QFont { return tableModel_->GetDetailFont();},
-                   [this](QFont& font) { tableModel_->SetDetailFont(font);});
+    [this](QFont& font) { tableModel_->SetDetailFont(font);});
 
 }
 void MainWindow::setFontCommon1(const QString& savekey,
@@ -1719,7 +1706,7 @@ void MainWindow::setFontCommon1(const QString& savekey,
 {
     setFontCommon2(savekey,
                    [pWidget]() -> QFont { return pWidget->font();},
-                   [pWidget](QFont& font) { pWidget->setFont(font);});
+    [pWidget](QFont& font) { pWidget->setFont(font);});
 }
 
 void MainWindow::askRebootClose()
@@ -2152,7 +2139,7 @@ void MainWindow::on_action_FontMenu_triggered()
 {
     setFontCommon2(KEY_FONT_MENU,
                    [this]()->QFont { return ui->menuBar->font(); },
-                   [this] (QFont& font)
+    [this] (QFont& font)
     {
         setMenuFont(font);
     }
@@ -2174,7 +2161,7 @@ void MainWindow::on_action_FontDockingWindow_triggered()
 
     setFontCommon2(KEY_FONT_DOCKINGWINDOW,
                    [allDock]() -> QFont { return allDock[0]->font();},
-                   [allDock](QFont& font)
+    [allDock](QFont& font)
     {
         for(QWidget* pW : allDock)
             pW->setFont(font);
@@ -2186,7 +2173,7 @@ void MainWindow::on_action_FontStatusbar_triggered()
 {
     setFontCommon2(KEY_FONT_STATUSBAR,
                    [this]() -> QFont { return ui->statusBar->font();},
-                   [this](QFont& font)
+    [this](QFont& font)
     {
         ui->statusBar->setFont(font);
         foreach(QWidget* pW, getAllStatusBarWidgets())
@@ -2752,6 +2739,15 @@ void MainWindow::on_action_SelectTags_triggered()
     }
 }
 
-
-
-
+#include "showlastscanerrorsdialog.h"
+void MainWindow::on_actionShow_last_scan_error_triggered()
+{
+    QString all = lastScanErrors_.empty() ?
+                tr("<No Error Logs>"):
+                join<QString>(lastScanErrors_, "\n",
+                     [](const QString& s)->QString{
+        return s;
+    });
+    ShowLastScanErrorsDialog dlg(this,all);
+    dlg.exec();
+}

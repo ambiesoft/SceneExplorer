@@ -1,3 +1,6 @@
+2021/11/03　1.22.17
+Add: 'Show last scan errors'
+
 2021/11/02　1.22.16
 ModifyData before AppendData
 

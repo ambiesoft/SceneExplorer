@@ -220,6 +220,8 @@
     <addaction name="action_ClearFindHistory"/>
     <addaction name="separator"/>
     <addaction name="menu_Focus"/>
+    <addaction name="separator"/>
+    <addaction name="actionShow_last_scan_error"/>
    </widget>
    <widget class="QMenu" name="menu_Directory">
     <property name="title">
@@ -1201,6 +1203,11 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+K, C</string>
+   </property>
+  </action>
+  <action name="actionShow_last_scan_error">
+   <property name="text">
+    <string>Show last scan error</string>
    </property>
   </action>
  </widget>

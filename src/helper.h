@@ -83,8 +83,18 @@ QString resolution_human(int width, int height);
 QString opencount_human(int count);
 QString fps_human(const double& fps);
 QString createThumbFileName(int i, const QString& thumbid, int thumbWidth, int thumbHeight, const QString& thumbext);
-bool fff(const QString& thumbid, const QString& thumbext,
+bool ThumbFilesExist(const QString& thumbid, const QString& thumbext,
          int thumbwidth, int thumbheight);
 
-
+// https://stackoverflow.com/questions/57890027/qlist-generic-join-function-with-template
+template <class T>
+QString join(const QList<T> &list,
+             const QString &separator,
+             std::function< QString (const T &item) > toStringFunction)
+{
+    QString out;
+    for(int i = 0; i<list.size(); i++)
+        out+= (i ? separator : "") + toStringFunction(list[i]);
+    return out;
+}
 #endif // HELPER_H

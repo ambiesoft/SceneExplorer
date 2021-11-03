@@ -471,7 +471,7 @@
     </message>
     <message>
         <source>No new files found in %1</source>
-        <translation>&quot;%1&quot; に新規ファイルは見つかりません</translation>
+        <translation type="vanished">&quot;%1&quot; に新規ファイルは見つかりません</translation>
     </message>
     <message>
         <source>%1 new items found in %2</source>
@@ -1621,6 +1621,22 @@
         <source>Sort by ctime(&amp;E)</source>
         <translation>作成時刻でソート(&amp;E)</translation>
     </message>
+    <message>
+        <source>Show last scan error</source>
+        <translation>最後のスキャンエラーを表示</translation>
+    </message>
+    <message>
+        <source>Check Thumbnail</source>
+        <translation>サムネイルチェック</translation>
+    </message>
+    <message>
+        <source>&quot;%1&quot; does not exist.</source>
+        <translation>&quot;%1&quot; は存在しません。</translation>
+    </message>
+    <message>
+        <source>&lt;No Error Logs&gt;</source>
+        <translation>＜エラーログはありません＞</translation>
+    </message>
 </context>
 <context>
     <name>Option</name>
@@ -2241,6 +2257,17 @@
     <message>
         <source>Filename cound not have &apos;/&apos; or/and &apos;\&apos;</source>
         <translation>ファイル名は &apos;/&apos; や &apos;\&apos; を持てません。</translation>
+    </message>
+</context>
+<context>
+    <name>ShowLastScanErrorsDialog</name>
+    <message>
+        <source>Dialog</source>
+        <translation type="vanished">ダイアログ</translation>
+    </message>
+    <message>
+        <source>Last scan errors</source>
+        <translation>最後のスキャンエラー</translation>
     </message>
 </context>
 <context>

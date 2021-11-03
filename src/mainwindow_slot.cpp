@@ -53,7 +53,7 @@ void MainWindow::sayNo(int loopId,
     if(loopId != gLoopId)
         return;
 
-    insertLog(TaskKind_FFMpeg, id, QString("%1 (%2) \"%3\"").arg(tr("Not a video"), errorReason, movieFile));
+    insertLog(TaskKind_FFMpegError, id, QString("%1 (%2) \"%3\"").arg(tr("Not a video"), errorReason, movieFile));
 }
 void MainWindow::sayUpdated(int loopId, int id,
                             const qint64& recordid,
@@ -86,7 +86,7 @@ void MainWindow::sayUpdated(int loopId, int id,
     }
     else
     {
-        insertLog(TaskKind_SQL, id, QString("%1 \"%2\"").arg(tr("Failed to write on Database"), movieFile));
+        insertLog(TaskKind_SQLError, id, QString("%1 \"%2\"").arg(tr("Failed to write on Database"), movieFile));
     }
 
     insertLog(TaskKind_FFMpeg, id, QString("%1 \"%2\"").arg(tr("Done"), movieFile));
@@ -172,7 +172,7 @@ void MainWindow::sayGoodby(int loopId,  int id,
     }
     else
     {
-        insertLog(TaskKind_SQL, id, QString("%1 \"%2\"").arg(tr("Failed to write on Database"), movieFile));
+        insertLog(TaskKind_SQLError, id, QString("%1 \"%2\"").arg(tr("Failed to write on Database"), movieFile));
     }
 
     insertLog(TaskKind_FFMpeg, id, QString("%1 \"%2\"").arg(tr("Done"), movieFile));
@@ -210,7 +210,7 @@ void MainWindow::warning_FFMpeg(int loopId, int id,
     if(loopId != gLoopId)
         return;
 
-    insertLog(TaskKind_FFMpeg,
+    insertLog(TaskKind_FFMpegWarn,
               id,
               tr("Warning") + ": " + warning,
               true);
