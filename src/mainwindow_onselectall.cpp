@@ -89,29 +89,42 @@ DirectoryItem* MainWindow::getDeepestDirectory(const QString& videoFile) const
     if(videoFile.isEmpty())
         return nullptr;
     QString videoDir = QFileInfo(videoFile).absolutePath();
-    DirectoryItem* foundItem=nullptr;
-    for (int i = 0; i < ui->directoryWidget->count(); ++i)
-    {
-        DirectoryItem* item = static_cast<DirectoryItem*>(ui->directoryWidget->item(i));
-        if(!item->IsNormalItem())
-            continue;
 
-        if(IsSubDir(item->directory(), videoDir))
+    std::function<DirectoryItem*(bool bOnlySelected)> searchfunc = [&](bool bOnlySelected) {
+        DirectoryItem* foundItem=nullptr;
+        for (int i = 0; i < ui->directoryWidget->count(); ++i)
         {
-            if(!foundItem)
+            DirectoryItem* item = static_cast<DirectoryItem*>(ui->directoryWidget->item(i));
+            if(!item->IsNormalItem())
+                continue;
+
+            if(bOnlySelected)
+                if(!item->isSelected())
+                    continue;
+            if(isSamePath(item->directory(), videoDir))
+                return item;
+            if(IsSubDir(item->directory(), videoDir))
             {
-                foundItem = item;
-            }
-            else
-            {
-                if(item->directory().length() > foundItem->directory().length())
+                if(!foundItem)
                 {
-                    foundItem=item;
+                    foundItem = item;
+                }
+                else
+                {
+                    if(item->directory().length() > foundItem->directory().length())
+                    {
+                        foundItem=item;
+                    }
                 }
             }
         }
-    }
-    return foundItem;
+        return foundItem;
+    };
+
+    DirectoryItem* retItem = searchfunc(true);
+    if(retItem)
+        return retItem;
+    return searchfunc(false);
 }
 bool MainWindow::isDeepestDirectorySelected(const QString& videoFile) const
 {
