@@ -17,6 +17,7 @@
 //along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "../../lsMisc/stdQt/stdQt.h"
+#include "../../lsMisc/stdosd/PathString.h"
 
 #include "helper.h"
 
@@ -26,6 +27,7 @@
 #include "mainwindow.h"
 
 using namespace AmbiesoftQt;
+using namespace Ambiesoft::stdosd;
 
 void MainWindow::on_action_SelectAll_triggered()
 {
@@ -101,7 +103,7 @@ DirectoryItem* MainWindow::getDeepestDirectory(const QString& videoFile) const
             if(bOnlySelected)
                 if(!item->isSelected())
                     continue;
-            if(isSamePath(item->directory(), videoDir))
+            if(stdIsSamePathString(item->directory().toStdWString(), videoDir.toStdWString()))
                 return item;
             if(IsSubDir(item->directory(), videoDir))
             {

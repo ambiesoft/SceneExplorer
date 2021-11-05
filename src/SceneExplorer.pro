@@ -88,6 +88,9 @@ SOURCES += \
 
 HEADERS += \
     ../../lsMisc/stdQt/ambapp.h \
+    ../../lsMisc/stdosd/PathString.h \
+    ../../lsMisc/stdosd/stdosd.h \
+    ../../lsMisc/stdosd/stdosd_literal.h \
     debugflag.h \
     gitrev.h \
     mainwindow.h \

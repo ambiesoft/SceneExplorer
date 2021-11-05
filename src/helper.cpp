@@ -36,6 +36,7 @@
 #include <QDateTime>
 
 #include "../../lsMisc/stdQt/stdQt.h"
+#include "../../lsMisc/stdosd/PathString.h"
 
 #include "commandoption.h"
 #include "consts.h"
@@ -494,12 +495,24 @@ bool isUUID(const QString& s)
 //#endif
 //}
 
-bool IsSubDir(const QString& parent, const QString& child)
+bool IsSubDir_obsolete(const QString& parent, const QString& child)
 {
     QDir childDir(child);
     do
     {
         if(QDir(parent)==childDir)
+            return true;
+    } while(childDir.cdUp());
+
+    return false;
+}
+bool IsSubDir(const QString& parent, const QString& child)
+{
+    Ambiesoft::stdosd::PathString<wchar_t> parentDir(parent.toStdWString());
+    Ambiesoft::stdosd::PathString<wchar_t> childDir(child.toStdWString());
+    do
+    {
+        if(parentDir==childDir)
             return true;
     } while(childDir.cdUp());
 
