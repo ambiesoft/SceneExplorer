@@ -28,10 +28,7 @@ void MainWindow::showEvent( QShowEvent* event )
     if(initShown_)
         return;
 
-
-
     Ambiesoft::BlockedBool bbInit(&initShown_, false, true);
-
 
     ui->directoryWidget->setMaximumSize(10000,10000);
     ui->txtLog->setMaximumSize(10000,10000);
@@ -41,19 +38,13 @@ void MainWindow::showEvent( QShowEvent* event )
     itemChangedCommon();
     tableSortParameterChanged(sortManager_.GetCurrentSort(), sortManager_.IsSortAscending());  // tableModel_->GetSortColumn(), tableModel_->GetSortReverse());
 
-
     OnTableViewScrollChanged(-1);
 
-    // Alert(this, QString("ScrollIndex:%1-%2").arg(pDoc_->modeIndexRow()).arg(pDoc_->modeIndexColumn()));
     int row = 0;
     int column = 0;
     if(pDoc_ && pDoc_->getLastPos(row,column))
     {
         QModelIndex mi = tableModel_->index(row,column);
-        // Alert(this, QString("ScrollIndex:%1-%2").arg(mi.row()).arg(mi.column()));
-
-
-        // ui->tableView->selectionModel()->select(mi,	QItemSelectionModel::ClearAndSelect);
         ui->tableView->selectionModel()->setCurrentIndex(mi, QItemSelectionModel::ClearAndSelect);
 
         tableModel_->ensureIndex(mi);
@@ -62,31 +53,23 @@ void MainWindow::showEvent( QShowEvent* event )
 
         OnTableViewScrollChanged(-1);
 
-
         tableModel_->ensureIndex(mi);
         QApplication::processEvents();
         ui->tableView->scrollTo(mi);
     }
 
     RefreshDirectoryTree();
+
+    tableModel_->setScrolled(false);
 }
 
 void MainWindow::OnTableViewScrollChanged(int pos)
 {
-//    if(tableModel_->GetImageCache() != ImageCacheType::IC_NEVER)
-//        return;
-//    QAbstractItemModel* sourceModel = proxyModel_->sourceModel();
-//    Q_ASSERT(proxyModel==proxyModel_);
-
     QModelIndex indexTop = ui->tableView->indexAt(ui->tableView->rect().topLeft());
     QModelIndex indexBottom = ui->tableView->indexAt(ui->tableView->rect().bottomLeft());
     int rowCountPerScreen = indexBottom.row()-indexTop.row()+1;
 
     static auto func = [&](int i){
-//        QModelIndex indexProxy = proxyModel_->index(i,0);
-//        QModelIndex indexSource = proxyModel_->mapToSource(indexProxy);
-//        tableModel_->data(indexSource, Qt::DecorationRole);
-//        tableModel_->data(indexSource, Qt::DisplayRole);
         tableModel_->data(tableModel_->index(i,0), Qt::DecorationRole);
         tableModel_->data(tableModel_->index(i,0), Qt::DisplayRole);
     };
@@ -97,15 +80,12 @@ void MainWindow::OnTableViewScrollChanged(int pos)
         func(i);
     }
 
-
     int rowBottom = indexBottom.row();
     int maxBottom = rowBottom + rowCountPerScreen; // upto next page
     for(int i=rowBottom; i < maxBottom; ++i)
     {
         func(i);
-//        QModelIndex mi = proxyModel->index(i,0);
-//        proxyModel->data(mi, Qt::DecorationRole);
-//        proxyModel->data(mi, Qt::DisplayRole);
-        // ui->tableView->resizeRowToContents(mi.row());
     }
+
+    tableModel_->setScrolled();
 }

@@ -141,6 +141,15 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
                 return QPixmap::fromImage(image);
             }
 
+            if(!scrolled_)
+            {
+                if(!mapPixmaps_.keys().contains(imageFile))
+                {
+                    QImage image(imageFile);
+                    QVariant vpix(QPixmap::fromImage(image));
+                    mapPixmaps_[imageFile]= vpix;
+                }
+            }
             if(mapPixmaps_.keys().contains(imageFile))
             {
                 return mapPixmaps_[imageFile];

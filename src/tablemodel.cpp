@@ -81,7 +81,7 @@ bool TableModel::ModifyDataIf(const TableItemDataPointer& pItemData)
     }
     return false;
 }
-bool TableModel:: AppendData(const TableItemDataPointer& pItemData, const bool enableUpdate)
+bool TableModel::AppendData(const TableItemDataPointer& pItemData, const bool enableUpdate)
 {
     if(ModifyDataIf(pItemData))
         return false;
@@ -139,6 +139,7 @@ void TableModel::ResetData(const QList<TableItemDataPointer>& all)
     StartImageTimer();
 
     parent_->scrollToTop();
+    scrolled_ = false;
 }
 
 int TableModel::rowCount(const QModelIndex & /*parent*/) const
@@ -153,6 +154,7 @@ void TableModel::ClearData()
     mapsFullpathToItem_.clear();
     if(imagecache_ != ImageCacheType::IC_ALWAYS)
         mapPixmaps_.clear();
+    scrolled_ = false;
     emit itemCountChanged();
 }
 

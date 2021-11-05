@@ -46,6 +46,8 @@ class TableModel : public QAbstractTableModel
     QFont fontInfo_;
     QFont fontDetail_;
 
+    bool scrolled_ = false;
+
     mutable std::deque<QModelIndex> suspendImageIndexes_;
     mutable int timerID_=0;
     mutable QElapsedTimer imageElapsedTimer_;
@@ -72,7 +74,6 @@ private:
     QMap<QString, TableItemDataPointer> mapsFullpathToItem_;
     mutable QMap<QString, QVariant> mapPixmaps_;
     ImageCacheType imagecache_;
-    // bool bShowMissing_ = false;
     QTableView* parent_;
     IMainWindow* mainWindow_;
 
@@ -80,17 +81,8 @@ private:
     QString GetTitleText(TableItemDataPointer item) const;
     QString GetInfoText(TableItemDataPointer item) const;
 
-    // static bool itemDataLessThan(const TableItemDataPointer v1, const TableItemDataPointer v2);
-
     void ClearData();
-    // SORTCOLUMN sortColumn_ = SORT_FILENAME;
-    // bool sortReverse_ = false;
-
-    //void SetSortColumn(SORTCOLUMN sc);
-    //void SetSortReverse(bool rev);
 public:
-    //SORTCOLUMN GetSortColumn() const;
-    //bool GetSortReverse() const;
 
     enum TableRole {
         MovieFileFull = Qt::UserRole + 1,
@@ -102,17 +94,15 @@ public:
     bool ModifyDataIf(const TableItemDataPointer& pItemData);
     bool AppendData(const TableItemDataPointer& pItemData, const bool enableUpdate = true);
 
+    void setScrolled(bool v = true) {
+        scrolled_ = v;
+    }
     int rowCount(const QModelIndex &parent = QModelIndex()) const override ;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
     QSize calculateSize(const QModelIndex& index, const QString& str) const;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     Qt::ItemFlags flags(const QModelIndex & index) const override ;
 
-    //    void Sort_obsolete(SORTCOLUMN column);
-    //    void Sort_obsolete(SORTCOLUMN column, bool rev);
-    //    bool RenameEntries(const QString& dir,
-    //                       const QStringList& renameOlds,
-    //                       const QStringList& renameNews);
     bool RenameEntry(const QString& dbDir,
                      const QString& dbFile,
                      const QString& newdir,
@@ -122,13 +112,6 @@ public:
         return itemDatas_.count();
     }
 
-//    void SetShowMissing(bool bToggle)
-//    {
-//        bShowMissing_ = bToggle;
-//    }
-//    bool IsShowMissing() const {
-//        return bShowMissing_;
-//    }
     void UpdateOpenCountAndLastAccess(const QString& movieFile,
                                       const int* opencount,
                                       const qint64* lastaccess);
@@ -201,7 +184,6 @@ public:
 
 Q_SIGNALS:
     void itemCountChanged();
-    //void sortParameterChanged(SORTCOLUMN sc, bool rev);
 };
 
 //#include <QItemDelegate>
