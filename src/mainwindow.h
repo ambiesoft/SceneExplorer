@@ -775,7 +775,6 @@ public Q_SLOTS:
                    int vWidth,int vHeight,
                    const QString& thumbext,
                    const double& fps);
-    void sayDead(int loopId, int id);
     void finished_FFMpeg(int loopId, int id);
     void warning_FFMpeg(int loopId, int id,
                         const QString& warning);

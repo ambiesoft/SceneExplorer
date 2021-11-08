@@ -178,19 +178,14 @@ void MainWindow::sayGoodby(int loopId,  int id,
     insertLog(TaskKind_FFMpeg, id, QString("%1 \"%2\"").arg(tr("Done"), movieFile));
 
 }
-void MainWindow::sayDead(int loopId, int id)
-{
-    if(loopId != gLoopId)
-        return;
-
-    taskModel_->RemoveTask(id);
-}
 void MainWindow::finished_FFMpeg(int loopId, int id)
 {
     if(loopId != gLoopId)
         return;
 
     Q_UNUSED(id);
+
+    taskModel_->RemoveTask(id);
 
     idManager_->IncrementDone(IDKIND_FFmpeg);
     Q_ASSERT(idManager_->Get(IDKIND_FFmpeg) >= idManager_->GetDone(IDKIND_FFmpeg));

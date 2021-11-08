@@ -52,14 +52,14 @@ void TaskModel::RemoveTask(int id)
     TaskListDataPointer p = map_[id];
     Q_ASSERT(p);
 
-    //    int row = findRow(p);
-    //    Q_ASSERT(row >= 0);
+    const int row = findRow(p);
+    Q_ASSERT(row >= 0);
     
-    // beginRemoveRows(QModelIndex(), row, row);
+    beginRemoveRows(QModelIndex(), row, row);
     Q_ASSERT(items_.contains(p));
     items_.removeOne(p);
     Q_ASSERT(!items_.contains(p));
-    // endRemoveRows();
+    endRemoveRows();
 
     map_.remove(id);
 

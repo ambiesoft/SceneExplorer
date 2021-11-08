@@ -767,16 +767,12 @@ void MainWindow::afterFilter2(int loopId,int id,
                                            GetThumbWidth(), GetThumbHeight(),
                                            false);
         pTask->setAutoDelete(true);
-        //        QObject::connect(pTask, &TaskFFMpeg::sayBorn,
-        //                         this, &MainWindow::sayBorn);
         QObject::connect(pTask, &TaskFFmpeg::sayHello,
                          this, &MainWindow::sayHello);
         QObject::connect(pTask, &TaskFFmpeg::sayNo,
                          this, &MainWindow::sayNo);
         QObject::connect(pTask, &TaskFFmpeg::sayGoodby,
                          this, &MainWindow::sayGoodby);
-        QObject::connect(pTask, &TaskFFmpeg::sayDead,
-                         this, &MainWindow::sayDead);
         QObject::connect(pTask, &TaskFFmpeg::finished_FFMpeg,
                          this, &MainWindow::finished_FFMpeg);
         QObject::connect(pTask, &TaskFFmpeg::warning_FFMpeg,
@@ -804,8 +800,6 @@ void MainWindow::afterFilter2(int loopId,int id,
                                            true);
         pTask->setRecordID(toUpdateFiles[i].first);
         pTask->setAutoDelete(true);
-        //        QObject::connect(pTask, &TaskFFMpeg::sayBorn,
-        //                         this, &MainWindow::sayBorn);
         QObject::connect(pTask, &TaskFFmpeg::sayHello,
                          this, &MainWindow::sayHello);
         QObject::connect(pTask, &TaskFFmpeg::sayNo,
@@ -814,8 +808,6 @@ void MainWindow::afterFilter2(int loopId,int id,
                          this, &MainWindow::sayUpdated);
         //        QObject::connect(pTask, &TaskFFmpeg::sayGoodby,
         //                         this, &MainWindow::sayGoodby);
-        QObject::connect(pTask, &TaskFFmpeg::sayDead,
-                         this, &MainWindow::sayDead);
         QObject::connect(pTask, &TaskFFmpeg::finished_FFMpeg,
                          this, &MainWindow::finished_FFMpeg);
         QObject::connect(pTask, &TaskFFmpeg::warning_FFMpeg,

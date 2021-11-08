@@ -72,7 +72,6 @@ TaskFFmpeg::TaskFFmpeg(const QString& ffprobe,
 TaskFFmpeg::~TaskFFmpeg()
 {
     delete priority_;
-    emit sayDead(loopId_,id_);
 }
 
 void TaskFFmpeg::setPriority(QProcess& process)
