@@ -1,3 +1,7 @@
+2021/11/09　1.22.20
+When remove missing items from database, it only removes items
+showing in the main window.
+
 2021/11/05　1.22.19
 Show all thumbnails after changing directory
 

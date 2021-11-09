@@ -792,8 +792,20 @@ void MainWindow::OnDirectoryRemoveMissingItems()
 
     DirectoryItem* item = static_cast<DirectoryItem*>( ui->directoryWidget->selectedItems()[0]);
 
+    QList<TableItemDataPointer> nonExistTableItems;
+    for(auto&& tableItem : tableModel_->getAllItems())
+    {
+        if(!QFileInfo::exists(tableItem->getMovieFileFull()))
+            nonExistTableItems.append(tableItem);
+    }
+    if(nonExistTableItems.empty())
+    {
+        Info(this,
+             tr("There are no missing items."));
+        return;
+    }
     if (!YesNo(this,
-               tr("Are you sure you want to remove missing items from database?")))
+               tr("Are you sure you want to remove %1 missing items from database?").arg(nonExistTableItems.count())))
     {
         return;
     }
@@ -802,7 +814,7 @@ void MainWindow::OnDirectoryRemoveMissingItems()
     if(item->IsNormalItem())
         dir = item->directory();
 
-    gpSQL->RemoveAllMissingEntries(dir);
+    gpSQL->RemoveAllMissingEntries(dir, nonExistTableItems);
 
     itemChangedCommon(true);
 }

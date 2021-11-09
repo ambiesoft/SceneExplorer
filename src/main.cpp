@@ -105,7 +105,7 @@ static void testSQL()
         QFile(pathCombine(dir,file)).remove();
         QFile(pathCombine(dir,file2)).remove();
 
-        Q_ASSERT(gpSQL->RemoveAllMissingEntries(dir));
+        Q_ASSERT(gpSQL->RemoveAllMissingEntries(dir, QList<TableItemDataPointer>()));
 
         // prepare actual file for not causing assert.
         qDebug() << "Test file is " << pathCombine(dir,file) << __FUNCTION__;
@@ -178,7 +178,7 @@ static void testSQL()
         QFile(pathCombine(dir,file)).remove();
         QFile(pathCombine(dir,file2)).remove();
 
-        Q_ASSERT(gpSQL->RemoveAllMissingEntries(dir));
+        Q_ASSERT(gpSQL->RemoveAllMissingEntries(dir,QList<TableItemDataPointer>()));
 
         // prepare actual file for not causing assert.
         qDebug() << "Test file is " << pathCombine(dir,file) << __FUNCTION__;

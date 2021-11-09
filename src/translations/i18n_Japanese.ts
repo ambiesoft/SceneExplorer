@@ -695,7 +695,7 @@
     </message>
     <message>
         <source>Are you sure you want to remove missing items from database?</source>
-        <translation>データベースから存在しないファイルのアイテムを削除しますか？</translation>
+        <translation type="vanished">データベースから存在しないファイルのアイテムを削除しますか？</translation>
     </message>
     <message>
         <source>&amp;Rescan to create thumbnails</source>
@@ -1636,6 +1636,14 @@
     <message>
         <source>&lt;No Error Logs&gt;</source>
         <translation>＜エラーログはありません＞</translation>
+    </message>
+    <message>
+        <source>There are no missing items.</source>
+        <translation>ファイルが存在しないアイテムはありません。</translation>
+    </message>
+    <message>
+        <source>Are you sure you want to remove %1 missing items from database?</source>
+        <translation>データベースからファイルが存在しない %1 個のアイテムを削除しますか？</translation>
     </message>
 </context>
 <context>

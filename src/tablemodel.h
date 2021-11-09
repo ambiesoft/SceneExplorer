@@ -94,6 +94,9 @@ public:
     bool ModifyDataIf(const TableItemDataPointer& pItemData);
     bool AppendData(const TableItemDataPointer& pItemData, const bool enableUpdate = true);
 
+    QList<TableItemDataPointer> getAllItems() const {
+        return itemDatas_;
+    }
     void setScrolled(bool v = true) {
         scrolled_ = v;
     }

@@ -1552,18 +1552,40 @@ bool Sql::RemoveEntry(const QString& dir,
     return true;
 }
 
-bool Sql::RemoveAllMissingEntries(const QString& dirc)
+bool Sql::RemoveAllMissingEntries(const QString& dirc, const QList<TableItemDataPointer>& items)
 {
     QSqlQuery query;
 
+    QString sqlWhere;
+    if(items.empty())
+    {
+        sqlWhere = " 1=1 ";
+    }
+    else
+    {
+        sqlWhere += "(1=0 or ";
+        for(auto&& item : items)
+        {
+            Q_ASSERT(item->getID() > 0);
+            sqlWhere += " id=";
+            sqlWhere += QString::number(item->getID());
+            sqlWhere += " or ";
+        }
+        sqlWhere += "1=0)";
+    }
+
     if (dirc.isEmpty())
     {
-        SQC(query,prepare("SELECT directory,name FROM FileInfo"));
+        QString sql = "SELECT directory,name FROM FileInfo WHERE" + sqlWhere;
+        SQC(query,prepare(sql));
     }
     else
     {
         QString dir = normalizeDir(dirc);
-        SQC(query,prepare("SELECT directory,name FROM FileInfo WHERE directory LIKE ?"));
+        QString sql="SELECT directory,name FROM FileInfo WHERE (directory LIKE ?) AND (";
+        sql += sqlWhere;
+        sql += ")";
+        SQC(query,prepare(sql));
 
         query.bindValue(0, dir+"%");
     }

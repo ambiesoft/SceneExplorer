@@ -206,7 +206,7 @@ public:
                      const QString& file,
                      QString* error = nullptr);
 
-    bool RemoveAllMissingEntries(const QString& dir);
+    bool RemoveAllMissingEntries(const QString& dir, const QList<TableItemDataPointer>& items);
     //    bool ApplyOpenCount(const QMap<qint64,int>& opencounts);
     //    bool ApplyLastAccesses(const QMap<qint64,qint64>& lastaccesses);
 
