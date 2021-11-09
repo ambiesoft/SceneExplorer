@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>562</width>
-    <height>541</height>
+    <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -29,6 +29,9 @@
      <property name="minimum">
       <number>1</number>
      </property>
+     <property name="maximum">
+      <number>32</number>
+     </property>
     </widget>
    </item>
    <item row="3" column="0">
@@ -45,6 +48,9 @@
     <widget class="QSpinBox" name="spinBoxThumb">
      <property name="minimum">
       <number>1</number>
+     </property>
+     <property name="maximum">
+      <number>32</number>
      </property>
     </widget>
    </item>

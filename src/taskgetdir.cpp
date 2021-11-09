@@ -36,29 +36,25 @@ TaskGetDir::TaskGetDir(int loopId,
                        int id,
                        const QString& dir,
                        SORTCOLUMNMY sortby, bool ascending,
-                       QThread::Priority* priority):
+                       const IFFTask2Main* pFF2M):
     loopId_(loopId),
     id_(id),
     dir_(dir),
     sortby_(sortby), ascending_(ascending)
 {
     Q_ASSERT(!dir.isEmpty());
-    if(priority)
-    {
-        priority_ = new QThread::Priority;
-        *priority_ = *priority;
-    }
+    pFF2M_ = pFF2M;
 }
 
 TaskGetDir::~TaskGetDir()
 {
-    delete priority_;
 }
 
 void TaskGetDir::run()
 {
-    if(priority_)
-        QThread::currentThread()->setPriority(*priority_);
+    QThread::Priority* priority = pFF2M_->GetTaskPriority();
+    if(priority)
+        QThread::currentThread()->setPriority(*priority);
     runStuff(dir_);
     emit finished_GetDir(loopId_, id_, dir_);
 }

@@ -3,6 +3,10 @@
 
 void TaskCheckThumbs::run()
 {
+    QThread::Priority* priority = pFF2M_->GetTaskPriority();
+    if(priority)
+        QThread::currentThread()->setPriority(*priority);
+
     emit afterCheckThumbs(
                 loopid_,
                 taskindex_,

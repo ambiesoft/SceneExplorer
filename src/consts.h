@@ -24,7 +24,7 @@ namespace Consts
 Q_CONSTEXPR char ORGANIZATION[] = "Ambiesoft";
 Q_CONSTEXPR char APPDOMAIN[] = "ambiesoft.com";
 Q_CONSTEXPR char APPNAME[] = "SceneExplorer";
-Q_CONSTEXPR char APPVERSION[] = "1.22.20";
+Q_CONSTEXPR char APPVERSION[] = "1.22.21";
 
 
 Q_CONSTEXPR char KEY_STYLE[] = "style";
@@ -135,5 +135,15 @@ Q_CONSTEXPR float FLOAT1000 = 1000.0f;
 Q_CONSTEXPR float FLOAT1024 = 1024.0f;
 
 Q_CONSTEXPR int FINDCOMBO_WIDTH = 140;
+
+Q_CONSTEXPR int MINIMUM_THREAD_COUNT = 1;
+Q_CONSTEXPR int MAXIMUM_THREAD_COUNT = 32;
+inline int GetMaxMinedThreadCount(int v) {
+    if(v < MINIMUM_THREAD_COUNT)
+        return MINIMUM_THREAD_COUNT;
+    if(v > MAXIMUM_THREAD_COUNT)
+        return MAXIMUM_THREAD_COUNT;
+    return v;
+}
 }
 #endif // CONSTS_H

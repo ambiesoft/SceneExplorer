@@ -4,6 +4,8 @@
 #include <QObject>
 #include <QRunnable>
 
+#include "IFFTask2Main.h"
+
 class TaskCheckThumbs : public QObject, public QRunnable
 {
     Q_OBJECT
@@ -16,6 +18,8 @@ class TaskCheckThumbs : public QObject, public QRunnable
     QString thumbext_;
     int width_=0;
     int height_=0;
+
+    const IFFTask2Main* pFF2M_ = nullptr;
 public:
     explicit TaskCheckThumbs(int loopid,
                              int taskindex,
@@ -24,8 +28,17 @@ public:
                              const QString& file,
                              const QString& thumbid,
                              const QString& thumbext,
-                             int width, int height) :
-        loopid_(loopid), taskindex_(taskindex), getdirid_(getdirid), dir_(dir), file_(file), thumbid_(thumbid), thumbext_(thumbext), width_(width), height_(height){}
+                             int width, int height,
+                             const IFFTask2Main* pFF2M) :
+        loopid_(loopid),
+        taskindex_(taskindex),
+        getdirid_(getdirid),
+        dir_(dir),
+        file_(file),
+        thumbid_(thumbid),
+        thumbext_(thumbext),
+        width_(width), height_(height),
+        pFF2M_(pFF2M) {}
     virtual ~TaskCheckThumbs() override {}
 
     void run() override;

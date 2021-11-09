@@ -24,14 +24,15 @@
 #include <QThread>
 #include <QProcess>
 
+#include "IFFTask2Main.h"
+
 class TaskFFmpeg : public QObject, public QRunnable
-        // class TaskFFMpeg : public QRunnable
 {
     Q_OBJECT
 
     static int waitMax_;
 
-    QThread::Priority* priority_ = nullptr;
+    const IFFTask2Main* pFF2M_ = nullptr;
 
 public:
     enum Progress
@@ -83,7 +84,7 @@ public:
                int loopId,
                int id,
                const QString& file,
-               QThread::Priority* priority,
+               const IFFTask2Main* pFF2M,
                const QString& thumbext,
                int thumbWidth, int thumbHeight,
                const bool isUpdateOnly);

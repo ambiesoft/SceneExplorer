@@ -106,8 +106,8 @@ void MainWindow::on_tableView_doubleClicked(const QModelIndex &index)
 void MainWindow::on_action_Options_triggered()
 {
     OptionDialog dlg(this);
-    dlg.maxgd_ = optionThreadcountGetDir_;
-    dlg.maxff_ = optionThreadcountThumbnail_;
+    dlg.maxgd_ = optionThreadcountGetDir();
+    dlg.maxff_ = optionThreadcountThumbnail();
     dlg.thumbCount_ = optionThumbCount_;
     dlg.thumbWidth_ = optionThumbWidth_;
     dlg.thumbHeight_ = optionThumbHeight_;
@@ -129,8 +129,8 @@ void MainWindow::on_action_Options_triggered()
     if(QDialog::Accepted != dlg.exec())
         return;
 
-    optionThreadcountGetDir_ = dlg.maxgd_;
-    optionThreadcountThumbnail_ = dlg.maxff_;
+    setOptionThreadcountGetDir(dlg.maxgd_);
+    setOptionThreadcountThumbnail(dlg.maxff_);
     optionThumbCount_ = dlg.thumbCount_;
     const bool bThumbChanged = (optionThumbWidth_ != dlg.thumbWidth_) ||
             (optionThumbHeight_ != dlg.thumbHeight_);
@@ -541,7 +541,7 @@ void MainWindow::StartScan(const QStringList& dirsOrig)
                     idManager_->Increment(IDKIND_GetDir),
                     dir,
                     sortManager_.GetCurrentSort(), sortManager_.IsSortAscending(),
-                    GetTaskPriority());
+                    this);
         pTaskGetDir->setAutoDelete(true);
         QObject::connect(pTaskGetDir, &TaskGetDir::afterGetDir,
                          this, &MainWindow::afterGetDir);

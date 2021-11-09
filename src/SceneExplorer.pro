@@ -91,6 +91,7 @@ HEADERS += \
     ../../lsMisc/stdosd/PathString.h \
     ../../lsMisc/stdosd/stdosd.h \
     ../../lsMisc/stdosd/stdosd_literal.h \
+    IFFTask2Main.h \
     debugflag.h \
     gitrev.h \
     mainwindow.h \

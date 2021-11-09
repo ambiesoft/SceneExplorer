@@ -37,6 +37,8 @@
 #include "tagidsinfo.h"
 #include "imainwindow.h"
 #include "historylist.h"
+#include "IFFTask2Main.h"
+#include "consts.h"
 
 class QThreadPool;
 class QLabel;
@@ -57,7 +59,7 @@ class MainWindow;
 
 #define CHECK_DOCUMENT(doc) do { if(!doc) { Alert(this, TR_NO_DOCUMENT()); return;}} while(false)
 
-class MainWindow : public QMainWindow, IMainWindow, IHistoryList
+class MainWindow : public QMainWindow, IMainWindow, IHistoryList, IFFTask2Main
 {
     Q_OBJECT
     using ParentClass = QMainWindow;
@@ -82,7 +84,7 @@ class MainWindow : public QMainWindow, IMainWindow, IHistoryList
     bool tableContextMenuActivaing_ = false;
 
     QScopedPointer<QThread::Priority> taskPriority_;
-    QThread::Priority* GetTaskPriority();
+
     int GetTaskPriorityAsInt();
     void SetTaskPriorityAsInt(int priority);
 
@@ -99,7 +101,7 @@ public:
     // History's virtual function
     void selectItem(const QString& movie) override;
     void updateToolButton() override;
-
+    virtual QThread::Priority* GetTaskPriority() const override;
     bool IsInitialized() const;
 
 private:
@@ -284,7 +286,30 @@ private:
     void checkTaskFinished();
 
     int optionThreadcountGetDir_ = 1;
+    int optionThreadcountGetDir() const {
+        return Consts::GetMaxMinedThreadCount(optionThreadcountGetDir_);
+    }
+    void setOptionThreadcountGetDir(int v) {
+        optionThreadcountGetDir_ = v;
+        if(pPoolGetDir_)
+        {
+            Q_ASSERT(optionThreadcountGetDir() > 0);
+            pPoolGetDir_->setMaxThreadCount(optionThreadcountGetDir());
+        }
+    }
+
     int optionThreadcountThumbnail_ = 2;
+    int optionThreadcountThumbnail() const {
+        return Consts::GetMaxMinedThreadCount(optionThreadcountThumbnail_);
+    }
+    void setOptionThreadcountThumbnail(int v) {
+        optionThreadcountThumbnail_ = v;
+        if(pPoolFFmpeg_)
+        {
+            Q_ASSERT(optionThreadcountThumbnail() > 0);
+            pPoolFFmpeg_->setMaxThreadCount(optionThreadcountThumbnail());
+        }
+    }
     int optionThumbCount_ = 3; // default is 3
     QString optionThumbFormat_ = QStringLiteral("jpg");
     int optionThumbWidth_ = 0;

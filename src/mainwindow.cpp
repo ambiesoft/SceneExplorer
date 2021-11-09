@@ -289,8 +289,8 @@ QThreadPool* MainWindow::getPoolGetDir()
     {
         pPoolGetDir_ = new QThreadPool;
         pPoolGetDir_->setExpiryTimeout(-1);
-        Q_ASSERT(optionThreadcountGetDir_ > 0);
-        pPoolGetDir_->setMaxThreadCount(optionThreadcountGetDir_);
+        Q_ASSERT(optionThreadcountGetDir() > 0);
+        pPoolGetDir_->setMaxThreadCount(optionThreadcountGetDir());
     }
     return pPoolGetDir_;
 }
@@ -316,8 +316,8 @@ QThreadPool* MainWindow::getPoolFFmpeg()
     {
         pPoolFFmpeg_ = new QThreadPool;
         pPoolFFmpeg_->setExpiryTimeout(-1);
-        Q_ASSERT(optionThreadcountThumbnail_ > 0);
-        pPoolFFmpeg_->setMaxThreadCount(optionThreadcountThumbnail_);
+        Q_ASSERT(optionThreadcountThumbnail() > 0);
+        pPoolFFmpeg_->setMaxThreadCount(optionThreadcountThumbnail());
     }
     return pPoolFFmpeg_;
 }
@@ -584,7 +584,8 @@ void MainWindow::afterGetDir(int loopId, int id,
                                                              file,
                                                              dbThumpID,
                                                              optionThumbFormat_,
-                                                             GetThumbWidth(),GetThumbHeight());
+                                                             GetThumbWidth(),GetThumbHeight(),
+                                                             this);
                 pTask->setAutoDelete(true);
                 QObject::connect(pTask, &TaskCheckThumbs::afterCheckThumbs,
                                  this, &MainWindow::afterCheckThumbs);
@@ -762,7 +763,7 @@ void MainWindow::afterFilter2(int loopId,int id,
                                            gLoopId,
                                            idManager_->Increment(IDKIND_FFmpeg),
                                            file,
-                                           GetTaskPriority(),
+                                           this,
                                            optionThumbFormat_,
                                            GetThumbWidth(), GetThumbHeight(),
                                            false);
@@ -794,7 +795,7 @@ void MainWindow::afterFilter2(int loopId,int id,
                                            gLoopId,
                                            idManager_->Increment(IDKIND_FFmpeg),
                                            file,
-                                           GetTaskPriority(),
+                                           this,
                                            optionThumbFormat_,
                                            GetThumbWidth(), GetThumbHeight(),
                                            true);
@@ -2304,8 +2305,9 @@ void MainWindow::on_action_ScanSelectedDirectory_triggered()
 }
 
 
-QThread::Priority* MainWindow::GetTaskPriority()
+QThread::Priority* MainWindow::GetTaskPriority() const
 {
+    // TODO: Need Lock
     return taskPriority_ ? taskPriority_.data() : nullptr;
 }
 int MainWindow::GetTaskPriorityAsInt()

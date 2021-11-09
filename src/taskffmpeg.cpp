@@ -42,7 +42,7 @@ TaskFFmpeg::TaskFFmpeg(const QString& ffprobe,
                        int loopId,
                        int id,
                        const QString& file,
-                       QThread::Priority* priority,
+                       const IFFTask2Main* pFF2M,
                        const QString& thumbext,
                        int thumbWidth, int thumbHeight,
                        const bool isUpdateOnly)
@@ -56,12 +56,7 @@ TaskFFmpeg::TaskFFmpeg(const QString& ffprobe,
     movieFile_=file;
 
     progress_ = Uninitialized;
-    if (priority)
-    {
-        priority_ = new QThread::Priority;
-        *priority_ = *priority;
-    }
-
+    pFF2M_ = pFF2M;
     thumbext_ = thumbext;
     thumbWidth_ = thumbWidth;
     thumbHeight_ = thumbHeight;
@@ -71,20 +66,21 @@ TaskFFmpeg::TaskFFmpeg(const QString& ffprobe,
 }
 TaskFFmpeg::~TaskFFmpeg()
 {
-    delete priority_;
+
 }
 
 void TaskFFmpeg::setPriority(QProcess& process)
 {
-    if(!priority_)
+    QThread::Priority* priority = pFF2M_->GetTaskPriority();
+    if(!priority)
         return;
 
     QStringList errors;
-    if(!setProcessPriority(process.processId(), *priority_, errors))
+    if(!setProcessPriority(process.processId(), *priority, errors))
     {
         QString error = errors.join(" ");
         emit warning_FFMpeg(loopId_,id_,
-                            tr("Failed to set priority %1.").arg((int)(*priority_)) + " " + error);
+                            tr("Failed to set priority %1.").arg((int)(*priority)) + " " + error);
     }
 }
 
@@ -277,8 +273,9 @@ bool TaskFFmpeg::getProbe(const QString& file,
 }
 void TaskFFmpeg::run()
 {
-    if (priority_)
-        QThread::currentThread()->setPriority(*priority_);
+    QThread::Priority* priority = pFF2M_->GetTaskPriority();
+    if (priority)
+        QThread::currentThread()->setPriority(*priority);
 
     run2();
     emit finished_FFMpeg(loopId_,id_);

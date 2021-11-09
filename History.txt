@@ -1,3 +1,6 @@
+2021/11/10　1.22.21
+Changing value of thread count and priority affects working threads.
+
 2021/11/09　1.22.20
 When remove missing items from database, it only removes items
 showing in the main window.

@@ -24,6 +24,7 @@
 #include <QThread>
 
 #include "globals.h"
+#include "IFFTask2Main.h"
 
 class TaskGetDir : public QObject, public QRunnable
 {
@@ -35,7 +36,7 @@ private:
     QString dir_;
     SORTCOLUMNMY sortby_ = SORT_NONE;
     bool ascending_=false;
-    QThread::Priority* priority_ = nullptr;
+    const IFFTask2Main* pFF2M_ = nullptr;
 
     void runStuff(const QString& dir);
 
@@ -49,7 +50,7 @@ public:
                int id,
                const QString& dir,
                SORTCOLUMNMY sortby, bool ascending,
-               QThread::Priority* priority);
+               const IFFTask2Main* pFF2M);
     virtual ~TaskGetDir() override;
 
     void run() override;
