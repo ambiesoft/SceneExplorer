@@ -793,10 +793,13 @@ void MainWindow::OnDirectoryRemoveMissingItems()
     DirectoryItem* item = static_cast<DirectoryItem*>( ui->directoryWidget->selectedItems()[0]);
 
     QList<TableItemDataPointer> nonExistTableItems;
-    for(auto&& tableItem : tableModel_->getAllItems())
     {
-        if(!QFileInfo::exists(tableItem->getMovieFileFull()))
-            nonExistTableItems.append(tableItem);
+        WaitingCursor wc;
+        for(auto&& tableItem : tableModel_->getAllItems())
+        {
+            if(!QFileInfo::exists(tableItem->getMovieFileFull()))
+                nonExistTableItems.append(tableItem);
+        }
     }
     if(nonExistTableItems.empty())
     {
