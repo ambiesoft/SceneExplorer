@@ -178,6 +178,11 @@ public:
                        const QStringList& renameNews);
     bool UpdateThumbExtFromFile_obsolete(const qint64& id,const QString& thumbid, QString& ext);
     bool IsEntryExists(const QString& newDir, const QString& newFile);
+    bool UpdateCWTiem(const QString& dir,
+                      const QString& file,
+                      const qint64& ctime,
+                      const qint64& wtime);
+
     bool RenameEntry(const QString& dbDir,
                      const QString& dbFile,
                      const QString& newdir,

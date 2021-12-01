@@ -55,6 +55,21 @@ static void showFatal(const QString& error)
 #define SQCN(Q,siki) SQC_BASE(Q,siki,return)
 #define SQCI(Q,siki) SQC_BASE(Q,siki,return -1)
 
+
+bool isBad(const QString& s)
+{
+    return s.isEmpty();
+}
+bool isBad(const qint64& qi64)
+{
+    return qi64 <= 0;
+}
+bool isBad(const QStringList& sl)
+{
+    return sl.isEmpty();
+}
+#define SDC(data) do{ if(isBad(data)) { Q_ASSERT(false); showFatal(QString(#data) +" is empty"); return false;} } while(false)
+
 bool Sql::CreateDBInfoTable()
 {
     QSqlQuery query;
@@ -1310,11 +1325,45 @@ bool Sql::IsEntryExists(const QString& newDir, const QString& newFile)
     return false;
 }
 
+bool Sql::UpdateCWTiem(const QString& dir,
+                       const QString& file,
+                       const qint64& ctime,
+                       const qint64& wtime)
+{
+    SDC(dir);
+    SDC(file);
+    SDC(ctime);
+    SDC(wtime);
+    qint64 id;
+    if(!GetID(dir, file, id))
+    {
+        Q_ASSERT(false);
+        return false;
+    }
+    SDC(id);
+
+    MYQMODIFIER QSqlQuery query = myPrepare("update FileInfo "
+                                            "set ctime=?,wtime=? "
+                                            "where id=?");
+
+    int i=0;
+    query.bindValue(i++, ctime);
+    query.bindValue(i++, wtime);
+    query.bindValue(i++, id);
+
+    SQC(query, exec());
+    return query.numRowsAffected()==1;
+}
 bool Sql::RenameEntry(const QString& oldDirc,
                       const QString& oldFile,
                       const QString& newDirc,
                       const QString& newFile)
 {
+    SDC(oldDirc);
+    SDC(oldFile);
+    SDC(newDirc);
+    SDC(newFile);
+
     QString oldDir = normalizeDir(oldDirc);
     QString newDir = normalizeDir(newDirc);
 
@@ -1348,6 +1397,9 @@ bool Sql::RenameEntries(const QString& dir,
                         const QStringList& renameOlds,
                         const QStringList& renameNews)
 {
+    SDC(dir);
+    SDC(renameOlds);
+    SDC(renameNews);
     for(int i=0 ; i < renameOlds.count(); ++i)
     {
         // check old file not exists
@@ -1533,6 +1585,9 @@ bool Sql::RemoveEntry(const QString& dir,
                       const QString& file,
                       QString* error)
 {
+    SDC(dir);
+    SDC(file);
+
     QSqlQuery& query = *getDeleteFromDirectoryName();
 
     int i = 0;
@@ -1779,6 +1834,7 @@ bool Sql::UpdateRecord(
                int vWidth,int vHeight,
                const double& fps)
 {
+    SDC(id);
     MYQMODIFIER QSqlQuery query("UPDATE FileInfo SET "
                                 "duration=?,format=?,bitrate=?,vcodec=?,acodec=?,vwidth=?,vheight=?,fps=?,recordversion=? WHERE id=?");
 
@@ -1798,6 +1854,7 @@ bool Sql::UpdateRecord(
 }
 bool Sql::SetUrl(const qint64& id, const QString& url)
 {
+    SDC(id);
     MYQMODIFIER QSqlQuery query("UPDATE FileInfo SET url=? WHERE id=?");
 
     int i=0;
@@ -1809,6 +1866,7 @@ bool Sql::SetUrl(const qint64& id, const QString& url)
 }
 bool Sql::SetMemo(const qint64& id, const QString& memo)
 {
+    SDC(id);
     MYQMODIFIER QSqlQuery query("UPDATE FileInfo SET memo=? WHERE id=?");
 
     int i=0;

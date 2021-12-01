@@ -523,6 +523,11 @@ void MainWindow::StartScan(const QStringList& dirsOrig)
                   tr("'%1' is excluded from scanning because its parent directory is included.").arg(removed));
     }
 
+    if(dirs.isEmpty())
+    {
+        insertLog(TaskKind_App, 0, tr("No directories found to scan."));
+        return;
+    }
     // make scan fast by reoder external device so that
     // each threads start with different device
     QStringList dirsEachDevice = SortDevice1by1(dirs);

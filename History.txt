@@ -1,3 +1,7 @@
+2021/12/01　1.22.22
+Fix: Finding scan dir returns wrong results if dir does not exist.
+Fix: When only the file time is changed, no thumbnail is recreated.
+
 2021/11/10　1.22.21
 Changing value of thread count and priority affects working threads.
 

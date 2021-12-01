@@ -556,8 +556,6 @@ void MainWindow::afterGetDir(int loopId, int id,
 
         QFileInfo fi(pathCombine(dir, file));
 
-        // QString sa = createSalient(fi.absoluteFilePath(), fi.size());
-
         bool isUptodate = false;
         qint64 dbid = 0;
         if(gpSQL->hasEntry(dir,file,size,ctime,wtime,sa,&isUptodate,&dbid))
@@ -598,16 +596,38 @@ void MainWindow::afterGetDir(int loopId, int id,
 
         }
 
-        QStringList dirsDB;
-        QStringList filesDB;
-        QList<qint64> sizesDB;
-        gpSQL->getEntryFromSalient(sa, dirsDB, filesDB, sizesDB);
+        // not in db as same name, ctime, and wtime
+
+        QStringList dirsDBofSalient;
+        QStringList filesDBofSalient;
+        QList<qint64> sizesDBofSalient;
+        gpSQL->getEntryFromSalient(sa, dirsDBofSalient, filesDBofSalient, sizesDBofSalient);
+
+        // check if only wtime or ctime are different
+        if(filesDBofSalient.length()==1 &&
+                sizesDBofSalient[0]==size &&
+                pathCombine(dirsDBofSalient[0], filesDBofSalient[0]) ==
+                    pathCombine(dir,file))
+        {
+            if(gpSQL->UpdateCWTiem(dir, file, ctime, wtime))
+            {
+                insertLog(TaskKind_SQL, id, tr("Time updated. \"%2\"").
+                          arg(pathCombine(dir,file)));
+            }
+            else
+            {
+                insertLog(TaskKind_SQLError, id, tr("Failed to update ctime or wtime in db. \"%2\"").
+                          arg(pathCombine(dir,file)));
+            }
+            continue;
+        }
+
         bool renamed = false;
         QStringList renamedKouhoDir;
         QStringList renamedKouhoName;
-        for(int i=0 ; i < filesDB.count(); ++i)
+        for(int i=0 ; i < filesDBofSalient.count(); ++i)
         {
-            const QString& dbFile = pathCombine(dirsDB[i], filesDB[i]);
+            const QString& dbFile = pathCombine(dirsDBofSalient[i], filesDBofSalient[i]);
             // same salient in db
             QFileInfo fidb(dbFile);
             // if dbfile not exists but the drive root exists, assume file is moved.
@@ -616,13 +636,13 @@ void MainWindow::afterGetDir(int loopId, int id,
             if(!fidb.exists() && isRootDriveExists(dbFile))
             {
                 // file info in db does not exist on disk
-                if(fi.size()==sizesDB[i])
+                if(fi.size()==sizesDBofSalient[i])
                 {
                     // db size is same size with disk
                     // and salient is same ( conditonal queried from db )
                     // we assume file is moved
-                    renamedKouhoDir.insert(0, dirsDB[i]);
-                    renamedKouhoName.insert(0, filesDB[i]);
+                    renamedKouhoDir.insert(0, dirsDBofSalient[i]);
+                    renamedKouhoName.insert(0, filesDBofSalient[i]);
                 }
             }
         }
@@ -644,6 +664,7 @@ void MainWindow::afterGetDir(int loopId, int id,
 
         if(renamed)
             continue;
+
         filteredFiles.append(file);
     }
     // now file must be thumbnailed
