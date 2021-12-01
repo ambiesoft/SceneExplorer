@@ -744,8 +744,13 @@ private:
                 kind==TaskKind_FFMpegError ||
                 kind==TaskKind_SQLError;
     }
+    QStringList logPond_;
+    int logTimerId_ = 0;
+    int logTimerConsecutiveEmptyCount_=0;
     void insertLog(TaskKind kind, int id, const QString& text, bool bError=false);
     void insertLog(TaskKind kind, const QVector<int>& ids, const QStringList& texts, bool bError=false);
+    void ResetLogTimer();
+
     void updateOnOpened(const qint64& id, const QString& movieFile);
     void openVideo(const qint64& id, const QString& movieFile);
     void openVideoDirectory(const QString& movieFile);
@@ -771,6 +776,8 @@ private:
     void InitDocument();
     bool LoadTags();
     void directoryWidgetMoveUpCommon(const bool bUp);
+protected:
+    void timerEvent(QTimerEvent *event) override;
 public Q_SLOTS:
     //    void sayBorn(int id,
     //                   const QString& movieFile);

@@ -1,3 +1,6 @@
+2021/12/02　1.22.23
+Modified: Faster log insertion
+
 2021/12/01　1.22.22
 Fix: Finding scan dir returns wrong results if dir does not exist.
 Fix: When only the file time is changed, no thumbnail is recreated.

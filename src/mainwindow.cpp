@@ -476,11 +476,36 @@ void MainWindow::insertLog(TaskKind kind,
     {
         lastScanErrors_.append( message);
     }
+
+    logPond_ += message;
+    ResetLogTimer();
+}
+void MainWindow::ResetLogTimer()
+{
+    if(logTimerId_==0)
+       logTimerId_ = startTimer(100);
+    logTimerConsecutiveEmptyCount_ = 0;
+    Q_ASSERT(logTimerId_ != 0);
+}
+void MainWindow::timerEvent(QTimerEvent *event)
+{
+    Q_UNUSED(event);
+    if(logPond_.isEmpty())
+    {
+        // 10 sec
+        if(++logTimerConsecutiveEmptyCount_ > 100)
+        {
+            Q_ASSERT(event->timerId() == logTimerId_);
+            killTimer(logTimerId_);
+            logTimerId_ = 0;
+        }
+        return;
+    }
+    ui->txtLog->appendPlainText(logPond_.join("\n"));
+    logPond_.clear();
+
     int scrollMax=ui->txtLog->verticalScrollBar()->maximum();
     int scrollCur=ui->txtLog->verticalScrollBar()->value();
-
-    ui->txtLog->appendPlainText(message);
-
     if(scrollMax==scrollCur)
     {
         ui->txtLog->verticalScrollBar()->setValue(
