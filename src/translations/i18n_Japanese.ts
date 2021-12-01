@@ -247,6 +247,7 @@
     <name>MainWindow</name>
     <message>
         <source>MainWindow</source>
+        <translatorcomment>MainWindow</translatorcomment>
         <translation>MainWindow</translation>
     </message>
     <message>
@@ -1644,6 +1645,18 @@
     <message>
         <source>Are you sure you want to remove %1 missing items from database?</source>
         <translation>データベースからファイルが存在しない %1 個のアイテムを削除しますか？</translation>
+    </message>
+    <message>
+        <source>No directories found to scan.</source>
+        <translation>スキャンするディレクトリはありません。</translation>
+    </message>
+    <message>
+        <source>Time updated. &quot;%1&quot;</source>
+        <translation>時刻が更新されました。 &quot;%1&quot;</translation>
+    </message>
+    <message>
+        <source>Failed to update ctime or wtime in db. &quot;%1&quot;</source>
+        <translation>ctimeまたはwtimeの更新に失敗しました。 &quot;%1&quot;</translation>
     </message>
 </context>
 <context>

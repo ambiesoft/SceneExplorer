@@ -611,12 +611,12 @@ void MainWindow::afterGetDir(int loopId, int id,
         {
             if(gpSQL->UpdateCWTiem(dir, file, ctime, wtime))
             {
-                insertLog(TaskKind_SQL, id, tr("Time updated. \"%2\"").
+                insertLog(TaskKind_SQL, id, tr("Time updated. \"%1\"").
                           arg(pathCombine(dir,file)));
             }
             else
             {
-                insertLog(TaskKind_SQLError, id, tr("Failed to update ctime or wtime in db. \"%2\"").
+                insertLog(TaskKind_SQLError, id, tr("Failed to update ctime or wtime in db. \"%1\"").
                           arg(pathCombine(dir,file)));
             }
             continue;
