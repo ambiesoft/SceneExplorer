@@ -130,7 +130,7 @@ bool TaskFFmpeg::getProbe(const QString& file,
     // qDebug() << "exitCode()=" << process.exitCode();
     if(0 != process.exitCode())
     {
-        errorReason = tr("existCode != 0");
+        errorReason = tr("ffprobe.exitCode = %1").arg(process.exitCode());
         return false;
     }
     QByteArray baOut = process.readAllStandardOutput();
@@ -341,96 +341,106 @@ bool TaskFFmpeg::run3(QString& errorReason)
     strWidthHeight.append(QString::number(thumbHeight_));
 
     const QString thumbid = QUuid::createUuid().toString().remove(L'{').remove(L'}');
-    QStringList emitFiles;
+
+    // ffmpeg.exe -hide_banner
+    // -ss 25.73 -i in.mp4
+    // -ss 66.73 -i in.mp4
+    // -map 0:v:0 -vf select='eq(pict_type\,I)' -vframes 1 -s 160x120 1.jpg
+    // -map 1:v:0 -vf select='eq(pict_type\,I)' -vframes 1 -s 160x120 2.jpg
+    QStringList filenames;
+    QStringList actualFiles;
+    QList<double> timepoints;
     for(int i=1 ; i <=5 ;++i)
     {
-        QString filename=createThumbFileName(i, thumbid, thumbWidth_, thumbHeight_,thumbext_);
+        QString filename = createThumbFileName(i, thumbid, thumbWidth_, thumbHeight_,thumbext_);
+        filenames.append(filename);
+        timepoints.append( (((double)i-0.5)*duration/5) );
+        actualFiles.append( QString(FILEPART_THUMBS) + QDir::separator()
+                            + filename);
+    }
 
-        QString actualFile = QString(FILEPART_THUMBS) + QDir::separator() + filename;
-
-        double timepoint = (((double)i-0.5)*duration/5);
-        QStringList qsl;
-        qsl.append("-v");
-        qsl.append("16");  // only error output
-        qsl.append("-hide_banner");  // as it is
-        qsl.append("-n");  // no overwrite
+    QStringList qsl;
+    qsl.append("-v");
+    qsl.append("16");  // only error output
+    qsl.append("-hide_banner");  // as it is
+    qsl.append("-n");  // no overwrite
+    for(int i=1; i <=5 ; ++i)
+    {
         qsl.append("-ss" );  // seek input
-        qsl.append(QString::number(timepoint) );  // seek position
+        qsl.append(QString::number(timepoints[i-1]) );  // seek position
         qsl.append("-i" );  // input file
         qsl.append(movieFile_ );  // input file
+    }
+    for(int i=1; i <=5 ; ++i)
+    {
+        qsl.append("-map");
+        qsl.append(QString::number(i-1) + ":v:0");
         qsl.append("-vf" );  // video filtergraph
         qsl.append("select='eq(pict_type\\,I)'");  // select filter with argument, Select only I-frames:
         qsl.append("-vframes" );
         qsl.append("1");
         qsl.append("-s");
         qsl.append(strWidthHeight);
-        qsl.append(actualFile);
+        qsl.append(actualFiles[i-1]);
+    }
 
-        QProcess process;
-        process.setProgram(ffmpeg_);
-        process.setArguments(qsl);
-        process.start(QProcess::ReadOnly);
+    QProcess process;
+    process.setProgram(ffmpeg_);
+    process.setArguments(qsl);
+    process.start(QProcess::ReadOnly);
 
-        if (!process.waitForStarted(waitMax_))
+    if (!process.waitForStarted(waitMax_))
+    {
+        errorReason = process.errorString();
+        return false;
+    }
+
+    setPriority(process);
+
+    if (!process.waitForFinished(waitMax_))
+    {
+        errorReason = process.errorString();
+        return false;
+    }
+
+    if (process.exitCode() != 0)
+    {
+        errorReason = tr("ffmpeg.exitCode = %1").arg(process.exitCode());
+        errorReason += "\n\n";
+        QByteArray baErr=process.readAllStandardError();
+        errorReason += baErr.data();
+        return false;
+    }
+
+    if (!QFile(actualFiles[0]).exists())
+    {
+        errorReason = tr("Failed to create thumbnail");
+        QByteArray baErr = process.readAllStandardError();
+        QString strErr = baErr.data();
+        if (!strErr.isEmpty())
         {
-            errorReason = process.errorString();
-            return false;
-        }
-
-        setPriority(process);
-
-        if (!process.waitForFinished(waitMax_))
-        {
-            errorReason = process.errorString();
-            return false;
-        }
-
-        if (process.exitCode() != 0)
-        {
-            errorReason = tr("ffmpeg.exitCode() != 0");
             errorReason += "\n\n";
-            QByteArray baErr=process.readAllStandardError();
-            errorReason += baErr.data();
-            return false;
+            errorReason += strErr;
         }
+        return false;
+    }
 
-        //        QByteArray baOut = ffmpeg.readAllStandardOutput();
-        //        qDebug()<<baOut.data();
-
-
-        if(i==1)
+    for(int i=2 ; i <= 5 ; ++i)
+    {
+        // short movie will not create thumb
+        if (!QFile(actualFiles[i-1]).exists())
         {
-            if (!QFile(actualFile).exists())
+            QFile f(actualFiles[i-1]);
+            if(!f.open(QIODevice::NewOnly | QIODevice::WriteOnly))
             {
-                errorReason = tr("Failed to create thumbnail");
-                QByteArray baErr = process.readAllStandardError();
-                QString strErr = baErr.data();
-                if (!strErr.isEmpty())
-                {
-                    errorReason += "\n\n";
-                    errorReason += strErr;
-                }
+                errorReason = tr("Failed to create dummy thumbnail");
                 return false;
             }
         }
-        else
-        {
-            // short movie will not create thumb
-            if (!QFile(actualFile).exists())
-            {
-                QFile f(actualFile);
-                if(!f.open(QIODevice::NewOnly | QIODevice::WriteOnly))
-                {
-                    errorReason = tr("Failed to create dummy thumbnail");
-                    return false;
-                }
-            }
-        }
-        emitFiles.append(filename);
     }
 
     emit sayGoodby(loopId_,id_,
-                   emitFiles,
+                   filenames,
                    movieFile_,
                    duration,
                    format,
