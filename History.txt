@@ -1,3 +1,6 @@
+2021/12/03　1.22.25
+Add the command line of a ffmpeg, if it succeeds but thumbnails are not created.
+
 2021/12/02　1.22.24
 Mofified: Createing thumbnails with a single command
 
