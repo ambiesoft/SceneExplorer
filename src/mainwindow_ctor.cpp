@@ -431,7 +431,7 @@ MainWindow::MainWindow(QWidget *parent,
         {
             // Alert(this, "recnet[0]=" +recents_[0]);
             if(recents_.isEmpty() ||
-                    !QFile(recents_[0]).exists() ||
+                    !QFileInfo(recents_[0]).exists() ||
                     !OpenDocument(recents_[0], true))
             {
                 // recents is empty or OpenDocument fails.

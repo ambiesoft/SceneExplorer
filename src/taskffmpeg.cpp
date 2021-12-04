@@ -31,12 +31,27 @@
 #include "helper.h"
 #include "osd.h"
 
+#include "../../lsMisc/stdQt/stdQt.h"
+
 #include "taskffmpeg.h"
 
 using namespace Consts;
 
 int TaskFFmpeg::waitMax_ = -1;
 
+QString GetAsCommandLine(const QStringList& list)
+{
+    QString ret;
+    for(auto&& s : list)
+    {
+        if(s[0] != '\'' && s[0] != '"' && s.indexOf(' ')>=0)
+            ret +=  doublequoteIfNecessary(s);
+        else
+            ret += s;
+        ret += " ";
+    }
+    return ret.trimmed();
+}
 TaskFFmpeg::TaskFFmpeg(const QString& ffprobe,
                        const QString& ffmpeg,
                        int loopId,
@@ -412,9 +427,14 @@ bool TaskFFmpeg::run3(QString& errorReason)
         return false;
     }
 
-    if (!QFile(actualFiles[0]).exists())
+    if (!QFileInfo(actualFiles[0]).exists())
     {
-        errorReason = tr("Failed to create thumbnail");
+        errorReason = tr("exitCode is 0 but thumbnails not created.");
+        errorReason += "\n\n";
+        errorReason += tr("The command line:");
+        errorReason += "\n";
+        errorReason += GetAsCommandLine(qsl);
+        errorReason += "\n\n";
         QByteArray baErr = process.readAllStandardError();
         QString strErr = baErr.data();
         if (!strErr.isEmpty())
@@ -428,7 +448,7 @@ bool TaskFFmpeg::run3(QString& errorReason)
     for(int i=2 ; i <= 5 ; ++i)
     {
         // short movie will not create thumb
-        if (!QFile(actualFiles[i-1]).exists())
+        if (!QFileInfo(actualFiles[i-1]).exists())
         {
             QFile f(actualFiles[i-1]);
             if(!f.open(QIODevice::NewOnly | QIODevice::WriteOnly))

@@ -862,7 +862,7 @@ bool Sql::DeleteEntryThumbFiles(const QString& dir,
     for(const QString& f : thumbfiles)
     {
         QFile(f).remove();
-        Q_ASSERT(!QFile(f).exists());
+        Q_ASSERT(!QFileInfo(f).exists());
     }
 
     if(removedThumbID)
@@ -1208,13 +1208,13 @@ bool Sql::GetAll(QList<TableItemDataPointer>& v,
         if(bOnlyMissing)
         {
             QString movieFileFull = pathCombine(directory,name);
-            if(QFile(movieFileFull).exists())
+            if(QFileInfo(movieFileFull).exists())
                 continue;
         }
         else if(bOnlyExistant)
         {
             QString movieFileFull = pathCombine(directory,name);
-            if(!QFile(movieFileFull).exists())
+            if(!QFileInfo(movieFileFull).exists())
                 continue;
         }
 
@@ -1370,7 +1370,7 @@ bool Sql::RenameEntry(const QString& oldDirc,
     Q_ASSERT(!QFileInfo(pathCombine(oldDir,oldFile)).exists());
     Q_ASSERT(QFileInfo(pathCombine(newDir,newFile)).exists());
 
-    if(!QFile(pathCombine(oldDir, oldFile)).exists())
+    if(!QFileInfo(pathCombine(oldDir, oldFile)).exists())
     {
 
         if(IsEntryExists(newDir,newFile))
@@ -1408,8 +1408,8 @@ bool Sql::RenameEntries(const QString& dir,
         Q_ASSERT(!oldfile.isEmpty());
         Q_ASSERT(!newfile.isEmpty());
         Q_ASSERT(oldfile != newfile);
-        Q_ASSERT(!QFile(pathCombine(dir, oldfile)).exists());
-        if(!QFile(pathCombine(dir, oldfile)).exists())
+        Q_ASSERT(!QFileInfo(pathCombine(dir, oldfile)).exists());
+        if(!QFileInfo(pathCombine(dir, oldfile)).exists())
         {
             MYQMODIFIER QSqlQuery query = myPrepare("update FileInfo "
                                                     "set name=? "

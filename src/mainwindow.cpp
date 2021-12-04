@@ -1015,7 +1015,7 @@ void MainWindow::OnRemove()
     if(movieFile.isEmpty()) { Alert(this, TR_NOVIDEO_SELECTED()); return;}
 
     bool bRemoveFromHardDisk = settings_.valueBool(KEY_MESSAGEBOX_REMOVEFORMEXTERNALMEDIA);
-    const bool isTargetFileExists = QFile(movieFile).exists();
+    const bool isTargetFileExists = QFileInfo(movieFile).exists();
 
     QMessageBox msgbox(this);
 
@@ -1805,7 +1805,7 @@ void MainWindow::on_action_New_triggered()
     QString newFile = dlg.selectedFiles()[0];
     lastSelectedDocumentDir_ = QFileInfo(newFile).absolutePath();
 
-    if(!OpenDocument(newFile, QFile(newFile).exists()))
+    if(!OpenDocument(newFile, QFileInfo(newFile).exists()))
         return;
 
     // create a file

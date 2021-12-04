@@ -34,6 +34,7 @@ class TaskFFmpeg : public QObject, public QRunnable
 
     const IFFTask2Main* pFF2M_ = nullptr;
 
+    int ffrun_new(QStringList* ret);
 public:
     enum Progress
     {

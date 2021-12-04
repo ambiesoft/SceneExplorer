@@ -54,7 +54,7 @@
 bool Document::Load(const QString& file, const bool bMustExists)
 {
     file_ = file;
-    const bool bExist = QFile(file).exists();
+    const bool bExist = QFileInfo(file).exists();
     if(bMustExists && !bExist)
     {
         lastErr_ = tr("\"%1\" does not exist.").arg(file);

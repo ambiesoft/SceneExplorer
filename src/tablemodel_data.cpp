@@ -29,6 +29,7 @@
 //#include <QRegExp>
 #include <QDebug>
 //#include <QTimerEvent>
+#include <QFileInfo>
 
 #include "../../lsMisc/stdQt/stdQt.h"
 
@@ -89,7 +90,7 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
         {
             // if(bShowMissing_)
             {
-                if(!QFile(itemDatas_[actualIndex]->getMovieFileFull()).exists())
+                if(!QFileInfo(itemDatas_[actualIndex]->getMovieFileFull()).exists())
                 {
                     return QColor(Qt::red);
                 }
@@ -195,7 +196,7 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
         {
             // if (bShowMissing_)
             {
-                if (!QFile(itemDatas_[actualIndex]->getMovieFileFull()).exists())
+                if (!QFileInfo(itemDatas_[actualIndex]->getMovieFileFull()).exists())
                 {
                     return QColor(Qt::red);
                 }

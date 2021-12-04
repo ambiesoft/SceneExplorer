@@ -370,7 +370,7 @@ void MainWindow::onMenu_RecentDocuments_AboutToShow()
         qa->setText(recents_[i]);
 
         // Fi file not exists, disable it
-        if(!QFile(recents_[i]).exists())
+        if(!QFileInfo(recents_[i]).exists())
             qa->setEnabled(false);
 
         // check Current item
