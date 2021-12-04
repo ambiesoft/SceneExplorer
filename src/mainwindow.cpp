@@ -1218,6 +1218,7 @@ void MainWindow::OnContextExternalTools()
         if(s=="${filefullpath}")
         {
             argparsed += movieFileNative;
+            //argparsed += QUrl::fromLocalFile(movieFileNative).toString();
         }
         else if(s=="${directoryfullpath}")
         {

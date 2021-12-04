@@ -24,6 +24,7 @@
 // #include <QFileIconProvider>
 #include <QPushButton>
 #include <QThread>
+#include <QThreadPool>
 
 #include "../../lsMisc/stdQt/inisettings.h"
 #include "../../lsMisc/stdosd/blockedbool.h"

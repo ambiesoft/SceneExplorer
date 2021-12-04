@@ -1,7 +1,7 @@
 #ifndef IFFTASK2MAIN_H
 #define IFFTASK2MAIN_H
 
-
+#include <QThread>
 
 class IFFTask2Main
 {

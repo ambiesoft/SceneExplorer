@@ -200,8 +200,11 @@ bool StartProcessDetached(const QString& exe, const QString& arg)
 {
     QString command;
     command += doublequoteIfNecessary(exe);
-    command += " ";
-    command += arg;
+    if(!arg.isEmpty())
+    {
+        command += " ";
+        command += arg;
+    }
     return QProcess::startDetached(command);
 }
 
