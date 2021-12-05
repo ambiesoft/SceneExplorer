@@ -374,6 +374,7 @@ bool TaskFFmpeg::run3(QString& errorReason)
                    vWidth,vHeight,
                    thumbext_,
                    fps);
+    return true;
 }
 
 bool TaskFFmpeg::run4_old(double duration, const QString& strWidthHeight, const QString& thumbid,
