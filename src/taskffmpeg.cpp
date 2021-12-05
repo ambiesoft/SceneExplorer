@@ -310,6 +310,8 @@ void TaskFFmpeg::run2()
     QString errorReason;
     if(!run3(errorReason))
         emit sayNo(loopId_,id_, movieFile_, errorReason);
+    if(!errorReason.isEmpty())
+        emit warning_FFMpeg(loopId_,id_,errorReason);
     progress_ = Finished;
 }
 
@@ -357,12 +359,125 @@ bool TaskFFmpeg::run3(QString& errorReason)
 
     const QString thumbid = QUuid::createUuid().toString().remove(L'{').remove(L'}');
 
+    QStringList filenames;
+    if(!run4(duration,strWidthHeight,thumbid, filenames, errorReason))
+        if(!run4_old(duration,strWidthHeight,thumbid, filenames, errorReason))
+            return false;
+
+    emit sayGoodby(loopId_,id_,
+                   filenames,
+                   movieFile_,
+                   duration,
+                   format,
+                   bitrate,
+                   vcodec,acodec,
+                   vWidth,vHeight,
+                   thumbext_,
+                   fps);
+}
+
+bool TaskFFmpeg::run4_old(double duration, const QString& strWidthHeight, const QString& thumbid,
+                      QStringList& filenames,QString& errorReason)
+{
+    filenames.clear();
+    for(int i=1 ; i <=5 ;++i)
+    {
+        QString filename=createThumbFileName(i, thumbid, thumbWidth_, thumbHeight_,thumbext_);
+
+        QString actualFile = QString(FILEPART_THUMBS) + QDir::separator() + filename;
+
+        double timepoint = (((double)i-0.5)*duration/5);
+        QStringList qsl;
+        qsl.append("-v");
+        qsl.append("16");  // only error output
+        qsl.append("-hide_banner");  // as it is
+        qsl.append("-n");  // no overwrite
+        qsl.append("-ss" );  // seek input
+        qsl.append(QString::number(timepoint) );  // seek position
+        qsl.append("-i" );  // input file
+        qsl.append(movieFile_ );  // input file
+        qsl.append("-vf" );  // video filtergraph
+        qsl.append("select='eq(pict_type\\,I)'");  // select filter with argument, Select only I-frames:
+        qsl.append("-vframes" );
+        qsl.append("1");
+        qsl.append("-s");
+        qsl.append(strWidthHeight);
+        qsl.append(actualFile);
+
+        QProcess process;
+        process.setProgram(ffmpeg_);
+        process.setArguments(qsl);
+        process.start(QProcess::ReadOnly);
+
+        if (!process.waitForStarted(waitMax_))
+        {
+            errorReason += process.errorString();
+            return false;
+        }
+
+        setPriority(process);
+
+        if (!process.waitForFinished(waitMax_))
+        {
+            errorReason += process.errorString();
+            return false;
+        }
+
+        if (process.exitCode() != 0)
+        {
+            errorReason += tr("ffmpeg.exitCode() != 0");
+            errorReason += "\n\n";
+            QByteArray baErr=process.readAllStandardError();
+            errorReason += baErr.data();
+            return false;
+        }
+
+        //        QByteArray baOut = ffmpeg.readAllStandardOutput();
+        //        qDebug()<<baOut.data();
+
+
+        if(i==1)
+        {
+            if (!QFile(actualFile).exists())
+            {
+                errorReason += tr("Failed to create thumbnail");
+                QByteArray baErr = process.readAllStandardError();
+                QString strErr = baErr.data();
+                if (!strErr.isEmpty())
+                {
+                    errorReason += "\n\n";
+                    errorReason += strErr;
+                }
+                return false;
+            }
+        }
+        else
+        {
+            // short movie will not create thumb
+            if (!QFile(actualFile).exists())
+            {
+                QFile f(actualFile);
+                if(!f.open(QIODevice::NewOnly | QIODevice::WriteOnly))
+                {
+                    errorReason += tr("Failed to create dummy thumbnail");
+                    return false;
+                }
+            }
+        }
+        filenames.append(filename);
+    }
+
+     return true;
+}
+bool TaskFFmpeg::run4(double duration, const QString& strWidthHeight, const QString& thumbid,
+                      QStringList& filenames,QString& errorReason)
+{
     // ffmpeg.exe -hide_banner
     // -ss 25.73 -i in.mp4
     // -ss 66.73 -i in.mp4
     // -map 0:v:0 -vf select='eq(pict_type\,I)' -vframes 1 -s 160x120 1.jpg
     // -map 1:v:0 -vf select='eq(pict_type\,I)' -vframes 1 -s 160x120 2.jpg
-    QStringList filenames;
+    Q_ASSERT(filenames.empty());
     QStringList actualFiles;
     QList<double> timepoints;
     for(int i=1 ; i <=5 ;++i)
@@ -406,7 +521,7 @@ bool TaskFFmpeg::run3(QString& errorReason)
 
     if (!process.waitForStarted(waitMax_))
     {
-        errorReason = process.errorString();
+        errorReason += process.errorString();
         return false;
     }
 
@@ -414,13 +529,13 @@ bool TaskFFmpeg::run3(QString& errorReason)
 
     if (!process.waitForFinished(waitMax_))
     {
-        errorReason = process.errorString();
+        errorReason += process.errorString();
         return false;
     }
 
     if (process.exitCode() != 0)
     {
-        errorReason = tr("ffmpeg.exitCode = %1").arg(process.exitCode());
+        errorReason += tr("ffmpeg.exitCode = %1").arg(process.exitCode());
         errorReason += "\n\n";
         QByteArray baErr=process.readAllStandardError();
         errorReason += baErr.data();
@@ -429,7 +544,7 @@ bool TaskFFmpeg::run3(QString& errorReason)
 
     if (!QFileInfo(actualFiles[0]).exists())
     {
-        errorReason = tr("exitCode is 0 but thumbnails not created.");
+        errorReason += tr("exitCode is 0 but thumbnails not created.");
         errorReason += "\n\n";
         errorReason += tr("The command line:");
         errorReason += "\n";
@@ -453,22 +568,11 @@ bool TaskFFmpeg::run3(QString& errorReason)
             QFile f(actualFiles[i-1]);
             if(!f.open(QIODevice::NewOnly | QIODevice::WriteOnly))
             {
-                errorReason = tr("Failed to create dummy thumbnail");
+                errorReason += tr("Failed to create dummy thumbnail");
                 return false;
             }
         }
     }
-
-    emit sayGoodby(loopId_,id_,
-                   filenames,
-                   movieFile_,
-                   duration,
-                   format,
-                   bitrate,
-                   vcodec,acodec,
-                   vWidth,vHeight,
-                   thumbext_,
-                   fps);
 
     return true;
 }

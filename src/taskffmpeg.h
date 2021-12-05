@@ -74,6 +74,10 @@ private:
                   QString& errorReason);
     void run2();
     bool run3(QString& errorReason);
+    bool run4(double duration, const QString& strWidthHeight, const QString& thumbid,
+              QStringList& filenames,QString& errorReason);
+    bool run4_old(double duration, const QString& strWidthHeight, const QString& thumbid,
+              QStringList& filenames,QString& errorReason);
 
     void setPriority(QProcess& process);
 public:
