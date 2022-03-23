@@ -1961,7 +1961,7 @@ void MainWindow::editTag()
         return;
     }
 
-    TagInputDialog dlg(this);
+    TagInputDialog dlg(this, TagInputDialog::TAGDIALOG_EDIT, pDoc_);
     dlg.setTag(tag);
     dlg.setYomi(yomi);
     if(!dlg.exec())
@@ -2572,24 +2572,43 @@ void MainWindow::on_action_AddNewTag_triggered()
         return;
     }
 
-    TagInputDialog dlg(this);
+    TagInputDialog dlg(this, TagInputDialog::TAGDIALOG_ADD, pDoc_);
     if(!dlg.exec())
         return;
 
     QString tag=dlg.tag();
     QString yomi=dlg.yomi();
 
-    qint64 insertedTag = -1;
-    if(!CreateNewTag(tag,yomi,&insertedTag))
-        return;
-    Q_ASSERT(insertedTag >= 0);
-
-    if(tableContextMenuActivaing_)
+    if(pDoc_->IsTagExist(tag) && tableContextMenuActivaing_)
     {
-        // comming from context menu
-        qint64 id = getSelectedID();
-        if(id >= 0)
-            pDoc_->SetTagged(id, insertedTag, true);
+        // find tagid from text
+        QList<TagItem*> tagItems;
+        pDoc_->GetAllTags(tagItems,false);
+        for(auto&& tagItem : tagItems)
+        {
+            if(tagItem->tagtext()==tag)
+            {
+                qint64 id = getSelectedID();
+                if(id >= 0)
+                    pDoc_->SetTagged(id, tagItem->tagid(), true);
+                break;
+            }
+        }
+    }
+    else
+    {
+        qint64 insertedTag = -1;
+        if(!CreateNewTag(tag,yomi,&insertedTag))
+            return;
+        Q_ASSERT(insertedTag >= 0);
+
+        if(tableContextMenuActivaing_)
+        {
+            // comming from context menu
+            qint64 id = getSelectedID();
+            if(id >= 0)
+                pDoc_->SetTagged(id, insertedTag, true);
+        }
     }
 
     RefreshTagTree();

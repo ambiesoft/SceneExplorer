@@ -21,6 +21,8 @@
 
 #include <QDialog>
 
+#include "document.h"
+
 namespace Ui {
 class TagInputDialog;
 }
@@ -29,11 +31,20 @@ class TagInputDialog : public QDialog
 {
     Q_OBJECT
 
+public:
+    enum TagDialogType {
+        TAGDIALOG_ADD,
+        TAGDIALOG_EDIT,
+    };
+private:
     QString lastTagText_;
     bool yomiChangging_=false;
     bool yomiChanged_ = false;
+    TagDialogType tdt_;
+    Document* pDoc_ = nullptr;
+
 public:
-    explicit TagInputDialog(QWidget *parent = nullptr);
+    explicit TagInputDialog(QWidget *parent, TagDialogType tdt, Document* pDoc);
     ~TagInputDialog();
 
     QString tag() const;
@@ -44,7 +55,6 @@ public:
 
 private Q_SLOTS:
     void on_lineTag_textChanged(const QString &arg1);
-
     void on_lineYomi_textChanged(const QString &arg1);
 
     virtual void done(int r);

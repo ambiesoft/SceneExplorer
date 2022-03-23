@@ -25,11 +25,14 @@
 
 using namespace AmbiesoftQt;
 
-TagInputDialog::TagInputDialog(QWidget *parent) :
+TagInputDialog::TagInputDialog(QWidget *parent, TagDialogType tdt, Document* pDoc) :
     QDialog(parent,GetDefaultDialogFlags()),
+    tdt_(tdt),
+    pDoc_(pDoc),
     ui(new Ui::TagInputDialog)
 {
     ui->setupUi(this);
+    Q_ASSERT(tdt_==TAGDIALOG_ADD || tdt_==TAGDIALOG_EDIT);
 }
 
 TagInputDialog::~TagInputDialog()
@@ -40,6 +43,21 @@ TagInputDialog::~TagInputDialog()
 void TagInputDialog::on_lineTag_textChanged(const QString &arg1)
 {
     Q_UNUSED(arg1);
+    if(tdt_==TAGDIALOG_ADD)
+    {
+        if(pDoc_->IsTagExist(ui->lineTag->text()))
+        {
+            ui->labelWarn->setText(tr("Tag \"%1\" already exists.").arg(ui->lineTag->text()));
+            ui->lineYomi->setEnabled(false);
+            return;
+        }
+        else
+        {
+            ui->labelWarn->setText(QString());
+            ui->lineYomi->setEnabled(true);
+        }
+    }
+
     if(!yomiChanged_)
     {
         if(lastTagText_==ui->lineYomi->text())

@@ -2379,13 +2379,13 @@
         <source>Tagname cound not have &apos;\t&apos; or/and &apos;\n&apos;</source>
         <translation>タグの名前に \t や \n を指定できません。</translation>
     </message>
+    <message>
+        <source>Tag &quot;%1&quot; already exists.</source>
+        <translation type="unfinished">タグ &quot;%1&quot; はすでに存在します。</translation>
+    </message>
 </context>
 <context>
     <name>TaskFFmpeg</name>
-    <message>
-        <source>existCode != 0</source>
-        <translation></translation>
-    </message>
     <message>
         <source>QJsonDocument is Null</source>
         <translation></translation>
@@ -2425,6 +2425,22 @@
     <message>
         <source>Failed to create dummy thumbnail</source>
         <translation>ダミーサムネイルの作成に失敗しました</translation>
+    </message>
+    <message>
+        <source>ffprobe.exitCode = %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>ffmpeg.exitCode = %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>exitCode is 0 but thumbnails not created.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <source>The command line:</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>

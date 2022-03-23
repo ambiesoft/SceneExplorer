@@ -1,3 +1,6 @@
+2022/03/23　1.22.27
+Modified: TagInputDialog checks and warns if the tag entered by the user already exists.
+
 2021/12/05　1.22.26
 Fixed: New ffmpeg command fails to create thumbnails for some videos.
 
