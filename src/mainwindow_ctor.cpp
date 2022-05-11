@@ -29,7 +29,6 @@
 #include "helper.h"
 #include "consts.h"
 #include "globals.h"
-#include "osd.h"
 
 #include "ui_mainwindow.h"
 #include "mainwindow.h"
@@ -308,10 +307,11 @@ MainWindow::MainWindow(QWidget *parent,
     qDebug() << "physicalDpiY:" << this->physicalDpiY();
     qDebug() << "logicalDpiX:" << this->logicalDpiX();
     qDebug() << "logicalDpiY:" << this->logicalDpiY();
-    qDebug() << "getDpiRatio():" << getDpiRatio(this);
 
-    optionThumbWidth_ = settings_.valueInt(KEY_THUMBNAIL_WIDTH, THUMB_WIDTH_DEFAULT * getDpiRatio(this));
-    optionThumbHeight_ = settings_.valueInt(KEY_THUMBNAIL_HEIGHT, THUMB_HEIGHT_DEFAULT * getDpiRatio(this));
+    qreal dpiMul = this->logicalDpiX() / 96.0;
+    qDebug() << "dpiMul:" << dpiMul;
+    optionThumbWidth_ = settings_.valueInt(KEY_THUMBNAIL_WIDTH, THUMB_WIDTH_DEFAULT * dpiMul);
+    optionThumbHeight_ = settings_.valueInt(KEY_THUMBNAIL_HEIGHT, THUMB_HEIGHT_DEFAULT * dpiMul);
 
     QString scrollMode = settings_.valueString(KEY_THUMBNAIL_SCROLLMODE, "item");
     if(scrollMode.isEmpty() || scrollMode=="item")

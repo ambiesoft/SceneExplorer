@@ -21,32 +21,12 @@
 
 #include <QThread>
 
-
 void MoveToTrashImpl( QString file );
-
 QString GetDefaultFFprobe();
 QString GetDefaultFFmpeg();
-
-
-
-
-
-
 bool setProcessPriority(const qint64& pid, QThread::Priority priority, QStringList& errors);
-
 bool myRename(const QString& oldfull, const QString& newfull, QString& error);
-
-
-
 bool StartProcessDetached(const QString& exe, const QString& arg);
-
 QIcon GetIconFromExecutable(const QString& exe);
-
-qreal getDpiRatio(QWidget* widget);
-
-
-
-
-
 
 #endif // OSD_H
