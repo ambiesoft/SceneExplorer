@@ -300,14 +300,15 @@ MainWindow::MainWindow(QWidget *parent,
     if(optionThumbCount_ != 3 && optionThumbCount_ != 5)
         optionThumbCount_ = 3;
     optionThumbFormat_ = settings_.valueString(KEY_THUMBNAIL_FORMAT, "jpg");
-    qreal aaa =this->devicePixelRatioF();
-    float dddd=this->physicalDpiX();
-    float vvvvvvv=this->logicalDpiX() / this->physicalDpiX();
-    float vvvvvvv2=this->logicalDpiY() / this->physicalDpiY();
-    float dpiScaleX = this->logicalDpiX() / 96.0;
-    float dpiScaleY = this->logicalDpiY() / 96.0;
-    optionThumbWidth_ = settings_.valueInt(KEY_THUMBNAIL_WIDTH, THUMB_WIDTH_DEFAULT * dpiScaleX);
-    optionThumbHeight_ = settings_.valueInt(KEY_THUMBNAIL_HEIGHT, THUMB_HEIGHT_DEFAULT * dpiScaleY);
+    qDebug() << "devicePixelRatioF:" << this->devicePixelRatioF();
+    qDebug() << "devicePixelRatioFScale:" << this->devicePixelRatioFScale();
+    qDebug() << "physicalDpiX:" << this->physicalDpiX();
+    qDebug() << "physicalDpiY:" << this->physicalDpiY();
+    qDebug() << "logicalDpiX:" << this->logicalDpiX();
+    qDebug() << "logicalDpiY:" << this->logicalDpiY();
+
+    optionThumbWidth_ = settings_.valueInt(KEY_THUMBNAIL_WIDTH, THUMB_WIDTH_DEFAULT * this->devicePixelRatioF());
+    optionThumbHeight_ = settings_.valueInt(KEY_THUMBNAIL_HEIGHT, THUMB_HEIGHT_DEFAULT * this->devicePixelRatioF());
 
     QString scrollMode = settings_.valueString(KEY_THUMBNAIL_SCROLLMODE, "item");
     if(scrollMode.isEmpty() || scrollMode=="item")
