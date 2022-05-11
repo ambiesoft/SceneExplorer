@@ -42,7 +42,7 @@ bool StartProcessDetached(const QString& exe, const QString& arg);
 
 QIcon GetIconFromExecutable(const QString& exe);
 
-
+qreal getDpiRatio(QWidget* widget);
 
 
 

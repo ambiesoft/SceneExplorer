@@ -194,3 +194,8 @@ QIcon GetIconFromExecutable(const QString& exe)
 
     return QIcon(QtWin::fromHICON(info.hIcon));
 }
+
+qreal getDpiRatio(QWidget* widget)
+{
+    return widget->logicalDpiX() / 96.0;
+}

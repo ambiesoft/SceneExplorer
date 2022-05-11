@@ -29,6 +29,7 @@
 #include "helper.h"
 #include "consts.h"
 #include "globals.h"
+#include "osd.h"
 
 #include "ui_mainwindow.h"
 #include "mainwindow.h"
@@ -300,15 +301,17 @@ MainWindow::MainWindow(QWidget *parent,
     if(optionThumbCount_ != 3 && optionThumbCount_ != 5)
         optionThumbCount_ = 3;
     optionThumbFormat_ = settings_.valueString(KEY_THUMBNAIL_FORMAT, "jpg");
+
     qDebug() << "devicePixelRatioF:" << this->devicePixelRatioF();
     qDebug() << "devicePixelRatioFScale:" << this->devicePixelRatioFScale();
     qDebug() << "physicalDpiX:" << this->physicalDpiX();
     qDebug() << "physicalDpiY:" << this->physicalDpiY();
     qDebug() << "logicalDpiX:" << this->logicalDpiX();
     qDebug() << "logicalDpiY:" << this->logicalDpiY();
+    qDebug() << "getDpiRatio():" << getDpiRatio(this);
 
-    optionThumbWidth_ = settings_.valueInt(KEY_THUMBNAIL_WIDTH, THUMB_WIDTH_DEFAULT * this->devicePixelRatioF());
-    optionThumbHeight_ = settings_.valueInt(KEY_THUMBNAIL_HEIGHT, THUMB_HEIGHT_DEFAULT * this->devicePixelRatioF());
+    optionThumbWidth_ = settings_.valueInt(KEY_THUMBNAIL_WIDTH, THUMB_WIDTH_DEFAULT * getDpiRatio(this));
+    optionThumbHeight_ = settings_.valueInt(KEY_THUMBNAIL_HEIGHT, THUMB_HEIGHT_DEFAULT * getDpiRatio(this));
 
     QString scrollMode = settings_.valueString(KEY_THUMBNAIL_SCROLLMODE, "item");
     if(scrollMode.isEmpty() || scrollMode=="item")

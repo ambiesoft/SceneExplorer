@@ -214,3 +214,8 @@ QIcon GetIconFromExecutable(const QString& exe)
     Q_UNUSED(exe);
     return QIcon();
 }
+
+qreal getDpiRatio(QWidget* widget)
+{
+    return widget->devicePixelRatioF();
+}
