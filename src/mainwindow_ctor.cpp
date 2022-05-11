@@ -300,8 +300,10 @@ MainWindow::MainWindow(QWidget *parent,
     if(optionThumbCount_ != 3 && optionThumbCount_ != 5)
         optionThumbCount_ = 3;
     optionThumbFormat_ = settings_.valueString(KEY_THUMBNAIL_FORMAT, "jpg");
-    optionThumbWidth_ = settings_.valueInt(KEY_THUMBNAIL_WIDTH, THUMB_WIDTH_DEFAULT);
-    optionThumbHeight_ = settings_.valueInt(KEY_THUMBNAIL_HEIGHT, THUMB_HEIGHT_DEFAULT);
+    float dpiScaleX = this->logicalDpiX() / 96.0;
+    float dpiScaleY = this->logicalDpiY() / 96.0;
+    optionThumbWidth_ = settings_.valueInt(KEY_THUMBNAIL_WIDTH, THUMB_WIDTH_DEFAULT * dpiScaleX);
+    optionThumbHeight_ = settings_.valueInt(KEY_THUMBNAIL_HEIGHT, THUMB_HEIGHT_DEFAULT * dpiScaleY);
 
     QString scrollMode = settings_.valueString(KEY_THUMBNAIL_SCROLLMODE, "item");
     if(scrollMode.isEmpty() || scrollMode=="item")
