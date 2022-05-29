@@ -201,14 +201,23 @@ MainWindow::MainWindow(QWidget *parent,
     connect(tbShowNonExistant_, SIGNAL(toggled(bool)),
             this, SLOT(OnShowMissingClicked()));
 
+    // Calculate dpi magnification ratio
+    qDebug() << "devicePixelRatioF:" << this->devicePixelRatioF();
+    qDebug() << "devicePixelRatioFScale:" << this->devicePixelRatioFScale();
+    qDebug() << "physicalDpiX:" << this->physicalDpiX();
+    qDebug() << "physicalDpiY:" << this->physicalDpiY();
+    qDebug() << "logicalDpiX:" << this->logicalDpiX();
+    qDebug() << "logicalDpiY:" << this->logicalDpiY();
 
+    const qreal dpiMul = this->logicalDpiX() / 96.0;
+    qDebug() << "dpiMul:" << dpiMul;
 
     //    QToolButton* myTooButton = new QToolButton(ui->mainToolBar);
     //    ui->mainToolBar->addWidget(myTooButton);
 
     cmbFind_ = new FindComboBox(ui->mainToolBar);
-    cmbFind_->setMinimumWidth(FINDCOMBO_WIDTH);
-    cmbFind_->setMaximumWidth(FINDCOMBO_WIDTH);
+    cmbFind_->setMinimumWidth(FINDCOMBO_WIDTH * dpiMul);
+    cmbFind_->setMaximumWidth(FINDCOMBO_WIDTH * dpiMul);
     cmbFind_->setEditable(true);
     QStringList findtexts = settings_.valueStringList(KEY_COMBO_FINDTEXTS);
     cmbFind_->addItems(findtexts);
@@ -301,15 +310,6 @@ MainWindow::MainWindow(QWidget *parent,
         optionThumbCount_ = 3;
     optionThumbFormat_ = settings_.valueString(KEY_THUMBNAIL_FORMAT, "jpg");
 
-    qDebug() << "devicePixelRatioF:" << this->devicePixelRatioF();
-    qDebug() << "devicePixelRatioFScale:" << this->devicePixelRatioFScale();
-    qDebug() << "physicalDpiX:" << this->physicalDpiX();
-    qDebug() << "physicalDpiY:" << this->physicalDpiY();
-    qDebug() << "logicalDpiX:" << this->logicalDpiX();
-    qDebug() << "logicalDpiY:" << this->logicalDpiY();
-
-    qreal dpiMul = this->logicalDpiX() / 96.0;
-    qDebug() << "dpiMul:" << dpiMul;
     optionThumbWidth_ = settings_.valueInt(KEY_THUMBNAIL_WIDTH, THUMB_WIDTH_DEFAULT * dpiMul);
     optionThumbHeight_ = settings_.valueInt(KEY_THUMBNAIL_HEIGHT, THUMB_HEIGHT_DEFAULT * dpiMul);
 
