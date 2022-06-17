@@ -2310,6 +2310,7 @@ void MainWindow::on_action_OpenDirectory_triggered()
             if(di->IsNormalItem())
             {
                 QString dir = di->directory();
+                qDebug() << "Opening " << QUrl::fromLocalFile(dir) << __FUNCTION__;
                 if(!QDesktopServices::openUrl(QUrl::fromLocalFile(dir)))
                 {
                     Alert(this, tr("failed to launch %1.").arg(dir));
