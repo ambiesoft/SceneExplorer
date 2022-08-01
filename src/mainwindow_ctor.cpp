@@ -112,7 +112,7 @@ MainWindow::MainWindow(QWidget *parent,
 
     connect(ui->tableView->verticalScrollBar(), &QScrollBar::valueChanged,
             this, &MainWindow::OnTableViewScrollChanged);
-    connect(ui->tableView->selectionModel(), &QItemSelectionModel::currentRowChanged,
+    connect(ui->tableView->selectionModel(), &QItemSelectionModel::currentChanged,
             this, &MainWindow::OnTableItemChanged);
 
 

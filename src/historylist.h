@@ -14,7 +14,7 @@ public:
 class HistoryList
 {
     int current_ = -1;
-    typedef QPair<qint64,QString> HistoryItemType;
+    using HistoryItemType = QPair<qint64,QString>;
     QList<HistoryItemType> list_;
     IHistoryList* parent_;
 public:
@@ -49,6 +49,9 @@ public:
     bool canGoBack() const;
     bool canGoForward() const;
 
+    bool isLast() const {
+        return current_ >= 0 && (current_ == (list_.length() - 1));
+    }
     void Clear();
 };
 

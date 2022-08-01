@@ -1553,6 +1553,7 @@ void MainWindow::GetSqlAllSetTable(const QStringList dirs,
 
 
     tableSortParameterChanged(sortManager_.GetCurrentSort(), sortManager_.IsSortAscending());
+    updateToolButton();
 }
 
 void MainWindow::UpdateTitle(const QStringList& dirs, UpdateTitleType utt)

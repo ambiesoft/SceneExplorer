@@ -95,7 +95,7 @@ void MainWindow::OnTableItemChanged(QModelIndex newIndex, QModelIndex oldIndex)
 
     qint64 id = getIDFromIndex(newIndex);
     QString movieFile = getVideoFromIndex(newIndex, false);
-    qDebug() << "old=" << oldIndex << ",new=" << newIndex << ":ID=" << id << ":" << movieFile << __FUNCTION__;
+    qDebug() << "selected id=" << getSelectedID() << ",old=" << oldIndex << ",new=" << newIndex << ":ID=" << id << ":" << movieFile << __FUNCTION__;
     if(id < 0)
         return;
 
@@ -104,9 +104,8 @@ void MainWindow::OnTableItemChanged(QModelIndex newIndex, QModelIndex oldIndex)
 
 void MainWindow::updateToolButton()
 {
-    // if current selection is not in view,
-    // GoBack will scroll into the selected item
-    ui->action_GoBack->setEnabled(true); // hisList_.canGoBack());
+    ui->action_GoBack->setEnabled(hisList_.canGoBack() ||
+                                  !ui->tableView->selectionModel()->hasSelection());
     ui->action_GoForward->setEnabled(hisList_.canGoForward());
 }
 
@@ -167,11 +166,18 @@ void MainWindow::on_action_GoBack_triggered()
         }
     }
 
-    if(hisList_.currentDbID()==getSelectedID())
-        hisList_.OnGoBack();
-    else
+    if(getSelectedID() == -1 && hisList_.isLast())
+    {
+        // Select the last selected item after the user changed or sorted the view
         hisList_.OnGoLast();
-
+    }
+    else
+    {
+        if(hisList_.currentDbID()==getSelectedID())
+            hisList_.OnGoBack();
+        else
+            hisList_.OnGoLast();
+    }
 }
 
 void MainWindow::on_action_GoForward_triggered()
