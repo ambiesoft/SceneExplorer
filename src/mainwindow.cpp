@@ -2790,6 +2790,7 @@ void MainWindow::on_action_SelectTags_triggered()
 
     Q_ASSERT(!tagChanging_);
     Ambiesoft::BlockedBool bt(&tagChanging_);
+    bool bScrolled = false;
     for(int i=0; i < ui->listTag->count(); ++i)
     {
         TagItem* ti = static_cast<TagItem*>(ui->listTag->item(i));
@@ -2797,7 +2798,14 @@ void MainWindow::on_action_SelectTags_triggered()
             continue;
         if(!tagids.contains(ti->tagid()))
             continue;
+
         ti->setSelected(true);
+
+        if(!bScrolled)
+        {
+            bScrolled = true;
+            ui->listTag->scrollToItem(ti);
+        }
     }
 }
 

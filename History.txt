@@ -1,3 +1,8 @@
+2022/09/14　1.22.31
+Modified: When 'Deepest directory selected' or 'Tag selected' from
+the context menu of Main Window, the selected directory or tags are
+to be scrolled to be visible.
+
 2022/08/01　1.22.30
 Modified: Changed the behavior of History
 

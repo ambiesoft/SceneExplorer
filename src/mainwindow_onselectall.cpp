@@ -167,5 +167,7 @@ void MainWindow::on_action_SelectDeepestDirectory_triggered()
     Q_ASSERT(!directoryChanging_);
     Ambiesoft::BlockedBool bt(&directoryChanging_);
     foundItem->setSelected(bNewSelect);
+    if(bNewSelect)
+        ui->directoryWidget->scrollToItem(foundItem);
 }
 
