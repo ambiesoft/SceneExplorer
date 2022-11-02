@@ -49,12 +49,16 @@ void TagInputDialog::on_lineTag_textChanged(const QString &arg1)
         {
             ui->labelWarn->setText(tr("Tag \"%1\" already exists.").arg(ui->lineTag->text()));
             ui->lineYomi->setEnabled(false);
+            ui->lineYomi->setVisible(false);
+            ui->labelYomi->setVisible(false);
             return;
         }
         else
         {
             ui->labelWarn->setText(QString());
             ui->lineYomi->setEnabled(true);
+            ui->lineYomi->setVisible(true);
+            ui->labelYomi->setVisible(true);
         }
     }
 
