@@ -2581,7 +2581,7 @@ void MainWindow::on_action_AddNewTag_triggered()
     QString tag=dlg.tag();
     QString yomi=dlg.yomi();
 
-    if(pDoc_->IsTagExist(tag) && tableContextMenuActivaing_)
+    if(pDoc_->IsTagExist(tag))
     {
         // find tagid from text
         QList<TagItem*> tagItems;
