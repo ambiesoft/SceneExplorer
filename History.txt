@@ -1,3 +1,7 @@
+2022/11/03　1.22.32
+Make 'Yomi' invisible when the tag already exists on the TagInputDialog
+Modified to not raise an error when adding a tag that already exists
+
 2022/09/14　1.22.31
 Modified: When 'Deepest directory selected' or 'Tag selected' from
 the context menu of Main Window, the selected directory or tags are
