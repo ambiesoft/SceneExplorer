@@ -1,3 +1,6 @@
+2023/03/20　1.22.33
+Fixed a problem that caused the app to crash when FFmpeg output was too long
+
 2022/11/03　1.22.32
 Make 'Yomi' invisible when the tag already exists on the TagInputDialog
 Modified to not raise an error when adding a tag that already exists

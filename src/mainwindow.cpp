@@ -501,7 +501,22 @@ void MainWindow::timerEvent(QTimerEvent *event)
         }
         return;
     }
-    ui->txtLog->appendPlainText(logPond_.join("\n"));
+
+    // This may be caused Exception
+    // ui->txtLog->appendPlainText(logPond_.join("\n"));
+    for(auto&& line : logPond_)
+    {
+        Q_CONSTEXPR int MAX_APPENDTEXT_LENGTH = 1024 * 10;
+        Q_CONSTEXPR int LAST_APPENDTEXT_LENGTH = 1024;
+        if(line.length() > MAX_APPENDTEXT_LENGTH)
+        {
+            ui->txtLog->appendPlainText(line.left(MAX_APPENDTEXT_LENGTH));
+            ui->txtLog->appendPlainText(tr("... Too long line, the middle section has been truncated."));
+            ui->txtLog->appendPlainText(line.right(LAST_APPENDTEXT_LENGTH));
+        }
+        else
+            ui->txtLog->appendPlainText(line);
+    }
     logPond_.clear();
 
     int scrollMax=ui->txtLog->verticalScrollBar()->maximum();

@@ -1658,6 +1658,10 @@
         <source>Failed to update ctime or wtime in db. &quot;%1&quot;</source>
         <translation>ctimeまたはwtimeの更新に失敗しました。 &quot;%1&quot;</translation>
     </message>
+    <message>
+        <source>... Too long line, the middle section has been truncated.</source>
+        <translation>...ラインが長すぎます。中間部分をカットしました。</translation>
+    </message>
 </context>
 <context>
     <name>Option</name>
@@ -2381,7 +2385,7 @@
     </message>
     <message>
         <source>Tag &quot;%1&quot; already exists.</source>
-        <translation type="unfinished">タグ &quot;%1&quot; はすでに存在します。</translation>
+        <translation>タグ &quot;%1&quot; はすでに存在します。</translation>
     </message>
 </context>
 <context>
@@ -2428,19 +2432,19 @@
     </message>
     <message>
         <source>ffprobe.exitCode = %1</source>
-        <translation type="unfinished"></translation>
+        <translation>ffprobe.exitCode = %1</translation>
     </message>
     <message>
         <source>ffmpeg.exitCode = %1</source>
-        <translation type="unfinished"></translation>
+        <translation>ffmpeg.exitCode = %1</translation>
     </message>
     <message>
         <source>exitCode is 0 but thumbnails not created.</source>
-        <translation type="unfinished"></translation>
+        <translation>exitCodeは 0 ですがサムネイルは作成されていません。</translation>
     </message>
     <message>
         <source>The command line:</source>
-        <translation type="unfinished"></translation>
+        <translation>コマンドライン：</translation>
     </message>
 </context>
 <context>
