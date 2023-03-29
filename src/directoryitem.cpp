@@ -18,7 +18,11 @@
 
 #include <QIcon>
 #include <QDir>
+#include <QObject>
+
+#include "directorycheckthread.h"
 #include "directoryitem.h"
+#include "mainwindow.h"
 
 QListWidget* DirectoryItem::parent_;
 
@@ -61,13 +65,20 @@ DirectoryItem::DirectoryItem(const qint64& dirid,
 
 void DirectoryItem::Refresh()
 {
-    static QBrush defaultFore = foreground();
+    if(!IsNormalItem())
+        return;
 
-    if(IsNormalItem())
-    {
-        if(!QDir(directory()).exists())
-            setForeground(Qt::red);
-        else
-            setForeground(defaultFore);
-    }
+    DirectoryCheckThread* pThread = new DirectoryCheckThread(directory());
+    QObject::connect(pThread, &DirectoryCheckThread::finished_CheckDir,
+                     this, &DirectoryItem::finished_CheckDir);
+    pThread->start();
+}
+void DirectoryItem::finished_CheckDir(const bool bExist,DirectoryCheckThread* pThread)
+{
+    if(MainWindow::isClosing())
+        return;
+    static QBrush defaultFore = foreground();
+    setForeground(bExist ? defaultFore : Qt::red);
+
+    delete pThread;
 }

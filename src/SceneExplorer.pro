@@ -29,6 +29,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
     ../../lsMisc/stdQt/ambapp.cpp \
+    directorycheckthread.cpp \
     main.cpp \
     mainwindow.cpp \
     mainwindow_contextmenu.cpp \
@@ -93,6 +94,7 @@ HEADERS += \
     ../../lsMisc/stdosd/stdosd_literal.h \
     IFFTask2Main.h \
     debugflag.h \
+    directorycheckthread.h \
     gitrev.h \
     mainwindow.h \
     showlastscanerrorsdialog.h \

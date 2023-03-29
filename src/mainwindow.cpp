@@ -83,6 +83,8 @@
 #include "ui_mainwindow.h"
 #include "mainwindow.h"
 
+bool MainWindow::closing_ = false;
+
 using namespace Consts;
 using namespace AmbiesoftQt;
 

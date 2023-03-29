@@ -19,11 +19,15 @@
 #ifndef DIRECTORYITEM_H
 #define DIRECTORYITEM_H
 
+#include <QObject>
 #include <QListWidgetItem>
 #include <QFileIconProvider>
 
-class DirectoryItem : public QListWidgetItem
+#include "directorycheckthread.h"
+
+class DirectoryItem : public QObject, public QListWidgetItem
 {
+    Q_OBJECT
     using ParentClass = QListWidgetItem;
 public:
     enum DirectoryItemType
@@ -99,7 +103,8 @@ public:
         displaytext_ = displaytext;
         ParentClass::setText(displaytext.isEmpty() ? directory_ : displaytext_);
     }
-
+public Q_SLOTS:
+    void finished_CheckDir(const bool bExist,DirectoryCheckThread* pThread);
 };
 
 #endif // DIRECTORYITEM_H

@@ -104,7 +104,9 @@ public:
     void updateToolButton() override;
     virtual QThread::Priority* GetTaskPriority() const override;
     bool IsInitialized() const;
-
+    static bool isClosing() {
+        return closing_;
+    }
 private:
     enum IDKIND {
         IDKIND_GetDir,
@@ -112,6 +114,7 @@ private:
         IDKIND_FFmpeg,
     };
     bool initialized_ = false;
+    static bool closing_;
     bool closed_ = false;
     bool directoryChanging_ = false;
     bool tagChanging_ = false;
