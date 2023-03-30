@@ -51,25 +51,19 @@
 #include "../../lsMisc/stdQt/inisettings.h"
 #include "../../lsMisc/stdQt/waitingcursor.h"
 
-#include "taskgetdir.h"
 #include "taskffmpeg.h"
-// #include "optionfontdialog.h"
 #include "tablemodel.h"
 #include "taskmodel.h"
 #include "tableitemdata.h"
-// #include "taskfilter.h"
 #include "errorinfoexception.h"
 #include "consts.h"
-#include "optiondialog.h"
 #include "optionextension.h"
 #include "optionexternaltoolsdialog.h"
 #include "ffmpeg.h"
 #include "globals.h"
 #include "helper.h"
 #include "osd.h"
-#include "extension.h"
 #include "sql.h"
-#include "tableitemdelegate.h"
 #include "docinfodialog.h"
 #include "tagitem.h"
 #include "taginputdialog.h"
@@ -1993,6 +1987,7 @@ void MainWindow::editTag()
     }
 
     ti->setTagText(dlg.tag());
+    ti->setYomi(dlg.yomi());
     RefreshTagTree();
 }
 void MainWindow::deleteTag()
@@ -2396,8 +2391,6 @@ void MainWindow::SetTaskPriorityAsInt(int priority)
     }
     *taskPriority_ = static_cast<QThread::Priority>( priority);
 }
-
-
 
 void MainWindow::on_action_ScanArbitraryDirectory_triggered()
 {

@@ -319,6 +319,8 @@ private:
     int optionThumbWidth_ = 0;
     int optionThumbHeight_ = 0;
 
+    int optionTagMenuFormat_ = 0;
+
     bool initShown_=false;
     bool IsClosed() const {
         return closed_;
@@ -415,6 +417,12 @@ protected:
                         std::function<void(QFont&)> setfunc);
     QList<QWidget*> getAllDockingWindow();
 
+    void createTagMenus(
+        QMenu* pParentMenu,
+        QList< QSharedPointer<QAction> >* actTagsKeeper,
+        QList< QSharedPointer<QMenu> >* subMenusTagKeeper,
+        QObject* pParent);
+
 
 private Q_SLOTS:
     void editTag();
@@ -434,7 +442,6 @@ private Q_SLOTS:
     void onUserDirectoryTriggered();
     void onArbitraryHistory();
     void onClearHistory();
-    void OnUserTagTriggered();
     void onMenuTag_AboutToShow();
     void onMenuDirectory_AboutToShow();
     void onMenuTask_AboutToShow();

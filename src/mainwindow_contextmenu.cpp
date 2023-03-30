@@ -16,27 +16,119 @@
 //You should have received a copy of the GNU General Public License
 //along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-//#include <QScrollBar>
-//#include <QLabel>
-//#include <QDebug>
+#include "../../lsMisc/stdQt/stdQt.h"
 
-//#include "../../lsMisc/stdQt/stdQt.h"
-
-//#include "taskmodel.h"
-//#include "extension.h"
-//#include "ffmpeg.h"
 #include "tagitem.h"
-//#include "helper.h"
-//#include "consts.h"
-//#include "globals.h"
 #include "mycontextmenu.h"
 
 #include "ui_mainwindow.h"
 #include "mainwindow.h"
 
-// using namespace Consts;
-// using namespace AmbiesoftQt;
+using namespace Consts;
+using namespace AmbiesoftQt;
 
+void MainWindow::createTagMenus(
+    QMenu* pParentMenu,
+    QList< QSharedPointer<QAction> >* actTagsKeeper,
+    QList< QSharedPointer<QMenu> >* subMenusTagKeeper,
+    QObject* pParent)
+{
+    QList<QSharedPointer<TagItem>> tags;
+    pDoc_ && pDoc_->GetAllTags(tags, false);
+    QSet<qint64> tagsCurrent;
+    pDoc_ && pDoc_->GetTagsFromID(getSelectedID(), tagsCurrent);
+    if(tags.isEmpty())
+    {
+        QAction* act = new QAction(new QAction(tr("No tags")));
+        QSharedPointer<QAction> sact;
+        if(actTagsKeeper) {
+            sact.reset(act);
+            actTagsKeeper->append(sact);
+        }
+        act->setEnabled(false);
+        pParentMenu->addAction(act);
+    }
+    else
+    {
+        if(optionTagMenuFormat_==0)
+        {
+            for(auto&& ti : tags)
+            {
+                QString text = ti->tagtext();
+                QAction* act = new QAction(text);
+                QSharedPointer<QAction> sact;
+                if(actTagsKeeper)
+                {
+                    sact.reset(act);
+                    actTagsKeeper->append(sact);
+                }
+                connect(act, SIGNAL(triggered()),
+                        this, SLOT(OnContextAddTags()));
+                pParentMenu->addAction(act);
+                act->setData(ti->tagid());
+                act->setCheckable(true);
+                if (tagsCurrent.contains(ti->tagid()))
+                    act->setChecked(true);
+            }
+        }
+        else if(optionTagMenuFormat_==1 || optionTagMenuFormat_==2)
+        {
+            std::map<QChar, std::vector<TagItem*>> charToTag;
+            for(auto&& ti : tags)
+            {
+                if(!ti->IsNormalItem())
+                    continue;
+
+                QChar firstChar = getFirstCharcter(optionTagMenuFormat_==1 ? ti->tagtext() : ti->yomi());
+                charToTag[firstChar].push_back(ti.data());
+            }
+
+            std::list<QChar> keysList;
+            for (const auto& pair : charToTag){
+                keysList.push_back(pair.first);
+            }
+
+            keysList.sort();
+
+            for(auto&& firstChar : keysList)
+            {
+                QMenu* subMenu = new QMenu(QString(firstChar));
+                QSharedPointer<QMenu> ssubMenu;
+                if(subMenusTagKeeper) {
+                    ssubMenu.reset(subMenu);
+                    subMenusTagKeeper->append(ssubMenu);
+                }
+                for(auto&& ti : charToTag[firstChar])
+                {
+                    QString text = ti->tagtext();
+
+                    // passing this makes |action| delete when |this| is deleting
+                    // Deleting |action| manually cause stop above action, I believe.
+                    QAction* action =  new QAction(text, pParent);
+                    QSharedPointer<QAction> saction;
+                    if(actTagsKeeper ){
+                        saction.reset(action);
+                        actTagsKeeper->append(saction);
+                    }
+
+                    action->setCheckable(true);
+                    // action->setChecked(ti->IsChecked());
+                    if (tagsCurrent.contains(ti->tagid()))
+                        action->setChecked(true);
+
+                    // action->setData(i);
+                    action->setData(ti->tagid());
+//                    connect(action.data(), &QAction::triggered,
+//                            this, &MainWindow::OnUserTagTriggered);
+                    connect(action, SIGNAL(triggered()),
+                            this, SLOT(OnContextAddTags()));
+                    subMenu->addAction(action);
+                }
+                pParentMenu->addMenu(subMenu);
+            }
+        }
+    }
+}
 
 void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
 {
@@ -124,35 +216,10 @@ void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
 
         // Tags tools ----->
         QMenu menuAddTags(tr("Ta&g..."), this);
-        QList< QSharedPointer<QAction> > actTags;
-        QList<TagItem*> tags;
-        pDoc_ && pDoc_->GetAllTags(tags, false);
-        QSet<qint64> tagsCurrent;
-        pDoc_ && pDoc_->GetTagsFromID(getSelectedID(), tagsCurrent);
-        if(tags.isEmpty())
-        {
-            QSharedPointer<QAction> act(new QAction(tr("No tags")));
-            act->setEnabled(false);
-            menuAddTags.addAction(act.data());
-            actTags.append(act);
-        }
-        else
-        {
-            for(TagItem* ti : tags)
-            {
-                QString text = ti->tagtext();
-                QSharedPointer<QAction> act(new QAction(text));
-                connect(act.data(), SIGNAL(triggered()),
-                        this, SLOT(OnContextAddTags()));
-                menuAddTags.addAction(act.data());
-                act->setData(ti->tagid());
-                act->setCheckable(true);
-                if (tagsCurrent.contains(ti->tagid()))
-                    act->setChecked(true);
-                actTags.append(act);
-                delete ti;
-            }
-        }
+        QList< QSharedPointer<QAction> > actTagsKeeper;
+        QList< QSharedPointer<QMenu> > subMenusTagKeeper;
+        createTagMenus(&menuAddTags, &actTagsKeeper, &subMenusTagKeeper, nullptr);
+
         menuAddTags.addSeparator();
         menuAddTags.addAction(ui->action_AddNewTag);
         contextMenu.addMenu(&menuAddTags);

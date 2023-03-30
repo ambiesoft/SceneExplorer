@@ -25,7 +25,7 @@
 
 #define DBVERSIONDOC 2
 class DirectoryItem;
-class TagItem;
+#include "tagitem.h"
 
 class DocumentSql : public QObject
 {

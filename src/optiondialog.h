@@ -49,6 +49,8 @@ public:
     QString scrollMode_;
 
     int taskPriority_= -1;
+    int tagMenuFormat_;
+
     bool useCustomDBDir_;
     QString dbdir_;
     bool limitItems_;

@@ -126,6 +126,15 @@ public:
     {
         return docSql_->GetAllTags(tags,bHasParent);
     }
+    bool GetAllTags(QList<QSharedPointer<TagItem>>& tags, bool bHasParent) const
+    {
+        QList<TagItem*> t;
+        bool ret = docSql_->GetAllTags(t,bHasParent);
+        for(TagItem* p : t) {
+            tags.append(QSharedPointer<TagItem>(p));
+        }
+        return ret;
+    }
     bool IsTagExist(const QString& tag) const
     {
         return docSql_->IsTagExist(tag);

@@ -337,6 +337,13 @@ MainWindow::MainWindow(QWidget *parent,
 
     tableModel_->SetImageCache(static_cast<ImageCacheType>(settings_.valueInt(KEY_IMAGECACHETYPE,1)));
 
+    optionTagMenuFormat_ = settings_.valueInt(KEY_TAGMENU_FORMAT, 0);
+    if(!(0 <= optionTagMenuFormat_ && optionTagMenuFormat_ <= 2))
+    {
+        Q_ASSERT(false);
+        Alert(this, tr("Unknown TagMenuFormat '%1'").arg(optionTagMenuFormat_));
+        optionTagMenuFormat_ = 0;
+    }
 
     // extension
     Extension::Load(settings_);

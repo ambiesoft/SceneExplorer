@@ -54,6 +54,12 @@ OptionDialog::OptionDialog(QWidget* parent)
     ui.cmbTaskPriority->addItem(tr("LowestPriority"), 1);
     ui.cmbTaskPriority->addItem(tr("IdlePriority"), 0);
 
+    ui.cmbTagMenuFormat->addItem(tr("Normal"));
+    ui.cmbTagMenuFormat->addItem(tr("Submenu with Text"));
+    ui.cmbTagMenuFormat->addItem(tr("Submenu with Yomi"));
+
+
+
     setWindowTitle(tr("option"));
 }
 
@@ -101,6 +107,10 @@ void OptionDialog::showEvent(QShowEvent *ev)
             break;
         }
     }
+
+    Q_ASSERT(ui.cmbTagMenuFormat->count()==3);
+    if(0<=tagMenuFormat_ && tagMenuFormat_ <= 2)
+        ui.cmbTagMenuFormat->setCurrentIndex(tagMenuFormat_);
 
     ui.lineInfoMain->setText(mainText_);
     ui.lineInfoSub->setText(subText_);
@@ -153,6 +163,8 @@ void OptionDialog::accept()
     scrollMode_ = ui.cmbScrollMode->currentIndex()==0 ? "item":"pixel";
 
     taskPriority_ = ui.cmbTaskPriority->currentData().toInt();
+
+    tagMenuFormat_ = ui.cmbTagMenuFormat->currentIndex();
 
     mainText_ = ui.lineInfoMain->text();
     subText_ = ui.lineInfoSub->text();

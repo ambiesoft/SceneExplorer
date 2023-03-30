@@ -34,7 +34,6 @@
 #include "consts.h"
 #include "globals.h"
 #include "ffmpeg.h"
-#include "taskmodel.h"
 #include "tableitemdata.h"
 
 #include "optiondialog.h"
@@ -45,7 +44,6 @@
 
 #include "sql.h"
 #include "helper.h"
-#include "osd.h"
 #include "tagitem.h"
 
 #include "mycontextmenu.h"
@@ -114,6 +112,8 @@ void MainWindow::on_action_Options_triggered()
     dlg.thumbFormat_ = optionThumbFormat_;
     dlg.scrollMode_ = ui->tableView->horizontalScrollMode()==QAbstractItemView::ScrollMode::ScrollPerItem ? "item" : "pixel";
     dlg.taskPriority_ = GetTaskPriorityAsInt();
+    dlg.tagMenuFormat_ = optionTagMenuFormat_;
+
     dlg.mainText_ = tableModel_->GetTitleTextTemplate();
     dlg.subText_ = tableModel_->GetInfoTextTemplate();
     dlg.imagecache_ = tableModel_->GetImageCache();
@@ -153,6 +153,8 @@ void MainWindow::on_action_Options_triggered()
         Alert(this, tr("Unknow scroll mode '%1'").arg(dlg.scrollMode_));
     }
     SetTaskPriorityAsInt(dlg.taskPriority_);
+    optionTagMenuFormat_ = dlg.tagMenuFormat_;
+
     tableModel_->SetColumnCountImage(dlg.thumbCount_);
     tableModel_->SetTitleTextTemplate(dlg.mainText_);
     tableModel_->SetInfoTextTemplate(dlg.subText_);
@@ -230,18 +232,7 @@ void MainWindow::onMenuDirectory_AboutToShow()
     ui->menu_Directory->addAction(tr("&Uncheck All"), this, SLOT(OnDirectoryUncheckAll()));
 }
 
-void MainWindow::OnUserTagTriggered()
-{
-    QAction* action = static_cast<QAction*>(sender());
-    if(!action)
-        return;
 
-    int index = action->data().toInt();
-    TagItem* ti = static_cast<TagItem*>( ui->listTag->item(index));
-
-
-    ti->setCheckState(ti->IsChecked() ? Qt::Unchecked : Qt::Checked);
-}
 void MainWindow::onMenuTag_AboutToShow()
 {
     int startPos = 2;
@@ -253,33 +244,7 @@ void MainWindow::onMenuTag_AboutToShow()
         delete pA;
     }
 
-    bool bAdded = false;
-    for(int i=0; i < ui->listTag->count(); ++i)
-    {
-        TagItem* ti = static_cast<TagItem*>(ui->listTag->item(i));
-        if(!ti->IsNormalItem())
-            continue;
-        bAdded=true;
-        QString text = ti->tagtext();
-
-        // passing this makes |action| delete when |this| is deleting
-        // Deleting |action| manually cause stop above action, I believe.
-        QAction* action = new QAction(text, this);
-        
-        action->setCheckable(true);
-        action->setChecked(ti->IsChecked());
-        action->setData(i);
-        connect(action, &QAction::triggered,
-                this, &MainWindow::OnUserTagTriggered);
-        ui->menu_Tag->addAction(action);
-    }
-
-    if(!bAdded)
-    {
-        QAction* actionNoDir = new QAction(tr("<No Tags>"));
-        actionNoDir->setEnabled(false);
-        ui->menu_Tag->addAction(actionNoDir);
-    }
+    createTagMenus(ui->menu_Tag, nullptr,nullptr, this);
 
     // check all and uncheck all
     ui->menu_Tag->addSeparator();

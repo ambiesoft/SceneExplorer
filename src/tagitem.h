@@ -88,6 +88,9 @@ public:
     QString yomi() const {
         return yomi_;
     }
+    void setYomi(const QString& yomi) {
+        yomi_ = yomi;
+    }
 };
 
 #endif // TAGITEM_H

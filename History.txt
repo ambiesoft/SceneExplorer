@@ -1,3 +1,6 @@
+2023/03/31　1.22.35
+Added the feature to make the tag menu into submenus
+
 2023/03/29　1.22.34
 Fixed an issue where it could be slow when refreshed
 

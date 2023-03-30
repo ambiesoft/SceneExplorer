@@ -24,7 +24,7 @@ namespace Consts
 Q_CONSTEXPR char ORGANIZATION[] = "Ambiesoft";
 Q_CONSTEXPR char APPDOMAIN[] = "ambiesoft.com";
 Q_CONSTEXPR char APPNAME[] = "SceneExplorer";
-Q_CONSTEXPR char APPVERSION[] = "1.22.34";
+Q_CONSTEXPR char APPVERSION[] = "1.22.35";
 
 
 Q_CONSTEXPR char KEY_STYLE[] = "style";
@@ -65,6 +65,8 @@ Q_CONSTEXPR char KEY_THUMBNAIL_HEIGHT[] = "thumbheight";
 Q_CONSTEXPR char KEY_THUMBNAIL_SCROLLMODE[] = "thumbscrollmode";
 
 Q_CONSTEXPR char KEY_TASK_PRIORITY[] = "taskpriority";
+
+Q_CONSTEXPR char KEY_TAGMENU_FORMAT[] = "tagmenuformat";
 
 Q_CONSTEXPR char KEY_TITLE_TEXT_TEMPLATE[] = "titletexttemplate";
 Q_CONSTEXPR char KEY_INFO_TEXT_TEMPLATE[] = "infotexttemplate";

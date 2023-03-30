@@ -1016,7 +1016,7 @@
     </message>
     <message>
         <source>&lt;No Tags&gt;</source>
-        <translation>&lt;タグがありません&gt;</translation>
+        <translation type="vanished">&lt;タグがありません&gt;</translation>
     </message>
     <message>
         <source>&amp;UI...</source>
@@ -1662,6 +1662,10 @@
         <source>... Too long line, the middle section has been truncated.</source>
         <translation>...ラインが長すぎます。中間部分をカットしました。</translation>
     </message>
+    <message>
+        <source>Unknown TagMenuFormat &apos;%1&apos;</source>
+        <translation>未知のTagMenuFormatです &apos;%1&apos;</translation>
+    </message>
 </context>
 <context>
     <name>Option</name>
@@ -1797,6 +1801,10 @@
         <source>Thumbnail &amp;Height</source>
         <translation>サムネイルの高さ(&amp;H)</translation>
     </message>
+    <message>
+        <source>Tag Menu Format</source>
+        <translation>タグメニューフォーマット</translation>
+    </message>
 </context>
 <context>
     <name>OptionDialog</name>
@@ -1915,6 +1923,18 @@
     <message>
         <source>By changing width or height of thumbnail, all thumbnails needs be recreated. Are you sure to continue?</source>
         <translation>サムネイルの幅や高さを変えるとすべてのサムネイルを再生成しなければなりません。続けますか？</translation>
+    </message>
+    <message>
+        <source>Normal</source>
+        <translation>ノーマル</translation>
+    </message>
+    <message>
+        <source>Submenu with Text</source>
+        <translation>テキストでサブメニュ化</translation>
+    </message>
+    <message>
+        <source>Submenu with Yomi</source>
+        <translation>読みでサブメニュー化</translation>
     </message>
 </context>
 <context>
