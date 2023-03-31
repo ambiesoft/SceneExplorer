@@ -7,25 +7,9 @@ prepare.bat.sample
 .*~
 out-*/
 
+vsproj/
+
 .qmake.stash
-.vs/
-ipch/
-SceneExplorer.VC.db
-SceneExplorer.sln
-SceneExplorer.vcxproj
-SceneExplorer.vcxproj.filters
-debug/
-release/
-ui_mainwindow.h
-ui_option.h
-ui_optionexternaltoolsdialog.h
-ui_optionfontdialog.h
-ui_optionextension.h
-ui_aboutdialog.h
-ui_docinfodialog.h
-ui_taginputdialog.h
-ui_renamedialog.h
-ui_itempropertydialog.h
 
 /build-*
 *.user

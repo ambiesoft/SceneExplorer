@@ -1,5 +1,7 @@
 @echo off
-cd %~dp0
+
+mkdir %~dp0vsproj
+cd %~dp0vsproj
 REM if not exist param.bat (
 REM   echo Rename param.bat.sample to param.bat and edit it.
 REM   goto :end
@@ -48,6 +50,10 @@ if [%SOURCEDIR%] == [] (
   echo SOURCEDIR not defined.
   goto :end
 )
+if not exist ..\%SOURCEDIR%\ (
+echo ..\%SOURCEDIR%\ not found or not a directory
+  goto :end
+)
 
 set QTBIN=%QTROOT%\%VSQTVER%\%VSQTTOOL%\bin
 if not exist %QTBIN%\ (
@@ -56,12 +62,10 @@ if not exist %QTBIN%\ (
 )
 set PATH=%QTBIN%;%PATH%
 
-
-
 set SOLUTION=%PRONAME%.sln
 set VCXPROJ=%PRONAME%.vcxproj
 set VCXFILTERS=%PRONAME%.vcxproj.filters
-set PRO=%SOURCEDIR%\%PRONAME%.pro
+set PRO=..\%SOURCEDIR%\%PRONAME%.pro
 
 if not exist %PRO% (
   echo %PRO% not found.
@@ -73,17 +77,25 @@ if exist %SOLUTION% (
   goto :launchsln
 )
 
-%DEL% %SOLUTION%
+if exist %SOLUTION% (
+  %DEL% %SOLUTION%
+)
 if exist %SOLUTION% (
   echo Failed to delete %SOLUTION%.
   goto :end
 )
-%DEL% %VCXPROJ%
+
+if exist %VCXPROJ% (
+  %DEL% %VCXPROJ%
+)
 if exist %VCXPROJ% (
   echo Failed to delete %VCXPROJ%.
   goto :end
 )
-%DEL% %VCXFILTERS%
+
+if exist %VCXFILTERS% (
+  %DEL% %VCXFILTERS%
+)
 if exist %VCXFILTERS% (
   echo Failed to delete %VCXFILTERS%.
   goto :end
@@ -113,10 +125,10 @@ if not exist %QMAKE% (
 
 
 call %VCVARSBAT% %VCVARSBATARG%
-cd %~dp0
+cd %~dp0vsproj
 
 call %QMAKE% -tp vc %PRO%
-cd %~dp0
+cd %~dp0vsproj
 
 echo "==== Creating Visual Studio project successful ===="
 echo launching %DEVENV% %VCXPROJ%
