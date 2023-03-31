@@ -39,7 +39,7 @@ void MainWindow::createTagMenus(
     pDoc_ && pDoc_->GetTagsFromID(getSelectedID(), tagsCurrent);
     if(tags.isEmpty())
     {
-        QAction* act = new QAction(new QAction(tr("No tags")));
+        QAction* act = new QAction(tr("No tags"), pParent);
         QSharedPointer<QAction> sact;
         if(actTagsKeeper) {
             sact.reset(act);
@@ -55,7 +55,7 @@ void MainWindow::createTagMenus(
             for(auto&& ti : tags)
             {
                 QString text = ti->tagtext();
-                QAction* act = new QAction(text);
+                QAction* act = new QAction(text, pParent);
                 QSharedPointer<QAction> sact;
                 if(actTagsKeeper)
                 {
