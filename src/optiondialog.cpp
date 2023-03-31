@@ -215,6 +215,8 @@ void OptionDialog::on_setFileCommon(QLineEdit* le)
     QFileDialog dlg(this);
     dlg.setDirectory(lastSelectedDir_);
     dlg.setFileMode(QFileDialog::ExistingFile);
+    Q_ASSERT(le == ui.lineffprobe || le == ui.lineffmpeg);
+    dlg.setWindowTitle(le == ui.lineffprobe ? tr("Choose ffprobe") : tr("Choose ffmpeg"));
 
     if(!dlg.exec())
         return;
