@@ -79,7 +79,8 @@ void MainWindow::createTagMenus(
                 if(!ti->IsNormalItem())
                     continue;
 
-                QChar firstChar = getFirstCharcter(optionTagMenuFormat_==1 ? ti->tagtext() : ti->yomi());
+                QChar firstChar = getFirstCharcter(
+                            optionTagMenuFormat_==1 ? ti->tagtext() : ti->yomi(), ' ');
                 charToTag[firstChar].push_back(ti.data());
             }
 
