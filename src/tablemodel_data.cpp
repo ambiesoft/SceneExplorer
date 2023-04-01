@@ -81,12 +81,12 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
             //                parent_->setSpan(index.row()+3,0,1,5);
             //                parent_->setSpan(index.row()+6,0,1,5);
             QString titleText = GetTitleText(itemDatas_[actualIndex]);
-            QSize qs = calculateSize(index, titleText);
+
+            // workaround for showing entire title.
+            // sometimes title not shown properly
+            QSize qs = calculateSize(index, titleText + " ");
             parent_->setRowHeight(index.row(), qs.height());
-            return titleText +
-                   // workaround for showing entire title.
-                   // sometimes title not shown properly
-                   " ";
+            return titleText;
         }
             break;
 
