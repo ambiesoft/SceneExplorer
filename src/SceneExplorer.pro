@@ -33,6 +33,7 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     mainwindow_contextmenu.cpp \
+    mainwindow_debugtest.cpp \
     showlastscanerrorsdialog.cpp \
     tablemodel.cpp \
     tablemodel_data.cpp \

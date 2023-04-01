@@ -451,7 +451,11 @@ private Q_SLOTS:
     void onMenuStyle_AboutToShow();
     void onMenuLanguage_AboutToShow();
     void onMenuDocking_windows_AboutToShow();
-    // void onMenu_Favorites_AboutToShow();
+    
+#ifdef QT_DEBUG
+    void onDebugTest();
+#endif
+
     void onMenu_RecentDocuments_AboutToShow();
 
     void on_actionSort_by_file_name_triggered();

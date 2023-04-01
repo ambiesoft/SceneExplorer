@@ -668,18 +668,12 @@ void TableModel::timerEvent(QTimerEvent *event)
         if(imageInterval_ != newInterval)
         {
             imageInterval_ = newInterval;
-//            KillImageTimer();
-//            StartImageTimer();
         }
         lastTenTick.clear();
         imageElapsedTimer_.invalidate();
         imageElapsedTimer_.start();
     }
 
-//    if((QApplication::mouseButtons() & Qt::MouseButton::LeftButton) != 0)
-//        return;
-
-    // QModelIndex index = suspendImageIndexes_.pop();
     QModelIndex index = suspendImageIndexes_.back();
     suspendImageIndexes_.pop_back();
     qDebug() << QString("TableModel timer row=%1, col=%2, count=%3").arg(index.row()).arg(index.column()).

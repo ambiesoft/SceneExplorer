@@ -52,6 +52,17 @@ MainWindow::MainWindow(QWidget *parent,
     this->setWindowTitle(qAppName());
     this->setWindowIcon(QIcon(":/icon.ico"));
 
+#ifdef QT_DEBUG
+    {
+        QAction* pAction = new QAction(this);
+        pAction->setText("Debug Test");
+        connect(pAction, &QAction::triggered,
+            this, &MainWindow::onDebugTest);
+        ui->menu_Help->addSeparator();
+        ui->menu_Help->addAction(pAction);
+    }
+#endif
+
     // menu
     connect(ui->menu_View, &QMenu::aboutToShow,
             this, &MainWindow::onMenuView_AboutToShow);
