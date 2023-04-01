@@ -84,7 +84,8 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
 
             // workaround for showing entire title.
             // sometimes title not shown properly
-            QSize qs = calculateSize(index, titleText + " ");
+            QString titleTextForSize{titleText};
+            QSize qs = calculateSize(index, titleTextForSize.replace(".", "  "));
             parent_->setRowHeight(index.row(), qs.height());
             return titleText;
         }

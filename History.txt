@@ -1,3 +1,6 @@
+2023/04/01　1.22.38
+Added a workaround for property showing the video title again
+
 2023/04/01　1.22.37
 Added a workaround for property showing the video title
 
