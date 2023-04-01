@@ -34,6 +34,7 @@
 #include "../../lsMisc/stdQt/stdQt.h"
 
 #include "consts.h"
+
 //#include "helper.h"
 //#include "globals.h"
 
@@ -82,7 +83,10 @@ QVariant TableModel::data(const QModelIndex &index, int role) const
             QString titleText = GetTitleText(itemDatas_[actualIndex]);
             QSize qs = calculateSize(index, titleText);
             parent_->setRowHeight(index.row(), qs.height());
-            return titleText; //->getMovieFileName();
+            return titleText +
+                   // workaround for showing entire title.
+                   // sometimes title not shown properly
+                   " ";
         }
             break;
 
