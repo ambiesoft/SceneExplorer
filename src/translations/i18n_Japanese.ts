@@ -1936,6 +1936,30 @@
         <source>Submenu with Yomi</source>
         <translation>読みでサブメニュー化</translation>
     </message>
+    <message>
+        <source>Choose ffprobe</source>
+        <translation>ffprobeを選択してください</translation>
+    </message>
+    <message>
+        <source>Choose ffmpeg</source>
+        <translation>ffmpegを選択してください</translation>
+    </message>
+    <message>
+        <source>Last Access (date)</source>
+        <translation>最終アクセス（日付）</translation>
+    </message>
+    <message>
+        <source>Last Access (time)</source>
+        <translation>最終アクセス（時刻）</translation>
+    </message>
+    <message>
+        <source>Last Modified (date)</source>
+        <translation>修正時刻（日付）</translation>
+    </message>
+    <message>
+        <source>Last Modified (time)</source>
+        <translation>修正時刻（時刻）</translation>
+    </message>
 </context>
 <context>
     <name>OptionExtension</name>
