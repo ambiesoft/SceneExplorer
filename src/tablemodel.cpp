@@ -250,6 +250,14 @@ QString TableModel::ExtractInfoText(TableItemDataPointer item, const QString& st
         {
             result += filetime_human(item->getLastAccess());
         }
+        else if(s=="${atime_date}")
+        {
+            result += filetime_date_human(item->getLastAccess());
+        }
+        else if(s=="${atime_time}")
+        {
+            result += filetime_time_human(item->getLastAccess());
+        }
         else if(s=="${bitrate}")
         {
             result += bitrate_human(item->getBitrate());
@@ -305,6 +313,14 @@ QString TableModel::ExtractInfoText(TableItemDataPointer item, const QString& st
         else if(s=="${wtime}")
         {
             result += filetime_human(item->getWtime());
+        }
+        else if(s=="${wtime_date}")
+        {
+            result += filetime_date_human(item->getWtime());
+        }
+        else if(s=="${wtime_time}")
+        {
+            result += filetime_time_human(item->getWtime());
         }
         else if(s=="${fps}")
         {

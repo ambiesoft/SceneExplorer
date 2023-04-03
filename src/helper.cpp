@@ -598,6 +598,17 @@ QString filetime_human(const qint64& filetime)
     QDateTime qdt = QDateTime::fromTime_t(filetime);
     return doublequoteIfNecessary(qdt.toString(Qt::DateFormat::DefaultLocaleShortDate));
 }
+QString filetime_date_human(const qint64& filetime)
+{
+    QDateTime qdt = QDateTime::fromTime_t(filetime);
+    return qdt.date().toString(Qt::DateFormat::LocalDate);
+}
+QString filetime_time_human(const qint64& filetime)
+{
+    QDateTime qdt = QDateTime::fromTime_t(filetime);
+    return qdt.time().toString();
+}
+
 QString fps_human(const double& fps)
 {
     return QString::number(fps,'g',4);

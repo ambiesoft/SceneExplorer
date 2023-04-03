@@ -269,6 +269,7 @@ void OptionDialog::constructTitleTemplateMenu(QMenu& contextMenu,
                                               QList< QSharedPointer<QAction> >& acts,
                                               bool isMain)
 {
+    // If you edit this, make sure to edit TableModel::ExtractInfoText
     static const auto alltargets = []()
     {
         QList<QPair<QString,QString>> alltargets;
@@ -278,7 +279,11 @@ void OptionDialog::constructTitleTemplateMenu(QMenu& contextMenu,
 
         alltargets.append(QPair<QString,QString>("size" ,tr("Size")));
         alltargets.append(QPair<QString,QString>("atime" ,tr("Last Access")));
+        alltargets.append(QPair<QString,QString>("atime_date" ,tr("Last Access (date)")));
+        alltargets.append(QPair<QString,QString>("atime_time" ,tr("Last Access (time)")));
         alltargets.append(QPair<QString,QString>("wtime" ,tr("Last Modified")));
+        alltargets.append(QPair<QString,QString>("wtime_date" ,tr("Last Modified (date)")));
+        alltargets.append(QPair<QString,QString>("wtime_time" ,tr("Last Modified (time)")));
 
         alltargets.append(QPair<QString,QString>("duration" ,tr("Duration")));
         alltargets.append(QPair<QString,QString>("format" ,tr("Format")));
@@ -293,18 +298,6 @@ void OptionDialog::constructTitleTemplateMenu(QMenu& contextMenu,
 
         return alltargets;
     }();
-
-    //    QStringList all;
-    //    for(size_t i=0 ; i < sizeof(alltargets)/sizeof(alltargets[0]); ++i )
-    //    {
-    //        if(all.contains(alltargets[i]))
-    //        {
-    //            Q_ASSERT(false);
-    //            continue;
-    //        }
-    //        all.append(alltargets[i]);
-    //    }
-    //    std::sort(all.begin(),all.end());
 
     for(auto&& pair : alltargets)
     {

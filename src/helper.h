@@ -76,6 +76,8 @@ QStringList RemoveDuplicateSubDirectory(const QStringList& sources, QStringList&
 // http://comments.gmane.org/gmane.comp.lib.qt.general/34914
 QString size_human(const qint64& size);
 QString filetime_human(const qint64& filetime);
+QString filetime_date_human(const qint64& filetime);
+QString filetime_time_human(const qint64& filetime);
 QString duration_human(double duration);
 QString format_human(const QString& s);
 QString bitrate_human(int bitrate);

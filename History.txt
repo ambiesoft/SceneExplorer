@@ -1,3 +1,5 @@
+Added 'xtime_date' and 'xtime_time' into dispay macro
+
 2023/04/01　1.22.38
 Added a workaround for property showing the video title again
 
