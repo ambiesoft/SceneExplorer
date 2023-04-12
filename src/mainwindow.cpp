@@ -1226,7 +1226,16 @@ void MainWindow::OnContextExternalTools()
         argparsed += arg.mid(prevpos,pos-prevpos);
         int matchedlen = rx.matchedLength();
         QString s = arg.mid(pos,matchedlen);// rx.cap(i++);
-        if(s=="${filefullpath}")
+        if(false) {}
+        else if(s=="${appfullpath}")
+        {
+            argparsed += QDir::toNativeSeparators(QCoreApplication::applicationFilePath());
+        }
+        else if(s=="${appdirectoryfullpath}")
+        {
+            argparsed += QDir::toNativeSeparators(QFileInfo(QCoreApplication::applicationFilePath()).dir().absolutePath());
+        }
+        else if(s=="${filefullpath}")
         {
             argparsed += movieFileNative;
             //argparsed += QUrl::fromLocalFile(movieFileNative).toString();

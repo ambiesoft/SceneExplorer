@@ -323,6 +323,8 @@ void OptionExternalToolsDialog::constructTitleTemplateMenu(QMenu& contextMenu,
                                                            QList< QSharedPointer<QAction> >& acts)
 {
     const char* alltargets[] = {
+        "appfullpath",
+        "appdirectoryfullpath",
         "filefullpath",
         "directoryfullpath",
         "filefullpathwithoutextension",

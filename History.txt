@@ -1,3 +1,6 @@
+2023/04/12 1.22.41
+Add ${appfullpath} and ${appdirectoryfullpath} to external tool macros
+
 2023/04/03　1.22.40
 i18n
 
