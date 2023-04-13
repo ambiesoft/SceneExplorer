@@ -21,6 +21,7 @@
 
 #include <QDialog>
 #include <QListWidgetItem>
+#include <QToolButton>
 
 #include "../../lsMisc/stdQt/inisettings.h"
 
