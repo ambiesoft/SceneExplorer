@@ -19,6 +19,7 @@
 #ifndef OPTIONDIALOG_H
 #define OPTIONDIALOG_H
 
+#include "../../lsMisc/stdQt/inisettings.h"
 
 #include "ui_option.h"
 
@@ -31,12 +32,13 @@ class OptionDialog:public QDialog
 
 private:
     Ui::Option ui;
+    AmbiesoftQt::IniSettings& settings_;
     QString lastSelectedDir_;
 
     void on_setFileCommon(QLineEdit* le);
 
 public:
-    OptionDialog(QWidget* parent = nullptr);
+    OptionDialog(AmbiesoftQt::IniSettings& settings, QWidget* parent = nullptr);
 
     QString mainText_,subText_;
     ImageCacheType imagecache_;

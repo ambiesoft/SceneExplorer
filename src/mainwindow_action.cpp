@@ -103,7 +103,7 @@ void MainWindow::on_tableView_doubleClicked(const QModelIndex &index)
 
 void MainWindow::on_action_Options_triggered()
 {
-    OptionDialog dlg(this);
+    OptionDialog dlg(settings_,this);
     dlg.maxgd_ = optionThreadcountGetDir();
     dlg.maxff_ = optionThreadcountThumbnail();
     dlg.thumbCount_ = optionThumbCount_;

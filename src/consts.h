@@ -24,7 +24,7 @@ namespace Consts
 Q_CONSTEXPR char ORGANIZATION[] = "Ambiesoft";
 Q_CONSTEXPR char APPDOMAIN[] = "ambiesoft.com";
 Q_CONSTEXPR char APPNAME[] = "SceneExplorer";
-Q_CONSTEXPR char APPVERSION[] = "1.22.41";
+Q_CONSTEXPR char APPVERSION[] = "1.22.42";
 
 
 Q_CONSTEXPR char KEY_STYLE[] = "style";
@@ -91,6 +91,7 @@ Q_CONSTEXPR char KEY_FONT_STATUSBAR[] = "fontstatusbar";
 Q_CONSTEXPR char KEY_FONT_DOCKINGWINDOW[] = "fontdockingwindow";
 
 Q_CONSTEXPR char KEY_EXTERNALTOOLS_LASTSELECTEDEXEDIR[] = "externaltoolslastselectedexedir";
+Q_CONSTEXPR char KEY_EXTERNALTOOLS_DIALOGGEOMETRY[] = "externaltoolsdialoggeometry";
 
 Q_CONSTEXPR char KEY_EXTERNALTOOLS_COUNT[] = "externaltoolscount";
 Q_CONSTEXPR char KEY_EXTERNALTOOLS_GROUPPRIX[] = "externaltool_";
@@ -98,6 +99,8 @@ Q_CONSTEXPR char KEY_EXTERNALTOOLS_NAME[] = "externaltoolname";
 Q_CONSTEXPR char KEY_EXTERNALTOOLS_EXE[] = "externaltoolexe";
 Q_CONSTEXPR char KEY_EXTERNALTOOLS_ARG[] = "externaltoolarg";
 Q_CONSTEXPR char KEY_EXTERNALTOOLS_COUNTASOPEN[] = "externaltoolcountasopen";
+
+Q_CONSTEXPR char KEY_OPTION_DIALOGGEOMETRY[] = "optiondialoggeometry";
 
 
 Q_CONSTEXPR char KEY_RECENT_OPENDOCUMENTS[] = "recentdocuments";

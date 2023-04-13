@@ -39,7 +39,10 @@ OptionExternalToolsDialog::OptionExternalToolsDialog(IniSettings& settings, QWid
     ui(new Ui::OptionExternalToolsDialog)
 {
     ui->setupUi(this);
+
     lastSelectedExeDir_ = settings_.valueString(KEY_EXTERNALTOOLS_LASTSELECTEDEXEDIR);
+    restoreGeometry(settings.value(KEY_EXTERNALTOOLS_DIALOGGEOMETRY).toByteArray());
+    CenterWidgets(this);
     setWindowTitle(tr("Option") + " | " + tr("External tools"));
 }
 void OptionExternalToolsDialog::showEvent(QShowEvent *ev)
@@ -274,6 +277,8 @@ void OptionExternalToolsDialog::on_buttonBox_accepted()
         ExternalToolWidgetItem* item = (ExternalToolWidgetItem*)ui->listWidget->item(i);
         items_.append(item->GetItem());
     }
+
+    settings_.setValue(KEY_EXTERNALTOOLS_DIALOGGEOMETRY,saveGeometry());
 }
 void OptionExternalToolsDialog::UpdateData()
 {

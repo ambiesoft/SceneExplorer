@@ -29,10 +29,12 @@
 #include "helper.h"
 #include "optiondialog.h"
 
+using namespace Consts;
 using namespace AmbiesoftQt;
 
-OptionDialog::OptionDialog(QWidget* parent)
+OptionDialog::OptionDialog(AmbiesoftQt::IniSettings& settings, QWidget* parent)
     : QDialog(parent,GetDefaultDialogFlags()),
+    settings_(settings),
       imagecache_(IC_NEVER)
 {
     ui.setupUi(this);
@@ -58,8 +60,8 @@ OptionDialog::OptionDialog(QWidget* parent)
     ui.cmbTagMenuFormat->addItem(tr("Submenu with Text"));
     ui.cmbTagMenuFormat->addItem(tr("Submenu with Yomi"));
 
-
-
+    restoreGeometry(settings.value(KEY_OPTION_DIALOGGEOMETRY).toByteArray());
+    CenterWidgets(this);
     setWindowTitle(tr("option"));
 }
 
@@ -150,6 +152,7 @@ void OptionDialog::showEvent(QShowEvent *ev)
 }
 void OptionDialog::on_buttonBox_accepted()
 {
+    settings_.setValue(KEY_OPTION_DIALOGGEOMETRY, saveGeometry());
 }
 void OptionDialog::accept()
 {
