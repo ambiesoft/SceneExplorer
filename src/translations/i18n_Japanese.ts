@@ -2078,6 +2078,10 @@
         <source>Context menu</source>
         <translation>コンテキストメニュー</translation>
     </message>
+    <message>
+        <source>Choose...</source>
+        <translation>選択する</translation>
+    </message>
 </context>
 <context>
     <name>OptionFontDialog</name>
