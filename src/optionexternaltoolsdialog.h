@@ -97,7 +97,9 @@ protected:
 
     void constructTitleTemplateMenu(
             QMenu& contextMenu,
-            QList< QSharedPointer<QAction> >& acts);
+            QList< QSharedPointer<QAction> >& acts,
+            const QToolButton* button);
+    void on_navigateCoimmon(const QToolButton* button);
 
 private Q_SLOTS:
     void on_listWidget_itemSelectionChanged();
@@ -129,6 +131,7 @@ private Q_SLOTS:
 
     void on_context_titleTemplateCommonMain();
 
+    void on_tb_chooseExecutable();
 private:
     Ui::OptionExternalToolsDialog *ui;
 };

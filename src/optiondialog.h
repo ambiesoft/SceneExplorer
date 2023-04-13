@@ -77,7 +77,6 @@ private Q_SLOTS:
     void on_tbInfoMain_clicked();
     void on_tbInfoSub_clicked();
 
-
     void on_context_titleTemplateCommonMain();
     void on_context_titleTemplateCommonSub();
 private Q_SLOTS:

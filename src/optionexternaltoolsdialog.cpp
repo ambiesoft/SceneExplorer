@@ -289,11 +289,61 @@ void OptionExternalToolsDialog::UpdateData()
     item->SetCountAsOpen(ui->chkCountAsOpen->isChecked());
 }
 
-void OptionExternalToolsDialog::on_tbExecutable_clicked()
+void OptionExternalToolsDialog::on_context_titleTemplateCommonMain()
 {
-    // QString filefull = ui->lineExe->text();
-    // QDir dir = QDir(filefull);
+    QAction* act = (QAction*)QObject::sender();
+    QVariantHash hash = act->data().toHash();
+    QString target = hash["text"].toString();
+    const QToolButton* button = reinterpret_cast<QToolButton*>( hash["button"].toLongLong());
 
+    if(button==ui->tbExecutable)
+        ui->lineExe->insert(target);
+    else if(button==ui->tbArguments)
+        ui->lineArg->insert(target);
+    else
+        Q_ASSERT(false);
+}
+void OptionExternalToolsDialog::constructTitleTemplateMenu(QMenu& contextMenu,
+                                                           QList< QSharedPointer<QAction> >& acts,
+                                                           const QToolButton* button)
+{
+    const char* alltargets[] = {
+        "appfullpath",
+        "appdirectoryfullpath",
+        "filefullpath",
+        "directoryfullpath",
+        "filefullpathwithoutextension",
+        "filename",
+        "filenamewithoutextension",
+    };
+
+    // Create "Choose menu"
+    {
+        QSharedPointer<QAction> act(new QAction(tr("Choose...")));
+        QVariantHash hash;
+        hash["button"]=(qlonglong)(button);
+        act->setData(hash);
+        connect(act.data(), SIGNAL(triggered()),
+                SLOT(on_tb_chooseExecutable()));
+        contextMenu.addAction(act.data());
+        acts.append(act);
+    }
+
+    for(size_t i=0 ; i < sizeof(alltargets)/sizeof(alltargets[0]); ++i )
+    {
+        QSharedPointer<QAction> act(new QAction(tr(alltargets[i])));
+        QVariantHash hash;
+        hash["button"]=(qlonglong)(button);
+        hash["text"]=QString("${") + alltargets[i] + "}";
+        act->setData(hash);
+        connect(act.data(), SIGNAL(triggered()),
+                SLOT(on_context_titleTemplateCommonMain()));
+        contextMenu.addAction(act.data());
+        acts.append(act);
+    }
+}
+void OptionExternalToolsDialog::on_tb_chooseExecutable()
+{
     QFileDialog dialog(this, tr("Choose Executable"), lastSelectedExeDir_);
     dialog.setFileMode(QFileDialog::ExistingFile);
     if(!dialog.exec())
@@ -306,55 +356,41 @@ void OptionExternalToolsDialog::on_tbExecutable_clicked()
     }
 
     QString selectedFile = dialog.selectedFiles()[0];
-    ui->lineExe->setText(selectedFile);
+
+    QAction* act = (QAction*)QObject::sender();
+    QVariantHash hash = act->data().toHash();
+    const QToolButton* button = reinterpret_cast<QToolButton*>( hash["button"].toLongLong());
+    if(button==ui->tbExecutable)
+        ui->lineExe->insert(selectedFile);
+    else if(button==ui->tbArguments)
+        ui->lineArg->insert(selectedFile);
+    else
+        Q_ASSERT(false);
 
     lastSelectedExeDir_ = QFileInfo(selectedFile).absoluteDir().absolutePath();
     settings_.setValue(KEY_EXTERNALTOOLS_LASTSELECTEDEXEDIR, lastSelectedExeDir_);
 }
 
-void OptionExternalToolsDialog::on_context_titleTemplateCommonMain()
+void OptionExternalToolsDialog::on_tbExecutable_clicked()
 {
-    QAction* act = (QAction*)QObject::sender();
-    QString target = act->data().toString();
-
-    ui->lineArg->insert(target);
-}
-void OptionExternalToolsDialog::constructTitleTemplateMenu(QMenu& contextMenu,
-                                                           QList< QSharedPointer<QAction> >& acts)
-{
-    const char* alltargets[] = {
-        "appfullpath",
-        "appdirectoryfullpath",
-        "filefullpath",
-        "directoryfullpath",
-        "filefullpathwithoutextension",
-        "filename",
-        "filenamewithoutextension",
-    };
-
-    for(size_t i=0 ; i < sizeof(alltargets)/sizeof(alltargets[0]); ++i )
-    {
-        QSharedPointer<QAction> act(new QAction(tr(alltargets[i])));
-        act->setData(QString("${") + alltargets[i] + "}");
-        connect(act.data(), SIGNAL(triggered()),
-                SLOT(on_context_titleTemplateCommonMain()));
-        contextMenu.addAction(act.data());
-        acts.append(act);
-    }
+    on_navigateCoimmon(ui->tbExecutable);
 }
 void OptionExternalToolsDialog::on_tbArguments_clicked()
 {
-    QPoint pos = ui->tbArguments->pos();
-    pos.setX(pos.x() + ui->tbArguments->width());
+    on_navigateCoimmon(ui->tbArguments);
+}
+void OptionExternalToolsDialog::on_navigateCoimmon(const QToolButton* button)
+{
+    QPoint pos = button->pos();
+    pos.setX(pos.x() + button->width());
 
     MyContextMenu contextMenu(tr("Context menu"), this);
     QList< QSharedPointer<QAction> > acts;
 
-    constructTitleTemplateMenu(contextMenu, acts);
+    constructTitleTemplateMenu(contextMenu, acts, button);
 
     contextMenu.exec(mapToGlobal(pos));
 }
-
 
 void OptionExternalToolsDialog::on_chkCountAsOpen_stateChanged(int arg1)
 {
