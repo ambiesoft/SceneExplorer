@@ -967,7 +967,7 @@ void MainWindow::OnRename()
     QString newbasename;
     QString newext;
     for(;;) {
-        RenameDialog dlg(this);
+        RenameDialog dlg(settings_,this);
         dlg.setBasename(newbasename.isEmpty() ? oldbasename : newbasename);
         dlg.setExt(newext.isEmpty() ? oldext : newext);
         if(!dlg.exec())

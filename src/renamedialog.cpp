@@ -20,17 +20,23 @@
 
 #include "helper.h"
 #include "osd.h"
+#include "consts.h"
 
 #include "renamedialog.h"
 #include "ui_renamedialog.h"
 
 using namespace AmbiesoftQt;
+using namespace Consts;
 
-RenameDialog::RenameDialog(QWidget *parent) :
+RenameDialog::RenameDialog(AmbiesoftQt::IniSettings& settings, QWidget *parent) :
     QDialog(parent,GetDefaultDialogFlags()),
+    settings_(settings),
     ui(new Ui::RenameDialog)
 {
     ui->setupUi(this);
+
+    restoreGeometry(settings.value(KEY_RENAME_DIALOGGEOMETRY).toByteArray());
+    CenterWidgets(this);
 }
 
 RenameDialog::~RenameDialog()
@@ -90,3 +96,9 @@ void RenameDialog::done(int r)
     }
     QDialog::done(r);
 }
+
+void RenameDialog::on_buttonBox_accepted()
+{
+    settings_.setValue(KEY_RENAME_DIALOGGEOMETRY,saveGeometry());
+}
+
