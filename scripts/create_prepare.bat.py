@@ -1,5 +1,6 @@
 import os
 import re
+import argparse
 
 template = """set PYTHONEXE=C:\\local\\python3\\python.exe
 set QTROOT=C:\\local\\Qt
@@ -49,10 +50,40 @@ set FFCEXE=C:\\LegacyPrograms\\FFC\\FFC.exe
 """
 
 
+def letUserSelect(selectWhat, selectFrom):
+    question = "Select {}\n".format(selectWhat)
+    i = 1
+    for sel in selectFrom:
+        question += str(i)
+        question += ": "
+        question += sel
+        question += "\n"
+        i += 1
+    i = int(input(question + ">"))
+    if not i:
+        exit("No {} selected".format(selectWhat))
+    return selectFrom[i-1]
+
+
 def main():
-    # qtDir = input("Enter QT install directory:")
-    qtDir = "C:\\local\\Qt"
-    output = ""
+    parser = argparse.ArgumentParser(
+        prog='create_prepare.bat', description='Test ArgumentParser')
+    parser.add_argument('-o',
+                        help="file to output")
+
+    args = parser.parse_args()
+
+    if not args.o:
+        exit('specify -o "file" to output result')
+
+    file = open(args.o, "w")
+
+    qtDir = input("Enter QT install directory:")
+    # qtDir = "C:\\local\\Qt"
+    if not qtDir:
+        exit("No Qt installed directory")
+    if not os.path.isdir(qtDir):
+        exit('"{}" is not a directory'.format(qtDir))
 
     qtVers = []
     dirs = [d for d in os.listdir(
@@ -66,17 +97,7 @@ def main():
         exit("No Qt versions found")
 
     if len(qtVers) > 1:
-        question = "Select Qt version\n"
-        i = 1
-        for qtVer in qtVers:
-            question += str(i)
-            question += ":"
-            question += qtVer
-            question += "\n"
-        i = int(input(question + ">"))
-        if not i:
-            exit("No Qt version selected")
-        qtVer = qtVers[i-1]
+        qtVer = letUserSelect("Qt version", qtVers)
     else:
         qtVer = qtVers[0]
 
@@ -93,24 +114,14 @@ def main():
     if not tools:
         exit("No tools found")
     if len(tools) > 1:
-        question = "Select Qt tool\n"
-        i = 1
-        for tool in tools:
-            question += str(i)
-            question += ":"
-            question += tool
-            question += "\n"
-        i = int(input(question + ">"))
-        if not i:
-            exit("No tool selected")
-        tool = tools[i-1]
+        tool = letUserSelect("Qt tool", tools)
     else:
         tool = tools[0]
 
     if not tool:
         exit("No tool")
 
-    print(template.format(qtVer=qtVer, tool=tool))
+    file.write(template.format(qtVer=qtVer, tool=tool))
 
 
 if __name__ == "__main__":
