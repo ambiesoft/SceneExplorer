@@ -1,0 +1,10 @@
+README.jp.md
+index.jp.md
+sdel.com
+src/resource/license/GPLv3.html
+src/translations/i18n_Japanese.ts
+
+*.ico
+*.png
+information/*
+*.jpg
