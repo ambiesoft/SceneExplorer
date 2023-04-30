@@ -1332,7 +1332,9 @@ bool Sql::UpdateCWTiem(const QString& dir,
 {
     SDC(dir);
     SDC(file);
-    SDC(ctime);
+    // qDebug() << "ctime:" << ctime << __FUNCTION__;
+    // In Linux ctime can be minus, let it be
+    // SDC(ctime);
     SDC(wtime);
     qint64 id;
     if(!GetID(dir, file, id))
