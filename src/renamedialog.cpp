@@ -45,9 +45,12 @@ RenameDialog::~RenameDialog()
 }
 void RenameDialog::showEvent(QShowEvent *)
 {
-    //    ui->lineName->setCursorPosition(0);
-    //    ui->lineName->setSelection(0, ui->lineName->text().length());
-    ui->lineName->selectAll();
+    ui->lineName->setCursorPosition(0);
+
+    // TODO: Select All and set cursor position at 0
+    // ui->lineName->setSelection(0, ui->lineName->text().length());
+    // ui->lineName->selectAll();
+
 }
 QString RenameDialog::basename() const
 {
