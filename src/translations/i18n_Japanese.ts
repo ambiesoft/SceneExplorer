@@ -203,6 +203,10 @@
         <source>Directory is empty.</source>
         <translation>ディレクトリが空です。</translation>
     </message>
+    <message>
+        <source>Writing to Test DB failed</source>
+        <translation>Testデータベースへの書き込みに失敗しました</translation>
+    </message>
 </context>
 <context>
     <name>ItemPropertyDialog</name>

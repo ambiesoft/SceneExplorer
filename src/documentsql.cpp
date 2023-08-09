@@ -22,6 +22,7 @@
 #include <QSqlError>
 #include <QDebug>
 #include <QDateTime>
+#include <QUuid>
 
 #include "../../lsMisc/stdQt/stdQt.h"
 
@@ -120,6 +121,27 @@ DocumentSql::DocumentSql(const QString& file) :
             return;
 
         QSqlQuery query(db);
+
+        // Write testdata by using DB Test
+        query.exec("DROP TABLE Test;");
+
+        const QString rndString=QUuid::createUuid().toString();
+        query.exec("CREATE TABLE Test ( "
+                   "testdata TEXT)"
+                   );
+        SQCN(query,prepare("INSERT INTO Test (testdata) VALUES (?)"));
+        query.bindValue(0, rndString);
+        if(!query.exec()) {
+            qDebug() << query.lastError().text() << __FUNCTION__;
+            lastError_ = query.lastError().text();
+            return;
+        }
+        query.exec("SELECT testdata FROM Test;");
+        query.next();
+        if(rndString != query.value("testdata").toString()) {
+            lastError_ = tr("Writing to Test DB failed");
+            return;
+        }
 
         const int version = GetDBVersionDoc(query);
         if(version < 0) {
