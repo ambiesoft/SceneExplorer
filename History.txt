@@ -1,3 +1,6 @@
+2023/09/08 1.22.46
+Change checkmark of tag menu to icon
+
 2023/09/08 1.22.45
 When 'Tag Menu Format' is 'Submenu with Text or Yomi', check the submenu if there are items tagged in the submenu.
 

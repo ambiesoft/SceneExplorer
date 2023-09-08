@@ -25,6 +25,6 @@
         <file>resource/images/left-arrow.png</file>
         <file>resource/images/right-arrow.png</file>
         <file>icon.ico</file>
-        <file>resource/images/submenu-check.png</file>
+        <file>resource/images/tagmenu-check.png</file>
     </qresource>
 </RCC>

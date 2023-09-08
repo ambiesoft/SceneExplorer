@@ -112,11 +112,10 @@ void MainWindow::createTagMenus(
                         actTagsKeeper->append(saction);
                     }
 
-                    action->setCheckable(true);
                     if (tagsCurrent.contains(ti->tagid())) {
-                        static QIcon iconSubMenu(":resource/images/submenu-check.png");
+                        static QIcon iconSubMenu(":resource/images/tagmenu-check.png");
                         subMenu->setIcon(iconSubMenu);
-                        action->setChecked(true);
+                        action->setIcon(iconSubMenu);
                     }
 
                     action->setData(ti->tagid());
