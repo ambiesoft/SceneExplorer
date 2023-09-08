@@ -113,14 +113,12 @@ void MainWindow::createTagMenus(
                     }
 
                     action->setCheckable(true);
-                    // action->setChecked(ti->IsChecked());
-                    if (tagsCurrent.contains(ti->tagid()))
+                    if (tagsCurrent.contains(ti->tagid())) {
+                        subMenu->setIcon(QIcon(":resource/images/submenu-check.png"));
                         action->setChecked(true);
+                    }
 
-                    // action->setData(i);
                     action->setData(ti->tagid());
-//                    connect(action.data(), &QAction::triggered,
-//                            this, &MainWindow::OnUserTagTriggered);
                     connect(action, SIGNAL(triggered()),
                             this, SLOT(OnContextAddTags()));
                     subMenu->addAction(action);
