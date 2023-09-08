@@ -1,3 +1,6 @@
+2023/09/09 1.22.47
+Fixed: Clicking tag menu item did not work
+
 2023/09/08 1.22.46
 Change checkmark of tag menu to icon
 

@@ -1198,8 +1198,8 @@ void MainWindow::OnContextAddTags()
 
     QAction* act = static_cast<QAction*>(QObject::sender());
     qint64 tagid = act->data().toLongLong();
-    // check state is already updated
-    pDoc_->SetTagged(id, tagid, act->isChecked());
+    
+    pDoc_->SetTagged(id, tagid, act->icon().isNull());
     RefreshTagTree();
 }
 
