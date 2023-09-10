@@ -306,7 +306,8 @@ bool GetDatabaseDirectory(IniSettings& settings, QString& dbDirToSet, bool& bQui
         {
             dbDirToSet = QStandardPaths::writableLocation(QStandardPaths::DataLocation);
             QFileDialog dlg;
-            dlg.setFileMode(QFileDialog::FileMode::DirectoryOnly);
+            dlg.setFileMode(QFileDialog::Directory);
+            dlg.setOption(QFileDialog::ShowDirsOnly, true);
             dlg.setDirectory(dbDirToSet);
             dlg.setWindowTitle(QObject::tr("Choose Database directory"));
             if(!dlg.exec())

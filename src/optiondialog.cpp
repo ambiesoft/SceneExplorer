@@ -204,7 +204,8 @@ void OptionDialog::accept()
 void OptionDialog::on_tbDBDir_clicked()
 {
     QFileDialog dlg(this);
-    dlg.setFileMode(QFileDialog::DirectoryOnly);
+    dlg.setFileMode(QFileDialog::Directory);
+    dlg.setOption(QFileDialog::ShowDirsOnly, true);
     dlg.setDirectory(dbdir_);
 
     if(!dlg.exec())

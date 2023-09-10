@@ -596,12 +596,12 @@ QString size_human(const qint64& size)
 QString filetime_human(const qint64& filetime)
 {
     QDateTime qdt = QDateTime::fromTime_t(filetime);
-    return doublequoteIfNecessary(qdt.toString(Qt::DateFormat::DefaultLocaleShortDate));
+    return doublequoteIfNecessary(QLocale().toString(qdt, QLocale::ShortFormat));
 }
 QString filetime_date_human(const qint64& filetime)
 {
     QDateTime qdt = QDateTime::fromTime_t(filetime);
-    return qdt.date().toString(Qt::DateFormat::LocalDate);
+    return QLocale().toString(qdt.date(), QLocale::ShortFormat);
 }
 QString filetime_time_human(const qint64& filetime)
 {

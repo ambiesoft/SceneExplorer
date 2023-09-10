@@ -30,6 +30,15 @@ class ExternalToolItem
     QIcon icon_;
     QString arg_;
     bool countAsOpen_;
+    void fromThat(const ExternalToolItem& that) {
+        if(this==&that)
+            return;
+        this->name_ = that.name_;
+        this->exe_ = that.exe_;
+        this->icon_ = that.icon_;
+        this->arg_ = that.arg_;
+        this->countAsOpen_ = that.countAsOpen_;
+    }
 public:
     ExternalToolItem(const QString& name,
                      const QString& exe,
@@ -42,13 +51,11 @@ public:
     }
 
     ExternalToolItem(const ExternalToolItem& that) {
-        if(this==&that)
-            return;
-        this->name_ = that.name_;
-        this->exe_ = that.exe_;
-        this->icon_ = that.icon_;
-        this->arg_ = that.arg_;
-        this->countAsOpen_ = that.countAsOpen_;
+        fromThat(that);
+    }
+    ExternalToolItem& operator=(const ExternalToolItem& that) {
+        fromThat(that);
+        return *this;
     }
     static ExternalToolItem Load(int i, AmbiesoftQt::IniSettings& settings);
     void Save(int i, AmbiesoftQt::IniSettings& settings);
