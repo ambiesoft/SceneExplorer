@@ -1214,69 +1214,67 @@ void MainWindow::OnContextExternalTools()
     int i = act->data().toInt();
     QString exe = externalTools_[i].GetExe();
     QString arg = externalTools_[i].GetArg();
-    QString argparsed;
 
-    static QRegExp rx("(\\$\\{\\w+\\})");
 
-    int prevpos = 0;
-    int pos = 0;
+    auto fnExpandMacro = [](const QString& arg, const QString& movieFileNative){
+        static QRegExp rx("(\\$\\{\\w+\\})");
 
-    while ((pos = rx.indexIn(arg, pos)) != -1)
-    {
-        argparsed += arg.mid(prevpos,pos-prevpos);
-        int matchedlen = rx.matchedLength();
-        QString s = arg.mid(pos,matchedlen);// rx.cap(i++);
-        if(false) {}
-        else if(s=="${appfullpath}")
+        int prevpos = 0;
+        int pos = 0;
+        QString argparsed;
+        while ((pos = rx.indexIn(arg, pos)) != -1)
         {
-            argparsed += QDir::toNativeSeparators(QCoreApplication::applicationFilePath());
+            argparsed += arg.mid(prevpos,pos-prevpos);
+            int matchedlen = rx.matchedLength();
+            QString s = arg.mid(pos,matchedlen);// rx.cap(i++);
+            if(false) {}
+            else if(s=="${appfullpath}")
+            {
+                argparsed += QDir::toNativeSeparators(QCoreApplication::applicationFilePath());
+            }
+            else if(s=="${appdirectoryfullpath}")
+            {
+                argparsed += QDir::toNativeSeparators(QFileInfo(QCoreApplication::applicationFilePath()).dir().absolutePath());
+            }
+            else if(s=="${filefullpath}")
+            {
+                argparsed += movieFileNative;
+            }
+            else if(s=="${directoryfullpath}")
+            {
+                argparsed += QDir::toNativeSeparators(QFileInfo(movieFileNative).dir().absolutePath());
+            }
+            else if(s=="${filefullpathwithoutextension}")
+            {
+                argparsed += QDir::toNativeSeparators(pathCombine(
+                                                          QFileInfo(movieFileNative).dir().absolutePath(),
+                                                          QFileInfo(QFileInfo(movieFileNative).fileName()).completeBaseName()));
+            }
+            else if(s=="${filename}")
+            {
+                argparsed += QFileInfo(movieFileNative).fileName();
+            }
+            else if(s=="${filenamewithoutextension}")
+            {
+                argparsed += QFileInfo(QFileInfo(movieFileNative).fileName()).completeBaseName();
+            }
+            pos += matchedlen;
+            prevpos = pos;
         }
-        else if(s=="${appdirectoryfullpath}")
-        {
-            argparsed += QDir::toNativeSeparators(QFileInfo(QCoreApplication::applicationFilePath()).dir().absolutePath());
-        }
-        else if(s=="${filefullpath}")
-        {
-            argparsed += movieFileNative;
-            //argparsed += QUrl::fromLocalFile(movieFileNative).toString();
-        }
-        else if(s=="${directoryfullpath}")
-        {
-            argparsed += QDir::toNativeSeparators(QFileInfo(movieFileNative).dir().absolutePath());
-        }
-        else if(s=="${filefullpathwithoutextension}")
-        {
-            argparsed += QDir::toNativeSeparators(pathCombine(
-                                                      QFileInfo(movieFileNative).dir().absolutePath(),
-                                                      QFileInfo(QFileInfo(movieFileNative).fileName()).completeBaseName()));
-        }
-        else if(s=="${filename}")
-        {
-            argparsed += QFileInfo(movieFileNative).fileName();
-        }
-        else if(s=="${filenamewithoutextension}")
-        {
-            argparsed += QFileInfo(QFileInfo(movieFileNative).fileName()).completeBaseName();
-        }
-        pos += matchedlen;
-        prevpos = pos;
-    }
-    argparsed += arg.mid(prevpos);
+        argparsed += arg.mid(prevpos);
+        return argparsed;
+    };
 
+    QString exeparsed = fnExpandMacro(exe, movieFileNative);
+    QString argparsed = fnExpandMacro(arg, movieFileNative);
 
-
-
-    //    QStringList argconst;
-    //    arg << movieFile;
-
-
-    qDebug() << __FUNCTION__ << exe << " " << argparsed << __FUNCTION__;
-    if(!StartProcessDetached(exe,argparsed))
+    qDebug() << __FUNCTION__ << exeparsed << " " << argparsed << __FUNCTION__;
+    if(!StartProcessDetached(exeparsed,argparsed))
     {
         QString message;
         message += tr("Failed to start new process.");
         message += "\n\n";
-        message += tr("Executable:") + exe;
+        message += tr("Executable:") + exeparsed;
         message += "\n";
         message += tr("Argument:") + argparsed;
         Alert(this, message);
