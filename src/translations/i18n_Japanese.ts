@@ -1670,6 +1670,10 @@
         <source>Unknown TagMenuFormat &apos;%1&apos;</source>
         <translation>未知のTagMenuFormatです &apos;%1&apos;</translation>
     </message>
+    <message>
+        <source>Fo&amp;lder name</source>
+        <translation>フォルダ名(&amp;L)</translation>
+    </message>
 </context>
 <context>
     <name>Option</name>

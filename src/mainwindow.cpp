@@ -1308,6 +1308,19 @@ void MainWindow::OnContextCopySelectedVideoFilenameWithoutExtension()
     }
     QApplication::clipboard()->setText(toClip);
 }
+void MainWindow::OnContextCopyFolderName()
+{
+    QString movieFile = getSelectedVideo(true);
+    if(movieFile.isEmpty()) { Alert(this, TR_NOVIDEO_SELECTED()); return;}
+
+    QString toClip = QFileInfo(movieFile).absoluteDir().absolutePath();
+    if(toClip.isEmpty())
+    {
+        Alert(this, tr("Name is empty"));
+        return;
+    }
+    QApplication::clipboard()->setText(QDir::toNativeSeparators(toClip));
+}
 
 void MainWindow::IDManager::updateStatus()
 {

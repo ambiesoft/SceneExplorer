@@ -188,6 +188,13 @@ void MainWindow::on_tableView_customContextMenuRequested(const QPoint &pos)
                 this, SLOT(OnContextCopySelectedVideoFilenameWithoutExtension()));
         menuCopyOther.addAction(&actionCopyFilenameWithoutExtension);
 
+        menuCopyOther.addSeparator();
+
+        QAction actionCopyFolderName(tr("Fo&lder name"));
+        connect(&actionCopyFolderName, SIGNAL(triggered()),
+                this, SLOT(OnContextCopyFolderName()));
+        menuCopyOther.addAction(&actionCopyFolderName);
+
         contextMenu.addMenu(&menuCopyOther);
         // <--- sub menu end
 
