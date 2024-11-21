@@ -1,4 +1,6 @@
+2024/11/21 1.22.49
 Add a menu 'Folder name' under 'Copy others' on the context menu
+Fixed an issue where the Explorer process could remain when opening a folder
 
 2023/09/25 1.22.48
 Fixed: Macros in Executables of External Tool were not being expanded
