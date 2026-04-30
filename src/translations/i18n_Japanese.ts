@@ -712,11 +712,11 @@
     </message>
     <message>
         <source>Move &amp;up</source>
-        <translation>上へ移動(&amp;U)</translation>
+        <translation type="vanished">上へ移動(&amp;U)</translation>
     </message>
     <message>
         <source>Move &amp;down</source>
-        <translation>下へ移動(&amp;D)</translation>
+        <translation type="vanished">下へ移動(&amp;D)</translation>
     </message>
     <message>
         <source>&amp;Sort by name</source>
@@ -1673,6 +1673,22 @@
     <message>
         <source>Fo&amp;lder name</source>
         <translation>フォルダ名(&amp;L)</translation>
+    </message>
+    <message>
+        <source>Select by &amp;OR</source>
+        <translation type="unfinished">&amp;ORでセレクト</translation>
+    </message>
+    <message>
+        <source>M&amp;ove up</source>
+        <translation type="unfinished">上へ移動(&amp;O)</translation>
+    </message>
+    <message>
+        <source>Mo&amp;ve down</source>
+        <translation type="unfinished">下へ移動(&amp;V)</translation>
+    </message>
+    <message>
+        <source>Select by A&amp;ND</source>
+        <translation type="unfinished">A&amp;NDでセレクト</translation>
     </message>
 </context>
 <context>

@@ -2139,7 +2139,7 @@ void MainWindow::showTagContextMenu(const QPoint &pos)
 
         // 'AND' or 'OR'
         QAction* pAct = nullptr;
-        pAct = myMenuItemArea.addAction(tr("Select by &AND"), this, SLOT(OnCheckTagAnd()));
+        pAct = myMenuItemArea.addAction(tr("Select by A&ND"), this, SLOT(OnCheckTagAnd()));
         pAct->setCheckable(true);
         pAct->setChecked(isAndSelect_);
 

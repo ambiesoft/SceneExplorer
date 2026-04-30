@@ -254,7 +254,7 @@ void MainWindow::onMenuTag_AboutToShow()
     // 'AND' or 'OR'
     ui->menu_Tag->addSeparator();
     QAction* pAct = nullptr;
-    pAct = ui->menu_Tag->addAction(tr("Select by &AND"), this, SLOT(OnCheckTagAnd()));
+    pAct = ui->menu_Tag->addAction(tr("Select by A&ND"), this, SLOT(OnCheckTagAnd()));
     pAct->setCheckable(true);
     pAct->setChecked(isAndSelect_);
 
@@ -979,12 +979,12 @@ void MainWindow::on_directoryWidget_customContextMenuRequested(const QPoint &pos
 
         menu.addSeparator();
 
-        QAction actMoveUp(tr("Move &up"));
+        QAction actMoveUp(tr("M&ove up"));
         connect(&actMoveUp, SIGNAL(triggered(bool)),
                 this, SLOT(OnDirectoryMoveUp()));
         menu.addAction(&actMoveUp);
 
-        QAction actMoveDown(tr("Move &down"));
+        QAction actMoveDown(tr("Mo&ve down"));
         connect(&actMoveDown, SIGNAL(triggered(bool)),
                 this, SLOT(OnDirectoryMoveDown()));
         menu.addAction(&actMoveDown);
