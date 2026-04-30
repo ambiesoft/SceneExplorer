@@ -2131,9 +2131,21 @@ void MainWindow::showTagContextMenu(const QPoint &pos)
         myMenuItemArea.addAction(tr("Check &Selection"), this, SLOT(OnCheckSelectedTag()));
         myMenuItemArea.addAction(tr("Uncheck Se&lection"), this, SLOT(OnUncheckSelectedTag()));
 
-        //myMenuItemArea.addSeparator();
+        myMenuItemArea.addSeparator();
         myMenuItemArea.addAction(tr("&Check All"), this, SLOT(OnCheckAllTag()));
         myMenuItemArea.addAction(tr("&Uncheck All"), this, SLOT(OnUncheckAllTag()));
+
+        myMenuItemArea.addSeparator();
+
+        // 'AND' or 'OR'
+        QAction* pAct = nullptr;
+        pAct = myMenuItemArea.addAction(tr("Select by &AND"), this, SLOT(OnCheckTagAnd()));
+        pAct->setCheckable(true);
+        pAct->setChecked(isAndSelect_);
+
+        pAct = myMenuItemArea.addAction(tr("Select by &OR"), this, SLOT(OnCheckTagOr()));
+        pAct->setCheckable(true);
+        pAct->setChecked(!isAndSelect_);
 
         // Show context menu at handling position
         myMenuItemArea.exec(ui->listTag->mapToGlobal(pos));
