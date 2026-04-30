@@ -244,7 +244,14 @@ void MainWindow::onMenuTag_AboutToShow()
         delete pA;
     }
 
-    createTagMenus(ui->menu_Tag, nullptr,nullptr, this);
+    qint64 id = getSelectedID();
+    if(id <= 0)
+    {
+        QAction* act = ui->menu_Tag->addAction(TR_NOVIDEO_SELECTED());
+        act->setEnabled(false);
+    }
+    else
+        createTagMenus(ui->menu_Tag, nullptr,nullptr, this);
 
     // check all and uncheck all
     ui->menu_Tag->addSeparator();
