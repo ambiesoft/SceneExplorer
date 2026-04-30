@@ -71,7 +71,7 @@ call :myCopy "%~dp0src\FolderConfig.ini" "%DISTDIR%\"
 
 set QTPROJECTFILE=%SOURCEDIR%\%PRONAME%.pro
 @echo on
-%PYTHONEXE% "%~dp0../distSolution/distqt.py" %QTPROJECTFILE% -distdir "%DISTDIR%" -qtroot %QTROOT% -qtversion %QTVERSION% -qtversiontools %QTVERSIONTOOLS% -distfile "%~dp0dist.json" -make %MAKE%
+%PYTHONEXE% "%~dp0../distSolution/distqt.py" %QTPROJECTFILE% -distdir "%DISTDIR%" -qtroot %QTROOT% -qtversion %QTVERSION% -qtversiontools %QTVERSIONTOOLS% -distfile "%~dp0dist.json" -make %MAKE% --skip-upload
 @echo off
 if ERRORLEVEL 1 (
   goto :error

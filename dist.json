@@ -144,6 +144,7 @@
     "archivedir": "C:\\Linkout",
     "remotedir": "https://ambiesoft.com/ffdav/uploads/SceneExplorer/",
     "remotesha1": "https://ambiesoft.com/ffdav/uploads/getSha1.php?file=SceneExplorer/{}",
+    "remoteonedrivedir": "https://1drv.ms/f/c/f0d9ddc561f5cf32/IgDJBAG-AleKS4SQTd5Ms4k1AfxBo6ckHLTQEhWqYigc-WI?e=Ij34S2",
     "ShouldNotBeFiles": [
     	"folder.ini"
     ],
