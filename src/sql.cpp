@@ -1101,13 +1101,37 @@ bool Sql::GetAllSqlString(
     }
     else
     {
-        sql += " AND (";
-        for(int i=0 ; i < tagInfos.tagCount(); ++i)
+        if(tagInfos.isAndSelect())
         {
-            sql += " t.tagid=" + QString::number(tagInfos.tagid(i)) + " OR";
+            // AND select
+            sql += " AND (";
+            // t.tagid IN (5, 6)
+            sql += " t.tagid IN (";
+            QStringList tagids;
+            for(int i=0 ; i < tagInfos.tagCount(); ++i)
+            {
+                tagids << QString::number(tagInfos.tagid(i));
+            }
+            sql += tagids.join(",");
+            sql += "))";
+
+            sql += " GROUP BY FileInfo.id";
+
+            sql += " HAVING COUNT(DISTINCT t.tagid) = ";
+            sql += QString::number(tagInfos.tagCount());
         }
-        sql += " 1=0)";
-        sql += " GROUP BY FileInfo.id";
+        else
+        {
+            // OR SELECT
+            sql += " AND (";
+            for(int i=0 ; i < tagInfos.tagCount(); ++i)
+            {
+                sql += " t.tagid=" + QString::number(tagInfos.tagid(i)) + " OR";
+            }
+            sql += " 1=0)";
+            sql += " GROUP BY FileInfo.id";
+        }
+
     }
 
     AppendSortArg(sql, sortby, sortrev);

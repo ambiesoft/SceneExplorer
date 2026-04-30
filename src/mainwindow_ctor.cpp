@@ -425,6 +425,8 @@ MainWindow::MainWindow(QWidget *parent,
         setMenuFont(font);
     }
 
+    vVal = settings_.valueBool(KEY_IS_AND_SELECT);
+    isAndSelect_ = vVal.toBool();
 
     // external tools
     int externalToolsCount = settings_.valueInt(KEY_EXTERNALTOOLS_COUNT, 0);

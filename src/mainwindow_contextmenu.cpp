@@ -50,6 +50,7 @@ void MainWindow::createTagMenus(
     }
     else
     {
+        Q_ASSERT(0 <= optionTagMenuFormat_&& optionTagMenuFormat_ <= 2);
         if(optionTagMenuFormat_==0)
         {
             for(auto&& ti : tags)

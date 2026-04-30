@@ -1198,7 +1198,7 @@ void MainWindow::OnContextAddTags()
 
     QAction* act = static_cast<QAction*>(QObject::sender());
     qint64 tagid = act->data().toLongLong();
-    
+
     pDoc_->SetTagged(id, tagid, act->icon().isNull());
     RefreshTagTree();
 }
@@ -1413,7 +1413,7 @@ void MainWindow::itemChangedCommon(bool bForceRead)
 
     // Get Tag selected
     // QSet<qint64> taggedids;
-    TagidsInfo tagInfos(TagidsInfo::TAGIDS_INFO_TYPE::TAGIDSINFO_USERSELECTED);
+    TagidsInfo tagInfos(TagidsInfo::TAGIDS_INFO_TYPE::TAGIDSINFO_USERSELECTED, isAndSelect_);
     GetSelectedAndCurrentTagIDs(tagInfos);
 
     bOnlyExistant = !tbShowNonExistant_->isChecked();
@@ -2071,6 +2071,19 @@ void MainWindow::OnCheckAllTag()
 void MainWindow::OnUncheckAllTag()
 {
     checkAllTagCommon(false);
+}
+
+void MainWindow::OnCheckTagAnd()
+{
+    isAndSelect_ = true;
+    settings_.setValue(KEY_IS_AND_SELECT, isAndSelect_);
+    itemChangedCommon();
+}
+void MainWindow::OnCheckTagOr()
+{
+    isAndSelect_ = false;
+    settings_.setValue(KEY_IS_AND_SELECT, isAndSelect_);
+    itemChangedCommon();
 }
 
 void MainWindow::OnCheckSelectedTag()

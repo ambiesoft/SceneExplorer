@@ -250,6 +250,17 @@ void MainWindow::onMenuTag_AboutToShow()
     ui->menu_Tag->addSeparator();
     ui->menu_Tag->addAction(tr("&Check All"), this, SLOT(OnCheckAllTag()));
     ui->menu_Tag->addAction(tr("&Uncheck All"), this, SLOT(OnUncheckAllTag()));
+
+    // 'AND' or 'OR'
+    ui->menu_Tag->addSeparator();
+    QAction* pAct = nullptr;
+    pAct = ui->menu_Tag->addAction(tr("Select by &AND"), this, SLOT(OnCheckTagAnd()));
+    pAct->setCheckable(true);
+    pAct->setChecked(isAndSelect_);
+
+    pAct = ui->menu_Tag->addAction(tr("Select by &OR"), this, SLOT(OnCheckTagOr()));
+    pAct->setCheckable(true);
+    pAct->setChecked(!isAndSelect_);
 }
 
 void MainWindow::onMenuTask_AboutToShow()

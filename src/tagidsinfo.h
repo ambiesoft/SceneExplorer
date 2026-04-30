@@ -16,12 +16,14 @@ private:
     TAGIDS_INFO_TYPE infotype_ = TAGIDSINFO_ALL;
     QList<qint64> alltaggedtagids_;
     QList<qint64> tagids_;
+    bool isAndSelect_ = false;
     mutable QList<qint64> removedTagids_;
     void CopyMember(const TagidsInfo& that)
     {
         this->infotype_ = that.infotype_;
         this->alltaggedtagids_=that.alltaggedtagids_;
         this->tagids_=that.tagids_;
+        this->isAndSelect_=that.isAndSelect_;
     }
 public:
     TagidsInfo(){}
@@ -30,13 +32,14 @@ public:
     }
     ~TagidsInfo(){}
 
-    TagidsInfo(TAGIDS_INFO_TYPE t) : infotype_(t){}
+    TagidsInfo(TAGIDS_INFO_TYPE t, const bool isAndSelect) : infotype_(t), isAndSelect_(isAndSelect){}
 
     bool operator ==(const TagidsInfo& that) {
         return
                 this->infotype_ == that.infotype_ &&
                 this->tagids_== that.tagids_ &&
-                this->alltaggedtagids_ == that.alltaggedtagids_;
+                this->alltaggedtagids_ == that.alltaggedtagids_ &&
+                this->isAndSelect_ == that.isAndSelect_;
     }
     const TagidsInfo& operator=(const TagidsInfo& that) {
         if(this != &that)
@@ -82,7 +85,9 @@ public:
     qint64 alltaggedtagid(int i) const {
         return alltaggedtagids_[i];
     }
-
+    bool isAndSelect() const {
+        return isAndSelect_;
+    }
 
     int removedTaggedCount() const;
     qint64 removedTag(int i) const;

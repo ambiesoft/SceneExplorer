@@ -118,6 +118,7 @@ private:
     bool closed_ = false;
     bool directoryChanging_ = false;
     bool tagChanging_ = false;
+    bool isAndSelect_ = false;
     bool lastQueriedOnlyMissing_ = false;
     bool lastQueriedOnlyExistant_ = false;
     QStringList lastQueriedDirs_ = QStringList(QLatin1String("dummy"));
@@ -429,6 +430,8 @@ private Q_SLOTS:
     void deleteTag();
     void OnCheckAllTag();
     void OnUncheckAllTag();
+    void OnCheckTagAnd();
+    void OnCheckTagOr();
     void OnCheckSelectedTag();
     void OnUncheckSelectedTag();
     void showTagContextMenu(const QPoint&);
