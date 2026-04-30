@@ -1199,7 +1199,10 @@ void MainWindow::OnContextAddTags()
     QAction* act = static_cast<QAction*>(QObject::sender());
     qint64 tagid = act->data().toLongLong();
 
-    pDoc_->SetTagged(id, tagid, act->icon().isNull());
+    Q_ASSERT(0 <= optionTagMenuFormat_&& optionTagMenuFormat_ <= 2);
+    pDoc_->SetTagged(id, tagid,
+                     optionTagMenuFormat_==0 ? (act->isChecked()) : ( act->icon().isNull()) );
+
     RefreshTagTree();
 }
 

@@ -1,6 +1,7 @@
 2026/04/30 1.22.50
 Update: Add a feature that allows users to choose between an “AND” search and an “OR”
 search when multiple tags are selected
+Fixed: Fixed an issue where tags could not be removed from items when the Tag Menu Format was set to “Normal.”
 
 2024/11/21 1.22.49
 Add a menu 'Folder name' under 'Copy others' on the context menu
