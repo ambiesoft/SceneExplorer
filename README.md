@@ -128,13 +128,13 @@ Run
 If you have troubles, post *Issue* on <https://github.com/ambiesoft/SceneExplorer/issues>.
 
 ## Donate
-Support Ambiesoft by making a donation. See <https://ambiesoft.com/donate/>.
+Support Ambiesoft by making a donation. See <https://ambiesoft.github.io/webjumper/?target=donate>.
 
 ## Contact
 - Author: Ambiesoft trueff
 - E-mail: <ambiesoft.trueff@gmail.com>
-- Webpage: <https://ambiesoft.com/main/index.php?page=sceneexplorer>
-- Forum: <https://ambiesoft.com/minibbs/minibbs.php>
+- Webpage: <https://ambiesoft.github.io/webjumper/?target=home>
+- Forum: <https://ambiesoft.github.io/webjumper/?target=bbs>
 - Development: <https://github.com/ambiesoft/SceneExplorer>
 
 
