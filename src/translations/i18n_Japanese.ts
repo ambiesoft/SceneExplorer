@@ -1690,6 +1690,14 @@
         <source>Select by A&amp;ND</source>
         <translation type="unfinished">A&amp;NDでセレクト</translation>
     </message>
+    <message>
+        <source>Unselec&amp;t</source>
+        <translation type="obsolete">選択解除(&amp;T)</translation>
+    </message>
+    <message>
+        <source>Unselect(&amp;Z)</source>
+        <translation type="unfinished">選択解除(&amp;Z)</translation>
+    </message>
 </context>
 <context>
     <name>Option</name>

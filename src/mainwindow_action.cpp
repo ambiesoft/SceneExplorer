@@ -846,6 +846,26 @@ void MainWindow::OnDirectoryUncheckAll()
 {
     CheckDirectoryCommon(false,false);
 }
+
+void MainWindow::OnUnselectDirectory(DirectoryItem* di)
+{
+    if(!di || !di->IsNormalItem())
+        return;
+    if(!pDoc_)
+    {
+        Alert(this,
+              tr("No Document"));
+        return;
+    }
+    {
+        Ambiesoft::BlockedBool bt(&directoryChanging_, true, false);
+        ui->directoryWidget->setCurrentItem(nullptr);
+        di->setSelected(false);
+    }
+
+    itemChangedCommon();
+}
+
 void MainWindow::OnDirectoryCheckSelection()
 {
     CheckDirectoryCommon(true,true);
@@ -962,6 +982,12 @@ void MainWindow::on_directoryWidget_customContextMenuRequested(const QPoint &pos
     else
     {
         MyContextMenu menu("DirectoryWidget Context Menu",this);
+        QAction* actUnselect = menu.addAction(tr("Unselect(&Z)"));
+        connect(actUnselect, &QAction::triggered, this, [this, di]() {
+           OnUnselectDirectory(di);
+        });
+        menu.addSeparator();
+
         menu.addEnablingAction(ui->action_Copy, di->IsNormalItem());
         menu.addEnablingAction(ui->action_OpenDirectory, di->IsNormalItem());
         menu.addSeparator();

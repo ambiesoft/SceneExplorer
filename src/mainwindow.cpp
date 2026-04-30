@@ -2089,6 +2089,25 @@ void MainWindow::OnCheckTagOr()
     itemChangedCommon();
 }
 
+void MainWindow::OnUnselectTag(TagItem* ti)
+{
+    {
+        Ambiesoft::BlockedBool tb(&tagChanging_);
+        if(!ti || !ti->IsNormalItem())
+            return;
+
+        if(!pDoc_)
+        {
+            Alert(this,
+                  tr("No Document"));
+            return;
+        }
+        ui->listTag->setCurrentItem(nullptr);
+        ti->setSelected(false);
+    }
+    itemChangedCommon();
+}
+
 void MainWindow::OnCheckSelectedTag()
 {
     checkAllTagCommon(true, true);
@@ -2124,6 +2143,12 @@ void MainWindow::showTagContextMenu(const QPoint &pos)
     {
         // Create menu and insert some actions
         MyContextMenu myMenuItemArea;
+        QAction* unselectAct = myMenuItemArea.addAction(tr("Unselect(&Z)"));
+        connect(unselectAct, &QAction::triggered, this, [this, ti]() {
+            OnUnselectTag(ti);
+        });
+
+        myMenuItemArea.addSeparator();
         myMenuItemArea.addAction(tr("&Edit"), this, SLOT(editTag()));
         myMenuItemArea.addAction(tr("&Delete"), this, SLOT(deleteTag()));
 

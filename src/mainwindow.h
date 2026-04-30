@@ -432,6 +432,7 @@ private Q_SLOTS:
     void OnUncheckAllTag();
     void OnCheckTagAnd();
     void OnCheckTagOr();
+    void OnUnselectTag(TagItem* ti);
     void OnCheckSelectedTag();
     void OnUncheckSelectedTag();
     void showTagContextMenu(const QPoint&);
@@ -879,6 +880,7 @@ public Q_SLOTS:
     void CheckDirectoryCommon(const bool bCheck, const bool bSelection);
     void OnDirectoryCheckAll();
     void OnDirectoryUncheckAll();
+    void OnUnselectDirectory(DirectoryItem* di);
     void OnDirectoryCheckSelection();
     void OnDirectoryUncheckSelection();
     void OnDirectorySortByDirectory();
