@@ -361,8 +361,9 @@ bool TaskFFmpeg::run3(QString& errorReason)
 
     QStringList filenames;
     if(!run4(duration,strWidthHeight,thumbid, filenames, errorReason))
-        if(!run4_old(duration,strWidthHeight,thumbid, filenames, errorReason))
-            return false;
+        if(!run4_old(duration,strWidthHeight,thumbid, filenames, HWACCEL_NONE, errorReason))
+            if(!run4_old(duration,strWidthHeight,thumbid, filenames, HWACCEL_AUTO, errorReason))
+                return false;
 
     emit sayGoodby(loopId_,id_,
                    filenames,
@@ -378,8 +379,10 @@ bool TaskFFmpeg::run3(QString& errorReason)
 }
 
 bool TaskFFmpeg::run4_old(double duration, const QString& strWidthHeight, const QString& thumbid,
-                      QStringList& filenames,QString& errorReason)
+                      QStringList& filenames, const Run4Old_HWACCEL hwaccel, QString& errorReason)
 {
+    Q_ASSERT(hwaccel==HWACCEL_NONE || hwaccel==HWACCEL_AUTO);
+
     filenames.clear();
     for(int i=1 ; i <=5 ;++i)
     {
@@ -393,6 +396,10 @@ bool TaskFFmpeg::run4_old(double duration, const QString& strWidthHeight, const 
         qsl.append("16");  // only error output
         qsl.append("-hide_banner");  // as it is
         qsl.append("-n");  // no overwrite
+        if(hwaccel==HWACCEL_AUTO) {
+            qsl.append("-hwaccel");
+            qsl.append("auto");
+        }
         qsl.append("-ss" );  // seek input
         qsl.append(QString::number(timepoint) );  // seek position
         qsl.append("-i" );  // input file

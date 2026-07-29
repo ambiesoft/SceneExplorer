@@ -76,8 +76,13 @@ private:
     bool run3(QString& errorReason);
     bool run4(double duration, const QString& strWidthHeight, const QString& thumbid,
               QStringList& filenames,QString& errorReason);
+    enum Run4Old_HWACCEL {
+        HWACCEL_NONE,
+        HWACCEL_AUTO,
+    };
+
     bool run4_old(double duration, const QString& strWidthHeight, const QString& thumbid,
-              QStringList& filenames,QString& errorReason);
+              QStringList& filenames, const Run4Old_HWACCEL hwaccel, QString& errorReason);
 
     void setPriority(QProcess& process);
 public:
