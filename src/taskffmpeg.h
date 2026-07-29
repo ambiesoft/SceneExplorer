@@ -80,9 +80,13 @@ private:
         HWACCEL_NONE,
         HWACCEL_AUTO,
     };
+    enum Run4Old_SS {
+        SS_DEFAULT,
+        SS_NONE,
+    };
 
-    bool run4_old(double duration, const QString& strWidthHeight, const QString& thumbid,
-              QStringList& filenames, const Run4Old_HWACCEL hwaccel, QString& errorReason);
+    bool run4_old(const double duration, const QString& strWidthHeight, const QString& thumbid,
+              QStringList& filenames, const Run4Old_HWACCEL hwaccel, const Run4Old_SS ssOption, QString& errorReason);
 
     void setPriority(QProcess& process);
 public:

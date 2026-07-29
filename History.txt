@@ -1,5 +1,7 @@
 2026/07/29 1.22.52
 Modified: When the existing method for creating thumbnails with FFmpeg fails, running it with the "-hwaccel auto" option.
+Modified: For extremely short videos or when an I-frame cannot be found during seek operations,
+          it now retrieves the first I-frame instead of performing a seek.
 
 2026/05/01 1.22.51
 Update: Add an ‘Unselect’ item to the context menu

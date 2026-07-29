@@ -361,8 +361,8 @@ bool TaskFFmpeg::run3(QString& errorReason)
 
     QStringList filenames;
     if(!run4(duration,strWidthHeight,thumbid, filenames, errorReason))
-        if(!run4_old(duration,strWidthHeight,thumbid, filenames, HWACCEL_NONE, errorReason))
-            if(!run4_old(duration,strWidthHeight,thumbid, filenames, HWACCEL_AUTO, errorReason))
+        if(!run4_old(duration,strWidthHeight,thumbid, filenames, HWACCEL_NONE, SS_DEFAULT, errorReason))
+            if(!run4_old(duration,strWidthHeight,thumbid, filenames, HWACCEL_AUTO, SS_DEFAULT, errorReason))
                 return false;
 
     emit sayGoodby(loopId_,id_,
@@ -378,8 +378,8 @@ bool TaskFFmpeg::run3(QString& errorReason)
     return true;
 }
 
-bool TaskFFmpeg::run4_old(double duration, const QString& strWidthHeight, const QString& thumbid,
-                      QStringList& filenames, const Run4Old_HWACCEL hwaccel, QString& errorReason)
+bool TaskFFmpeg::run4_old(const double duration, const QString& strWidthHeight, const QString& thumbid,
+                      QStringList& filenames, const Run4Old_HWACCEL hwaccel, const Run4Old_SS ssOption, QString& errorReason)
 {
     Q_ASSERT(hwaccel==HWACCEL_NONE || hwaccel==HWACCEL_AUTO);
 
@@ -391,6 +391,7 @@ bool TaskFFmpeg::run4_old(double duration, const QString& strWidthHeight, const 
         QString actualFile = QString(FILEPART_THUMBS) + QDir::separator() + filename;
 
         double timepoint = (((double)i-0.5)*duration/5);
+
         QStringList qsl;
         qsl.append("-v");
         qsl.append("16");  // only error output
@@ -400,8 +401,11 @@ bool TaskFFmpeg::run4_old(double duration, const QString& strWidthHeight, const 
             qsl.append("-hwaccel");
             qsl.append("auto");
         }
-        qsl.append("-ss" );  // seek input
-        qsl.append(QString::number(timepoint) );  // seek position
+        // if the first try is failed, try to run without -ss option
+        if(!(i==1 && ssOption==SS_NONE)) {
+            qsl.append("-ss" );  // seek input
+            qsl.append(QString::number(timepoint) );  // seek position
+        }
         qsl.append("-i" );  // input file
         qsl.append(movieFile_ );  // input file
         qsl.append("-vf" );  // video filtergraph
@@ -440,15 +444,28 @@ bool TaskFFmpeg::run4_old(double duration, const QString& strWidthHeight, const 
             return false;
         }
 
-        //        QByteArray baOut = ffmpeg.readAllStandardOutput();
-        //        qDebug()<<baOut.data();
-
-
         if(i==1)
         {
             if (!QFile(actualFile).exists())
             {
-                errorReason += tr("Failed to create thumbnail");
+                if(ssOption==SS_DEFAULT) {
+                    // Run without ss option
+                    return run4_old(duration, strWidthHeight, thumbid,
+                                    filenames, hwaccel, SS_NONE, errorReason);
+                }
+
+                errorReason += "run4_old()";
+                if(hwaccel==HWACCEL_AUTO) {
+                        errorReason+= " with hwaccel";
+                }
+                errorReason += "\n";
+                errorReason += tr("exitCode is 0 but thumbnails not created.");
+                errorReason += "\n\n";
+                errorReason += tr("The command line:");
+                errorReason += "\n";
+                errorReason += GetAsCommandLine(qsl);
+                errorReason += "\n\n";
+
                 QByteArray baErr = process.readAllStandardError();
                 QString strErr = baErr.data();
                 if (!strErr.isEmpty())
@@ -552,6 +569,7 @@ bool TaskFFmpeg::run4(double duration, const QString& strWidthHeight, const QStr
 
     if (!QFileInfo(actualFiles[0]).exists())
     {
+        errorReason += "run4()\n";
         errorReason += tr("exitCode is 0 but thumbnails not created.");
         errorReason += "\n\n";
         errorReason += tr("The command line:");
