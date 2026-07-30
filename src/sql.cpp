@@ -259,6 +259,7 @@ Sql::Sql(QObject*) : db_(QSqlDatabase::addDatabase("QSQLITE"))
         query.bindValue(0, DBVERSION);
         SQCN(query,exec());
     }
+    lastIssuedId_ = getMaxId();
     ok_ = true;
 }
 Sql::~Sql()
@@ -365,6 +366,18 @@ QString Sql::getAllColumns(bool bBrace, bool bQ)
     return ret;
 }
 
+qint64 Sql::getMaxId()
+{
+    QSqlQuery q;
+    q.exec("SELECT IFNULL(MAX(id),0) FROM FileInfo");
+    q.next();
+    return q.value(0).toLongLong();
+}
+qint64 Sql::getNextId()
+{
+    return qMax(lastIssuedId_, getMaxId()) + 1;
+}
+
 QSqlQuery* Sql::getInsertQuery(TableItemDataPointer tid)
 {
     static QStringList allcolumns;
@@ -441,7 +454,10 @@ QSqlQuery* Sql::getInsertQuery(TableItemDataPointer tid)
     // 1st COALEASE
     pQInsert_->bindValue(bindIndex++, tid->getMovieDirectory());
     pQInsert_->bindValue(bindIndex++, tid->getMovieFileName());
-    pQInsert_->bindValue(bindIndex++, tid->getIDVariant());
+    if (tid->getID()==0)
+        pQInsert_->bindValue(bindIndex++, getNextId());
+    else
+        pQInsert_->bindValue(bindIndex++, tid->getIDVariant());
 
     // 2nd COALEASE
     pQInsert_->bindValue(bindIndex++, tid->getMovieDirectory());
@@ -545,7 +561,8 @@ qint64 Sql::InsertDataFromFFmpeg(TableItemDataPointer tid)
         qDebug() << pQInsert->lastError() << __FUNCTION__;
         return SQL_EXEC_FAILED;
     }
-    tid->setID(pQInsert->lastInsertId().toLongLong());
+    lastIssuedId_ = pQInsert->lastInsertId().toLongLong();
+    tid->setID(lastIssuedId_);
 
     return 0;
 }

@@ -1,3 +1,7 @@
+2026/07/30 1.22.53
+Fix: Fixed an issue where, after deleting an item and then adding it again,
+     the ID would be the same as the deleted item's.
+
 2026/07/29 1.22.52
 Modified: When the existing method for creating thumbnails with FFmpeg fails, running it with the "-hwaccel auto" option.
 Modified: For extremely short videos or when an I-frame cannot be found during seek operations,

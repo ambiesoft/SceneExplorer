@@ -74,6 +74,8 @@ class Sql : public QObject
     // QString getAllColumnsUpdate(TableItemDataPointer tid);
     QString lastError_;
 
+    qint64 lastIssuedId_ = 1;
+
     bool GetAllSqlString(
             QSqlQuery& query,
             const QStringList& selects,
@@ -127,6 +129,9 @@ public:
 
     QSqlQuery* pQDeleteFromDirectoryName_ = nullptr;
     QSqlQuery* getDeleteFromDirectoryName();
+
+    qint64 getMaxId();
+    qint64 getNextId();
 
     QSqlQuery* pQInsert_=nullptr;
     QSqlQuery* getInsertQuery(TableItemDataPointer tid);
@@ -210,7 +215,6 @@ public:
     bool RemoveEntry(const QString& dir,
                      const QString& file,
                      QString* error = nullptr);
-
     bool RemoveAllMissingEntries(const QString& dir, const QList<TableItemDataPointer>& items);
     //    bool ApplyOpenCount(const QMap<qint64,int>& opencounts);
     //    bool ApplyLastAccesses(const QMap<qint64,qint64>& lastaccesses);
