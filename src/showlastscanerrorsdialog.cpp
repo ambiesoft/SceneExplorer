@@ -8,7 +8,8 @@ ShowLastScanErrorsDialog::ShowLastScanErrorsDialog(QWidget *parent, const QStrin
     ui(new Ui::ShowLastScanErrorsDialog)
 {
     ui->setupUi(this);
-    ui->tbErrors->setText(error);
+    // ui->tbErrors->setPlainText(error);
+    ui->pteErrors->setPlainText(error);
 }
 
 ShowLastScanErrorsDialog::~ShowLastScanErrorsDialog()

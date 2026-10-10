@@ -1,3 +1,7 @@
+2026/10/10 1.22.55
+Fixed: Fixed an issue where, if too many errors occurred when the “Last Scan Error” dialog was displayed,
+       processing would slow down or the application would crash.
+
 2026/08/04 1.22.54
 Fixed: If ffprobe cannot determine the video's duration, modify the code to treat it as having a duration of 0.
 
