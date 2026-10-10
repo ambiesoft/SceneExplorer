@@ -12,7 +12,7 @@ class ShowLastScanErrorsDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit ShowLastScanErrorsDialog(QWidget *parent, const QString& error);
+    explicit ShowLastScanErrorsDialog(QWidget *parent, const QList<QString>* error);
     ~ShowLastScanErrorsDialog();
 
 private slots:
@@ -22,7 +22,7 @@ private slots:
 
 private:
     Ui::ShowLastScanErrorsDialog *ui;
-    QString m_errorLog;
+    const QList<QString>* m_errorLog;
 };
 
 #endif // SHOWLASTSCANERRORSDIALOG_H

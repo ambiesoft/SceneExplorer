@@ -2895,12 +2895,12 @@ void MainWindow::on_action_SelectTags_triggered()
 #include "showlastscanerrorsdialog.h"
 void MainWindow::on_actionShow_last_scan_error_triggered()
 {
-    QString all = lastScanErrors_.empty() ?
-                tr("<No Error Logs>"):
-                join<QString>(lastScanErrors_, "\n",
-                     [](const QString& s)->QString{
-        return s;
-    });
-    ShowLastScanErrorsDialog dlg(this,all);
+    // QString all = lastScanErrors_.empty() ?
+    //             tr("<No Error Logs>"):
+    //             join<QString>(lastScanErrors_, "\n",
+    //                  [](const QString& s)->QString{
+    //     return s;
+    // });
+    ShowLastScanErrorsDialog dlg(this, &lastScanErrors_);
     dlg.exec();
 }
