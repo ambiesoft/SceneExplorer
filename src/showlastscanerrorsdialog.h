@@ -15,8 +15,14 @@ public:
     explicit ShowLastScanErrorsDialog(QWidget *parent, const QString& error);
     ~ShowLastScanErrorsDialog();
 
+private slots:
+    void on_pbSave_clicked();
+
+    void on_pbOk_clicked();
+
 private:
     Ui::ShowLastScanErrorsDialog *ui;
+    QString m_errorLog;
 };
 
 #endif // SHOWLASTSCANERRORSDIALOG_H

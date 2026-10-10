@@ -2374,6 +2374,30 @@
         <source>Last scan errors</source>
         <translation>最後のスキャンエラー</translation>
     </message>
+    <message>
+        <source>The error log is too large to display on the screen (total characters: %1). Please save the log as a file.</source>
+        <translation type="unfinished">エラーログが大きすぎるため、画面に表示できません（合計文字数: %1）。ログをファイルとして保存してください。</translation>
+    </message>
+    <message>
+        <source>Saving Error Logs</source>
+        <translation type="unfinished">エラーログの保存</translation>
+    </message>
+    <message>
+        <source>Text File (*.txt);;All Files (*.*)</source>
+        <translation type="unfinished">テキストファイル (*.txt);;すべてのファイル (*.*)</translation>
+    </message>
+    <message>
+        <source>Failed to write to the file.</source>
+        <translation type="unfinished">ファイルの保存に失敗しました。</translation>
+    </message>
+    <message>
+        <source>&amp;Save</source>
+        <translation type="unfinished">保存する(&amp;S)</translation>
+    </message>
+    <message>
+        <source>OK</source>
+        <translation type="unfinished"></translation>
+    </message>
 </context>
 <context>
     <name>Sql</name>
@@ -2500,7 +2524,7 @@
     </message>
     <message>
         <source>Failed to create thumbnail</source>
-        <translation>サムネイルの作成に失敗しました</translation>
+        <translation type="vanished">サムネイルの作成に失敗しました</translation>
     </message>
     <message>
         <source>Failed to set priority %1.</source>
